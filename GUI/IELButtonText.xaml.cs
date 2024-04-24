@@ -73,13 +73,19 @@ namespace Auxiliary_Access_Console_DL_20.GUI
         public Brush BbMouseClick { get; set; }
 
         // Foreground
+        private Brush _FgButton;
+
         /// <summary>
         /// Цвет текста при не активном состоянии
         /// </summary>
         public Brush FgButton
         {
-            get { return RealyButton.Foreground; }
-            set { RealyButton.Foreground = value; }
+            get { return _FgButton; }
+            set
+            {
+                _FgButton = value;
+                RealyButton.Foreground = value;
+            }
         }
 
         /// <summary>
@@ -120,7 +126,8 @@ namespace Auxiliary_Access_Console_DL_20.GUI
             BgMouseActive = new SolidColorBrush(Color.FromRgb(80, 80, 80));
             BgMouseClick = new SolidColorBrush(Color.FromRgb(120, 120, 120));
 
-            FgButton = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            _FgButton = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            RealyButton.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             FgMouseActive = new SolidColorBrush(Color.FromRgb(235, 235, 235));
             FgMouseClick = new SolidColorBrush(Color.FromRgb(215, 215, 215));
 
@@ -130,6 +137,7 @@ namespace Auxiliary_Access_Console_DL_20.GUI
             {
                 BorderButton.Background = BgMouseActive;
                 BorderButton.BorderBrush = BbMouseActive;
+                RealyButton.Foreground = FgMouseActive;
                 if (TextMouseActive != null) RealyButton.Text = TextMouseActive;
             };
 
@@ -137,6 +145,7 @@ namespace Auxiliary_Access_Console_DL_20.GUI
             {
                 BorderButton.Background = _BgButton;
                 BorderButton.BorderBrush = _BbButton;
+                RealyButton.Foreground = _FgButton;
                 if (TextMouseActive != null) RealyButton.Text = Text;
             };
 
@@ -144,6 +153,7 @@ namespace Auxiliary_Access_Console_DL_20.GUI
             {
                 BorderButton.Background = BgMouseClick;
                 BorderButton.BorderBrush = BbMouseClick;
+                RealyButton.Foreground = FgMouseClick;
                 RealyButton.Focus();
             };
 
@@ -151,6 +161,7 @@ namespace Auxiliary_Access_Console_DL_20.GUI
             {
                 BorderButton.Background = _BgButton;
                 BorderButton.BorderBrush = _BbButton;
+                RealyButton.Foreground = _FgButton;
                 if (TextMouseActive != null) RealyButton.Text = Text;
             };
         }
