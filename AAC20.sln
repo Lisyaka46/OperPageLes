@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auxiliary_Access_Console_DL_20", "Auxiliary_Access_Console_DL_20.csproj", "{EA626EA3-FA53-4622-80CB-95B467D4D6BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AAC20", "AAC20.csproj", "{EA626EA3-FA53-4622-80CB-95B467D4D6BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
