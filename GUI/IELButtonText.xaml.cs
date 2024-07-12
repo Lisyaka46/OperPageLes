@@ -1,169 +1,255 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 
-namespace Auxiliary_Access_Console_DL_20.GUI
+namespace AAC20.GUI
 {
     /// <summary>
     /// Логика взаимодействия для IELButtonText.xaml
     /// </summary>
     public partial class IELButtonText : UserControl
     {
-        // Background
-        private Brush _BgButton;
-
+        private Color _DefaultBorderBrush;
         /// <summary>
-        /// Цвет фона при не активном состоянии
+        /// Цвет границы кнопки
         /// </summary>
-        public Brush BgButton
+        public Color DefaultBorderBrush
         {
-            get { return _BgButton; }
+            get => _DefaultBorderBrush;
             set
             {
-                _BgButton = value;
-                BorderButton.Background = value;
+                BorderButton.BorderBrush = new SolidColorBrush(value);
+                _DefaultBorderBrush = value;
+            }
+        }
+
+        private Color _DefaultBackground;
+        /// <summary>
+        /// Цвет фона кнопки
+        /// </summary>
+        public Color DefaultBackground
+        {
+            get => _DefaultBackground;
+            set
+            {
+                BorderButton.Background = new SolidColorBrush(value);
+                _DefaultBackground = value;
+            }
+        }
+
+        private Color _DefaultForeground;
+        /// <summary>
+        /// Цвет текста в кнопке
+        /// </summary>
+        public Color DefaultForeground
+        {
+            get => _DefaultForeground;
+            set
+            {
+                TextBlockButton.Foreground = new SolidColorBrush(value);
+                _DefaultForeground = value;
             }
         }
 
         /// <summary>
-        /// Цвет фона при наведении мышью на элемент
+        /// Выделенный цвет границы кнопки
         /// </summary>
-        public Brush BgMouseActive { get; set; }
+        public Color SelectBorderBrush { get; set; }
 
         /// <summary>
-        /// Цвет фона при нажатии мышью на элемент
+        /// Выделенный цвет фона кнопки
         /// </summary>
-        public Brush BgMouseClick { get; set; }
-
-        // BorderBrush
-        private Brush _BbButton;
+        public Color SelectBackground { get; set; }
 
         /// <summary>
-        /// Цвет границ при не активном состоянии
+        /// Выделенный цвет текста в кнопке
         /// </summary>
-        public Brush BbButton
+        public Color SelectForeground { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет границы кнопки
+        /// </summary>
+        public Color ClickedBorderBrush { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет фона кнопки
+        /// </summary>
+        public Color ClickedBackground { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет текста в кнопке
+        /// </summary>
+        public Color ClickedForeground { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет границы кнопки
+        /// </summary>
+        public Color NotEnabledBorderBrush { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет фона кнопки
+        /// </summary>
+        public Color NotEnabledBackground { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет текста в кнопке
+        /// </summary>
+        public Color NotEnabledForeground { get; set; }
+
+        private int _AnimationMillisecond = 0;
+        /// <summary>
+        /// Количество миллисекунд для анимации (по умолчанию 80)
+        /// </summary>
+        public int AnimationMillisecond
         {
-            get { return _BbButton; }
+            get => _AnimationMillisecond;
             set
             {
-                _BbButton = value;
-                BorderButton.BorderBrush = value;
+                if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "Значение должно быть больше нуля!");
+                else _AnimationMillisecond = value;
             }
         }
 
         /// <summary>
-        /// Цвет границ при наведении мышью на элемент
-        /// </summary>
-        public Brush BbMouseActive { get; set; }
-
-        /// <summary>
-        /// Цвет границ при нажатии мышью на элемент
-        /// </summary>
-        public Brush BbMouseClick { get; set; }
-
-        // Foreground
-        private Brush _FgButton;
-
-        /// <summary>
-        /// Цвет текста при не активном состоянии
-        /// </summary>
-        public Brush FgButton
-        {
-            get { return _FgButton; }
-            set
-            {
-                _FgButton = value;
-                RealyButton.Foreground = value;
-            }
-        }
-
-        /// <summary>
-        /// Цвет текста при наведении мышью на элемент
-        /// </summary>
-        public Brush FgMouseActive { get; set; }
-
-        /// <summary>
-        /// Цвет текста при нажатии мышью на элемент
-        /// </summary>
-        public Brush FgMouseClick { get; set; }
-
-        // Text
-        /// <summary>
-        /// Текст который отображается при не активном состоянии элемента
+        /// Текст кнопки
         /// </summary>
         public string Text
         {
-            get { return RealyButton.Text; }
-            set { RealyButton.Text = value; }
+            get => TextBlockButton.Text;
+            set => TextBlockButton.Text = value;
         }
 
         /// <summary>
-        /// Текст отображаемый при наведении мышью на элемент
+        /// Скругление границ кнопки (по умолчанию 10, 10, 10, 10)
         /// </summary>
-        public string? TextMouseActive { get; set; }
+        public CornerRadius CornerRadius
+        {
+            get => BorderButton.CornerRadius;
+            set => BorderButton.CornerRadius = value;
+        }
+
+        /// <summary>
+        /// Шрифт текста в кнопке
+        /// </summary>
+        public FontFamily TextFontFamily
+        {
+            get => TextBlockButton.FontFamily;
+            set => TextBlockButton.FontFamily = value;
+        }
+
+        /// <summary>
+        /// Размер текста в кнопке
+        /// </summary>
+        public double TextFontSize
+        {
+            get => TextBlockButton.FontSize;
+            set => TextBlockButton.FontSize = value;
+        }
+
+        /// <summary>
+        /// Анимация кнопки
+        /// </summary>
+        private readonly ColorAnimation animation;
 
         public IELButtonText()
         {
             InitializeComponent();
-            _BbButton = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            BorderButton.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            BbMouseActive = new SolidColorBrush(Color.FromRgb(20, 20, 20));
-            BbMouseClick = new SolidColorBrush(Color.FromRgb(40, 40, 40));
-
-            _BgButton = new SolidColorBrush(Color.FromRgb(40, 40, 40));
-            BorderButton.Background = new SolidColorBrush(Color.FromRgb(40, 40, 40));
-            BgMouseActive = new SolidColorBrush(Color.FromRgb(80, 80, 80));
-            BgMouseClick = new SolidColorBrush(Color.FromRgb(120, 120, 120));
-
-            _FgButton = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            RealyButton.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            FgMouseActive = new SolidColorBrush(Color.FromRgb(235, 235, 235));
-            FgMouseClick = new SolidColorBrush(Color.FromRgb(215, 215, 215));
-
-            Text = "Кнопка";
-
-            GridButton.MouseEnter += (sender, e) =>
+            AnimationMillisecond = 80;
+            animation = new ColorAnimation()
             {
-                BorderButton.Background = BgMouseActive;
-                BorderButton.BorderBrush = BbMouseActive;
-                RealyButton.Foreground = FgMouseActive;
-                if (TextMouseActive != null) RealyButton.Text = TextMouseActive;
+                Duration = TimeSpan.FromMilliseconds(AnimationMillisecond)
+            };
+            TextFontFamily = new FontFamily("Arial");
+            TextFontSize = 12;
+            Text = "Text";
+            CornerRadius = new CornerRadius(10);
+
+            DefaultBorderBrush = Colors.Black;
+            SelectBorderBrush = Colors.DarkGray;
+            ClickedBorderBrush = Colors.Gray;
+            NotEnabledBorderBrush = Colors.Brown;
+
+            DefaultBackground = Colors.White;
+            SelectBackground = Colors.Gray;
+            ClickedBackground = Colors.WhiteSmoke;
+            NotEnabledBackground = Colors.IndianRed;
+
+            DefaultForeground = Colors.Black;
+            SelectForeground = Colors.DarkGray;
+            ClickedForeground = Colors.Gray;
+            NotEnabledForeground = Colors.DarkRed;
+
+            MouseEnter += (sender, e) => MouseEnterAnimation();
+
+            MouseLeave += (sender, e) => MouseLeaveAnimation();
+
+            MouseDown += (sender, e) =>
+            {
+                BorderButton.BorderBrush = new SolidColorBrush(ClickedBorderBrush);
+                BorderButton.Background = new SolidColorBrush(ClickedBackground);
+                TextBlockButton.Foreground = new SolidColorBrush(ClickedForeground);
             };
 
-            GridButton.MouseLeave += (sender, e) =>
-            {
-                BorderButton.Background = _BgButton;
-                BorderButton.BorderBrush = _BbButton;
-                RealyButton.Foreground = _FgButton;
-                if (TextMouseActive != null) RealyButton.Text = Text;
-            };
+            MouseUp += (sender, e) => MouseEnterAnimation();
 
-            GridButton.MouseDown += (sender, e) =>
+            IsEnabledChanged += (sender, e) =>
             {
-                BorderButton.Background = BgMouseClick;
-                BorderButton.BorderBrush = BbMouseClick;
-                RealyButton.Foreground = FgMouseClick;
-                RealyButton.Focus();
+                BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, null);
+                BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, null);
+                TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, null);
+                BorderButton.BorderBrush = new SolidColorBrush((bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush);
+                BorderButton.Background = new SolidColorBrush((bool)e.NewValue ? DefaultBackground : NotEnabledBackground);
+                TextBlockButton.Foreground = new SolidColorBrush((bool)e.NewValue ? DefaultForeground : NotEnabledForeground);
             };
+        }
 
-            GridButton.MouseUp += (sender, e) =>
-            {
-                BorderButton.Background = _BgButton;
-                BorderButton.BorderBrush = _BbButton;
-                RealyButton.Foreground = _FgButton;
-                if (TextMouseActive != null) RealyButton.Text = Text;
-            };
+        /// <summary>
+        /// Анимация выделения кнопки мышью
+        /// </summary>
+        private void MouseEnterAnimation()
+        {
+            animation.To = SelectBorderBrush;
+            BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            animation.To = SelectBackground;
+            BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            animation.To = SelectForeground;
+            TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+        }
+
+        /// <summary>
+        /// Анимация отключения выделения мышью
+        /// </summary>
+        private void MouseLeaveAnimation()
+        {
+            animation.To = DefaultBorderBrush;
+            BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            animation.To = DefaultBackground;
+            BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            animation.To = DefaultForeground;
+            TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+        }
+
+        /// <summary>
+        /// Анимация мерцания
+        /// </summary>
+        public void BlinkAnimation()
+        {
+            animation.From = ClickedBorderBrush;
+            animation.To = DefaultBorderBrush;
+            BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            animation.From = ClickedBackground;
+            animation.To = DefaultBackground;
+            BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            animation.From = ClickedForeground;
+            animation.To = DefaultForeground;
+            TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
         }
     }
 }
