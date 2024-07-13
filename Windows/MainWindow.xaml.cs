@@ -47,6 +47,22 @@ namespace AAC20
         };
 
         /// <summary>
+        /// Перечисление вариаций вычисления позиций панели действий
+        /// </summary>
+        private enum PositionAnimActionPanel
+        {
+            /// <summary>
+            /// Обычное вычисление по курсору
+            /// </summary>
+            Default = 0,
+
+            /// <summary>
+            /// Вычисление цента объекта
+            /// </summary>
+            CenterObject = 1,
+        }
+
+        /// <summary>
         /// Реальное время
         /// </summary>
         private static string RealTime => DateTime.Now.ToString("HH:mm:ss");
@@ -80,9 +96,18 @@ namespace AAC20
         };
 
         /// <summary>
+        /// Объект анимации для управления прозрачностью панели действий
+        /// </summary>
+        private static readonly DoubleAnimation DoubleAnimateActionPanelOpacity = new(0, TimeSpan.FromMilliseconds(250d))
+        {
+            DecelerationRatio = 0.2d,
+            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        /// <summary>
         /// Размер активной панели действий
         /// </summary>
-        private static Size SizeActiveActionPanel => new(166, 176);
+        private static Size SizeActiveActionPanel => new(186, 125);
 
         public MainWindow()
         {
@@ -113,10 +138,13 @@ namespace AAC20
             BorderActionPanel.Height = 0;
 
             ButtonReboot.MouseUp += (sender, e) => App.RebootApplication();
-            ButtonReturnCommand.MouseUp += (sender, e) =>
+            ButtonReturnCommand.MouseUp += (sender, e) => ActivateActionCommand(TextBoxCommandInput.Text);
+            IELActionButtonClearConsole.MouseLeftButtonUp += (sender, e) =>
             {
-                ActivateActionCommand(TextBoxCommandInput.Text);
+                RichTextBoxMainMessage.Document = new();
+                AnimationActionPanel(false);
             };
+            SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
@@ -146,7 +174,7 @@ namespace AAC20
                 else if (e.ChangedButton == MouseButton.Right)
                 {
                     if (!Flags.ActionPanelActivate.Value) AnimationActionPanel(true);
-                    else AnimationMoveActionPanel();
+                    else AnimationMoveActionPanel(PositionAnimActionPanel.Default);
                 }
             };
 
@@ -157,25 +185,45 @@ namespace AAC20
         /// Анимировать изменение состояния панель действий
         /// </summary>
         /// <param name="State">Состояние панели</param>
-        private void AnimationActionPanel(bool State)
+        private void AnimationActionPanel(bool State, PositionAnimActionPanel StylePositionAnimate = PositionAnimActionPanel.Default)
         {
+            if (State == Flags.ActionPanelActivate.Value) return;
             Flags.ActionPanelActivate.Value = State;
-            AnimationMoveActionPanel();
-            DoubleAnimateActionPanelWH.To = State ? 166d : 0d;
-            BorderActionPanel.BeginAnimation(HeightProperty, DoubleAnimateActionPanelWH);
-            DoubleAnimateActionPanelWH.To = State ? 176d : 0d;
+            AnimationMoveActionPanel(StylePositionAnimate);
+            DoubleAnimateActionPanelWH.To = State ? SizeActiveActionPanel.Width : 0d;
             BorderActionPanel.BeginAnimation(WidthProperty, DoubleAnimateActionPanelWH);
+            DoubleAnimateActionPanelWH.To = State ? SizeActiveActionPanel.Height : 0d;
+            BorderActionPanel.BeginAnimation(HeightProperty, DoubleAnimateActionPanelWH);
+            DoubleAnimateActionPanelOpacity.To = State ? 1d : 0d;
+            BorderActionPanel.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
         }
 
         /// <summary>
-        /// Анимировать передвижение панели действий
+        /// Анимировать передвижение панели действий константно
         /// </summary>
-        private void AnimationMoveActionPanel()
+        /// <param name="StylePositionToAnimate">Вид вычисления позиции позиции анимации</param>
+        private void AnimationMoveActionPanel(PositionAnimActionPanel StylePositionToAnimate)
         {
-            Point MousePoint = Mouse.GetPosition(RichTextBoxMainMessage);
-            if (MousePoint.X + SizeActiveActionPanel.Width > RichTextBoxMainMessage.ActualWidth) MousePoint.X = RichTextBoxMainMessage.ActualWidth - SizeActiveActionPanel.Width - 1;
-            if (MousePoint.Y + SizeActiveActionPanel.Height > RichTextBoxMainMessage.ActualHeight) MousePoint.Y = RichTextBoxMainMessage.ActualHeight - SizeActiveActionPanel.Height - 1;
-            ThicknessAnimateActionPanel.To = new Thickness(MousePoint.X - 9, MousePoint.Y + 9, 0, 0);
+            if (StylePositionToAnimate == PositionAnimActionPanel.Default)
+            {
+                Point MousePoint = Mouse.GetPosition(RichTextBoxMainMessage);
+                if (Flags.ActionPanelActivate.Value)
+                {
+                    if (MousePoint.X + SizeActiveActionPanel.Width > RichTextBoxMainMessage.ActualWidth - 9)
+                        MousePoint.X = RichTextBoxMainMessage.ActualWidth - SizeActiveActionPanel.Width - 1;
+                    if (MousePoint.Y + SizeActiveActionPanel.Height > RichTextBoxMainMessage.ActualHeight - 47)
+                        MousePoint.Y = RichTextBoxMainMessage.ActualHeight - SizeActiveActionPanel.Height - 1;
+                }
+                ThicknessAnimateActionPanel.To = new Thickness(MousePoint.X, MousePoint.Y, 0, 0);
+            }
+            else if (StylePositionToAnimate == PositionAnimActionPanel.CenterObject)
+            {
+                ThicknessAnimateActionPanel.To =
+                    new Thickness(
+                        BorderActionPanel.Margin.Left + BorderActionPanel.Width / 2,
+                        BorderActionPanel.Margin.Top + BorderActionPanel.Height / 2,
+                        0, 0);
+            }
             BorderActionPanel.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
         }
 
@@ -185,7 +233,7 @@ namespace AAC20
         /// <param name="CommandString">Ктрока команды</param>
         private void ActivateActionCommand(string CommandString)
         {
-            if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false);
+            if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
             CommandStateResult Result = ConsoleCommand.ReadAndExecuteCommand([.. App.DataConsoleCommand], CommandString);
