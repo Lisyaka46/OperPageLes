@@ -13,8 +13,8 @@ namespace AAC20.Classes.Commands
     /// Инициализировать объект параметра команды
     /// </remarks>
     /// <param name="NameParameter">Имя параметра</param>
-    /// <param name="AbsolutlyParameter">Обязателен или не обязателен</param>
-    public class Parameter(string NameParameter, bool AbsolutlyParameter)
+    /// <param name="AbsolutlyParameter">Обязателен или не обязателен данный параметр (по умолчанию true)</param>
+    public class Parameter(string NameParameter, bool AbsolutlyParameter = true)
     {
         /// <summary>
         /// Имя параметра команды

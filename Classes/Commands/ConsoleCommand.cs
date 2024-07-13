@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom.Compiler;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace AAC20.Classes.Commands
 {
@@ -91,8 +93,28 @@ namespace AAC20.Classes.Commands
                 TextCommand = TextCommand.Replace(" ", "_").Replace("*", string.Empty).ToLower();
             }
             ConsoleCommand? SearchCommand = ConsoleCommands.SingleOrDefault(i => i.Name.Equals(TextCommand));
-            return SearchCommand?.ExecuteCommand(Parameters).Result ?? new(Commands.ResultState.Failed, $"Invalid command \"{TextCommand}\"", $"Команда \"{TextCommand}\" не найдена");
+            if (SearchCommand == null)
+            {
+                Paragraph Massage = new();
+                Massage.Inlines.Add(new Bold(new Run(">>> ")));
+                Massage.Inlines.Add(new Run("Invalid command "));
+                Massage.Inlines.Add(new Italic(new Run($"\"{TextCommand}\"") { Background = new SolidColorBrush(Colors.IndianRed) }));
+                return CommandStateResult.Failed(Massage, $"Команда \"{TextCommand}\" не найдена");
+            }
+            else
+            {
+                return AbsolutlyRequiredParameters(SearchCommand, Parameters) ?
+                    SearchCommand.ExecuteCommand(Parameters).Result : CommandStateResult.FaledParameteres(SearchCommand.Name);
+            }
         }
+
+        /// <summary>
+        /// Узнать написаны ли обязательные параметры команды
+        /// </summary>
+        /// <param name="WritingParameters">Написанные параметры</param>
+        /// <returns>Совпадает правилу или нет</returns>
+        private static bool AbsolutlyRequiredParameters(ConsoleCommand Command, string[]? WritingParameters) =>
+            (WritingParameters?.Length ?? 0) >= (Command.Parameters?.Count((i) => i.Absolutly == true) ?? 0);
 
         /// <summary>
         /// Создать выполнение команды

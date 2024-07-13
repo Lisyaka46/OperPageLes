@@ -31,7 +31,7 @@
                 <GUI1:ImageButton x:Name="ButtonSettings" DisabledBackground="#FFDE5E5E" ButtonBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" MillisecondsAnimation="90" MouseBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="1" Margin="2,1,2,1"/>
             </Grid>
         </Border>
-        <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Grid.RowSpan="2" Margin="3,2,2,2">
+        <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="3,2,2,2" Grid.Row="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*" MinHeight="35" MaxHeight="45"/>
@@ -45,10 +45,15 @@
                 <ColumnDefinition Width="45*"/>
             </Grid.ColumnDefinitions>
             <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Выполнить" Margin="3,3,2,3" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027"/>
-            <Image x:Name="ui" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
+            <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
         </Grid>
         <Border BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,3,3,4">
-            <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal"/>
+            <Grid x:Name="GridConsole">
+                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF255F3E" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="120"/>
+                </Border>
+                <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False"/>
+            </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" CornerRadius="10,10,10,10" Grid.Column="0" Grid.ColumnSpan="2" Margin="2,4,3,1">
             <Grid>
@@ -61,8 +66,8 @@
                 <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Arial Rounded MT Bold" FontSize="16" Margin="5,0,0,3" VerticalAlignment="Bottom" Height="19"/>
             </Grid>
         </Border>
-        <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="2,2,2,2" TextBackground="#FD78CCA0" TextBorderBrush="Black" TextBorderThickness="3,3,3,3" Grid.Column="1" Grid.Row="3" TextFontSize="17" SelectionBrush="#FF1E885A" Margin="3,5,3,5" MinWidth="100"/>
-        <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontFamily="Calibri" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,6,7,3" SelectForeground="#FF655802" SelectBorderBrush="#FF8A7A2E" SelectBackground="#FFC7C824" DefaultBackground="#FFDFE0C9" ClickedBorderBrush="#FF735F1A" ClickedForeground="#FF56530E" Grid.Column="2"/>
+        <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="2,2,2,2" TextBackground="#FD78CCA0" TextBorderBrush="Black" TextBorderThickness="3,3,3,3" Grid.Column="1" Grid.Row="3" TextFontSize="17" SelectionBrush="#FF1E885A" Margin="3,5,3,5" MinWidth="100" Text=""/>
+        <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontFamily="Calibri" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" SelectForeground="#FF655802" SelectBorderBrush="#FF8A7A2E" SelectBackground="#FFC7C824" DefaultBackground="#FFDFE0C9" ClickedBorderBrush="#FF735F1A" ClickedForeground="#FF56530E" Grid.Column="2"/>
 
     </Grid>
 </Window>

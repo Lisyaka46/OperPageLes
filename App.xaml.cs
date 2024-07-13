@@ -13,11 +13,14 @@ namespace AAC20
     /// </summary>
     public partial class App : Application
     {
-        public static readonly List<ConsoleCommand> DataConsoleCommand =
+        /// <summary>
+        /// Массив консольных команд
+        /// </summary>
+        internal static readonly List<ConsoleCommand> DataConsoleCommand =
         [
             new ConsoleCommand("reboot", "Перезагружает программу", (param) =>
             {
-                //Restart();
+                RebootApplication();
                 return Task.FromResult(CommandStateResult.Completed);
             }),
 
@@ -27,5 +30,14 @@ namespace AAC20
                 return Task.FromResult(CommandStateResult.Completed);
             }),
         ];
+
+        /// <summary>
+        /// Перезагрузить программу
+        /// </summary>
+        internal static void RebootApplication()
+        {
+            Process.Start(Process.GetCurrentProcess().ProcessName, Environment.GetCommandLineArgs());
+            Current.Shutdown();
+        }
     }
 }

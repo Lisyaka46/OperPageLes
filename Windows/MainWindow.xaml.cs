@@ -9,6 +9,7 @@ using Timer = System.Timers.Timer;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using AAC20.Classes.Commands;
+using AAC20.Classes;
 
 namespace AAC20
 {
@@ -35,6 +36,17 @@ namespace AAC20
         }
 
         /// <summary>
+        /// Флаги данной формы
+        /// </summary>
+        private static class Flags
+        {
+            /// <summary>
+            /// Флаг состояния активности панели действий в главной консоли
+            /// </summary>
+            public static Flag ActionPanelActivate = new(false);
+        };
+
+        /// <summary>
         /// Реальное время
         /// </summary>
         private static string RealTime => DateTime.Now.ToString("HH:mm:ss");
@@ -49,70 +61,138 @@ namespace AAC20
         /// </summary>
         private readonly UpdateBackgroundData UpdateBackgroundDataThis;
 
+        /// <summary>
+        /// Объект анимации для управления размерами панели действий
+        /// </summary>
+        private static readonly DoubleAnimation DoubleAnimateActionPanelWH = new(0, TimeSpan.FromMilliseconds(300d))
+        {
+            DecelerationRatio = 0.6d,
+            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        /// <summary>
+        /// Объект анимации для управления позицией панели действий
+        /// </summary>
+        private static readonly ThicknessAnimation ThicknessAnimateActionPanel = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
+        {
+            DecelerationRatio = 0.6d,
+            EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut }
+        };
+
+        /// <summary>
+        /// Размер активной панели действий
+        /// </summary>
+        private static Size SizeActiveActionPanel => new(166, 176);
+
         public MainWindow()
         {
             InitializeComponent();
+
             App.DataConsoleCommand.AddRange([
                 new ConsoleCommand("clear", "Очистка выводимых данных", (param) =>
                 {
-                    //ObjLog.LOGTextAppend($"Была распознана очистка консоли <tbOutput> (Командой clear)");
-                    //AnimationDL.StopAnimate(AnimationDL.StyleAnimateObj.AnimText, "tbOutput");
                     RichTextBoxMainMessage.Document = new();
                     return Task.FromResult(CommandStateResult.Completed);
                 }),
-                new ConsoleCommand("print", [new Parameter("Text", true)], "Вывод текста на экран", (param) =>
+                new ConsoleCommand("print", [new Parameter("Text")], "Вывод текста на экран", (param) =>
                 {
                     if (param.Length == 0) return Task.FromResult(CommandStateResult.FaledParameteres("Print"));
-                    RichTextBoxMainMessage.Document.Blocks.Add(new Paragraph(new Run($">>> {param[0]}\n")));
+                    Paragraph Massage = new();
+                    Massage.Inlines.Clear();
+                    Massage.Inlines.Add(new Bold(new Run(">>> ")));
+                    Massage.Inlines.Add(new Run(param[0]));
+                    RichTextBoxMainMessage.Document.Blocks.Add(Massage);
                     return Task.FromResult(CommandStateResult.Completed);
                 }),
             ]);
 
             UpdateBackgroundDataThis = new((sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             BackgroundUpdateVisualData();
+            RichTextBoxMainMessage.Document = new();
+            BorderActionPanel.Width = 0;
+            BorderActionPanel.Height = 0;
 
+            ButtonReboot.MouseUp += (sender, e) => App.RebootApplication();
             ButtonReturnCommand.MouseUp += (sender, e) =>
             {
-                ActivateActionCommand();
+                ActivateActionCommand(TextBoxCommandInput.Text);
             };
+
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
-                if (e.Key == Key.Enter)
+                switch (e.Key)
                 {
-                    TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
-                        new ColorAnimation(Color.FromRgb(160, 245, 200), TimeSpan.FromMilliseconds(90)));
+                    case Key.Enter:
+                        TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                            new ColorAnimation(Color.FromRgb(160, 245, 200), TimeSpan.FromMilliseconds(90d)));
+                        break;
                 }
             };
             TextBoxCommandInput.KeyUp += (sender, e) =>
             {
-                if (e.Key == Key.Enter)
+                switch (e.Key)
                 {
-                    TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
-                        new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430)));
-                    ActivateActionCommand();
+                    case Key.Enter:
+                        TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                            new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
+                        ActivateActionCommand(TextBoxCommandInput.Text);
+                        break;
                 }
             };
 
+            RichTextBoxMainMessage.MouseUp += (sender, e) =>
+            {
+                if (e.ChangedButton == MouseButton.Left && Flags.ActionPanelActivate.Value) AnimationActionPanel(false);
+                else if (e.ChangedButton == MouseButton.Right)
+                {
+                    if (!Flags.ActionPanelActivate.Value) AnimationActionPanel(true);
+                    else AnimationMoveActionPanel();
+                }
+            };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
         }
 
-        private void ActivateActionCommand()
+        /// <summary>
+        /// Анимировать изменение состояния панель действий
+        /// </summary>
+        /// <param name="State">Состояние панели</param>
+        private void AnimationActionPanel(bool State)
         {
-            if (TextBoxCommandInput.Text.Length == 0) return;
-            string CommandString = TextBoxCommandInput.Text;
+            Flags.ActionPanelActivate.Value = State;
+            AnimationMoveActionPanel();
+            DoubleAnimateActionPanelWH.To = State ? 166d : 0d;
+            BorderActionPanel.BeginAnimation(HeightProperty, DoubleAnimateActionPanelWH);
+            DoubleAnimateActionPanelWH.To = State ? 176d : 0d;
+            BorderActionPanel.BeginAnimation(WidthProperty, DoubleAnimateActionPanelWH);
+        }
+
+        /// <summary>
+        /// Анимировать передвижение панели действий
+        /// </summary>
+        private void AnimationMoveActionPanel()
+        {
+            Point MousePoint = Mouse.GetPosition(RichTextBoxMainMessage);
+            if (MousePoint.X + SizeActiveActionPanel.Width > RichTextBoxMainMessage.ActualWidth) MousePoint.X = RichTextBoxMainMessage.ActualWidth - SizeActiveActionPanel.Width - 1;
+            if (MousePoint.Y + SizeActiveActionPanel.Height > RichTextBoxMainMessage.ActualHeight) MousePoint.Y = RichTextBoxMainMessage.ActualHeight - SizeActiveActionPanel.Height - 1;
+            ThicknessAnimateActionPanel.To = new Thickness(MousePoint.X - 9, MousePoint.Y + 9, 0, 0);
+            BorderActionPanel.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
+        }
+
+        /// <summary>
+        /// Активировать команду
+        /// </summary>
+        /// <param name="CommandString">Ктрока команды</param>
+        private void ActivateActionCommand(string CommandString)
+        {
+            if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false);
+            if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
             CommandStateResult Result = ConsoleCommand.ReadAndExecuteCommand([.. App.DataConsoleCommand], CommandString);
-            if (Result.State == ResultState.Complete)
+            if (Result.State == ResultState.Failed && Result.Massage != null)
             {
+                RichTextBoxMainMessage.Document.Blocks.Add(Result.Massage);
             }
-            else
-            {
-                RichTextBoxMainMessage.Document.Blocks.Add(new Paragraph(new Run($">>> {Result.Massage}\n")));
-            }
-            // Paragraph myParagraph = new();
-            // myParagraph.Inlines.Add(new Run(CommandString));
-            // RichTextBoxMainMessage.Document.Blocks.Add(myParagraph);
         }
 
         /// <summary>
