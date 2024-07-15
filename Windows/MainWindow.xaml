@@ -44,22 +44,17 @@
                 <ColumnDefinition Width="89*"/>
                 <ColumnDefinition Width="45*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Выполнить" Margin="3,3,2,3" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027"/>
             <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
+            <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1"/>
         </Grid>
         <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,3,3,4">
             <Grid x:Name="GridConsole">
-                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="182" Height="129" >
+                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="182" Height="122" >
                     <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="6*"/>
-                            <RowDefinition Height="6*"/>
-                            <RowDefinition Height="5*"/>
-                        </Grid.RowDefinitions>
-                        <GUI:IELButtonText x:Name="IELActionButtonClearConsole" Margin="5,5,5,5" Text="Очистить текст в консоли" TextFontFamily="Arial Rounded MT Bold" DefaultBackground="#FF569A73" DefaultBorderBrush="#FF14482A" CornerRadius="8,8,8,8" SelectBackground="#FF92FFC0" SelectBorderBrush="#FF3A6D50" SelectForeground="#FF00423B" NotEnabledBackground="#FFA24242" NotEnabledBorderBrush="#FF7D1F1F" NotEnabledForeground="#FF540000"/>
+                        <Frame x:Name="FrameActionPanel"/>
                     </Grid>
                 </Border>
-                <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False"/>
+                <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross"/>
             </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" CornerRadius="10,10,10,10" Grid.Column="0" Grid.ColumnSpan="2" Margin="2,4,3,1">

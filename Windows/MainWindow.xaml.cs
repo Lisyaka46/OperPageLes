@@ -10,6 +10,9 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using AAC20.Classes.Commands;
 using AAC20.Classes;
+using AAC20.Windows.Frames;
+using AAC20.Windows.Pages.ActionPanel;
+using System.Windows.Navigation;
 
 namespace AAC20
 {
@@ -45,6 +48,22 @@ namespace AAC20
             /// </summary>
             public static Flag ActionPanelActivate = new(false);
         };
+
+        /// <summary>
+        /// Класс страниц данной формы
+        /// </summary>
+        private static class Pages
+        {
+            /// <summary>
+            /// Главная страница панели действий
+            /// </summary>
+            internal static PageMainActionPanel PageMainActPanel = new();
+
+            /// <summary>
+            /// Страница буффера в панели действий
+            /// </summary>
+            internal static PageBufferActionPanel PageBufferActPanel = new();
+        }
 
         /// <summary>
         /// Перечисление вариаций вычисления позиций панели действий
@@ -107,7 +126,7 @@ namespace AAC20
         /// <summary>
         /// Размер активной панели действий
         /// </summary>
-        private static Size SizeActiveActionPanel => new(186, 125);
+        private readonly Size SizeActiveActionPanel;
 
         public MainWindow()
         {
@@ -121,7 +140,6 @@ namespace AAC20
                 }),
                 new ConsoleCommand("print", [new Parameter("Text")], "Вывод текста на экран", (param) =>
                 {
-                    if (param.Length == 0) return Task.FromResult(CommandStateResult.FaledParameteres("Print"));
                     Paragraph Massage = new();
                     Massage.Inlines.Clear();
                     Massage.Inlines.Add(new Bold(new Run(">>> ")));
@@ -131,19 +149,33 @@ namespace AAC20
                 }),
             ]);
 
+            Pages.PageMainActPanel.IELButtonCrearConsole.MouseLeftButtonUp += (sender, e) =>
+            {
+                RichTextBoxMainMessage.Document = new();
+                AnimationActionPanel(false);
+            };
+
+            Pages.PageMainActPanel.IELButtonCommandBuffer.MouseLeftButtonUp += (sender, e) =>
+            {
+                FrameActionPanel.Navigate(Pages.PageBufferActPanel);
+            };
+
+            Pages.PageBufferActPanel.IELButtonBackMainMenu.MouseLeftButtonUp += (sender, e) =>
+            {
+                FrameActionPanel.Navigate(Pages.PageMainActPanel);
+            };
+
             UpdateBackgroundDataThis = new((sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             BackgroundUpdateVisualData();
+            FrameActionPanel.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            FrameActionPanel.Navigate(Pages.PageMainActPanel);
             RichTextBoxMainMessage.Document = new();
+            SizeActiveActionPanel = new(BorderActionPanel.Width, BorderActionPanel.Height);
             BorderActionPanel.Width = 0;
             BorderActionPanel.Height = 0;
 
             ButtonReboot.MouseUp += (sender, e) => App.RebootApplication();
             ButtonReturnCommand.MouseUp += (sender, e) => ActivateActionCommand(TextBoxCommandInput.Text);
-            IELActionButtonClearConsole.MouseLeftButtonUp += (sender, e) =>
-            {
-                RichTextBoxMainMessage.Document = new();
-                AnimationActionPanel(false);
-            };
             SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
 
             TextBoxCommandInput.KeyDown += (sender, e) =>

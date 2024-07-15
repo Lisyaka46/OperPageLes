@@ -1,0 +1,22 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.Windows.Pages.ActionPanel"
+      xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Pages.ActionPanel.PageBufferActionPanel"
+      mc:Ignorable="d" 
+      d:DesignHeight="132.5" d:DesignWidth="184"
+      Title="PageBufferActionPanel">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="83*"/>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4"/>
+
+        <GUI:IELButtonText x:Name="IELButtonBackMainMenu" Margin="4,5,90,5" StateVisualizationButton="LeftArrow" Text="Назад" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Bahnschrift" TextFontSize="14"/>
+
+    </Grid>
+</Page>
