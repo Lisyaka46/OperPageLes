@@ -355,13 +355,13 @@ namespace AAC20.GUI
                 {
                     TextBlockLeftArrow.Foreground = new SolidColorBrush(Foreground);
                     BorderLeftArrow.BeginAnimation(MarginProperty, null);
-                    BorderLeftArrow.Margin = new(0, 0, -2, 0);
+                    BorderLeftArrow.Margin = new(0, 1, -2, 0);
                 }
                 else
                 {
                     TextBlockRightArrow.Foreground = new SolidColorBrush(Foreground);
                     BorderRightArrow.BeginAnimation(MarginProperty, null);
-                    BorderRightArrow.Margin = new(-2, 0, 0, 0);
+                    BorderRightArrow.Margin = new(-2, 1, 0, 0);
                 }
             }
             if (CharKeyKeyboardActivate)
@@ -383,7 +383,7 @@ namespace AAC20.GUI
             {
                 ButtonAnimationThickness.To = new(
                     StateVisualizationButton == StateButton.RightArrow ? 1 : 0,
-                    0,
+                    1,
                     StateVisualizationButton == StateButton.LeftArrow ? 1 : 0,
                     0);
                 if (StateVisualizationButton == StateButton.LeftArrow)
@@ -434,7 +434,7 @@ namespace AAC20.GUI
             {
                 ButtonAnimationThickness.To = new(
                     StateVisualizationButton == StateButton.RightArrow ? -5 : 0,
-                    0,
+                    1,
                     StateVisualizationButton == StateButton.LeftArrow ? -5 : 0,
                     0);
                 if (StateVisualizationButton == StateButton.LeftArrow)

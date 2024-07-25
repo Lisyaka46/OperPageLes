@@ -13,6 +13,7 @@ using AAC20.Classes;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
 using System.Windows.Navigation;
+using System.Windows.Controls;
 
 namespace AAC20
 {
@@ -128,6 +129,11 @@ namespace AAC20
         /// </summary>
         private readonly Size SizeActiveActionPanel;
 
+        /// <summary>
+        /// Вложенность панели действий для анимации
+        /// </summary>
+        private int PanelVerschachtelung = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -157,18 +163,19 @@ namespace AAC20
 
             Pages.PageMainActPanel.IELButtonCommandBuffer.MouseLeftButtonUp += (sender, e) =>
             {
-                FrameActionPanel.Navigate(Pages.PageBufferActPanel);
+                NextPageInActtionPanel(Pages.PageBufferActPanel);
             };
 
             Pages.PageBufferActPanel.IELButtonBackMainMenu.MouseLeftButtonUp += (sender, e) =>
             {
-                FrameActionPanel.Navigate(Pages.PageMainActPanel);
+                NextPageInActtionPanel(Pages.PageMainActPanel, false);
             };
 
             UpdateBackgroundDataThis = new((sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             BackgroundUpdateVisualData();
-            FrameActionPanel.NavigationUIVisibility = NavigationUIVisibility.Hidden;
-            FrameActionPanel.Navigate(Pages.PageMainActPanel);
+            FrameActionPanelLeft.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            FrameActionPanelRight.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            FrameActionPanelLeft.Navigate(Pages.PageMainActPanel);
             RichTextBoxMainMessage.Document = new();
             SizeActiveActionPanel = new(BorderActionPanel.Width, BorderActionPanel.Height);
             BorderActionPanel.Width = 0;
@@ -211,6 +218,38 @@ namespace AAC20
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
+        }
+
+        /// <summary>
+        /// Перенаправить страницу панели
+        /// </summary>
+        /// <param name="Content">Новая страница панели</param>
+        /// <param name="RightAlign">Правая ориентация движения</param>
+        private void NextPageInActtionPanel(object Content, bool RightAlign = true)
+        {
+            Frame OldFrameAnim = PanelVerschachtelung % 2 == 0 ? FrameActionPanelLeft : FrameActionPanelRight;
+            Frame NewFrameAnim = !(PanelVerschachtelung % 2 == 0) ? FrameActionPanelLeft : FrameActionPanelRight;
+            int Offset = RightAlign ? -18 : 18;
+            NewFrameAnim.Opacity = 0;
+            Canvas.SetZIndex(OldFrameAnim, 0);
+            Canvas.SetZIndex(NewFrameAnim, 1);
+            OldFrameAnim.IsEnabled = false;
+            NewFrameAnim.IsEnabled = true;
+            NewFrameAnim.BeginAnimation(MarginProperty, null);
+            NewFrameAnim.Margin = new(0 - Offset);
+            NewFrameAnim.Navigate(Content);
+
+            DoubleAnimateActionPanelOpacity.To = 0;
+            OldFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
+            ThicknessAnimateActionPanel.To = new(Offset);
+            OldFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
+
+            DoubleAnimateActionPanelOpacity.To = 1;
+            NewFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
+            ThicknessAnimateActionPanel.To = new(0);
+            NewFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
+
+            PanelVerschachtelung = (PanelVerschachtelung + 1) % 2;
         }
 
         /// <summary>
@@ -268,7 +307,7 @@ namespace AAC20
             if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
-            CommandStateResult Result = ConsoleCommand.ReadAndExecuteCommand([.. App.DataConsoleCommand], CommandString);
+            CommandStateResult Result = ConsoleCommand.ReadAndExecuteCommand(App.BufferCommand, [.. App.DataConsoleCommand], CommandString);
             if (Result.State == ResultState.Failed && Result.Massage != null)
             {
                 RichTextBoxMainMessage.Document.Blocks.Add(Result.Massage);

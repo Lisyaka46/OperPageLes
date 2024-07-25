@@ -31,6 +31,8 @@ namespace AAC20
             }),
         ];
 
+        internal static Classes.Commands.Buffer BufferCommand = new();
+
         /// <summary>
         /// Перезагрузить программу
         /// </summary>

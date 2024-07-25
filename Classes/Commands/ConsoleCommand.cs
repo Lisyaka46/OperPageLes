@@ -9,15 +9,8 @@ namespace AAC20.Classes.Commands
     /// <summary>
     /// Консольная команда
     /// </summary>
-    public partial class ConsoleCommand
+    public partial class ConsoleCommand : ICommandAAC
     {
-        /// <summary>
-        /// Делегат события выполнения команды
-        /// </summary>
-        /// <param name="ParametersValue">Параметры команды</param>
-        /// <returns>Итог выполнения команды</returns>
-        public delegate Task<CommandStateResult> ExecuteCom(string[] ParametersValue);
-
         /// <summary>
         /// Имя команды
         /// </summary>
@@ -36,7 +29,7 @@ namespace AAC20.Classes.Commands
         /// <summary>
         /// Действие которое выполняет команда
         /// </summary>
-        private event ExecuteCom Execute;
+        private event ICommandAAC.ExecuteCom Execute;
 
         /// <summary>
         /// Инициализировать объект консольной команды с параметрами
@@ -45,7 +38,7 @@ namespace AAC20.Classes.Commands
         /// <param name="Parameters">Параметры команды</param>
         /// <param name="Explanation">Описание команды</param>
         /// <param name="Execute">Действие выполнения</param>
-        public ConsoleCommand(string Name, Parameter[] Parameters, string Explanation, ExecuteCom Execute)
+        public ConsoleCommand(string Name, Parameter[] Parameters, string Explanation, ICommandAAC.ExecuteCom Execute)
         {
             this.Name = Name;
             this.Parameters = Parameters;
@@ -60,7 +53,7 @@ namespace AAC20.Classes.Commands
         /// <param name="Name">Имя</param>
         /// <param name="Explanation">Описание команды</param>
         /// <param name="Execute">Действие выполнения</param>
-        public ConsoleCommand(string Name, string Explanation, ExecuteCom Execute)
+        public ConsoleCommand(string Name, string Explanation, ICommandAAC.ExecuteCom Execute)
         {
             this.Name = Name;
             this.Explanation = Explanation;
@@ -72,7 +65,7 @@ namespace AAC20.Classes.Commands
         /// </summary>
         /// <param name="ConsoleCommands">Массив поиска консольных команд</param>
         /// <param name="TextCommand">Читаемая команда</param>
-        public static CommandStateResult ReadAndExecuteCommand(ConsoleCommand[] ConsoleCommands, string TextCommand)
+        public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, ConsoleCommand[] ConsoleCommands, string TextCommand)
         {
             string[]? Parameters = null;
             while (TextCommand.Length > 0)
@@ -85,8 +78,8 @@ namespace AAC20.Classes.Commands
             {
                 if (TextCommand[TextCommand.IndexOf('*') + 1] != ' ') TextCommand = TextCommand.Replace("*", "* ");
                 TextCommand = TextCommand[0..TextCommand.IndexOf('*')].Replace(" ", "_").ToLower() + TextCommand[TextCommand.IndexOf('*')..];
-                Parameters = [.. RegexParameterCommand().Matches(TextCommand).Select(i => i.Value[2..])];
-                TextCommand = RegexSortCommand().Match(TextCommand).Value.ToString().Replace("*", string.Empty).Replace(" ", string.Empty);
+                Parameters = [.. ICommandAAC.RegexParameterCommand().Matches(TextCommand).Select(i => i.Value[2..])];
+                TextCommand = ICommandAAC.RegexSortCommand().Match(TextCommand).Value.ToString().Replace("*", string.Empty).Replace(" ", string.Empty);
             }
             else // command
             {
@@ -103,8 +96,9 @@ namespace AAC20.Classes.Commands
             }
             else
             {
+                BufferCommand.Add(SearchCommand, SearchCommand.Name, Parameters ?? []);
                 return AbsolutlyRequiredParameters(SearchCommand, Parameters) ?
-                    SearchCommand.ExecuteCommand(Parameters).Result : CommandStateResult.FaledParameteres(SearchCommand.Name);
+                    SearchCommand.ExecuteCommand(Parameters) : CommandStateResult.FaledParameteres(SearchCommand.Name);
             }
         }
 
@@ -119,11 +113,6 @@ namespace AAC20.Classes.Commands
         /// <summary>
         /// Создать выполнение команды
         /// </summary>
-        public async Task<CommandStateResult> ExecuteCommand(string[]? parameters) => await Execute.Invoke(parameters ?? []);
-
-        [GeneratedRegex(@"( |\*|,)([^,]|,,)+")]
-        private static partial Regex RegexParameterCommand();
-        [GeneratedRegex(@"\b[^\*~!@#$<>,.\/\\?|'"";:`%^&*()\[\]{} \-=+]+\* ?")]
-        private static partial Regex RegexSortCommand();
+        public CommandStateResult ExecuteCommand(string[]? parameters) => Execute.Invoke(parameters ?? []).Result;
     }
 }
