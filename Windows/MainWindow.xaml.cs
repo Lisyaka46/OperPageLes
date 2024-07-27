@@ -243,6 +243,14 @@ namespace AAC20
                 }
             };
 
+            Pages.PageBufferActPanel.BorderBuffer.MouseWheel += (sender, e) =>
+            {
+                if (App.BufferCommand.Count > 4)
+                {
+
+                }
+            };
+
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
         }
 

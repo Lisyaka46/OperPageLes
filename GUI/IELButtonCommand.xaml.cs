@@ -26,7 +26,7 @@ namespace AAC20.GUI
         /// <summary>
         /// Ссылка на команду
         /// </summary>
-        private readonly Classes.Commands.Buffer.BufferCommand<ICommandAAC> RefCommand;
+        private readonly Classes.Buffer.BufferCommand<ICommandAAC> RefCommand;
 
         /// <summary>
         /// Перечисление стилей цвета нажатия на кнопку
@@ -206,7 +206,7 @@ namespace AAC20.GUI
         /// </summary>
         private readonly DoubleAnimation ButtonAnimationOpacity;
 
-        public IELButtonCommand(Classes.Commands.Buffer.BufferCommand<ICommandAAC> Command, int index)
+        public IELButtonCommand(Classes.Buffer.BufferCommand<ICommandAAC> Command, int index)
         {
             InitializeComponent();
             RefCommand = Command;
@@ -228,23 +228,24 @@ namespace AAC20.GUI
             Text = RefCommand.TextCommand;
             CornerRadius = new CornerRadius(10);
             HorizontalAlignment = HorizontalAlignment.Stretch;
-            VerticalAlignment = VerticalAlignment.Stretch;
-            Margin = new(3, 27 * index + 4, 3, 0);
-            Height = 23;
+            VerticalAlignment = VerticalAlignment.Top;
+            Margin = new(5, 27 * index + 4, 5, 0);
+            Height = 25;
+            BorderButton.CornerRadius = new CornerRadius(4);
 
-            DefaultBorderBrush = Colors.Black;
-            SelectBorderBrush = Colors.DarkGray;
-            ClickedBorderBrush = Colors.Gray;
-            NotEnabledBorderBrush = Colors.Brown;
-
-            DefaultBackground = Colors.White;
-            SelectBackground = Colors.Gray;
-            ClickedBackground = Colors.WhiteSmoke;
+            DefaultBackground = Color.FromRgb(172, 238, 255);
+            SelectBackground = Color.FromRgb(101, 193, 241);
+            ClickedBackground = Colors.White;
             NotEnabledBackground = Colors.IndianRed;
 
+            DefaultBorderBrush = Color.FromRgb(105, 71, 101);
+            SelectBorderBrush = Color.FromRgb(158, 130, 155);
+            ClickedBorderBrush = Color.FromRgb(136, 93, 130);
+            NotEnabledBorderBrush = Colors.Brown;
+
             DefaultForeground = Colors.Black;
-            SelectForeground = Colors.DarkGray;
-            ClickedForeground = Colors.Gray;
+            SelectForeground = Color.FromRgb(28, 33, 32);
+            ClickedForeground = Color.FromRgb(0, 49, 34);
             NotEnabledForeground = Colors.DarkRed;
 
             MouseEnter += (sender, e) => MouseEnterAnimation();

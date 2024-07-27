@@ -1,9 +1,10 @@
-﻿using AAC20.GUI;
+﻿using AAC20.Classes.Commands;
+using AAC20.GUI;
 using System.Windows;
 using System.Windows.Controls;
-using static AAC20.Classes.Commands.Buffer;
+using static AAC20.Classes.Buffer;
 
-namespace AAC20.Classes.Commands
+namespace AAC20.Classes
 {
     /// <summary>
     /// Буфер консольных команд
@@ -28,6 +29,11 @@ namespace AAC20.Classes.Commands
         /// Общее количество мест в буфере
         /// </summary>
         public int Length => BufferElements.Length;
+
+        /// <summary>
+        /// Счётчик прокрутки мыши буфера
+        /// </summary>
+        public CounterScrollBar CounterBuffer = new(0, 4);
 
         /// <summary>
         /// Класс буферной команды
@@ -110,7 +116,11 @@ namespace AAC20.Classes.Commands
         public void Add(ICommandAAC Command, string Name, string[] Parameteres, string StringCommand)
         {
             IELButtonCommand BCom = new(new BufferCommand<ICommandAAC>(ref Command, Name, Parameteres, StringCommand), Count);
-            if (Count < BufferElements.Length - 1) this[++Count] = BCom;
+            if (Count < BufferElements.Length - 1)
+            {
+                this[++Count] = BCom;
+                CounterBuffer.MaxUp(1);
+            }
             else
             {
                 BufferElements = [.. BufferElements.Skip(1)];
