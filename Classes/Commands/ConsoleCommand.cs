@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 using System.CodeDom.Compiler;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace AAC20.Classes.Commands
 {
@@ -67,6 +69,7 @@ namespace AAC20.Classes.Commands
         /// <param name="TextCommand">Читаемая команда</param>
         public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, ConsoleCommand[] ConsoleCommands, string TextCommand)
         {
+            string RegistriernCommand = TextCommand;
             string[]? Parameters = null;
             while (TextCommand.Length > 0)
             {
@@ -96,7 +99,7 @@ namespace AAC20.Classes.Commands
             }
             else
             {
-                BufferCommand.Add(SearchCommand, SearchCommand.Name, Parameters ?? []);
+                BufferCommand.Add(SearchCommand, SearchCommand.Name, Parameters ?? [], RegistriernCommand);
                 return AbsolutlyRequiredParameters(SearchCommand, Parameters) ?
                     SearchCommand.ExecuteCommand(Parameters) : CommandStateResult.FaledParameteres(SearchCommand.Name);
             }

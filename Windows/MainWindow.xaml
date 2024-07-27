@@ -32,12 +32,11 @@
             </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="3,2,2,2" Grid.Row="1">
-            <Grid>
+            <Grid x:Name="Paging">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*" MinHeight="35" MaxHeight="45"/>
                     <RowDefinition Height="57*"/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="Dev" HorizontalAlignment="Left" Margin="30,12,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
             </Grid>
         </Border>
         <Grid Grid.Column="2" Grid.Row="2" Margin="0,52,0,0" Grid.RowSpan="2">
@@ -46,12 +45,12 @@
                 <ColumnDefinition Width="45*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
-            <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1"/>
+            <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" CharKeyKeyboard="A"/>
         </Grid>
         <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,3,3,4">
             <Grid x:Name="GridConsole">
-                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="182" Height="122" >
-                    <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110">
+                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="215" Height="164" Focusable="True" AllowDrop="True" >
+                    <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True">
                         <Frame x:Name="FrameActionPanelLeft" Grid.ColumnSpan="1" Panel.ZIndex="1"/>
                         <Frame x:Name="FrameActionPanelRight" Grid.ColumnSpan="1"/>
                     </Grid>

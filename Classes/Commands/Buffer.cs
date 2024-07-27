@@ -1,4 +1,7 @@
-﻿using static AAC20.Classes.Commands.Buffer;
+﻿using AAC20.GUI;
+using System.Windows;
+using System.Windows.Controls;
+using static AAC20.Classes.Commands.Buffer;
 
 namespace AAC20.Classes.Commands
 {
@@ -14,7 +17,7 @@ namespace AAC20.Classes.Commands
         /// <summary>
         /// Массив элементов буфера
         /// </summary>
-        private BufferCommand<ICommandAAC>[] BufferElements = new BufferCommand<ICommandAAC>[Math.Clamp(CountBuffer, 4, 80)];
+        private IELButtonCommand[] BufferElements = new IELButtonCommand[Math.Clamp(CountBuffer, 4, 80)];
 
         /// <summary>
         /// Количество добавленных команд
@@ -33,12 +36,17 @@ namespace AAC20.Classes.Commands
         /// <param name="Command">Ссылка на команду</param>
         /// <param name="Name">Имя команды</param>
         /// <param name="Parameters">Параметры команды</param>
-        public class BufferCommand<T>(ref T Command, string Name, string[] Parameters) where T : ICommandAAC
+        public class BufferCommand<T>(ref T Command, string Name, string[] Parameters, string StringCommand) where T : ICommandAAC
         {
             /// <summary>
             /// Ссылка на команду
             /// </summary>
             public T RefCommand = Command;
+
+            /// <summary>
+            /// Пропись сохранённой команды
+            /// </summary>
+            public readonly string TextCommand = StringCommand;
 
             /// <summary>
             /// Имя сохранённой команды
@@ -63,7 +71,7 @@ namespace AAC20.Classes.Commands
         /// <param name="key">Индекс читаемого элемента</param>
         /// <returns>Прочитанный текст элемента</returns>
         /// <exception cref="IndexOutOfRangeException">Исключение выхода индекса за границы буфера</exception>
-        public BufferCommand<ICommandAAC> this[Index key]
+        public IELButtonCommand this[Index key]
         {
             get
             {
@@ -84,7 +92,7 @@ namespace AAC20.Classes.Commands
         {
             if (Count > 0)
             {
-                BufferElements = new BufferCommand<ICommandAAC>[BufferElements.Length];
+                BufferElements = new IELButtonCommand[BufferElements.Length];
                 Count = 0;
             }
         }
@@ -98,9 +106,10 @@ namespace AAC20.Classes.Commands
         /// <param name="Command">Элемент буфера</param>
         /// <param name="Name">Имя команды</param>
         /// <param name="Parameteres">Параметры выполняемой команды</param>
-        public void Add(ICommandAAC Command, string Name, string[] Parameteres)
+        /// <param name="StringCommand">Пропись команды</param>
+        public void Add(ICommandAAC Command, string Name, string[] Parameteres, string StringCommand)
         {
-            BufferCommand<ICommandAAC> BCom = new(ref Command, Name, Parameteres);
+            IELButtonCommand BCom = new(new BufferCommand<ICommandAAC>(ref Command, Name, Parameteres, StringCommand), Count);
             if (Count < BufferElements.Length - 1) this[++Count] = BCom;
             else
             {

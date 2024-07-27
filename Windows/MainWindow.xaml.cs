@@ -14,6 +14,7 @@ using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
 using System.Windows.Navigation;
 using System.Windows.Controls;
+using AAC20.Interfaces;
 
 namespace AAC20
 {
@@ -134,6 +135,11 @@ namespace AAC20
         /// </summary>
         private int PanelVerschachtelung = 0;
 
+        /// <summary>
+        /// ССылка на активную страницу панели действий
+        /// </summary>
+        private IPageActionPanelAAC RefPageActionPanel;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -155,18 +161,18 @@ namespace AAC20
                 }),
             ]);
 
-            Pages.PageMainActPanel.IELButtonCrearConsole.MouseLeftButtonUp += (sender, e) =>
+            Pages.PageMainActPanel.IELButtonCrearConsole.OnActivate += (AltMode) =>
             {
                 RichTextBoxMainMessage.Document = new();
                 AnimationActionPanel(false);
             };
 
-            Pages.PageMainActPanel.IELButtonCommandBuffer.MouseLeftButtonUp += (sender, e) =>
+            Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivate += (AltMode) =>
             {
                 NextPageInActtionPanel(Pages.PageBufferActPanel);
             };
 
-            Pages.PageBufferActPanel.IELButtonBackMainMenu.MouseLeftButtonUp += (sender, e) =>
+            Pages.PageBufferActPanel.IELButtonBackMainMenu.OnActivate += (AltMode) =>
             {
                 NextPageInActtionPanel(Pages.PageMainActPanel, false);
             };
@@ -175,15 +181,35 @@ namespace AAC20
             BackgroundUpdateVisualData();
             FrameActionPanelLeft.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             FrameActionPanelRight.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            RefPageActionPanel = Pages.PageMainActPanel;
             FrameActionPanelLeft.Navigate(Pages.PageMainActPanel);
             RichTextBoxMainMessage.Document = new();
             SizeActiveActionPanel = new(BorderActionPanel.Width, BorderActionPanel.Height);
             BorderActionPanel.Width = 0;
             BorderActionPanel.Height = 0;
 
-            ButtonReboot.MouseUp += (sender, e) => App.RebootApplication();
-            ButtonReturnCommand.MouseUp += (sender, e) => ActivateActionCommand(TextBoxCommandInput.Text);
+            ButtonReboot.OnActivate += (key) => App.RebootApplication();
+            ButtonReturnCommand.OnActivate += (key) => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+
+            BorderActionPanel.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Escape:
+                        AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+                        break;
+                    case Key.Z:
+                        RefPageActionPanel.AltModeChanged.Invoke(!RefPageActionPanel.AltMode);
+                        break;
+                    case Key.W:
+                        Pages.PageMainActPanel.IELButtonCrearConsole.BlinkAnimation();
+                        break;
+                    default:
+                        if (RefPageActionPanel.AltMode) RefPageActionPanel.ActivateInKey(e.Key);
+                        break;
+                }
+            };
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
@@ -225,7 +251,7 @@ namespace AAC20
         /// </summary>
         /// <param name="Content">Новая страница панели</param>
         /// <param name="RightAlign">Правая ориентация движения</param>
-        private void NextPageInActtionPanel(object Content, bool RightAlign = true)
+        private void NextPageInActtionPanel(IPageActionPanelAAC Content, bool RightAlign = true)
         {
             Frame OldFrameAnim = PanelVerschachtelung % 2 == 0 ? FrameActionPanelLeft : FrameActionPanelRight;
             Frame NewFrameAnim = !(PanelVerschachtelung % 2 == 0) ? FrameActionPanelLeft : FrameActionPanelRight;
@@ -237,6 +263,8 @@ namespace AAC20
             NewFrameAnim.IsEnabled = true;
             NewFrameAnim.BeginAnimation(MarginProperty, null);
             NewFrameAnim.Margin = new(0 - Offset);
+            Content.AltMode = RefPageActionPanel.AltMode;
+            RefPageActionPanel = Content;
             NewFrameAnim.Navigate(Content);
 
             DoubleAnimateActionPanelOpacity.To = 0;
@@ -256,9 +284,16 @@ namespace AAC20
         /// Анимировать изменение состояния панель действий
         /// </summary>
         /// <param name="State">Состояние панели</param>
+        /// <param name="StylePositionAnimate">Стиль анимации позиции</param>
         private void AnimationActionPanel(bool State, PositionAnimActionPanel StylePositionAnimate = PositionAnimActionPanel.Default)
         {
             if (State == Flags.ActionPanelActivate.Value) return;
+            if (State) BorderActionPanel.Focus();
+            else
+            {
+                RefPageActionPanel.AltModeChanged.Invoke(false);
+                RichTextBoxMainMessage.Focus();
+            }
             Flags.ActionPanelActivate.Value = State;
             AnimationMoveActionPanel(StylePositionAnimate);
             DoubleAnimateActionPanelWH.To = State ? SizeActiveActionPanel.Width : 0d;
@@ -307,7 +342,15 @@ namespace AAC20
             if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
-            CommandStateResult Result = ConsoleCommand.ReadAndExecuteCommand(App.BufferCommand, [.. App.DataConsoleCommand], CommandString);
+            //Pages.PageBufferActPanel.GridBuffer.Background = new SolidColorBrush(Colors.Black);
+            CommandStateResult Result =
+                ConsoleCommand.ReadAndExecuteCommand
+                (App.BufferCommand, [.. App.DataConsoleCommand], CommandString);
+            if (Result.State == ResultState.Complete)
+            {
+                Pages.PageBufferActPanel.GridBuffer.Children.Add(App.BufferCommand[App.BufferCommand.Count]);
+            }
+
             if (Result.State == ResultState.Failed && Result.Massage != null)
             {
                 RichTextBoxMainMessage.Document.Blocks.Add(Result.Massage);

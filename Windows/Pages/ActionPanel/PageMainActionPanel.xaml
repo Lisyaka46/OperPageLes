@@ -6,15 +6,15 @@
       xmlns:local="clr-namespace:AAC20.Windows.Frames"
       xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Frames.PageMainActionPanel"
       mc:Ignorable="d"
-      Title="PageMainActionPanel" d:DesignHeight="95.5" d:DesignWidth="165.523">
+      Title="PageMainActionPanel" d:DesignHeight="95.5" d:DesignWidth="178.18">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="37*"/>
             <RowDefinition Height="37*"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonText x:Name="IELButtonCrearConsole" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Очистить текст консоли" Margin="0,5,0,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" FontWeight="Bold"/>
-        <GUI:IELButtonText x:Name="IELButtonCommandBuffer" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Командный буфер" Margin="0,5,0,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" Grid.Row="1" FontWeight="Bold" StateVisualizationButton="RightArrow"/>
+        <GUI:IELButtonText x:Name="IELButtonCrearConsole" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Очистить текст консоли" Margin="0,5,0,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D0"/>
+        <GUI:IELButtonText x:Name="IELButtonCommandBuffer" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Командный буфер" Margin="0,5,0,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" Grid.Row="1" FontWeight="Bold" StateVisualizationButton="RightArrow" CharKeyKeyboard="D1"/>
 
     </Grid>
 </Page>

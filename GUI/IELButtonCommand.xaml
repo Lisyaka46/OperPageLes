@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="AAC20.GUI.IELButtonCommand"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AAC20.GUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="22.934" d:DesignWidth="83.026">
+    <Grid>
+        <Border x:Name="BorderButton" BorderBrush="Black" BorderThickness="3,3,3,3" CornerRadius="4, 4, 4, 4" Background="White" Grid.ColumnSpan="1" Grid.Column="1">
+            <Grid x:Name="GridButton">
+                <TextBlock x:Name="TextBlockButton" Text="TextBlock" TextAlignment="Center" Foreground="Black" Focusable="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="1" Grid.Column="1" VerticalAlignment="Top" Margin="3,0,3,0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
