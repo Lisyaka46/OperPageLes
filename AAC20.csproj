@@ -8,7 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+    <None Remove="Fonts\Tablon-Regular.ttf" />
     <None Remove="Windows\WindowsImages\Loading.gif" />
     <None Remove="Windows\WindowsImages\Settings.png" />
     <None Remove="Windows\WindowsImages\YES.png" />
@@ -19,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\Tablon-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Windows\WindowsImages\Loading.gif" />
     <Resource Include="Windows\WindowsImages\Settings.png" />
     <Resource Include="Windows\WindowsImages\YES.png" />
