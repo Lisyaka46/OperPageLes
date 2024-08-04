@@ -18,7 +18,7 @@ namespace AAC20.Classes
         /// <summary>
         /// Массив элементов буфера
         /// </summary>
-        private IELButtonCommand[] BufferElements = new IELButtonCommand[Math.Clamp(CountBuffer, 4, 80)];
+        private IELButtonCommand?[] BufferElements = new IELButtonCommand[Math.Clamp(CountBuffer, 4, 80)];
 
         /// <summary>
         /// Количество добавленных команд
@@ -42,12 +42,12 @@ namespace AAC20.Classes
         /// <param name="Command">Ссылка на команду</param>
         /// <param name="Name">Имя команды</param>
         /// <param name="Parameters">Параметры команды</param>
-        public class BufferCommand<T>(ref T Command, string Name, string[] Parameters, string StringCommand) where T : ICommandAAC
+        public class BufferCommand<T>(ref T? Command, string Name, string[] Parameters, string StringCommand) where T : ICommandAAC
         {
             /// <summary>
             /// Ссылка на команду
             /// </summary>
-            public T RefCommand = Command;
+            public T? RefCommand = Command;
 
             /// <summary>
             /// Пропись сохранённой команды
@@ -68,7 +68,7 @@ namespace AAC20.Classes
             /// Создать выполнение сохранённой команды
             /// </summary>
             /// <returns>Итог выполнения команды</returns>
-            public CommandStateResult ExecuteCommand() => RefCommand.ExecuteCommand(Parameters);
+            public CommandStateResult ExecuteCommand() => RefCommand?.ExecuteCommand(Parameters) ?? CommandStateResult.FaledCommand(Name);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace AAC20.Classes
         {
             get
             {
-                if (key.Value < Length) return BufferElements[key];
+                if (key.Value < Length) return BufferElements[key] ?? throw new Exception("Объект по индексу является нулевым. Данный тип не допускает пустых значений");
                 else throw new IndexOutOfRangeException($"Индекс ({key}) вышел за рамки буфера ({Length})");
             }
             private set
@@ -94,10 +94,12 @@ namespace AAC20.Classes
         /// <summary>
         /// Удалить <b>все</b> элементы буфера
         /// </summary>
-        public void DeleteAll()
+        /// <param name="ChildrenElements">Сетка элементов сохранённых команд буфера</param>
+        public void DeleteAll(Grid? ChildrenElements)
         {
             if (Count > 0)
             {
+                ChildrenElements?.Children.Clear();
                 BufferElements = new IELButtonCommand[BufferElements.Length];
                 Count = 0;
             }
@@ -113,12 +115,12 @@ namespace AAC20.Classes
         /// <param name="Name">Имя команды</param>
         /// <param name="Parameteres">Параметры выполняемой команды</param>
         /// <param name="StringCommand">Пропись команды</param>
-        public void Add(ICommandAAC Command, string Name, string[] Parameteres, string StringCommand)
+        public IELButtonCommand Add(ICommandAAC? Command, string Name, string[] Parameteres, string StringCommand)
         {
             IELButtonCommand BCom = new(new BufferCommand<ICommandAAC>(ref Command, Name, Parameteres, StringCommand), Count);
             if (Count < BufferElements.Length - 1)
             {
-                this[++Count] = BCom;
+                this[Count++] = BCom;
                 CounterBuffer.MaxUp(1);
             }
             else
@@ -126,6 +128,7 @@ namespace AAC20.Classes
                 BufferElements = [.. BufferElements.Skip(1)];
                 this[^1] = BCom;
             }
+            return BCom;
         }
     }
 }

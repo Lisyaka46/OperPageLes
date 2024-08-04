@@ -5,6 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows;
+using AAC20.Windows.Pages.ActionPanel;
 
 namespace AAC20.Classes.Commands
 {
@@ -67,7 +68,7 @@ namespace AAC20.Classes.Commands
         /// </summary>
         /// <param name="ConsoleCommands">Массив поиска консольных команд</param>
         /// <param name="TextCommand">Читаемая команда</param>
-        public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, ConsoleCommand[] ConsoleCommands, string TextCommand)
+        public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, PageBufferActionPanel? PageBuffer, ConsoleCommand[] ConsoleCommands, string TextCommand)
         {
             string RegistriernCommand = TextCommand;
             string[]? Parameters = null;
@@ -89,17 +90,15 @@ namespace AAC20.Classes.Commands
                 TextCommand = TextCommand.Replace(" ", "_").Replace("*", string.Empty).ToLower();
             }
             ConsoleCommand? SearchCommand = ConsoleCommands.SingleOrDefault(i => i.Name.Equals(TextCommand));
-            if (SearchCommand == null)
+            GUI.IELButtonCommand Button = BufferCommand.Add(SearchCommand, TextCommand, Parameters ?? [], RegistriernCommand);
+            if (PageBuffer != null)
             {
-                Paragraph Massage = new();
-                Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                Massage.Inlines.Add(new Run("Invalid command "));
-                Massage.Inlines.Add(new Italic(new Run($"\"{TextCommand}\"") { Background = new SolidColorBrush(Colors.IndianRed) }));
-                return CommandStateResult.Failed(Massage, $"Команда \"{TextCommand}\" не найдена");
+                PageBuffer.GridBuffer.Children.Add(Button);
+                PageBuffer.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             }
+            if (SearchCommand == null) return CommandStateResult.FaledCommand(TextCommand);
             else
             {
-                BufferCommand.Add(SearchCommand, SearchCommand.Name, Parameters ?? [], RegistriernCommand);
                 return AbsolutlyRequiredParameters(SearchCommand, Parameters) ?
                     SearchCommand.ExecuteCommand(Parameters) : CommandStateResult.FaledParameteres(SearchCommand.Name);
             }

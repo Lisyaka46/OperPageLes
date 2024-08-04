@@ -84,7 +84,8 @@ namespace AAC20.GUI
             set
             {
                 SolidColorBrush color = new(value);
-                TextBlockButton.Foreground = color;
+                TextBlockButtonName.Foreground = color;
+                TextBlockButtonCommand.Foreground = color;
                 _DefaultForeground = value;
             }
         }
@@ -160,8 +161,8 @@ namespace AAC20.GUI
         /// </summary>
         public string Text
         {
-            get => TextBlockButton.Text;
-            set => TextBlockButton.Text = value;
+            get => TextBlockButtonName.Text;
+            set => TextBlockButtonName.Text = value;
         }
 
         /// <summary>
@@ -178,8 +179,8 @@ namespace AAC20.GUI
         /// </summary>
         public FontFamily TextFontFamily
         {
-            get => TextBlockButton.FontFamily;
-            set => TextBlockButton.FontFamily = value;
+            get => TextBlockButtonName.FontFamily;
+            set => TextBlockButtonName.FontFamily = value;
         }
 
         /// <summary>
@@ -187,8 +188,8 @@ namespace AAC20.GUI
         /// </summary>
         public double TextFontSize
         {
-            get => TextBlockButton.FontSize;
-            set => TextBlockButton.FontSize = value;
+            get => TextBlockButtonName.FontSize;
+            set => TextBlockButtonName.FontSize = value;
         }
 
         /// <summary>
@@ -224,13 +225,14 @@ namespace AAC20.GUI
             };
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 14;
-            TextBlockButton.FontWeight = FontWeights.Bold;
-            Text = RefCommand.TextCommand;
+            TextBlockButtonName.FontWeight = FontWeights.Bold;
+            Text = RefCommand.Name;
+            TextBlockButtonCommand.Text = Command.TextCommand;
             CornerRadius = new CornerRadius(10);
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Top;
-            Margin = new(5, 27 * index + 4, 5, 0);
-            Height = 25;
+            Margin = new(5, 29 * index + 4, 5, 0);
+            Height = 27;
             BorderButton.CornerRadius = new CornerRadius(4);
 
             DefaultBackground = Color.FromRgb(172, 238, 255);
@@ -257,7 +259,7 @@ namespace AAC20.GUI
             MouseUp += (sender, e) =>
             {
                 MouseEnterAnimation();
-                RefCommand.ExecuteCommand();
+                App.MainWindowApplication.SummarizeCommandStateResult(RefCommand.ExecuteCommand());
             };
 
             IsEnabledChanged += (sender, e) =>
@@ -268,10 +270,12 @@ namespace AAC20.GUI
                 BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush;
                 BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, null);
                 BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, null);
-                TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, null);
+                TextBlockButtonName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, null);
+                TextBlockButtonCommand.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, null);
                 BorderButton.BorderBrush = new SolidColorBrush(BorderBrush);
                 BorderButton.Background = new SolidColorBrush(Background);
-                TextBlockButton.Foreground = new SolidColorBrush(Foreground);
+                TextBlockButtonName.Foreground = new SolidColorBrush(Foreground);
+                TextBlockButtonCommand.Foreground = new SolidColorBrush(Foreground);
             };
         }
 
@@ -287,7 +291,8 @@ namespace AAC20.GUI
             BorderBrush = StyleClickColor == ActivateClickColor.Clicked ? ClickedBorderBrush : NotEnabledBorderBrush;
             BorderButton.BorderBrush = new SolidColorBrush(BorderBrush);
             BorderButton.Background = new SolidColorBrush(Background);
-            TextBlockButton.Foreground = new SolidColorBrush(Foreground);
+            TextBlockButtonName.Foreground = new SolidColorBrush(Foreground);
+            TextBlockButtonCommand.Foreground = new SolidColorBrush(Foreground);
         }
 
         /// <summary>
@@ -303,7 +308,8 @@ namespace AAC20.GUI
             BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = SelectForeground;
-            TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockButtonName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockButtonCommand.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
         }
 
         /// <summary>
@@ -318,7 +324,8 @@ namespace AAC20.GUI
             BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = DefaultForeground;
-            TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockButtonName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockButtonCommand.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
         }
 
         /// <summary>
@@ -336,7 +343,8 @@ namespace AAC20.GUI
 
             ButtonAnimationColor.From = ClickedForeground;
             ButtonAnimationColor.To = DefaultForeground;
-            TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockButtonName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockButtonCommand.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
         }
     }
 }

@@ -43,6 +43,11 @@ namespace AAC20
         internal static Classes.Buffer BufferCommand = new();
 
         /// <summary>
+        /// Главное окно програмы
+        /// </summary>
+        internal static MainWindow MainWindowApplication => (MainWindow)Current.MainWindow;
+
+        /// <summary>
         /// Перезагрузить программу
         /// </summary>
         internal static void RebootApplication()

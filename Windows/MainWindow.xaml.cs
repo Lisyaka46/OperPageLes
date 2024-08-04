@@ -211,6 +211,11 @@ namespace AAC20
                 }
             };
 
+            TextBoxCommandInput.GotFocus += (sender, e) =>
+            {
+                if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+            };
+
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
                 switch (e.Key)
@@ -240,14 +245,6 @@ namespace AAC20
                 {
                     if (!Flags.ActionPanelActivate.Value) AnimationActionPanel(true);
                     else AnimationMoveActionPanel(PositionAnimActionPanel.Default);
-                }
-            };
-
-            Pages.PageBufferActPanel.BorderBuffer.MouseWheel += (sender, e) =>
-            {
-                if (App.BufferCommand.Count > 4)
-                {
-
                 }
             };
 
@@ -351,14 +348,15 @@ namespace AAC20
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
             //Pages.PageBufferActPanel.GridBuffer.Background = new SolidColorBrush(Colors.Black);
-            CommandStateResult Result =
-                ConsoleCommand.ReadAndExecuteCommand
-                (App.BufferCommand, [.. App.DataConsoleCommand], CommandString);
-            if (Result.State == ResultState.Complete)
-            {
-                Pages.PageBufferActPanel.GridBuffer.Children.Add(App.BufferCommand[App.BufferCommand.Count]);
-            }
+            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
+            SummarizeCommandStateResult(
+                ConsoleCommand.ReadAndExecuteCommand(App.BufferCommand, Pages.PageBufferActPanel,
+                [.. App.DataConsoleCommand], CommandString)
+                );
+        }
 
+        internal void SummarizeCommandStateResult(CommandStateResult Result)
+        {
             if (Result.State == ResultState.Failed && Result.Massage != null)
             {
                 RichTextBoxMainMessage.Document.Blocks.Add(Result.Massage);

@@ -69,7 +69,20 @@ namespace AAC20.Classes.Commands
             Massage.Inlines.Add(new Run("The "));
             Massage.Inlines.Add(new Italic(new Run($"\"{NameCommand}\" ")) { Background = new SolidColorBrush(Colors.IndianRed) });
             Massage.Inlines.Add(new Run("command resulted in an error due to a lack of parameters to execute."));
-            return new(ResultState.Failed, Massage, $"Команда \"{NameCommand}\" привела к ошибке из-за недостатка параметров");
+            return new(ResultState.Failed, Massage, $"Команда \"{NameCommand}\" привела к ошибке из-за недостатка параметров.");
+        }
+
+        /// <summary>
+        /// Ошибочный итог выполнения команды из-за несуществующей команды
+        /// </summary>
+        /// <param name="NameCommand">Имя команды которая привела к ошибке</param>
+        public static CommandStateResult FaledCommand(string NameCommand)
+        {
+            Paragraph Massage = new();
+            Massage.Inlines.Add(new Bold(new Run(">>> ")));
+            Massage.Inlines.Add(new Run("Invalid command "));
+            Massage.Inlines.Add(new Italic(new Run($"\"{NameCommand}\"") { Background = new SolidColorBrush(Colors.IndianRed) }));
+            return new(ResultState.Failed, Massage, $"Команда \"{NameCommand}\" не найдена.");
         }
 
         /// <summary>

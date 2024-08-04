@@ -6,21 +6,23 @@
       xmlns:local="clr-namespace:AAC20.Windows.Pages.ActionPanel"
       xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Pages.ActionPanel.PageBufferActionPanel"
       mc:Ignorable="d" 
-      d:DesignHeight="128.908" d:DesignWidth="190.386"
+      d:DesignHeight="128.908"
       Title="PageBufferActionPanel">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="13*"/>
-            <RowDefinition Height="30*"/>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="94*"/>
         </Grid.RowDefinitions>
-        <Border x:Name="BorderBuffer" BorderBrush="Black" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True">
+        <Border x:Name="BorderBuffer" BorderBrush="#FF163C26" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True" Background="#B21B2F24">
             <Grid>
                 <Grid x:Name="GridBuffer"/>
             </Grid>
         </Border>
 
-        <GUI:IELButtonText x:Name="IELButtonBackMainMenu" Margin="4,5,66,5" StateVisualizationButton="LeftArrow" Text="Назад" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="14" FontWeight="Bold" CharKeyKeyboardActivate="True"/>
+        <GUI:IELButtonText x:Name="IELButtonBackMainMenu" Margin="4,5,0,5" StateVisualizationButton="LeftArrow" Text="Назад" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboardActivate="True" CharKeyKeyboard="Oem3" HorizontalAlignment="Left" Width="95"/>
+        <TextBlock x:Name="TextBlockCounterBuffer" HorizontalAlignment="Left" TextWrapping="Wrap" Text="00/00" VerticalAlignment="Center" FontFamily="Bahnschrift SemiBold" Margin="212,0,0,-4" Height="15" FontSize="14" Foreground="#FF80EAE2"/>
+        <GUI:IELButtonText x:Name="IELButtonClearBuffer" Margin="103,5,0,5" Text="Очистить" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboardActivate="True" CharKeyKeyboard="D1" HorizontalAlignment="Left" Width="103" IsEnabled="False"/>
 
     </Grid>
 </Page>

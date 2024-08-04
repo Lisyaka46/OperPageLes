@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AAC20.Classes;
 using System.Windows.Media.Animation;
+using System.Runtime.InteropServices;
 
 namespace AAC20.Windows.Pages.ActionPanel
 {
@@ -44,25 +45,63 @@ namespace AAC20.Windows.Pages.ActionPanel
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
         };
 
+        /// <summary>
+        /// Объект анимации прозрачности элементов буфера
+        /// </summary>
+        private readonly DoubleAnimation OpacityAnimationBuffer = new(0, TimeSpan.FromMilliseconds(90d))
+        {
+            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
+        };
+
         public PageBufferActionPanel()
         {
             InitializeComponent();
+            IELButtonClearBuffer.NotEnabledActivateToButtonEvent = true;
+            TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             AltModeChanged = (Mode) =>
             {
                 IELButtonBackMainMenu.CharKeyKeyboardActivate = Mode;
+                IELButtonClearBuffer.CharKeyKeyboardActivate = Mode;
                 PAltMode = Mode;
             };
             BorderBuffer.MouseWheel += (sender, e) =>
             {
-                if (App.BufferCommand.CounterBuffer.MaxValue > App.BufferCommand.CounterBuffer.CountVisibleElements)
+                if (App.BufferCommand.CounterBuffer.MaxValue > App.BufferCommand.CounterBuffer.CountVisibleElements && App.BufferCommand.Count > 0)
                 {
                     if (e.Delta > 0 && App.BufferCommand.CounterBuffer.Value > 0) App.BufferCommand.CounterBuffer.Up();
                     else if (e.Delta < 0 &&
                     App.BufferCommand.CounterBuffer.Value < App.BufferCommand.CounterBuffer.MaxValue - App.BufferCommand.CounterBuffer.CountVisibleElements) App.BufferCommand.CounterBuffer.Down();
-                    ThicknessAnimationBuffer.To = new Thickness(0, 0 - 27 * App.BufferCommand.CounterBuffer.Value, 0, 0);
+                    ThicknessAnimationBuffer.To = new(0, 0 - (App.BufferCommand[0].Height + 2) * App.BufferCommand.CounterBuffer.Value, 0, 0);
                     GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 }
             };
+            IELButtonClearBuffer.OnActivate += (Key) =>
+            {
+                OpacityAnimationBuffer.Completed += EventClearBuffer;
+                App.BufferCommand.CounterBuffer.Value = 0;
+                App.BufferCommand.CounterBuffer.MaxDown(App.BufferCommand.CounterBuffer.MaxValue);
+                ThicknessAnimationBuffer.To = new(0, 0 - (App.BufferCommand[0].Height + 2) * App.BufferCommand.CounterBuffer.Value, 0, 0);
+                ThicknessAnimationBuffer.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+                ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
+                GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
+                OpacityAnimationBuffer.To = 0.4d;
+                TextBlockCounterBuffer.Text = $"0/{App.BufferCommand.Length}";
+                for (int i = 0; i < App.BufferCommand.Count; i++)
+                {
+                    ThicknessAnimationBuffer.To = new(0, App.BufferCommand[i].Margin.Top - 12, 0, 0);
+                    OpacityAnimationBuffer.BeginTime = TimeSpan.FromMilliseconds(120 + i * 30);
+                    App.BufferCommand[i].BeginAnimation(OpacityProperty, OpacityAnimationBuffer);
+                    App.BufferCommand[i].BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
+                }
+                OpacityAnimationBuffer.BeginTime = null;
+                ThicknessAnimationBuffer.EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut };
+                ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(300d);
+            };
+        }
+
+        private void EventClearBuffer(object? sender, EventArgs e)
+        {
+            App.BufferCommand.DeleteAll(GridBuffer);
         }
 
         /// <summary>
