@@ -1,23 +1,8 @@
-﻿using AAC20.GUI;
-using AAC20.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AAC20.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using AAC20.Classes;
 using System.Windows.Media.Animation;
-using System.Runtime.InteropServices;
 
 namespace AAC20.Windows.Pages.ActionPanel
 {
@@ -56,7 +41,6 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel()
         {
             InitializeComponent();
-            IELButtonClearBuffer.NotEnabledActivateToButtonEvent = true;
             TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             AltModeChanged = (Mode) =>
             {
@@ -66,21 +50,22 @@ namespace AAC20.Windows.Pages.ActionPanel
             };
             BorderBuffer.MouseWheel += (sender, e) =>
             {
-                if (App.BufferCommand.CounterBuffer.MaxValue > App.BufferCommand.CounterBuffer.CountVisibleElements && App.BufferCommand.Count > 0)
+                if (App.BufferCommand.CounterBuffer.MaxValue > 0 && App.BufferCommand.Count > 0)
                 {
                     if (e.Delta > 0 && App.BufferCommand.CounterBuffer.Value > 0) App.BufferCommand.CounterBuffer.Up();
                     else if (e.Delta < 0 &&
-                    App.BufferCommand.CounterBuffer.Value < App.BufferCommand.CounterBuffer.MaxValue - App.BufferCommand.CounterBuffer.CountVisibleElements) App.BufferCommand.CounterBuffer.Down();
+                    App.BufferCommand.CounterBuffer.Value < App.BufferCommand.CounterBuffer.MaxValue) App.BufferCommand.CounterBuffer.Down();
                     ThicknessAnimationBuffer.To = new(0, 0 - (App.BufferCommand[0].Height + 2) * App.BufferCommand.CounterBuffer.Value, 0, 0);
                     GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 }
             };
             IELButtonClearBuffer.OnActivate += (Key) =>
             {
+                IELButtonClearBuffer.IsEnabled = false;
                 OpacityAnimationBuffer.Completed += EventClearBuffer;
                 App.BufferCommand.CounterBuffer.Value = 0;
-                App.BufferCommand.CounterBuffer.MaxDown(App.BufferCommand.CounterBuffer.MaxValue);
-                ThicknessAnimationBuffer.To = new(0, 0 - (App.BufferCommand[0].Height + 2) * App.BufferCommand.CounterBuffer.Value, 0, 0);
+                App.BufferCommand.CounterBuffer.MaxClear();
+                ThicknessAnimationBuffer.To = new(0);
                 ThicknessAnimationBuffer.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);

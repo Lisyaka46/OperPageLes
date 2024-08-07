@@ -6,7 +6,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:GUI="clr-namespace:AAC20.GUI"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        xmlns:GUI1="clr-namespace:ScheduleChangesItems.GUI"
         x:Name="window" x:Class="AAC20.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500">
@@ -28,7 +27,7 @@
                     <ColumnDefinition Width="584*"/>
                     <ColumnDefinition Width="59*" MinWidth="56" MaxWidth="65"/>
                 </Grid.ColumnDefinitions>
-                <GUI1:ImageButton x:Name="ButtonSettings" DisabledBackground="#FFDE5E5E" ButtonBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" MillisecondsAnimation="90" MouseBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="1" Margin="2,1,2,1"/>
+                <GUI:IELImageButton x:Name="ButtonSettings" DisabledBackground="#FFDE5E5E" ButtonBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" MillisecondsAnimation="90" MouseBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="1" Margin="2,1,2,1"/>
                 <Image x:Name="ImageIndificator_Копировать" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="4,2,0,2" HorizontalAlignment="Left"/>
             </Grid>
         </Border>

@@ -277,11 +277,6 @@ namespace AAC20.GUI
         /// </summary>
         public Activate? OnActivate;
 
-        /// <summary>
-        /// Активность действия отключения после активации кнопки
-        /// </summary>
-        public bool NotEnabledActivateToButtonEvent = false;
-
         public IELButtonText()
         {
             InitializeComponent();
@@ -321,16 +316,24 @@ namespace AAC20.GUI
             ClickedForeground = Colors.Gray;
             NotEnabledForeground = Colors.DarkRed;
 
-            MouseEnter += (sender, e) => MouseEnterAnimation();
+            MouseEnter += (sender, e) =>
+            {
+                if (IsEnabled) MouseEnterAnimation();
+            };
 
-            MouseLeave += (sender, e) => MouseLeaveAnimation();
+            MouseLeave += (sender, e) =>
+            {
+                if (IsEnabled) MouseLeaveAnimation();
+            };
 
-            MouseLeftButtonDown += (sender, e) => ClickDownAnimation(ActivateClickColor.Clicked);
+            MouseLeftButtonDown += (sender, e) =>
+            {
+                if (IsEnabled) ClickDownAnimation(ActivateClickColor.Clicked);
+            };
 
             MouseUp += (sender, e) =>
             {
-                if (!NotEnabledActivateToButtonEvent) MouseEnterAnimation();
-                else IsEnabled = false;
+                MouseEnterAnimation();
                 OnActivate?.Invoke(false);
             };
 

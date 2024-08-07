@@ -15,12 +15,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
 
-namespace ScheduleChangesItems.GUI
+namespace AAC20.GUI
 {
     /// <summary>
-    /// Логика взаимодействия для ImageButton.xaml
+    /// Логика взаимодействия для IELImageButton.xaml
     /// </summary>
-    public partial class ImageButton : UserControl
+    public partial class IELImageButton : UserControl
     {
         private Brush _Background;
         /// <summary>
@@ -188,7 +188,7 @@ namespace ScheduleChangesItems.GUI
         /// <summary>
         /// Инициализировать объект кнопки с изображением
         /// </summary>
-        public ImageButton()
+        public IELImageButton()
         {
             InitializeComponent();
             _Background = new SolidColorBrush(Colors.Black);
