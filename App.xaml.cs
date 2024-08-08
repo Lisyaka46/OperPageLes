@@ -55,29 +55,5 @@ namespace AAC20
             Process.Start(Process.GetCurrentProcess().ProcessName, Environment.GetCommandLineArgs());
             Current.Shutdown();
         }
-
-        /// <summary>
-        /// Активировать кнопку типа "IELButtonText" в странице
-        /// </summary>
-        /// <param name="VisualObject">Ссылка на объект поиска</param>
-        /// <param name="key">Ключ клавиши</param>
-        internal static void ActivateButtonInKey(Visual VisualObject, Key key)
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(VisualObject); i++)
-            {
-                Visual ChildVisualElement = (Visual)VisualTreeHelper.GetChild(VisualObject, i);
-                if (ChildVisualElement.GetType() == typeof(IELButtonText))
-                {
-                    IELButtonText Button = (IELButtonText)ChildVisualElement;
-                    if (Button.CharKeyKeyboard == key) Button.OnActivate?.Invoke(true);
-                }
-                else
-                {
-                    ActivateButtonInKey(ChildVisualElement, key);
-                }
-            }
-            //return false;
-            //throw new Exception($"Ключ клавиши \"{key}\" не имеет не одна кнопка, в данном случае выведено исключение");
-        }
     }
 }

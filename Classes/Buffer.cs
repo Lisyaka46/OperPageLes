@@ -10,7 +10,6 @@ using static AAC20.Classes.Buffer;
 
 namespace AAC20.Classes
 {
-    // Сделать объект визуализирующий буфер !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /// <summary>
     /// Буфер консольных команд
     /// </summary>
@@ -73,7 +72,12 @@ namespace AAC20.Classes
             /// Создать выполнение сохранённой команды
             /// </summary>
             /// <returns>Итог выполнения команды</returns>
-            public CommandStateResult ExecuteCommand() => RefCommand?.ExecuteCommand(Parameters) ?? CommandStateResult.FaledCommand(Name);
+            public CommandStateResult ExecuteCommand()
+            {
+                if (RefCommand == null) return CommandStateResult.FaledCommand(Name);
+                else if (RefCommand.AbsolutlyRequiredParameters(Parameters)) return RefCommand.ExecuteCommand(Parameters);
+                else return CommandStateResult.FaledParameteres(Name);
+            }
         }
 
         /// <summary>
@@ -113,24 +117,32 @@ namespace AAC20.Classes
         /// </summary>
         /// <param name="ChildrenElements">Сетка элементов сохранённых команд буфера</param>
         /// <param name="index">Индекс удаляемого элемента</param>
-        public void Delete(Grid ChildrenElements, int index)
+        internal void Delete(Grid ChildrenElements, int index)
         {
             if (Count > 0)
             {
-                ref IELButtonCommand? Button = ref BufferElements[index];
-                if (Button != null)
+                try
                 {
-                    DoubleAnimation AnimationDeleteElement = new(0, TimeSpan.FromMilliseconds(100d))
+                    ref IELButtonCommand? Button = ref BufferElements[index];
+                    if (Button != null)
                     {
-                        EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
-                        FillBehavior = FillBehavior.Stop,
-                    };
-                    AnimationDeleteElement.Completed += (sender, e) => ChildrenElements.Children.RemoveAt(index);
-                    Button.BeginAnimation(FrameworkElement.OpacityProperty, AnimationDeleteElement);
+                        DoubleAnimation AnimationDeleteElement = new(0, TimeSpan.FromMilliseconds(100d))
+                        {
+                            EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
+                            FillBehavior = FillBehavior.Stop,
+                        };
+                        AnimationDeleteElement.Completed += (sender, e) =>
+                        {
+                            try { ChildrenElements.Children.RemoveAt(index); }
+                            catch { }
+                        };
+                        Button.BeginAnimation(FrameworkElement.OpacityProperty, AnimationDeleteElement);
+                    }
+                    ReSort(index);
+                    Count--;
+                    CounterBuffer.MaxDown(1);
                 }
-                ReSort(index);
-                Count--;
-                CounterBuffer.MaxDown(1);
+                catch { }
             }
         }
 

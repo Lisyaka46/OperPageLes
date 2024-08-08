@@ -26,13 +26,27 @@ namespace AAC20.Classes.Commands
         }
 
         /// <summary>
+        /// Параметры команды
+        /// </summary>
+        public Parameter[]? Parameters { get; }
+
+        /// <summary>
         /// Создать выполнение команды
         /// </summary>
         internal CommandStateResult ExecuteCommand(string[]? parameters);
 
-        [GeneratedRegex(@"( |\*|,)([^,]|,,)+")]
+        /// <summary>
+        /// Узнать написаны ли обязательные параметры команды
+        /// </summary>
+        /// <param name="WritingParameters">Написанные параметры</param>
+        /// <returns>Совпадает правилу или нет</returns>
+        internal abstract bool AbsolutlyRequiredParameters(string[]? WritingParameters);
+
+        [GeneratedRegex(@"[^*]+")]
+        internal static partial Regex RegexNameCommand();
+        [GeneratedRegex(@"\*.*")]
         internal static partial Regex RegexParameterCommand();
-        [GeneratedRegex(@"\b[^\*~!@#$<>,.\/\\?|'"";:`%^&*()\[\]{} \-=+]+\* ?")]
-        internal static partial Regex RegexSortCommand();
+        [GeneratedRegex(@"[^,]+")]
+        internal static partial Regex RegexSortParamCommand();
     }
 }

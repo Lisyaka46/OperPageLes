@@ -28,7 +28,7 @@ namespace AAC20.Classes.Commands
         /// <summary>
         /// Параметры команды
         /// </summary>
-        public readonly Parameter[]? Parameters;
+        public Parameter[]? Parameters { get; private set; }
 
         /// <summary>
         /// Действие которое выполняет команда
@@ -71,29 +71,35 @@ namespace AAC20.Classes.Commands
         /// <param name="TextCommand">Читаемая команда</param>
         public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, PageBufferActionPanel? PageBuffer, ConsoleCommand[] ConsoleCommands, string TextCommand)
         {
-            string RegistriernCommand = TextCommand;
             string[]? Parameters = null;
-            while (TextCommand.Length > 0)
+            string Name;
+            if (TextCommand.Contains('*')) // command * param1, param2, param3 ...
             {
-                if (TextCommand[^1] == ' ') TextCommand = TextCommand.Remove(TextCommand.Length - 1);
-                else if (TextCommand.Contains("  ")) TextCommand = TextCommand.Replace("  ", " ");
-                else break;
-            }
-            if (TextCommand.Contains('*') && TextCommand[^1] != '*') // command* param1, param2, param3 ...
-            {
-                if (TextCommand[TextCommand.IndexOf('*') + 1] != ' ') TextCommand = TextCommand.Replace("*", "* ");
-                TextCommand = TextCommand[0..TextCommand.IndexOf('*')].Replace(" ", "_").ToLower() + TextCommand[TextCommand.IndexOf('*')..];
-                Parameters = [.. ICommandAAC.RegexParameterCommand().Matches(TextCommand).Select(i => i.Value[2..])];
-                TextCommand = ICommandAAC.RegexSortCommand().Match(TextCommand).Value.ToString().Replace("*", string.Empty).Replace(" ", string.Empty);
+                Name = ClearReplySymbol(ICommandAAC.RegexNameCommand().Match(TextCommand).Value, ' ');
+                Parameters = [..
+                    ICommandAAC.RegexSortParamCommand().Matches(
+                        ICommandAAC.RegexParameterCommand().Match(TextCommand).Value[1..])
+                    .Select((i) => i.Value) ];
+                for (int i = 0; i < Parameters.Length; i++)
+                {
+                    switch (Parameters[i][0])
+                    {
+                        case ' ':
+                        case '~':
+                            Parameters[i] = Parameters[i][1..];
+                            break;
+                    }
+                }
             }
             else // command
             {
-                TextCommand = TextCommand.Replace(" ", "_").Replace("*", string.Empty).ToLower();
+                Name = ClearReplySymbol(TextCommand, ' ');
             }
-            ConsoleCommand? SearchCommand = ConsoleCommands.SingleOrDefault(i => i.Name.Equals(TextCommand));
+            Name = Name.Replace(" ", "_").ToLower();
+            ConsoleCommand? SearchCommand = ConsoleCommands.SingleOrDefault(i => i.Name.Equals(Name));
             if (PageBuffer != null)
             {
-                GUI.IELButtonCommand Button = BufferCommand.Add(SearchCommand, ref PageBuffer.GridBuffer, TextCommand, Parameters ?? [], RegistriernCommand);
+                GUI.IELButtonCommand Button = BufferCommand.Add(SearchCommand, ref PageBuffer.GridBuffer, Name, Parameters ?? [], TextCommand);
                 PageBuffer.IELButtonClearBuffer.IsEnabled = true;
                 Button.OnActivateRightButtonMouse += () =>
                 {
@@ -104,12 +110,24 @@ namespace AAC20.Classes.Commands
                 PageBuffer.GridBuffer.Children.Add(Button);
                 PageBuffer.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             }
-            if (SearchCommand == null) return CommandStateResult.FaledCommand(TextCommand);
+            if (SearchCommand == null) return CommandStateResult.FaledCommand(Name);
             else
             {
-                return AbsolutlyRequiredParameters(SearchCommand, Parameters) ?
+                return SearchCommand.AbsolutlyRequiredParameters(Parameters) ?
                     SearchCommand.ExecuteCommand(Parameters) : CommandStateResult.FaledParameteres(SearchCommand.Name);
             }
+        }
+
+        //
+        private static string ClearReplySymbol(string Text, char Symbol)
+        {
+            Text = new([.. Text.Reverse()]);
+            for (int i = 0, count = 0; i < Text.Length; i++)
+            {
+                if (Text[i] == Symbol) count = i + 1;
+                else return new([.. Text.Remove(0, count).Reverse()]);
+            }
+            return new([.. Text.Reverse()]);
         }
 
         /// <summary>
@@ -117,8 +135,8 @@ namespace AAC20.Classes.Commands
         /// </summary>
         /// <param name="WritingParameters">Написанные параметры</param>
         /// <returns>Совпадает правилу или нет</returns>
-        private static bool AbsolutlyRequiredParameters(ConsoleCommand Command, string[]? WritingParameters) =>
-            (WritingParameters?.Length ?? 0) >= (Command.Parameters?.Count((i) => i.Absolutly == true) ?? 0);
+        public bool AbsolutlyRequiredParameters(string[]? WritingParameters) =>
+            (WritingParameters?.Length ?? 0) >= (Parameters?.Count((i) => i.Absolutly == true) ?? 0);
 
         /// <summary>
         /// Создать выполнение команды

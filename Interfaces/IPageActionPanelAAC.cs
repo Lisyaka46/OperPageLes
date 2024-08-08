@@ -25,6 +25,7 @@ namespace AAC20.Interfaces
         /// Активация кнопки по ключу
         /// </summary>
         /// <param name="key">Ключ активации</param>
-        public void ActivateInKey(System.Windows.Input.Key key);
+        /// <param name="KeyDownEvent">Начало нажатия на кнопку</param>
+        public void ActivateInKey(System.Windows.Input.Key key, bool KeyDownEvent);
     }
 }

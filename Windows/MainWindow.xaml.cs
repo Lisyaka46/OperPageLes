@@ -49,6 +49,11 @@ namespace AAC20
             /// Флаг состояния активности панели действий в главной консоли
             /// </summary>
             public static Flag ActionPanelActivate = new(false);
+
+            /// <summary>
+            /// Флаг состояния активации кнопки панели действий через клавишу клавиатуры
+            /// </summary>
+            public static Flag ActionPanelActivateButtonAltMode = new(false);
         };
 
         /// <summary>
@@ -161,18 +166,18 @@ namespace AAC20
                 }),
             ]);
 
-            Pages.PageMainActPanel.IELButtonCrearConsole.OnActivate += (AltMode) =>
+            Pages.PageMainActPanel.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
             {
                 RichTextBoxMainMessage.Document = new();
                 AnimationActionPanel(false);
             };
 
-            Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivate += (AltMode) =>
+            Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
             {
                 NextPageInActtionPanel(Pages.PageBufferActPanel);
             };
 
-            Pages.PageBufferActPanel.IELButtonBackMainMenu.OnActivate += (AltMode) =>
+            Pages.PageBufferActPanel.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
             {
                 NextPageInActtionPanel(Pages.PageMainActPanel, false);
             };
@@ -188,12 +193,22 @@ namespace AAC20
             BorderActionPanel.Width = 0;
             BorderActionPanel.Height = 0;
 
-            ButtonReboot.OnActivate += (key) => App.RebootApplication();
-            ButtonReturnCommand.OnActivate += (key) => ActivateActionCommand(TextBoxCommandInput.Text);
+            ButtonReboot.OnActivateMouseLeft += (key) => App.RebootApplication();
+            ButtonReturnCommand.OnActivateMouseLeft += (key) => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+
+            BorderActionPanel.KeyDown += (sender, e) =>
+            {
+                if (RefPageActionPanel.AltMode && e.Key != Key.Z && !Flags.ActionPanelActivateButtonAltMode.Value)
+                {
+                    Flags.ActionPanelActivateButtonAltMode.Value = true;
+                    RefPageActionPanel.ActivateInKey(e.Key, true);
+                }
+            };
 
             BorderActionPanel.KeyUp += (sender, e) =>
             {
+
                 switch (e.Key)
                 {
                     case Key.Escape:
@@ -202,11 +217,12 @@ namespace AAC20
                     case Key.Z:
                         RefPageActionPanel.AltModeChanged.Invoke(!RefPageActionPanel.AltMode);
                         break;
-                    case Key.W:
-                        Pages.PageMainActPanel.IELButtonCrearConsole.BlinkAnimation();
-                        break;
                     default:
-                        if (RefPageActionPanel.AltMode) RefPageActionPanel.ActivateInKey(e.Key);
+                        if (RefPageActionPanel.AltMode)
+                        {
+                            Flags.ActionPanelActivateButtonAltMode.Value = false;
+                            RefPageActionPanel.ActivateInKey(e.Key, false);
+                        }
                         break;
                 }
             };
@@ -246,6 +262,11 @@ namespace AAC20
                     if (!Flags.ActionPanelActivate.Value) AnimationActionPanel(true);
                     else AnimationMoveActionPanel(PositionAnimActionPanel.Default);
                 }
+            };
+
+            RichTextBoxMainMessage.TextChanged += (sender, e) =>
+            {
+                RichTextBoxMainMessage.ScrollToEnd();
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();

@@ -63,9 +63,29 @@ namespace AAC20.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] LeftMouseButton {
+            get {
+                object obj = ResourceManager.GetObject("LeftMouseButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Loading {
             get {
                 object obj = ResourceManager.GetObject("Loading", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] RightMouseButton {
+            get {
+                object obj = ResourceManager.GetObject("RightMouseButton", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -47,6 +47,7 @@ namespace AAC20.Windows.Frames
         /// Активировать кнопку по ключу
         /// </summary>
         /// <param name="key">Ключ активации</param>
-        public void ActivateInKey(Key key) => App.ActivateButtonInKey(this, key);
+        /// <param name="KeyDownEvent">Начало нажатия на кнопку</param>
+        public void ActivateInKey(Key key, bool KeyDownEvent) => GUI.IELButtonText.ActivateButtonInKey(this, key, KeyDownEvent);
     }
 }

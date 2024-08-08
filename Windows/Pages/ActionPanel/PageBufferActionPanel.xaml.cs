@@ -1,6 +1,8 @@
-﻿using AAC20.Interfaces;
+﻿using AAC20.GUI;
+using AAC20.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
@@ -61,7 +63,7 @@ namespace AAC20.Windows.Pages.ActionPanel
                     else if (e.Delta < 0) App.BufferCommand.CounterBuffer.Down();
                 }
             };
-            IELButtonClearBuffer.OnActivate += (Key) =>
+            IELButtonClearBuffer.OnActivateMouseLeft += (Key) =>
             {
                 TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(App.BufferCommand.CounterBuffer.Value > 0 ? 50d : 0d);
                 IELButtonClearBuffer.IsEnabled = false;
@@ -97,6 +99,7 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// Активировать кнопку по ключу
         /// </summary>
         /// <param name="key">Ключ активации</param>
-        public void ActivateInKey(Key key) => App.ActivateButtonInKey(this, key);
+        /// <param name="KeyDownEvent">Начало нажатия на кнопку</param>
+        public void ActivateInKey(Key key, bool KeyDownEvent) => IELButtonText.ActivateButtonInKey(this, key, KeyDownEvent);
     }
 }
