@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows;
 using AAC20.Windows.Pages.ActionPanel;
+using System;
 
 namespace AAC20.Classes.Commands
 {
@@ -90,9 +91,16 @@ namespace AAC20.Classes.Commands
                 TextCommand = TextCommand.Replace(" ", "_").Replace("*", string.Empty).ToLower();
             }
             ConsoleCommand? SearchCommand = ConsoleCommands.SingleOrDefault(i => i.Name.Equals(TextCommand));
-            GUI.IELButtonCommand Button = BufferCommand.Add(SearchCommand, TextCommand, Parameters ?? [], RegistriernCommand);
             if (PageBuffer != null)
             {
+                GUI.IELButtonCommand Button = BufferCommand.Add(SearchCommand, ref PageBuffer.GridBuffer, TextCommand, Parameters ?? [], RegistriernCommand);
+                PageBuffer.IELButtonClearBuffer.IsEnabled = true;
+                Button.OnActivateRightButtonMouse += () =>
+                {
+                    App.BufferCommand.Delete(PageBuffer.GridBuffer, Button);
+                    PageBuffer.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+                    if (App.BufferCommand.Count == 0) PageBuffer.IELButtonClearBuffer.IsEnabled = false;
+                };
                 PageBuffer.GridBuffer.Children.Add(Button);
                 PageBuffer.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             }

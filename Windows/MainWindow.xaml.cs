@@ -347,8 +347,6 @@ namespace AAC20
             if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
-            //Pages.PageBufferActPanel.GridBuffer.Background = new SolidColorBrush(Colors.Black);
-            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
             SummarizeCommandStateResult(
                 ConsoleCommand.ReadAndExecuteCommand(App.BufferCommand, Pages.PageBufferActPanel,
                 [.. App.DataConsoleCommand], CommandString)

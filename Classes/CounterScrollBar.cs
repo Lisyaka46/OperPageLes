@@ -7,6 +7,17 @@ namespace AAC20.Classes
     /// </summary>
     public class CounterScrollBar
     {
+        /// <summary>
+        /// Делегат события изменения значения счётчика
+        /// </summary>
+        /// <param name="Value">Присвоенное значение счётчику</param>
+        public delegate void EventChangedValue(int Value);
+
+        /// <summary>
+        /// Объект события изменения значения счётчика
+        /// </summary>
+        public event EventChangedValue? ChangedValue;
+
         private int _Value;
         /// <summary>
         /// Текущее значение счётчика
@@ -18,7 +29,11 @@ namespace AAC20.Classes
             {
                 if (value == _Value) return;
                 else if (value > MaxValue) throw new ArgumentOutOfRangeException(nameof(value), "Аргумент при присвоении имеет число выше чем максимальный коэффициент");
-                else _Value = value;
+                else
+                {
+                    _Value = value;
+                    ChangedValue?.Invoke(_Value);
+                }
             }
         }
 
@@ -62,7 +77,13 @@ namespace AAC20.Classes
         /// Изменить счётчик скролл-бара вверх (--)
         /// </summary>
         /// <returns>Итоговое число движения</returns>
-        public int Up() => Value > 0 ? --Value : 0;
+        public int Up()
+        {
+            if (_Value == 0) return 0;
+            _Value = _Value > 0 ? _Value - 1 : 0;
+            ChangedValue?.Invoke(_Value);
+            return _Value;
+        }
 
         /// <summary>
         /// Изменить счётчик скролл-бара вниз (++)
@@ -70,7 +91,13 @@ namespace AAC20.Classes
         /// <returns>Итоговое число движения</returns>
         public int Down()
         {
-            if (MaxValue > 0) return Value < MaxValue ? ++Value : MaxValue;
+            if (MaxValue > 0)
+            {
+                if (_Value == MaxValue) return MaxValue;
+                _Value = _Value < MaxValue ? _Value + 1 : MaxValue;
+                ChangedValue?.Invoke(_Value);
+                return _Value;
+            }
             else throw new ArgumentOutOfRangeException(nameof(Value), $"Значение невозможно увеличить так как MaxValue < 0. (Value={Value} MaxValue={Value})");
         }
 
@@ -88,13 +115,13 @@ namespace AAC20.Classes
         /// <returns>Уменьшенное максимальное значение</returns>
         public int MaxDown(int value)
         {
-            if (MaxValue - value >= 0)
+            if (MaxValue - value >= Min_MaxValue)
             {
                 MaxValue -= value;
-                if (Value > MaxValue) Value = MaxValue;
+                if (Value > 0 && Value > MaxValue) Value = MaxValue;
                 return MaxValue;
             }
-            else throw new ArgumentOutOfRangeException(nameof(value), $"({nameof(MaxValue)} - {nameof(value)} < 0) невозможно уменьшить максимальное значение ({MaxValue - value} < 0)");
+            else throw new ArgumentOutOfRangeException(nameof(value), $"({nameof(MaxValue)} - {nameof(value)} < {Min_MaxValue}) невозможно уменьшить максимальное значение ({MaxValue - value} < {Min_MaxValue})");
         }
 
         /// <summary>

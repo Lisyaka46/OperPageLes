@@ -1,11 +1,16 @@
 ﻿using AAC20.Classes.Commands;
 using AAC20.GUI;
+using System;
+using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using static AAC20.Classes.Buffer;
 
 namespace AAC20.Classes
 {
+    // Сделать объект визуализирующий буфер !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /// <summary>
     /// Буфер консольных команд
     /// </summary>
@@ -92,14 +97,88 @@ namespace AAC20.Classes
         }
 
         /// <summary>
-        /// Удалить <b>все</b> элементы буфера
+        /// Удалить элемент буфера
         /// </summary>
         /// <param name="ChildrenElements">Сетка элементов сохранённых команд буфера</param>
-        public void DeleteAll(Grid? ChildrenElements)
+        /// <param name="DeleteElement">Объект удаляемый из сетки буфера</param>
+        public void Delete(Grid ChildrenElements, UIElement DeleteElement)
+        {
+            int i = ChildrenElements.Children.IndexOf(DeleteElement);
+            if (i == -1) throw new IndexOutOfRangeException("Удаляемый элемент из буфера сохранённых команд не найден (-1)");
+            else Delete(ChildrenElements, i);
+        }
+
+        /// <summary>
+        /// Удалить элемент буфера
+        /// </summary>
+        /// <param name="ChildrenElements">Сетка элементов сохранённых команд буфера</param>
+        /// <param name="index">Индекс удаляемого элемента</param>
+        public void Delete(Grid ChildrenElements, int index)
         {
             if (Count > 0)
             {
-                ChildrenElements?.Children.Clear();
+                ref IELButtonCommand? Button = ref BufferElements[index];
+                if (Button != null)
+                {
+                    DoubleAnimation AnimationDeleteElement = new(0, TimeSpan.FromMilliseconds(100d))
+                    {
+                        EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
+                        FillBehavior = FillBehavior.Stop,
+                    };
+                    AnimationDeleteElement.Completed += (sender, e) => ChildrenElements.Children.RemoveAt(index);
+                    Button.BeginAnimation(FrameworkElement.OpacityProperty, AnimationDeleteElement);
+                }
+                ReSort(index);
+                Count--;
+                CounterBuffer.MaxDown(1);
+            }
+        }
+
+        /// <summary>
+        /// Пересортировка исключая index
+        /// </summary>
+        /// <param name="index">Исключающий индекс элемента</param>
+        /// <param name="AnimateAction">Анимировать сортировку или нет</param>
+        private void ReSort(int index, bool AnimateAction = true)
+        {
+            ref IELButtonCommand? Button = ref BufferElements[index];
+            if (Count > 1 && index < Count - 1)
+            {
+                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
+                {
+                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
+                };
+                Thickness ThicknessIndex = new(0);
+                for (int i = index; i < Count - 1; i++)
+                {
+                    if (i != Count - 1) BufferElements[i] = BufferElements[i + 1];
+                    Button = ref BufferElements[i];
+                    if (Button == null) continue;
+                    else
+                    {
+                        ThicknessIndex = new Thickness(0, 29 * i + 4, 0, 0);
+                        Button.TextBlockNumberCommand.Text = $"#{i + 1}";
+                        if (!AnimateAction) Button.Margin = ThicknessIndex;
+                        else
+                        {
+                            AnimationBuffer.To = ThicknessIndex;
+                            AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
+                            Button.BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Удалить <b>все</b> элементы буфера
+        /// </summary>
+        /// <param name="ChildrenElements">Сетка элементов сохранённых команд буфера</param>
+        public void DeleteAll(Grid ChildrenElements)
+        {
+            if (Count > 0)
+            {
+                ChildrenElements.Children.Clear();
                 BufferElements = new IELButtonCommand[BufferElements.Length];
                 Count = 0;
             }
@@ -115,17 +194,19 @@ namespace AAC20.Classes
         /// <param name="Name">Имя команды</param>
         /// <param name="Parameteres">Параметры выполняемой команды</param>
         /// <param name="StringCommand">Пропись команды</param>
-        public IELButtonCommand Add(ICommandAAC? Command, string Name, string[] Parameteres, string StringCommand)
+        /// <param name="ChildrenElements">Сетка элементов буфера</param>
+        public IELButtonCommand Add(ICommandAAC? Command, ref Grid ChildrenElements, string Name, string[] Parameteres, string StringCommand)
         {
-            IELButtonCommand BCom = new(new BufferCommand<ICommandAAC>(ref Command, Name, Parameteres, StringCommand), Count);
-            if (Count < BufferElements.Length - 1)
+            IELButtonCommand BCom = new(new BufferCommand<ICommandAAC>(ref Command, Name, Parameteres, StringCommand), Count - (Count < BufferElements.Length ? 0 : 1));
+            if (Count < BufferElements.Length)
             {
                 this[Count++] = BCom;
                 CounterBuffer.MaxUp(1);
             }
             else
             {
-                BufferElements = [.. BufferElements.Skip(1)];
+                ChildrenElements.Children.RemoveAt(0);
+                ReSort(0, false);
                 this[^1] = BCom;
             }
             return BCom;

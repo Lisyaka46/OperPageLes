@@ -207,6 +207,26 @@ namespace AAC20.GUI
         /// </summary>
         private readonly DoubleAnimation ButtonAnimationOpacity;
 
+        /// <summary>
+        /// Активация действия кнопки
+        /// </summary>
+        private bool ButtonActivate = false;
+
+        /// <summary>
+        /// Делегат события активации кнопки команды
+        /// </summary>
+        public delegate void EventActivate();
+
+        /// <summary>
+        /// Объект события активации кнопки команды левой кнопкой мыши
+        /// </summary>
+        public event EventActivate OnActivateLeftButtonMouse;
+
+        /// <summary>
+        /// Объект события активации кнопки команды правой кнопкой мыши
+        /// </summary>
+        public event EventActivate? OnActivateRightButtonMouse;
+
         public IELButtonCommand(Classes.Buffer.BufferCommand<ICommandAAC> Command, int index)
         {
             InitializeComponent();
@@ -231,9 +251,14 @@ namespace AAC20.GUI
             CornerRadius = new CornerRadius(10);
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Top;
-            Margin = new(5, 29 * index + 4, 5, 0);
+            Margin = new(0, 29 * index + 4, 0, 0);
             Height = 27;
+            Width = 230;
             BorderButton.CornerRadius = new CornerRadius(4);
+            Opacity = 0;
+            TextBlockNumberCommand.Text = $"#{index + 1}";
+            ButtonAnimationOpacity.To = 1;
+            BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
 
             DefaultBackground = Color.FromRgb(172, 238, 255);
             SelectBackground = Color.FromRgb(101, 193, 241);
@@ -252,14 +277,41 @@ namespace AAC20.GUI
 
             MouseEnter += (sender, e) => MouseEnterAnimation();
 
-            MouseLeave += (sender, e) => MouseLeaveAnimation();
-
-            MouseLeftButtonDown += (sender, e) => ClickDownAnimation(ActivateClickColor.Clicked);
-
-            MouseUp += (sender, e) =>
+            MouseLeave += (sender, e) =>
             {
-                MouseEnterAnimation();
+                ButtonActivate = false;
+                MouseLeaveAnimation();
+            };
+
+            MouseDown += (sender, e) =>
+            {
+                ButtonActivate = true;
+                ClickDownAnimation(ActivateClickColor.Clicked);
+            };
+
+            OnActivateLeftButtonMouse += () =>
+            {
                 App.MainWindowApplication.SummarizeCommandStateResult(RefCommand.ExecuteCommand());
+            };
+
+            MouseLeftButtonUp += (sender, e) =>
+            {
+                if (ButtonActivate)
+                {
+                    ButtonActivate = false;
+                    MouseEnterAnimation();
+                    OnActivateLeftButtonMouse.Invoke();
+                }
+            };
+
+            MouseRightButtonUp += (sender, e) =>
+            {
+                if (ButtonActivate)
+                {
+                    ButtonActivate = false;
+                    MouseEnterAnimation();
+                    OnActivateRightButtonMouse?.Invoke();
+                }
             };
 
             IsEnabledChanged += (sender, e) =>

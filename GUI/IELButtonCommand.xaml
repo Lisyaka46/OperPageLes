@@ -11,6 +11,7 @@
             <Grid x:Name="GridButton">
                 <TextBlock x:Name="TextBlockButtonName" TextTrimming="WordEllipsis" Text="TextBlock" TextAlignment="Center" Foreground="Black" Focusable="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="1" Grid.Column="1" VerticalAlignment="Center" Margin="7,0,7,7"/>
                 <TextBlock x:Name="TextBlockButtonCommand" Text="TextBlock" TextAlignment="Center" Foreground="Black" Focusable="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="0,11,5,0" FontSize="8" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis"/>
+                <TextBlock x:Name="TextBlockNumberCommand" HorizontalAlignment="Right" TextWrapping="Wrap" Text="#00" VerticalAlignment="Top" FontSize="8" FontWeight="Bold" Margin="0,-2.2,0.8,0" TextAlignment="Right"/>
             </Grid>
         </Border>
     </Grid>
