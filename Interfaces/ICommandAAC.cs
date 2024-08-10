@@ -46,7 +46,7 @@ namespace AAC20.Classes.Commands
         internal static partial Regex RegexNameCommand();
         [GeneratedRegex(@"\*.*")]
         internal static partial Regex RegexParameterCommand();
-        [GeneratedRegex(@"[^,]+")]
+        [GeneratedRegex(@"([^%,]+|%,|%%)+")]
         internal static partial Regex RegexSortParamCommand();
     }
 }

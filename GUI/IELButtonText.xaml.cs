@@ -221,7 +221,7 @@ namespace AAC20.GUI
             set => TextBlockButton.FontSize = value;
         }
 
-        public bool _CharKeyKeyboardActivate = false;
+        private bool _CharKeyKeyboardActivate = false;
         /// <summary>
         /// Активность видимости символа действия активации кнопки
         /// </summary>
@@ -306,6 +306,11 @@ namespace AAC20.GUI
         /// Картинка действий над кнопкой
         /// </summary>
         private BitmapImage? ImageMouse;
+
+        /// <summary>
+        /// Состояние активности отображения действий на кнопке
+        /// </summary>
+        public bool VisibleMouseImaging = true;
 
         public IELButtonText()
         {
@@ -418,11 +423,8 @@ namespace AAC20.GUI
                 ButtonAnimationColor.To = Foreground;
                 TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-                if (ImageMouseButtonsUse.Opacity > 0d)
-                {
-                    ButtonAnimationOpacity.To = 0d;
-                    ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
-                }
+                ButtonAnimationOpacity.To = 0d;
+                ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
             };
         }
 
@@ -552,14 +554,17 @@ namespace AAC20.GUI
             }
             TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-            ImageMouse = ImageMouseButton();
-            if (ImageMouse != null)
+            if (VisibleMouseImaging)
             {
-                ButtonAnimationOpacity.To = 0.4d;
-                ImageMouseButtonsUse.BeginInit();
-                ImageMouseButtonsUse.Source = ImageMouse;
-                ImageMouseButtonsUse.EndInit();
-                ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
+                ImageMouse = ImageMouseButton();
+                if (ImageMouse != null)
+                {
+                    ButtonAnimationOpacity.To = 0.4d;
+                    ImageMouseButtonsUse.BeginInit();
+                    ImageMouseButtonsUse.Source = ImageMouse;
+                    ImageMouseButtonsUse.EndInit();
+                    ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
+                }
             }
         }
 
@@ -594,11 +599,8 @@ namespace AAC20.GUI
             TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-            if (ImageMouseButtonsUse.Opacity > 0d)
-            {
-                ButtonAnimationOpacity.To = 0d;
-                ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
-            }
+            ButtonAnimationOpacity.To = 0d;
+            ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
         }
 
         /// <summary>

@@ -8,7 +8,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         x:Name="window" x:Class="AAC20.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500">
+        Title="MainWindow" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo03.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*" MinWidth="40"/>
@@ -28,11 +28,11 @@
                     <ColumnDefinition Width="59*" MinWidth="56" MaxWidth="65"/>
                 </Grid.ColumnDefinitions>
                 <GUI:IELImageButton x:Name="ButtonSettings" DisabledBackground="#FFDE5E5E" ButtonBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" MillisecondsAnimation="90" MouseBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="1" Margin="2,1,2,1"/>
-                <Image x:Name="ImageIndificator_Копировать" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="4,2,0,2" HorizontalAlignment="Left"/>
+                <Image x:Name="ImageLogoApplication" Margin="4,2,0,2" HorizontalAlignment="Left" Source="/Windows/WindowsImages/Logo01.png"/>
             </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="3,2,2,2" Grid.Row="1">
-            <Grid x:Name="Paging">
+            <Grid x:Name="GridPaging">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*" MinHeight="35" MaxHeight="45"/>
                     <RowDefinition Height="57*"/>
@@ -49,13 +49,16 @@
         </Grid>
         <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,3,3,4">
             <Grid x:Name="GridConsole">
-                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="265" Height="200" Focusable="True" AllowDrop="True" >
-                    <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BorderActionPanel" Panel.ZIndex="1" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="265" Height="220" Focusable="True" AllowDrop="True" >
+                    <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True" Margin="5,5,5,5">
                         <Frame x:Name="FrameActionPanelLeft" Grid.ColumnSpan="1" Panel.ZIndex="1"/>
                         <Frame x:Name="FrameActionPanelRight" Grid.ColumnSpan="1"/>
                     </Grid>
                 </Border>
-                <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross"/>
+                <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto"/>
             </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" CornerRadius="10,10,10,10" Grid.Column="0" Grid.ColumnSpan="2" Margin="2,4,3,1">

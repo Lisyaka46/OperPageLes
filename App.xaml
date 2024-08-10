@@ -8,5 +8,6 @@
         <Style x:Key="Tablon">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Tablon"/>
         </Style>
+        <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>

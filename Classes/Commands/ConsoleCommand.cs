@@ -89,6 +89,8 @@ namespace AAC20.Classes.Commands
                             Parameters[i] = Parameters[i][1..];
                             break;
                     }
+                    Parameters[i] = Parameters[i].Replace("%,", ",");
+                    Parameters[i] = Parameters[i].Replace("%%", "%");
                 }
             }
             else // command

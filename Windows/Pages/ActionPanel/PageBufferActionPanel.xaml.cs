@@ -43,6 +43,7 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel()
         {
             InitializeComponent();
+            IELButtonBackMainMenu.VisibleMouseImaging = false;
             App.BufferCommand.CounterBuffer.ChangedValue += (Value) =>
             {
                 ThicknessAnimationBuffer.To = new(0, 0 - 29 * Value, 0, 0);

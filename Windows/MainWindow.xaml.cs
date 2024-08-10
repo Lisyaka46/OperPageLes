@@ -5,7 +5,6 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Timer = System.Timers.Timer;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using AAC20.Classes.Commands;
@@ -15,6 +14,8 @@ using AAC20.Windows.Pages.ActionPanel;
 using System.Windows.Navigation;
 using System.Windows.Controls;
 using AAC20.Interfaces;
+using System.Linq;
+using AAC20.Windows;
 
 namespace AAC20
 {
@@ -23,23 +24,6 @@ namespace AAC20
     /// </summary>
     public partial class MainWindow : Window
     {
-        private sealed class UpdateBackgroundData
-        {
-            /// <summary>
-            /// Объект управляющий фоновым обновлением визуальной информации
-            /// </summary>
-            public readonly Timer TimerDataUpdate;
-
-            /// <summary>
-            /// Инициализировать объект управления фоновым обновлением информации в данном окне
-            /// </summary>
-            public UpdateBackgroundData(ElapsedEventHandler Elapsed)
-            {
-                TimerDataUpdate = new(1000);
-                TimerDataUpdate.Elapsed += Elapsed;
-            }
-        }
-
         /// <summary>
         /// Флаги данной формы
         /// </summary>
@@ -141,7 +125,7 @@ namespace AAC20
         private int PanelVerschachtelung = 0;
 
         /// <summary>
-        /// ССылка на активную страницу панели действий
+        /// Ссылка на активную страницу панели действий
         /// </summary>
         private IPageActionPanelAAC RefPageActionPanel;
 
@@ -160,7 +144,7 @@ namespace AAC20
                     Paragraph Massage = new();
                     Massage.Inlines.Clear();
                     Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                    Massage.Inlines.Add(new Run(param[0]));
+                    Massage.Inlines.Add(new Run(string.Join('\0', param)));
                     RichTextBoxMainMessage.Document.Blocks.Add(Massage);
                     return Task.FromResult(CommandStateResult.Completed);
                 }),
@@ -182,7 +166,7 @@ namespace AAC20
                 NextPageInActtionPanel(Pages.PageMainActPanel, false);
             };
 
-            UpdateBackgroundDataThis = new((sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
+            UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             BackgroundUpdateVisualData();
             FrameActionPanelLeft.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             FrameActionPanelRight.NavigationUIVisibility = NavigationUIVisibility.Hidden;
@@ -192,6 +176,9 @@ namespace AAC20
             SizeActiveActionPanel = new(BorderActionPanel.Width, BorderActionPanel.Height);
             BorderActionPanel.Width = 0;
             BorderActionPanel.Height = 0;
+
+            ButtonReturnCommand.VisibleMouseImaging = false;
+            ButtonReboot.VisibleMouseImaging = false;
 
             ButtonReboot.OnActivateMouseLeft += (key) => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += (key) => ActivateActionCommand(TextBoxCommandInput.Text);
@@ -267,6 +254,12 @@ namespace AAC20
             RichTextBoxMainMessage.TextChanged += (sender, e) =>
             {
                 RichTextBoxMainMessage.ScrollToEnd();
+            };
+
+            ImageLogoApplication.MouseUp += (sender, e) =>
+            {
+                LicenseWindow License = new();
+                License.ShowDialog();
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
