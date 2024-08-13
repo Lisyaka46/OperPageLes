@@ -152,7 +152,7 @@ namespace AAC20.Windows
         /// <summary>
         /// Начать анимацию благодарностей
         /// </summary>
-        public void AnimationThanks()
+        private void AnimationThanks()
         {
             FrameThanks.Navigate(PageThanks);
             UpdateThanks();

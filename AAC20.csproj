@@ -11,6 +11,7 @@
 
 	<ItemGroup>
     <None Remove="Fonts\Tablon-Regular.ttf" />
+    <None Remove="Windows\WindowsImages\20.png" />
     <None Remove="Windows\WindowsImages\DoubleMouseButton.png" />
     <None Remove="Windows\WindowsImages\LeftMouseButton.png" />
     <None Remove="Windows\WindowsImages\LicenseIco.png" />
@@ -18,8 +19,6 @@
     <None Remove="Windows\WindowsImages\Logo01.png" />
     <None Remove="Windows\WindowsImages\Logo02.png" />
     <None Remove="Windows\WindowsImages\Logo03.png" />
-    <None Remove="Windows\WindowsImages\Logo20.png" />
-    <None Remove="Windows\WindowsImages\Logo4.png" />
     <None Remove="Windows\WindowsImages\RightMouseButton.png" />
     <None Remove="Windows\WindowsImages\Settings.png" />
     <None Remove="Windows\WindowsImages\YES.png" />
@@ -39,8 +38,8 @@
     <Resource Include="Windows\WindowsImages\Loading.gif" />
     <Resource Include="Windows\WindowsImages\Logo01.png" />
     <Resource Include="Windows\WindowsImages\Logo03.png" />
-    <Resource Include="Windows\WindowsImages\Logo20.png" />
-    <Resource Include="Windows\WindowsImages\Logo4.png" />
+    <Resource Include="Windows\WindowsImages\20.png" />
+    <Resource Include="Windows\WindowsImages\Logo02.png" />
     <Resource Include="Windows\WindowsImages\RightMouseButton.png" />
     <Resource Include="Windows\WindowsImages\Settings.png" />
     <Resource Include="Windows\WindowsImages\YES.png" />

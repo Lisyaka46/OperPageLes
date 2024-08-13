@@ -12,8 +12,8 @@
             <RowDefinition Height="159*"/>
             <RowDefinition Height="129*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="ImageLogo" Height="100" Margin="0,30,0,0" VerticalAlignment="Top" Width="100" Source="/Windows/WindowsImages/Logo4.png" HorizontalAlignment="Center"/>
-        <Image x:Name="Image20" Margin="0,84,0,0" VerticalAlignment="Top" Source="/Windows/WindowsImages/Logo20.png" Width="84" HorizontalAlignment="Center" Height="38"/>
+        <Image x:Name="ImageLogo" Height="100" Margin="0,30,0,0" VerticalAlignment="Top" Width="100" Source="/Windows/WindowsImages/Logo02.png" HorizontalAlignment="Center"/>
+        <Image x:Name="Image20" Margin="0,84,0,0" VerticalAlignment="Top" Source="/Windows/WindowsImages/20.png" Width="84" HorizontalAlignment="Center" Height="38"/>
         <Frame x:Name="FrameLicense" Content="" NavigationUIVisibility="Hidden" Grid.RowSpan="2" Margin="-10,146,0,0"/>
         <Image x:Name="ImageLicense" Source="/Windows/WindowsImages/LicenseIco.png" Margin="0,45,0,35"/>
         <Frame x:Name="FrameThanks" Content="" Grid.Row="2" NavigationUIVisibility="Hidden" Margin="0,9,0,0"/>
