@@ -16,6 +16,7 @@ using System.Windows.Controls;
 using AAC20.Interfaces;
 using System.Linq;
 using AAC20.Windows;
+using AAC20.GUI;
 
 namespace AAC20
 {
@@ -27,33 +28,33 @@ namespace AAC20
         /// <summary>
         /// Флаги данной формы
         /// </summary>
-        private static class Flags
+        private readonly struct Flags
         {
             /// <summary>
             /// Флаг состояния активности панели действий в главной консоли
             /// </summary>
-            public static Flag ActionPanelActivate = new(false);
+            public static readonly Flag ActionPanelActivate = new(false);
 
             /// <summary>
             /// Флаг состояния активации кнопки панели действий через клавишу клавиатуры
             /// </summary>
-            public static Flag ActionPanelActivateButtonAltMode = new(false);
+            public static readonly Flag ActionPanelActivateButtonAltMode = new(false);
         };
 
         /// <summary>
         /// Класс страниц данной формы
         /// </summary>
-        private static class Pages
+        private readonly struct Pages
         {
             /// <summary>
             /// Главная страница панели действий
             /// </summary>
-            internal static PageMainActionPanel PageMainActPanel = new();
+            internal static readonly PageMainActionPanel PageMainActPanel = new();
 
             /// <summary>
             /// Страница буффера в панели действий
             /// </summary>
-            internal static PageBufferActionPanel PageBufferActPanel = new();
+            internal static readonly PageBufferActionPanel PageBufferActPanel = new();
         }
 
         /// <summary>
@@ -150,6 +151,12 @@ namespace AAC20
                 }),
             ]);
 
+            App.AppFlags.FlagCtrlActivateActionButtonAltMode.ChangeStateFlag += (NewValue) =>
+            {
+                DoubleAnimateActionPanelOpacity.To = NewValue ? 1d : 0d;
+                TextBlockRightButtonIndicatorKey.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
+            };
+
             Pages.PageMainActPanel.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
             {
                 RichTextBoxMainMessage.Document = new();
@@ -158,12 +165,12 @@ namespace AAC20
 
             Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
             {
-                NextPageInActtionPanel(Pages.PageBufferActPanel);
+                NextPageInActtionPanel(Pages.PageBufferActPanel, AltMode);
             };
 
             Pages.PageBufferActPanel.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
             {
-                NextPageInActtionPanel(Pages.PageMainActPanel, false);
+                NextPageInActtionPanel(Pages.PageMainActPanel, AltMode, false);
             };
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
@@ -172,6 +179,7 @@ namespace AAC20
             FrameActionPanelRight.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             RefPageActionPanel = Pages.PageMainActPanel;
             FrameActionPanelLeft.Navigate(Pages.PageMainActPanel);
+            TextBlockRightButtonIndicatorKey.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
             SizeActiveActionPanel = new(BorderActionPanel.Width, BorderActionPanel.Height);
             BorderActionPanel.Width = 0;
@@ -188,28 +196,32 @@ namespace AAC20
             {
                 if (RefPageActionPanel.AltMode && e.Key != Key.Z && !Flags.ActionPanelActivateButtonAltMode.Value)
                 {
+                    if (e.Key == Key.RightCtrl)
+                    {
+                        App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = true;
+                        return;
+                    }
                     Flags.ActionPanelActivateButtonAltMode.Value = true;
-                    RefPageActionPanel.ActivateInKey(e.Key, true);
+                    RefPageActionPanel.BlinkActivateIELButtonTextInKey(e.Key);
                 }
             };
 
             BorderActionPanel.KeyUp += (sender, e) =>
             {
-
+                Flags.ActionPanelActivateButtonAltMode.Value = false;
+                App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = false;
                 switch (e.Key)
                 {
                     case Key.Escape:
                         AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
                         break;
                     case Key.Z:
-                        RefPageActionPanel.AltModeChanged.Invoke(!RefPageActionPanel.AltMode);
+                        RefPageActionPanel.AltMode = !RefPageActionPanel.AltMode;
                         break;
                     default:
-                        if (RefPageActionPanel.AltMode)
-                        {
-                            Flags.ActionPanelActivateButtonAltMode.Value = false;
-                            RefPageActionPanel.ActivateInKey(e.Key, false);
-                        }
+                        RefPageActionPanel.ActivateIELButtonTextInKey(e.Key,
+                        App.AppFlags.FlagCtrlActivateActionButtonAltMode ?
+                        IPageActionPanelAAC.OrientationActivate.RightButton : IPageActionPanelAAC.OrientationActivate.LeftButton);
                         break;
                 }
             };
@@ -227,6 +239,10 @@ namespace AAC20
                         TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(160, 245, 200), TimeSpan.FromMilliseconds(90d)));
                         break;
+                    case Key.Escape:
+                        TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                            new ColorAnimation(Color.FromRgb(255, 122, 84), TimeSpan.FromMilliseconds(90d)));
+                        break;
                 }
             };
             TextBoxCommandInput.KeyUp += (sender, e) =>
@@ -234,11 +250,17 @@ namespace AAC20
                 switch (e.Key)
                 {
                     case Key.Enter:
-                        TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
-                            new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
                         ActivateActionCommand(TextBoxCommandInput.Text);
                         break;
+                    case Key.Escape:
+                        TextBoxCommandInput.Text = string.Empty;
+                        break;
+                    case Key.Apps:
+                        AnimationActionPanel(true);
+                        return;
                 }
+                TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                            new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
             };
 
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
@@ -270,25 +292,24 @@ namespace AAC20
         /// </summary>
         /// <param name="Content">Новая страница панели</param>
         /// <param name="RightAlign">Правая ориентация движения</param>
-        private void NextPageInActtionPanel(IPageActionPanelAAC Content, bool RightAlign = true)
+        private void NextPageInActtionPanel(IPageActionPanelAAC Content, bool AltMode, bool RightAlign = true)
         {
             Frame OldFrameAnim = PanelVerschachtelung % 2 == 0 ? FrameActionPanelLeft : FrameActionPanelRight;
             Frame NewFrameAnim = !(PanelVerschachtelung % 2 == 0) ? FrameActionPanelLeft : FrameActionPanelRight;
-            int Offset = RightAlign ? -18 : 18;
             NewFrameAnim.Opacity = 0;
             Canvas.SetZIndex(OldFrameAnim, 0);
             Canvas.SetZIndex(NewFrameAnim, 1);
             OldFrameAnim.IsEnabled = false;
             NewFrameAnim.IsEnabled = true;
             NewFrameAnim.BeginAnimation(MarginProperty, null);
-            NewFrameAnim.Margin = new(0 - Offset);
-            Content.AltMode = RefPageActionPanel.AltMode;
+            NewFrameAnim.Margin = !RightAlign ? new(-20, -20, 40, -10) : new(40, -10, -20, -20);
+            Content.AltMode = AltMode;
             RefPageActionPanel = Content;
             NewFrameAnim.Navigate(Content);
 
             DoubleAnimateActionPanelOpacity.To = 0;
             OldFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
-            ThicknessAnimateActionPanel.To = new(Offset);
+            ThicknessAnimateActionPanel.To = !RightAlign ? new(40, -20, -20, -20) : new(-20, -20, 40, -20);
             OldFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
 
             DoubleAnimateActionPanelOpacity.To = 1;
@@ -310,8 +331,8 @@ namespace AAC20
             if (State) BorderActionPanel.Focus();
             else
             {
-                RefPageActionPanel.AltModeChanged.Invoke(false);
-                RichTextBoxMainMessage.Focus();
+                RefPageActionPanel.AltMode = false;
+                TextBoxCommandInput.Focus();
             }
             Flags.ActionPanelActivate.Value = State;
             AnimationMoveActionPanel(StylePositionAnimate);

@@ -9,7 +9,7 @@
       d:DesignHeight="128.908"
       Title="PageBufferActionPanel">
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="35*"/>
             <RowDefinition Height="94*"/>
@@ -20,9 +20,9 @@
             </Grid>
         </Border>
 
-        <GUI:IELButtonText x:Name="IELButtonBackMainMenu" Margin="4,5,0,5" StateVisualizationButton="LeftArrow" Text="Назад" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboardActivate="True" CharKeyKeyboard="Oem3" HorizontalAlignment="Left" Width="95"/>
+        <GUI:IELButtonText x:Name="IELButtonBackMainMenu" Margin="4,5,0,5" StateVisualizationButton="LeftArrow" Text="Назад" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboard="Oem3" HorizontalAlignment="Left" Width="95"/>
         <TextBlock x:Name="TextBlockCounterBuffer" HorizontalAlignment="Left" TextWrapping="Wrap" Text="00/00" VerticalAlignment="Center" FontFamily="Bahnschrift SemiBold" Margin="212,0,0,-4" Height="15" FontSize="14" Foreground="#FF80EAE2"/>
-        <GUI:IELButtonText x:Name="IELButtonClearBuffer" Margin="103,5,0,5" Text="Очистить" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboardActivate="True" CharKeyKeyboard="D1" HorizontalAlignment="Left" Width="103" IsEnabled="False"/>
+        <GUI:IELButtonText x:Name="IELButtonClearBuffer" Margin="103,5,0,5" Text="Очистить" DefaultBackground="#FFA1F9FF" SelectBackground="#FF57D5FF" SelectBorderBrush="#FF000A35" SelectForeground="#FF123238" ClickedBorderBrush="#FF000E4A" ClickedForeground="#FF0F2F44" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboard="D1" HorizontalAlignment="Left" Width="103" IsEnabled="False"/>
 
     </Grid>
 </Page>

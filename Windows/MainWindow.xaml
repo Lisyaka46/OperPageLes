@@ -56,6 +56,14 @@
                     <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True" Margin="5,5,5,5">
                         <Frame x:Name="FrameActionPanelLeft" Grid.ColumnSpan="1" Panel.ZIndex="1"/>
                         <Frame x:Name="FrameActionPanelRight" Grid.ColumnSpan="1"/>
+                        <TextBlock x:Name="TextBlockRightButtonIndicatorKey" HorizontalAlignment="Right" TextWrapping="Wrap" Text="CTRL" VerticalAlignment="Bottom" Panel.ZIndex="2" Padding="10,3,10,3" Margin="0,0,-4,-4">
+                            <TextBlock.Background>
+                                <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
+                                    <GradientStop Color="#FF55A6A7" Offset="0.575"/>
+                                    <GradientStop Offset="1" Color="#00922525"/>
+                                </RadialGradientBrush>
+                            </TextBlock.Background>
+                        </TextBlock>
                     </Grid>
                 </Border>
                 <RichTextBox x:Name="RichTextBoxMainMessage" Background="#FF4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto"/>

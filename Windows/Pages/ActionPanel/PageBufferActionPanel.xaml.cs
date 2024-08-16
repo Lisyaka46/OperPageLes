@@ -13,11 +13,10 @@ namespace AAC20.Windows.Pages.ActionPanel
     /// </summary>
     public partial class PageBufferActionPanel : Page, IPageActionPanelAAC
     {
-        private bool PAltMode = false;
         /// <summary>
-        /// Alt режим для переключения кнопок с помощью клавиш клавиатуры
+        /// Объект данных Alt-режима
         /// </summary>
-        public bool AltMode { get => PAltMode; set => AltModeChanged.Invoke(value); }
+        private bool _AltMode;
 
         /// <summary>
         /// Объект события изменения состояния Alt режима
@@ -54,7 +53,6 @@ namespace AAC20.Windows.Pages.ActionPanel
             {
                 IELButtonBackMainMenu.CharKeyKeyboardActivate = Mode;
                 IELButtonClearBuffer.CharKeyKeyboardActivate = Mode;
-                PAltMode = Mode;
             };
             BorderBuffer.MouseWheel += (sender, e) =>
             {
@@ -97,10 +95,30 @@ namespace AAC20.Windows.Pages.ActionPanel
         }
 
         /// <summary>
-        /// Активировать кнопку по ключу
+        /// Узнать состояние Alt-режима
         /// </summary>
-        /// <param name="key">Ключ активации</param>
-        /// <param name="KeyDownEvent">Начало нажатия на кнопку</param>
-        public void ActivateInKey(Key key, bool KeyDownEvent) => IELButtonText.ActivateButtonInKey(this, key, KeyDownEvent);
+        /// <returns>Состояние</returns>
+        public bool GetAltMode() => _AltMode;
+
+        /// <summary>
+        /// Изменить состояние Alt-режима
+        /// </summary>
+        /// <param name="value">Значение</param>
+        public void SetAltMode(bool value) => _AltMode = value;
+
+        /// <summary>
+        /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
+        /// </summary>
+        /// <param name="key">Клавиша</param>
+        /// <param name="Orientation">Ориентация нажатия на кнопку</param>
+        public void ActivateIELButtonTextInKey(Key key, IPageActionPanelAAC.OrientationActivate Orientation) =>
+            IELButtonText.ActivateButtonInKey<IELButtonText>(MainGrid, key, Orientation);
+
+        /// <summary>
+        /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
+        /// </summary>
+        /// <param name="key">Клавиша</param>
+        public void BlinkActivateIELButtonTextInKey(Key key) =>
+            IELButtonText.BlinkActivateInKey<IELButtonText>(MainGrid, key);
     }
 }

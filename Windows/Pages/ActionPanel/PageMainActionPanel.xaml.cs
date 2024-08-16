@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AAC20.GUI;
 using AAC20.Interfaces;
 
 namespace AAC20.Windows.Frames
@@ -21,11 +22,10 @@ namespace AAC20.Windows.Frames
     /// </summary>
     public partial class PageMainActionPanel : Page, IPageActionPanelAAC
     {
-        private bool PAltMode = false;
         /// <summary>
-        /// Alt режим для переключения кнопок с помощью клавиш клавиатуры
+        /// Объект данных Alt-режима
         /// </summary>
-        public bool AltMode { get => PAltMode; set => AltModeChanged.Invoke(value); }
+        private bool _AltMode;
 
         /// <summary>
         /// Объект события изменения состояния Alt режима
@@ -39,15 +39,40 @@ namespace AAC20.Windows.Frames
             {
                 IELButtonCrearConsole.CharKeyKeyboardActivate = Mode;
                 IELButtonCommandBuffer.CharKeyKeyboardActivate = Mode;
-                PAltMode = Mode;
+                IELButtonDiscriptionCommand.CharKeyKeyboardActivate = Mode;
             };
+            IELButtonDiscriptionCommand.OnActivateMouseLeft += (Key) =>
+            {
+
+            };
+            
         }
 
         /// <summary>
-        /// Активировать кнопку по ключу
+        /// Узнать состояние Alt-режима
         /// </summary>
-        /// <param name="key">Ключ активации</param>
-        /// <param name="KeyDownEvent">Начало нажатия на кнопку</param>
-        public void ActivateInKey(Key key, bool KeyDownEvent) => GUI.IELButtonText.ActivateButtonInKey(this, key, KeyDownEvent);
+        /// <returns>Состояние</returns>
+        public bool GetAltMode() => _AltMode;
+
+        /// <summary>
+        /// Изменить состояние Alt-режима
+        /// </summary>
+        /// <param name="value">Значение</param>
+        public void SetAltMode(bool value) => _AltMode = value;
+
+        /// <summary>
+        /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
+        /// </summary>
+        /// <param name="key">Клавиша</param>
+        /// <param name="Orientation">Ориентация нажатия на кнопку</param>
+        public void ActivateIELButtonTextInKey(Key key, IPageActionPanelAAC.OrientationActivate Orientation) =>
+            IELButtonText.ActivateButtonInKey<IELButtonText>(MainGrid, key, Orientation);
+
+        /// <summary>
+        /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
+        /// </summary>
+        /// <param name="key">Клавиша</param>
+        public void BlinkActivateIELButtonTextInKey(Key key) =>
+            IELButtonText.BlinkActivateInKey<IELButtonText>(MainGrid, key);
     }
 }

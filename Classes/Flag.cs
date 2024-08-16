@@ -7,23 +7,6 @@ using System.Threading.Tasks;
 namespace AAC20.Classes
 {
     /// <summary>
-    /// Статус Флага
-    /// </summary>
-    public enum BooleanFlags
-    {
-
-        /// <summary>
-        /// Отрицание Флага
-        /// </summary>
-        False = 0,
-
-        /// <summary>
-        /// Одобрение Флага
-        /// </summary>
-        True = 1
-    }
-
-    /// <summary>
     /// Описание структуры объекта флага
     /// </summary>
     /// <remarks>
@@ -60,5 +43,11 @@ namespace AAC20.Classes
                 ChangeStateFlag?.Invoke(_Value);
             }
         }
+
+        /// <summary>
+        /// Преобразование флага в его значение
+        /// </summary>
+        /// <param name="f">Флаг</param>
+        public static implicit operator bool(Flag f) => f._Value;
     }
 }

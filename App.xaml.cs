@@ -1,4 +1,5 @@
-﻿using AAC20.Classes.Commands;
+﻿using AAC20.Classes;
+using AAC20.Classes.Commands;
 using AAC20.GUI;
 using AAC20.Interfaces;
 using System;
@@ -22,6 +23,17 @@ namespace AAC20
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Класс флагов программы
+        /// </summary>
+        internal readonly struct AppFlags
+        {
+            /// <summary>
+            /// Флаг активации правого нажатия с помощью кнопки CTRL в панели действий
+            /// </summary>
+            internal static readonly Flag FlagCtrlActivateActionButtonAltMode = new(false);
+        }
+
         /// <summary>
         /// Массив консольных команд
         /// </summary>

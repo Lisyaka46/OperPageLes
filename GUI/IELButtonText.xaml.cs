@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using AAC20.Interfaces;
+using Microsoft.Windows.Themes;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -429,32 +433,52 @@ namespace AAC20.GUI
         }
 
         /// <summary>
-        /// Активировать кнопку типа "IELButtonText" в странице
+        /// Найти кнопку типа "IELButtonText" в странице
         /// </summary>
         /// <param name="VisualObject">Ссылка на объект поиска</param>
         /// <param name="key">Ключ клавиши</param>
-        /// <param name="DownKeyEvent">Начало нажатия клавиши</param>
-        internal static void ActivateButtonInKey(Visual VisualObject, Key key, bool DownKeyEvent = false)
+        public static T? SearchButton<T>(Visual VisualObject, Key key) where T : IELButtonText
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(VisualObject); i++)
             {
                 Visual ChildVisualElement = (Visual)VisualTreeHelper.GetChild(VisualObject, i);
-                if (ChildVisualElement.GetType() == typeof(IELButtonText))
+                if (ChildVisualElement.GetType() == typeof(T))
                 {
-                    IELButtonText Button = (IELButtonText)ChildVisualElement;
-                    if (Button.CharKeyKeyboard == key && Button.IsEnabled)
-                    {
-                        if (DownKeyEvent) Button.BlinkAnimation();
-                        else Button.OnActivateMouseLeft?.Invoke(true);
-                    }
+                    T Button = (T)ChildVisualElement;
+                    if (Button.CharKeyKeyboard == key && Button.IsEnabled) return Button;
                 }
-                else
-                {
-                    ActivateButtonInKey(ChildVisualElement, key, DownKeyEvent);
-                }
+                else if (ChildVisualElement.GetType() == typeof(IAddChild)) return SearchButton<T>(ChildVisualElement, key);
             }
-            //return false;
-            //throw new Exception($"Ключ клавиши \"{key}\" не имеет не одна кнопка, в данном случае выведено исключение");
+            return null;
+        }
+
+        /// <summary>
+        /// Активировать кнопку типа "IELButtonText" в странице
+        /// </summary>
+        /// <param name="VisualObject">Ссылка на объект поиска</param>
+        /// <param name="key">Ключ клавиши</param>
+        /// <param name="Orientation">Ориентация нажатия</param>
+        public static void ActivateButtonInKey<T>(Visual VisualObject, Key key, IPageActionPanelAAC.OrientationActivate Orientation) where T : IELButtonText
+        {
+            T? Button = SearchButton<T>(VisualObject, key);
+            if (Button == null) return;
+            else
+            {
+                if (Orientation == IPageActionPanelAAC.OrientationActivate.LeftButton) Button.OnActivateMouseLeft?.Invoke(true);
+                else if (Orientation == IPageActionPanelAAC.OrientationActivate.RightButton) Button.OnActivateMouseRight?.Invoke(true);
+            }
+        }
+
+        /// <summary>
+        /// Активировать мерцание кнопки типа "IELButtonText" в странице
+        /// </summary>
+        /// <param name="VisualObject">Ссылка на объект поиска</param>
+        /// <param name="key">Ключ клавиши</param>
+        public static void BlinkActivateInKey<T>(Visual VisualObject, Key key) where T : IELButtonText
+        {
+            T? Button = SearchButton<T>(VisualObject, key);
+            if (Button == null) return;
+            else Button.BlinkAnimation();
         }
 
         /// <summary>
@@ -491,18 +515,13 @@ namespace AAC20.GUI
             BorderBrush = StyleClickColor == ActivateClickColor.Clicked ? ClickedBorderBrush : NotEnabledBorderBrush;
             if (StateVisualizationButton != StateButton.Default)
             {
-                if (StateVisualizationButton == StateButton.LeftArrow)
-                {
-                    TextBlockLeftArrow.Foreground = new SolidColorBrush(Foreground);
-                    BorderLeftArrow.BeginAnimation(MarginProperty, null);
-                    BorderLeftArrow.Margin = new(0);
-                }
-                else
-                {
-                    TextBlockRightArrow.Foreground = new SolidColorBrush(Foreground);
-                    BorderRightArrow.BeginAnimation(MarginProperty, null);
-                    BorderRightArrow.Margin = new(0);
-                }
+                (StateVisualizationButton == StateButton.LeftArrow ? TextBlockLeftArrow : TextBlockRightArrow)
+                    .Foreground = new SolidColorBrush(Foreground);
+                ButtonAnimationThickness.To = new(
+                    StateVisualizationButton == StateButton.RightArrow ? 5 : 0, 0,
+                    StateVisualizationButton == StateButton.LeftArrow ? 5 : 0, 0);
+                (StateVisualizationButton == StateButton.LeftArrow ? BorderLeftArrow : BorderRightArrow)
+                    .BeginAnimation(MarginProperty, ButtonAnimationThickness);
             }
             BorderCharKeyboard.BorderBrush = new SolidColorBrush(BorderBrush);
             BorderCharKeyboard.Background = new SolidColorBrush(Background);
@@ -521,9 +540,9 @@ namespace AAC20.GUI
             if (StateVisualizationButton != StateButton.Default)
             {
                 ButtonAnimationThickness.To = new(
-                    StateVisualizationButton == StateButton.RightArrow ? 3 : 0,
+                    StateVisualizationButton == StateButton.RightArrow ? -3 : 0,
                     0,
-                    StateVisualizationButton == StateButton.LeftArrow ? 3 : 0,
+                    StateVisualizationButton == StateButton.LeftArrow ? -3 : 0,
                     0);
                 if (StateVisualizationButton == StateButton.LeftArrow)
                     BorderLeftArrow.BeginAnimation(MarginProperty, ButtonAnimationThickness);

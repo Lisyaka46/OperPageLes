@@ -121,6 +121,14 @@ namespace AAC20.GUI
             set => TextBoxMain.Text = value;
         }
 
+        /// <summary>
+        /// Сделать фокус на элементе
+        /// </summary>
+        public new void Focus()
+        {
+            TextBoxMain.Focus();
+        }
+
         public IELTextBoxCommand()
         {
             InitializeComponent();
@@ -134,6 +142,7 @@ namespace AAC20.GUI
             BorderThickness = new(1, 1, 1, 1);
             CornerRadius = new(1, 1, 1, 1);
             TextFontSize = 14;
+            TextBoxMain.ContextMenu = null;
 
             GotKeyboardFocus += (sender, e) =>
             {
