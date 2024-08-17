@@ -1,12 +1,29 @@
-﻿<Window x:Class="AAC20.Windows.WindowDiscriptionCommands"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AAC20.Windows"
+        xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.WindowDiscriptionCommands"
         mc:Ignorable="d"
-        Title="Описание всех команд" Height="450" Width="800" Icon="/Windows/WindowsImages/LogoDC.png" WindowStartupLocation="CenterOwner">
+        Title="Описание всех команд" Height="450" Width="800" Icon="/Windows/WindowsImages/LogoDC.png" WindowStartupLocation="CenterOwner" Background="#FF527562">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="200*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="82*"/>
+                <ColumnDefinition Width="70*"/>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="105*"/>
+                <ColumnDefinition Width="63*"/>
+            </Grid.ColumnDefinitions>
+            <GUI:IELButtonText x:Name="IELButtonCrearConsole" DefaultBackground="#FFDECDDB" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13.3" TextFontFamily="Calibri" Text="Консольные команды" CornerRadius="6,6,6,6" SelectBackground="#FF8DCBF3" SelectBorderBrush="#FF4A1138" SelectForeground="#FF1C2B37" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" CharKeyKeyboard="D1"/>
+            <GUI:IELButtonText x:Name="IELButtonCrearConsole_Копировать" DefaultBackground="#FFDECDDB" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13.3" TextFontFamily="Calibri" Text="Голос. команды" CornerRadius="6,6,6,6" SelectBackground="#FF8DCBF3" SelectBorderBrush="#FF4A1138" SelectForeground="#FF1C2B37" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" CharKeyKeyboard="D1" Grid.Column="1"/>
+            <GUI:IELButtonText x:Name="IELButtonCrearConsole_Копировать1" DefaultBackground="#FFDECDDB" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13.3" TextFontFamily="Calibri" Text="Пользоват. команды" CornerRadius="6,6,6,6" SelectBackground="#FF8DCBF3" SelectBorderBrush="#FF4A1138" SelectForeground="#FF1C2B37" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" CharKeyKeyboard="D1" Grid.Column="2"/>
+        </Grid>
+
     </Grid>
 </Window>

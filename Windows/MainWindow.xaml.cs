@@ -17,6 +17,9 @@ using AAC20.Interfaces;
 using System.Linq;
 using AAC20.Windows;
 using AAC20.GUI;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows.Markup;
 
 namespace AAC20
 {
@@ -128,6 +131,7 @@ namespace AAC20
         /// <summary>
         /// Ссылка на активную страницу панели действий
         /// </summary>
+        [NotNull()]
         private IPageActionPanelAAC RefPageActionPanel;
 
         public MainWindow()
@@ -173,6 +177,21 @@ namespace AAC20
                 NextPageInActtionPanel(Pages.PageMainActPanel, AltMode, false);
             };
 
+            Pages.PageMainActPanel.IELButtonDiscriptionCommand.OnActivateMouseLeft += (Key) =>
+            {
+                AnimationActionPanel(false);
+                if (App.AppWindows.DiscriptionCommands == null)
+                {
+                    App.AppWindows.DiscriptionCommands = new();
+                    App.AppWindows.DiscriptionCommands.Show();
+                }
+                else
+                {
+                    App.AppWindows.DiscriptionCommands.WindowState = WindowState.Normal;
+                    App.AppWindows.DiscriptionCommands.Activate();
+                }
+            };
+
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             BackgroundUpdateVisualData();
             FrameActionPanelLeft.NavigationUIVisibility = NavigationUIVisibility.Hidden;
@@ -192,6 +211,8 @@ namespace AAC20
             ButtonReturnCommand.OnActivateMouseLeft += (key) => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
 
+            Closing += (sender, e) => App.Current.Shutdown(0);
+
             BorderActionPanel.KeyDown += (sender, e) =>
             {
                 if (RefPageActionPanel.AltMode && e.Key != Key.Z && !Flags.ActionPanelActivateButtonAltMode.Value)
@@ -209,7 +230,6 @@ namespace AAC20
             BorderActionPanel.KeyUp += (sender, e) =>
             {
                 Flags.ActionPanelActivateButtonAltMode.Value = false;
-                App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = false;
                 switch (e.Key)
                 {
                     case Key.Escape:
@@ -224,6 +244,7 @@ namespace AAC20
                         IPageActionPanelAAC.OrientationActivate.RightButton : IPageActionPanelAAC.OrientationActivate.LeftButton);
                         break;
                 }
+                App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = false;
             };
 
             TextBoxCommandInput.GotFocus += (sender, e) =>
@@ -257,7 +278,7 @@ namespace AAC20
                         break;
                     case Key.Apps:
                         AnimationActionPanel(true);
-                        return;
+                        break;
                 }
                 TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
@@ -292,7 +313,9 @@ namespace AAC20
         /// </summary>
         /// <param name="Content">Новая страница панели</param>
         /// <param name="RightAlign">Правая ориентация движения</param>
-        private void NextPageInActtionPanel(IPageActionPanelAAC Content, bool AltMode, bool RightAlign = true)
+        private void NextPageInActtionPanel(
+            [DoesNotReturnIf(false), NotNull()] IPageActionPanelAAC Content,
+            bool AltMode, bool RightAlign = true)
         {
             Frame OldFrameAnim = PanelVerschachtelung % 2 == 0 ? FrameActionPanelLeft : FrameActionPanelRight;
             Frame NewFrameAnim = !(PanelVerschachtelung % 2 == 0) ? FrameActionPanelLeft : FrameActionPanelRight;
@@ -302,7 +325,7 @@ namespace AAC20
             OldFrameAnim.IsEnabled = false;
             NewFrameAnim.IsEnabled = true;
             NewFrameAnim.BeginAnimation(MarginProperty, null);
-            NewFrameAnim.Margin = !RightAlign ? new(-20, -20, 40, -10) : new(40, -10, -20, -20);
+            NewFrameAnim.Margin = !RightAlign ? new(-20, -20, 40, -10) : new(40, -10, -20, -10);
             Content.AltMode = AltMode;
             RefPageActionPanel = Content;
             NewFrameAnim.Navigate(Content);
@@ -325,6 +348,7 @@ namespace AAC20
         /// </summary>
         /// <param name="State">Состояние панели</param>
         /// <param name="StylePositionAnimate">Стиль анимации позиции</param>
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         private void AnimationActionPanel(bool State, PositionAnimActionPanel StylePositionAnimate = PositionAnimActionPanel.Default)
         {
             if (State == Flags.ActionPanelActivate.Value) return;
@@ -388,6 +412,7 @@ namespace AAC20
                 );
         }
 
+        [MTAThread()]
         internal void SummarizeCommandStateResult(CommandStateResult Result)
         {
             if (Result.State == ResultState.Failed && Result.Massage != null)

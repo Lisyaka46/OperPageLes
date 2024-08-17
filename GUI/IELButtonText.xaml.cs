@@ -1,5 +1,6 @@
 ﻿using AAC20.Interfaces;
 using Microsoft.Windows.Themes;
+using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -311,10 +312,28 @@ namespace AAC20.GUI
         /// </summary>
         private BitmapImage? ImageMouse;
 
+        private bool _VisibleMouseImaging = true;
         /// <summary>
         /// Состояние активности отображения действий на кнопке
         /// </summary>
-        public bool VisibleMouseImaging = true;
+        public bool VisibleMouseImaging
+        {
+            get => _VisibleMouseImaging;
+            set
+            {
+                _VisibleMouseImaging = value;
+                if (EnterButton)
+                {
+                    ButtonAnimationOpacity.To = value ? 0.4d : 0d;
+                    ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Состояние активности наведения на кнопку
+        /// </summary>
+        private bool EnterButton = false;
 
         public IELButtonText()
         {
@@ -585,6 +604,7 @@ namespace AAC20.GUI
                     ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
                 }
             }
+            EnterButton = true;
         }
 
         /// <summary>
@@ -592,6 +612,7 @@ namespace AAC20.GUI
         /// </summary>
         internal void MouseLeaveAnimation()
         {
+            EnterButton = false;
             if (StateVisualizationButton != StateButton.Default)
             {
                 ButtonAnimationThickness.To = new(0);
@@ -625,21 +646,22 @@ namespace AAC20.GUI
         /// <summary>
         /// Анимация мерцания
         /// </summary>
+        [MTAThread()]
         public void BlinkAnimation()
         {
             ButtonAnimationColor.SpeedRatio = 0.6d;
             ButtonAnimationColor.From = Colors.White;
-            ButtonAnimationColor.To = DefaultBorderBrush;
+            ButtonAnimationColor.To = EnterButton ? SelectBorderBrush : DefaultBorderBrush;
             BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             BorderCharKeyboard.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.From = Colors.White;
-            ButtonAnimationColor.To = DefaultBackground;
+            ButtonAnimationColor.To = EnterButton ? SelectBackground : DefaultBackground;
             BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             BorderCharKeyboard.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.From = Colors.White;
-            ButtonAnimationColor.To = DefaultForeground;
+            ButtonAnimationColor.To = EnterButton ? SelectForeground : DefaultForeground;
             TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 

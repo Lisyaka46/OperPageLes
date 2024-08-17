@@ -1,18 +1,14 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.CodeDom.Compiler;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Windows;
-using AAC20.Windows.Pages.ActionPanel;
-using System;
+﻿using AAC20.Windows.Pages.ActionPanel;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Windows.Markup;
 
 namespace AAC20.Classes.Commands
 {
     /// <summary>
     /// Консольная команда
     /// </summary>
+    [MarkupExtensionReturnTypeAttribute(typeof(ConsoleCommand))]
     public partial class ConsoleCommand : ICommandAAC
     {
         /// <summary>
@@ -28,6 +24,7 @@ namespace AAC20.Classes.Commands
         /// <summary>
         /// Параметры команды
         /// </summary>
+        [AllowNull()]
         public Parameter[]? Parameters { get; private set; }
 
         /// <summary>
@@ -69,7 +66,8 @@ namespace AAC20.Classes.Commands
         /// </summary>
         /// <param name="ConsoleCommands">Массив поиска консольных команд</param>
         /// <param name="TextCommand">Читаемая команда</param>
-        public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, PageBufferActionPanel? PageBuffer, ConsoleCommand[] ConsoleCommands, string TextCommand)
+        public static CommandStateResult ReadAndExecuteCommand(Buffer BufferCommand, PageBufferActionPanel? PageBuffer,
+            [NotNull()] ConsoleCommand[] ConsoleCommands, string TextCommand)
         {
             string[]? Parameters = null;
             string Name;

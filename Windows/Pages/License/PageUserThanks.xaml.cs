@@ -31,10 +31,28 @@ namespace AAC20.Windows.Pages.License
         /// </summary>
         const double MillisecondsShow = 1200d;
 
+        /// <summary>
+        /// Фнимация прозрачности страницы
+        /// </summary>
+        private readonly DoubleAnimation AnimOpacity = new(0d, TimeSpan.FromMilliseconds(MillisecondsHide))
+        {
+            EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut },
+            FillBehavior = FillBehavior.Stop,
+        };
+
+        /// <summary>
+        /// Анимация позиции страницы
+        /// </summary>
+        private readonly ThicknessAnimation AnimMargin = new(new(0, -14, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide))
+        {
+            EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut },
+            FillBehavior = FillBehavior.HoldEnd,
+        };
+
         public PageUserThanks()
         {
-            Opacity = 0d;
             InitializeComponent();
+            Opacity = 0d;
         }
 
         /// <summary>
@@ -48,22 +66,7 @@ namespace AAC20.Windows.Pages.License
         /// <param name="ColorPhrase">Цвет текста фразы</param>
         public void NextUser(string NickName, string Phrase, string Message, Uri? UriIcon, Color ColorNickName, Color ColorPhrase)
         {
-            DoubleAnimation AnimOpacity = new(0d, TimeSpan.FromMilliseconds(MillisecondsHide))
-            {
-                EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut },
-                FillBehavior = FillBehavior.Stop,
-            };
-            ThicknessAnimation AnimMargin = new(new(0, -14, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide))
-            {
-                EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut },
-                FillBehavior = FillBehavior.HoldEnd,
-            };
-            AnimOpacity.Completed += (sender, e) =>
-            {
-                Opacity = 0d;
-                UpdateInfo(NickName, Phrase, Message, UriIcon, ColorNickName, ColorPhrase);
-                VisiblePage();
-            };
+            AnimOpacity.Completed += (sender, e) => UpdateInfo(NickName, Phrase, Message, UriIcon, ColorNickName, ColorPhrase);
             BeginAnimation(OpacityProperty, AnimOpacity);
             BeginAnimation(MarginProperty, AnimMargin);
         }
@@ -79,6 +82,7 @@ namespace AAC20.Windows.Pages.License
         /// <param name="ColorPhrase">Цвет текста фразы</param>
         private void UpdateInfo(string NickName, string Phrase, string Message, Uri? UriIcon, Color ColorNickName, Color ColorPhrase)
         {
+            Opacity = 0d;
             TextBlockNickName.Foreground = new SolidColorBrush(ColorNickName);
             TextBlockNickName.Text = NickName;
             TextBlockPhrase.Text = Phrase;
@@ -90,6 +94,7 @@ namespace AAC20.Windows.Pages.License
                 ImageIconNickName.Opacity = 1d;
             }
             else ImageIconNickName.Opacity = 0d;
+            VisiblePage();
         }
 
         /// <summary>

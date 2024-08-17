@@ -93,7 +93,7 @@ namespace AAC20.Windows
         public LicenseWindow()
         {
             InitializeComponent();
-            UpdateInfoThanks = new(5000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
+            UpdateInfoThanks = new(6000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
             DoubleAnimateAppOpacity = new(0, TimeSpan.FromMilliseconds(1050d))
             {
                 DecelerationRatio = 0.2d,
@@ -106,6 +106,7 @@ namespace AAC20.Windows
             };
             Opacity = 0d;
             ImageLicense.Opacity = 0d;
+            ImageLicense.RenderSize = new Size(70, 70);
             ImageLicense.Margin = new(0, 45 - 15, 0, 35 - 15);
             ImageLogo.Margin = new(12, 30 + 10, 0, 0);
             Image20.Margin = new(-12, 84 - 10, 0, 0);
@@ -127,10 +128,6 @@ namespace AAC20.Windows
                 LicenseAnimation();
                 DoubleAnimateAppOpacity.BeginTime = TimeSpan.Zero;
             };
-            ImageLogo.MouseUp += (sender, e) =>
-            {
-                PageThanks.NextUser("666", "\"Спасибо что живая.\"", "- За помощь в разработке.", null, Color.FromRgb(255, 89, 96), Color.FromRgb(195, 189, 222));
-            };
         }
 
         /// <summary>
@@ -142,7 +139,7 @@ namespace AAC20.Windows
             ThicknessAnimatePos.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn };
             ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(300d);
             DoubleAnimateAppOpacity.BeginTime = TimeSpan.FromMilliseconds(1300d);
-            DoubleAnimateAppOpacity.Duration = TimeSpan.FromMilliseconds(300d);
+            DoubleAnimateAppOpacity.Duration = TimeSpan.FromMilliseconds(600d);
             ThicknessAnimatePos.To = new(0, 45, 0, 35);
             DoubleAnimateAppOpacity.To = 1d;
             ImageLicense.BeginAnimation(MarginProperty, ThicknessAnimatePos);

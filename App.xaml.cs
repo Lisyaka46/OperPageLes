@@ -2,6 +2,7 @@
 using AAC20.Classes.Commands;
 using AAC20.GUI;
 using AAC20.Interfaces;
+using AAC20.Windows;
 using System;
 using System.Configuration;
 using System.Data;
@@ -24,7 +25,7 @@ namespace AAC20
     public partial class App : Application
     {
         /// <summary>
-        /// Класс флагов программы
+        /// Структура флагов программы
         /// </summary>
         internal readonly struct AppFlags
         {
@@ -32,6 +33,17 @@ namespace AAC20
             /// Флаг активации правого нажатия с помощью кнопки CTRL в панели действий
             /// </summary>
             internal static readonly Flag FlagCtrlActivateActionButtonAltMode = new(false);
+        }
+
+        /// <summary>
+        /// Структура всех окон программы
+        /// </summary>
+        internal readonly struct AppWindows
+        {
+            /// <summary>
+            /// Окно описания всех команд
+            /// </summary>
+            internal static WindowDiscriptionCommands? DiscriptionCommands = null;
         }
 
         /// <summary>
@@ -47,7 +59,7 @@ namespace AAC20
 
             new ConsoleCommand("close", "Закрывает программу", (param) =>
             {
-                Environment.Exit(0);
+                Current.Shutdown(0);
                 return Task.FromResult(CommandStateResult.Completed);
             }),
         ];
@@ -68,7 +80,7 @@ namespace AAC20
         internal static void RebootApplication()
         {
             Process.Start(Process.GetCurrentProcess().ProcessName, Environment.GetCommandLineArgs());
-            Current.Shutdown();
+            Current.Shutdown(0);
         }
     }
 }

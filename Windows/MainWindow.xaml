@@ -8,7 +8,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         x:Name="window" x:Class="AAC20.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo03.png">
+        Title="Главное меню" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo03.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*" MinWidth="40"/>

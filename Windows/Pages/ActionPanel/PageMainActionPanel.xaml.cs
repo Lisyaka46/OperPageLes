@@ -41,11 +41,6 @@ namespace AAC20.Windows.Frames
                 IELButtonCommandBuffer.CharKeyKeyboardActivate = Mode;
                 IELButtonDiscriptionCommand.CharKeyKeyboardActivate = Mode;
             };
-            IELButtonDiscriptionCommand.OnActivateMouseLeft += (Key) =>
-            {
-
-            };
-            
         }
 
         /// <summary>

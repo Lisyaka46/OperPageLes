@@ -22,6 +22,7 @@ namespace AAC20.Windows
         public WindowDiscriptionCommands()
         {
             InitializeComponent();
+            Closing += (sender, e) => App.AppWindows.DiscriptionCommands = null;
         }
     }
 }
