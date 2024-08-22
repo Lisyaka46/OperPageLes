@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AAC20.Windows.Pages.Discription;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,10 +21,25 @@ namespace AAC20.Windows
     /// </summary>
     public partial class WindowDiscriptionCommands : Window
     {
+        /// <summary>
+        /// Структура всех страниц окна
+        /// </summary>
+        private readonly struct Pages
+        {
+            /// <summary>
+            /// Страница описания всех консольных команд
+            /// </summary>
+            internal static readonly PageDiscriptionConsole DiscriptionConsole = new();
+        }
+
         public WindowDiscriptionCommands()
         {
             InitializeComponent();
             Closing += (sender, e) => App.AppWindows.DiscriptionCommands = null;
+            IELButtonConsole.OnActivateMouseLeft += (Mode) =>
+            {
+
+            };
         }
     }
 }

@@ -24,11 +24,12 @@
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="2,2,2,3" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="584*"/>
-                    <ColumnDefinition Width="59*" MinWidth="56" MaxWidth="65"/>
+                    <ColumnDefinition Width="37"/>
+                    <ColumnDefinition Width="601*"/>
+                    <ColumnDefinition Width="64*" MinWidth="56" MaxWidth="65"/>
                 </Grid.ColumnDefinitions>
-                <GUI:IELImageButton x:Name="ButtonSettings" DisabledBackground="#FFDE5E5E" ButtonBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" MillisecondsAnimation="90" MouseBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="1" Margin="2,1,2,1"/>
-                <Image x:Name="ImageLogoApplication" Margin="4,2,0,2" HorizontalAlignment="Left" Source="/Windows/WindowsImages/Logo01.png"/>
+                <GUI:IELImageButton x:Name="ButtonSettings" DefaultBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" SelectBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="2" Margin="2,1,2,1"/>
+                <Image x:Name="ImageLogoApplication" Margin="2,2,2,2" Source="/Windows/WindowsImages/Logo03.png"/>
             </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="3,2,2,2" Grid.Row="1">
@@ -59,7 +60,7 @@
                         <TextBlock x:Name="TextBlockRightButtonIndicatorKey" HorizontalAlignment="Right" TextWrapping="Wrap" Text="CTRL" VerticalAlignment="Bottom" Panel.ZIndex="2" Padding="10,3,10,3" Margin="0,0,-4,-4">
                             <TextBlock.Background>
                                 <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
-                                    <GradientStop Color="#FF55A6A7" Offset="0.575"/>
+                                    <GradientStop Color="#B255A6A7" Offset="0.575"/>
                                     <GradientStop Offset="1" Color="#00922525"/>
                                 </RadialGradientBrush>
                             </TextBlock.Background>
@@ -80,7 +81,7 @@
                 <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Arial Rounded MT Bold" FontSize="16" Margin="5,0,0,3" VerticalAlignment="Bottom" Height="19"/>
             </Grid>
         </Border>
-        <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="2,2,2,2" TextBackground="#FD78CCA0" TextBorderBrush="Black" TextBorderThickness="3,3,3,3" Grid.Column="1" Grid.Row="3" TextFontSize="17" SelectionBrush="#FF1E885A" Margin="3,5,3,5" MinWidth="100" Text=""/>
+        <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="1" Grid.Row="3" Margin="3,5,3,5" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C"/>
         <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" SelectForeground="#FF655802" SelectBorderBrush="#FF8A7A2E" SelectBackground="#FFC7C824" DefaultBackground="#FFDFE0C9" ClickedBorderBrush="#FF735F1A" ClickedForeground="#FF56530E" Grid.Column="2" FontWeight="Bold" TextFontFamily="Calibri"/>
 
     </Grid>

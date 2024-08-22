@@ -8,7 +8,7 @@ namespace AAC20.Classes.Commands
     /// <summary>
     /// Консольная команда
     /// </summary>
-    [MarkupExtensionReturnTypeAttribute(typeof(ConsoleCommand))]
+    [MarkupExtensionReturnType(typeof(ConsoleCommand))]
     public partial class ConsoleCommand : ICommandAAC
     {
         /// <summary>

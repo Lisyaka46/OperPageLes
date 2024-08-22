@@ -101,18 +101,18 @@ namespace AAC20
         };
 
         /// <summary>
-        /// Объект анимации для управления позицией панели действий
+        /// Объект анимации для управления позицией
         /// </summary>
-        private static readonly ThicknessAnimation ThicknessAnimateActionPanel = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
+        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
         {
             DecelerationRatio = 0.6d,
             EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut }
         };
 
         /// <summary>
-        /// Объект анимации для управления прозрачностью панели действий
+        /// Объект анимации для управления прозрачностью
         /// </summary>
-        private static readonly DoubleAnimation DoubleAnimateActionPanelOpacity = new(0, TimeSpan.FromMilliseconds(250d))
+        private static readonly DoubleAnimation DoubleAnimateOpacity = new(0, TimeSpan.FromMilliseconds(250d))
         {
             DecelerationRatio = 0.2d,
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
@@ -157,8 +157,8 @@ namespace AAC20
 
             App.AppFlags.FlagCtrlActivateActionButtonAltMode.ChangeStateFlag += (NewValue) =>
             {
-                DoubleAnimateActionPanelOpacity.To = NewValue ? 1d : 0d;
-                TextBlockRightButtonIndicatorKey.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
+                DoubleAnimateOpacity.To = NewValue ? 1d : 0d;
+                TextBlockRightButtonIndicatorKey.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
             };
 
             Pages.PageMainActPanel.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
@@ -257,11 +257,11 @@ namespace AAC20
                 switch (e.Key)
                 {
                     case Key.Enter:
-                        TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                        TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(160, 245, 200), TimeSpan.FromMilliseconds(90d)));
                         break;
                     case Key.Escape:
-                        TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                        TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(255, 122, 84), TimeSpan.FromMilliseconds(90d)));
                         break;
                 }
@@ -279,8 +279,10 @@ namespace AAC20
                     case Key.Apps:
                         AnimationActionPanel(true);
                         break;
+                    default:
+                        return;
                 }
-                TextBoxCommandInput.TextBackground.BeginAnimation(SolidColorBrush.ColorProperty,
+                TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
             };
 
@@ -299,10 +301,45 @@ namespace AAC20
                 RichTextBoxMainMessage.ScrollToEnd();
             };
 
+            ImageLogoApplication.MouseEnter += (sender, e) =>
+            {
+                ThicknessAnimate.To = new(0);
+                DoubleAnimateOpacity.To = 0.6d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
+            };
+
+            ImageLogoApplication.MouseLeave += (sender, e) =>
+            {
+                ThicknessAnimate.To = new(2);
+                DoubleAnimateOpacity.To = 1d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
+            };
+
+            ImageLogoApplication.MouseDown += (sender, e) =>
+            {
+                ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(100d);
+                ThicknessAnimate.To = new(4);
+                DoubleAnimateOpacity.To = 0.4d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
+                ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
+            };
+
             ImageLogoApplication.MouseUp += (sender, e) =>
             {
+                ThicknessAnimate.To = new(2);
+                DoubleAnimateOpacity.To = 1d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
                 LicenseWindow License = new();
                 License.ShowDialog();
+            };
+
+            Activated += (sender, e) =>
+            {
+                TextBoxCommandInput.Focus();
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
@@ -330,15 +367,15 @@ namespace AAC20
             RefPageActionPanel = Content;
             NewFrameAnim.Navigate(Content);
 
-            DoubleAnimateActionPanelOpacity.To = 0;
-            OldFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
-            ThicknessAnimateActionPanel.To = !RightAlign ? new(40, -20, -20, -20) : new(-20, -20, 40, -20);
-            OldFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
+            DoubleAnimateOpacity.To = 0;
+            OldFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+            ThicknessAnimate.To = !RightAlign ? new(40, -20, -20, -20) : new(-20, -20, 40, -20);
+            OldFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimate);
 
-            DoubleAnimateActionPanelOpacity.To = 1;
-            NewFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
-            ThicknessAnimateActionPanel.To = new(0);
-            NewFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
+            DoubleAnimateOpacity.To = 1;
+            NewFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+            ThicknessAnimate.To = new(0);
+            NewFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimate);
 
             PanelVerschachtelung = (PanelVerschachtelung + 1) % 2;
         }
@@ -364,8 +401,8 @@ namespace AAC20
             BorderActionPanel.BeginAnimation(WidthProperty, DoubleAnimateActionPanelWH);
             DoubleAnimateActionPanelWH.To = State ? SizeActiveActionPanel.Height : 0d;
             BorderActionPanel.BeginAnimation(HeightProperty, DoubleAnimateActionPanelWH);
-            DoubleAnimateActionPanelOpacity.To = State ? 1d : 0d;
-            BorderActionPanel.BeginAnimation(OpacityProperty, DoubleAnimateActionPanelOpacity);
+            DoubleAnimateOpacity.To = State ? 1d : 0d;
+            BorderActionPanel.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
         }
 
         /// <summary>
@@ -384,17 +421,17 @@ namespace AAC20
                     if (MousePoint.Y + SizeActiveActionPanel.Height > RichTextBoxMainMessage.ActualHeight - 47)
                         MousePoint.Y = RichTextBoxMainMessage.ActualHeight - SizeActiveActionPanel.Height - 1;
                 }
-                ThicknessAnimateActionPanel.To = new Thickness(MousePoint.X, MousePoint.Y, 0, 0);
+                ThicknessAnimate.To = new Thickness(MousePoint.X, MousePoint.Y, 0, 0);
             }
             else if (StylePositionToAnimate == PositionAnimActionPanel.CenterObject)
             {
-                ThicknessAnimateActionPanel.To =
+                ThicknessAnimate.To =
                     new Thickness(
                         BorderActionPanel.Margin.Left + BorderActionPanel.Width / 2,
                         BorderActionPanel.Margin.Top + BorderActionPanel.Height / 2,
                         0, 0);
             }
-            BorderActionPanel.BeginAnimation(MarginProperty, ThicknessAnimateActionPanel);
+            BorderActionPanel.BeginAnimation(MarginProperty, ThicknessAnimate);
         }
 
         /// <summary>

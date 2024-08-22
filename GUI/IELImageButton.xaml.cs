@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AAC20.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,88 +21,104 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELImageButton.xaml
     /// </summary>
-    public partial class IELImageButton : UserControl
+    public partial class IELImageButton : UserControl, IIELObject
     {
-        private Brush _Background;
+        #region Default
+        private Color _DefaultBorderBrush;
         /// <summary>
-        /// Отображаемый цвет кнопки
+        /// Цвет границы
         /// </summary>
-        public new Brush Background
+        public Color DefaultBorderBrush
         {
-            get
+            get => _DefaultBorderBrush;
+            set
             {
-                return _Background;
-            }
-            private set
-            {
-                _Background = value;
+                SolidColorBrush color = new(value);
+                ButtonBorder.BorderBrush = color;
+                _DefaultBorderBrush = value;
             }
         }
 
-        private Color _ButtonBackground;
+        private Color _DefaultBackground;
         /// <summary>
-        /// Основной цвет кнопки
+        /// Цвет фона
         /// </summary>
-        public Color ButtonBackground
+        public Color DefaultBackground
         {
-            get
-            {
-                return _ButtonBackground;
-            }
+            get => _DefaultBackground;
             set
             {
-                ButtonBorder.Background = new SolidColorBrush(value);
-                _ButtonBackground = value;
+                SolidColorBrush color = new(value);
+                ButtonBorder.Background = color;
+                _DefaultBackground = value;
             }
         }
+        #endregion
 
-        private Color _MouseBackground;
-        /// <summary>
-        /// Цвет который отображается при наведении на кнопку курсором
-        /// </summary>
-        public Color MouseBackground
-        {
-            get
-            {
-                return _MouseBackground;
-            }
-            set
-            {
-                _MouseBackground = value;
-            }
-        }
 
-        private Color _DisabledBackground;
+        #region Select
         /// <summary>
-        /// Цвет который отображается при отключённом состоянии элемента
+        /// Выделенный цвет границы
         /// </summary>
-        public Color DisabledBackground
-        {
-            get
-            {
-                return _DisabledBackground;
-            }
-            set
-            {
-                _DisabledBackground = value;
-            }
-        }
+        public Color SelectBorderBrush { get; set; }
 
-        private Color _ClickedBackground;
         /// <summary>
-        /// Цвет который отображается при зажатой клавиши мыши
+        /// Выделенный цвет фона
         /// </summary>
-        public Color ClickedBackground
+        public Color SelectBackground { get; set; }
+        #endregion
+
+
+        #region Clicked
+        /// <summary>
+        /// Нажатый цвет границы
+        /// </summary>
+        public Color ClickedBorderBrush { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет фона
+        /// </summary>
+        public Color ClickedBackground { get; set; }
+        #endregion
+
+
+        #region NotEnabled
+        /// <summary>
+        /// Выключенный цвет границы
+        /// </summary>
+        public Color NotEnabledBorderBrush { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет фона
+        /// </summary>
+        public Color NotEnabledBackground { get; set; }
+        #endregion
+
+        #region AnimationMillisecond
+        private int _AnimationMillisecond = 80;
+        /// <summary>
+        /// Узнать длительность анимации в миллисекундах
+        /// </summary>
+        public int GetAnimationMillisecond() => _AnimationMillisecond;
+
+        /// <summary>
+        /// Задать время анимации
+        /// </summary>
+        /// <param name="value">Значение времени в миллисекундах</param>
+        public void SetAnimationMillisecond(int value)
         {
-            get
-            {
-                return _ClickedBackground;
-            }
-            set
-            {
-                _ClickedBackground = value;
-            }
+            TimeSpan time = TimeSpan.FromMilliseconds(value);
+            ButtonAnimationColor.Duration = time;
+            _AnimationMillisecond = value;
         }
+        #endregion
+
+        #region animateObjects
+        /// <summary>
+        /// Анимация цвета
+        /// </summary>
+        private readonly ColorAnimation ButtonAnimationColor;
+        #endregion
 
         /// <summary>
         /// Изображение которое отображается в кнопке
@@ -118,55 +135,22 @@ namespace AAC20.GUI
             }
         }
 
-        private Thickness _BorderThickness;
         /// <summary>
         /// Толщина границ кнопки
         /// </summary>
-        public new Thickness BorderThickness
+        public Thickness BorderThicknessBlock
         {
-            get
-            {
-                return _BorderThickness;
-            }
-            set
-            {
-                ButtonBorder.BorderThickness = value;
-                _BorderThickness = value;
-            }
+            get => ButtonBorder.BorderThickness;
+            set => ButtonBorder.BorderThickness = value;
         }
 
-        private CornerRadius _CornerRadius;
         /// <summary>
         /// Скруглённость границ кнопки
         /// </summary>
         public CornerRadius CornerRadius
         {
-            get
-            {
-                return _CornerRadius;
-            }
-            set
-            {
-                ButtonBorder.CornerRadius = value;
-                _CornerRadius = value;
-            }
-        }
-
-        private double _MillisecondsAnimation;
-        /// <summary>
-        /// Количество миллисекунд используемые в анимации
-        /// </summary>
-        public double MillisecondsAnimation
-        {
-            get
-            {
-                return _MillisecondsAnimation;
-            }
-            set
-            {
-                if (value >= 0d) _MillisecondsAnimation = value;
-                else throw new InvalidOperationException("Значение должно быть больше или равно нулю");
-            }
+            get => ButtonBorder.CornerRadius;
+            set => ButtonBorder.CornerRadius = value;
         }
 
         /// <summary>
@@ -174,14 +158,8 @@ namespace AAC20.GUI
         /// </summary>
         public Thickness ImageMargin
         {
-            get
-            {
-                return ButtonImage.Margin;
-            }
-            set
-            {
-                ButtonImage.Margin = value;
-            }
+            get => ButtonImage.Margin;
+            set => ButtonImage.Margin = value;
         }
 
 
@@ -191,14 +169,22 @@ namespace AAC20.GUI
         public IELImageButton()
         {
             InitializeComponent();
-            _Background = new SolidColorBrush(Colors.Black);
             ButtonImage.Margin = new Thickness(10, 10, 10, 10);
-            ClickedBackground = Colors.LightGray;
-            DisabledBackground = Colors.Gray;
-            MillisecondsAnimation = 0d;
-            ButtonBackground = Colors.Black;
-            MouseBackground = Colors.Gray;
-            ButtonBorder.Background = new SolidColorBrush(ButtonBackground);
+            ButtonAnimationColor = new()
+            {
+                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
+            };
+
+            DefaultBorderBrush = Colors.Black;
+            SelectBorderBrush = Colors.DarkGray;
+            ClickedBorderBrush = Colors.Gray;
+            NotEnabledBorderBrush = Colors.Brown;
+
+            DefaultBackground = Colors.White;
+            SelectBackground = Colors.Gray;
+            ClickedBackground = Colors.WhiteSmoke;
+            NotEnabledBackground = Colors.IndianRed;
+
             ButtonBorder.MouseEnter += (sender, e) =>
             {
                 if (IsEnabled) MouseEnterDetect();
@@ -209,18 +195,18 @@ namespace AAC20.GUI
             };
             IsEnabledChanged += (sender, e) =>
             {
-                if ((bool)e.OldValue)
-                {
-                    ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, null);
-                    ButtonBorder.Background = new SolidColorBrush(DisabledBackground);
-                }
-                else
-                {
-                    ButtonBorder.Background = new SolidColorBrush(ButtonBackground);
-                }
+                Color
+                Background = (bool)e.NewValue ? DefaultBackground : NotEnabledBackground,
+                BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush;
+
+                ButtonAnimationColor.To = BorderBrush;
+                ButtonBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = Background;
+                ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             };
             ButtonBorder.MouseDown += (sender, e) =>
             {
+                ButtonBorder.BorderBrush = new SolidColorBrush(ClickedBorderBrush);
                 ButtonBorder.Background = new SolidColorBrush(ClickedBackground);
             };
             ButtonBorder.MouseUp += (sender, e) =>
@@ -234,11 +220,11 @@ namespace AAC20.GUI
         /// </summary>
         private void MouseEnterDetect()
         {
-            if (!ButtonBorder.Background.IsFrozen && !ButtonBorder.Background.IsSealed)
-            {
-                ColorAnimation anim = new(MouseBackground, TimeSpan.FromMilliseconds(MillisecondsAnimation));
-                ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
-            }
+            ButtonAnimationColor.To = SelectBorderBrush;
+            ButtonBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = SelectBackground;
+            ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
         }
 
         /// <summary>
@@ -246,11 +232,11 @@ namespace AAC20.GUI
         /// </summary>
         private void MouseLeaveDetect()
         {
-            if (!ButtonBorder.Background.IsFrozen && !ButtonBorder.Background.IsSealed)
-            {
-                ColorAnimation anim = new(MouseBackground, ButtonBackground, TimeSpan.FromMilliseconds(MillisecondsAnimation));
-                ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
-            }
+            ButtonAnimationColor.To = DefaultBorderBrush;
+            ButtonBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = DefaultBackground;
+            ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
         }
     }
 }

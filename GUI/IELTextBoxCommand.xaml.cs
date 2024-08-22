@@ -1,124 +1,187 @@
-﻿using System.Windows;
+﻿using AAC20.Interfaces;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using static AAC20.GUI.IELButtonText;
 
 namespace AAC20.GUI
 {
     /// <summary>
     /// Логика взаимодействия для IELTextBoxCommand.xaml
     /// </summary>
-    public partial class IELTextBoxCommand : UserControl
+    public partial class IELTextBoxCommand : UserControl, IIELObject
     {
         /// <summary>
         /// Скруглённость границ объекта
         /// </summary>
         public CornerRadius CornerRadius
         {
-            get
-            {
-                return TextBoxBorder.CornerRadius;
-            }
-            set
-            {
-                TextBoxBorder.CornerRadius = value;
-            }
+            get => TextBoxBorder.CornerRadius;
+            set => TextBoxBorder.CornerRadius = value;
         }
 
         /// <summary>
         /// Толщина границ объекта
         /// </summary>
-        public Thickness TextBorderThickness
+        public Thickness BorderThicknessBlock
         {
-            get
-            {
-                return TextBoxBorder.BorderThickness;
-            }
-            set
-            {
-                TextBoxBorder.BorderThickness = value;
-            }
+            get => TextBoxBorder.BorderThickness;
+            set => TextBoxBorder.BorderThickness = value;
         }
 
         /// <summary>
         /// Размер текста в элементе
         /// </summary>
-        public double TextFontSize
+        public new double FontSize
         {
-            get
-            {
-                return TextBoxMain.FontSize;
-            }
-            set
-            {
-                TextBoxMain.FontSize = value;
-            }
+            get => TextBoxMain.FontSize;
+            set => TextBoxMain.FontSize = value;
         }
 
+        #region Default
+        private Color _DefaultBorderBrush;
         /// <summary>
-        /// Фон элемента
+        /// Цвет границы
         /// </summary>
-        public Brush TextBackground
+        public Color DefaultBorderBrush
         {
-            get
-            {
-                return TextBoxBorder.Background;
-            }
+            get => _DefaultBorderBrush;
             set
             {
-                TextBoxBorder.Background = value;
+                SolidColorBrush color = new(value);
+                TextBoxBorder.BorderBrush = color;
+                _DefaultBorderBrush = value;
             }
         }
 
-        private Color _Foreground;
+        private Color _DefaultBackground;
         /// <summary>
-        /// Фон текста в элементе
+        /// Цвет фона
         /// </summary>
-        public new Color Foreground
+        public Color DefaultBackground
         {
-            get => _Foreground;
+            get => _DefaultBackground;
             set
             {
-                TextBoxMain.Foreground = new SolidColorBrush(value);
-                _Foreground = value;
+                SolidColorBrush color = new(value);
+                TextBoxBorder.Background = color;
+                _DefaultBackground = value;
             }
         }
 
-        private Color _SelectionBrush;
+        private Color _DefaultForeground;
         /// <summary>
-        /// Фон выделенного текста в элементе
+        /// Цвет текста
         /// </summary>
-        public Color SelectionBrush
+        public Color DefaultForeground
         {
-            get => _SelectionBrush;
+            get => _DefaultForeground;
             set
             {
-                TextBoxMain.SelectionBrush = new SolidColorBrush(value);
-                _SelectionBrush = value;
+                SolidColorBrush color = new(value);
+                TextBoxMain.Foreground = color;
+                _DefaultForeground = value;
             }
         }
+        #endregion
 
-        private Color _TextBorderBrush;
+
+        #region Select
         /// <summary>
-        /// Фон элемента
+        /// Выделенный цвет границы
         /// </summary>
-        public Color TextBorderBrush
-        {
-            get => _TextBorderBrush;
-            set
-            {
-                TextBoxBorder.BorderBrush = new SolidColorBrush(value);
-                _TextBorderBrush = value;
-            }
-        }
+        public Color SelectBorderBrush { get; set; }
 
         /// <summary>
-        /// Текст
+        /// Выделенный цвет фона
+        /// </summary>
+        public Color SelectBackground { get; set; }
+
+        /// <summary>
+        /// Выделенный цвет текста
+        /// </summary>
+        public Color SelectForeground { get; set; }
+        #endregion
+
+
+        #region Clicked
+        /// <summary>
+        /// Нажатый цвет границы
+        /// </summary>
+        public Color ClickedBorderBrush { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет фона
+        /// </summary>
+        public Color ClickedBackground { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет текста
+        /// </summary>
+        public Color ClickedForeground { get; set; }
+        #endregion
+
+
+        #region NotEnabled
+        /// <summary>
+        /// Выключенный цвет границы
+        /// </summary>
+        public Color NotEnabledBorderBrush { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет фона
+        /// </summary>
+        public Color NotEnabledBackground { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет текста
+        /// </summary>
+        public Color NotEnabledForeground { get; set; }
+        #endregion
+
+        #region AnimationMillisecond
+        private int _AnimationMillisecond = 80;
+        /// <summary>
+        /// Узнать длительность анимации в миллисекундах
+        /// </summary>
+        public int GetAnimationMillisecond() => _AnimationMillisecond;
+
+        /// <summary>
+        /// Задать время анимации
+        /// </summary>
+        /// <param name="value">Значение времени в миллисекундах</param>
+        public void SetAnimationMillisecond(int value)
+        {
+            TimeSpan time = TimeSpan.FromMilliseconds(value);
+            ButtonAnimationColor.Duration = time;
+            _AnimationMillisecond = value;
+        }
+        #endregion
+
+        #region animateObjects
+        /// <summary>
+        /// Анимация цвета
+        /// </summary>
+        private readonly ColorAnimation ButtonAnimationColor;
+        #endregion
+
+        /// <summary>
+        /// Текст элемента
         /// </summary>
         public string Text
         {
             get => TextBoxMain.Text;
             set => TextBoxMain.Text = value;
+        }
+
+        /// <summary>
+        /// Переопределённый объект фона
+        /// </summary>
+        public new Brush Background
+        {
+            get => TextBoxBorder.Background;
+            set => TextBoxBorder.Background = value;
         }
 
         /// <summary>
@@ -129,31 +192,113 @@ namespace AAC20.GUI
             TextBoxMain.Focus();
         }
 
+        /// <summary>
+        /// Фокусировка текста
+        /// </summary>
+        private bool FocusText = false;
+
         public IELTextBoxCommand()
         {
             InitializeComponent();
+            ButtonAnimationColor = new()
+            {
+                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
+            };
+            DefaultBorderBrush = Colors.Black;
+            DefaultBackground = Color.FromRgb(66, 183, 121);
+            DefaultForeground = Colors.Black;
 
-            TextBoxBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+            SelectBorderBrush = Color.FromRgb(29, 33, 18);
+            SelectBackground = Color.FromRgb(204, 201, 120);
+            SelectForeground = Color.FromRgb(33, 43, 38);
 
-            TextBackground = new SolidColorBrush(Colors.White);
-            Foreground = Colors.Black;
-            SelectionBrush = Colors.Gray;
-            TextBorderBrush = Colors.Black;
-            BorderThickness = new(1, 1, 1, 1);
-            CornerRadius = new(1, 1, 1, 1);
-            TextFontSize = 14;
+            ClickedBorderBrush = Color.FromRgb(1, 68, 101);
+            ClickedBackground = Color.FromRgb(120, 204, 160);
+            ClickedForeground = Color.FromRgb(1, 43, 28);
+
+            NotEnabledBorderBrush = Colors.Brown;
+            NotEnabledBackground = Colors.IndianRed;
+            NotEnabledForeground = Colors.DarkRed;
+
+            BorderThicknessBlock = new(2, 2, 2, 2);
+            CornerRadius = new(4, 4, 4, 4);
+            FontSize = 14;
             TextBoxMain.ContextMenu = null;
 
             GotKeyboardFocus += (sender, e) =>
             {
-                TextBoxBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty,
-                    new ColorAnimation(Color.FromRgb(4, 68, 101), TimeSpan.FromMilliseconds(150)));
+                FocusText = true;
+                ButtonAnimationColor.Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond * 2);
+                ButtonAnimationColor.To = ClickedBorderBrush;
+                TextBoxBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = ClickedBackground;
+                TextBoxBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = ClickedForeground;
+                TextBoxMain.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond);
             };
             LostKeyboardFocus += (sender, e) =>
             {
-                TextBoxBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty,
-                    new ColorAnimation(Colors.Black, TimeSpan.FromMilliseconds(150)));
+                FocusText = false;
+                MouseLeaveAnimation();
             };
+
+            MouseEnter += (sender, e) =>
+            {
+                if (IsEnabled && !FocusText) MouseEnterAnimation();
+            };
+
+            MouseLeave += (sender, e) =>
+            {
+                if (IsEnabled && !FocusText) MouseLeaveAnimation();
+            };
+
+            IsEnabledChanged += (sender, e) =>
+            {
+                Color
+                Foreground = (bool)e.NewValue ? DefaultForeground : NotEnabledForeground,
+                Background = (bool)e.NewValue ? DefaultBackground : NotEnabledBackground,
+                BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush;
+
+                ButtonAnimationColor.To = BorderBrush;
+                TextBoxBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = Background;
+                TextBoxBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = Foreground;
+                TextBoxMain.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            };
+        }
+
+        /// <summary>
+        /// Анимация выделения мышью
+        /// </summary>
+        private void MouseEnterAnimation()
+        {
+
+            ButtonAnimationColor.To = SelectBorderBrush;
+            TextBoxBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = SelectBackground;
+            TextBoxBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = SelectForeground;
+            TextBoxMain.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+        }
+
+        /// <summary>
+        /// Анимация отключения выделения мышью
+        /// </summary>
+        private void MouseLeaveAnimation()
+        {
+
+            ButtonAnimationColor.To = DefaultBorderBrush;
+            TextBoxBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = DefaultBackground;
+            TextBoxBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = DefaultForeground;
+            TextBoxMain.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
         }
     }
 }

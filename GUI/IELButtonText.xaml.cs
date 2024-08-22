@@ -15,7 +15,7 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELButtonText.xaml
     /// </summary>
-    public partial class IELButtonText : UserControl
+    public partial class IELButtonText : UserControl, IIELObject
     {
         /// <summary>
         /// Перечисление состояний отображения кнопки
@@ -169,26 +169,26 @@ namespace AAC20.GUI
         /// </summary>
         public Color NotEnabledForeground { get; set; }
 
+        #region AnimationMillisecond
         private int _AnimationMillisecond = 80;
         /// <summary>
-        /// Количество миллисекунд для анимации (по умолчанию 80)
+        /// Узнать длительность анимации в миллисекундах
         /// </summary>
-        public int AnimationMillisecond
+        public int GetAnimationMillisecond() => _AnimationMillisecond;
+
+        /// <summary>
+        /// Задать время анимации
+        /// </summary>
+        /// <param name="value">Значение времени в миллисекундах</param>
+        public void SetAnimationMillisecond(int value)
         {
-            get => _AnimationMillisecond;
-            set
-            {
-                if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "Значение должно быть больше нуля!");
-                else
-                {
-                    TimeSpan time = TimeSpan.FromMilliseconds(value);
-                    ButtonAnimationColor.Duration = time;
-                    ButtonAnimationThickness.Duration = time;
-                    ButtonAnimationOpacity.Duration = time;
-                    _AnimationMillisecond = value;
-                }
-            }
+            TimeSpan time = TimeSpan.FromMilliseconds(value);
+            ButtonAnimationColor.Duration = time;
+            ButtonAnimationThickness.Duration = time;
+            ButtonAnimationOpacity.Duration = time;
+            _AnimationMillisecond = value;
         }
+        #endregion
 
         /// <summary>
         /// Текст кнопки
@@ -206,6 +206,15 @@ namespace AAC20.GUI
         {
             get => BorderButton.CornerRadius;
             set => BorderButton.CornerRadius = value;
+        }
+
+        /// <summary>
+        /// Толщина границ
+        /// </summary>
+        public Thickness BorderThicknessBlock
+        {
+            get => BorderButton.BorderThickness;
+            set => BorderButton.BorderThickness = value;
         }
 
         /// <summary>
@@ -258,22 +267,20 @@ namespace AAC20.GUI
         }
 
         #region animateObjects
-
         /// <summary>
         /// Анимация цвета кнопки
         /// </summary>
         private readonly ColorAnimation ButtonAnimationColor;
 
         /// <summary>
-        /// Анимация позиции стрелок кнопки
+        /// Анимация позиции
         /// </summary>
         private readonly ThicknessAnimation ButtonAnimationThickness;
 
         /// <summary>
-        /// Анимация прозрачности для символа клавиатуры
+        /// Анимация прозрачности
         /// </summary>
         private readonly DoubleAnimation ButtonAnimationOpacity;
-
         #endregion
 
         /// <summary>
@@ -341,15 +348,15 @@ namespace AAC20.GUI
             StateVisualizationButton = StateButton.Default;
             ButtonAnimationOpacity = new()
             {
-                Duration = TimeSpan.FromMilliseconds(AnimationMillisecond)
+                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
             };
             ButtonAnimationThickness = new()
             {
-                Duration = TimeSpan.FromMilliseconds(AnimationMillisecond)
+                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
             };
             ButtonAnimationColor = new()
             {
-                Duration = TimeSpan.FromMilliseconds(AnimationMillisecond)
+                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
             };
             BorderButton.Margin = new(-24, 0, 0, 0);
             BorderCharKeyboard.Opacity = 0d;
@@ -554,7 +561,7 @@ namespace AAC20.GUI
         /// <summary>
         /// Анимация выделения кнопки мышью
         /// </summary>
-        internal void MouseEnterAnimation()
+        private void MouseEnterAnimation()
         {
             if (StateVisualizationButton != StateButton.Default)
             {
@@ -610,7 +617,7 @@ namespace AAC20.GUI
         /// <summary>
         /// Анимация отключения выделения мышью
         /// </summary>
-        internal void MouseLeaveAnimation()
+        private void MouseLeaveAnimation()
         {
             EnterButton = false;
             if (StateVisualizationButton != StateButton.Default)
