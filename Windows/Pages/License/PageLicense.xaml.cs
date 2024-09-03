@@ -60,7 +60,7 @@ namespace AAC20.Windows.Pages.License
             BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
             ThicknessAnimatePos.To = new(0, 10, 0, 0);
             TextBlockAAC.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-            ThicknessAnimatePos.BeginTime += TimeSpan.FromMilliseconds(100d);
+            ThicknessAnimatePos.BeginTime += TimeSpan.FromMilliseconds(70d);
             ThicknessAnimatePos.To = new(0, 57, 0, 0);
             TextBlockLicenseText.BeginAnimation(MarginProperty, ThicknessAnimatePos);
         }

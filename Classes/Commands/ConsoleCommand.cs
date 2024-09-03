@@ -14,12 +14,12 @@ namespace AAC20.Classes.Commands
         /// <summary>
         /// Имя команды
         /// </summary>
-        public readonly string Name;
+        public string Name { get; }
 
         /// <summary>
         /// Описание консольной команды
         /// </summary>
-        public readonly string Explanation;
+        public string Description { get; }
 
         /// <summary>
         /// Параметры команды
@@ -37,13 +37,13 @@ namespace AAC20.Classes.Commands
         /// </summary>
         /// <param name="Name">Имя</param>
         /// <param name="Parameters">Параметры команды</param>
-        /// <param name="Explanation">Описание команды</param>
+        /// <param name="Description">Описание команды</param>
         /// <param name="Execute">Действие выполнения</param>
-        public ConsoleCommand(string Name, Parameter[] Parameters, string Explanation, ICommandAAC.ExecuteCom Execute)
+        public ConsoleCommand(string Name, Parameter[] Parameters, string Description, ICommandAAC.ExecuteCom Execute)
         {
             this.Name = Name;
             this.Parameters = Parameters;
-            this.Explanation = Explanation;
+            this.Description = Description;
             this.Execute = Execute;
 
         }
@@ -52,12 +52,12 @@ namespace AAC20.Classes.Commands
         /// Инициализировать объект консольной команды без параметров
         /// </summary>
         /// <param name="Name">Имя</param>
-        /// <param name="Explanation">Описание команды</param>
+        /// <param name="Description">Описание команды</param>
         /// <param name="Execute">Действие выполнения</param>
-        public ConsoleCommand(string Name, string Explanation, ICommandAAC.ExecuteCom Execute)
+        public ConsoleCommand(string Name, string Description, ICommandAAC.ExecuteCom Execute)
         {
             this.Name = Name;
-            this.Explanation = Explanation;
+            this.Description = Description;
             this.Execute = Execute;
         }
 

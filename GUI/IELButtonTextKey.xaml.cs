@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 namespace AAC20.GUI
 {
     /// <summary>
-    /// Логика взаимодействия для IELButtonText.xaml
+    /// Логика взаимодействия для IELButtonTextKey.xaml
     /// </summary>
-    public partial class IELButtonText : UserControl, IIELObject
+    public partial class IELButtonTextKey : UserControl, IIELObject
     {
         /// <summary>
         /// Перечисление состояний отображения кнопки
@@ -85,6 +85,7 @@ namespace AAC20.GUI
                 BorderButton.BorderBrush = color;
                 BorderLeftArrow.BorderBrush = color;
                 BorderRightArrow.BorderBrush = color;
+                BorderCharKeyboard.BorderBrush = color;
                 _DefaultBorderBrush = value;
             }
         }
@@ -100,6 +101,7 @@ namespace AAC20.GUI
             {
                 SolidColorBrush color = new(value);
                 BorderButton.Background = color;
+                BorderCharKeyboard.Background = color;
                 _DefaultBackground = value;
             }
         }
@@ -117,6 +119,7 @@ namespace AAC20.GUI
                 TextBlockButton.Foreground = color;
                 TextBlockLeftArrow.Foreground = color;
                 TextBlockRightArrow.Foreground = color;
+                TextBlockCharKey.Foreground = color;
                 _DefaultForeground = value;
             }
         }
@@ -232,6 +235,37 @@ namespace AAC20.GUI
             set => TextBlockButton.FontSize = value;
         }
 
+        private bool _CharKeyKeyboardActivate = false;
+        /// <summary>
+        /// Активность видимости символа действия активации кнопки
+        /// </summary>
+        public bool CharKeyKeyboardActivate
+        {
+            get => _CharKeyKeyboardActivate;
+            set
+            {
+                ButtonAnimationOpacity.To = value ? 1d : 0d;
+                ButtonAnimationThickness.To = new(!value ? -24 : 0, 0, 0, 0);
+                BorderButton.BeginAnimation(MarginProperty, ButtonAnimationThickness);
+                BorderCharKeyboard.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
+                _CharKeyKeyboardActivate = value;
+            }
+        }
+
+        private Key? _CharKeyKeyboard;
+        /// <summary>
+        /// Клавиша отвечающая за активацию кнопки
+        /// </summary>
+        public Key? CharKeyKeyboard
+        {
+            get => _CharKeyKeyboard;
+            set
+            {
+                _CharKeyKeyboard = value;
+                TextBlockCharKey.Text = KeyName(value).ToString();
+            }
+        }
+
         #region animateObjects
         /// <summary>
         /// Анимация цвета кнопки
@@ -308,7 +342,7 @@ namespace AAC20.GUI
         /// </summary>
         private bool EnterButton = false;
 
-        public IELButtonText()
+        public IELButtonTextKey()
         {
             InitializeComponent();
             StateVisualizationButton = StateButton.Default;
@@ -324,6 +358,8 @@ namespace AAC20.GUI
             {
                 Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
             };
+            BorderButton.Margin = new(-24, 0, 0, 0);
+            BorderCharKeyboard.Opacity = 0d;
             ImageMouseButtonsUse.Opacity = 0d;
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 12;
@@ -404,6 +440,13 @@ namespace AAC20.GUI
                     }
                 }
                 ButtonAnimationColor.To = BorderBrush;
+                BorderCharKeyboard.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = Background;
+                BorderCharKeyboard.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = Foreground;
+                TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+                ButtonAnimationColor.To = BorderBrush;
                 BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
                 ButtonAnimationColor.To = Background;
                 BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
@@ -465,6 +508,28 @@ namespace AAC20.GUI
         }
 
         /// <summary>
+        /// Узнать символ клавиши по коду клавиши
+        /// </summary>
+        /// <param name="key">Код клавиши</param>
+        /// <returns>Символ клавиши</returns>
+        private static char KeyName(Key? key)
+        {
+            return (key switch
+            {
+                Key.Oem3 => '~',
+                Key.OemMinus => '-',
+                Key.OemPlus => '+',
+                Key.OemComma => '<',
+                Key.OemPeriod => '>',
+                Key.Oem2 => '/',
+                Key.Oem4 => '[',
+                Key.Oem6 => ']',
+                Key.OemPipe => '\\',
+                _ => key?.ToString()[^1]
+            }) ?? '\0';
+        }
+
+        /// <summary>
         /// Анимировать нажатие на кнопку (Down)
         /// </summary>
         /// <param name="StyleClickColor">Стиль нажатия на кнопку</param>
@@ -484,6 +549,9 @@ namespace AAC20.GUI
                 (StateVisualizationButton == StateButton.LeftArrow ? BorderLeftArrow : BorderRightArrow)
                     .BeginAnimation(MarginProperty, ButtonAnimationThickness);
             }
+            BorderCharKeyboard.BorderBrush = new SolidColorBrush(BorderBrush);
+            BorderCharKeyboard.Background = new SolidColorBrush(Background);
+            TextBlockCharKey.Foreground = new SolidColorBrush(Foreground);
 
             BorderButton.BorderBrush = new SolidColorBrush(BorderBrush);
             BorderButton.Background = new SolidColorBrush(Background);
@@ -515,9 +583,11 @@ namespace AAC20.GUI
                     BorderLeftArrow.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
                 else BorderRightArrow.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             }
+            BorderCharKeyboard.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = SelectBackground;
             BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            BorderCharKeyboard.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = SelectForeground;
             TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
@@ -527,6 +597,7 @@ namespace AAC20.GUI
                     TextBlockLeftArrow.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
                 else TextBlockRightArrow.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             }
+            TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             if (VisibleMouseImaging)
             {
@@ -565,12 +636,15 @@ namespace AAC20.GUI
                     BorderLeftArrow.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
                 else BorderRightArrow.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             }
+            BorderCharKeyboard.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = DefaultBackground;
             BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            BorderCharKeyboard.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = DefaultForeground;
             TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationOpacity.To = 0d;
             ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
@@ -586,14 +660,17 @@ namespace AAC20.GUI
             ButtonAnimationColor.From = Colors.White;
             ButtonAnimationColor.To = EnterButton ? SelectBorderBrush : DefaultBorderBrush;
             BorderButton.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            BorderCharKeyboard.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.From = Colors.White;
             ButtonAnimationColor.To = EnterButton ? SelectBackground : DefaultBackground;
             BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            BorderCharKeyboard.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.From = Colors.White;
             ButtonAnimationColor.To = EnterButton ? SelectForeground : DefaultForeground;
             TextBlockButton.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            TextBlockCharKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.SpeedRatio = 1;
             ButtonAnimationColor.From = null;

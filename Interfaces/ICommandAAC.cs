@@ -31,6 +31,16 @@ namespace AAC20.Classes.Commands
         public Parameter[]? Parameters { get; }
 
         /// <summary>
+        /// Название команды
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Описание команды
+        /// </summary>
+        public string Description { get; }
+
+        /// <summary>
         /// Создать выполнение команды
         /// </summary>
         internal CommandStateResult ExecuteCommand(string[]? parameters);

@@ -9,7 +9,7 @@
 
     <Grid>
         <TextBlock x:Name="TextBlockAAC" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="AAC20" VerticalAlignment="Top" Style="{Binding Mode=OneWay, Source={StaticResource Tablon}}" FontSize="36" FontWeight="Bold"/>
-        <TextBlock x:Name="TextBlockLicenseText" HorizontalAlignment="Center" Margin="0,57,0,0" TextWrapping="Wrap" Text="Данная программа лицензирована" VerticalAlignment="Top" FontSize="16"/>
+        <TextBlock x:Name="TextBlockLicenseText" HorizontalAlignment="Center" Margin="0,57,0,0" TextWrapping="Wrap" Text="Автор: Даниил Лисов" VerticalAlignment="Top" FontSize="16" FontFamily="Global Monospace"/>
 
     </Grid>
 </Page>

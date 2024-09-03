@@ -55,6 +55,7 @@ namespace AAC20.Windows
         /// </summary>
         private readonly string[] NickNamesThanks =
         [
+            "Lisyaka",
             "Minsi",
         ];
 
@@ -63,6 +64,7 @@ namespace AAC20.Windows
         /// </summary>
         private readonly string[] PhrasesThanks =
         [
+            "\"Я не знаю...\"",
             "\"Спасибо что живая.\"",
         ];
 
@@ -71,6 +73,7 @@ namespace AAC20.Windows
         /// </summary>
         private readonly string[] MessageThanks =
         [
+            "- За всю разработку.",
             "- За помощь в разработке.\n- За проектирование программы.",
         ];
 
@@ -79,6 +82,7 @@ namespace AAC20.Windows
         /// </summary>
         private readonly Uri?[] UriIconThanks =
         [
+            new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"),
             null,
         ];
 
@@ -87,6 +91,7 @@ namespace AAC20.Windows
         /// </summary>
         private readonly (Color?, Color?)[] ForegroundColorThanks =
         [
+            (Color.FromRgb(245, 225, 101), Color.FromRgb(219, 177, 205)),
             (Color.FromRgb(86, 255, 120), Color.FromRgb(195, 189, 222)),
         ];
 

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using static AAC20.GUI.IELButtonText;
+using static AAC20.GUI.IELButtonTextKey;
 
 namespace AAC20.GUI
 {

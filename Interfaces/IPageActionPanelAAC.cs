@@ -70,9 +70,9 @@ namespace AAC20.Interfaces
         /// <param name="PageIELButtons">Страница содержащая кнопки типа "T"</param>
         /// <param name="key">Ключ активации</param>
         /// <param name="Orienation">Ориентация активации кнопки</param>
-        public sealed static void ActivateInKey<T>(Page PageIELButtons, System.Windows.Input.Key key, OrientationActivate Orienation) where T : IELButtonText
+        public sealed static void ActivateInKey<T>(Page PageIELButtons, System.Windows.Input.Key key, OrientationActivate Orienation) where T : IELButtonTextKey
         {
-            IELButtonText.ActivateButtonInKey<T>(PageIELButtons, key, Orienation);
+            IELButtonTextKey.ActivateButtonInKey<T>(PageIELButtons, key, Orienation);
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace AAC20.Interfaces
         /// </summary>
         /// <param name="PageIELButtons">Страница содержащая кнопки типа "T"</param>
         /// <param name="key">Ключ активации</param>
-        public sealed static void BlinkActivateInKey<T>(Page PageIELButtons, System.Windows.Input.Key key) where T : IELButtonText
+        public sealed static void BlinkActivateInKey<T>(Page PageIELButtons, System.Windows.Input.Key key) where T : IELButtonTextKey
         {
-            IELButtonText.BlinkActivateInKey<T>(PageIELButtons, key);
+            IELButtonTextKey.BlinkActivateInKey<T>(PageIELButtons, key);
         }
 
         /// <summary>

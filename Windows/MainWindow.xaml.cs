@@ -139,12 +139,12 @@ namespace AAC20
             InitializeComponent();
 
             App.DataConsoleCommand.AddRange([
-                new ConsoleCommand("clear", "Очистка выводимых данных", (param) =>
+                new ConsoleCommand("clear", "Очищает текстовый вывод главного меню программы", (param) =>
                 {
                     RichTextBoxMainMessage.Document = new();
                     return Task.FromResult(CommandStateResult.Completed);
                 }),
-                new ConsoleCommand("print", [new Parameter("Text")], "Вывод текста на экран", (param) =>
+                new ConsoleCommand("print", [new Parameter("Text")], "Выводит все введёные параметры начиная с параметра \"Text\" в консоль главного меню программы", (param) =>
                 {
                     Paragraph Massage = new();
                     Massage.Inlines.Clear();
@@ -203,9 +203,6 @@ namespace AAC20
             SizeActiveActionPanel = new(BorderActionPanel.Width, BorderActionPanel.Height);
             BorderActionPanel.Width = 0;
             BorderActionPanel.Height = 0;
-
-            ButtonReturnCommand.VisibleMouseImaging = false;
-            ButtonReboot.VisibleMouseImaging = false;
 
             ButtonReboot.OnActivateMouseLeft += (key) => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += (key) => ActivateActionCommand(TextBoxCommandInput.Text);

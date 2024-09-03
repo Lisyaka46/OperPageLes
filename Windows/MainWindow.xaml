@@ -8,7 +8,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         x:Name="window" x:Class="AAC20.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo03.png">
+        Title="Главное меню" Height="551" Width="857" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF4A7B60" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*" MinWidth="40"/>
@@ -29,7 +29,7 @@
                     <ColumnDefinition Width="64*" MinWidth="56" MaxWidth="65"/>
                 </Grid.ColumnDefinitions>
                 <GUI:IELImageButton x:Name="ButtonSettings" DefaultBackground="White" CornerRadius="8,8,8,8" ImageMargin="2,2,2,2" Imaging="/Windows/WindowsImages/Settings.png" SelectBackground="#FF28B4C7" ClickedBackground="#FF6A82CC" Grid.Column="2" Margin="2,1,2,1"/>
-                <Image x:Name="ImageLogoApplication" Margin="2,2,2,2" Source="/Windows/WindowsImages/Logo03.png"/>
+                <Image x:Name="ImageLogoApplication" Margin="2,2,2,2" Source="/Windows/WindowsImages/Logo02.png"/>
             </Grid>
         </Border>
         <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="3,2,2,2" Grid.Row="1">
@@ -46,7 +46,7 @@
                 <ColumnDefinition Width="45*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
-            <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" CharKeyKeyboard="A"/>
+            <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" VisibleMouseImaging="False"/>
         </Grid>
         <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,3,3,4">
             <Grid x:Name="GridConsole">
@@ -82,7 +82,7 @@
             </Grid>
         </Border>
         <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="1" Grid.Row="3" Margin="3,5,3,5" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C"/>
-        <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" SelectForeground="#FF655802" SelectBorderBrush="#FF8A7A2E" SelectBackground="#FFC7C824" DefaultBackground="#FFDFE0C9" ClickedBorderBrush="#FF735F1A" ClickedForeground="#FF56530E" Grid.Column="2" FontWeight="Bold" TextFontFamily="Calibri"/>
+        <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" SelectForeground="#FF655802" SelectBorderBrush="#FF8A7A2E" SelectBackground="#FFC7C824" DefaultBackground="#FFDFE0C9" ClickedBorderBrush="#FF735F1A" ClickedForeground="#FF56530E" Grid.Column="2" FontWeight="Bold" TextFontFamily="Calibri" VisibleMouseImaging="False"/>
 
     </Grid>
 </Window>

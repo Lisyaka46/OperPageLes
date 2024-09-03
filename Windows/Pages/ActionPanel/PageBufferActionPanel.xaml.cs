@@ -42,7 +42,6 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel()
         {
             InitializeComponent();
-            IELButtonBackMainMenu.VisibleMouseImaging = false;
             App.BufferCommand.CounterBuffer.ChangedValue += (Value) =>
             {
                 ThicknessAnimationBuffer.To = new(0, 0 - 29 * Value, 0, 0);
@@ -112,13 +111,13 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// <param name="key">Клавиша</param>
         /// <param name="Orientation">Ориентация нажатия на кнопку</param>
         public void ActivateIELButtonTextInKey(Key key, IPageActionPanelAAC.OrientationActivate Orientation) =>
-            IELButtonText.ActivateButtonInKey<IELButtonText>(MainGrid, key, Orientation);
+            IELButtonTextKey.ActivateButtonInKey<IELButtonTextKey>(MainGrid, key, Orientation);
 
         /// <summary>
         /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         public void BlinkActivateIELButtonTextInKey(Key key) =>
-            IELButtonText.BlinkActivateInKey<IELButtonText>(MainGrid, key);
+            IELButtonTextKey.BlinkActivateInKey<IELButtonTextKey>(MainGrid, key);
     }
 }
