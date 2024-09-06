@@ -1,25 +1,18 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Timers;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
+﻿using AAC20.Classes;
 using AAC20.Classes.Commands;
-using AAC20.Classes;
+using AAC20.Interfaces;
+using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
-using System.Windows.Navigation;
-using System.Windows.Controls;
-using AAC20.Interfaces;
-using System.Linq;
-using AAC20.Windows;
-using AAC20.GUI;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Markup;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 
 namespace AAC20
 {
@@ -208,7 +201,7 @@ namespace AAC20
             ButtonReturnCommand.OnActivateMouseLeft += (key) => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
 
-            Closing += (sender, e) => App.Current.Shutdown(0);
+            //Closing += (sender, e) => App.Current.Shutdown(0);
 
             BorderActionPanel.KeyDown += (sender, e) =>
             {
