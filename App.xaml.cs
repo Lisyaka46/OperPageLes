@@ -1,5 +1,5 @@
 ﻿using AAC20.Classes;
-using AAC20.Classes.Commands;
+using Interpreter.Commands;
 using AAC20.Windows;
 using System.Diagnostics;
 using System.Windows;
@@ -38,23 +38,23 @@ namespace AAC20
         /// </summary>
         internal static readonly List<ConsoleCommand> DataConsoleCommand =
         [
-            new ConsoleCommand("reboot", "Перезагружает программу", (param) =>
+            new ConsoleCommand("reboot", "Перезагружает программу", (Command, param) =>
             {
                 RebootApplication();
-                return Task.FromResult(CommandStateResult.Completed);
+                return Task.FromResult(CommandStateResult.Completed(Command.Name));
             }),
 
-            new ConsoleCommand("close", "Закрывает программу", (param) =>
+            new ConsoleCommand("close", "Закрывает программу", (Command, param) =>
             {
                 Current.Shutdown(0);
-                return Task.FromResult(CommandStateResult.Completed);
+                return Task.FromResult(CommandStateResult.Completed(Command.Name));
             }),
         ];
 
         /// <summary>
         /// Буфер объектов команд
         /// </summary>
-        internal static Classes.Buffer BufferCommand = new();
+        internal static Interpreter.Classes.Buffer BufferCommand = new();
 
         /// <summary>
         /// Главное окно програмы

@@ -1,7 +1,9 @@
-﻿using AAC20.GUI;
+﻿using AAC20.Classes;
+using AAC20.GUI;
 using AAC20.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -17,6 +19,11 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// Объект данных Alt-режима
         /// </summary>
         private bool _AltMode;
+
+        /// <summary>
+        /// Массив кнопок команд буфера
+        /// </summary>
+        internal readonly List<IELButtonCommand> BufferButtonCommand;
 
         /// <summary>
         /// Объект события изменения состояния Alt режима
@@ -39,10 +46,17 @@ namespace AAC20.Windows.Pages.ActionPanel
             EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
         };
 
+        /// <summary>
+        /// Скролл-бар страницы визуализации буфера
+        /// </summary>
+        private readonly CounterScrollBar ScrollBar;
+
         public PageBufferActionPanel()
         {
             InitializeComponent();
-            App.BufferCommand.CounterBuffer.ChangedValue += (Value) =>
+            BufferButtonCommand = [];
+            ScrollBar = new(0, 5);
+            ScrollBar.ChangedValue += (Value) =>
             {
                 ThicknessAnimationBuffer.To = new(0, 0 - 29 * Value, 0, 0);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
@@ -55,17 +69,17 @@ namespace AAC20.Windows.Pages.ActionPanel
             };
             BorderBuffer.MouseWheel += (sender, e) =>
             {
-                if (App.BufferCommand.CounterBuffer.MaxValue > 0 && App.BufferCommand.Count > 0)
+                if (ScrollBar.MaxValue > 0 && App.BufferCommand.Count > 0)
                 {
-                    if (e.Delta > 0) App.BufferCommand.CounterBuffer.Up();
-                    else if (e.Delta < 0) App.BufferCommand.CounterBuffer.Down();
+                    if (e.Delta > 0) ScrollBar.Up();
+                    else if (e.Delta < 0) ScrollBar.Down();
                 }
             };
             IELButtonClearBuffer.OnActivateMouseLeft += (Key) =>
             {
-                TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(App.BufferCommand.CounterBuffer.Value > 0 ? 50d : 0d);
+                TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(ScrollBar.Value > 0 ? 50d : 0d);
                 IELButtonClearBuffer.IsEnabled = false;
-                App.BufferCommand.CounterBuffer.MaxClear();
+                ScrollBar.MaxClear();
                 ThicknessAnimationBuffer.To = new(0);
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
@@ -76,17 +90,17 @@ namespace AAC20.Windows.Pages.ActionPanel
                     if (i == App.BufferCommand.Count - 1)
                     {
                         OpacityAnimationBuffer.FillBehavior = FillBehavior.Stop;
-                        OpacityAnimationBuffer.Completed += (sender, e) => App.BufferCommand.DeleteAll(GridBuffer);
+                        OpacityAnimationBuffer.Completed += (sender, e) => App.BufferCommand.DeleteAll();
                     }
-                    ThicknessAnimationBuffer.To = new(-11, App.BufferCommand[i].Margin.Top + 11, 0, 0);
+                    ThicknessAnimationBuffer.To = new(-11, BufferButtonCommand[i].Margin.Top + 11, 0, 0);
                     BeginTimeOffset.Add(TimeSpan.FromMilliseconds(60d));
                     OpacityAnimationBuffer.BeginTime = BeginTimeOffset;
                     ThicknessAnimationBuffer.BeginTime = BeginTimeOffset;
-                    App.BufferCommand[i].BeginAnimation(OpacityProperty, OpacityAnimationBuffer);
-                    App.BufferCommand[i].BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
+                    BufferButtonCommand[i].BeginAnimation(OpacityProperty, OpacityAnimationBuffer);
+                    BufferButtonCommand[i].BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 }
                 OpacityAnimationBuffer.FillBehavior = FillBehavior.HoldEnd;
-                OpacityAnimationBuffer.Completed -= (sender, e) => App.BufferCommand.DeleteAll(GridBuffer);
+                OpacityAnimationBuffer.Completed -= (sender, e) => App.BufferCommand.DeleteAll();
                 OpacityAnimationBuffer.BeginTime = TimeSpan.Zero;
                 ThicknessAnimationBuffer.BeginTime = TimeSpan.Zero;
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(300d);

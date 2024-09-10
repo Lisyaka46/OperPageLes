@@ -1,5 +1,4 @@
 ﻿using AAC20.Classes;
-using AAC20.Classes.Commands;
 using AAC20.Interfaces;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
@@ -13,6 +12,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
+using Interpreter.Commands;
+using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
+using AAC20.GUI;
+using System;
 
 namespace AAC20
 {
@@ -131,22 +135,42 @@ namespace AAC20
         {
             InitializeComponent();
 
+            #region Command
             App.DataConsoleCommand.AddRange([
-                new ConsoleCommand("clear", "Очищает текстовый вывод главного меню программы", (param) =>
+
+                new ConsoleCommand("clear",
+                "Очищает текстовый вывод главного меню программы",
+                (Command, param) =>
                 {
                     RichTextBoxMainMessage.Document = new();
-                    return Task.FromResult(CommandStateResult.Completed);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
-                new ConsoleCommand("print", [new Parameter("Text")], "Выводит все введёные параметры начиная с параметра \"Text\" в консоль главного меню программы", (param) =>
+
+                new ConsoleCommand("print", [new Parameter("Text", typeof(string))],
+                "Выводит все введёные параметры начиная с параметра \"Text\" в консоль главного меню программы",
+                (Command, param) =>
                 {
                     Paragraph Massage = new();
-                    Massage.Inlines.Clear();
                     Massage.Inlines.Add(new Bold(new Run(">>> ")));
                     Massage.Inlines.Add(new Run(string.Join('\0', param)));
                     RichTextBoxMainMessage.Document.Blocks.Add(Massage);
-                    return Task.FromResult(CommandStateResult.Completed);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
+
+                new ConsoleCommand("buffer",
+                "Отображает содержание буфера команд в консоль главного меню программы",
+                (Command, param) =>
+                {
+                    Paragraph Massage = new();
+                    Massage.Inlines.Add(new Bold(new Run(">>> ")));
+                    Massage.Inlines.Add(new Run($"{App.BufferCommand.Length}:[{string.Join(',', App.BufferCommand.BufferElements)}] " +
+                        $"{Pages.PageBufferActPanel.BufferButtonCommand.Count}+1:[{string.Join<IELButtonCommand>(',', Pages.PageBufferActPanel.BufferButtonCommand)}]"));
+                    RichTextBoxMainMessage.Document.Blocks.Add(Massage);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+
             ]);
+            #endregion
 
             App.AppFlags.FlagCtrlActivateActionButtonAltMode.ChangeStateFlag += (NewValue) =>
             {
@@ -202,6 +226,36 @@ namespace AAC20
             SizeChanged += (sender, e) => AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
 
             //Closing += (sender, e) => App.Current.Shutdown(0);
+
+            App.BufferCommand.DelElement += (index) =>
+            {
+                Pages.PageBufferActPanel.GridBuffer.Children.RemoveAt(index);
+            };
+
+            App.BufferCommand.ClearBuffer += () =>
+            {
+                Pages.PageBufferActPanel.GridBuffer.Children.Clear();
+                Pages.PageBufferActPanel.BufferButtonCommand.Clear();
+            };
+
+            App.BufferCommand.SortBuffer += (index) =>
+            {
+                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
+                {
+                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
+                };
+                Thickness ThicknessIndex = new(0);
+                for (int i = index; i < App.BufferCommand.Count - 1; i++)
+                {
+                    Pages.PageBufferActPanel.BufferButtonCommand[i].TextBlockNumberCommand.Text = $"#{i}";
+                    AnimationBuffer.To = new Thickness(0, 29 * i + 4, 0, 0);
+                    AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
+                    Pages.PageBufferActPanel.BufferButtonCommand[i].BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
+                    if (i > index) Pages.PageBufferActPanel.BufferButtonCommand[i] = Pages.PageBufferActPanel.BufferButtonCommand[i - 1];
+                }
+                if (App.BufferCommand.Count > 0) Pages.PageBufferActPanel.BufferButtonCommand.RemoveAt(App.BufferCommand.Count - 1);
+                else Pages.PageBufferActPanel.BufferButtonCommand.Clear();
+            };
 
             BorderActionPanel.KeyDown += (sender, e) =>
             {
@@ -433,18 +487,40 @@ namespace AAC20
             if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
-            SummarizeCommandStateResult(
-                ConsoleCommand.ReadAndExecuteCommand(App.BufferCommand, Pages.PageBufferActPanel,
-                [.. App.DataConsoleCommand], CommandString)
-                );
+            ConsoleCommand? Command = ConsoleCommand.ReadCommand([.. App.DataConsoleCommand], CommandString);
+            string Name = ConsoleCommand.ReadNameCommand(CommandString);
+            string[] Parameters = ConsoleCommand.ReadParametersCommand(CommandString);
+            App.BufferCommand.Add(Name);
+            SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters));
+            IELButtonCommand Button = new(Command, Parameters, Name, CommandString, App.BufferCommand.Count - 1);
+            Pages.PageBufferActPanel.BufferButtonCommand.Add(Button);
+            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
+            Button.OnActivateRightButtonMouse += () =>
+            {
+                App.BufferCommand.Delete(Button.Text);
+                Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+                if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
+            };
+            Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
+            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
         }
 
         [MTAThread()]
         internal void SummarizeCommandStateResult(CommandStateResult Result)
         {
-            if (Result.State == ResultState.Failed && Result.Massage != null)
+            if (Result.State != ResultState.Complete && Result.Massage != null)
             {
-                RichTextBoxMainMessage.Document.Blocks.Add(Result.Massage);
+                Paragraph P_Massage = new();
+                foreach (Match Element in StringCommandError().Matches(Result.Massage))
+                {
+                    if ((Element.Value[0], Element.Value[^1]) == ('"', '"'))
+                    {
+                        P_Massage.Inlines.Add(new Italic(new Run(Element.Value)) { Background = new SolidColorBrush(Colors.IndianRed) });
+                        continue;
+                    }
+                    P_Massage.Inlines.Add(new Run(Element.Value));
+                }
+                RichTextBoxMainMessage.Document.Blocks.Add(P_Massage);
             }
         }
 
@@ -456,5 +532,11 @@ namespace AAC20
             TextBlockTime.Text = RealTime;
             TextBlockData.Text = RealData;
         }
+
+        [GeneratedRegex("([^\"]+|\"[^\"]+\"?)")]
+        /// <summary>
+        /// Функция регулярного выражения выделения текста в ковычках "текст"
+        /// </summary>
+        private static partial Regex StringCommandError();
     }
 }

@@ -69,4 +69,8 @@
     <Folder Include="Windows\Pages\Settings\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
+  </ItemGroup>
+
 </Project>

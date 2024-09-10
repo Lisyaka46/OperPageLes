@@ -1,5 +1,4 @@
-﻿using AAC20.Classes.Commands;
-using System;
+﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Interpreter.Commands;
 
 namespace AAC20.GUI
 {
@@ -23,11 +23,6 @@ namespace AAC20.GUI
     /// </summary>
     public partial class IELButtonCommand : UserControl
     {    
-        /// <summary>
-        /// Ссылка на команду
-        /// </summary>
-        private readonly Classes.Buffer.BufferCommand<ICommandAAC> RefCommand;
-
         /// <summary>
         /// Перечисление стилей цвета нажатия на кнопку
         /// </summary>
@@ -227,10 +222,9 @@ namespace AAC20.GUI
         /// </summary>
         public event EventActivate? OnActivateRightButtonMouse;
 
-        public IELButtonCommand(Classes.Buffer.BufferCommand<ICommandAAC> Command, int index)
+        public IELButtonCommand(ConsoleCommand? Command, string[] Param, string Name, string? FullNameCommand, int index)
         {
             InitializeComponent();
-            RefCommand = Command;
             ButtonAnimationOpacity = new()
             {
                 Duration = TimeSpan.FromMilliseconds(AnimationMillisecond)
@@ -246,8 +240,8 @@ namespace AAC20.GUI
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 14;
             TextBlockButtonName.FontWeight = FontWeights.Bold;
-            Text = RefCommand.Name;
-            TextBlockButtonCommand.Text = Command.TextCommand;
+            Text = Command != null ? Command.Name : Name;
+            TextBlockButtonCommand.Text = FullNameCommand ?? string.Empty;
             CornerRadius = new CornerRadius(10);
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Top;
@@ -291,7 +285,7 @@ namespace AAC20.GUI
 
             OnActivateLeftButtonMouse += () =>
             {
-                App.MainWindowApplication.SummarizeCommandStateResult(RefCommand.ExecuteCommand());
+                App.MainWindowApplication.SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Param));
             };
 
             MouseLeftButtonUp += (sender, e) =>
