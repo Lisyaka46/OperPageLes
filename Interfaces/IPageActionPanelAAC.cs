@@ -65,27 +65,6 @@ namespace AAC20.Interfaces
         internal Delegate_AltModeChanged AltModeChanged { get; }
 
         /// <summary>
-        /// Активировать кнопку по ключу
-        /// </summary>
-        /// <param name="PageIELButtons">Страница содержащая кнопки типа "T"</param>
-        /// <param name="key">Ключ активации</param>
-        /// <param name="Orienation">Ориентация активации кнопки</param>
-        public sealed static void ActivateInKey<T>(Page PageIELButtons, System.Windows.Input.Key key, OrientationActivate Orienation) where T : IELButtonTextKey
-        {
-            IELButtonTextKey.ActivateButtonInKey<T>(PageIELButtons, key, Orienation);
-        }
-
-        /// <summary>
-        /// Активировать мерцание кнопки по ключу
-        /// </summary>
-        /// <param name="PageIELButtons">Страница содержащая кнопки типа "T"</param>
-        /// <param name="key">Ключ активации</param>
-        public sealed static void BlinkActivateInKey<T>(Page PageIELButtons, System.Windows.Input.Key key) where T : IELButtonTextKey
-        {
-            IELButtonTextKey.BlinkActivateInKey<T>(PageIELButtons, key);
-        }
-
-        /// <summary>
         /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>

@@ -10,7 +10,7 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELTextBoxCommand.xaml
     /// </summary>
-    public partial class IELTextBoxCommand : UserControl, IIELObject
+    public partial class IELTextBoxCommand : UserControl
     {
         /// <summary>
         /// Скруглённость границ объекта
@@ -141,21 +141,20 @@ namespace AAC20.GUI
         #endregion
 
         #region AnimationMillisecond
-        private int _AnimationMillisecond = 80;
+        private int _AnimationMillisecond;
         /// <summary>
-        /// Узнать длительность анимации в миллисекундах
+        /// Длительность анимации в миллисекундах
         /// </summary>
-        public int GetAnimationMillisecond() => _AnimationMillisecond;
-
-        /// <summary>
-        /// Задать время анимации
-        /// </summary>
-        /// <param name="value">Значение времени в миллисекундах</param>
-        public void SetAnimationMillisecond(int value)
+        public int AnimationMillisecond
         {
-            TimeSpan time = TimeSpan.FromMilliseconds(value);
-            ButtonAnimationColor.Duration = time;
-            _AnimationMillisecond = value;
+            get => _AnimationMillisecond;
+            set
+            {
+                TimeSpan time = TimeSpan.FromMilliseconds(value);
+                ButtonAnimationColor.Duration = time;
+                _AnimationMillisecond = value;
+
+            }
         }
         #endregion
 
@@ -200,10 +199,10 @@ namespace AAC20.GUI
         public IELTextBoxCommand()
         {
             InitializeComponent();
-            ButtonAnimationColor = new()
-            {
-                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
-            };
+
+            ButtonAnimationColor = new();
+            AnimationMillisecond = 80;
+
             DefaultBorderBrush = Colors.Black;
             DefaultBackground = Color.FromRgb(66, 183, 121);
             DefaultForeground = Colors.Black;

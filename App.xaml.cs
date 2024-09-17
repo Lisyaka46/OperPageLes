@@ -54,7 +54,7 @@ namespace AAC20
         /// <summary>
         /// Буфер объектов команд
         /// </summary>
-        internal static Interpreter.Classes.Buffer BufferCommand = new();
+        internal static Interpreter.Classes.Buffer BufferCommand = new(50);
 
         /// <summary>
         /// Главное окно програмы

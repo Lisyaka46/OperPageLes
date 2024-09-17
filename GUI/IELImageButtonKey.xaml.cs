@@ -4,13 +4,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace AAC20.GUI
 {
     /// <summary>
-    /// Логика взаимодействия для IELImageButton.xaml
+    /// Логика взаимодействия для IELImageButtonKey.xaml
     /// </summary>
-    public partial class IELImageButton : UserControl, IIELObject
+    public partial class IELImageButtonKey : UserControl, IIELObjectVisualMouse, IIELObjectKey
     {
         #region Default
         private Color _DefaultBorderBrush;
@@ -24,6 +25,7 @@ namespace AAC20.GUI
             {
                 SolidColorBrush color = new(value);
                 ButtonBorder.BorderBrush = color;
+                ButtonBorderKey.BorderBrush = color;
                 _DefaultBorderBrush = value;
             }
         }
@@ -39,7 +41,23 @@ namespace AAC20.GUI
             {
                 SolidColorBrush color = new(value);
                 ButtonBorder.Background = color;
+                ButtonBorderKey.Background = color;
                 _DefaultBackground = value;
+            }
+        }
+
+        private Color _DefaultForeground;
+        /// <summary>
+        /// Цвет текста
+        /// </summary>
+        public Color DefaultForeground
+        {
+            get => _DefaultForeground;
+            set
+            {
+                SolidColorBrush color = new(value);
+                TextBlockKey.Foreground = color;
+                _DefaultForeground = value;
             }
         }
         #endregion
@@ -55,6 +73,11 @@ namespace AAC20.GUI
         /// Выделенный цвет фона
         /// </summary>
         public Color SelectBackground { get; set; }
+
+        /// <summary>
+        /// Выделенный цвет текста
+        /// </summary>
+        public Color SelectForeground { get; set; }
         #endregion
 
 
@@ -68,6 +91,11 @@ namespace AAC20.GUI
         /// Нажатый цвет фона
         /// </summary>
         public Color ClickedBackground { get; set; }
+
+        /// <summary>
+        /// Нажатый цвет текста
+        /// </summary>
+        public Color ClickedForeground { get; set; }
         #endregion
 
 
@@ -81,6 +109,11 @@ namespace AAC20.GUI
         /// Выключенный цвет фона
         /// </summary>
         public Color NotEnabledBackground { get; set; }
+
+        /// <summary>
+        /// Выключенный цвет текста
+        /// </summary>
+        public Color NotEnabledForeground { get; set; }
         #endregion
 
         #region AnimationMillisecond
@@ -95,6 +128,8 @@ namespace AAC20.GUI
             {
                 TimeSpan time = TimeSpan.FromMilliseconds(value);
                 ButtonAnimationColor.Duration = time;
+                ButtonAnimationDouble.Duration = time;
+                ButtonAnimationThickness.Duration = time;
                 _AnimationMillisecond = value;
 
             }
@@ -106,6 +141,16 @@ namespace AAC20.GUI
         /// Анимация цвета
         /// </summary>
         private readonly ColorAnimation ButtonAnimationColor;
+
+        /// <summary>
+        /// Анимация цвета
+        /// </summary>
+        private readonly DoubleAnimation ButtonAnimationDouble;
+
+        /// <summary>
+        /// Анимация позиции
+        /// </summary>
+        private readonly ThicknessAnimation ButtonAnimationThickness;
         #endregion
 
         /// <summary>
@@ -161,14 +206,76 @@ namespace AAC20.GUI
         public IIELObjectKey.Activate? OnActivateMouseRight { get; internal set; }
 
         /// <summary>
+        /// Картинка действий над кнопкой
+        /// </summary>
+        private BitmapImage? ImageMouse;
+
+        private bool _VisibleMouseImaging = true;
+        /// <summary>
+        /// Состояние активности отображения действий на кнопке
+        /// </summary>
+        public bool VisibleMouseImaging
+        {
+            get => _VisibleMouseImaging;
+            set
+            {
+                _VisibleMouseImaging = value;
+                if (EnterButton)
+                {
+                    ButtonAnimationDouble.To = value ? 0.4d : 0d;
+                    ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationDouble);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Состояние активности наведения на кнопку
+        /// </summary>
+        private bool EnterButton = false;
+
+        private bool _CharKeyKeyboardActivate = false;
+        /// <summary>
+        /// Активность видимости символа действия активации кнопки
+        /// </summary>
+        public bool CharKeyKeyboardActivate
+        {
+            get => _CharKeyKeyboardActivate;
+            set
+            {
+                ButtonAnimationDouble.To = value ? 1d : 0d;
+                ButtonAnimationThickness.To = new(!value ? -24 : 0, 0, 0, 0);
+                ButtonBorder.BeginAnimation(MarginProperty, ButtonAnimationThickness);
+                ButtonBorderKey.BeginAnimation(OpacityProperty, ButtonAnimationDouble);
+                _CharKeyKeyboardActivate = value;
+            }
+        }
+
+        private Key? _CharKeyKeyboard;
+        /// <summary>
+        /// Клавиша отвечающая за активацию кнопки
+        /// </summary>
+        public Key? CharKeyKeyboard
+        {
+            get => _CharKeyKeyboard;
+            set
+            {
+                _CharKeyKeyboard = value;
+                TextBlockKey.Text = IIELObjectKey.KeyName(value).ToString();
+            }
+        }
+
+        /// <summary>
         /// Инициализировать объект кнопки с изображением
         /// </summary>
-        public IELImageButton()
+        public IELImageButtonKey()
         {
             InitializeComponent();
+            ButtonAnimationThickness = new();
+            ButtonAnimationDouble = new();
             ButtonAnimationColor = new();
             AnimationMillisecond = 80;
             ButtonImage.Margin = new Thickness(10, 10, 10, 10);
+            CharKeyKeyboardActivate = false;
 
             DefaultBorderBrush = Colors.Black;
             SelectBorderBrush = Colors.DarkGray;
@@ -180,6 +287,12 @@ namespace AAC20.GUI
             ClickedBackground = Colors.WhiteSmoke;
             NotEnabledBackground = Colors.IndianRed;
 
+            DefaultForeground = Colors.Black;
+            SelectForeground = Colors.DimGray;
+            ClickedForeground = Colors.LightGray;
+            NotEnabledForeground = Colors.Red;
+
+            ImageMouseButtonsUse.Opacity = 0d;
             ButtonBorder.MouseEnter += (sender, e) =>
             {
                 if (IsEnabled) MouseEnterDetect();
@@ -192,12 +305,19 @@ namespace AAC20.GUI
             {
                 Color
                 Background = (bool)e.NewValue ? DefaultBackground : NotEnabledBackground,
-                BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush;
+                BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush,
+                Foreground = (bool)e.NewValue ? DefaultForeground : NotEnabledForeground;
 
                 ButtonAnimationColor.To = BorderBrush;
                 ButtonBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonBorderKey.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
                 ButtonAnimationColor.To = Background;
                 ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                ButtonBorderKey.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+                ButtonAnimationColor.To = Foreground;
+                TextBlockKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
             };
 
             MouseDown += (sender, e) =>
@@ -210,6 +330,7 @@ namespace AAC20.GUI
                     {
                         ButtonBorder.BorderBrush = new SolidColorBrush(ClickedBorderBrush);
                         ButtonBorder.Background = new SolidColorBrush(ClickedBackground);
+                        TextBlockKey.Foreground = new SolidColorBrush(ClickedForeground);
                     }
                 }
             };
@@ -243,6 +364,24 @@ namespace AAC20.GUI
 
             ButtonAnimationColor.To = SelectBackground;
             ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            ButtonBorderKey.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = SelectForeground;
+            TextBlockKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            if (VisibleMouseImaging)
+            {
+                ImageMouse = IIELObjectVisualMouse.ImageMouseButton(this);
+                if (ImageMouse != null)
+                {
+                    ButtonAnimationDouble.To = 0.4d;
+                    ImageMouseButtonsUse.BeginInit();
+                    ImageMouseButtonsUse.Source = ImageMouse;
+                    ImageMouseButtonsUse.EndInit();
+                    ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationDouble);
+                }
+            }
+            EnterButton = true;
         }
 
         /// <summary>
@@ -255,6 +394,39 @@ namespace AAC20.GUI
 
             ButtonAnimationColor.To = DefaultBackground;
             ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            ButtonBorderKey.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.To = DefaultForeground;
+            TextBlockKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationDouble.To = 0d;
+            ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationDouble);
+            EnterButton = false;
+        }
+
+        /// <summary>
+        /// Анимация мерцания
+        /// </summary>
+        [MTAThread()]
+        public void BlinkAnimation()
+        {
+            ButtonAnimationColor.SpeedRatio = 0.6d;
+            ButtonAnimationColor.From = Colors.White;
+            ButtonAnimationColor.To = EnterButton ? SelectBorderBrush : DefaultBorderBrush;
+            ButtonBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            ButtonBorderKey.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.From = Colors.White;
+            ButtonAnimationColor.To = EnterButton ? SelectBackground : DefaultBackground;
+            ButtonBorder.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+            ButtonBorderKey.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.From = Colors.White;
+            ButtonAnimationColor.To = EnterButton ? SelectForeground : DefaultForeground;
+            TextBlockKey.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+
+            ButtonAnimationColor.SpeedRatio = 1;
+            ButtonAnimationColor.From = null;
         }
     }
 }

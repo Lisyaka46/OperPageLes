@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AAC20.Classes;
 using AAC20.GUI;
 using AAC20.Interfaces;
 
@@ -61,13 +62,13 @@ namespace AAC20.Windows.Frames
         /// <param name="key">Клавиша</param>
         /// <param name="Orientation">Ориентация нажатия на кнопку</param>
         public void ActivateIELButtonTextInKey(Key key, IPageActionPanelAAC.OrientationActivate Orientation) =>
-            IELButtonTextKey.ActivateButtonInKey<IELButtonTextKey>(MainGrid, key, Orientation);
+            IIELObjectKey.ActivateButtonInKey(MainGrid, key, Orientation);
 
         /// <summary>
         /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         public void BlinkActivateIELButtonTextInKey(Key key) =>
-            IELButtonTextKey.BlinkActivateInKey<IELButtonTextKey>(MainGrid, key);
+            IIELObjectKey.BlinkActivateInKey(MainGrid, key);
     }
 }

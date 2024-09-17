@@ -12,7 +12,7 @@ namespace AAC20.Interfaces
     /// <summary>
     /// Интерфейс объекта IEL
     /// </summary>
-    interface IIELObject
+    public interface IIELObject
     {
         #region Default
         /// <summary>
@@ -68,28 +68,9 @@ namespace AAC20.Interfaces
 
         #region AnimationMillisecond
         /// <summary>
-        /// Узнать длительность анимации в миллисекундах
-        /// </summary>
-        int GetAnimationMillisecond();
-
-        /// <summary>
-        /// Задать время анимации
-        /// </summary>
-        /// <param name="value">Значение времени в миллисекундах</param>
-        void SetAnimationMillisecond(int value);
-
-        /// <summary>
         /// Количество миллисекунд для анимации
         /// </summary>
-        sealed int AnimationMillisecond
-        {
-            get => GetAnimationMillisecond();
-            set
-            {
-                if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "Значение должно быть больше нуля!");
-                else SetAnimationMillisecond(value);
-            }
-        }
+        public int AnimationMillisecond { get; set; }
         #endregion
 
         /// <summary>
@@ -101,5 +82,26 @@ namespace AAC20.Interfaces
         /// Толщина границ
         /// </summary>
         public Thickness BorderThicknessBlock { get; set; }
+
+        /// <summary>
+        /// Статус активности объекта
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// Объект события активации кнопки левым щелчком мыши
+        /// </summary>
+        public Activate? OnActivateMouseLeft { get; }
+
+        /// <summary>
+        /// Объект события активации кнопки правым щелчком мыши
+        /// </summary>
+        public Activate? OnActivateMouseRight { get; }
+
+        /// <summary>
+        /// Делегат события активации
+        /// </summary>
+        /// <param name="KeyboardActivate">Активировался ли объект с помощью клавиатуры</param>
+        public delegate void Activate(bool KeyboardActivate);
     }
 }

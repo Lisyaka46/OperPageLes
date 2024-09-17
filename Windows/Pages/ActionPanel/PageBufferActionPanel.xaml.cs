@@ -1,6 +1,7 @@
 ﻿using AAC20.Classes;
 using AAC20.GUI;
 using AAC20.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -19,11 +20,6 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// Объект данных Alt-режима
         /// </summary>
         private bool _AltMode;
-
-        /// <summary>
-        /// Массив кнопок команд буфера
-        /// </summary>
-        internal readonly List<IELButtonCommand> BufferButtonCommand;
 
         /// <summary>
         /// Объект события изменения состояния Alt режима
@@ -49,16 +45,22 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// <summary>
         /// Скролл-бар страницы визуализации буфера
         /// </summary>
-        private readonly CounterScrollBar ScrollBar;
+        internal readonly CounterScrollBar ScrollBar;
 
-        public PageBufferActionPanel()
+        /// <summary>
+        /// Константа размера Height для кнопок буфера
+        /// </summary>
+        [NotNull()]
+        private readonly int H;
+
+        public PageBufferActionPanel(int HeightButtonCommand)
         {
             InitializeComponent();
-            BufferButtonCommand = [];
-            ScrollBar = new(0, 5);
+            H = HeightButtonCommand;
+            ScrollBar = new(0, 4);
             ScrollBar.ChangedValue += (Value) =>
             {
-                ThicknessAnimationBuffer.To = new(0, 0 - 29 * Value, 0, 0);
+                ThicknessAnimationBuffer.To = new(0, 0 - (H + 2) * Value, 0, 0);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
             };
             TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
@@ -87,17 +89,18 @@ namespace AAC20.Windows.Pages.ActionPanel
                 TextBlockCounterBuffer.Text = $"0/{App.BufferCommand.Length}";
                 for (int i = 0; i < App.BufferCommand.Count; i++)
                 {
+                    IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
                     if (i == App.BufferCommand.Count - 1)
                     {
                         OpacityAnimationBuffer.FillBehavior = FillBehavior.Stop;
                         OpacityAnimationBuffer.Completed += (sender, e) => App.BufferCommand.DeleteAll();
                     }
-                    ThicknessAnimationBuffer.To = new(-11, BufferButtonCommand[i].Margin.Top + 11, 0, 0);
+                    ThicknessAnimationBuffer.To = new(-11, Button.Margin.Top + 11, 0, 0);
                     BeginTimeOffset.Add(TimeSpan.FromMilliseconds(60d));
                     OpacityAnimationBuffer.BeginTime = BeginTimeOffset;
                     ThicknessAnimationBuffer.BeginTime = BeginTimeOffset;
-                    BufferButtonCommand[i].BeginAnimation(OpacityProperty, OpacityAnimationBuffer);
-                    BufferButtonCommand[i].BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
+                    Button.BeginAnimation(OpacityProperty, OpacityAnimationBuffer);
+                    Button.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 }
                 OpacityAnimationBuffer.FillBehavior = FillBehavior.HoldEnd;
                 OpacityAnimationBuffer.Completed -= (sender, e) => App.BufferCommand.DeleteAll();
@@ -125,13 +128,13 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// <param name="key">Клавиша</param>
         /// <param name="Orientation">Ориентация нажатия на кнопку</param>
         public void ActivateIELButtonTextInKey(Key key, IPageActionPanelAAC.OrientationActivate Orientation) =>
-            IELButtonTextKey.ActivateButtonInKey<IELButtonTextKey>(MainGrid, key, Orientation);
+            IIELObjectKey.ActivateButtonInKey(MainGrid, key, Orientation);
 
         /// <summary>
         /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         public void BlinkActivateIELButtonTextInKey(Key key) =>
-            IELButtonTextKey.BlinkActivateInKey<IELButtonTextKey>(MainGrid, key);
+            IIELObjectKey.BlinkActivateInKey(MainGrid, key);
     }
 }

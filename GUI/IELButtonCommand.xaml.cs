@@ -1,20 +1,8 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Interpreter.Commands;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Interpreter.Commands;
 
 namespace AAC20.GUI
 {
@@ -222,7 +210,12 @@ namespace AAC20.GUI
         /// </summary>
         public event EventActivate? OnActivateRightButtonMouse;
 
-        public IELButtonCommand(ConsoleCommand? Command, string[] Param, string Name, string? FullNameCommand, int index)
+        /// <summary>
+        /// Индекс кнопки команды
+        /// </summary>
+        public int IndexElement { get; set; }
+
+        public IELButtonCommand(string Name, string FullTextCommand, int indexBuffer)
         {
             InitializeComponent();
             ButtonAnimationOpacity = new()
@@ -240,19 +233,18 @@ namespace AAC20.GUI
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 14;
             TextBlockButtonName.FontWeight = FontWeights.Bold;
-            Text = Command != null ? Command.Name : Name;
-            TextBlockButtonCommand.Text = FullNameCommand ?? string.Empty;
+            Text = Name;
+            TextBlockButtonCommand.Text = FullTextCommand;
             CornerRadius = new CornerRadius(10);
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Top;
-            Margin = new(0, 29 * index + 4, 0, 0);
             Height = 27;
             Width = 230;
             BorderButton.CornerRadius = new CornerRadius(4);
             Opacity = 0;
-            TextBlockNumberCommand.Text = $"#{index + 1}";
             ButtonAnimationOpacity.To = 1;
             BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
+            IndexElement = indexBuffer;
 
             DefaultBackground = Color.FromRgb(172, 238, 255);
             SelectBackground = Color.FromRgb(101, 193, 241);
@@ -285,7 +277,8 @@ namespace AAC20.GUI
 
             OnActivateLeftButtonMouse += () =>
             {
-                App.MainWindowApplication.SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Param));
+                App.MainWindowApplication.SummarizeCommandStateResult(
+                    ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], App.BufferCommand[IndexElement]));
             };
 
             MouseLeftButtonUp += (sender, e) =>

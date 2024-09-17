@@ -167,23 +167,20 @@ namespace AAC20.GUI
         public Color NotEnabledForeground { get; set; }
 
         #region AnimationMillisecond
-        private int _AnimationMillisecond = 80;
+        private int _AnimationMillisecond;
         /// <summary>
-        /// Узнать длительность анимации в миллисекундах
+        /// Длительность анимации в миллисекундах
         /// </summary>
-        public int GetAnimationMillisecond() => _AnimationMillisecond;
-
-        /// <summary>
-        /// Задать время анимации
-        /// </summary>
-        /// <param name="value">Значение времени в миллисекундах</param>
-        public void SetAnimationMillisecond(int value)
+        public int AnimationMillisecond
         {
-            TimeSpan time = TimeSpan.FromMilliseconds(value);
-            ButtonAnimationColor.Duration = time;
-            ButtonAnimationThickness.Duration = time;
-            ButtonAnimationOpacity.Duration = time;
-            _AnimationMillisecond = value;
+            get => _AnimationMillisecond;
+            set
+            {
+                TimeSpan time = TimeSpan.FromMilliseconds(value);
+                ButtonAnimationColor.Duration = time;
+                _AnimationMillisecond = value;
+
+            }
         }
         #endregion
 
@@ -250,20 +247,14 @@ namespace AAC20.GUI
         #endregion
 
         /// <summary>
-        /// Делегат события активации кнопки
-        /// </summary>
-        /// <param name="KeyboardActivate">Активировалась ли кнопка с помощью клавиатуры</param>
-        public delegate void Activate(bool KeyboardActivate);
-
-        /// <summary>
         /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public Activate? OnActivateMouseLeft;
+        public IIELObject.Activate? OnActivateMouseLeft { get; internal set; }
 
         /// <summary>
         /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public Activate? OnActivateMouseRight;
+        public IIELObject.Activate? OnActivateMouseRight { get; internal set; }
 
         /// <summary>
         /// Узнать отображения действий над кнопкой
@@ -312,18 +303,12 @@ namespace AAC20.GUI
         {
             InitializeComponent();
             StateVisualizationButton = StateButton.Default;
-            ButtonAnimationOpacity = new()
-            {
-                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
-            };
-            ButtonAnimationThickness = new()
-            {
-                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
-            };
-            ButtonAnimationColor = new()
-            {
-                Duration = TimeSpan.FromMilliseconds(_AnimationMillisecond)
-            };
+
+            ButtonAnimationOpacity = new();
+            ButtonAnimationThickness = new();
+            ButtonAnimationColor = new();
+            AnimationMillisecond = 80;
+
             ImageMouseButtonsUse.Opacity = 0d;
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 12;

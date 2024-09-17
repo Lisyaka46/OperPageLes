@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AAC20.GUI"
              mc:Ignorable="d" 
-             d:DesignHeight="62.942" d:DesignWidth="177.319">
+             d:DesignHeight="32.988" d:DesignWidth="87.835">
     <Grid>
         <Border x:Name="ButtonBorder" BorderThickness="1" CornerRadius="10,10,10,10" BorderBrush="Black">
             <Image x:Name="ButtonImage" Margin="10,7,10,7"/>

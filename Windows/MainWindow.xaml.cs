@@ -1,22 +1,22 @@
 ﻿using AAC20.Classes;
+using AAC20.GUI;
 using AAC20.Interfaces;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
+using Interpreter.Commands;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Interpreter.Commands;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using AAC20.GUI;
-using System;
 
 namespace AAC20
 {
@@ -54,7 +54,7 @@ namespace AAC20
             /// <summary>
             /// Страница буффера в панели действий
             /// </summary>
-            internal static readonly PageBufferActionPanel PageBufferActPanel = new();
+            internal static readonly PageBufferActionPanel PageBufferActPanel = new(H);
         }
 
         /// <summary>
@@ -84,9 +84,14 @@ namespace AAC20
         private static string RealData => DateTime.Now.ToString("dd.MM.yyyy");
 
         /// <summary>
-        /// Объект управления фоновым обновлением информации в данном окне
+        /// Объект управления фоновым обновлением информации в данном окне 1000
         /// </summary>
         private readonly UpdateBackgroundData UpdateBackgroundDataThis;
+
+        /// <summary>
+        /// Объект управления фоновым обновлением информации в данном окне 60
+        /// </summary>
+        private readonly UpdateBackgroundData UpdateBackgroundDataRunTime;
 
         /// <summary>
         /// Объект анимации для управления размерами панели действий
@@ -131,6 +136,14 @@ namespace AAC20
         [NotNull()]
         private IPageActionPanelAAC RefPageActionPanel;
 
+        /// <summary>
+        /// Константа размера Height для кнопок буфера
+        /// </summary>
+        [NotNull()]
+        const int H = 33;
+
+        //private MMDeviceEnumerator Device = new();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -163,8 +176,7 @@ namespace AAC20
                 {
                     Paragraph Massage = new();
                     Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                    Massage.Inlines.Add(new Run($"{App.BufferCommand.Length}:[{string.Join(',', App.BufferCommand.BufferElements)}] " +
-                        $"{Pages.PageBufferActPanel.BufferButtonCommand.Count}+1:[{string.Join<IELButtonCommand>(',', Pages.PageBufferActPanel.BufferButtonCommand)}]"));
+                    Massage.Inlines.Add(new Run($"{App.BufferCommand.Count}/{App.BufferCommand.Length}:[{string.Join(',', App.BufferCommand.BufferElements)}]"));
                     RichTextBoxMainMessage.Document.Blocks.Add(Massage);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
@@ -182,6 +194,10 @@ namespace AAC20
             {
                 RichTextBoxMainMessage.Document = new();
                 AnimationActionPanel(false);
+            };
+            Pages.PageMainActPanel.IELButtonCrearConsole.OnActivateMouseRight += (AltMode) =>
+            {
+                RichTextBoxMainMessage.Document = new();
             };
 
             Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
@@ -210,6 +226,9 @@ namespace AAC20
             };
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
+            UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
+            //ImageTest.Source = new BitmapImage(new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"));
+            ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
             BackgroundUpdateVisualData();
             FrameActionPanelLeft.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             FrameActionPanelRight.NavigationUIVisibility = NavigationUIVisibility.Hidden;
@@ -230,70 +249,76 @@ namespace AAC20
             App.BufferCommand.DelElement += (index) =>
             {
                 Pages.PageBufferActPanel.GridBuffer.Children.RemoveAt(index);
-            };
+                Pages.PageBufferActPanel.ScrollBar.MaxDown(1);
 
-            App.BufferCommand.ClearBuffer += () =>
-            {
-                Pages.PageBufferActPanel.GridBuffer.Children.Clear();
-                Pages.PageBufferActPanel.BufferButtonCommand.Clear();
-            };
-
-            App.BufferCommand.SortBuffer += (index) =>
-            {
                 ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
                 {
                     EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
                 };
                 Thickness ThicknessIndex = new(0);
-                for (int i = index; i < App.BufferCommand.Count - 1; i++)
+                for (int i = index; i < App.BufferCommand.Count; i++)
                 {
-                    Pages.PageBufferActPanel.BufferButtonCommand[i].TextBlockNumberCommand.Text = $"#{i}";
-                    AnimationBuffer.To = new Thickness(0, 29 * i + 4, 0, 0);
+                    IELButtonCommand Button = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
+                    Button.TextBlockNumberCommand.Text = $"#{i + 1}";
+                    Button.IndexElement--;
+                    AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
                     AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
-                    Pages.PageBufferActPanel.BufferButtonCommand[i].BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
-                    if (i > index) Pages.PageBufferActPanel.BufferButtonCommand[i] = Pages.PageBufferActPanel.BufferButtonCommand[i - 1];
+                    Button.BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
                 }
-                if (App.BufferCommand.Count > 0) Pages.PageBufferActPanel.BufferButtonCommand.RemoveAt(App.BufferCommand.Count - 1);
-                else Pages.PageBufferActPanel.BufferButtonCommand.Clear();
+            };
+
+            App.BufferCommand.ClearBuffer += () =>
+            {
+                Pages.PageBufferActPanel.GridBuffer.Children.Clear();
+                Pages.PageBufferActPanel.ScrollBar.MaxClear();
             };
 
             BorderActionPanel.KeyDown += (sender, e) =>
             {
-                if (RefPageActionPanel.AltMode && e.Key != Key.Z && !Flags.ActionPanelActivateButtonAltMode.Value)
+                if (RefPageActionPanel.AltMode && e.Key != Key.Z && e.Key != Key.RightCtrl && !Flags.ActionPanelActivateButtonAltMode.Value)
                 {
-                    if (e.Key == Key.RightCtrl)
-                    {
-                        App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = true;
-                        return;
-                    }
-                    Flags.ActionPanelActivateButtonAltMode.Value = true;
                     RefPageActionPanel.BlinkActivateIELButtonTextInKey(e.Key);
+                    Flags.ActionPanelActivateButtonAltMode.Value = true;
                 }
+                if (e.Key == Key.RightCtrl && RefPageActionPanel.AltMode) App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = true;
             };
 
             BorderActionPanel.KeyUp += (sender, e) =>
             {
-                Flags.ActionPanelActivateButtonAltMode.Value = false;
                 switch (e.Key)
                 {
                     case Key.Escape:
-                        AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
-                        break;
+                        if (!App.AppFlags.FlagCtrlActivateActionButtonAltMode)
+                            AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+                        return;
                     case Key.Z:
-                        RefPageActionPanel.AltMode = !RefPageActionPanel.AltMode;
-                        break;
-                    default:
-                        RefPageActionPanel.ActivateIELButtonTextInKey(e.Key,
-                        App.AppFlags.FlagCtrlActivateActionButtonAltMode ?
-                        IPageActionPanelAAC.OrientationActivate.RightButton : IPageActionPanelAAC.OrientationActivate.LeftButton);
-                        break;
+                        if (!App.AppFlags.FlagCtrlActivateActionButtonAltMode)
+                            RefPageActionPanel.AltMode = !RefPageActionPanel.AltMode;
+                        return;
+                    case Key.RightCtrl:
+                        if (!Flags.ActionPanelActivateButtonAltMode.Value)
+                            App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = false;
+                        return;
+                    default: break;
+                }
+                if (!Flags.ActionPanelActivateButtonAltMode.Value) return;
+                if (RefPageActionPanel.AltMode)
+                {
+                    RefPageActionPanel.ActivateIELButtonTextInKey(e.Key,
+                    App.AppFlags.FlagCtrlActivateActionButtonAltMode ?
+                    IPageActionPanelAAC.OrientationActivate.RightButton : IPageActionPanelAAC.OrientationActivate.LeftButton);
                 }
                 App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = false;
+                Flags.ActionPanelActivateButtonAltMode.Value = false;
             };
 
             TextBoxCommandInput.GotFocus += (sender, e) =>
             {
-                if (Flags.ActionPanelActivate.Value) AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+                if (Flags.ActionPanelActivate.Value)
+                {
+                    AnimationActionPanel(false, PositionAnimActionPanel.CenterObject);
+                    App.AppFlags.FlagCtrlActivateActionButtonAltMode.Value = false;
+                }
             };
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
@@ -381,12 +406,14 @@ namespace AAC20
                 License.ShowDialog();
             };
 
+
             Activated += (sender, e) =>
             {
                 TextBoxCommandInput.Focus();
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
+            UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
         }
 
         /// <summary>
@@ -406,14 +433,14 @@ namespace AAC20
             OldFrameAnim.IsEnabled = false;
             NewFrameAnim.IsEnabled = true;
             NewFrameAnim.BeginAnimation(MarginProperty, null);
-            NewFrameAnim.Margin = !RightAlign ? new(-20, -20, 40, -10) : new(40, -10, -20, -10);
+            NewFrameAnim.Margin = !RightAlign ? new(-20, -20, 40, -3) : new(40, -10, -20, -3);
             Content.AltMode = AltMode;
             RefPageActionPanel = Content;
             NewFrameAnim.Navigate(Content);
 
             DoubleAnimateOpacity.To = 0;
             OldFrameAnim.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
-            ThicknessAnimate.To = !RightAlign ? new(40, -20, -20, -20) : new(-20, -20, 40, -20);
+            ThicknessAnimate.To = !RightAlign ? new(40, -20, -20, -3) : new(-20, -20, 40, -3);
             OldFrameAnim.BeginAnimation(MarginProperty, ThicknessAnimate);
 
             DoubleAnimateOpacity.To = 1;
@@ -490,19 +517,42 @@ namespace AAC20
             ConsoleCommand? Command = ConsoleCommand.ReadCommand([.. App.DataConsoleCommand], CommandString);
             string Name = ConsoleCommand.ReadNameCommand(CommandString);
             string[] Parameters = ConsoleCommand.ReadParametersCommand(CommandString);
-            App.BufferCommand.Add(Name);
-            SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters));
-            IELButtonCommand Button = new(Command, Parameters, Name, CommandString, App.BufferCommand.Count - 1);
-            Pages.PageBufferActPanel.BufferButtonCommand.Add(Button);
             Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
-            Button.OnActivateRightButtonMouse += () =>
+            if (App.BufferCommand.Count < App.BufferCommand.Length)
             {
-                App.BufferCommand.Delete(Button.Text);
-                Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
-                if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
-            };
-            Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
+                IELButtonCommand Button = new(Name, CommandString, App.BufferCommand.Count)
+                {
+                    Height = H,
+                    Margin = new(0, (H + 2) * App.BufferCommand.Count, 0, 0),
+                };
+                Button.OnActivateRightButtonMouse += () =>
+                {
+                    App.BufferCommand.Delete(Button.IndexElement);
+                    Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+                    if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
+                };
+                Button.TextBlockNumberCommand.Text = $"#{App.BufferCommand.Count + 1}";
+                App.BufferCommand.Add(CommandString);
+                Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
+                Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
+            }
+            else
+            {
+                App.BufferCommand.Add(CommandString);
+                IELButtonCommand RealButton;
+                for (int i = 0; i < Pages.PageBufferActPanel.GridBuffer.Children.Count - 1; i++)
+                {
+                    RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
+                    IELButtonCommand NextButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i + 1];
+                    RealButton.Text = NextButton.Text;
+                    RealButton.TextBlockButtonCommand.Text = NextButton.TextBlockButtonCommand.Text;
+                }
+                RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[^1];
+                RealButton.Text = Name;
+                RealButton.TextBlockButtonCommand.Text = CommandString;
+            }
             Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+            SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters));
         }
 
         [MTAThread()]
@@ -525,12 +575,44 @@ namespace AAC20
         }
 
         /// <summary>
-        /// Функция обновления визуальной информации в данном окне
+        /// Функция обновления визуальной информации в данном окне 100
         /// </summary>
         private void BackgroundUpdateVisualData()
         {
             TextBlockTime.Text = RealTime;
             TextBlockData.Text = RealData;
+        }
+
+        /// <summary>
+        /// Функция обновления визуальной информации в данном окне 60
+        /// </summary>
+        private void BackgroundUpdateVisualDataRunTime()
+        {
+            //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
+            //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
+            //byte rgbValue = (byte)(2.55d * Volume);
+            //TextBlockTest.Foreground = new SolidColorBrush(Color.FromRgb(rgbValue, rgbValue, rgbValue));
+            //TextBlockTest.Text = $"Volume: {Volume}";
+            //ImageTest.Margin = new(428 - (Volume / 2), 204 - (Volume / 2), 0, 0);
+            //ImageTest.Width = 10 + Volume;
+            //ImageTest.Height = 10 + Volume;
+
+            try
+            {
+                Point MousePoint = Mouse.GetPosition(this);
+                Point PointScreen = PointToScreen(new(0, 0));
+                TextBlockTest.Text = $"Point: {PointScreen.X}:{PointScreen.Y} - {MousePoint.X}:{MousePoint.Y} - {ActualWidth}:{ActualHeight}";
+                if (-MousePoint.X == PointScreen.X && -MousePoint.Y == PointScreen.Y)
+                {
+                    return;
+                }
+                else MousePoint = new(
+                    (MousePoint.X - (ActualWidth / 2)) / 3,
+                    (MousePoint.Y - (ActualHeight / 2)) / 3);
+                ImageTest.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
+            }
+            catch { ImageTest.Margin = new(0, 0, 0, 0); }
+            
         }
 
         [GeneratedRegex("([^\"]+|\"[^\"]+\"?)")]
