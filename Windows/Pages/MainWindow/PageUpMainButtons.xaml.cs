@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AAC20.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AAC20.Classes;
-using AAC20.GUI;
-using AAC20.Interfaces;
 
-namespace AAC20.Windows.Frames
+namespace AAC20.Windows.Pages.MainWindow
 {
     /// <summary>
-    /// Логика взаимодействия для PageMainActionPanel.xaml
+    /// Логика взаимодействия для PageUpMainButtons.xaml
     /// </summary>
-    public partial class PageMainActionPanel : Page, IPageModuleButtonKeyAAC
+    public partial class PageUpMainButtons : Page, IPageModuleButtonKeyAAC
     {
         /// <summary>
         /// Объект данных Alt-режима
@@ -33,14 +31,13 @@ namespace AAC20.Windows.Frames
         /// </summary>
         public IPageModuleButtonKeyAAC.Delegate_AltModeChanged AltModeChanged { get; private set; }
 
-        public PageMainActionPanel()
+        public PageUpMainButtons()
         {
             InitializeComponent();
             AltModeChanged = (Mode) =>
             {
-                IELButtonCrearConsole.CharKeyKeyboardActivate = Mode;
-                IELButtonCommandBuffer.CharKeyKeyboardActivate = Mode;
-                IELButtonDiscriptionCommand.CharKeyKeyboardActivate = Mode;
+                IELButtonLabel.CharKeyKeyboardActivate = Mode;
+                IELButtonSettings.CharKeyKeyboardActivate = Mode;
             };
         }
 

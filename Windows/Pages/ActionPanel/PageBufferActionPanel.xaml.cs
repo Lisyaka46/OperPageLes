@@ -14,7 +14,7 @@ namespace AAC20.Windows.Pages.ActionPanel
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
     /// </summary>
-    public partial class PageBufferActionPanel : Page, IPageActionPanelAAC
+    public partial class PageBufferActionPanel : Page, IPageModuleButtonKeyAAC
     {
         /// <summary>
         /// Объект данных Alt-режима
@@ -24,7 +24,7 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// <summary>
         /// Объект события изменения состояния Alt режима
         /// </summary>
-        public IPageActionPanelAAC.Delegate_AltModeChanged AltModeChanged { get; private set; }
+        public IPageModuleButtonKeyAAC.Delegate_AltModeChanged AltModeChanged { get; private set; }
 
         /// <summary>
         /// Объект анимации позиции сколла буфера
@@ -127,14 +127,14 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// </summary>
         /// <param name="key">Клавиша</param>
         /// <param name="Orientation">Ориентация нажатия на кнопку</param>
-        public void ActivateIELButtonTextInKey(Key key, IPageActionPanelAAC.OrientationActivate Orientation) =>
+        public void ActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
             IIELObjectKey.ActivateButtonInKey(MainGrid, key, Orientation);
 
         /// <summary>
         /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
-        public void BlinkActivateIELButtonTextInKey(Key key) =>
-            IIELObjectKey.BlinkActivateInKey(MainGrid, key);
+        public void BlinkActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
+            IIELObjectKey.BlinkActivateInKey(MainGrid, key, Orientation);
     }
 }

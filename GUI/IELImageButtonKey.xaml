@@ -8,8 +8,8 @@
              d:DesignHeight="47.885" d:DesignWidth="76.35">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="22*"/>
-            <ColumnDefinition Width="67*"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Border x:Name="ButtonBorder" BorderThickness="3,3,3,3" CornerRadius="10,10,10,10" BorderBrush="Black" Grid.Column="1" Background="White">
             <Grid>

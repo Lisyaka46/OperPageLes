@@ -1,16 +1,8 @@
-﻿using AAC20.GUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿using System.Windows.Input;
 
 namespace AAC20.Interfaces
 {
-    public interface IPageActionPanelAAC
+    public interface IPageModuleButtonKeyAAC
     {
         /// <summary>
         /// Перечисление вариаций активации кнопки по клавише
@@ -29,13 +21,13 @@ namespace AAC20.Interfaces
         }
 
         /// <summary>
-        /// Узнать состояние Alt-режима
+        /// Узнать состояние Alt-режима <b>Без предварительного события</b>
         /// </summary>
         /// <returns>Состояние</returns>
         bool GetAltMode();
 
         /// <summary>
-        /// Изменить состояние Alt-режима
+        /// Изменить состояние Alt-режима <b>Без предварительного события</b>
         /// </summary>
         /// <param name="value">Значение</param>
         void SetAltMode(bool value);
@@ -75,6 +67,6 @@ namespace AAC20.Interfaces
         /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
-        public void BlinkActivateIELButtonTextInKey(Key key);
+        public void BlinkActivateIELButtonTextInKey(Key key, OrientationActivate Orientation);
     }
 }

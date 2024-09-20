@@ -4,8 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AAC20.Classes
+namespace AAC20.Classes.Flaging
 {
+    /// <summary>
+    /// Перечисление состояний ожидаемого типа флага
+    /// </summary>
+    public enum WaitTypeFlag
+    {
+        Wait = -1,
+        No = 0,
+        Yes = 1,
+    }
+
     /// <summary>
     /// Описание структуры объекта флага
     /// </summary>
@@ -15,6 +25,7 @@ namespace AAC20.Classes
     /// <param name="Value">Стартовое значение</param>
     public class Flag(bool Value)
     {
+
         /// <summary>
         /// Делегат события изменения состояния флага
         /// </summary>
@@ -25,6 +36,11 @@ namespace AAC20.Classes
         /// Событие изменения состояния флага
         /// </summary>
         public event EventChangeStateFlag? ChangeStateFlag;
+
+        /// <summary>
+        /// Параметр состояния ожидания
+        /// </summary>
+        public bool Wait { get; internal set; } = false;
 
         /// <summary>
         /// Ресурсное значение флага
@@ -39,6 +55,8 @@ namespace AAC20.Classes
             get => _Value;
             set
             {
+                if (_Value == value) return;
+                Wait = false;
                 _Value = value;
                 ChangeStateFlag?.Invoke(_Value);
             }

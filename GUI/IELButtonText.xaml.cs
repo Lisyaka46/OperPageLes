@@ -178,6 +178,8 @@ namespace AAC20.GUI
             {
                 TimeSpan time = TimeSpan.FromMilliseconds(value);
                 ButtonAnimationColor.Duration = time;
+                ButtonAnimationOpacity.Duration = time;
+                ButtonAnimationThickness.Duration = time;
                 _AnimationMillisecond = value;
 
             }
@@ -426,14 +428,14 @@ namespace AAC20.GUI
         /// <param name="VisualObject">Ссылка на объект поиска</param>
         /// <param name="key">Ключ клавиши</param>
         /// <param name="Orientation">Ориентация нажатия</param>
-        public static void ActivateButtonInKey<T>(Visual VisualObject, Key key, IPageActionPanelAAC.OrientationActivate Orientation) where T : IELButtonTextKey
+        public static void ActivateButtonInKey<T>(Visual VisualObject, Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) where T : IELButtonTextKey
         {
             T? Button = SearchButton<T>(VisualObject, key);
             if (Button == null) return;
             else
             {
-                if (Orientation == IPageActionPanelAAC.OrientationActivate.LeftButton) Button.OnActivateMouseLeft?.Invoke(true);
-                else if (Orientation == IPageActionPanelAAC.OrientationActivate.RightButton) Button.OnActivateMouseRight?.Invoke(true);
+                if (Orientation == IPageModuleButtonKeyAAC.OrientationActivate.LeftButton) Button.OnActivateMouseLeft?.Invoke(true);
+                else if (Orientation == IPageModuleButtonKeyAAC.OrientationActivate.RightButton) Button.OnActivateMouseRight?.Invoke(true);
             }
         }
 

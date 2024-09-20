@@ -3,6 +3,12 @@ using Interpreter.Commands;
 using AAC20.Windows;
 using System.Diagnostics;
 using System.Windows;
+using System.Runtime.InteropServices;
+using System.Globalization;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Http;
+using AAC20.Classes.Flaging;
 
 namespace AAC20
 {
@@ -16,10 +22,7 @@ namespace AAC20
         /// </summary>
         internal readonly struct AppFlags
         {
-            /// <summary>
-            /// Флаг активации правого нажатия с помощью кнопки CTRL в панели действий
-            /// </summary>
-            internal static readonly Flag FlagCtrlActivateActionButtonAltMode = new(false);
+            
         }
 
         /// <summary>
@@ -60,6 +63,41 @@ namespace AAC20
         /// Главное окно програмы
         /// </summary>
         internal static MainWindow MainWindowApplication => (MainWindow)Current.MainWindow;
+
+        /// <summary>
+        /// Объект пинговки сайта
+        /// </summary>
+        private readonly Ping ObjPing = new();
+
+        /// <summary>
+        /// Поток обновляемый данные интернета
+        /// </summary>
+        private readonly Thread ThreadInternetCheckConnection;
+
+        /// <summary>
+        /// Состояние подключения к интернету
+        /// </summary>
+        internal static readonly Flag InternetPinging = new(false);
+
+        public App()
+        {
+            ThreadInternetCheckConnection = new Thread(delegate ()
+            {
+                while (true)
+                {
+                    try
+                    {
+                        InternetPinging.Wait = true;
+                        PingReply reply = ObjPing.SendPingAsync("yandex.ru", 800).Result;
+                        InternetPinging.Value = reply.Status == IPStatus.Success;
+                    }
+                    catch { InternetPinging.Value = false; }
+                    InternetPinging.Wait = false;
+                    Thread.Sleep(1000);
+                }
+            });
+            ThreadInternetCheckConnection.Start();
+        }
 
         /// <summary>
         /// Перезагрузить программу
