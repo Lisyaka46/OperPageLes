@@ -10,6 +10,25 @@
         mc:Ignorable="d"
         Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" Margin="-4,0,0,0">
     <Grid x:Name="GridMain">
+        <Border x:Name="BorderActionPanel" Panel.ZIndex="2" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="261" Height="220" Focusable="True" AllowDrop="True" Margin="17,59,0,0" >
+            <Border.FocusVisualStyle>
+                <Style>
+                    <Setter Property="Control.Template" Value="{x:Null}"/>
+                </Style>
+            </Border.FocusVisualStyle>
+            <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True" Margin="5,5,5,5">
+                <Frame x:Name="FrameActionPanelLeft" Grid.ColumnSpan="1" Panel.ZIndex="1"/>
+                <Frame x:Name="FrameActionPanelRight" Grid.ColumnSpan="1"/>
+                <TextBlock x:Name="TextBlockRightButtonIndicatorKey" HorizontalAlignment="Right" TextWrapping="Wrap" Text="CTRL" VerticalAlignment="Bottom" Panel.ZIndex="2" Padding="10,3,10,3" Margin="0,0,-4,-4">
+                    <TextBlock.Background>
+                        <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
+                            <GradientStop Color="#B255A6A7" Offset="0.575"/>
+                            <GradientStop Offset="1" Color="#00922525"/>
+                        </RadialGradientBrush>
+                    </TextBlock.Background>
+                </TextBlock>
+            </Grid>
+        </Border>
         <Image x:Name="ImageTest" HorizontalAlignment="Center" Height="200" VerticalAlignment="Center" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Width="200"/>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -46,11 +65,11 @@
                     </TextBlock>
                 </Grid>
             </Border>
-            <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60">
+            <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60">
                 <Grid>
                     <Frame x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" NavigationUIVisibility="Hidden"/>
-                    <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16"/>
-                    <GUI:IELLabelCommand x:Name="Test" HorizontalAlignment="Left" Margin="79,309,0,0" VerticalAlignment="Top" Height="79" Width="73" SelectBackground="#FF38B8ED" SelectForeground="#FF02212B" ClickedBackground="#FF00CAFF" ClickedForeground="#FF00143A" DefaultBackground="#FF659098" AnimationMillisecond="120">
+                    <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16" Panel.ZIndex="1"/>
+                    <!--<GUI:IELLabelCommand x:Name="Test" HorizontalAlignment="Left" Margin="79,309,0,0" VerticalAlignment="Top" Height="79" Width="73" SelectBackground="#FF38B8ED" SelectForeground="#FF02212B" ClickedBackground="#FF00CAFF" ClickedForeground="#FF00143A" DefaultBackground="#FF659098" AnimationMillisecond="120">
                         <GUI:IELLabelCommand.DefaultBorderBrush>
                             <RadialGradientBrush RadiusX="0.8" RadiusY="0.8">
                                 <GradientStop Color="#FF010203"/>
@@ -71,7 +90,7 @@
                                 <GradientStop Color="#FF333B45" Offset="0.344"/>
                             </RadialGradientBrush>
                         </GUI:IELLabelCommand.SelectBorderBrush>
-                    </GUI:IELLabelCommand>
+                    </GUI:IELLabelCommand>-->
                 </Grid>
             </Border>
             <Grid Grid.Column="2" Grid.Row="3">
@@ -87,25 +106,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Border x:Name="BorderActionPanel" Panel.ZIndex="2" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="265" Height="220" Focusable="True" AllowDrop="True" >
-                        <Border.FocusVisualStyle>
-                            <Style>
-                                <Setter Property="Control.Template" Value="{x:Null}"/>
-                            </Style>
-                        </Border.FocusVisualStyle>
-                        <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True" Margin="5,5,5,5">
-                            <Frame x:Name="FrameActionPanelLeft" Grid.ColumnSpan="1" Panel.ZIndex="1"/>
-                            <Frame x:Name="FrameActionPanelRight" Grid.ColumnSpan="1"/>
-                            <TextBlock x:Name="TextBlockRightButtonIndicatorKey" HorizontalAlignment="Right" TextWrapping="Wrap" Text="CTRL" VerticalAlignment="Bottom" Panel.ZIndex="2" Padding="10,3,10,3" Margin="0,0,-4,-4">
-                                <TextBlock.Background>
-                                    <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
-                                        <GradientStop Color="#B255A6A7" Offset="0.575"/>
-                                        <GradientStop Offset="1" Color="#00922525"/>
-                                    </RadialGradientBrush>
-                                </TextBlock.Background>
-                            </TextBlock>
-                        </Grid>
-                    </Border>
                     <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1"/>
                 </Grid>
             </Border>

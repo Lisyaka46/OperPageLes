@@ -55,7 +55,7 @@ namespace AAC20.Windows
                 GUI.IELButtonText Button = GenerateCommandButton();
                 Button.Margin = new(3, 32 * i++ + 4, 3, 0);
                 Button.Text = commandAAC.Name;
-                Button.OnActivateMouseLeft += (Key) => DetectNewDiscriptionCommand(commandAAC);
+                Button.OnActivateMouseLeft += () => DetectNewDiscriptionCommand(commandAAC);
                 GridElements.Children.Add(Button);
             }
             Closing += (sender, e) =>
@@ -89,7 +89,7 @@ namespace AAC20.Windows
                     BorderContextMenuParameter.BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
                 }
             };
-            IELButtonCloneTextCommand.OnActivateMouseLeft += (Mode) =>
+            IELButtonCloneTextCommand.OnActivateMouseLeft += () =>
             {
                 Clipboard.SetText(TextBlockTextCommand.Text);
                 AnimationColor.To = Colors.Black;
@@ -187,7 +187,7 @@ namespace AAC20.Windows
         private void SetInformationCommand(ICommandAAC Command)
         {
             int CountAbsolutly = Command.Parameters?.Count((i) => i.Absolutly) ?? 0;
-            string TextRegistration = string.Join(',', Command.Parameters?.Select(i => i.Name) ?? []);
+            string TextRegistration = string.Join(", ", Command.Parameters?.Select(i => i.Name) ?? []);
             TextBlockNameCommand.Text = $"0 команда: \"{Command.Name}\"";
             TextBlockMainDescriptionCommand.Text = Command.Description;
             TextBlockDescriptionCountParameter.Text = CountAbsolutly == 0 ?

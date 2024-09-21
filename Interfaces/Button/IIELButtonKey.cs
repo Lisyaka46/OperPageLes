@@ -2,10 +2,11 @@
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using AAC20.Interfaces;
 
-namespace AAC20.Interfaces
+namespace AAC20.Interfaces.Button
 {
-    public interface IIELObjectKey : IIELObject
+    public interface IIELButtonKey : IIELButton
     {
         /// <summary>
         /// Активность видимости символа действия активации кнопки
@@ -18,46 +19,40 @@ namespace AAC20.Interfaces
         public Key? CharKeyKeyboard { get; set; }
 
         /// <summary>
+        /// Объект события активации кнопки левым щелчком мыши
+        /// </summary>
+        public Activate? OnActivateMouseLeft { get; }
+
+        /// <summary>
+        /// Объект события активации кнопки правым щелчком мыши
+        /// </summary>
+        public Activate? OnActivateMouseRight { get; }
+
+        /// <summary>
+        /// Делегат события активации
+        /// </summary>
+        /// <param name="KeyboardActivate">Активировался ли объект с помощью клавиатуры</param>
+        public delegate void Activate(bool KeyboardActivate);
+
+        /// <summary>
         /// Анимация мерцания
         /// </summary>
         [MTAThread()]
         public void BlinkAnimation();
 
         /// <summary>
-        /// Узнать символ клавиши по коду клавиши
-        /// </summary>
-        /// <param name="key">Код клавиши</param>
-        /// <returns>Символ клавиши</returns>
-        protected static sealed char KeyName(Key? key)
-        {
-            return (key switch
-            {
-                Key.Oem3 => '~',
-                Key.OemMinus => '-',
-                Key.OemPlus => '+',
-                Key.OemComma => '<',
-                Key.OemPeriod => '>',
-                Key.Oem2 => '/',
-                Key.Oem4 => '[',
-                Key.Oem6 => ']',
-                Key.OemPipe => '\\',
-                _ => key?.ToString()[^1]
-            }) ?? '\0';
-        }
-
-        /// <summary>
         /// Найти кнопку типа "IELButtonText" в странице
         /// </summary>
         /// <param name="VisualObject">Ссылка на объект поиска</param>
         /// <param name="key">Ключ клавиши</param>
-        protected static sealed IIELObjectKey? SearchButton(Visual VisualObject, Key key)
+        protected static sealed IIELButtonKey? SearchButton(Visual VisualObject, Key key)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(VisualObject); i++)
             {
                 Visual ChildVisualElement = (Visual)VisualTreeHelper.GetChild(VisualObject, i);
                 try
                 {
-                    IIELObjectKey ObjectButton = (IIELObjectKey)ChildVisualElement;
+                    IIELButtonKey ObjectButton = (IIELButtonKey)ChildVisualElement;
                     if (ObjectButton.CharKeyKeyboard == key && ObjectButton.IsEnabled) return ObjectButton;
                 }
                 catch
@@ -76,7 +71,7 @@ namespace AAC20.Interfaces
         /// <param name="Orientation">Ориентация нажатия</param>
         internal static sealed void ActivateButtonInKey(Visual VisualObject, Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation)
         {
-            IIELObjectKey? Button = SearchButton(VisualObject, key);
+            IIELButtonKey? Button = SearchButton(VisualObject, key);
             if (Button == null) return;
             else
             {
@@ -92,7 +87,7 @@ namespace AAC20.Interfaces
         /// <param name="key">Ключ клавиши</param>
         internal static sealed void BlinkActivateInKey(Visual VisualObject, Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation)
         {
-            IIELObjectKey? Button = SearchButton(VisualObject, key);
+            IIELButtonKey? Button = SearchButton(VisualObject, key);
             if (Button == null) return;
             else
             {

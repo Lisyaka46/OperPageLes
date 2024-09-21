@@ -1,4 +1,5 @@
 ﻿using AAC20.Interfaces;
+using AAC20.Interfaces.Button;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,16 +12,16 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELImageButtonKey.xaml
     /// </summary>
-    public partial class IELImageButtonKey : UserControl, IIELObjectVisualMouse, IIELObjectKey
+    public partial class IELImageButtonKey : UserControl, IIELButtonKey
     {
         #region Default
-        private Color _DefaultBorderBrush;
+        private Color? _DefaultBorderBrush;
         /// <summary>
         /// Цвет границы
         /// </summary>
         public Color DefaultBorderBrush
         {
-            get => _DefaultBorderBrush;
+            get => _DefaultBorderBrush ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -30,13 +31,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultBackground;
+        private Color? _DefaultBackground;
         /// <summary>
         /// Цвет фона
         /// </summary>
         public Color DefaultBackground
         {
-            get => _DefaultBackground;
+            get => _DefaultBackground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -46,13 +47,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultForeground;
+        private Color? _DefaultForeground;
         /// <summary>
         /// Цвет текста
         /// </summary>
         public Color DefaultForeground
         {
-            get => _DefaultForeground;
+            get => _DefaultForeground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -169,7 +170,7 @@ namespace AAC20.GUI
         }
 
         /// <summary>
-        /// Толщина границ кнопки
+        /// Толщина границ
         /// </summary>
         public Thickness BorderThicknessBlock
         {
@@ -178,7 +179,7 @@ namespace AAC20.GUI
         }
 
         /// <summary>
-        /// Скруглённость границ кнопки
+        /// Скруглённость границ
         /// </summary>
         public CornerRadius CornerRadius
         {
@@ -198,12 +199,12 @@ namespace AAC20.GUI
         /// <summary>
         /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public IIELObjectKey.Activate? OnActivateMouseLeft { get; internal set; }
+        public IIELButtonKey.Activate? OnActivateMouseLeft { get; internal set; }
 
         /// <summary>
         /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public IIELObjectKey.Activate? OnActivateMouseRight { get; internal set; }
+        public IIELButtonKey.Activate? OnActivateMouseRight { get; internal set; }
 
         /// <summary>
         /// Картинка действий над кнопкой
@@ -260,7 +261,7 @@ namespace AAC20.GUI
             set
             {
                 _CharKeyKeyboard = value;
-                TextBlockKey.Text = IIELObjectKey.KeyName(value).ToString();
+                TextBlockKey.Text = IIELObject.KeyName(value).ToString();
             }
         }
 
@@ -371,7 +372,7 @@ namespace AAC20.GUI
 
             if (VisibleMouseImaging)
             {
-                ImageMouse = IIELObjectVisualMouse.ImageMouseButton(this);
+                ImageMouse = IIELObject.ImageMouseButton(OnActivateMouseLeft != null, OnActivateMouseRight != null);
                 if (ImageMouse != null)
                 {
                     ButtonAnimationDouble.To = 0.4d;

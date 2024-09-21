@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Input;
 
 namespace AAC20.Interfaces
 {
@@ -14,94 +16,46 @@ namespace AAC20.Interfaces
     /// </summary>
     public interface IIELObject
     {
-        #region Default
-        /// <summary>
-        /// Цвет границы
-        /// </summary>
-        public Color DefaultBorderBrush { get; set; }
-
-        /// <summary>
-        /// Цвет фона
-        /// </summary>
-        public Color DefaultBackground { get; set; }
-        #endregion
-
-
-        #region Select
-        /// <summary>
-        /// Выделенный цвет границы
-        /// </summary>
-        public Color SelectBorderBrush { get; set; }
-
-        /// <summary>
-        /// Выделенный цвет фона
-        /// </summary>
-        public Color SelectBackground { get; set; }
-        #endregion
-
-
-        #region Clicked
-        /// <summary>
-        /// Нажатый цвет границы
-        /// </summary>
-        public Color ClickedBorderBrush { get; set; }
-
-        /// <summary>
-        /// Нажатый цвет фона
-        /// </summary>
-        public Color ClickedBackground { get; set; }
-        #endregion
-
-
-        #region NotEnabled
-        /// <summary>
-        /// Выключенный цвет границы
-        /// </summary>
-        public Color NotEnabledBorderBrush { get; set; }
-
-        /// <summary>
-        /// Выключенный цвет фона
-        /// </summary>
-        public Color NotEnabledBackground { get; set; }
-        #endregion
-
-
-        #region AnimationMillisecond
-        /// <summary>
-        /// Количество миллисекунд для анимации
-        /// </summary>
-        public int AnimationMillisecond { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Скругление границ
-        /// </summary>
-        public CornerRadius CornerRadius { get; set; }
-
-        /// <summary>
-        /// Толщина границ
-        /// </summary>
-        public Thickness BorderThicknessBlock { get; set; }
-
         /// <summary>
         /// Статус активности объекта
         /// </summary>
         public bool IsEnabled { get; set; }
 
         /// <summary>
-        /// Объект события активации кнопки левым щелчком мыши
+        /// Узнать отображения действий над кнопкой
         /// </summary>
-        public Activate? OnActivateMouseLeft { get; }
+        /// <returns>Изображение мыши с действиями</returns>
+        internal static sealed BitmapImage? ImageMouseButton(bool Left, bool Right)
+        {
+            if (Left)
+            {
+                if (Right) return new(new Uri("/Windows/WindowsImages/DoubleMouseButton.png", UriKind.Relative));
+                else return new(new Uri("/Windows/WindowsImages/LeftMouseButton.png", UriKind.Relative));
+            }
+            else if (Right) return new(new Uri("/Windows/WindiwsImages/RightMouseButton.png", UriKind.Relative));
+            else return null;
+        }
 
         /// <summary>
-        /// Объект события активации кнопки правым щелчком мыши
+        /// Узнать символ клавиши по коду клавиши
         /// </summary>
-        public Activate? OnActivateMouseRight { get; }
-
-        /// <summary>
-        /// Делегат события активации
-        /// </summary>
-        /// <param name="KeyboardActivate">Активировался ли объект с помощью клавиатуры</param>
-        public delegate void Activate(bool KeyboardActivate);
+        /// <param name="key">Код клавиши</param>
+        /// <returns>Символ клавиши</returns>
+        internal static sealed char KeyName(Key? key)
+        {
+            return (key switch
+            {
+                Key.Oem3 => '~',
+                Key.OemMinus => '-',
+                Key.OemPlus => '+',
+                Key.OemComma => '<',
+                Key.OemPeriod => '>',
+                Key.Oem2 => '/',
+                Key.Oem4 => '[',
+                Key.Oem6 => ']',
+                Key.OemPipe => '\\',
+                _ => key?.ToString()[^1]
+            }) ?? '\0';
+        }
     }
 }

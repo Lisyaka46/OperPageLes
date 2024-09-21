@@ -3,36 +3,40 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Input;
+using Interpreter.Commands;
+using AAC20.Interfaces.Button;
+using System.Windows;
 
 namespace AAC20.GUI
 {
     /// <summary>
     /// Логика взаимодействия для IELLabelCommand.xaml
     /// </summary>
-    public partial class IELLabelCommand : UserControl
+    public partial class IELLabelCommand : UserControl, IIELButtonDefault
     {
 
-        private GradientBrush _DefaultBorderBrush = new RadialGradientBrush(Colors.White, Colors.Black);
+        private Color? _DefaultBorderBrush;
         /// <summary>
         /// Цвет границы кнопки
         /// </summary>
-        public GradientBrush DefaultBorderBrush
+        public Color DefaultBorderBrush
         {
-            get => _DefaultBorderBrush;
+            get => _DefaultBorderBrush ?? Colors.Gold;
             set
             {
-                BorderMain.BorderBrush = value;
+                SolidColorBrush color = new(value);
+                BorderMain.BorderBrush = color;
                 _DefaultBorderBrush = value;
             }
         }
 
-        private Color _DefaultBackground = Colors.Black;
+        private Color? _DefaultBackground;
         /// <summary>
         /// Цвет фона кнопки
         /// </summary>
         public Color DefaultBackground
         {
-            get => _DefaultBackground;
+            get => _DefaultBackground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -41,13 +45,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultForeground = Colors.Black;
+        private Color? _DefaultForeground;
         /// <summary>
         /// Цвет текста в кнопке
         /// </summary>
         public Color DefaultForeground
         {
-            get => _DefaultForeground;
+            get => _DefaultForeground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -60,7 +64,7 @@ namespace AAC20.GUI
         /// <summary>
         /// Выделенный цвет границы кнопки
         /// </summary>
-        public GradientBrush SelectBorderBrush { get; set; }
+        public Color SelectBorderBrush { get; set; }
 
         /// <summary>
         /// Выделенный цвет фона кнопки
@@ -75,7 +79,7 @@ namespace AAC20.GUI
         /// <summary>
         /// Нажатый цвет границы кнопки
         /// </summary>
-        public GradientBrush ClickedBorderBrush { get; set; }
+        public Color ClickedBorderBrush { get; set; }
 
         /// <summary>
         /// Нажатый цвет фона кнопки
@@ -90,7 +94,7 @@ namespace AAC20.GUI
         /// <summary>
         /// Выключенный цвет границы кнопки
         /// </summary>
-        public GradientBrush NotEnabledBorderBrush { get; set; }
+        public Color NotEnabledBorderBrush { get; set; }
 
         /// <summary>
         /// Выключенный цвет фона кнопки
@@ -105,12 +109,12 @@ namespace AAC20.GUI
         /// <summary>
         /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public IIELObject.Activate? OnActivateMouseLeft { get; internal set; }
+        public IIELButtonDefault.Activate? OnActivateMouseLeft { get; internal set; }
 
         /// <summary>
         /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public IIELObject.Activate? OnActivateMouseRight { get; internal set; }
+        public IIELButtonDefault.Activate? OnActivateMouseRight { get; internal set; }
 
         #region animateObjects
         /// <summary>
@@ -160,9 +164,33 @@ namespace AAC20.GUI
         }
         #endregion
 
-        public IELLabelCommand()
+        /// <summary>
+        /// Толщина границ
+        /// </summary>
+        public Thickness BorderThicknessBlock
+        {
+            get => BorderMain.BorderThickness;
+            set => BorderMain.BorderThickness = value;
+        }
+
+        /// <summary>
+        /// Скруглённость границ
+        /// </summary>
+        public CornerRadius CornerRadius
+        {
+            get => BorderMain.CornerRadius;
+            set => BorderMain.CornerRadius = value;
+        }
+
+        public ILabelAction Label { get; set; }
+
+        public int Index { get; set; }
+
+        public IELLabelCommand(ILabelAction Label, int Index = 0)
         {
             InitializeComponent();
+            this.Label = Label;
+            this.Index = Index;
             AnimationMillisecond = 200;
 
             BorderMain.Background = new SolidColorBrush(Colors.Black);
@@ -171,52 +199,37 @@ namespace AAC20.GUI
             TextBlockName.Foreground = new SolidColorBrush(Colors.Black);
             TextBlockName.Foreground = new SolidColorBrush(Colors.Black);
 
+            TextBlockName.Text = this.Label.Name;
+            TextBlockIndex.Text = $"{Index}";
+
             DefaultBackground = Color.FromRgb(128, 179, 189);
-            DefaultBorderBrush = new RadialGradientBrush(Color.FromRgb(1, 2, 3), Color.FromRgb(69, 98, 127))
-            {
-                RadiusX = 0.8d,
-                RadiusY = 0.8d,
-            };
+            DefaultBorderBrush = Color.FromRgb(69, 98, 127);
             DefaultForeground = Colors.Black;
 
             SelectBackground = Color.FromRgb(111, 199, 173);
-            SelectBorderBrush = new RadialGradientBrush(Colors.White, Color.FromRgb(69, 98, 127))
-            {
-                RadiusX = 0.8d,
-                RadiusY = 0.8d,
-            };
+            SelectBorderBrush = Color.FromRgb(69, 98, 127);
             SelectForeground = Color.FromRgb(0, 80, 60);
 
             ClickedBackground = Color.FromRgb(69, 154, 101);
-            ClickedBorderBrush = new RadialGradientBrush(Color.FromRgb(1, 2, 3), Color.FromRgb(69, 127, 83))
-            {
-                RadiusX = 0.8d,
-                RadiusY = 0.8d,
-            };
+            ClickedBorderBrush = Color.FromRgb(69, 127, 83);
             ClickedForeground = Color.FromRgb(40, 60, 41);
 
             NotEnabledBackground = Color.FromRgb(181, 102, 102);
-            NotEnabledBorderBrush = new RadialGradientBrush(Color.FromRgb(1, 2, 3), Color.FromRgb(255, 90, 90))
-            {
-                RadiusX = 0.8d,
-                RadiusY = 0.8d,
-            };
+            NotEnabledBorderBrush = Color.FromRgb(255, 90, 90);
             NotEnabledForeground = Colors.Black;
 
             IsEnabledChanged += (sender, e) =>
             {
                 Color
                 Foreground = (bool)e.NewValue ? DefaultForeground : NotEnabledForeground,
-                Background = (bool)e.NewValue ? DefaultBackground : NotEnabledBackground;
-                GradientBrush BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush;
+                Background = (bool)e.NewValue ? DefaultBackground : NotEnabledBackground,
+                BorderBrush = (bool)e.NewValue ? DefaultBorderBrush : NotEnabledBorderBrush;
 
                 ButtonAnimationColor.To = Background;
                 BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-                ButtonAnimationColor.To = BorderBrush.GradientStops[0].Color;
-                ((GradientBrush)BorderMain.BorderBrush).GradientStops[0].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
-                ButtonAnimationColor.To = BorderBrush.GradientStops[1].Color;
-                ((GradientBrush)BorderMain.BorderBrush).GradientStops[1].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
+                ButtonAnimationColor.To = BorderBrush;
+                BorderMain.BorderBrush.BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
 
                 ButtonAnimationColor.To = Foreground;
                 TextBlockIndex.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
@@ -247,7 +260,7 @@ namespace AAC20.GUI
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
                     MouseEnterAnimation();
-                    OnActivateMouseLeft?.Invoke(false);
+                    OnActivateMouseLeft?.Invoke();
                 }
             };
 
@@ -256,7 +269,7 @@ namespace AAC20.GUI
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
                     MouseEnterAnimation();
-                    OnActivateMouseRight?.Invoke(false);
+                    OnActivateMouseRight?.Invoke();
                 }
             };
         }
@@ -269,10 +282,8 @@ namespace AAC20.GUI
             ButtonAnimationColor.To = SelectBackground;
             BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-            ButtonAnimationColor.To = SelectBorderBrush.GradientStops[0].Color;
-            ((GradientBrush)BorderMain.BorderBrush).GradientStops[0].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
-            ButtonAnimationColor.To = SelectBorderBrush.GradientStops[1].Color;
-            ((GradientBrush)BorderMain.BorderBrush).GradientStops[1].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
+            ButtonAnimationColor.To = SelectBorderBrush;
+            BorderMain.BorderBrush.BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = SelectForeground;
             TextBlockIndex.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
@@ -290,10 +301,8 @@ namespace AAC20.GUI
             ButtonAnimationColor.To = DefaultBackground;
             BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-            ButtonAnimationColor.To = DefaultBorderBrush.GradientStops[0].Color;
-            ((GradientBrush)BorderMain.BorderBrush).GradientStops[0].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
-            ButtonAnimationColor.To = DefaultBorderBrush.GradientStops[1].Color;
-            ((GradientBrush)BorderMain.BorderBrush).GradientStops[1].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
+            ButtonAnimationColor.To = DefaultBorderBrush;
+            BorderMain.BorderBrush.BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = DefaultForeground;
             TextBlockIndex.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
@@ -312,10 +321,8 @@ namespace AAC20.GUI
             ButtonAnimationColor.To = ClickedBackground;
             BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
 
-            ButtonAnimationColor.To = ClickedBorderBrush.GradientStops[0].Color;
-            ((GradientBrush)BorderMain.BorderBrush).GradientStops[0].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
-            ButtonAnimationColor.To = ClickedBorderBrush.GradientStops[1].Color;
-            ((GradientBrush)BorderMain.BorderBrush).GradientStops[1].BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
+            ButtonAnimationColor.To = ClickedBorderBrush;
+            BorderMain.BorderBrush.BeginAnimation(GradientStop.ColorProperty, ButtonAnimationColor);
 
             ButtonAnimationColor.To = ClickedForeground;
             TextBlockIndex.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);

@@ -1,0 +1,22 @@
+﻿<Page x:Class="AAC20.Windows.Pages.ActionPanel.PageLabelActionPanel"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.Windows.Pages.ActionPanel"
+      xmlns:GUI="clr-namespace:AAC20.GUI"
+      mc:Ignorable="d" 
+      d:DesignHeight="180" d:DesignWidth="150"
+      Title="PageLabelActionPanel">
+
+    <Grid x:Name="GridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <GUI:IELButtonTextKey x:Name="IELButtonExecuteLabel" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Выполнить" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D1" Margin="4,4,4,4"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonChangeLabel" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Изменить" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" CharKeyKeyboard="D2" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonMovingLabel" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Переместить" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" CharKeyKeyboard="D3" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1"/>
+    </Grid>
+</Page>

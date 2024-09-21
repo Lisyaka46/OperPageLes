@@ -1,4 +1,5 @@
 ﻿using AAC20.Interfaces;
+using AAC20.Interfaces.Button;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,19 +23,38 @@ namespace AAC20.Windows.Pages.MainWindow
     public partial class PageUpMainButtons : Page, IPageModuleButtonKeyAAC
     {
         /// <summary>
-        /// Объект данных Alt-режима
+        /// Имя страницы
         /// </summary>
-        private bool _AltMode;
+        public string PageName { get; }
+
+        /// <summary>
+        /// Объект данных режима клавиатуры
+        /// </summary>
+        private bool _KeyboardMode;
+
+        /// <summary>
+        /// Режим клавиатуры
+        /// </summary>
+        public bool KeyboardMode
+        {
+            get => _KeyboardMode;
+            set
+            {
+                _KeyboardMode = value;
+                KeyboardModeChanged.Invoke(value);
+            }
+        }
 
         /// <summary>
         /// Объект события изменения состояния Alt режима
         /// </summary>
-        public IPageModuleButtonKeyAAC.Delegate_AltModeChanged AltModeChanged { get; private set; }
+        public IPageModuleButtonKeyAAC.Delegate_KeyboardModeChanged KeyboardModeChanged { get; private set; }
 
         public PageUpMainButtons()
         {
             InitializeComponent();
-            AltModeChanged = (Mode) =>
+            PageName = nameof(PageUpMainButtons);
+            KeyboardModeChanged = (Mode) =>
             {
                 IELButtonLabel.CharKeyKeyboardActivate = Mode;
                 IELButtonSettings.CharKeyKeyboardActivate = Mode;
@@ -42,30 +62,18 @@ namespace AAC20.Windows.Pages.MainWindow
         }
 
         /// <summary>
-        /// Узнать состояние Alt-режима
-        /// </summary>
-        /// <returns>Состояние</returns>
-        public bool GetAltMode() => _AltMode;
-
-        /// <summary>
-        /// Изменить состояние Alt-режима
-        /// </summary>
-        /// <param name="value">Значение</param>
-        public void SetAltMode(bool value) => _AltMode = value;
-
-        /// <summary>
         /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         /// <param name="Orientation">Ориентация нажатия на кнопку</param>
         public void ActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
-            IIELObjectKey.ActivateButtonInKey(MainGrid, key, Orientation);
+            IIELButtonKey.ActivateButtonInKey(MainGrid, key, Orientation);
 
         /// <summary>
         /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         public void BlinkActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
-            IIELObjectKey.BlinkActivateInKey(MainGrid, key, Orientation);
+            IIELButtonKey.BlinkActivateInKey(MainGrid, key, Orientation);
     }
 }

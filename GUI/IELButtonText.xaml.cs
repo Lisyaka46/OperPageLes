@@ -1,4 +1,5 @@
 ﻿using AAC20.Interfaces;
+using AAC20.Interfaces.Button;
 using Microsoft.Windows.Themes;
 using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
@@ -15,7 +16,7 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELButtonText.xaml
     /// </summary>
-    public partial class IELButtonText : UserControl, IIELObject
+    public partial class IELButtonText : UserControl, IIELButtonDefault
     {
         /// <summary>
         /// Перечисление состояний отображения кнопки
@@ -72,13 +73,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultBorderBrush;
+        private Color? _DefaultBorderBrush;
         /// <summary>
         /// Цвет границы кнопки
         /// </summary>
         public Color DefaultBorderBrush
         {
-            get => _DefaultBorderBrush;
+            get => _DefaultBorderBrush ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -89,13 +90,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultBackground;
+        private Color? _DefaultBackground;
         /// <summary>
         /// Цвет фона кнопки
         /// </summary>
         public Color DefaultBackground
         {
-            get => _DefaultBackground;
+            get => _DefaultBackground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -104,13 +105,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultForeground;
+        private Color? _DefaultForeground;
         /// <summary>
         /// Цвет текста в кнопке
         /// </summary>
         public Color DefaultForeground
         {
-            get => _DefaultForeground;
+            get => _DefaultForeground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -251,27 +252,12 @@ namespace AAC20.GUI
         /// <summary>
         /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public IIELObject.Activate? OnActivateMouseLeft { get; internal set; }
+        public IIELButtonDefault.Activate? OnActivateMouseLeft { get; internal set; }
 
         /// <summary>
         /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public IIELObject.Activate? OnActivateMouseRight { get; internal set; }
-
-        /// <summary>
-        /// Узнать отображения действий над кнопкой
-        /// </summary>
-        /// <returns>Изображение мыши с действиями</returns>
-        private BitmapImage? ImageMouseButton()
-        {
-            if (OnActivateMouseLeft != null)
-            {
-                if (OnActivateMouseRight != null) return new(new Uri("/Windows/WindowsImages/DoubleMouseButton.png", UriKind.Relative));
-                else return new(new Uri("/Windows/WindowsImages/LeftMouseButton.png", UriKind.Relative));
-            }
-            else if (OnActivateMouseRight != null) return new(new Uri("/Windows/WindiwsImages/RightMouseButton.png", UriKind.Relative));
-            else return null;
-        }
+        public IIELButtonDefault.Activate? OnActivateMouseRight { get; internal set; }
 
         /// <summary>
         /// Картинка действий над кнопкой
@@ -317,6 +303,10 @@ namespace AAC20.GUI
             Text = "Text";
             CornerRadius = new CornerRadius(10);
 
+            //BorderButton.BorderBrush = new SolidColorBrush(Colors.Black);
+            //BorderButton.Background = new SolidColorBrush(Colors.Black);
+            //TextBlockButton.Foreground = new SolidColorBrush(Colors.Black);
+
             DefaultBorderBrush = Colors.Black;
             SelectBorderBrush = Colors.DarkGray;
             ClickedBorderBrush = Colors.Gray;
@@ -356,7 +346,7 @@ namespace AAC20.GUI
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
                     MouseEnterAnimation();
-                    OnActivateMouseLeft?.Invoke(false);
+                    OnActivateMouseLeft?.Invoke();
                 }
             };
 
@@ -365,7 +355,7 @@ namespace AAC20.GUI
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
                     MouseEnterAnimation();
-                    OnActivateMouseRight?.Invoke(false);
+                    OnActivateMouseRight?.Invoke();
                 }
             };
 
@@ -400,55 +390,6 @@ namespace AAC20.GUI
                 ButtonAnimationOpacity.To = 0d;
                 ImageMouseButtonsUse.BeginAnimation(OpacityProperty, ButtonAnimationOpacity);
             };
-        }
-
-        /// <summary>
-        /// Найти кнопку типа "IELButtonText" в странице
-        /// </summary>
-        /// <param name="VisualObject">Ссылка на объект поиска</param>
-        /// <param name="key">Ключ клавиши</param>
-        public static T? SearchButton<T>(Visual VisualObject, Key key) where T : IELButtonTextKey
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(VisualObject); i++)
-            {
-                Visual ChildVisualElement = (Visual)VisualTreeHelper.GetChild(VisualObject, i);
-                if (ChildVisualElement.GetType() == typeof(T))
-                {
-                    T Button = (T)ChildVisualElement;
-                    if (Button.CharKeyKeyboard == key && Button.IsEnabled) return Button;
-                }
-                else if (ChildVisualElement.GetType() == typeof(IAddChild)) return SearchButton<T>(ChildVisualElement, key);
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Активировать кнопку типа "IELButtonText" в странице
-        /// </summary>
-        /// <param name="VisualObject">Ссылка на объект поиска</param>
-        /// <param name="key">Ключ клавиши</param>
-        /// <param name="Orientation">Ориентация нажатия</param>
-        public static void ActivateButtonInKey<T>(Visual VisualObject, Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) where T : IELButtonTextKey
-        {
-            T? Button = SearchButton<T>(VisualObject, key);
-            if (Button == null) return;
-            else
-            {
-                if (Orientation == IPageModuleButtonKeyAAC.OrientationActivate.LeftButton) Button.OnActivateMouseLeft?.Invoke(true);
-                else if (Orientation == IPageModuleButtonKeyAAC.OrientationActivate.RightButton) Button.OnActivateMouseRight?.Invoke(true);
-            }
-        }
-
-        /// <summary>
-        /// Активировать мерцание кнопки типа "IELButtonText" в странице
-        /// </summary>
-        /// <param name="VisualObject">Ссылка на объект поиска</param>
-        /// <param name="key">Ключ клавиши</param>
-        public static void BlinkActivateInKey<T>(Visual VisualObject, Key key) where T : IELButtonTextKey
-        {
-            T? Button = SearchButton<T>(VisualObject, key);
-            if (Button == null) return;
-            else Button.BlinkAnimation();
         }
 
         /// <summary>
@@ -517,7 +458,7 @@ namespace AAC20.GUI
 
             if (VisibleMouseImaging)
             {
-                ImageMouse = ImageMouseButton();
+                ImageMouse = IIELObject.ImageMouseButton(OnActivateMouseLeft != null, OnActivateMouseRight != null);
                 if (ImageMouse != null)
                 {
                     ButtonAnimationOpacity.To = 0.4d;

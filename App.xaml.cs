@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Http;
 using AAC20.Classes.Flaging;
+using AAC20.Classes.Labels;
 
 namespace AAC20
 {
@@ -53,6 +54,11 @@ namespace AAC20
                 return Task.FromResult(CommandStateResult.Completed(Command.Name));
             }),
         ];
+
+        /// <summary>
+        /// Массив ярлыков команд
+        /// </summary>
+        internal static readonly ListLabel<LabelAction> DataLabelAction = new();
 
         /// <summary>
         /// Буфер объектов команд

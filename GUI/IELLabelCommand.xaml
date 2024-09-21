@@ -28,7 +28,7 @@
                 <RowDefinition/>
                 <RowDefinition Height="14"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="TextBlockName" Grid.Row="2" TextWrapping="Wrap" Text="TextBlock" FontSize="11" FontWeight="Bold" TextAlignment="Center" Foreground="Black"/>
+            <TextBlock x:Name="TextBlockName" Grid.Row="2" TextWrapping="Wrap" Text="Name" FontSize="11" FontWeight="Bold" TextAlignment="Center" Foreground="Black"/>
             <TextBlock x:Name="TextBlockIndex" Grid.Column="0" TextWrapping="Wrap" Text="0" FontSize="8" TextAlignment="Right" Padding="0,0,2,0" FontFamily="Arial Black"/>
             <Image x:Name="ImageElement" Margin="10,10,10,10" Source="/Windows/WindowsImages/Logo02.png" Grid.Row="1"/>
 

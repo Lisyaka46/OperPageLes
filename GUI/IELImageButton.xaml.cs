@@ -1,4 +1,4 @@
-﻿using AAC20.Interfaces;
+﻿using AAC20.Interfaces.Button;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,16 +10,16 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELImageButton.xaml
     /// </summary>
-    public partial class IELImageButton : UserControl, IIELObject
+    public partial class IELImageButton : UserControl, IIELButtonDefault
     {
         #region Default
-        private Color _DefaultBorderBrush;
+        private Color? _DefaultBorderBrush;
         /// <summary>
         /// Цвет границы
         /// </summary>
         public Color DefaultBorderBrush
         {
-            get => _DefaultBorderBrush;
+            get => _DefaultBorderBrush ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -28,13 +28,13 @@ namespace AAC20.GUI
             }
         }
 
-        private Color _DefaultBackground;
+        private Color? _DefaultBackground;
         /// <summary>
         /// Цвет фона
         /// </summary>
         public Color DefaultBackground
         {
-            get => _DefaultBackground;
+            get => _DefaultBackground ?? Colors.Gold;
             set
             {
                 SolidColorBrush color = new(value);
@@ -153,12 +153,12 @@ namespace AAC20.GUI
         /// <summary>
         /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public IIELObjectKey.Activate? OnActivateMouseLeft { get; internal set; }
+        public IIELButtonDefault.Activate? OnActivateMouseLeft { get; internal set; }
 
         /// <summary>
         /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public IIELObjectKey.Activate? OnActivateMouseRight { get; internal set; }
+        public IIELButtonDefault.Activate? OnActivateMouseRight { get; internal set; }
 
         /// <summary>
         /// Инициализировать объект кнопки с изображением
@@ -219,7 +219,7 @@ namespace AAC20.GUI
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
                     MouseEnterDetect();
-                    OnActivateMouseLeft?.Invoke(false);
+                    OnActivateMouseLeft?.Invoke();
                 }
             };
 
@@ -228,7 +228,7 @@ namespace AAC20.GUI
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
                     MouseEnterDetect();
-                    OnActivateMouseRight?.Invoke(false);
+                    OnActivateMouseRight?.Invoke();
                 }
             };
         }

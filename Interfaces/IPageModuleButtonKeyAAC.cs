@@ -21,40 +21,25 @@ namespace AAC20.Interfaces
         }
 
         /// <summary>
-        /// Узнать состояние Alt-режима <b>Без предварительного события</b>
+        /// Имя страницы
         /// </summary>
-        /// <returns>Состояние</returns>
-        bool GetAltMode();
+        public string PageName { get; }
 
         /// <summary>
-        /// Изменить состояние Alt-режима <b>Без предварительного события</b>
+        /// Объект состояния режима клавиатуры <b>БЕЗ СОБЫТИЯ ИЗМЕНЕНИЯ</b>
         /// </summary>
-        /// <param name="value">Значение</param>
-        void SetAltMode(bool value);
+        public bool KeyboardMode { get; set; }
 
         /// <summary>
-        /// Объект состояния Alt-режима
-        /// </summary>
-        internal sealed bool AltMode
-        {
-            get => GetAltMode();
-            set
-            {
-                SetAltMode(value);
-                AltModeChanged.Invoke(value);
-            }
-        }
-
-        /// <summary>
-        /// Делегат события изменения состояния Alt режима
+        /// Делегат события изменения состояния режима клавиатуры
         /// </summary>
         /// <param name="ModeChanged">Новое значение Alt режима</param>
-        public delegate void Delegate_AltModeChanged(bool ModeChanged);
+        public delegate void Delegate_KeyboardModeChanged(bool ModeChanged);
 
         /// <summary>
-        /// Объект события Alt режима
+        /// Объект события режима клавиатуры
         /// </summary>
-        internal Delegate_AltModeChanged AltModeChanged { get; }
+        internal Delegate_KeyboardModeChanged? KeyboardModeChanged { get; }
 
         /// <summary>
         /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
