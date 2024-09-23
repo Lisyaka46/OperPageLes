@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace AAC20.GUI
 {
@@ -154,6 +155,27 @@ namespace AAC20.GUI
         private readonly ThicknessAnimation ButtonAnimationThickness;
         #endregion
 
+        #region MouseHover
+        /// <summary>
+        /// Длительность задержки в миллисекундах
+        /// </summary>
+        public double IntervalHover
+        {
+            get => TimerBorderInfo.Interval.TotalMilliseconds;
+            set => TimerBorderInfo.Interval = TimeSpan.FromMilliseconds(value);
+        }
+
+        /// <summary>
+        /// Таймер события MouseHover
+        /// </summary>
+        private readonly DispatcherTimer TimerBorderInfo = new();
+
+        /// <summary>
+        /// Событие задержки курсора на элементе
+        /// </summary>
+        public event EventHandler? MouseHover;
+        #endregion
+
         /// <summary>
         /// Изображение которое отображается в кнопке
         /// </summary>
@@ -277,6 +299,12 @@ namespace AAC20.GUI
             AnimationMillisecond = 80;
             ButtonImage.Margin = new Thickness(10, 10, 10, 10);
             CharKeyKeyboardActivate = false;
+            IntervalHover = 1300d;
+            TimerBorderInfo.Tick += (sender, e) =>
+            {
+                MouseHover?.Invoke(this, e);
+                TimerBorderInfo.Stop();
+            };
 
             DefaultBorderBrush = Colors.Black;
             SelectBorderBrush = Colors.DarkGray;

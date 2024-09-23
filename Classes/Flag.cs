@@ -55,8 +55,7 @@ namespace AAC20.Classes.Flaging
             get => _Value;
             set
             {
-                if (_Value == value) return;
-                Wait = false;
+                if (_Value == value || Wait) return;
                 _Value = value;
                 ChangeStateFlag?.Invoke(_Value);
             }

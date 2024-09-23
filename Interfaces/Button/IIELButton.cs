@@ -79,5 +79,15 @@ namespace AAC20.Interfaces.Button
         /// Толщина границ
         /// </summary>
         public Thickness BorderThicknessBlock { get; set; }
+
+        /// <summary>
+        /// Длительность задержки в миллисекундах
+        /// </summary>
+        public double IntervalHover { get; set; }
+
+        /// <summary>
+        /// Событие задержки курсора на элементе
+        /// </summary>
+        public abstract event EventHandler? MouseHover;
     }
 }

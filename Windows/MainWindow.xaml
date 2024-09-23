@@ -8,27 +8,9 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         x:Name="window" x:Class="AAC20.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" Margin="-4,0,0,0">
-    <Grid x:Name="GridMain">
-        <Border x:Name="BorderActionPanel" Panel.ZIndex="2" BorderThickness="2,2,2,2" BorderBrush="#FF153523" CornerRadius="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#AF284234" Width="261" Height="220" Focusable="True" AllowDrop="True" Margin="17,59,0,0" >
-            <Border.FocusVisualStyle>
-                <Style>
-                    <Setter Property="Control.Template" Value="{x:Null}"/>
-                </Style>
-            </Border.FocusVisualStyle>
-            <Grid x:Name="GridActionPanel" MinWidth="175" MinHeight="110" Focusable="True" Margin="5,5,5,5">
-                <Frame x:Name="FrameActionPanelLeft" Grid.ColumnSpan="1" Panel.ZIndex="1"/>
-                <Frame x:Name="FrameActionPanelRight" Grid.ColumnSpan="1"/>
-                <TextBlock x:Name="TextBlockRightButtonIndicatorKey" HorizontalAlignment="Right" TextWrapping="Wrap" Text="CTRL" VerticalAlignment="Bottom" Panel.ZIndex="2" Padding="10,3,10,3" Margin="0,0,-4,-4">
-                    <TextBlock.Background>
-                        <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
-                            <GradientStop Color="#B255A6A7" Offset="0.575"/>
-                            <GradientStop Offset="1" Color="#00922525"/>
-                        </RadialGradientBrush>
-                    </TextBlock.Background>
-                </TextBlock>
-            </Grid>
-        </Border>
+        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" Margin="-4,0,0,0" RenderTransformOrigin="0.5,0.5">
+    <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
+        <GUI:IELActionPanel x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
         <Image x:Name="ImageTest" HorizontalAlignment="Center" Height="200" VerticalAlignment="Center" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Width="200"/>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -106,29 +88,32 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1"/>
+                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1">
+                    </RichTextBox>
                 </Grid>
             </Border>
             <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" CornerRadius="10,10,10,10" Grid.Column="1" Grid.ColumnSpan="1" Margin="3,3,3,3" Background="#CC4A7B60">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="40"/>
-                        <ColumnDefinition Width="371*"/>
-                        <ColumnDefinition Width="34*"/>
+                        <ColumnDefinition Width="43"/>
+                        <ColumnDefinition Width="184*"/>
+                        <ColumnDefinition Width="17*"/>
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Margin="5,5,5,5" Source="/Windows/WindowsImages/WifiOff.png">
-                        <Image.Effect>
-                            <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
-                        </Image.Effect>
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
-                                <SkewTransform AngleY="0"/>
-                                <RotateTransform Angle="0"/>
-                                <TranslateTransform Y="0" X="0"/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Border x:Name="BorderInternetConnection" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF4C8069" Margin="3,3,3,3">
+                        <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/Windows/WindowsImages/WifiOff.png" Margin="-2,0,2,0">
+                            <Image.Effect>
+                                <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
+                            </Image.Effect>
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                                    <SkewTransform AngleY="0"/>
+                                    <RotateTransform Angle="0"/>
+                                    <TranslateTransform Y="0" X="0"/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </Border>
                 </Grid>
             </Border>
             <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C" Grid.ColumnSpan="2"/>
@@ -139,7 +124,7 @@
                     <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Arial Rounded MT Bold" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>
                 </Grid>
             </Border>
-
         </Grid>
+        <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="293,105,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6"/>
     </Grid>
 </Window>

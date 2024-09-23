@@ -56,11 +56,6 @@ namespace AAC20
         ];
 
         /// <summary>
-        /// Массив ярлыков команд
-        /// </summary>
-        internal static readonly ListLabel<LabelAction> DataLabelAction = new();
-
-        /// <summary>
         /// Буфер объектов команд
         /// </summary>
         internal static Interpreter.Classes.Buffer BufferCommand = new(50);
@@ -95,10 +90,14 @@ namespace AAC20
                     {
                         InternetPinging.Wait = true;
                         PingReply reply = ObjPing.SendPingAsync("yandex.ru", 800).Result;
+                        InternetPinging.Wait = false;
                         InternetPinging.Value = reply.Status == IPStatus.Success;
                     }
-                    catch { InternetPinging.Value = false; }
-                    InternetPinging.Wait = false;
+                    catch
+                    {
+                        InternetPinging.Wait = false; 
+                        InternetPinging.Value = false;
+                    }
                     Thread.Sleep(1000);
                 }
             });

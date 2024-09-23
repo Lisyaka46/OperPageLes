@@ -79,7 +79,7 @@ namespace AAC20.Windows.Pages.ActionPanel
             InitializeComponent();
             PageName = nameof(PageBufferActionPanel);
             H = HeightButtonCommand;
-            ScrollBar = new(0, 4);
+            ScrollBar = new(0, 3);
             ScrollBar.ChangedValue += (Value) =>
             {
                 ThicknessAnimationBuffer.To = new(0, 0 - (H + 2) * Value, 0, 0);

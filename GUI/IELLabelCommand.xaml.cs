@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Interpreter.Commands;
 using AAC20.Interfaces.Button;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace AAC20.GUI
 {
@@ -116,6 +117,27 @@ namespace AAC20.GUI
         /// </summary>
         public IIELButtonDefault.Activate? OnActivateMouseRight { get; internal set; }
 
+        #region MouseHover
+        /// <summary>
+        /// Длительность задержки в миллисекундах
+        /// </summary>
+        public double IntervalHover
+        {
+            get => TimerBorderInfo.Interval.TotalMilliseconds;
+            set => TimerBorderInfo.Interval = TimeSpan.FromMilliseconds(value);
+        }
+
+        /// <summary>
+        /// Таймер события MouseHover
+        /// </summary>
+        private readonly DispatcherTimer TimerBorderInfo = new();
+
+        /// <summary>
+        /// Событие задержки курсора на элементе
+        /// </summary>
+        public event EventHandler? MouseHover;
+        #endregion
+
         #region animateObjects
         /// <summary>
         /// Анимация цвета кнопки
@@ -192,6 +214,12 @@ namespace AAC20.GUI
             this.Label = Label;
             this.Index = Index;
             AnimationMillisecond = 200;
+            IntervalHover = 1300d;
+            TimerBorderInfo.Tick += (sender, e) =>
+            {
+                MouseHover?.Invoke(this, e);
+                TimerBorderInfo.Stop();
+            };
 
             BorderMain.Background = new SolidColorBrush(Colors.Black);
             BorderMain.BorderBrush = new RadialGradientBrush(Colors.White, Colors.Black);
@@ -238,18 +266,27 @@ namespace AAC20.GUI
 
             MouseEnter += (sender, e) =>
             {
-                if (IsEnabled) MouseEnterAnimation();
+                if (IsEnabled)
+                {
+                    MouseEnterAnimation();
+                    TimerBorderInfo.Start();
+                }
             };
 
             MouseLeave += (sender, e) =>
             {
-                if (IsEnabled) MouseLeaveAnimation();
+                if (IsEnabled)
+                {
+                    MouseLeaveAnimation();
+                    TimerBorderInfo.Stop();
+                }
             };
 
             MouseDown += (sender, e) =>
             {
                 if (IsEnabled)
                 {
+                    TimerBorderInfo.Stop();
                     if (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ClickDownAnimation();
                     else if (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null) ClickDownAnimation();
                 }
