@@ -42,14 +42,14 @@ namespace AAC20.Interfaces
         internal Delegate_KeyboardModeChanged? KeyboardModeChanged { get; }
 
         /// <summary>
-        /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
+        /// Активировать кнопку в данном элементе типа "IIELButtonKey" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         /// <param name="Orientation">Ориентация нажатия на кнопку</param>
         internal void ActivateIELButtonTextInKey(Key key, OrientationActivate Orientation);
 
         /// <summary>
-        /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
+        /// Активировать мерцание кнопки в данном элементе типа "IIELButtonKey" с помощью клавиши
         /// </summary>
         /// <param name="key">Клавиша</param>
         public void BlinkActivateIELButtonTextInKey(Key key, OrientationActivate Orientation);

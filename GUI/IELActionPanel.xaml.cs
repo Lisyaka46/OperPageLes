@@ -2,6 +2,7 @@
 using AAC20.Classes.Flaging;
 using AAC20.Interfaces;
 using System.Configuration;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -29,19 +30,47 @@ namespace AAC20.GUI
         public bool PanelActionActivate => FlagPanelActionActivate;
 
         /// <summary>
-        /// Флаг состояния режима клавиатуры
+        /// Состояние правого нажатия в режиме клавиатуры
         /// </summary>
-        private readonly Flag FlagActivateKeyboardMode = new(false);
+        private bool ActivateRightClickKeyboardMode = false;
 
         /// <summary>
-        /// Узнать состояние активности режима клавиатуры
+        /// Состояние выделения кнопки через режим клавиатуры
         /// </summary>
-        public bool ActivateKeyboardMode => FlagActivateKeyboardMode;
+        private bool SelectButtonKeyboardMode = false;
 
+        private Key _KeyActivateKeyboardMode;
         /// <summary>
         /// Код клавиши активирующий режим клавиатуры в панели действий
         /// </summary>
-        public Key KeyActivateKeyboardMode { get; set; }
+        public Key KeyActivateKeyboardMode
+        {
+            get => _KeyActivateKeyboardMode;
+            set
+            {
+                if (_KeyKeyboardModeActivateRightClick == value)
+                    throw new InvalidOperationException($"{nameof(KeyActivateKeyboardMode)} " +
+                        $"Нельзя задавать одинаковые значения клавиши this:{_KeyActivateKeyboardMode} - {_KeyKeyboardModeActivateRightClick}");
+                _KeyActivateKeyboardMode = value;
+            }
+        }
+
+        private Key _KeyKeyboardModeActivateRightClick;
+        /// <summary>
+        /// Код клавиши активирующий праввое нажатие в режиме клавиатуры в панели действий
+        /// </summary>
+        public Key KeyKeyboardModeActivateRightClick
+        {
+            get => _KeyKeyboardModeActivateRightClick;
+            set
+            {
+                if (_KeyActivateKeyboardMode == value)
+                    throw new InvalidOperationException($"{nameof(KeyKeyboardModeActivateRightClick)} " +
+                        $"Нельзя задавать одинаковые значения клавиши this:{_KeyKeyboardModeActivateRightClick} - {_KeyActivateKeyboardMode}");
+                _KeyKeyboardModeActivateRightClick = value;
+                TextBlockRightButtonIndicatorKey.Text = IIELObject.KeyName(KeyKeyboardModeActivateRightClick).ToString();
+            }
+        }
 
         /// <summary>
         /// Объект анимации для управления размерами панели действий
@@ -64,9 +93,14 @@ namespace AAC20.GUI
         List<(IPageModuleButtonKeyAAC, string)> BufferPages = [];
 
         /// <summary>
+        /// Объект актуальной страницы
+        /// </summary>
+        private IPageModuleButtonKeyAAC ActualPage => (IPageModuleButtonKeyAAC)ActualFrame.Content;
+
+        /// <summary>
         /// Объект предыдущей страницы
         /// </summary>
-        private IPageModuleButtonKeyAAC RefBackPage => (IPageModuleButtonKeyAAC)BackFrame.Content;
+        private IPageModuleButtonKeyAAC BackPage => (IPageModuleButtonKeyAAC)BackFrame.Content;
 
         /// <summary>
         /// Объект актуального окна страницы
@@ -103,6 +137,58 @@ namespace AAC20.GUI
         {
             InitializeComponent();
             KeyActivateKeyboardMode = Key.Z;
+            KeyKeyboardModeActivateRightClick = Key.RightCtrl;
+            TextBlockRightButtonIndicatorKey.Opacity = 0d;
+            KeyDown += (sender, e) =>
+            {
+                if (!FlagPanelActionActivate) return;
+                if (e.Key == KeyKeyboardModeActivateRightClick && ActualPage.KeyboardMode)
+                {
+                    AnimTextBlockRightClick(true);
+                }
+                else
+                {
+                    if (ActualPage.KeyboardMode && !SelectButtonKeyboardMode)
+                    {
+                        SelectButtonKeyboardMode = true;
+                        ActualPage.BlinkActivateIELButtonTextInKey(e.Key, ActivateRightClickKeyboardMode ?
+                            IPageModuleButtonKeyAAC.OrientationActivate.RightButton : IPageModuleButtonKeyAAC.OrientationActivate.LeftButton);
+                    }
+                }
+            };
+            KeyUp += (sender, e) =>
+            {
+                if (!FlagPanelActionActivate) return;
+                if (e.Key == KeyActivateKeyboardMode)
+                {
+                    ActualPage.KeyboardMode = !ActualPage.KeyboardMode;
+                    if (ActivateRightClickKeyboardMode) AnimTextBlockRightClick(false);
+                }
+                else if (e.Key == KeyKeyboardModeActivateRightClick && ActualPage.KeyboardMode)
+                {
+                    AnimTextBlockRightClick(false);
+                }
+                else
+                {
+                    if (ActualPage.KeyboardMode && SelectButtonKeyboardMode)
+                    {
+                        SelectButtonKeyboardMode = false;
+                        ActualPage.ActivateIELButtonTextInKey(e.Key, ActivateRightClickKeyboardMode ?
+                            IPageModuleButtonKeyAAC.OrientationActivate.RightButton : IPageModuleButtonKeyAAC.OrientationActivate.LeftButton);
+                    }
+                }
+            };
+            LostFocus += (sender, e) => ClosePanelAction(PositionAnimActionPanel.CenterObject);
+        }
+
+        /// <summary>
+        /// Анимировать текст правого нажатия по кнопке в панели действий
+        /// </summary>
+        private void AnimTextBlockRightClick(bool StateParam)
+        {
+            ActivateRightClickKeyboardMode = StateParam;
+            DoubleAnimateObj.To = ActivateRightClickKeyboardMode ? 1d : 0d;
+            TextBlockRightButtonIndicatorKey.BeginAnimation(OpacityProperty, DoubleAnimateObj);
         }
 
         /// <summary>
@@ -116,12 +202,15 @@ namespace AAC20.GUI
             {
                 if (!ActiveObject.ElementInPanel.Name.Equals(Settings.ElementInPanel.Name))
                 {
+                    double X = Mouse.GetPosition((IInputElement)VisualParent).X;
                     if (Settings.ElementInPanel.ActualWidth < Settings.SizedPanel.Width)
                         Settings.SizedPanel = new(Settings.ElementInPanel.ActualWidth, Settings.SizedPanel.Height);
                     if (Settings.ElementInPanel.ActualHeight < Settings.SizedPanel.Height)
                         Settings.SizedPanel = new(Settings.SizedPanel.Width, Settings.ElementInPanel.ActualHeight);
                     AddBufferElementPageAction(ActiveObject);
-                    NextPageInActtionPanel(BufferSearchDefaultPage(Settings.ElementInPanel.Name) ?? Settings.DefaultPageInPanel);
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(360d);
+                    NextPageInActtionPanel(BufferSearchDefaultPage(Settings.ElementInPanel.Name) ?? Settings.DefaultPageInPanel, X >= Margin.Left);
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
                     AnimateSizePanelAction(Settings.SizedPanel);
                     ActiveObject = Settings;
                 }
@@ -158,6 +247,8 @@ namespace AAC20.GUI
             if (!FlagPanelActionActivate) return;
 
             DoubleAnimateObj.To = 0d;
+            if (ActivateRightClickKeyboardMode) ActivateRightClickKeyboardMode = false;
+            if (ActualPage.KeyboardMode) ActualPage.KeyboardMode = false;
             BeginAnimation(OpacityProperty, DoubleAnimateObj);
             AnimationMovePanelAction(PositionAnim, new(0, 0), ActiveObject.ElementInPanel);
             AnimateSizePanelAction(new(0, 0));
@@ -185,7 +276,8 @@ namespace AAC20.GUI
             ActualFrame.IsEnabled = true;
             ActualFrame.BeginAnimation(MarginProperty, null);
             ActualFrame.Margin = !RightAlign ? new(-20, -20, 40, -3) : new(40, -10, -20, -3);
-            Content.KeyboardMode = RefBackPage.KeyboardMode;
+            Content.KeyboardMode = BackPage.KeyboardMode;
+            BackPage.KeyboardMode = false;
             ActualFrame.Navigate(Content);
 
             DoubleAnimateObj.To = 0d;

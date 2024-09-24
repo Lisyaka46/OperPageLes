@@ -54,11 +54,12 @@ namespace AAC20.Windows.Pages.Other
             {
                 Width = 80,
                 Height = 80,
-                Margin = new(40, (80 + 10) * ObjectsLabel.Count, 0, 0),
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                //Margin = new(40, 80 * ObjectsLabel.Count + 10, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
                 ContextMenu = null,
                 IntervalHover = 800d,
+                Opacity = 1d
             };
             /*Label.OnActivateMouseLeft += () =>
             {

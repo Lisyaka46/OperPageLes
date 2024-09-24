@@ -1,4 +1,5 @@
 ﻿using AAC20.Classes.Flaging;
+using AAC20.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +11,7 @@ namespace AAC20.GUI
     /// <summary>
     /// Логика взаимодействия для IELBlockMessage.xaml
     /// </summary>
-    public partial class IELBlockMessage : UserControl
+    public partial class IELBlockMessage : UserControl, IIELObject
     {
         #region Flags
         /// <summary>

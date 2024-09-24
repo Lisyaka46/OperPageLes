@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,7 +56,8 @@ namespace AAC20.Classes.Flaging
             get => _Value;
             set
             {
-                if (_Value == value || Wait) return;
+                if (Wait) throw new Exception("Состояние флага изменить невозможно в состоянии ожидания!");
+                if (_Value == value) return;
                 _Value = value;
                 ChangeStateFlag?.Invoke(_Value);
             }

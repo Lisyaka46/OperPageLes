@@ -10,6 +10,7 @@ using System.Net.NetworkInformation;
 using System.Net.Http;
 using AAC20.Classes.Flaging;
 using AAC20.Classes.Labels;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AAC20
 {
@@ -66,14 +67,9 @@ namespace AAC20
         internal static MainWindow MainWindowApplication => (MainWindow)Current.MainWindow;
 
         /// <summary>
-        /// Объект пинговки сайта
-        /// </summary>
-        private readonly Ping ObjPing = new();
-
-        /// <summary>
         /// Поток обновляемый данные интернета
         /// </summary>
-        private readonly Thread ThreadInternetCheckConnection;
+        private readonly ThreadGenericWhileProcess ThreadInternetCheckConnection;
 
         /// <summary>
         /// Состояние подключения к интернету
@@ -82,25 +78,7 @@ namespace AAC20
 
         public App()
         {
-            ThreadInternetCheckConnection = new Thread(delegate ()
-            {
-                while (true)
-                {
-                    try
-                    {
-                        InternetPinging.Wait = true;
-                        PingReply reply = ObjPing.SendPingAsync("yandex.ru", 800).Result;
-                        InternetPinging.Wait = false;
-                        InternetPinging.Value = reply.Status == IPStatus.Success;
-                    }
-                    catch
-                    {
-                        InternetPinging.Wait = false; 
-                        InternetPinging.Value = false;
-                    }
-                    Thread.Sleep(1000);
-                }
-            });
+            ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
             ThreadInternetCheckConnection.Start();
         }
 
@@ -113,6 +91,24 @@ namespace AAC20
             Current.Shutdown(0);
         }
 
+        //
+        private static void CheckInternetConnection()
+        {
+            Ping ObjPing = new();
+            try
+            {
+                InternetPinging.Wait = true;
+                PingReply reply = ObjPing.SendPingAsync("yandex.ru", 800).Result;
+                InternetPinging.Wait = false;
+                InternetPinging.Value = reply.Status == IPStatus.Success;
+            }
+            catch
+            {
+                InternetPinging.Wait = false;
+                InternetPinging.Value = false;
+            }
+        }
+
         /// <summary>
         /// Точка входа в программу
         /// </summary>
@@ -121,6 +117,10 @@ namespace AAC20
         {
             //base.OnStartup(e);
             Current.MainWindow = new MainWindow();
+            Current.Exit += (sender, e) =>
+            {
+                ThreadInternetCheckConnection.Kill();
+            };
             MainWindowApplication.Show();
         }
     }

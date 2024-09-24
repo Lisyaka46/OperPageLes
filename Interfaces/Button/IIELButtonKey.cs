@@ -57,7 +57,12 @@ namespace AAC20.Interfaces.Button
                 }
                 catch
                 {
-                    if (ChildVisualElement.GetType() == typeof(IAddChild)) return SearchButton(ChildVisualElement, key);
+                    if (ChildVisualElement.GetType().Name.Equals("Grid"))
+                    {
+                        IIELButtonKey? Returing = SearchButton(ChildVisualElement, key);
+                        if (Returing != null) return Returing;
+                        else continue;
+                    }
                 }
             }
             return null;

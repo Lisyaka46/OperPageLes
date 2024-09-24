@@ -5,16 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AAC20.Windows.Pages.Other"
       xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Pages.Other.PageLabels"
-      mc:Ignorable="d" 
-      d:DesignHeight="180" d:DesignWidth="150"
-      Title="PageLabels">
+      mc:Ignorable="d"
+      Title="PageLabels" Background="#FFE45454">
 
     <Grid>
         <Grid x:Name="GridMain">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="20*"/>
-            </Grid.ColumnDefinitions>
+            <TextBlock TextWrapping="Wrap" Text="TextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
     </Grid>

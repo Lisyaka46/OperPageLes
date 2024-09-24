@@ -1,15 +1,15 @@
 ﻿using AAC20.Classes;
 using AAC20.Classes.Flaging;
 using AAC20.GUI;
-using AAC20.Interfaces;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
 using AAC20.Windows.Pages.MainWindow;
 using AAC20.Windows.Pages.Other;
 using Interpreter.Commands;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,12 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.Xml.Linq;
-using System.IO;
-using System.Diagnostics;
-using System;
 //using System.Windows.Forms;
 
 namespace AAC20
@@ -40,11 +35,6 @@ namespace AAC20
         /// </summary>
         private readonly struct Flags
         {
-            /// <summary>
-            /// Флаг активации правого нажатия с помощью кнопки CTRL в панели действий
-            /// </summary>
-            internal static readonly Flag FlagCtrlActivateActionButtonAltMode = new(false);
-
             /// <summary>
             /// Флаг активации правого нажатия с помощью кнопки CTRL в верхней панели кнопок
             /// </summary>
@@ -311,11 +301,11 @@ namespace AAC20
             #endregion
 
             #region Event Flags
-            Flags.FlagCtrlActivateActionButtonAltMode.ChangeStateFlag += (NewValue) =>
+            /*Flags.FlagCtrlActivateActionButtonAltMode.ChangeStateFlag += (NewValue) =>
             {
                 DoubleAnimateObj.To = NewValue ? 1d : 0d;
                 //TextBlockRightButtonIndicatorKey.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            };
+            };*/
             Flags.FlagCtrlActivateActionButtonUp.ChangeStateFlag += (NewValue) =>
             {
                 DoubleAnimateObj.To = NewValue ? 1d : 0d;
@@ -368,13 +358,11 @@ namespace AAC20
             };
             Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseLeft += (key) =>
             {
-                Canvas.SetZIndex(TextBlockNullFrameElement, -1);
                 FrameComponent.Navigate(Pages.PageObjLabelsAction);
                 
             };
             Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseRight += (key) =>
             {
-                Canvas.SetZIndex(TextBlockNullFrameElement, -1);
                 FrameComponent.Navigate(null);
 
             };
@@ -389,13 +377,14 @@ namespace AAC20
             FrameButtonsUp.Navigate(Pages.PageMainButtonsUp);
             TextBlockRightButtonIndicatorKeyButtonsUp.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
+            IELActionPanelMain.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(250d, 230d));
 
 
             ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
-            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction();
+            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
             App.BufferCommand.DelElement += (index) =>
@@ -624,7 +613,7 @@ namespace AAC20
 
             Activated += (sender, e) =>
             {
-                TextBoxCommandInput.Focus();
+                //TextBoxCommandInput.Focus();
                 /*GridMain.RenderTransform = new TransformGroup()
                 {
                     Children = [

@@ -49,7 +49,7 @@
             </Border>
             <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60">
                 <Grid>
-                    <Frame x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" NavigationUIVisibility="Hidden"/>
+                    <Frame x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" NavigationUIVisibility="Hidden" Source="/Windows/Pages/Other/PageLabels.xaml" Background="#FFB98F8F"/>
                     <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16" Panel.ZIndex="1"/>
                     <!--<GUI:IELLabelCommand x:Name="Test" HorizontalAlignment="Left" Margin="79,309,0,0" VerticalAlignment="Top" Height="79" Width="73" SelectBackground="#FF38B8ED" SelectForeground="#FF02212B" ClickedBackground="#FF00CAFF" ClickedForeground="#FF00143A" DefaultBackground="#FF659098" AnimationMillisecond="120">
                         <GUI:IELLabelCommand.DefaultBorderBrush>
