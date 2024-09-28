@@ -4,12 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AAC20.Windows.Pages.MainWindow"
-      xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Pages.MainWindow.PageUpMainButtons"
+      x:Class="AAC20.Windows.Pages.MainWindow.PageUpMainButtons"
+      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
       mc:Ignorable="d" 
       d:DesignHeight="70.482" d:DesignWidth="547"
       Title="PageUpMainButtons">
 
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="GridMain">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="218*"/>
             <ColumnDefinition Width="329*"/>

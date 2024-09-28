@@ -1,6 +1,5 @@
 ﻿using AAC20.Classes;
 using AAC20.Classes.Flaging;
-using AAC20.GUI;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
@@ -21,6 +20,8 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 //using System.Windows.Forms;
+using IEL.Interfaces.Core;
+using IEL;
 
 namespace AAC20
 {
@@ -71,22 +72,6 @@ namespace AAC20
             /// </summary>
             internal static readonly PageLabels PageObjLabelsAction = new();
 
-        }
-
-        /// <summary>
-        /// Перечисление вариаций вычисления позиций панели действий
-        /// </summary>
-        public enum PositionAnimActionPanel
-        {
-            /// <summary>
-            /// Обычное вычисление по курсору
-            /// </summary>
-            Default = 0,
-
-            /// <summary>
-            /// Вычисление цента объекта
-            /// </summary>
-            CenterObject = 1,
         }
 
         /// <summary>
@@ -193,12 +178,14 @@ namespace AAC20
                 new ConsoleCommand("label",
                 [
                     new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
-                    new Parameter("Description", typeof(string), "Default")
+                    new Parameter("Description", typeof(string), string.Empty)
                 ],
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"",
                 (Command, param) =>
                 {
                     Pages.PageObjLabelsAction.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
+                    CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
+                    Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -334,12 +321,12 @@ namespace AAC20
 
             Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
             {
-                IELActionPanelMain.NextPageInActtionPanel(Pages.PageBufferActPanel);
+                IELActionPanelMain.NextPage(Pages.PageBufferActPanel);
             };
 
             Pages.PageBufferActPanel.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
             {
-                IELActionPanelMain.NextPageInActtionPanel(Pages.PageMainActPanel, false);
+                IELActionPanelMain.NextPage(Pages.PageMainActPanel, false);
             };
 
             Pages.PageMainActPanel.IELButtonDiscriptionCommand.OnActivateMouseLeft += (Key) =>
@@ -370,21 +357,20 @@ namespace AAC20
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
-            //ImageTest.Source = new BitmapImage(new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"));
             ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
-            //ImageInternetConnection.Source = new BitmapImage(new Uri("/Windows/WindowsImages/WifiOn.png", UriKind.Relative));
             BackgroundUpdateVisualData();
             FrameButtonsUp.Navigate(Pages.PageMainButtonsUp);
             TextBlockRightButtonIndicatorKeyButtonsUp.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
+            FrameComponent.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(250d, 230d));
 
 
             ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
-            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
             App.BufferCommand.DelElement += (index) =>
@@ -400,7 +386,7 @@ namespace AAC20
                 for (int i = index; i < App.BufferCommand.Count; i++)
                 {
                     IELButtonCommand Button = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
-                    Button.TextBlockNumberCommand.Text = $"#{i + 1}";
+                    //Button.TextBlockNumberCommand.Text = $"#{i + 1}";
                     Button.IndexElement--;
                     AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
                     AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
@@ -414,17 +400,9 @@ namespace AAC20
                 Pages.PageBufferActPanel.ScrollBar.MaxClear();
             };
 
-            /*BorderActionPanel.KeyDown += (sender, e) =>
+            IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                if (RefPageActionPanel.KeyboardMode && e.Key != Key.Z && e.Key != Key.RightCtrl && !Flags.ActivateButtonAltMode.Value)
-                {
-                    RefPageActionPanel.BlinkActivateIELButtonTextInKey(e.Key,
-                        Flags.FlagCtrlActivateActionButtonAltMode.Value ?
-                        IPageModuleButtonKeyAAC.OrientationActivate.RightButton :
-                        IPageModuleButtonKeyAAC.OrientationActivate.LeftButton);
-                    Flags.ActivateButtonAltMode.Value = true;
-                }
-                if (e.Key == Key.RightCtrl && RefPageActionPanel.KeyboardMode) Flags.FlagCtrlActivateActionButtonAltMode.Value = true;
+                TextBoxCommandInput.Focus();
             };
 
             /*BorderActionPanel.KeyUp += (sender, e) =>
@@ -456,15 +434,15 @@ namespace AAC20
                 Flags.ActivateButtonAltMode.Value = false;
             };*/
 
-            TextBoxCommandInput.GotFocus += (sender, e) =>
+            /*TextBoxCommandInput.GotFocus += (sender, e) =>
             {
-                if (Pages.PageMainButtonsUp.KeyboardMode) Pages.PageMainButtonsUp.KeyboardMode = false;
-                /*if (Flags.ActionPanelActivate.Value)
+                if (Pages.PageMainButtonsUp.ModulePage.KeyboardMode) Pages.PageMainButtonsUp.ModulePage.KeyboardMode = false;
+                if (Flags.ActionPanelActivate.Value)
                 {
                     AnimationActionPanel(false, RichTextBoxMainMessage, SizeActiveActionPanel, PositionAnimActionPanel.CenterObject);
                     Flags.FlagCtrlActivateActionButtonAltMode.Value = false;
-                }*/
-            };
+                }
+            };*/
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
@@ -494,7 +472,7 @@ namespace AAC20
                         IELActionPanelMain.UsingPanelAction(SettingsMain);
                         break;
                     case Key.RightCtrl:
-                        Pages.PageMainButtonsUp.KeyboardMode = true;
+                        Pages.PageMainButtonsUp.ModulePage.KeyboardMode = true;
                         BorderButtonsUp.Focus();
                         return;
                     default:
@@ -504,47 +482,9 @@ namespace AAC20
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
             };
 
-            /*BorderButtonsUp.KeyDown += (sender, e) =>
-            {
-                if (Flags.ActivateButtonAltMode.Value) return;
-                switch (e.Key)
-                {
-                    case Key.RightCtrl:
-                        Flags.FlagCtrlActivateActionButtonUp.Value = true;
-                        break;
-                    default:
-                        Flags.ActivateButtonAltMode.Value = true;
-                        Pages.PageMainButtonsUp.BlinkActivateIELButtonTextInKey(e.Key,
-                        Flags.FlagCtrlActivateActionButtonUp ?
-                        IPageModuleButtonKeyAAC.OrientationActivate.RightButton : IPageModuleButtonKeyAAC.OrientationActivate.LeftButton);
-                        break;
-                }
-            };*/
-
-            /*BorderButtonsUp.KeyUp += (sender, e) =>
-            {
-                switch (e.Key)
-                {
-                    case Key.Escape:
-                        Pages.PageMainButtonsUp.KeyboardMode = false;
-                        TextBoxCommandInput.Focus();
-                        break;
-                    case Key.RightCtrl:
-                        if (!Flags.ActivateButtonAltMode.Value) Flags.FlagCtrlActivateActionButtonUp.Value = false;
-                        break;
-                    default:
-                        Pages.PageMainButtonsUp.ActivateIELButtonTextInKey(e.Key,
-                        Flags.FlagCtrlActivateActionButtonUp ?
-                        IPageModuleButtonKeyAAC.OrientationActivate.RightButton : IPageModuleButtonKeyAAC.OrientationActivate.LeftButton);
-                        Flags.FlagCtrlActivateActionButtonUp.Value = false;
-                        break;
-                }
-                Flags.ActivateButtonAltMode.Value = false;
-            };*/
-
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+                if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.FlagPanelActionActivate) IELActionPanelMain.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right) IELActionPanelMain.UsingPanelAction(SettingsMain);
             };
 
@@ -555,7 +495,7 @@ namespace AAC20
 
             BorderInternetConnection.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(BorderInternetConnection, Flags.FlagInternetConnection ?
+                IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, Flags.FlagInternetConnection ?
                     "Есть подключение к интернету" : "Нет подключения к интернету",
                     IELBlockMessage.OrientationBorderInfo.RightUp);
             };
@@ -602,14 +542,43 @@ namespace AAC20
 
             FrameComponent.Navigating += (sender, e) =>
             {
-                DoubleAnimateObj.To = e.Content == null ? 1d : 0d;
+                void SetZIndex(object? INsender, EventArgs INe)
+                {
+                    int Z = e.Content == null ? 1 : 0;
+                    Canvas.SetZIndex(FrameComponent, e.Content == null ? 0 : 1);
+                    Canvas.SetZIndex(TextBlockNullFrameElement, Z);
+                    TextBlockNullFrameElement.Opacity = Z;
+                    DoubleAnimateObj.Completed -= SetZIndex;
+                    DoubleAnimateObj.FillBehavior = FillBehavior.HoldEnd;
+                }
+                bool NavigaitedPage = e.Content != null;
+                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1300d);
+                DoubleAnimateObj.To = NavigaitedPage ? 1d : 0d;
+                FrameComponent.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                if (NavigaitedPage)
+                {
+                    DoubleAnimateObj.To = 0d;
+                    DoubleAnimateObj.FillBehavior = FillBehavior.Stop;
+                    DoubleAnimateObj.Completed += SetZIndex;
+                }
+                else
+                {
+                    DoubleAnimateObj.To = 1d;
+                }
                 TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
+                /*if (TextBlockNullFrameElement.Opacity < 1d && e.Content != null) return;
+                if (e.Content != null)
+                {
+                    FrameComponent.Opacity = 0d;
+                    DoubleAnimateObj.To = 1d;
+                    FrameComponent.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                }
+                DoubleAnimateObj.To = e.Content == null ? 1d : 0d;
+                DoubleAnimateObj.FillBehavior = FillBehavior.Stop;
+                DoubleAnimateObj.Completed += SetZIndex;
+                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);*/
             };
-
-            //Test.OnActivateMouseRight += (Key) =>
-            //{
-                //Test.IsEnabled = false;
-            //};
 
             Activated += (sender, e) =>
             {
@@ -641,13 +610,13 @@ namespace AAC20
         /// <param name="CommandString">Ктрока команды</param>
         private void ActivateActionCommand(string CommandString)
         {
-            IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            //IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
-            TextBoxCommandInput.Text = string.Empty;
+            //TextBoxCommandInput.Text = string.Empty;
             ConsoleCommand? Command = ConsoleCommand.ReadCommand([.. App.DataConsoleCommand], CommandString);
             string Name = ConsoleCommand.ReadNameCommand(CommandString);
             string[] Parameters = ConsoleCommand.ReadParametersCommand(CommandString);
-            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
+            //Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
             if (App.BufferCommand.Count < App.BufferCommand.Length)
             {
                 IELButtonCommand Button = new(Name, CommandString, App.BufferCommand.Count)
@@ -658,10 +627,10 @@ namespace AAC20
                 Button.OnActivateRightButtonMouse += () =>
                 {
                     App.BufferCommand.Delete(Button.IndexElement);
-                    Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
-                    if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
+                    //Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+                    //if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
                 };
-                Button.TextBlockNumberCommand.Text = $"#{App.BufferCommand.Count + 1}";
+                //Button.TextBlockNumberCommand.Text = $"#{App.BufferCommand.Count + 1}";
                 App.BufferCommand.Add(CommandString);
                 Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
                 Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
@@ -675,13 +644,13 @@ namespace AAC20
                     RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
                     IELButtonCommand NextButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i + 1];
                     RealButton.Text = NextButton.Text;
-                    RealButton.TextBlockButtonCommand.Text = NextButton.TextBlockButtonCommand.Text;
+                    //RealButton.TextBlockButtonCommand.Text = NextButton.TextBlockButtonCommand.Text;
                 }
                 RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[^1];
                 RealButton.Text = Name;
-                RealButton.TextBlockButtonCommand.Text = CommandString;
+                //RealButton.TextBlockButtonCommand.Text = CommandString;
             }
-            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+            //Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters));
         }
 
@@ -713,14 +682,16 @@ namespace AAC20
             TextBlockData.Text = RealData;
             if (!App.InternetPinging.Wait)
             {
-                if (IELMessageMain.FlagMessage && Flags.FlagInternetConnection.Value != App.InternetPinging)
+                /*
+                if (IELMessageMain.FlagMessage && Flags.FlagInternetConnection.Value != App.InternetPinging &&
+                    IELMessageMain.NameParentObject.Equals(BorderInternetConnection.Name))
                 {
                     IELMessageMain.Opacity = 0d;
                     IELMessageMain.FlagMessage.Value = false;
-                    IELMessageMain.UsingBorderInformation(BorderInternetConnection, App.InternetPinging ?
+                    IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, App.InternetPinging ?
                     "Есть подключение к интернету" : "Нет подключения к интернету",
                     IELBlockMessage.OrientationBorderInfo.RightUp);
-                }
+                }*/
                 Flags.FlagInternetConnection.Value = App.InternetPinging;
             }
         }

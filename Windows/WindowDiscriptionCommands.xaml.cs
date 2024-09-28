@@ -1,11 +1,11 @@
 ﻿using AAC20.Classes.Flaging;
-using AAC20.GUI;
 using Interpreter.Commands;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using IEL;
 
 namespace AAC20.Windows
 {
@@ -52,7 +52,7 @@ namespace AAC20.Windows
             int i = 0;
             foreach (ConsoleCommand commandAAC in App.DataConsoleCommand)
             {
-                GUI.IELButtonText Button = GenerateCommandButton();
+                IELButtonText Button = GenerateCommandButton();
                 Button.Margin = new(3, 32 * i++ + 4, 3, 0);
                 Button.Text = commandAAC.Name;
                 Button.OnActivateMouseLeft += () => DetectNewDiscriptionCommand(commandAAC);
@@ -60,11 +60,7 @@ namespace AAC20.Windows
             }
             Closing += (sender, e) =>
             {
-                if (App.MainWindowApplication != null)
-                { 
-                    App.MainWindowApplication.Activate();
-                    App.MainWindowApplication.WindowState = WindowState.Normal;
-                }
+                App.MainWindowApplication?.Activate();
                 App.AppWindows.DiscriptionCommands = null;
             };
             IELButtonInfoParameter.MouseUp += (sender, e) =>
@@ -105,7 +101,7 @@ namespace AAC20.Windows
                 {
                     Button = (IELButtonText)GridElements.Children[Index];
                     Button.DefaultBackground = AnimationColor.To ?? default;
-                    Button.BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
+                    //Button.BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
                 }
             };
             IELButtonSearchCommand.MouseRightButtonUp += (sender, e) =>
@@ -117,7 +113,7 @@ namespace AAC20.Windows
                     Button = (IELButtonText)Element;
                     if (Button.DefaultBackground == AnimationColor.To) continue;
                     Button.DefaultBackground = AnimationColor.To ?? default;
-                    Button.BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
+                    //Button.BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
                 }
             };
         }
@@ -157,9 +153,9 @@ namespace AAC20.Windows
         /// Сгенерировать кнопку команнды описания
         /// </summary>
         /// <returns>Кнопка команды</returns>
-        private static GUI.IELButtonText GenerateCommandButton()
+        private static IELButtonText GenerateCommandButton()
         {
-            return new GUI.IELButtonText()
+            return new IELButtonText()
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Top,

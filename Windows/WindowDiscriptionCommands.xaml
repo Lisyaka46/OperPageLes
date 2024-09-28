@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AAC20.Windows"
-        xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.WindowDiscriptionCommands"
+        xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+        x:Class="AAC20.Windows.WindowDiscriptionCommands"
         mc:Ignorable="d"
         Title="Описание всех команд" Height="450" Width="850" Icon="/Windows/WindowsImages/LogoDC.png" WindowStartupLocation="CenterOwner" Background="#FF527562" MinWidth="720" MinHeight="400">
     <Grid>

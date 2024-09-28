@@ -1,83 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using AAC20.Classes;
-using AAC20.GUI;
-using AAC20.Interfaces;
-using AAC20.Interfaces.Button;
-using AAC20.Windows.Pages.MainWindow;
+﻿using System.Windows.Controls;
+using IEL.Interfaces.Core;
+using IEL;
+using IEL.Classes;
 
 namespace AAC20.Windows.Frames
 {
     /// <summary>
     /// Логика взаимодействия для PageMainActionPanel.xaml
     /// </summary>
-    public partial class PageMainActionPanel : Page, IPageModuleButtonKeyAAC
+    public partial class PageMainActionPanel : Page, IPageKey
     {
         /// <summary>
-        /// Имя страницы
+        /// Модуль страницы
         /// </summary>
-        public string PageName { get; }
+        public ModulePageKey ModulePage { get; }
 
         /// <summary>
-        /// Объект данных режима клавиатуры
+        /// Главная страница компонента
         /// </summary>
-        private bool _KeyboardMode;
-
-        /// <summary>
-        /// Режим клавиатуры
-        /// </summary>
-        public bool KeyboardMode
-        {
-            get => _KeyboardMode;
-            set
-            {
-                _KeyboardMode = value;
-                KeyboardModeChanged.Invoke(value);
-            }
-        }
-
-        /// <summary>
-        /// Объект события изменения состояния Alt режима
-        /// </summary>
-        public IPageModuleButtonKeyAAC.Delegate_KeyboardModeChanged KeyboardModeChanged { get; private set; }
+        public Grid MainGrid => GridMain;
 
         public PageMainActionPanel()
         {
             InitializeComponent();
-            PageName = nameof(PageMainActionPanel);
-            KeyboardModeChanged = (Mode) =>
+            ModulePage = new(nameof(PageMainActionPanel))
             {
-                IELButtonCrearConsole.CharKeyKeyboardActivate = Mode;
-                IELButtonCommandBuffer.CharKeyKeyboardActivate = Mode;
-                IELButtonDiscriptionCommand.CharKeyKeyboardActivate = Mode;
+                KeyboardModeChanged = (Mode) =>
+                {
+                    IELButtonCrearConsole.CharKeyKeyboardActivate = Mode;
+                    IELButtonCommandBuffer.CharKeyKeyboardActivate = Mode;
+                    IELButtonDiscriptionCommand.CharKeyKeyboardActivate = Mode;
+                }
             };
         }
-
-        /// <summary>
-        /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
-        /// </summary>
-        /// <param name="key">Клавиша</param>
-        /// <param name="Orientation">Ориентация нажатия на кнопку</param>
-        public void ActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
-            IIELButtonKey.ActivateButtonInKey(MainGrid, key, Orientation);
-
-        /// <summary>
-        /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
-        /// </summary>
-        /// <param name="key">Клавиша</param>
-        public void BlinkActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
-            IIELButtonKey.BlinkActivateInKey(MainGrid, key, Orientation);
     }
 }

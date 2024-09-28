@@ -1,16 +1,10 @@
 ﻿using AAC20.Classes;
-using Interpreter.Commands;
-using AAC20.Windows;
-using System.Diagnostics;
-using System.Windows;
-using System.Runtime.InteropServices;
-using System.Globalization;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Http;
 using AAC20.Classes.Flaging;
-using AAC20.Classes.Labels;
-using System.Security.Cryptography.X509Certificates;
+using AAC20.Windows;
+using Interpreter.Commands;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Windows;
 
 namespace AAC20
 {

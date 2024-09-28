@@ -1,51 +1,28 @@
 ﻿using AAC20.Classes;
-using AAC20.GUI;
-using AAC20.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media.Animation;
-using AAC20.Interfaces.Button;
-using System.Windows.Media;
-using AAC20.Windows.Pages.MainWindow;
+using IEL.Interfaces.Core;
+using IEL;
+using IEL.Classes;
 
 namespace AAC20.Windows.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
     /// </summary>
-    public partial class PageBufferActionPanel : Page, IPageModuleButtonKeyAAC
+    public partial class PageBufferActionPanel : Page, IPageKey
     {
         /// <summary>
-        /// Имя страницы
+        /// Модуль страницы
         /// </summary>
-        public string PageName { get; }
+        public ModulePageKey ModulePage { get; }
 
         /// <summary>
-        /// Объект данных режима клавиатуры
+        /// Главная страница компонента
         /// </summary>
-        private bool _KeyboardMode;
-
-        /// <summary>
-        /// Режим клавиатуры
-        /// </summary>
-        public bool KeyboardMode
-        {
-            get => _KeyboardMode;
-            set
-            {
-                _KeyboardMode = value;
-                KeyboardModeChanged.Invoke(value);
-            }
-        }
-
-        /// <summary>
-        /// Объект события изменения состояния Alt режима
-        /// </summary>
-        public IPageModuleButtonKeyAAC.Delegate_KeyboardModeChanged KeyboardModeChanged { get; private set; }
+        public Grid MainGrid => GridMain;
 
         /// <summary>
         /// Объект анимации позиции сколла буфера
@@ -77,16 +54,16 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel(int HeightButtonCommand)
         {
             InitializeComponent();
-            PageName = nameof(PageBufferActionPanel);
+            ModulePage = new(nameof(PageBufferActionPanel));
             H = HeightButtonCommand;
-            ScrollBar = new(0, 3);
+            ScrollBar = new(3);
             ScrollBar.ChangedValue += (Value) =>
             {
                 ThicknessAnimationBuffer.To = new(0, 0 - (H + 2) * Value, 0, 0);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
             };
             TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
-            KeyboardModeChanged = (Mode) =>
+            ModulePage.KeyboardModeChanged = (Mode) =>
             {
                 IELButtonBackMainMenu.CharKeyKeyboardActivate = Mode;
                 IELButtonClearBuffer.CharKeyKeyboardActivate = Mode;
@@ -131,20 +108,5 @@ namespace AAC20.Windows.Pages.ActionPanel
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(300d);
             };
         }
-
-        /// <summary>
-        /// Активировать кнопку в данном элементе типа "IELButtonText" с помощью клавиши
-        /// </summary>
-        /// <param name="key">Клавиша</param>
-        /// <param name="Orientation">Ориентация нажатия на кнопку</param>
-        public void ActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
-            IIELButtonKey.ActivateButtonInKey(MainGrid, key, Orientation);
-
-        /// <summary>
-        /// Активировать мерцание кнопки в данном элементе типа "IELButtonText" с помощью клавиши
-        /// </summary>
-        /// <param name="key">Клавиша</param>
-        public void BlinkActivateIELButtonTextInKey(Key key, IPageModuleButtonKeyAAC.OrientationActivate Orientation) =>
-            IIELButtonKey.BlinkActivateInKey(MainGrid, key, Orientation);
     }
 }

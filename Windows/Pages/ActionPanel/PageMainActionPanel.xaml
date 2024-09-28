@@ -4,11 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AAC20.Windows.Frames"
-      xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Frames.PageMainActionPanel"
+      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+      x:Class="AAC20.Windows.Frames.PageMainActionPanel"
       mc:Ignorable="d"
       Title="PageMainActionPanel" d:DesignHeight="131.167" d:DesignWidth="178.18">
 
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="44*"/>
             <RowDefinition Height="44*"/>

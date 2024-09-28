@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AAC20.Windows"
-        xmlns:GUI="clr-namespace:AAC20.GUI" xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="AAC20.Windows.LicenseWindow"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="AAC20.Windows.LicenseWindow"
         mc:Ignorable="d" Background="#CC4D735E" Height="450" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Topmost="True" Icon="{Binding Mode=OneWay, Source={StaticResource EmptyImage}}">
     <Grid>
         <Grid.RowDefinitions>

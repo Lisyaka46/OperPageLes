@@ -4,13 +4,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:GUI="clr-namespace:AAC20.GUI"
+        xmlns:GUI="clr-namespace:IEL;assembly=IEL"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         x:Name="window" x:Class="AAC20.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" Margin="-4,0,0,0" RenderTransformOrigin="0.5,0.5">
+        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
-        <GUI:IELActionPanel x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
+        <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
         <Image x:Name="ImageTest" HorizontalAlignment="Center" Height="200" VerticalAlignment="Center" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Width="200"/>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -47,32 +47,10 @@
                     </TextBlock>
                 </Grid>
             </Border>
-            <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60">
+            <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60" Panel.ZIndex="0">
                 <Grid>
-                    <Frame x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" NavigationUIVisibility="Hidden" Source="/Windows/Pages/Other/PageLabels.xaml" Background="#FFB98F8F"/>
+                    <Frame x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" NavigationUIVisibility="Hidden" ClipToBounds="True"/>
                     <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16" Panel.ZIndex="1"/>
-                    <!--<GUI:IELLabelCommand x:Name="Test" HorizontalAlignment="Left" Margin="79,309,0,0" VerticalAlignment="Top" Height="79" Width="73" SelectBackground="#FF38B8ED" SelectForeground="#FF02212B" ClickedBackground="#FF00CAFF" ClickedForeground="#FF00143A" DefaultBackground="#FF659098" AnimationMillisecond="120">
-                        <GUI:IELLabelCommand.DefaultBorderBrush>
-                            <RadialGradientBrush RadiusX="0.8" RadiusY="0.8">
-                                <GradientStop Color="#FF010203"/>
-                                <GradientStop Color="#FF436C96" Offset="1"/>
-                            </RadialGradientBrush>
-                        </GUI:IELLabelCommand.DefaultBorderBrush>
-                        <GUI:IELLabelCommand.ClickedBorderBrush>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#FF152E3E" Offset="0"/>
-                                <GradientStop Color="#FF3A9ED2" Offset="1"/>
-                                <GradientStop Color="#FF1D4860" Offset="0.271"/>
-                            </RadialGradientBrush>
-                        </GUI:IELLabelCommand.ClickedBorderBrush>
-                        <GUI:IELLabelCommand.SelectBorderBrush>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#FF2E3135"/>
-                                <GradientStop Color="#FF5985B1" Offset="1"/>
-                                <GradientStop Color="#FF333B45" Offset="0.344"/>
-                            </RadialGradientBrush>
-                        </GUI:IELLabelCommand.SelectBorderBrush>
-                    </GUI:IELLabelCommand>-->
                 </Grid>
             </Border>
             <Grid Grid.Column="2" Grid.Row="3">
@@ -100,7 +78,7 @@
                         <ColumnDefinition Width="17*"/>
                     </Grid.ColumnDefinitions>
                     <Border x:Name="BorderInternetConnection" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF4C8069" Margin="3,3,3,3">
-                        <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/Windows/WindowsImages/WifiOff.png" Margin="-2,0,2,0">
+                        <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/Windows/WindowsImages/WifiOff.png" Margin="-2,0,0,0">
                             <Image.Effect>
                                 <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
                             </Image.Effect>
@@ -114,6 +92,7 @@
                             </Image.RenderTransform>
                         </Image>
                     </Border>
+                    <TextBlock x:Name="Test" Grid.Column="1" HorizontalAlignment="Left" Margin="25,4,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
                 </Grid>
             </Border>
             <GUI:IELTextBoxCommand x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C" Grid.ColumnSpan="2"/>

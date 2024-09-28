@@ -4,14 +4,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AAC20.Windows.Pages.Other"
-      xmlns:GUI="clr-namespace:AAC20.GUI" x:Class="AAC20.Windows.Pages.Other.PageLabels"
+      x:Class="AAC20.Windows.Pages.Other.PageLabels"
       mc:Ignorable="d"
-      Title="PageLabels" Background="#FFE45454">
+      Title="PageLabels" d:DesignHeight="144.46" d:DesignWidth="148.456">
 
     <Grid>
-        <Grid x:Name="GridMain">
-            <TextBlock TextWrapping="Wrap" Text="TextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-
+        <Grid x:Name="GridMain"/>
     </Grid>
 </Page>

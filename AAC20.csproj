@@ -53,9 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="GUI\IELButtonText.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -76,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>
 

@@ -40,7 +40,7 @@ namespace AAC20.Classes
         /// <summary>
         /// Максимальное значение счётчика
         /// </summary>
-        public int MaxValue { get; private set; }
+        public double MaxValue { get; private set; }
 
         /// <summary>
         /// Количество видимых элементов при старте
@@ -48,29 +48,27 @@ namespace AAC20.Classes
         public readonly int CountVisibleElements;
 
         /// <summary>
-        /// Доля движения по одному объекту
+        /// Доля видимости объектов на позиции
         /// </summary>
         public readonly int TrafficShare;
 
         /// <summary>
         /// Минимальный порог максимального значения счётчика
         /// </summary>
-        private readonly int Min_MaxValue;
+        private readonly double Min_MaxValue;
 
         /// <summary>
         /// Инициализировать объект счётчика скролл-бара
         /// </summary>
-        /// <param name="Max">Максимальное значение счётчика</param>
-        /// <param name="countVisible">Количество видимых элементов при старте</param>
-        /// <param name="value">Начальное значение счётчика</param>
-        /// <param name="TrafficShare">Доля движения одного скрола по объекту</param>
-        public CounterScrollBar(int Max, int countVisible, int value = 0, ushort TrafficShare = 1)
+        /// <param name="CountVisible">Количество видимых элементов при старте перед скроллом</param>
+        /// <param name="TrafficShare">Доля видимости объектов на позиции скролла</param>
+        public CounterScrollBar(int CountVisible, ushort TrafficShare = 1)
         {
             this.TrafficShare = TrafficShare;
-            CountVisibleElements = countVisible * TrafficShare;
-            MaxValue = Max / TrafficShare - CountVisibleElements / TrafficShare;
+            CountVisibleElements = CountVisible;
+            MaxValue = -CountVisible / TrafficShare;
             Min_MaxValue = MaxValue;
-            _Value = value;
+            _Value = 0;
         }
 
         /// <summary>
@@ -79,9 +77,7 @@ namespace AAC20.Classes
         /// <returns>Итоговое число движения</returns>
         public int Up()
         {
-            if (_Value == 0) return 0;
-            _Value = _Value > 0 ? _Value - 1 : 0;
-            ChangedValue?.Invoke(_Value);
+            if (_Value > 0) ChangedValue?.Invoke(--_Value);
             return _Value;
         }
 
@@ -91,14 +87,13 @@ namespace AAC20.Classes
         /// <returns>Итоговое число движения</returns>
         public int Down()
         {
-            if (MaxValue > 0)
+            if (MaxValue > 0d)
             {
-                if (_Value == MaxValue) return MaxValue;
-                _Value = _Value < MaxValue ? _Value + 1 : MaxValue;
-                ChangedValue?.Invoke(_Value);
+                if ((double)_Value < MaxValue) ChangedValue?.Invoke(++_Value);
                 return _Value;
             }
-            else throw new ArgumentOutOfRangeException(nameof(Value), $"Значение невозможно увеличить так как MaxValue < 0. (Value={Value} MaxValue={Value})");
+            else throw new ArgumentOutOfRangeException(nameof(Value), "Значение невозможно увеличить так как MaxValue < 0. " +
+                $"(Value={Value} MaxValue={Value} MaxValue_%_TrafficShare={MaxValue % TrafficShare})");
         }
 
         /// <summary>
@@ -106,19 +101,19 @@ namespace AAC20.Classes
         /// </summary>
         /// <param name="value">Значение на сколько увеличивается максимальное значение</param>
         /// <returns>Увеличеное максимальное значение</returns>
-        public int MaxUp(int value) => MaxValue += value;
+        public double MaxUp(int value) => MaxValue += (double)value / TrafficShare;
 
         /// <summary>
         /// Функция уменьшения максимального значения
         /// </summary>
         /// <param name="value">Значение на сколько увеличивается максимальное значение</param>
         /// <returns>Уменьшенное максимальное значение</returns>
-        public int MaxDown(int value)
+        public double MaxDown(int value)
         {
-            if (MaxValue - value >= Min_MaxValue)
+            if (MaxValue - (value / TrafficShare) >= Min_MaxValue)
             {
-                MaxValue -= value;
-                if (Value > 0 && Value > MaxValue) Value = MaxValue;
+                MaxValue -= (double)value / TrafficShare;
+                if (Value > 0 && Value > MaxValue) Value = (int)MaxValue;
                 return MaxValue;
             }
             else throw new ArgumentOutOfRangeException(nameof(value), $"({nameof(MaxValue)} - {nameof(value)} < {Min_MaxValue}) невозможно уменьшить максимальное значение ({MaxValue - value} < {Min_MaxValue})");
