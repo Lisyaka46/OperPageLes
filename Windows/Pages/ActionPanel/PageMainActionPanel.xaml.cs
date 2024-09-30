@@ -27,9 +27,9 @@ namespace AAC20.Windows.Frames
             {
                 KeyboardModeChanged = (Mode) =>
                 {
-                    IELButtonCrearConsole.CharKeyKeyboardActivate = Mode;
-                    IELButtonCommandBuffer.CharKeyKeyboardActivate = Mode;
-                    IELButtonDiscriptionCommand.CharKeyKeyboardActivate = Mode;
+                    IELButtonCrearConsole.CharKeyboardActivate = Mode;
+                    IELButtonCommandBuffer.CharKeyboardActivate = Mode;
+                    IELButtonDiscriptionCommand.CharKeyboardActivate = Mode;
                 }
             };
         }

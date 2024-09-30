@@ -65,8 +65,8 @@ namespace AAC20.Windows.Pages.ActionPanel
             TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
             ModulePage.KeyboardModeChanged = (Mode) =>
             {
-                IELButtonBackMainMenu.CharKeyKeyboardActivate = Mode;
-                IELButtonClearBuffer.CharKeyKeyboardActivate = Mode;
+                IELButtonBackMainMenu.CharKeyboardActivate = Mode;
+                IELButtonClearBuffer.CharKeyboardActivate = Mode;
             };
             BorderBuffer.MouseWheel += (sender, e) =>
             {

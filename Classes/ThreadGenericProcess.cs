@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AAC20.Classes
 {
-    public class ThreadGenericWhileProcess
+    public class ThreadGenericProcess
     {
         /// <summary>
         /// Поток обновляемый данные
@@ -29,7 +29,12 @@ namespace AAC20.Classes
         /// </summary>
         private volatile bool ParamManageThread;
 
-        public ThreadGenericWhileProcess(Action ActionProcess, int MillisecondsSleep)
+        /// <summary>
+        /// Инициализировать <b>ПОВТОРЯЮЩИЙСЯ</b> поток
+        /// </summary>
+        /// <param name="ActionProcess">Действие которое выполняется в новом потоке</param>
+        /// <param name="MillisecondsSleep">Тайм-аут после каждого завершения действия</param>
+        public ThreadGenericProcess(Action ActionProcess, uint MillisecondsSleep)
         {
             ParamManageThread = false;
             FlagElement = new(false);
@@ -38,8 +43,22 @@ namespace AAC20.Classes
                 while (ParamManageThread)
                 {
                     ActionProcess.Invoke();
-                    Thread.Sleep(MillisecondsSleep);
+                    Thread.Sleep((int)MillisecondsSleep);
                 }
+            });
+        }
+
+        /// <summary>
+        /// Инициализировать <b>НЕ ПОВТОРЯЮЩИЙСЯ</b> поток
+        /// </summary>
+        /// <param name="ActionProcess">Действие которое выполняется в новом потоке</param>
+        public ThreadGenericProcess(Action ActionProcess)
+        {
+            ParamManageThread = false;
+            FlagElement = new(false);
+            ThreadInternetCheckConnection = new(delegate ()
+            {
+                ActionProcess.Invoke();
             });
         }
 
@@ -48,6 +67,7 @@ namespace AAC20.Classes
         /// </summary>
         public void Start()
         {
+            if (ParamManageThread) return;
             ParamManageThread = true;
             FlagElement.Value = true;
             ThreadInternetCheckConnection.Start();
@@ -58,9 +78,17 @@ namespace AAC20.Classes
         /// </summary>
         public void Kill()
         {
+            Paused();
+            ThreadInternetCheckConnection.Join();
+        }
+
+        /// <summary>
+        /// Остановить поток данных
+        /// </summary>
+        public void Paused()
+        {
             ParamManageThread = false;
             FlagElement.Value = false;
-            ThreadInternetCheckConnection.Join();
         }
     }
 }

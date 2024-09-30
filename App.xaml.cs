@@ -63,7 +63,7 @@ namespace AAC20
         /// <summary>
         /// Поток обновляемый данные интернета
         /// </summary>
-        private readonly ThreadGenericWhileProcess ThreadInternetCheckConnection;
+        private readonly ThreadGenericProcess ThreadInternetCheckConnection;
 
         /// <summary>
         /// Состояние подключения к интернету

@@ -47,9 +47,9 @@
                     </TextBlock>
                 </Grid>
             </Border>
-            <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60" Panel.ZIndex="0">
+            <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60" Panel.ZIndex="0">
                 <Grid>
-                    <Frame x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" NavigationUIVisibility="Hidden" ClipToBounds="True"/>
+                    <GUI:IELFrameDefault x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" ClipToBounds="True"/>
                     <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16" Panel.ZIndex="1"/>
                 </Grid>
             </Border>
@@ -61,7 +61,7 @@
                 <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
                 <GUI:IELButtonText x:Name="ButtonReturnCommand" DefaultBackground="#FFBADEC3" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" SelectBackground="#FF5EE49D" SelectBorderBrush="#FF114A1A" SelectForeground="#FF065400" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" Grid.ColumnSpan="1" VisibleMouseImaging="False"/>
             </Grid>
-            <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,3,3,4" Panel.ZIndex="1">
+            <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,2,2,2" Panel.ZIndex="1">
                 <Grid x:Name="GridConsole">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

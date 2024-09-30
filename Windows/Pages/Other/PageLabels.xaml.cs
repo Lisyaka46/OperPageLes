@@ -7,6 +7,9 @@ using System.Windows.Media.Animation;
 using IEL.Classes;
 using IEL;
 using IEL.Interfaces.Core;
+using System.Windows.Media;
+using AAC20.Classes.Flaging;
+using MySql.Data.MySqlClient;
 
 namespace AAC20.Windows.Pages.Other
 {
@@ -62,31 +65,47 @@ namespace AAC20.Windows.Pages.Other
         /// <summary>
         /// Объект анимации для управления позицией
         /// </summary>
-        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(250d))
+        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(550d))
         {
             DecelerationRatio = 0.6d,
             EasingFunction = new QuadraticEase() { EasingMode = EasingMode.EaseOut }
         };
 
+        /// <summary>
+        /// Возможен ли повтор анимации загрузки
+        /// </summary>
+        private readonly Flag AnimateForeverLoading = new(false);
+
+        /// <summary>
+        /// Флаг поиска данных о ярлыках в базе данных
+        /// </summary>
+        private readonly Flag SearchInfoSQL = new(false);
+
+        private ThreadGenericProcess SQLLoadInformation;
+
         public PageLabels()
         {
             InitializeComponent();
+            BorderScrollBackground.Width = 0d;
             ModulePage = new(nameof(PageLabels));
             ScrollBar = new(10, TrafficShare: 2);
             SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(110, 130));
+            ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             ObjectsLabel = [];
-            /*PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
+            PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
                 ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
-            };*/
+            };
 
             GridMain.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
             GridMain.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
 
             ScrollBar.ChangedValue += (NewValue) =>
             {
-                ThicknessAnimate.To = new(0, 0 - (75 + 9) * NewValue, 0, 0);
+                ThicknessAnimate.To = new(0, 0 - (75 + 5) * NewValue, 0, 0);
                 GridMain.BeginAnimation(MarginProperty, ThicknessAnimate);
+                DoubleAnimateObj.To = ActualWidth / (int)(ScrollBar.MaxValue + 0.5d) * NewValue;
+                BorderScrollBackground.BeginAnimation(WidthProperty, DoubleAnimateObj);
             };
             GridMain.MouseWheel += (sender, e) =>
             {
@@ -96,15 +115,69 @@ namespace AAC20.Windows.Pages.Other
                     else if (e.Delta < 0) ScrollBar.Down();
                 }
             };
+            BorderScrollBackground.MouseDown += (sender, e) =>
+            {
+                ScrollBar.Value = 0;
+            };
+
+            GriaButtonSearch.MouseUp += (sender, e) =>
+            {
+                StartLoadSQL();
+            };
+
+            SQLLoadInformation = new(() =>
+            {
+                MySqlConnection Connection = new("Server=localhost; DataBase=aac20_control; Uid=root; Pwd=; charset=utf8;");
+                try
+                {
+                    Connection.Open();
+                    MySqlCommand command = new("SELECT labels.LabelConstruct FROM `labels` WHERE labels.id LIKE '%9%'", Connection);
+                    MySqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string? Text = reader["LabelConstruct"].ToString();
+                        if (Text == null) continue;
+                        AddLabel(AACConverter.ConvertRegexToLabelAction(Text));
+                    }
+                }
+                catch
+                {
+
+                }
+                AnimationLoadingStop();
+            });
+            void ProcessLoadSQLKill(bool NewValueFlag)
+            {
+                if (!NewValueFlag)
+                {
+                    SQLLoadInformation.Paused();
+                }
+            }
+            AnimateForeverLoading.ChangeStateFlag += ProcessLoadSQLKill;
         }
 
+        internal void StartLoadSQL()
+        {
+            if (SearchInfoSQL.Wait) return;
+            SearchInfoSQL.Value = true;
+            SearchInfoSQL.Wait = true;
+            AnimationLoadingStart();
+            SQLLoadInformation.Start();
+            SearchInfoSQL.Wait = false;
+            SearchInfoSQL.Value = false;
+        }
+
+        /// <summary>
+        /// Добавить в страницу элемент ялрыка
+        /// </summary>
+        /// <param name="label">Добавляеммый элемент ярлыка</param>
         internal void AddLabel(LabelAction label)
         {
             IELLabelCommand Label = new(label, ObjectsLabel.Count)
             {
                 Width = 75,
                 Height = 75,
-                Margin = new(0, (75 + 9) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 4, 0, 0),
+                Margin = new(0, (75 + 5) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 4, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 ContextMenu = null,
@@ -118,25 +191,68 @@ namespace AAC20.Windows.Pages.Other
             Label.OnActivateMouseRight += () =>
             {
                 SelectIndexElementLabel = Label.Index;
-                //App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(SettingsPanelActionElement);
+                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(SettingsPanelActionElement);
             };
             Label.MouseHover += (sender, e) =>
             {
                 if (sender == null) return;
                 IELLabelCommand Element = (IELLabelCommand)sender;
                 string Text = Element.Label.Description ?? string.Empty;
-                //if (Text.Length > 0)
-                //    App.MainWindowApplication.IELMessageMain.UsingBorderInformation(Element, Label.Name, Text,
-                //        IELBlockMessage.OrientationBorderInfo.LeftDown);
+                if (Text.Length > 0)
+                    App.MainWindowApplication.IELMessageMain.UsingBorderInformation(Element, Label.Name, Text,
+                        IELBlockMessage.OrientationBorderInfo.LeftDown);
             };
-            //Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
-            //Label.MouseDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.MouseDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             ObjectsLabel.Add(Label);
+            TextBlockCount.Text = $"{ObjectsLabel.Count} Ярлыков";
             GridMain.Children.Add(Label);
             Grid.SetColumn(Label, (ObjectsLabel.Count - 1) % GridMain.ColumnDefinitions.Count);
             DoubleAnimateObj.To = 1d;
             Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             ScrollBar.MaxUp(1);
         }
+
+        /// <summary>
+        /// Создать анимацию загрузки
+        /// </summary>
+        internal void AnimationLoadingStart()
+        {
+            if (!AnimateForeverLoading.Wait && !AnimateForeverLoading) AnimateForeverLoading.Value = true;
+            else
+            {
+                AnimateForeverLoading.Wait = false;
+                return;
+            }
+            PointAnimation PointAnimate = new()
+            {
+                From = new(-1d, 0.5d),
+                To = new(2d, 0.5d),
+                Duration = TimeSpan.FromMilliseconds(1000d),
+                FillBehavior = FillBehavior.Stop,
+                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
+            };
+            PointAnimate.Completed += PointAnimate_Completed;
+            ((RadialGradientBrush)BorderNamingLabel.BorderBrush).BeginAnimation(RadialGradientBrush.CenterProperty, PointAnimate);
+
+            DoubleAnimateObj.To = 1d;
+            ((RadialGradientBrush)BorderNamingLabel.BorderBrush).BeginAnimation(OpacityProperty, DoubleAnimateObj);
+
+            void PointAnimate_Completed(object? sender, EventArgs e)
+            {
+                ((RadialGradientBrush)BorderNamingLabel.BorderBrush).BeginAnimation(RadialGradientBrush.CenterProperty,
+                    AnimateForeverLoading.Wait ? null : PointAnimate);
+                if (AnimateForeverLoading.Wait)
+                {
+                    AnimateForeverLoading.Wait = false;
+                    AnimateForeverLoading.Value = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Остановить анимацию загрузки
+        /// </summary>
+        internal void AnimationLoadingStop() => AnimateForeverLoading.Wait = true;
     }
 }

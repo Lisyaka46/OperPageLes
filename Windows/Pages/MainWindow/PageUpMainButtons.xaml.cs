@@ -27,8 +27,8 @@ namespace AAC20.Windows.Pages.MainWindow
             {
                 KeyboardModeChanged = (Mode) =>
                 {
-                    IELButtonLabel.CharKeyKeyboardActivate = Mode;
-                    IELButtonSettings.CharKeyKeyboardActivate = Mode;
+                    IELButtonLabel.CharKeyboardActivate = Mode;
+                    IELButtonSettings.CharKeyboardActivate = Mode;
                 }
             };
         }
