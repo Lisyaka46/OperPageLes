@@ -81,7 +81,20 @@ namespace AAC20.Windows.Pages.Other
         /// </summary>
         private readonly Flag SearchInfoSQL = new(false);
 
-        private ThreadGenericProcess SQLLoadInformation;
+        /// <summary>
+        /// Массив доступный из потока чтения базы данных
+        /// </summary>
+        private volatile LabelAction[] SQLLabelActions;
+
+        /// <summary>
+        /// Флаг успешного завершения чтения ярлыков из базы данных
+        /// </summary>
+        internal bool SQLCompleteSearch { get; private set; } = false;
+
+        /// <summary>
+        /// Поток чтения ярлыков из базы данных
+        /// </summary>
+        private readonly ThreadGenericProcess SQLLoadInformation;
 
         public PageLabels()
         {
@@ -91,6 +104,7 @@ namespace AAC20.Windows.Pages.Other
             ScrollBar = new(10, TrafficShare: 2);
             SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(110, 130));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
+            SQLLabelActions = [];
             ObjectsLabel = [];
             PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
@@ -102,7 +116,7 @@ namespace AAC20.Windows.Pages.Other
 
             ScrollBar.ChangedValue += (NewValue) =>
             {
-                ThicknessAnimate.To = new(0, 0 - (75 + 5) * NewValue, 0, 0);
+                ThicknessAnimate.To = new(0, 0 - (75 + 3) * NewValue, 0, 0);
                 GridMain.BeginAnimation(MarginProperty, ThicknessAnimate);
                 DoubleAnimateObj.To = ActualWidth / (int)(ScrollBar.MaxValue + 0.5d) * NewValue;
                 BorderScrollBackground.BeginAnimation(WidthProperty, DoubleAnimateObj);
@@ -120,7 +134,7 @@ namespace AAC20.Windows.Pages.Other
                 ScrollBar.Value = 0;
             };
 
-            GriaButtonSearch.MouseUp += (sender, e) =>
+            GridButtonSearch.MouseUp += (sender, e) =>
             {
                 StartLoadSQL();
             };
@@ -133,12 +147,14 @@ namespace AAC20.Windows.Pages.Other
                     Connection.Open();
                     MySqlCommand command = new("SELECT labels.LabelConstruct FROM `labels` WHERE labels.id LIKE '%9%'", Connection);
                     MySqlDataReader reader = command.ExecuteReader();
+                    List<LabelAction> labels = [];
                     while (reader.Read())
                     {
                         string? Text = reader["LabelConstruct"].ToString();
                         if (Text == null) continue;
-                        AddLabel(AACConverter.ConvertRegexToLabelAction(Text));
+                        labels.Add(AACConverter.ConvertRegexToLabelAction(Text));
                     }
+                    SQLLabelActions = [.. labels];
                 }
                 catch
                 {
@@ -150,7 +166,16 @@ namespace AAC20.Windows.Pages.Other
             {
                 if (!NewValueFlag)
                 {
-                    SQLLoadInformation.Paused();
+                    SQLLoadInformation.Kill();
+                    if (SQLLabelActions.Length > 0)
+                    {
+                        foreach (LabelAction Element in SQLLabelActions)
+                        {
+                            AddLabel(Element);
+                        }
+                        SQLLabelActions = [];
+                        SQLCompleteSearch = true;
+                    }
                 }
             }
             AnimateForeverLoading.ChangeStateFlag += ProcessLoadSQLKill;
@@ -158,7 +183,7 @@ namespace AAC20.Windows.Pages.Other
 
         internal void StartLoadSQL()
         {
-            if (SearchInfoSQL.Wait) return;
+            if (SearchInfoSQL.Wait || SQLCompleteSearch) return;
             SearchInfoSQL.Value = true;
             SearchInfoSQL.Wait = true;
             AnimationLoadingStart();
@@ -177,7 +202,7 @@ namespace AAC20.Windows.Pages.Other
             {
                 Width = 75,
                 Height = 75,
-                Margin = new(0, (75 + 5) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 4, 0, 0),
+                Margin = new(0, (75 + 3) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 4, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 ContextMenu = null,

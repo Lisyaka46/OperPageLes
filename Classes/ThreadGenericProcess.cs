@@ -12,7 +12,7 @@ namespace AAC20.Classes
         /// <summary>
         /// Поток обновляемый данные
         /// </summary>
-        private readonly Thread ThreadInternetCheckConnection;
+        private Thread? ThreadInternetCheckConnection;
 
         /// <summary>
         /// Флаг подключённый к потоку данных
@@ -30,6 +30,17 @@ namespace AAC20.Classes
         private volatile bool ParamManageThread;
 
         /// <summary>
+        /// Действие которое выполняет поток
+        /// </summary>
+        private readonly Action ThreadAction;
+
+        //
+        private readonly bool While;
+
+        //
+        private readonly int MillisecondSleep;
+
+        /// <summary>
         /// Инициализировать <b>ПОВТОРЯЮЩИЙСЯ</b> поток
         /// </summary>
         /// <param name="ActionProcess">Действие которое выполняется в новом потоке</param>
@@ -38,14 +49,9 @@ namespace AAC20.Classes
         {
             ParamManageThread = false;
             FlagElement = new(false);
-            ThreadInternetCheckConnection = new(delegate ()
-            {
-                while (ParamManageThread)
-                {
-                    ActionProcess.Invoke();
-                    Thread.Sleep((int)MillisecondsSleep);
-                }
-            });
+            ThreadAction = ActionProcess;
+            While = true;
+            MillisecondSleep = (int)MillisecondsSleep;
         }
 
         /// <summary>
@@ -56,10 +62,9 @@ namespace AAC20.Classes
         {
             ParamManageThread = false;
             FlagElement = new(false);
-            ThreadInternetCheckConnection = new(delegate ()
-            {
-                ActionProcess.Invoke();
-            });
+            ThreadAction = ActionProcess;
+            While = false;
+            MillisecondSleep = 0;
         }
 
         /// <summary>
@@ -68,6 +73,24 @@ namespace AAC20.Classes
         public void Start()
         {
             if (ParamManageThread) return;
+            if (While)
+            {
+                ThreadInternetCheckConnection = new(delegate ()
+                {
+                    while (ParamManageThread)
+                    {
+                        ThreadAction.Invoke();
+                        Thread.Sleep(MillisecondSleep);
+                    }
+                });
+            }
+            else
+            {
+                ThreadInternetCheckConnection = new(delegate ()
+                {
+                    ThreadAction.Invoke();
+                });
+            }
             ParamManageThread = true;
             FlagElement.Value = true;
             ThreadInternetCheckConnection.Start();
@@ -78,17 +101,9 @@ namespace AAC20.Classes
         /// </summary>
         public void Kill()
         {
-            Paused();
-            ThreadInternetCheckConnection.Join();
-        }
-
-        /// <summary>
-        /// Остановить поток данных
-        /// </summary>
-        public void Paused()
-        {
             ParamManageThread = false;
             FlagElement.Value = false;
+            ThreadInternetCheckConnection?.Join();
         }
     }
 }

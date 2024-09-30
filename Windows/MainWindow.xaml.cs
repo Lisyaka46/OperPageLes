@@ -529,15 +529,37 @@ namespace AAC20
                 License.ShowDialog();
             };
 
+            FrameComponent.OpenFrame += () =>
+            {
+                DoubleAnimation animation = DoubleAnimateObj.Clone();
+                void SetZIndex(object? INsender, EventArgs INe)
+                {
+                    Canvas.SetZIndex(TextBlockNullFrameElement, -1);
+                    TextBlockNullFrameElement.Opacity = 0d;
+                    animation.Completed -= SetZIndex;
+                    animation.FillBehavior = FillBehavior.HoldEnd;
+                }
+                animation.To = 0d;
+                animation.Completed += SetZIndex;
+                animation.FillBehavior = FillBehavior.Stop;
+                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, animation);
+            };
+
             FrameComponent.ChangeElementPage += (Name) =>
             {
-                if (Name.Equals(Pages.PageObjLabelsAction.GetType().Name))
+                /*if (Name.Equals(Pages.PageObjLabelsAction.GetType().Name))
                 {
-                    if (Flags.FlagInternetConnection)
+                    if (Flags.FlagInternetConnection && !Pages.PageObjLabelsAction.SQLCompleteSearch)
                     {
                         Pages.PageObjLabelsAction.StartLoadSQL();
                     }
-                }
+                }*/
+            };
+            FrameComponent.ClosingFrame += () =>
+            {
+                Canvas.SetZIndex(TextBlockNullFrameElement, 1);
+                DoubleAnimateObj.To = 1d;
+                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             };
             /*FrameComponent.ChangeElementPage += () =>
             {

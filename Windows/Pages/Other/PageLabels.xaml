@@ -21,7 +21,7 @@
                     <GradientStop Color="#FF4A7B60" Offset="1"/>
                 </RadialGradientBrush>
             </Border.BorderBrush>
-            <Grid x:Name="GriaButtonSearch" Background="#FF488FA7">
+            <Grid x:Name="GridButtonSearch" Background="#FF488FA7">
                 <Border x:Name="BorderScrollBackground" HorizontalAlignment="Left" Width="10" Background="#FF4A7B60" Margin="0,2,0,2"/>
                 <TextBlock x:Name="TextBlockCount" TextWrapping="Wrap" Text="0 Ярлыков" FontSize="12" FontFamily="Tahoma" HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="1" Margin="0,0,5,0"/>
             </Grid>
