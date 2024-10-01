@@ -390,6 +390,9 @@ namespace AAC20
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(250d, 230d));
 
+            Canvas.SetZIndex(IELMessageMain, -2);
+            Canvas.SetZIndex(IELActionPanelMain, -2);
+
             ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
@@ -429,7 +432,7 @@ namespace AAC20
 
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                //TextBoxCommandInput.Focus();
+                TextBoxCommandInput.Focus();
             };
 
             /*TextBoxCommandInput.GotFocus += (sender, e) =>
@@ -482,7 +485,7 @@ namespace AAC20
 
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.FlagPanelActionActivate) IELActionPanelMain.ClosePanelAction();
+                if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right) IELActionPanelMain.UsingPanelAction(SettingsMain);
             };
 
@@ -658,6 +661,7 @@ namespace AAC20
                 };
                 Button.OnActivateMouseLeft += () =>
                 {
+                    IELActionPanelMain.ClosePanelAction();
                     App.MainWindowApplication.SummarizeCommandStateResult(
                         ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], App.BufferCommand[Button.Index]));
                 };

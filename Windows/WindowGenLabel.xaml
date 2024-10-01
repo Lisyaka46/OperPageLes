@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AAC20.Windows"
         xmlns:IEL="clr-namespace:IEL;assembly=IEL" x:Class="AAC20.Windows.WindowGenLabel"
         mc:Ignorable="d"
-        Title="WindowGenLabel" d:DesignHeight="200" d:DesignWidth="200" Icon="{DynamicResource EmptyImage}">
+        Title="Создание ярлыка" d:DesignHeight="301.667" Icon="{DynamicResource EmptyImage}" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Width="273">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -15,10 +15,10 @@
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="129*"/>
-            <RowDefinition Height="55*"/>
+            <RowDefinition Height="175*"/>
+            <RowDefinition Height="111*"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid Margin="0,0,0,2">
             <Grid.Background>
                 <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.6" RadiusY="0.6">
                     <GradientStop Color="#FFA0C8D6"/>
@@ -38,34 +38,34 @@
             <Border BorderBrush="#FF254A67" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="#4C42CC97">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="36*"/>
-                        <RowDefinition Height="36*"/>
-                        <RowDefinition Height="36*"/>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="30*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="TextBlockName" HorizontalAlignment="Left" Margin="2,-9,0,0" TextWrapping="Wrap" Text="Имя" VerticalAlignment="Top" Padding="3,3,3,3" FontSize="10" FontFamily="Franklin Gothic Medium">
-                        <TextBlock.Background>
-                            <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
-                                <GradientStop Color="#FF00FFF9" Offset="0.38"/>
-                                <GradientStop Color="Transparent" Offset="1"/>
+                    <IEL:IELTextBox x:Name="IELTextBoxNameLabel" Margin="2,2,2,7" TextName="Имя ярлыка*" Text="" ShowNameText="True" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center">
+                        <IEL:IELTextBox.BackgroundNaming>
+                            <RadialGradientBrush RadiusX="0.6">
+                                <GradientStop Color="#0072ABBF" Offset="1"/>
+                                <GradientStop Color="#CC74ADC1" Offset="0.404"/>
                             </RadialGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                    <TextBlock x:Name="TextBlockDescription" HorizontalAlignment="Left" Margin="2,-7,0,0" TextWrapping="Wrap" Text="Описание" VerticalAlignment="Top" Padding="3,3,3,3" FontSize="10" FontFamily="Franklin Gothic Medium" Grid.RowSpan="1" Grid.Row="1">
-                        <TextBlock.Background>
-                            <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
-                                <GradientStop Color="#FF00FFF9" Offset="0.38"/>
-                                <GradientStop Color="Transparent" Offset="1"/>
+                        </IEL:IELTextBox.BackgroundNaming>
+                    </IEL:IELTextBox>
+                    <IEL:IELTextBox x:Name="IELTextBoxCommand" TextName="Команда*" Text="" ShowNameText="True" Grid.Row="1" Margin="2,2,2,7" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center">
+                        <IEL:IELTextBox.BackgroundNaming>
+                            <RadialGradientBrush RadiusX="0.6">
+                                <GradientStop Color="#0072ABBF" Offset="1"/>
+                                <GradientStop Color="#CC74ADC1" Offset="0.404"/>
                             </RadialGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                    <TextBlock x:Name="TextBlockCommand" HorizontalAlignment="Left" Margin="2,-6,0,0" TextWrapping="Wrap" Text="Команда" VerticalAlignment="Top" Padding="3,3,3,3" FontSize="10" FontFamily="Franklin Gothic Medium" Grid.RowSpan="1" Grid.Row="2">
-                        <TextBlock.Background>
-                            <RadialGradientBrush RadiusX="0.5" RadiusY="0.5">
-                                <GradientStop Color="#FF00FFF9" Offset="0.38"/>
-                                <GradientStop Color="Transparent" Offset="1"/>
+                        </IEL:IELTextBox.BackgroundNaming>
+                    </IEL:IELTextBox>
+                    <IEL:IELTextBox x:Name="IELTextBoxDescription" TextName="Описание ярлыка" Text="" ShowNameText="True" Grid.Row="2" Margin="4,1,0,3" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center" MaxLines="5" DefaultBackground="#FF42B79A" SelectBackground="#FF82CC78" ClickedBackground="#FF80EDB4">
+                        <IEL:IELTextBox.BackgroundNaming>
+                            <RadialGradientBrush RadiusX="0.6">
+                                <GradientStop Color="#0072ABBF" Offset="1"/>
+                                <GradientStop Color="#CC74ADC1" Offset="0.562"/>
                             </RadialGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
+                        </IEL:IELTextBox.BackgroundNaming>
+                    </IEL:IELTextBox>
                 </Grid>
             </Border>
         </Grid>
@@ -74,8 +74,8 @@
                 <RowDefinition Height="26*"/>
                 <RowDefinition Height="26*"/>
             </Grid.RowDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="30,0,30,0" VerticalAlignment="Center" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" TextFontFamily="Bahnschrift" DefaultBackground="#FF77C1DA" SelectBackground="DeepSkyBlue" ClickedBackground="#FFB8EDFF" SelectBorderBrush="#FF13162F" ClickedBorderBrush="#FF212031" SelectForeground="#FF0D2523" ClickedForeground="#FF16242B"/>
-            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="30,0,30,0" VerticalAlignment="Center" BorderThicknessBlock="2,2,2,2" Text="Отмена" TextFontFamily="Bahnschrift" DefaultBackground="#FFDA9B77" SelectBackground="#FFE6A960" ClickedBackground="#FFFFD2B8" SelectBorderBrush="#FF2F2A13" ClickedBorderBrush="#FF303120" SelectForeground="#FF25210D" ClickedForeground="#FF2B2116" Grid.Row="1"/>
+            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" TextFontFamily="Bahnschrift" DefaultBackground="#FF77C1DA" SelectBackground="DeepSkyBlue" ClickedBackground="#FFB8EDFF" SelectBorderBrush="#FF13162F" ClickedBorderBrush="#FF212031" SelectForeground="#FF0D2523" ClickedForeground="#FF16242B" TextFontSize="14"/>
+            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Отмена" TextFontFamily="Bahnschrift" DefaultBackground="#FFDA9B77" SelectBackground="#FFE6A960" ClickedBackground="#FFFFD2B8" SelectBorderBrush="#FF2F2A13" ClickedBorderBrush="#FF303120" SelectForeground="#FF25210D" ClickedForeground="#FF2B2116" Grid.Row="1" TextFontSize="14"/>
         </Grid>
     </Grid>
 </Window>

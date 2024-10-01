@@ -95,7 +95,7 @@
                     <TextBlock x:Name="Test" Grid.Column="1" HorizontalAlignment="Left" Margin="25,4,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
                 </Grid>
             </Border>
-            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C" Grid.ColumnSpan="2"/>
+            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C" Grid.ColumnSpan="2" ForgroundNaming="#FF11FF81"/>
             <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" SelectForeground="#FF655802" SelectBorderBrush="#FF8A7A2E" SelectBackground="#FFC7C824" DefaultBackground="#FFDFE0C9" ClickedBorderBrush="#FF735F1A" ClickedForeground="#FF56530E" Grid.Column="2" FontWeight="Bold" TextFontFamily="Calibri" VisibleMouseImaging="False"/>
             <Border BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC4A7B60">
                 <Grid>
@@ -104,6 +104,6 @@
                 </Grid>
             </Border>
         </Grid>
-        <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="293,105,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6"/>
+        <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6"/>
     </Grid>
 </Window>
