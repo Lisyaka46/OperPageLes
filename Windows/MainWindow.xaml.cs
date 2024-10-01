@@ -5,6 +5,9 @@ using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
 using AAC20.Windows.Pages.MainWindow;
 using AAC20.Windows.Pages.Other;
+using IEL;
+using IEL.Classes;
+using IEL.Interfaces.Core;
 using Interpreter.Commands;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -19,10 +22,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using IEL.Interfaces.Core;
-using IEL;
-using MySql.Data.MySqlClient;
-using System.Data;
 
 namespace AAC20
 {
@@ -200,6 +199,16 @@ namespace AAC20
                     Pages.PageObjLabelsAction.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
                     CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
                     Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+                #endregion
+
+                #region create_label
+                new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
+                (Command, param) =>
+                {
+                    LabelAction? label = new WindowGenLabel().CreateLabel();
+                    if (label != null) Pages.PageObjLabelsAction.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -420,7 +429,7 @@ namespace AAC20
 
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                TextBoxCommandInput.Focus();
+                //TextBoxCommandInput.Focus();
             };
 
             /*TextBoxCommandInput.GotFocus += (sender, e) =>
@@ -603,7 +612,7 @@ namespace AAC20
 
             Activated += (sender, e) =>
             {
-                TextBoxCommandInput.Focus();
+                //TextBoxCommandInput.Focus();
                 /*GridMain.RenderTransform = new TransformGroup()
                 {
                     Children = [
@@ -622,6 +631,7 @@ namespace AAC20
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
+            TextBoxCommandInput.Focus();
             //UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
         }
 

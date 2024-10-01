@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AAC20.Windows.Pages.License"
       mc:Ignorable="d"
-      Title="Page1" Width="300" Height="300">
+      Title="Page1">
 
     <Grid>
         <TextBlock x:Name="TextBlockAAC" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="AAC20" VerticalAlignment="Top" Style="{Binding Mode=OneWay, Source={StaticResource Tablon}}" FontSize="36" FontWeight="Bold"/>

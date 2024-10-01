@@ -1,22 +1,9 @@
 ﻿using AAC20.Classes;
 using AAC20.Windows.Pages.License;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AAC20.Windows
 {
@@ -116,23 +103,25 @@ namespace AAC20.Windows
             ImageLogo.Margin = new(12, 30 + 10, 0, 0);
             Image20.Margin = new(-12, 84 - 10, 0, 0);
             FrameLicense.NavigationUIVisibility = NavigationUIVisibility.Hidden;
-            Activated += (sender, e) =>
-            {
-                DoubleAnimateAppOpacity.BeginTime = TimeSpan.FromMilliseconds(70d);
-                DoubleAnimateAppOpacity.To = 1d;
-                BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
+        }
 
-                ThicknessAnimatePos.BeginTime = DoubleAnimateAppOpacity.BeginTime + TimeSpan.FromMilliseconds(20d);
-                ThicknessAnimatePos.To = new(0, 30, 0, 0);
-                ImageLogo.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-                ThicknessAnimatePos.To = new(0, 84, 0, 0);
-                Image20.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-                PageLicense license = new();
-                FrameLicense.Navigate(license);
-                AnimationThanks();
-                LicenseAnimation();
-                DoubleAnimateAppOpacity.BeginTime = TimeSpan.Zero;
-            };
+        public new void ShowDialog()
+        {
+            DoubleAnimateAppOpacity.BeginTime = TimeSpan.FromMilliseconds(70d);
+            DoubleAnimateAppOpacity.To = 1d;
+            BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
+
+            ThicknessAnimatePos.BeginTime = DoubleAnimateAppOpacity.BeginTime + TimeSpan.FromMilliseconds(20d);
+            ThicknessAnimatePos.To = new(0, 30, 0, 0);
+            ImageLogo.BeginAnimation(MarginProperty, ThicknessAnimatePos);
+            ThicknessAnimatePos.To = new(0, 84, 0, 0);
+            Image20.BeginAnimation(MarginProperty, ThicknessAnimatePos);
+            PageLicense license = new();
+            FrameLicense.Navigate(license);
+            AnimationThanks();
+            LicenseAnimation();
+            DoubleAnimateAppOpacity.BeginTime = TimeSpan.Zero;
+            base.ShowDialog();
         }
 
         /// <summary>

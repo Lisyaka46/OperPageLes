@@ -129,14 +129,34 @@ namespace AAC20.Windows.Pages.Other
                     else if (e.Delta < 0) ScrollBar.Down();
                 }
             };
-            BorderScrollBackground.MouseDown += (sender, e) =>
+
+            BorderNamingLabel.MouseEnter += (sender, e) =>
             {
-                ScrollBar.Value = 0;
+                ThicknessAnimate.To = new(0, 5, 0, 5);
+                Storyboard.SetTargetProperty(ThicknessAnimate, new PropertyPath(Border.BorderThicknessProperty));
+                Storyboard ellipseStoryboard = new();
+                ellipseStoryboard.Children.Add(ThicknessAnimate);
+                ellipseStoryboard.Begin(BorderNamingLabel);
+                //BorderNamingLabel.BeginAnimation(, )
             };
 
-            GridButtonSearch.MouseUp += (sender, e) =>
+            BorderNamingLabel.MouseLeave += (sender, e) =>
+            {
+                ThicknessAnimate.To = new(0, 3, 0, 3);
+                Storyboard.SetTargetProperty(ThicknessAnimate, new PropertyPath(Border.BorderThicknessProperty));
+                Storyboard ellipseStoryboard = new();
+                ellipseStoryboard.Children.Add(ThicknessAnimate);
+                ellipseStoryboard.Begin(BorderNamingLabel);
+            };
+
+            BorderNamingLabel.MouseLeftButtonUp += (sender, e) =>
             {
                 StartLoadSQL();
+            };
+
+            BorderNamingLabel.MouseRightButtonUp += (sender, e) =>
+            {
+                ScrollBar.Value = 0;
             };
 
             SQLLoadInformation = new(() =>
@@ -202,7 +222,7 @@ namespace AAC20.Windows.Pages.Other
             {
                 Width = 75,
                 Height = 75,
-                Margin = new(0, (75 + 3) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 4, 0, 0),
+                Margin = new(0, (75 + 3) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 2, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 ContextMenu = null,

@@ -8,7 +8,13 @@
       d:DesignHeight="124.667" d:DesignWidth="258.333"
       Title="PageUser">
 
-    <Grid>
+    <Grid ClipToBounds="True">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF4D735E" Offset="0.512"/>
+                <GradientStop Color="#FF639A7B" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="21*"/>
             <RowDefinition Height="11*"/>
@@ -18,7 +24,7 @@
             <ColumnDefinition Width="50*"/>
             <ColumnDefinition Width="79*"/>
         </Grid.ColumnDefinitions>
-        <Border x:Name="BorderNickName" BorderBrush="Black" BorderThickness="2,2,2,2" Grid.ColumnSpan="2" CornerRadius="5,5,5,5" Margin="0,0,0,1">
+        <Border x:Name="BorderNickName" BorderBrush="Black" BorderThickness="0,2,0,2" Grid.ColumnSpan="2" Background="#E54B7774">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="79*"/>
@@ -40,8 +46,8 @@
                 </TextBlock>
             </Grid>
         </Border>
-        <TextBlock TextWrapping="Wrap" Text="Благодарен за:" FontStyle="Italic" FontWeight="Bold" Grid.ColumnSpan="1" Grid.Row="1" TextAlignment="Center" Foreground="#FF171717"/>
-        <TextBlock x:Name="TextBlockMessage" TextWrapping="Wrap" Text="- за." FontStyle="Italic" Foreground="#FFC3BDDE" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1"/>
-        <Image x:Name="ImageIconNickName" Grid.Row="2" Margin="25,5,25,5"/>
+        <TextBlock TextWrapping="Wrap" Text="Благодарен за:" FontStyle="Italic" FontWeight="Bold" Grid.ColumnSpan="1" Grid.Row="1" TextAlignment="Center" Foreground="#FF171717" Panel.ZIndex="0"/>
+        <TextBlock x:Name="TextBlockMessage" TextWrapping="Wrap" Text="- за." FontStyle="Italic" Foreground="#FFC3BDDE" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1" Panel.ZIndex="0"/>
+        <Image x:Name="ImageIconNickName" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="3" Opacity="0.48" StretchDirection="DownOnly" Stretch="UniformToFill" Panel.ZIndex="-1"/>
     </Grid>
 </Page>

@@ -43,7 +43,7 @@ namespace AAC20.Windows.Pages.License
         /// <summary>
         /// Анимация позиции страницы
         /// </summary>
-        private readonly ThicknessAnimation AnimMargin = new(new(0, -14, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide))
+        private readonly ThicknessAnimation AnimMargin = new(new(0), TimeSpan.FromMilliseconds(MillisecondsHide))
         {
             EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.HoldEnd,
@@ -67,6 +67,7 @@ namespace AAC20.Windows.Pages.License
         public void NextUser(string NickName, string Phrase, string Message, Uri? UriIcon, Color ColorNickName, Color ColorPhrase)
         {
             AnimOpacity.Completed += (sender, e) => UpdateInfo(NickName, Phrase, Message, UriIcon, ColorNickName, ColorPhrase);
+            AnimMargin.To = new(0, -14, 0, 0);
             BeginAnimation(OpacityProperty, AnimOpacity);
             BeginAnimation(MarginProperty, AnimMargin);
         }
@@ -90,10 +91,22 @@ namespace AAC20.Windows.Pages.License
             TextBlockMessage.Text = Message;
             if (UriIcon != null)
             {
-                ImageIconNickName.Source = new BitmapImage(UriIcon);
-                ImageIconNickName.Opacity = 1d;
+                BitmapImage bitmap = new(UriIcon);
+                ImageIconNickName.Source = bitmap;
+                ImageIconNickName.Opacity = 0.4d;
+                AnimMargin.To = new(0, -140, 0, 0);
+                AnimMargin.Duration = TimeSpan.FromMilliseconds(9000d);
+                AnimMargin.EasingFunction = null;
+                ImageIconNickName.BeginAnimation(MarginProperty, AnimMargin);
+                AnimMargin.Duration = TimeSpan.FromMilliseconds(MillisecondsHide);
+                AnimMargin.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
             }
-            else ImageIconNickName.Opacity = 0d;
+            else
+            {
+                ImageIconNickName.Opacity = 0d;
+                ImageIconNickName.BeginAnimation(MarginProperty, null);
+                ImageIconNickName.Margin = new(0);
+            }
             VisiblePage();
         }
 

@@ -45,7 +45,7 @@ namespace AAC20.Windows
         public WindowDiscriptionCommands()
         {
             InitializeComponent();
-            IELInputSearchCommand.Text = string.Empty;
+            //IELInputSearchCommand.Text = string.Empty;
             GridMainDescription.Opacity = 0d;
             BorderContextMenuParameter.Opacity = 0d;
             TextBlockTextCommand.Foreground = new SolidColorBrush(Colors.Black);
