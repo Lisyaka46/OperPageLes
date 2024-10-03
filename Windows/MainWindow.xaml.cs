@@ -9,6 +9,7 @@ using IEL;
 using IEL.Classes;
 using IEL.Interfaces.Core;
 using Interpreter.Commands;
+using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -131,6 +132,11 @@ namespace AAC20
 
         //private MMDeviceEnumerator Device = new();
 
+        /// <summary>
+        /// Состояние воспроизведения приветственной анимации
+        /// </summary>
+        private bool HiAnimation = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -149,7 +155,6 @@ namespace AAC20
                 }),
                 #endregion
                 #endif
-
 
                 #region clear
                 new ConsoleCommand("clear",
@@ -198,7 +203,7 @@ namespace AAC20
                 {
                     Pages.PageObjLabelsAction.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
                     CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
-                    Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
+                    //Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -221,7 +226,7 @@ namespace AAC20
                     try
                     {
                         string uri = (string)param[0];
-                        Process.Start(new System.Diagnostics.ProcessStartInfo(uri) { UseShellExecute = true });
+                        Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
                         Paragraph Message = new();
                         Run RuningText = new($"\"{param[0]}\"")
                         {
@@ -240,7 +245,7 @@ namespace AAC20
                             RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
                         };
                         RuningText.MouseLeftButtonUp += (sender, e) =>
-                            Process.Start(new System.Diagnostics.ProcessStartInfo(uri) { UseShellExecute = true });
+                            Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
                         Message.Inlines.Add(new Bold(new Run(">>> Открытие ссылки ")));
                         Message.Inlines.Add(RuningText);
                         RichTextBoxMainMessage.Document.Blocks.Add(Message);
@@ -304,6 +309,48 @@ namespace AAC20
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
+
+                #region open_file
+                new ConsoleCommand("open_file",
+                [
+                    new Parameter("File", typeof(string))
+                ],
+                "Открывает файл по его заданной директории",
+                (Command, param) =>
+                {
+                    string path = (string)param[0];
+                    Paragraph Message = new();
+                    if (File.Exists(path))
+                    {
+                        Message.Inlines.Add(new Bold(new Run(">>> Открытие файла ")));
+                        Run RuningText = new($"\"{Path.GetFileName(path)}\"")
+                        {
+                            Background = new SolidColorBrush(Colors.Green),
+                            Cursor = Cursors.Hand,
+                        };
+                        RuningText.MouseEnter += (sender, e) =>
+                        {
+                            ColorAnimate.To = Color.FromRgb(53, 161, 175);
+                            RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
+                        };
+                        RuningText.MouseLeave += (sender, e) =>
+                        {
+                            IELMessageMain.CloseBorderInformation();
+                            ColorAnimate.To = Colors.Green;
+                            RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
+                        };
+
+                        RuningText.MouseLeftButtonUp += (sender, e) => Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+                        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+
+                        Message.Inlines.Add(RuningText);
+                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
+                        return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                    }
+                    else return Task.FromResult(
+                        CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
+                }),
+                #endregion
             ]);
             #endregion
 
@@ -311,11 +358,6 @@ namespace AAC20
             #endregion
 
             #region Event Flags
-            /*Flags.FlagCtrlActivateActionButtonAltMode.ChangeStateFlag += (NewValue) =>
-            {
-                DoubleAnimateObj.To = NewValue ? 1d : 0d;
-                //TextBlockRightButtonIndicatorKey.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            };*/
             Flags.FlagCtrlActivateActionButtonUp.ChangeStateFlag += (NewValue) =>
             {
                 DoubleAnimateObj.To = NewValue ? 1d : 0d;
@@ -369,7 +411,6 @@ namespace AAC20
             Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseLeft += (key) =>
             {
                 FrameComponent.NextPage(Pages.PageObjLabelsAction);
-                
             };
             Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseRight += (key) =>
             {
@@ -397,12 +438,6 @@ namespace AAC20
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
-
-            if (Flags.FlagInternetConnection)
-            {
-                
-                //Pages.PageObjLabelsAction.AddLabel(AACConverter.ConvertRegexToLabelAction("$Name;Command$\"Text\"~"));
-            }
 
             App.BufferCommand.DelElement += (index) =>
             {
@@ -434,16 +469,6 @@ namespace AAC20
             {
                 TextBoxCommandInput.Focus();
             };
-
-            /*TextBoxCommandInput.GotFocus += (sender, e) =>
-            {
-                if (Pages.PageMainButtonsUp.ModulePage.KeyboardMode) Pages.PageMainButtonsUp.ModulePage.KeyboardMode = false;
-                if (Flags.ActionPanelActivate.Value)
-                {
-                    AnimationActionPanel(false, RichTextBoxMainMessage, SizeActiveActionPanel, PositionAnimActionPanel.CenterObject);
-                    Flags.FlagCtrlActivateActionButtonAltMode.Value = false;
-                }
-            };*/
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
@@ -573,48 +598,30 @@ namespace AAC20
                 DoubleAnimateObj.To = 1d;
                 TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             };
-            /*FrameComponent.ChangeElementPage += () =>
-            {
-                void SetZIndex(object? INsender, EventArgs INe)
-                {
-                    int Z = e.Content == null ? 1 : 0;
-                    Canvas.SetZIndex(FrameComponent, e.Content == null ? 0 : 1);
-                    Canvas.SetZIndex(TextBlockNullFrameElement, Z);
-                    TextBlockNullFrameElement.Opacity = Z;
-                    DoubleAnimateObj.Completed -= SetZIndex;
-                    DoubleAnimateObj.FillBehavior = FillBehavior.HoldEnd;
-                }
-                bool NavigaitedPage = e.Content != null;
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1300d);
-                DoubleAnimateObj.To = NavigaitedPage ? 1d : 0d;
-                FrameComponent.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                if (NavigaitedPage)
-                {
-                    DoubleAnimateObj.To = 0d;
-                    DoubleAnimateObj.FillBehavior = FillBehavior.Stop;
-                    DoubleAnimateObj.Completed += SetZIndex;
-                }
-                else
-                {
-                    DoubleAnimateObj.To = 1d;
-                }
-                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
-                /*if (TextBlockNullFrameElement.Opacity < 1d && e.Content != null) return;
-                if (e.Content != null)
-                {
-                    FrameComponent.Opacity = 0d;
-                    DoubleAnimateObj.To = 1d;
-                    FrameComponent.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                }
-                DoubleAnimateObj.To = e.Content == null ? 1d : 0d;
-                DoubleAnimateObj.FillBehavior = FillBehavior.Stop;
-                DoubleAnimateObj.Completed += SetZIndex;
-                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            };*/
 
             Activated += (sender, e) =>
             {
+                if (!HiAnimation)
+                {
+                    HiAnimation = true;
+
+                    #region Anim Start
+                    #region 1
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(400d);
+
+                    ThicknessAnimate.From = new(8);
+                    ThicknessAnimate.To = BorderImageInformation.Margin;
+                    BorderImageInformation.BeginAnimation(MarginProperty, ThicknessAnimate);
+
+                    ThicknessAnimate.From = new(8);
+                    ThicknessAnimate.To = BorderDateTime.Margin;
+                    BorderDateTime.BeginAnimation(MarginProperty, ThicknessAnimate);
+
+                    ThicknessAnimate.From = null;
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
+                    #endregion
+                    #endregion
+                }
                 //TextBoxCommandInput.Focus();
                 /*GridMain.RenderTransform = new TransformGroup()
                 {

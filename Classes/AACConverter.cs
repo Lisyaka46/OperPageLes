@@ -41,6 +41,22 @@ namespace AAC20.Classes
         }
 
         /// <summary>
+        /// Конвертировать объект текста в массив объектов ярлыка
+        /// </summary>
+        /// <param name="Text">Текст Предоставляемый для обработки</param>
+        /// <remarks>
+        /// Пример синтаксиса одного элемента ярлыка: <c>$Name;Command$"Text"~</c>
+        /// </remarks>
+        /// <returns>Конвертированный массив объектов ярлыка</returns>
+        public static LabelAction[] ConvertRegexToMassLabelAction(string Text)
+        {
+            MatchCollection LabelSQLTextElements = RegexingStartEndSumbol('$', '~').Matches(Text);
+            List<LabelAction> labels = [];
+            foreach (Match match in LabelSQLTextElements) labels.Add(ConvertRegexToLabelAction(match.Value));
+            return [.. labels];
+        }
+
+        /// <summary>
         /// Конвертировать объект текста в объект ярлыка
         /// </summary>
         /// <param name="Text">Текст Предоставляемый для обработки</param>

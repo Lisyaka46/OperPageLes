@@ -3,6 +3,7 @@ using AAC20.Windows.Pages.License;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 namespace AAC20.Windows
@@ -33,54 +34,32 @@ namespace AAC20.Windows
         private readonly PageUserThanks PageThanks = new();
 
         /// <summary>
+        /// Массив помошников 
+        /// </summary>
+        private readonly AssistentThanks[] Assistents =
+        [
+            new("Lisyaka", "\"Не знаю...\"",
+                "- За всю разработку.",
+                new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"),
+                new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Logo02.png")
+                )
+            {
+                ColorNickName = Color.FromRgb(245, 225, 101),
+                ColorPhrase =  Color.FromRgb(219, 177, 205)
+            },
+            new("Minsi", "\"Спасибо что живая.\"",
+                "- За помощь в разработке.\n- За проектирование программы."
+                )
+            {
+                ColorNickName = Color.FromRgb(86, 255, 120),
+                ColorPhrase =  Color.FromRgb(195, 189, 222)
+            },
+        ];
+
+        /// <summary>
         /// Индекс отображения благодарственного сообщения
         /// </summary>
         private int Value = -1;
-
-        /// <summary>
-        /// Массив ников
-        /// </summary>
-        private readonly string[] NickNamesThanks =
-        [
-            "Lisyaka",
-            "Minsi",
-        ];
-
-        /// <summary>
-        /// Массив фраз
-        /// </summary>
-        private readonly string[] PhrasesThanks =
-        [
-            "\"Я не знаю...\"",
-            "\"Спасибо что живая.\"",
-        ];
-
-        /// <summary>
-        /// Массив благодарственных сообщений
-        /// </summary>
-        private readonly string[] MessageThanks =
-        [
-            "- За всю разработку.",
-            "- За помощь в разработке.\n- За проектирование программы.",
-        ];
-
-        /// <summary>
-        /// Массив путей для иконок
-        /// </summary>
-        private readonly Uri?[] UriIconThanks =
-        [
-            new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"),
-            null,
-        ];
-
-        /// <summary>
-        /// Массив объектов цвета, для персонализвации пользователя в благодарностях (Ник, Фраза)
-        /// </summary>
-        private readonly (Color?, Color?)[] ForegroundColorThanks =
-        [
-            (Color.FromRgb(245, 225, 101), Color.FromRgb(219, 177, 205)),
-            (Color.FromRgb(86, 255, 120), Color.FromRgb(195, 189, 222)),
-        ];
 
         public LicenseWindow()
         {
@@ -155,16 +134,9 @@ namespace AAC20.Windows
         /// </summary>
         private void UpdateThanks()
         {
-            if (Value == NickNamesThanks.Length - 1) Value = 0;
+            if (Value == Assistents.Length - 1) Value = 0;
             else Value++;
-            PageThanks.NextUser(
-                NickNamesThanks[Value],
-                PhrasesThanks[Value],
-                MessageThanks[Value],
-                UriIconThanks[Value],
-                ForegroundColorThanks[Value].Item1 ?? Colors.Black,
-                ForegroundColorThanks[Value].Item2 ?? Colors.Black
-                );
+            PageThanks.NextUser(Assistents[Value]);
         }
     }
 }

@@ -74,8 +74,8 @@
                 <RowDefinition Height="26*"/>
                 <RowDefinition Height="26*"/>
             </Grid.RowDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" TextFontFamily="Bahnschrift" DefaultBackground="#FF77C1DA" SelectBackground="DeepSkyBlue" ClickedBackground="#FFB8EDFF" SelectBorderBrush="#FF13162F" ClickedBorderBrush="#FF212031" SelectForeground="#FF0D2523" ClickedForeground="#FF16242B" TextFontSize="14"/>
-            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Отмена" TextFontFamily="Bahnschrift" DefaultBackground="#FFDA9B77" SelectBackground="#FFE6A960" ClickedBackground="#FFFFD2B8" SelectBorderBrush="#FF2F2A13" ClickedBorderBrush="#FF303120" SelectForeground="#FF25210D" ClickedForeground="#FF2B2116" Grid.Row="1" TextFontSize="14"/>
+            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" TextFontFamily="Bahnschrift" TextFontSize="14"/>
+            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Отмена" TextFontFamily="Bahnschrift" Grid.Row="1" TextFontSize="14"/>
         </Grid>
     </Grid>
 </Window>

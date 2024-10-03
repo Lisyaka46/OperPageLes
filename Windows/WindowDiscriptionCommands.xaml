@@ -25,11 +25,11 @@
                 <ColumnDefinition Width="253*"/>
                 <ColumnDefinition Width="59*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonText x:Name="IELButtonConsole" DefaultBackground="#FFDECDDB" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Консольные команды" CornerRadius="6,6,6,6" SelectBackground="#FF8DCBF3" SelectBorderBrush="#FF4A1138" SelectForeground="#FF1C2B37" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" Margin="3,0,3,0" Grid.RowSpan="1" VisibleMouseImaging="False"/>
-            <GUI:IELButtonText x:Name="IELButtonVoice" DefaultBackground="#FFDECDDB" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Голос. команды" CornerRadius="6,6,6,6" SelectBackground="#FF8DCBF3" SelectBorderBrush="#FF4A1138" SelectForeground="#FF1C2B37" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" Grid.Column="1" Margin="3,0,3,0" Grid.RowSpan="1" VisibleMouseImaging="False"/>
-            <GUI:IELButtonText x:Name="IELButtonSoft" DefaultBackground="#FFDECDDB" DefaultBorderBrush="Black" DefaultForeground="Black" TextFontSize="14" TextFontFamily="Calibri" Text="Пользоват. команды" CornerRadius="6,6,6,6" SelectBackground="#FF8DCBF3" SelectBorderBrush="#FF4A1138" SelectForeground="#FF1C2B37" ClickedBackground="#FFE1FFF7" ClickedBorderBrush="#FF134A28" ClickedForeground="#FF004027" FontWeight="Bold" Grid.Column="2" FontFamily="Arial" Margin="3,0,3,0" Grid.RowSpan="1" VisibleMouseImaging="False"/>
+            <GUI:IELButtonText x:Name="IELButtonConsole" TextFontSize="14" TextFontFamily="Calibri" Text="Консольные команды" CornerRadius="6,6,6,6" FontWeight="Bold" Margin="3,0,3,0" Grid.RowSpan="1" VisibleMouseImaging="False"/>
+            <GUI:IELButtonText x:Name="IELButtonVoice" TextFontSize="14" TextFontFamily="Calibri" Text="Голос. команды" CornerRadius="6,6,6,6" FontWeight="Bold" Grid.Column="1" Margin="3,0,3,0" Grid.RowSpan="1" VisibleMouseImaging="False"/>
+            <GUI:IELButtonText x:Name="IELButtonSoft" TextFontSize="14" TextFontFamily="Calibri" Text="Пользоват. команды" CornerRadius="6,6,6,6" FontWeight="Bold" Grid.Column="2" FontFamily="Arial" Margin="3,0,3,0" Grid.RowSpan="1" VisibleMouseImaging="False"/>
             <GUI:IELTextBox x:Name="IELInputSearchCommand" Grid.Column="3" BorderThicknessBlock="4,2,4,2" CornerRadius="6,6,6,6" Margin="3,0,0,0" Grid.RowSpan="1"/>
-            <GUI:IELImageButton x:Name="IELButtonSearchCommand" Grid.Column="4" Imaging="/Windows/WindowsImages/Search.png" ImageMargin="1,1,1,1" BorderThicknessBlock="3,3,3,3" Margin="7,0,7,0" DefaultBackground="#FF8CDCDE" SelectBackground="#FF5ACEF5" SelectBorderBrush="#FF1A1335" ClickedBorderBrush="#FF46003A" Grid.RowSpan="1"/>
+            <GUI:IELImageButton x:Name="IELButtonSearchCommand" Grid.Column="4" Imaging="/Windows/WindowsImages/Search.png" ImageMargin="1,1,1,1" BorderThicknessBlock="3,3,3,3" Margin="7,0,7,0" Grid.RowSpan="1"/>
             <Rectangle Grid.Row="1" Margin="0,2,0,0" Grid.ColumnSpan="5">
                 <Rectangle.Fill>
                     <RadialGradientBrush GradientOrigin="0.5,-1" Center="0.5,0.5" RadiusX="0.7" RadiusY="0.7">
@@ -75,8 +75,8 @@
                                 <ColumnDefinition Width="133"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Text="Print* text, text2" Margin="5,0,5,0" FontSize="14" TextAlignment="Center" Grid.ColumnSpan="1" VerticalAlignment="Center" Height="19"/>
-                            <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" TextFontSize="14" TextFontFamily="Bahnschrift" CornerRadius="6,6,6,6" Margin="3,0,3,0" SelectBackground="#FFA5A4C8" ClickedBackground="#FFEBA5EF" SelectBorderBrush="#FF0E293E" ClickedBorderBrush="#FF420D39" SelectForeground="#FF0E2722" ClickedForeground="#FF1E1D27" VisibleMouseImaging="False"/>
-                            <GUI:IELImageButton x:Name="IELButtonInfoParameter" Grid.Column="1" Imaging="/Windows/WindowsImages/Logo03.png" ImageMargin="2,2,2,2" BorderThicknessBlock="2,2,2,2" DefaultBackground="#FF53E8F3" SelectBackground="#FF53F3D2" SelectBorderBrush="#FF32463C" ClickedBorderBrush="#FF00442C" CornerRadius="6,6,6,6" Panel.ZIndex="2" Margin="2,0,2,0"/>
+                            <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" TextFontSize="14" TextFontFamily="Bahnschrift" CornerRadius="6,6,6,6" Margin="3,0,3,0" VisibleMouseImaging="False"/>
+                            <GUI:IELImageButton x:Name="IELButtonInfoParameter" Grid.Column="1" Imaging="/Windows/WindowsImages/Logo03.png" ImageMargin="2,2,2,2" BorderThicknessBlock="2,2,2,2" CornerRadius="6,6,6,6" Panel.ZIndex="2" Margin="2,0,2,0"/>
                         </Grid>
                     </Border>
                     <Border x:Name="BorderContextMenuParameter" BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5,5,5,5" Margin="122,15,0,0" Grid.RowSpan="3" Background="#D82D8A80" Panel.ZIndex="1" Width="380" Height="155">

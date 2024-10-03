@@ -13,6 +13,10 @@
     <None Remove="Fonts\Tablon-Regular.ttf" />
     <None Remove="Windows\WindowsImages\20.png" />
     <None Remove="Windows\WindowsImages\DoubleMouseButton.png" />
+    <None Remove="Windows\WindowsImages\Labels\Command.png" />
+    <None Remove="Windows\WindowsImages\Labels\File.png" />
+    <None Remove="Windows\WindowsImages\Labels\Folder.png" />
+    <None Remove="Windows\WindowsImages\Labels\Link.png" />
     <None Remove="Windows\WindowsImages\LeftMouseButton.png" />
     <None Remove="Windows\WindowsImages\LicenseIco.png" />
     <None Remove="Windows\WindowsImages\Loading.gif" />
@@ -23,6 +27,7 @@
     <None Remove="Windows\WindowsImages\RightMouseButton.png" />
     <None Remove="Windows\WindowsImages\Search.png" />
     <None Remove="Windows\WindowsImages\Settings.png" />
+    <None Remove="Windows\WindowsImages\Wifi.png" />
     <None Remove="Windows\WindowsImages\WifiOff.png" />
     <None Remove="Windows\WindowsImages\WifiOn.png" />
   </ItemGroup>
@@ -38,6 +43,10 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Windows\WindowsImages\DoubleMouseButton.png" />
+    <Resource Include="Windows\WindowsImages\Labels\Command.png" />
+    <Resource Include="Windows\WindowsImages\Labels\File.png" />
+    <Resource Include="Windows\WindowsImages\Labels\Folder.png" />
+    <Resource Include="Windows\WindowsImages\Labels\Link.png" />
     <Resource Include="Windows\WindowsImages\LeftMouseButton.png" />
     <Resource Include="Windows\WindowsImages\LicenseIco.png" />
     <Resource Include="Windows\WindowsImages\Loading.gif" />
@@ -49,6 +58,7 @@
     <Resource Include="Windows\WindowsImages\RightMouseButton.png" />
     <Resource Include="Windows\WindowsImages\Search.png" />
     <Resource Include="Windows\WindowsImages\Settings.png" />
+    <Resource Include="Windows\WindowsImages\Wifi.png" />
     <Resource Include="Windows\WindowsImages\WifiOff.png" />
     <Resource Include="Windows\WindowsImages\WifiOn.png" />
   </ItemGroup>
@@ -69,7 +79,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Classes\GUI\" />
     <Folder Include="Windows\Pages\Settings\" />
   </ItemGroup>
 

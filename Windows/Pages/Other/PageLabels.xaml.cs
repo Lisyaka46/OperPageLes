@@ -10,6 +10,7 @@ using IEL.Interfaces.Core;
 using System.Windows.Media;
 using AAC20.Classes.Flaging;
 using MySql.Data.MySqlClient;
+using System.Windows.Media.Imaging;
 
 namespace AAC20.Windows.Pages.Other
 {
@@ -109,6 +110,7 @@ namespace AAC20.Windows.Pages.Other
             PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
                 ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
+                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
 
             GridMain.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
@@ -172,7 +174,10 @@ namespace AAC20.Windows.Pages.Other
                     {
                         string? Text = reader["LabelConstruct"].ToString();
                         if (Text == null) continue;
-                        labels.Add(AACConverter.ConvertRegexToLabelAction(Text));
+                        foreach (LabelAction Element in AACConverter.ConvertRegexToMassLabelAction(Text))
+                        {
+                            labels.Add(Element);
+                        }
                     }
                     SQLLabelActions = [.. labels];
                 }
@@ -192,6 +197,8 @@ namespace AAC20.Windows.Pages.Other
                         foreach (LabelAction Element in SQLLabelActions)
                         {
                             AddLabel(Element);
+                            ObjectsLabel[^1].ImageTagSource = new BitmapImage(new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Wifi.png"));
+                            ObjectsLabel[^1].ImageTagVisible = true;
                         }
                         SQLLabelActions = [];
                         SQLCompleteSearch = true;
@@ -218,6 +225,14 @@ namespace AAC20.Windows.Pages.Other
         /// <param name="label">Добавляеммый элемент ярлыка</param>
         internal void AddLabel(LabelAction label)
         {
+            string NameFileLabelImage = ConsoleCommand.ReadNameCommand(label.Command) switch
+            {
+                "open_link" => "Link.png",
+                "open_file" => "File.png",
+                "open_directory" => "Folder.png",
+                _ => "Command.png"
+            };
+            Uri UriIconLabel = new($@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Labels\{NameFileLabelImage}");
             IELLabelCommand Label = new(label, ObjectsLabel.Count)
             {
                 Width = 75,
@@ -228,6 +243,7 @@ namespace AAC20.Windows.Pages.Other
                 ContextMenu = null,
                 IntervalHover = 800d,
                 Opacity = 0d,
+                ImageSource = new BitmapImage(UriIconLabel)
             };
             Label.OnActivateMouseLeft += () =>
             {

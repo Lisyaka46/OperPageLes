@@ -100,7 +100,7 @@ namespace AAC20.Windows
                 foreach (int Index in IndexSearch)
                 {
                     Button = (IELButtonText)GridElements.Children[Index];
-                    Button.DefaultBackground = AnimationColor.To ?? default;
+                    //Button.SettingAnimate.BackgroundDNSU.Default = AnimationColor.To ?? default;
                     //Button.BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
                 }
             };
@@ -111,8 +111,8 @@ namespace AAC20.Windows
                 foreach (UIElement Element in GridElements.Children)
                 {
                     Button = (IELButtonText)Element;
-                    if (Button.DefaultBackground == AnimationColor.To) continue;
-                    Button.DefaultBackground = AnimationColor.To ?? default;
+                    //if (Button.SettingAnimate.BackgroundDNSU.Default == AnimationColor.To) continue;
+                    //Button.SettingAnimate.BackgroundDNSU.Default = AnimationColor.To ?? default;
                     //Button.BorderButton.Background.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
                 }
             };
@@ -162,7 +162,7 @@ namespace AAC20.Windows
                 Height = 30,
                 VisibleMouseImaging = false,
 
-                DefaultBackground = Color.FromRgb(207, 206, 160),
+                /*DefaultBackground = Color.FromRgb(207, 206, 160),
                 DefaultBorderBrush = Colors.Black,
                 DefaultForeground = Colors.Black,
 
@@ -172,7 +172,7 @@ namespace AAC20.Windows
 
                 ClickedBackground = Color.FromRgb(131, 168, 171),
                 ClickedBorderBrush = Color.FromRgb(16, 74, 31),
-                ClickedForeground = Colors.Black
+                ClickedForeground = Colors.Black*/
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AAC20.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,15 +59,10 @@ namespace AAC20.Windows.Pages.License
         /// <summary>
         /// Переключить страцину на другого пользователя
         /// </summary>
-        /// <param name="NickName">Ник</param>
-        /// <param name="Phrase">Фраза</param>
-        /// <param name="Message">Сообщение</param>
-        /// <param name="UriIcon">Путь к иконке</param>
-        /// <param name="ColorNickName">Цвет текста ника</param>
-        /// <param name="ColorPhrase">Цвет текста фразы</param>
-        public void NextUser(string NickName, string Phrase, string Message, Uri? UriIcon, Color ColorNickName, Color ColorPhrase)
+        /// <param name="assistent">Данные помошника разработки</param>
+        internal void NextUser(AssistentThanks assistent)
         {
-            AnimOpacity.Completed += (sender, e) => UpdateInfo(NickName, Phrase, Message, UriIcon, ColorNickName, ColorPhrase);
+            AnimOpacity.Completed += (sender, e) => UpdateInfo(ref assistent);
             AnimMargin.To = new(0, -14, 0, 0);
             BeginAnimation(OpacityProperty, AnimOpacity);
             BeginAnimation(MarginProperty, AnimMargin);
@@ -75,23 +71,20 @@ namespace AAC20.Windows.Pages.License
         /// <summary>
         /// Обновить данные
         /// </summary>
-        /// <param name="NickName">Ник</param>
-        /// <param name="Phrase">Фраза</param>
-        /// <param name="Message">Сообщение</param>
-        /// <param name="UriIcon">Путь к иконке</param>
-        /// <param name="ColorNickName">Цвет текста ника</param>
-        /// <param name="ColorPhrase">Цвет текста фразы</param>
-        private void UpdateInfo(string NickName, string Phrase, string Message, Uri? UriIcon, Color ColorNickName, Color ColorPhrase)
+        /// <param name="assistent">Объект данных помошника</param>
+        private void UpdateInfo(ref AssistentThanks assistent)
         {
             Opacity = 0d;
-            TextBlockNickName.Foreground = new SolidColorBrush(ColorNickName);
-            TextBlockNickName.Text = NickName;
-            TextBlockPhrase.Text = Phrase;
-            TextBlockPhrase.Foreground = new SolidColorBrush(ColorPhrase);
-            TextBlockMessage.Text = Message;
-            if (UriIcon != null)
+            TextBlockNickName.Foreground = new SolidColorBrush(assistent.ColorNickName);
+            TextBlockNickName.Text = assistent.NickName;
+            TextBlockPhrase.Text = assistent.Phrase;
+            TextBlockPhrase.Foreground = new SolidColorBrush(assistent.ColorPhrase);
+            TextBlockMessage.Text = assistent.Message;
+            if (assistent.LinkImage != null || assistent.PathImage != null)
             {
-                BitmapImage bitmap = new(UriIcon);
+                BitmapImage bitmap;
+                if (assistent.LinkImage != null && App.InternetPinging.Value) bitmap = new(assistent.LinkImage);
+                else bitmap = new BitmapImage(assistent.PathImage);
                 ImageIconNickName.Source = bitmap;
                 ImageIconNickName.Opacity = 0.4d;
                 AnimMargin.To = new(0, -140, 0, 0);
