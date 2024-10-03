@@ -421,7 +421,7 @@ namespace AAC20
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
-            //ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
+            ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
             BackgroundUpdateVisualData();
             FrameButtonsUp.Navigate(Pages.PageMainButtonsUp);
             TextBlockRightButtonIndicatorKeyButtonsUp.Opacity = 0d;
@@ -620,23 +620,6 @@ namespace AAC20
                     ThicknessAnimate.From = null;
                     ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
                     #endregion
-                    #region 2
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(3000d);
-
-                    ThicknessAnimate.From = new(-20);
-                    ThicknessAnimate.To = ImageFullWindow.Margin;
-                    ImageFullWindow.BeginAnimation(MarginProperty, ThicknessAnimate);
-
-                    DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(3000d);
-                    DoubleAnimateObj.From = 10d;
-                    DoubleAnimateObj.To = 0d;
-                    BlurEffectFullImage.BeginAnimation(BlurEffect.RadiusProperty, DoubleAnimateObj);
-                    DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
-                    DoubleAnimateObj.From = null;
-
-                    ThicknessAnimate.From = null;
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
-                    #endregion
                     #endregion
                 }
                 //TextBoxCommandInput.Focus();
@@ -772,7 +755,7 @@ namespace AAC20
             //ImageTest.Width = 10 + Volume;
             //ImageTest.Height = 10 + Volume;
 
-            /*try
+            try
             {
                 Point MousePoint = Mouse.GetPosition(this);
                 Point PointScreen = PointToScreen(new(0, 0));
@@ -786,7 +769,7 @@ namespace AAC20
                     (MousePoint.Y - (ActualHeight / 2)) / 3);
                 ImageTest.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
             }
-            catch { ImageTest.Margin = new(0); }*/
+            catch { ImageTest.Margin = new(0); }
             
         }
 
