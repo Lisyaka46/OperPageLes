@@ -12,7 +12,11 @@
         Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
         <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
-        <Image x:Name="ImageTest" HorizontalAlignment="Center" Height="200" VerticalAlignment="Center" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Width="200"/>
+        <Image x:Name="ImageFullWindow" Source="/Windows/pole-lavanda-derevya-listva.jpg" Stretch="Fill">
+            <Image.Effect>
+                <BlurEffect x:Name="BlurEffectFullImage" Radius="0"/>
+            </Image.Effect>
+        </Image>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="136"/>
@@ -59,7 +63,7 @@
                     <ColumnDefinition Width="89*"/>
                     <ColumnDefinition Width="45*"/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1" Opacity="0"/>
+                <Image x:Name="ImageIndificator" Margin="9,7,9,7" Grid.Column="1" Opacity="0"/>
                 <GUI:IELButtonText x:Name="ButtonReturnCommand" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160"/>
             </Grid>
             <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,2,2,2" Panel.ZIndex="1">

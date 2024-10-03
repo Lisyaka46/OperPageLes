@@ -186,6 +186,8 @@ namespace AAC20.Windows.Pages.Other
 
                 }
                 AnimationLoadingStop();
+                SearchInfoSQL.Wait = false;
+                SearchInfoSQL.Value = false;
             });
             void ProcessLoadSQLKill(bool NewValueFlag)
             {
@@ -215,8 +217,6 @@ namespace AAC20.Windows.Pages.Other
             SearchInfoSQL.Wait = true;
             AnimationLoadingStart();
             SQLLoadInformation.Start();
-            SearchInfoSQL.Wait = false;
-            SearchInfoSQL.Value = false;
         }
 
         /// <summary>

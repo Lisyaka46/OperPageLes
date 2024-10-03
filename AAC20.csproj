@@ -11,6 +11,8 @@
 
 	<ItemGroup>
     <None Remove="Fonts\Tablon-Regular.ttf" />
+    <None Remove="Windows\AAC20Pulse.wmv" />
+    <None Remove="Windows\pole-lavanda-derevya-listva.jpg" />
     <None Remove="Windows\WindowsImages\20.png" />
     <None Remove="Windows\WindowsImages\DoubleMouseButton.png" />
     <None Remove="Windows\WindowsImages\Labels\Command.png" />
@@ -19,6 +21,7 @@
     <None Remove="Windows\WindowsImages\Labels\Link.png" />
     <None Remove="Windows\WindowsImages\LeftMouseButton.png" />
     <None Remove="Windows\WindowsImages\LicenseIco.png" />
+    <None Remove="Windows\WindowsImages\LicensePreview.wmv" />
     <None Remove="Windows\WindowsImages\Loading.gif" />
     <None Remove="Windows\WindowsImages\Logo01.png" />
     <None Remove="Windows\WindowsImages\Logo02.png" />
@@ -35,6 +38,7 @@
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="9.0.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
@@ -49,6 +53,9 @@
     <Resource Include="Windows\WindowsImages\Labels\Link.png" />
     <Resource Include="Windows\WindowsImages\LeftMouseButton.png" />
     <Resource Include="Windows\WindowsImages\LicenseIco.png" />
+    <Resource Include="Windows\WindowsImages\LicensePreview.wmv">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Windows\WindowsImages\Loading.gif" />
     <Resource Include="Windows\WindowsImages\Logo01.png" />
     <Resource Include="Windows\WindowsImages\Logo03.png" />

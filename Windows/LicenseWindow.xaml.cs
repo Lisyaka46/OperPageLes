@@ -79,9 +79,14 @@ namespace AAC20.Windows
             ImageLicense.Opacity = 0d;
             ImageLicense.RenderSize = new Size(70, 70);
             ImageLicense.Margin = new(0, 45 - 15, 0, 35 - 15);
-            ImageLogo.Margin = new(12, 30 + 10, 0, 0);
-            Image20.Margin = new(-12, 84 - 10, 0, 0);
+            //MediaElementLicense.Source = new(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\LicensePreview.gif");
             FrameLicense.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            ME.Source = new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\LicensePreview.wmv");
+            ME.MediaEnded += (sender, e) =>
+            {
+                ME.Position = TimeSpan.FromMilliseconds(1d);
+                ME.Play();
+            };
         }
 
         public new void ShowDialog()
@@ -90,11 +95,6 @@ namespace AAC20.Windows
             DoubleAnimateAppOpacity.To = 1d;
             BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
 
-            ThicknessAnimatePos.BeginTime = DoubleAnimateAppOpacity.BeginTime + TimeSpan.FromMilliseconds(20d);
-            ThicknessAnimatePos.To = new(0, 30, 0, 0);
-            ImageLogo.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-            ThicknessAnimatePos.To = new(0, 84, 0, 0);
-            Image20.BeginAnimation(MarginProperty, ThicknessAnimatePos);
             PageLicense license = new();
             FrameLicense.Navigate(license);
             AnimationThanks();
@@ -108,7 +108,7 @@ namespace AAC20.Windows
         /// </summary>
         private void LicenseAnimation()
         {
-            ThicknessAnimatePos.BeginTime = TimeSpan.FromMilliseconds(1200d);
+            ThicknessAnimatePos.BeginTime = TimeSpan.FromMilliseconds(2200d);
             ThicknessAnimatePos.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn };
             ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(300d);
             DoubleAnimateAppOpacity.BeginTime = TimeSpan.FromMilliseconds(1300d);
