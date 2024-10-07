@@ -678,6 +678,13 @@ namespace AAC20
                     Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
                     if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
                 };
+                /*Button.SettingAnimate = new IELSettingAnimate(
+                        new BrushSettingQ(
+                    Color.FromRgb(54, 255, 255), Color.FromRgb(58, 171, 108),
+                    Color.FromRgb(54, 169, 157), Color.FromRgb(227, 97, 116)),
+                        new BrushSettingQ(BrushSettingQ.CreateStyle.BorderBrush),
+                        new BrushSettingQ(BrushSettingQ.CreateStyle.Foreground)
+                        );*/
                 App.BufferCommand.Add(CommandString);
                 Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
                 Pages.PageBufferActPanel.ScrollBar.MaxUp(1);

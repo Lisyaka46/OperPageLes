@@ -82,6 +82,7 @@ namespace AAC20.Windows
             ImageLogo.Margin = new(12, 30 + 10, 0, 0);
             Image20.Margin = new(-12, 84 - 10, 0, 0);
             FrameLicense.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            Closed += (sender, e) => GC.Collect(2, GCCollectionMode.Forced);
         }
 
         public new void ShowDialog()

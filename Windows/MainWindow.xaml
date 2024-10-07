@@ -98,7 +98,7 @@
             </Border>
             <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C" Grid.ColumnSpan="2" ForgroundNaming="#FF11FF81"/>
             <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" Grid.Column="2" FontWeight="Bold" TextFontFamily="Calibri" VisibleMouseImaging="False"/>
-            <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC4A7B60">
+                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC4A7B60">
                 <Grid>
                     <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="16" FontFamily="Arial Rounded MT Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,2,0,0"/>
                     <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Arial Rounded MT Bold" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>
