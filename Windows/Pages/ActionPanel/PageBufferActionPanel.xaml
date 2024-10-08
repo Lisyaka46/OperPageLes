@@ -25,7 +25,7 @@
                 <ColumnDefinition Width="103*"/>
                 <ColumnDefinition Width="46*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" StateVisualizationButton="LeftArrow" Text="Назад" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" StateVisualizationButton="LeftArrow"/>
             <TextBlock x:Name="TextBlockCounterBuffer" HorizontalAlignment="Center" TextWrapping="Wrap" Text="00/00" VerticalAlignment="Center" FontFamily="Bahnschrift SemiBold" FontSize="14" Foreground="#FF80EAE2" Grid.Column="2"/>
             <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" TextFontFamily="Calibri" TextFontSize="12" FontWeight="Bold" CharKeyKeyboard="D1" IsEnabled="False" VisibleMouseImaging="False" Grid.Column="1" Margin="3,0,1,0"/>
         </Grid>

@@ -12,6 +12,7 @@
 	<ItemGroup>
     <None Remove="Fonts\Tablon-Regular.ttf" />
     <None Remove="Windows\WindowsImages\20.png" />
+    <None Remove="Windows\WindowsImages\ArrowFrameComponent.png" />
     <None Remove="Windows\WindowsImages\DoubleMouseButton.png" />
     <None Remove="Windows\WindowsImages\Labels\Command.png" />
     <None Remove="Windows\WindowsImages\Labels\File.png" />
@@ -42,6 +43,7 @@
     <Resource Include="Fonts\Tablon-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Windows\WindowsImages\ArrowFrameComponent.png" />
     <Resource Include="Windows\WindowsImages\DoubleMouseButton.png" />
     <Resource Include="Windows\WindowsImages\Labels\Command.png" />
     <Resource Include="Windows\WindowsImages\Labels\File.png" />

@@ -32,7 +32,12 @@ namespace AAC20.Windows.Pages.Other
         /// <summary>
         /// Динамический массив ярлыков
         /// </summary>
-        private readonly List<IELLabelCommand> ObjectsLabel;
+        private List<IELLabelCommand> ObjectsLabel;
+
+        /// <summary>
+        /// Динамический массив ярлыков
+        /// </summary>
+        private List<IELLabelCommand> ObjectsSQLLabel;
 
         /// <summary>
         /// Индекс выделенного элемента
@@ -53,6 +58,11 @@ namespace AAC20.Windows.Pages.Other
         /// Скролл-бар страницы ярлыков
         /// </summary>
         internal readonly CounterScrollBar ScrollBar;
+
+        /// <summary>
+        /// Узнать количество созданных ярлыков
+        /// </summary>
+        internal int CountLabel => ObjectsLabel.Count + ObjectsSQLLabel.Count;
 
         /// <summary>
         /// Объект анимации для управления double значением
@@ -100,6 +110,7 @@ namespace AAC20.Windows.Pages.Other
         public PageLabels()
         {
             InitializeComponent();
+            RowDefinitionSQLLabels.Height = new(0, GridUnitType.Star);
             BorderScrollBackground.Width = 0d;
             ModulePage = new(nameof(PageLabels));
             ScrollBar = new(10, TrafficShare: 2);
@@ -107,20 +118,24 @@ namespace AAC20.Windows.Pages.Other
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             SQLLabelActions = [];
             ObjectsLabel = [];
+            ObjectsSQLLabel = [];
             PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
                 ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
 
-            GridMain.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
-            GridMain.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+            GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+            GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+
+            GridSQLLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+            GridSQLLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
 
             ScrollBar.ChangedValue += (NewValue) =>
             {
-                ThicknessAnimate.To = new(0, 0 - (75 + 3) * NewValue, 0, 0);
+                ThicknessAnimate.To = new(0, 0 - (75 + BorderDinamicLabels.Padding.Top) * NewValue, 0, 0);
                 GridMain.BeginAnimation(MarginProperty, ThicknessAnimate);
-                DoubleAnimateObj.To = ActualWidth / (int)(ScrollBar.MaxValue + 0.5d) * NewValue;
+                DoubleAnimateObj.To = ActualWidth / (int)(ScrollBar.MaxValue) * NewValue;
                 BorderScrollBackground.BeginAnimation(WidthProperty, DoubleAnimateObj);
             };
             GridMain.MouseWheel += (sender, e) =>
@@ -139,7 +154,6 @@ namespace AAC20.Windows.Pages.Other
                 Storyboard ellipseStoryboard = new();
                 ellipseStoryboard.Children.Add(ThicknessAnimate);
                 ellipseStoryboard.Begin(BorderNamingLabel);
-                //BorderNamingLabel.BeginAnimation(, )
             };
 
             BorderNamingLabel.MouseLeave += (sender, e) =>
@@ -194,11 +208,14 @@ namespace AAC20.Windows.Pages.Other
                     SQLLoadInformation.Kill();
                     if (SQLLabelActions.Length > 0)
                     {
+                        BorderDinamicLabels.BorderThickness = new(0, 1, 0, 0);
+                        BorderSQLLabels.BorderThickness = new(0, 0, 0, 1);
+                        RowDefinitionSQLLabels.Height = new(
+                            SQLLabelActions.Length / 2 * (75 + BorderDinamicLabels.Padding.Top) + BorderSQLLabels.Padding.Bottom,
+                            GridUnitType.Pixel);
                         foreach (LabelAction Element in SQLLabelActions)
                         {
-                            AddLabel(Element);
-                            ObjectsLabel[^1].ImageTagSource = new BitmapImage(new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Wifi.png"));
-                            ObjectsLabel[^1].ImageTagVisible = true;
+                            AddSQLLabel(Element);
                         }
                         SQLLabelActions = [];
                         SQLCompleteSearch = true;
@@ -220,10 +237,13 @@ namespace AAC20.Windows.Pages.Other
         }
 
         /// <summary>
-        /// Добавить в страницу элемент ялрыка
+        /// Сгенерировать объект интерфейса ярлыка
         /// </summary>
-        /// <param name="label">Добавляеммый элемент ярлыка</param>
-        internal void AddLabel(LabelAction label)
+        /// <param name="label">Объект ссылки на данные ярлыка</param>
+        /// <param name="Data">Массив ярлыков</param>
+        /// <param name="grid">Контейнер нахождения ярлыка</param>
+        /// <returns>Объект интерфейса ярлыка</returns>
+        private IELLabelCommand CreateLabel(LabelAction label, ref List<IELLabelCommand> Data, ref Grid grid)
         {
             string NameFileLabelImage = ConsoleCommand.ReadNameCommand(label.Command) switch
             {
@@ -233,11 +253,11 @@ namespace AAC20.Windows.Pages.Other
                 _ => "Command.png"
             };
             Uri UriIconLabel = new($@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Labels\{NameFileLabelImage}");
-            IELLabelCommand Label = new(label, ObjectsLabel.Count)
+            IELLabelCommand Label = new(label, Data.Count)
             {
                 Width = 75,
                 Height = 75,
-                Margin = new(0, (75 + 3) * (ObjectsLabel.Count / GridMain.ColumnDefinitions.Count) + 2, 0, 0),
+                Margin = new(0, (75 + BorderDinamicLabels.Padding.Top) * (Data.Count / grid.ColumnDefinitions.Count), 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 ContextMenu = null,
@@ -265,10 +285,40 @@ namespace AAC20.Windows.Pages.Other
             };
             Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             Label.MouseDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            return Label;
+        }
+
+        /// <summary>
+        /// Добавить в страницу SQL элемент ялрыка
+        /// </summary>
+        /// <param name="label">Добавляеммый элемент ярлыка</param>
+        internal void AddSQLLabel(LabelAction label)
+        {
+            IELLabelCommand Label = CreateLabel(label, ref ObjectsSQLLabel, ref GridSQLLabels);
+            Label.ImageTagSource = new BitmapImage(new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Wifi.png"));
+            Label.ImageTagVisible = true;
+            ObjectsSQLLabel.Add(Label);
+            GridSQLLabels.Children.Add(Label);
+            Grid.SetColumn(Label, (ObjectsSQLLabel.Count - 1) % GridSQLLabels.ColumnDefinitions.Count);
+
+            TextBlockCount.Text = $"{CountLabel} Ярлыков";
+            DoubleAnimateObj.To = 1d;
+            Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+            ScrollBar.MaxUp(1);
+        }
+
+        /// <summary>
+        /// Добавить в страницу элемент ялрыка
+        /// </summary>
+        /// <param name="label">Добавляеммый элемент ярлыка</param>
+        internal void AddLabel(LabelAction label)
+        {
+            IELLabelCommand Label = CreateLabel(label, ref ObjectsLabel, ref GridDinamicLabels);
             ObjectsLabel.Add(Label);
-            TextBlockCount.Text = $"{ObjectsLabel.Count} Ярлыков";
-            GridMain.Children.Add(Label);
-            Grid.SetColumn(Label, (ObjectsLabel.Count - 1) % GridMain.ColumnDefinitions.Count);
+            GridDinamicLabels.Children.Add(Label);
+            Grid.SetColumn(Label, (ObjectsLabel.Count - 1) % GridDinamicLabels.ColumnDefinitions.Count);
+
+            TextBlockCount.Text = $"{CountLabel} Ярлыков";
             DoubleAnimateObj.To = 1d;
             Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             ScrollBar.MaxUp(1);

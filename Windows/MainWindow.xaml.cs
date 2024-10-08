@@ -46,6 +46,11 @@ namespace AAC20
             /// Флаг соеденения с интернетом
             /// </summary>
             internal static readonly Flag FlagInternetConnection = new(false);
+
+            /// <summary>
+            /// Флаг состояния видимости объекта страниц
+            /// </summary>
+            internal static readonly Flag FlagFrameComponentVisible = new(true);
         };
 
         /// <summary>
@@ -73,6 +78,12 @@ namespace AAC20
             /// </summary>
             internal static readonly PageLabels PageObjLabelsAction = new();
 
+            #if DEBUG
+            /// <summary>
+            /// Страница разработчика
+            /// </summary>
+            internal static readonly PageDeveloper PageDeveloperState = new();
+            #endif
         }
 
         /// <summary>
@@ -154,6 +165,17 @@ namespace AAC20
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
+
+                #region dev
+                new ConsoleCommand("dev",
+                "Открывает страницу разработчика",
+                (Command, param) =>
+                {
+                    if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
+                    FrameComponent.NextPage(Pages.PageDeveloperState);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+                #endregion
                 #endif
 
                 #region clear
@@ -202,7 +224,7 @@ namespace AAC20
                 (Command, param) =>
                 {
                     Pages.PageObjLabelsAction.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
-                    CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
+                    //CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
                     //Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
@@ -354,9 +376,6 @@ namespace AAC20
             ]);
             #endregion
 
-            #region Label
-            #endregion
-
             #region Event Flags
             Flags.FlagCtrlActivateActionButtonUp.ChangeStateFlag += (NewValue) =>
             {
@@ -410,12 +429,17 @@ namespace AAC20
             };
             Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseLeft += (key) =>
             {
+                if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
                 FrameComponent.NextPage(Pages.PageObjLabelsAction);
             };
             Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseRight += (key) =>
             {
                 FrameComponent.CloseFrame();
-
+            };
+            Pages.PageDeveloperState.IELButtonCreateLabel.OnActivateMouseLeft += () =>
+            {
+                Pages.PageObjLabelsAction.AddLabel(new("Test", "Test", "Test"));
+                Pages.PageDeveloperState.TextBlockLabelsCount.Text = $"={Pages.PageObjLabelsAction.CountLabel}";
             };
             #endregion
 
@@ -469,6 +493,27 @@ namespace AAC20
             {
                 TextBoxCommandInput.Focus();
             };
+
+            #region IELButtonFrameComponentVisible
+            IELButtonFrameComponentVisible.RenderTransform = new TransformGroup();
+            ((TransformGroup)IELButtonFrameComponentVisible.RenderTransform).Children.Add(new RotateTransform(0d, 0d, 0d));
+
+            IELButtonFrameComponentVisible.OnActivateMouseLeft += () => 
+            {
+                UsingChangeStateFrameComponent();
+                IELMessageMain.CloseBorderInformation();
+            };
+            IELButtonFrameComponentVisible.MouseHover += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELButtonFrameComponentVisible, IELButtonFrameComponentVisible.Name,
+                    (Flags.FlagFrameComponentVisible ? "Скрыть" : "Показать") + " глобальные страницы",
+                    IELBlockMessage.OrientationBorderInfo.LeftUp);
+            };
+            IELButtonFrameComponentVisible.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
@@ -599,6 +644,28 @@ namespace AAC20
                 TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             };
 
+            SizeChanged += (sender, e) =>
+            {
+                if (Pages.PageObjLabelsAction.GridMain.ActualHeight == 0d) return;
+                int ScrollCountVisible = (int)(BorderFrameComponent.ActualHeight / 79d) * Pages.PageObjLabelsAction.ScrollBar.TrafficShare;
+                Pages.PageDeveloperState.ListBoxDeveloper.Items[0] = $"[0] CountVisible= {ScrollCountVisible} : {Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements}";
+                Pages.PageDeveloperState.ListBoxDeveloper.Items[1] = $"[1] ActualHeight={Pages.PageObjLabelsAction.GridMain.ActualHeight}";
+                if (ScrollCountVisible != Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
+                {
+                    int Value = Math.Abs(ScrollCountVisible - Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements) / Pages.PageObjLabelsAction.ScrollBar.TrafficShare;
+                    if (ScrollCountVisible > Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
+                    {
+                        Pages.PageObjLabelsAction.ScrollBar.VisibleUp(Value);
+                        //DoubleAnimateObj.To = 79 * ScrollCountVisible + 25;
+                    }
+                    else if (ScrollCountVisible < Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
+                    {
+                        Pages.PageObjLabelsAction.ScrollBar.VisibleDown(Value);
+                        //DoubleAnimateObj.To = 79 * ScrollCountVisible + 25;
+                    }
+                }
+            };
+
             Activated += (sender, e) =>
             {
                 if (!HiAnimation)
@@ -643,6 +710,27 @@ namespace AAC20
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
             TextBoxCommandInput.Focus();
             //UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
+        }
+
+        /// <summary>
+        /// Изменить состояние глобальных страниц на противоположное
+        /// </summary>
+        private void UsingChangeStateFrameComponent()
+        {
+            DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(560d);
+            DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 180d : 0d;
+            ((RotateTransform)((TransformGroup)IELButtonFrameComponentVisible.RenderTransform).Children[0]).
+                BeginAnimation(RotateTransform.AngleProperty, DoubleAnimateObj);
+
+            DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 0d : 220d;
+            Storyboard storyboard = new();
+            storyboard.Children.Add(DoubleAnimateObj);
+            Storyboard.SetTarget(DoubleAnimateObj, FrameComponentColumn);
+            Storyboard.SetTargetProperty(DoubleAnimateObj, new PropertyPath("(ColumnDefinition.MaxWidth)"));
+            storyboard.Begin();
+            DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
+            Flags.FlagFrameComponentVisible.Value = !Flags.FlagFrameComponentVisible;
+            IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
         }
 
         /// <summary>

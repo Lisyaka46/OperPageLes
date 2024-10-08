@@ -37,37 +37,35 @@ namespace AAC20.Classes
             }
         }
 
+        private int _MaxValue;
         /// <summary>
         /// Максимальное значение счётчика
         /// </summary>
-        public double MaxValue { get; private set; }
+        public double MaxValue
+        {
+            get => _MaxValue / TrafficShare;
+        }
 
         /// <summary>
         /// Количество видимых элементов при старте
         /// </summary>
-        public readonly int CountVisibleElements;
+        public int CountVisibleElements { get; private set; }
 
         /// <summary>
         /// Доля видимости объектов на позиции
         /// </summary>
-        public readonly int TrafficShare;
-
-        /// <summary>
-        /// Минимальный порог максимального значения счётчика
-        /// </summary>
-        private readonly double Min_MaxValue;
+        public int TrafficShare { get; private set; }
 
         /// <summary>
         /// Инициализировать объект счётчика скролл-бара
         /// </summary>
         /// <param name="CountVisible">Количество видимых элементов при старте перед скроллом</param>
         /// <param name="TrafficShare">Доля видимости объектов на позиции скролла</param>
-        public CounterScrollBar(int CountVisible, ushort TrafficShare = 1)
+        public CounterScrollBar(int CountVisible, ushort TrafficShare = 1, int CountElements = 0)
         {
             this.TrafficShare = TrafficShare;
             CountVisibleElements = CountVisible;
-            MaxValue = -CountVisible / TrafficShare;
-            Min_MaxValue = MaxValue;
+            _MaxValue = CountElements - CountVisibleElements;
             _Value = 0;
         }
 
@@ -101,7 +99,15 @@ namespace AAC20.Classes
         /// </summary>
         /// <param name="value">Значение на сколько увеличивается максимальное значение</param>
         /// <returns>Увеличеное максимальное значение</returns>
-        public double MaxUp(int value) => MaxValue += (double)value / TrafficShare;
+        public double MaxUp(int value)
+        {
+            _MaxValue += value;
+            if (MaxValue > 0)
+            {
+                if (Value + value / TrafficShare >= MaxValue) Value = (int)MaxValue;
+            }
+            return MaxValue;
+        }
 
         /// <summary>
         /// Функция уменьшения максимального значения
@@ -110,13 +116,11 @@ namespace AAC20.Classes
         /// <returns>Уменьшенное максимальное значение</returns>
         public double MaxDown(int value)
         {
-            if (MaxValue - (value / TrafficShare) >= Min_MaxValue)
-            {
-                MaxValue -= (double)value / TrafficShare;
-                if (Value > 0 && Value > MaxValue) Value = (int)MaxValue;
-                return MaxValue;
-            }
-            else throw new ArgumentOutOfRangeException(nameof(value), $"({nameof(MaxValue)} - {nameof(value)} < {Min_MaxValue}) невозможно уменьшить максимальное значение ({MaxValue - value} < {Min_MaxValue})");
+            if (Value - value / TrafficShare < 0) Value = 0;
+            else if (Value == MaxValue) Value -= value / TrafficShare;
+            else if ((MaxValue - Value) * TrafficShare < CountVisibleElements / TrafficShare) Value = (_MaxValue - value) / TrafficShare;
+            _MaxValue -= value;
+            return MaxValue;
         }
 
         /// <summary>
@@ -128,7 +132,38 @@ namespace AAC20.Classes
         public void MaxClear()
         {
             Value = 0;
-            MaxValue = Min_MaxValue;
+            _MaxValue = -CountVisibleElements;
+        }
+
+        /// <summary>
+        /// Функция увеличения значения видимости элементов
+        /// </summary>
+        /// <returns>Увеличеное значение видимости элементов</returns>
+        public int VisibleUp(int CountLines)
+        {
+            int Value = CountLines * TrafficShare;
+            CountVisibleElements += Value;
+            if (_MaxValue > 0)
+            {
+                MaxDown(Value);
+            }
+            return CountVisibleElements;
+        }
+
+        /// <summary>
+        /// Функция уменьшения значения видимости элементов
+        /// </summary>
+        /// <returns>Уменьшенное значение видимости элементов</returns>
+        public double VisibleDown(int CountLines)
+        {
+            int Value = CountLines * TrafficShare;
+            if (CountVisibleElements > Value)
+            {
+                CountVisibleElements -= Value;
+                MaxUp(Value);
+                return CountVisibleElements;
+            }
+            else throw new Exception($"({nameof(Value)} <= 0) невозможно уменьшить значение ({CountVisibleElements - Value} < {TrafficShare})");
         }
     }
 }

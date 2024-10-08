@@ -48,62 +48,85 @@
                     </TextBlock>
                 </Grid>
             </Border>
-            <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="2" Margin="2,2,2,2" Grid.Row="1" Background="#CC4A7B60" Panel.ZIndex="0">
-                <Grid>
-                    <GUI:IELFrameDefault x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" ClipToBounds="True"/>
-                    <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16" Panel.ZIndex="1"/>
-                </Grid>
-            </Border>
             <Grid Grid.Column="2" Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="89*"/>
                     <ColumnDefinition Width="45*"/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1" Opacity="0"/>
-                <GUI:IELButtonText x:Name="ButtonReturnCommand" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160"/>
+                <GUI:IELButtonText x:Name="ButtonReturnCommand" TextFontSize="13" TextFontFamily="Calibri" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160">
+                    <GUI:IELButtonText.BackgroundSetting>
+                        <Classes:BrushSettingQ Default="#FF55C7A5" NotEnabled="#FFCE4867" Select="#FF47F9C4" Used="White"/>
+                    </GUI:IELButtonText.BackgroundSetting>
+                </GUI:IELButtonText>
             </Grid>
-            <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.Row="1" Grid.ColumnSpan="2" Margin="2,2,2,2" Panel.ZIndex="1">
-                <Grid x:Name="GridConsole">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1"/>
-                </Grid>
-            </Border>
-            <Border x:Name="BorderImageInformation" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" CornerRadius="10,10,10,10" Grid.Column="1" Grid.ColumnSpan="1" Margin="3,3,3,3" Background="#CC4A7B60">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="43"/>
-                        <ColumnDefinition Width="43"/>
-                        <ColumnDefinition Width="323*"/>
-                        <ColumnDefinition Width="35*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border x:Name="BorderInternetConnection" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF4C8069" Margin="3,3,3,3">
-                        <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/Windows/WindowsImages/WifiOff.png" Margin="-2,0,0,0">
-                            <Image.Effect>
-                                <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
-                            </Image.Effect>
-                            <Image.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
-                                    <SkewTransform AngleY="0"/>
-                                    <RotateTransform Angle="0"/>
-                                    <TranslateTransform Y="0" X="0"/>
-                                </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                    </Border>
-                    <GUI:IELImageButton Grid.Column="1" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Imaging="/Windows/WindowsImages/Logo02.png" ImageMargin="2,2,2,2"/>
-                </Grid>
-            </Border>
+            <Grid x:Name="GridMainComponents" Grid.Row="1" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition x:Name="FrameComponentColumn" Width="220" MaxWidth="220" MinWidth="0"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Margin="2,2,2,2" Panel.ZIndex="1">
+                    <Grid x:Name="GridConsole">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="BorderFrameComponent" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Column="1" Background="#CC4A7B60" Panel.ZIndex="0" MinWidth="220" Margin="2,2,2,2">
+                    <Grid x:Name="GridFrameComponent">
+                        <GUI:IELFrameDefault x:Name="FrameComponent" Foreground="#FF4C0000" FontSize="12" ClipToBounds="True" VerticalContentAlignment="Top"/>
+                        <TextBlock x:Name="TextBlockNullFrameElement" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Нет выбранного элемента" VerticalAlignment="Center" FontFamily="Candara" FontStyle="Italic" FontWeight="Normal" Foreground="#FF1A233E" FontSize="16" Panel.ZIndex="1"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="124"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BorderImageInformation" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#CC4A7B60" Grid.Column="1" Grid.ColumnSpan="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="43"/>
+                            <ColumnDefinition Width="43"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="43"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="BorderInternetConnection" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF4C8069" Margin="3,3,3,3">
+                            <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/Windows/WindowsImages/WifiOff.png" Margin="-2,0,0,0">
+                                <Image.Effect>
+                                    <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
+                                </Image.Effect>
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                                        <SkewTransform AngleY="0"/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform Y="0" X="0"/>
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Border>
+                        <GUI:IELImageButton x:Name="IELButtonFrameComponentVisible" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/Windows/WindowsImages/ArrowFrameComponent.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="2000">
+                            <GUI:IELImageButton.BorderBrushSetting>
+                                <Classes:BrushSettingQ Default="Black" NotEnabled="#FF400817" Select="#FF151729" Used="#FF173128"/>
+                            </GUI:IELImageButton.BorderBrushSetting>
+                            <GUI:IELImageButton.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF3EBAD2" NotEnabled="#FFE24267" Select="#FF26DEDA" Used="White"/>
+                            </GUI:IELImageButton.BackgroundSetting>
+                        </GUI:IELImageButton>
+                    </Grid>
+                </Border>
+                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC4A7B60" Grid.ColumnSpan="1">
+                    <Grid>
+                        <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="16" FontFamily="Arial Rounded MT Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,2,0,0"/>
+                        <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Arial Rounded MT Bold" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>
+                    </Grid>
+                </Border>
+            </Grid>
             <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" DefaultBackground="#FF42B779" DefaultBorderBrush="Black" BorderThicknessBlock="3,3,3,3" SelectBackground="#FFCCC978" SelectBorderBrush="#FF1D2112" SelectForeground="#FF212B26" ClickedBorderBrush="#FF044465" ClickedBackground="#FF78CCA0" ClickedForeground="#FF012B1C" Grid.ColumnSpan="2" ForgroundNaming="#FF11FF81"/>
             <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" TextFontSize="14" CornerRadius="6,6,6,6" Margin="8,2,7,3" Grid.Column="2" FontWeight="Bold" TextFontFamily="Calibri" VisibleMouseImaging="False"/>
-                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Grid.Row="2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC4A7B60">
-                <Grid>
-                    <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="16" FontFamily="Arial Rounded MT Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,2,0,0"/>
-                    <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Arial Rounded MT Bold" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>
-                </Grid>
-            </Border>
         </Grid>
         <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6"/>
     </Grid>
