@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AAC20.Windows"
-        xmlns:IEL="clr-namespace:IEL;assembly=IEL" x:Class="AAC20.Windows.WindowGenLabel"
+        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="AAC20.Windows.WindowGenLabel"
         mc:Ignorable="d"
         Title="Создание ярлыка" d:DesignHeight="301.667" Icon="{DynamicResource EmptyImage}" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Width="273">
     <Grid>
@@ -18,24 +18,14 @@
             <RowDefinition Height="175*"/>
             <RowDefinition Height="111*"/>
         </Grid.RowDefinitions>
-        <Grid Margin="0,0,0,2">
+        <Grid>
             <Grid.Background>
                 <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.6" RadiusY="0.6">
                     <GradientStop Color="#FFA0C8D6"/>
                     <GradientStop Color="#FF69A6BB" Offset="1"/>
                 </RadialGradientBrush>
             </Grid.Background>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="40*"/>
-                <ColumnDefinition Width="10*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="40*"/>
-                <RowDefinition Height="6*"/>
-            </Grid.RowDefinitions>
-            <Border BorderBrush="#FF254A67" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="#4C42CC97">
+            <Border BorderBrush="#FF254A67" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="#4C42CC97" Margin="30,20,30,20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30*"/>
@@ -50,7 +40,7 @@
                             </RadialGradientBrush>
                         </IEL:IELTextBox.BackgroundNaming>
                     </IEL:IELTextBox>
-                    <IEL:IELTextBox x:Name="IELTextBoxCommand" TextName="Команда*" Text="" ShowNameText="True" Grid.Row="1" Margin="2,2,2,7" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center">
+                    <IEL:IELTextBox x:Name="IELTextBoxCommand" TextName="Команда*" Text="" Grid.Row="1" Margin="2,2,2,7" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center" ShowNameText="True">
                         <IEL:IELTextBox.BackgroundNaming>
                             <RadialGradientBrush RadiusX="0.6">
                                 <GradientStop Color="#0072ABBF" Offset="1"/>
@@ -58,7 +48,7 @@
                             </RadialGradientBrush>
                         </IEL:IELTextBox.BackgroundNaming>
                     </IEL:IELTextBox>
-                    <IEL:IELTextBox x:Name="IELTextBoxDescription" TextName="Описание ярлыка" Text="" ShowNameText="True" Grid.Row="2" Margin="4,1,0,3" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center" MaxLines="5" DefaultBackground="#FF42B79A" SelectBackground="#FF82CC78" ClickedBackground="#FF80EDB4">
+                    <IEL:IELTextBox x:Name="IELTextBoxDescription" TextName="Описание ярлыка" Text="" ShowNameText="True" Grid.Row="2" Margin="4,1,0,3" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center" MaxLines="5">
                         <IEL:IELTextBox.BackgroundNaming>
                             <RadialGradientBrush RadiusX="0.6">
                                 <GradientStop Color="#0072ABBF" Offset="1"/>
@@ -74,8 +64,16 @@
                 <RowDefinition Height="26*"/>
                 <RowDefinition Height="26*"/>
             </Grid.RowDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" TextFontFamily="Bahnschrift" TextFontSize="14"/>
-            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="30,6,30,6" BorderThicknessBlock="2,2,2,2" Text="Отмена" TextFontFamily="Bahnschrift" Grid.Row="1" TextFontSize="14"/>
+            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="40,6,40,6" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" FontFamily="Bahnschrift" AnimationMillisecond="140">
+                <IEL:IELButtonText.BackgroundSetting>
+                    <Classes:BrushSettingQ Default="#FF61A6C3" Select="#FF54C38E" Used="#FF9CF9D5" NotEnabled="#FFE44242"/>
+                </IEL:IELButtonText.BackgroundSetting>
+            </IEL:IELButtonText>
+            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="40,6,40,6" BorderThicknessBlock="2,2,2,2" Text="Отмена" FontFamily="Bahnschrift" Grid.Row="1" AnimationMillisecond="140">
+                <IEL:IELButtonText.BackgroundSetting>
+                    <Classes:BrushSettingQ Default="#FF61A6C3" Select="#FFDE587D" Used="#FFF99CB1" NotEnabled="#FFE44242"/>
+                </IEL:IELButtonText.BackgroundSetting>
+            </IEL:IELButtonText>
         </Grid>
     </Grid>
 </Window>

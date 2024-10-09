@@ -25,7 +25,7 @@ namespace AAC20.Windows.Pages.License
         /// <summary>
         /// Объект анимации для управления прозрачностью объекта
         /// </summary>
-        private readonly DoubleAnimation DoubleAnimateOpacity = new(0, TimeSpan.FromMilliseconds(800d))
+        private readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(800d))
         {
             DecelerationRatio = 0.2d,
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
@@ -46,8 +46,9 @@ namespace AAC20.Windows.Pages.License
             Opacity = 0d;
             TextBlockAAC.Margin = new(0, 20, 0, 0);
             TextBlockLicenseText.Margin = new(0, 67, 0, 0);
-            DoubleAnimateOpacity.BeginTime = TimeSpan.FromMilliseconds(700d);
+            DoubleAnimate.BeginTime = TimeSpan.FromMilliseconds(700d);
             ThicknessAnimatePos.BeginTime = TimeSpan.FromMilliseconds(700d);
+            TextBlockLicenseText.Foreground.RelativeTransform = new RotateTransform(0d, 0.5d, 0.5d);
             Start();
         }
 
@@ -56,13 +57,22 @@ namespace AAC20.Windows.Pages.License
         /// </summary>
         private void Start()
         {
-            DoubleAnimateOpacity.To = 1d;
-            BeginAnimation(OpacityProperty, DoubleAnimateOpacity);
+            DoubleAnimate.To = 1d;
+            BeginAnimation(OpacityProperty, DoubleAnimate);
             ThicknessAnimatePos.To = new(0, 10, 0, 0);
             TextBlockAAC.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-            ThicknessAnimatePos.BeginTime += TimeSpan.FromMilliseconds(70d);
+            ThicknessAnimatePos.BeginTime += TimeSpan.FromMilliseconds(72d);
             ThicknessAnimatePos.To = new(0, 57, 0, 0);
             TextBlockLicenseText.BeginAnimation(MarginProperty, ThicknessAnimatePos);
+
+            DoubleAnimation anim = new()
+            {
+                From = 0d,
+                To = 360d,
+                Duration = TimeSpan.FromMilliseconds(3000d),
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+            TextBlockLicenseText.Foreground.RelativeTransform.BeginAnimation(RotateTransform.AngleProperty, anim);
         }
     }
 }

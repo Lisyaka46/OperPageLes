@@ -116,9 +116,12 @@ namespace AAC20.Classes
         /// <returns>Уменьшенное максимальное значение</returns>
         public double MaxDown(int value)
         {
-            if (Value - value / TrafficShare < 0) Value = 0;
-            else if (Value == MaxValue) Value -= value / TrafficShare;
-            else if ((MaxValue - Value) * TrafficShare < CountVisibleElements / TrafficShare) Value = (_MaxValue - value) / TrafficShare;
+            if (MaxValue > 0)
+            {
+                if (Value - value / TrafficShare < 0) Value = 0;
+                else if (Value == MaxValue) Value -= value / TrafficShare;
+                else if ((MaxValue - Value) * TrafficShare < CountVisibleElements / TrafficShare) Value = (_MaxValue - value) / TrafficShare;
+            }
             _MaxValue -= value;
             return MaxValue;
         }

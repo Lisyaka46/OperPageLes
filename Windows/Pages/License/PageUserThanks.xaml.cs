@@ -88,7 +88,7 @@ namespace AAC20.Windows.Pages.License
                 ImageIconNickName.Source = bitmap;
                 ImageIconNickName.Opacity = 0.4d;
                 AnimMargin.To = new(0, -140, 0, 0);
-                AnimMargin.Duration = TimeSpan.FromMilliseconds(9000d);
+                AnimMargin.Duration = TimeSpan.FromMilliseconds(12000d);
                 AnimMargin.EasingFunction = null;
                 ImageIconNickName.BeginAnimation(MarginProperty, AnimMargin);
                 AnimMargin.Duration = TimeSpan.FromMilliseconds(MillisecondsHide);

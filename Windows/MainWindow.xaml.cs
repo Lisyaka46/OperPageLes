@@ -38,11 +38,6 @@ namespace AAC20
         private readonly struct Flags
         {
             /// <summary>
-            /// Флаг активации правого нажатия с помощью кнопки CTRL в верхней панели кнопок
-            /// </summary>
-            internal static readonly Flag FlagCtrlActivateActionButtonUp = new(false);
-
-            /// <summary>
             /// Флаг соеденения с интернетом
             /// </summary>
             internal static readonly Flag FlagInternetConnection = new(false);
@@ -377,12 +372,6 @@ namespace AAC20
             #endregion
 
             #region Event Flags
-            Flags.FlagCtrlActivateActionButtonUp.ChangeStateFlag += (NewValue) =>
-            {
-                DoubleAnimateObj.To = NewValue ? 1d : 0d;
-                TextBlockRightButtonIndicatorKeyButtonsUp.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            };
-
             Flags.FlagInternetConnection.ChangeStateFlag += (NewValue) =>
             {
                 ImageInternetConnection.Source = new BitmapImage(new Uri($"/Windows/WindowsImages/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
@@ -432,10 +421,6 @@ namespace AAC20
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
                 FrameComponent.NextPage(Pages.PageObjLabelsAction);
             };
-            Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseRight += (key) =>
-            {
-                FrameComponent.CloseFrame();
-            };
             Pages.PageDeveloperState.IELButtonCreateLabel.OnActivateMouseLeft += () =>
             {
                 Pages.PageObjLabelsAction.AddLabel(new("Test", "Test", "Test"));
@@ -447,11 +432,8 @@ namespace AAC20
             //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
             ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
             BackgroundUpdateVisualData();
-            FrameButtonsUp.Navigate(Pages.PageMainButtonsUp);
-            TextBlockRightButtonIndicatorKeyButtonsUp.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
-            //FrameComponent.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(250d, 230d));
 
@@ -489,6 +471,12 @@ namespace AAC20
                 Pages.PageBufferActPanel.ScrollBar.MaxClear();
             };
 
+            IELButtonLabel.OnActivateMouseLeft += () =>
+            {
+                if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
+                FrameComponent.NextPage(Pages.PageObjLabelsAction);
+            };
+
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 TextBoxCommandInput.Focus();
@@ -501,6 +489,11 @@ namespace AAC20
             IELButtonFrameComponentVisible.OnActivateMouseLeft += () => 
             {
                 UsingChangeStateFrameComponent();
+                IELMessageMain.CloseBorderInformation();
+            };
+            IELButtonFrameComponentVisible.OnActivateMouseRight += () =>
+            {
+                FrameComponent.CloseFrame();
                 IELMessageMain.CloseBorderInformation();
             };
             IELButtonFrameComponentVisible.MouseHover += (sender, e) =>
@@ -553,6 +546,24 @@ namespace AAC20
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
             };
 
+            BorderButtonsUp.KeyDown += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.RightCtrl:
+                        break;
+                }
+            };
+
+            BorderButtonsUp.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Escape:
+                        break;
+                }
+            };
+
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
                 if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
@@ -577,36 +588,26 @@ namespace AAC20
 
             ImageLogoApplication.MouseEnter += (sender, e) =>
             {
-                ThicknessAnimate.To = new(3);
                 DoubleAnimateObj.To = 0.6d;
                 ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
             };
 
             ImageLogoApplication.MouseLeave += (sender, e) =>
             {
-                ThicknessAnimate.To = new(5);
                 DoubleAnimateObj.To = 1d;
                 ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
             };
 
             ImageLogoApplication.MouseDown += (sender, e) =>
             {
-                ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(100d);
-                ThicknessAnimate.To = new(6);
                 DoubleAnimateObj.To = 0.4d;
                 ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
-                ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
             };
 
             ImageLogoApplication.MouseUp += (sender, e) =>
             {
-                ThicknessAnimate.To = new(2);
                 DoubleAnimateObj.To = 1d;
                 ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                ImageLogoApplication.BeginAnimation(MarginProperty, ThicknessAnimate);
                 LicenseWindow License = new();
                 License.ShowDialog();
             };
@@ -656,12 +657,10 @@ namespace AAC20
                     if (ScrollCountVisible > Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
                     {
                         Pages.PageObjLabelsAction.ScrollBar.VisibleUp(Value);
-                        //DoubleAnimateObj.To = 79 * ScrollCountVisible + 25;
                     }
                     else if (ScrollCountVisible < Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
                     {
                         Pages.PageObjLabelsAction.ScrollBar.VisibleDown(Value);
-                        //DoubleAnimateObj.To = 79 * ScrollCountVisible + 25;
                     }
                 }
             };
@@ -679,6 +678,16 @@ namespace AAC20
                     ThicknessAnimate.From = new(8);
                     ThicknessAnimate.To = BorderImageInformation.Margin;
                     BorderImageInformation.BeginAnimation(MarginProperty, ThicknessAnimate);
+
+                    TimeDataColumnDefinition.MaxWidth = 0d;
+                    DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1200d);
+                    DoubleAnimateObj.To = 124d;
+                    Storyboard storyboard = new();
+                    storyboard.Children.Add(DoubleAnimateObj);
+                    Storyboard.SetTarget(DoubleAnimateObj, TimeDataColumnDefinition);
+                    Storyboard.SetTargetProperty(DoubleAnimateObj, new PropertyPath("(ColumnDefinition.MaxWidth)"));
+                    storyboard.Begin();
+                    DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
 
                     ThicknessAnimate.From = new(8);
                     ThicknessAnimate.To = BorderDateTime.Margin;

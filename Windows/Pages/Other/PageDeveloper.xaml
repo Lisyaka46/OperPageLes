@@ -11,8 +11,8 @@
 
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
-            <RowDefinition Height="137*"/>
-            <RowDefinition Height="63*"/>
+            <RowDefinition Height="274"/>
+            <RowDefinition Height="126"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>

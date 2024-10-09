@@ -13,11 +13,20 @@
 
     <Grid x:Name="GridMain">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="218*"/>
+            <ColumnDefinition Width="163*"/>
             <ColumnDefinition Width="329*"/>
+            <ColumnDefinition Width="55"/>
         </Grid.ColumnDefinitions>
 
-        <GUI:IELImageButtonKey x:Name="IELButtonSettings" Imaging="/Windows/WindowsImages/Settings.png" Grid.ColumnSpan="2" Grid.Column="1" CharKeyKeyboard="D2" ImageMargin="2,2,2,2"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonLabel" RenderTransformOrigin="0,0" CharKeyKeyboard="D1" Text="Ярлыки" FontWeight="Bold" TextFontFamily="Calibri"/>
+        <GUI:IELImageButtonKey x:Name="IELButtonSettings" Imaging="/Windows/WindowsImages/Settings.png" Grid.ColumnSpan="1" Grid.Column="2" CharKeyKeyboard="D2" ImageMargin="2,2,2,2" Margin="3,0,0,0" AnimationMillisecond="140" VisibleMouseImaging="False">
+            <GUI:IELImageButtonKey.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF50A79D" Select="#FF46C5B6" NotEnabled="#FFC13750" Used="White"/>
+            </GUI:IELImageButtonKey.BackgroundSetting>
+        </GUI:IELImageButtonKey>
+        <GUI:IELButtonTextKey x:Name="IELButtonLabel" RenderTransformOrigin="0,0" CharKeyKeyboard="D1" Text="Ярлыки" FontWeight="Bold" FontFamily="Calibri" Margin="0,0,3,0" AnimationMillisecond="140" VisibleMouseImaging="False">
+            <GUI:IELButtonTextKey.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF50A79D" Select="#FF46C5B6" NotEnabled="#FFC13750" Used="White"/>
+            </GUI:IELButtonTextKey.BackgroundSetting>
+        </GUI:IELButtonTextKey>
     </Grid>
 </Page>

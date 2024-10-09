@@ -39,14 +39,14 @@ namespace AAC20.Windows
                 if (IELTextBoxNameLabel.Text.Length == 0)
                 {
                     ButtonAnimationColor.From = Colors.Red;
-                    ButtonAnimationColor.To = IELTextBoxNameLabel.DefaultBackground;
+                    ButtonAnimationColor.To = IELTextBoxNameLabel.BackgroundSetting.Default;
                     IELTextBoxNameLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
                     return;
                 }
                 if (IELTextBoxCommand.Text.Length == 0)
                 {
                     ButtonAnimationColor.From = Colors.Red;
-                    ButtonAnimationColor.To = IELTextBoxCommand.DefaultBackground;
+                    ButtonAnimationColor.To = IELTextBoxCommand.BackgroundSetting.Default;
                     IELTextBoxCommand.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
                     return;
                 }

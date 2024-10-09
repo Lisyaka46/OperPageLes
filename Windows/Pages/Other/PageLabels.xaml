@@ -27,16 +27,23 @@
                 </Border>
             </Grid>
         </Grid>
-        <Border x:Name="BorderNamingLabel" BorderThickness="0,3,0,3" Background="#FF488FA7" Cursor="Hand">
+        <Border x:Name="BorderNamingLabel" BorderThickness="0,0,0,4" Background="#FF37E2D6" Cursor="Hand">
             <Border.BorderBrush>
                 <RadialGradientBrush Center="0,0.5" GradientOrigin="0.5,0.5" RadiusX="0.7" RadiusY="0.5" MappingMode="RelativeToBoundingBox" SpreadMethod="Pad" Opacity="1">
-                    <GradientStop Color="#FF488FA7" Offset="0.88"/>
-                    <GradientStop Color="#FF4A7B60" Offset="1"/>
+                    <GradientStop Color="#FF37E2D6" Offset="0.88"/>
+                    <GradientStop Color="#004A7B60" Offset="1"/>
                 </RadialGradientBrush>
             </Border.BorderBrush>
             <Grid x:Name="GridButtonSearch">
-                <Border x:Name="BorderScrollBackground" HorizontalAlignment="Left" Width="10" Background="#FF4A7B60" Margin="0,2,0,2" Cursor="Hand" Panel.ZIndex="1"/>
-                <TextBlock x:Name="TextBlockCount" TextWrapping="Wrap" Text="0 Ярлыков" FontSize="12" FontFamily="Tahoma" HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="1" Margin="0,0,5,0"/>
+                <Border x:Name="BorderScrollBackground" HorizontalAlignment="Left" Width="10" Margin="0,2,0,2" Cursor="Hand" Panel.ZIndex="1">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                            <GradientStop Color="#FF37E2D6"/>
+                            <GradientStop Color="#FF25A7D2" Offset="0.729"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <TextBlock x:Name="TextBlockCount" Text="0 Ярлыков" HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="1" Margin="0,0,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}"/>
             </Grid>
         </Border>
     </Grid>

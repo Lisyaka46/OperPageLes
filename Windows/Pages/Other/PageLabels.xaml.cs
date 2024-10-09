@@ -142,6 +142,11 @@ namespace AAC20.Windows.Pages.Other
             {
                 if (ScrollBar.MaxValue > 0 && ObjectsLabel.Count > 0)
                 {
+                    if (App.MainWindowApplication.IELActionPanelMain.NameFrameElement.Equals(SettingsPanelActionElement.ElementInPanel.Name))
+                    {
+                        SelectIndexElementLabel = -1;
+                        App.MainWindowApplication.IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
+                    }
                     if (e.Delta > 0) ScrollBar.Up();
                     else if (e.Delta < 0) ScrollBar.Down();
                 }
@@ -149,7 +154,7 @@ namespace AAC20.Windows.Pages.Other
 
             BorderNamingLabel.MouseEnter += (sender, e) =>
             {
-                ThicknessAnimate.To = new(0, 5, 0, 5);
+                ThicknessAnimate.To = new(0, 0, 0, 7);
                 Storyboard.SetTargetProperty(ThicknessAnimate, new PropertyPath(Border.BorderThicknessProperty));
                 Storyboard ellipseStoryboard = new();
                 ellipseStoryboard.Children.Add(ThicknessAnimate);
@@ -158,7 +163,7 @@ namespace AAC20.Windows.Pages.Other
 
             BorderNamingLabel.MouseLeave += (sender, e) =>
             {
-                ThicknessAnimate.To = new(0, 3, 0, 3);
+                ThicknessAnimate.To = new(0, 0, 0, 4);
                 Storyboard.SetTargetProperty(ThicknessAnimate, new PropertyPath(Border.BorderThicknessProperty));
                 Storyboard ellipseStoryboard = new();
                 ellipseStoryboard.Children.Add(ThicknessAnimate);
@@ -263,16 +268,13 @@ namespace AAC20.Windows.Pages.Other
                 ContextMenu = null,
                 IntervalHover = 800d,
                 Opacity = 0d,
-                ImageSource = new BitmapImage(UriIconLabel)
+                ImageSource = new BitmapImage(UriIconLabel),
+                AnimationMillisecond = 300,
+                BorderThicknessBlock = new(2),
             };
             Label.OnActivateMouseLeft += () =>
             {
                 App.MainWindowApplication.SummarizeCommandStateResult(ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], label.Command));
-            };
-            Label.OnActivateMouseRight += () =>
-            {
-                SelectIndexElementLabel = Label.Index;
-                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(SettingsPanelActionElement);
             };
             Label.MouseHover += (sender, e) =>
             {
@@ -284,7 +286,7 @@ namespace AAC20.Windows.Pages.Other
                         IELBlockMessage.OrientationBorderInfo.LeftDown);
             };
             Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
-            Label.MouseDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.MouseLeftButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             return Label;
         }
 
@@ -314,6 +316,12 @@ namespace AAC20.Windows.Pages.Other
         internal void AddLabel(LabelAction label)
         {
             IELLabelCommand Label = CreateLabel(label, ref ObjectsLabel, ref GridDinamicLabels);
+            Label.MouseRightButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.OnActivateMouseRight += () =>
+            {
+                SelectIndexElementLabel = Label.Index;
+                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(SettingsPanelActionElement);
+            };
             ObjectsLabel.Add(Label);
             GridDinamicLabels.Children.Add(Label);
             Grid.SetColumn(Label, (ObjectsLabel.Count - 1) % GridDinamicLabels.ColumnDefinitions.Count);

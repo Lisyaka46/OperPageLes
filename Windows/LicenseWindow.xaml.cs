@@ -64,7 +64,7 @@ namespace AAC20.Windows
         public LicenseWindow()
         {
             InitializeComponent();
-            UpdateInfoThanks = new(6000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
+            UpdateInfoThanks = new(10000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
             DoubleAnimateAppOpacity = new(0, TimeSpan.FromMilliseconds(1050d))
             {
                 DecelerationRatio = 0.2d,

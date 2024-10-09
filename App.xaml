@@ -7,6 +7,24 @@
         <Style x:Key="Tablon">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Tablon"/>
         </Style>
+        <Style x:Key="Monocraft">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Monocraft"/>
+        </Style>
+        <Style x:Key="MOSCOW2024">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#MOSCOW2024"/>
+        </Style>
+        <Style x:Key="sangha">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#sangha"/>
+        </Style>
+        <Style x:Key="Aventura">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Aventura"/>
+        </Style>
+        <Style x:Key="Pecita">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Pecita"/>
+        </Style>
+        <Style x:Key="Bree CYR var Regular">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Bree CYR var Regular"/>
+        </Style>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>
