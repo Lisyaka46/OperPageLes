@@ -10,6 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Windows\Pages\MainWindow\**" />
+    <Compile Remove="Windows\Pages\Settings\**" />
+    <EmbeddedResource Remove="Windows\Pages\MainWindow\**" />
+    <EmbeddedResource Remove="Windows\Pages\Settings\**" />
+    <None Remove="Windows\Pages\MainWindow\**" />
+    <None Remove="Windows\Pages\Settings\**" />
+    <Page Remove="Windows\Pages\MainWindow\**" />
+    <Page Remove="Windows\Pages\Settings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Fonts\Aventura.ttf" />
     <None Remove="Fonts\Bree CYR var Regular.ttf" />
     <None Remove="Fonts\Domino Regular.otf" />
@@ -81,11 +92,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Windows\Pages\MainWindow\" />
-    <Folder Include="Windows\Pages\Settings\" />
   </ItemGroup>
 
   <ItemGroup>

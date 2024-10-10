@@ -161,7 +161,7 @@ namespace AAC20
                 (Command, param) =>
                 {
                     if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
-                    FrameComponent.NextPage(Pages.PageDeveloperState);
+                    //FrameComponent.NextPage(Pages.PageDeveloperState);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -463,7 +463,9 @@ namespace AAC20
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
-                FrameComponent.NextPage(Pages.PageObjLabelsAction);
+                //FrameComponent.NextPage(Pages.PageObjLabelsAction);
+                IELBrowserPageMain.AddInlayPage(Pages.PageObjLabelsAction, "Ярлыки",
+                        "Ярлыки которые предаставляются программой для быстрого взаимодействия");
             };
 
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
@@ -482,7 +484,7 @@ namespace AAC20
             };
             IELButtonFrameComponentVisible.OnActivateMouseRight += () =>
             {
-                FrameComponent.CloseFrame();
+                //FrameComponent.CloseFrame();
                 IELMessageMain.CloseBorderInformation();
             };
             IELButtonFrameComponentVisible.MouseHover += (sender, e) =>
@@ -597,7 +599,7 @@ namespace AAC20
                 License.ShowDialog();
             };
 
-            FrameComponent.OpenFrame += () =>
+            /*FrameComponent.OpenFrame += () =>
             {
                 DoubleAnimation animation = DoubleAnimateObj.Clone();
                 void SetZIndex(object? INsender, EventArgs INe)
@@ -622,13 +624,13 @@ namespace AAC20
                         Pages.PageObjLabelsAction.StartLoadSQL();
                     }
                 }*/
-            };
+            /*};
             FrameComponent.ClosingFrame += () =>
             {
                 Canvas.SetZIndex(TextBlockNullFrameElement, 1);
                 DoubleAnimateObj.To = 1d;
                 TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            };
+            };*/
 
             SizeChanged += (sender, e) =>
             {
@@ -716,7 +718,7 @@ namespace AAC20
             ((RotateTransform)((TransformGroup)IELButtonFrameComponentVisible.RenderTransform).Children[0]).
                 BeginAnimation(RotateTransform.AngleProperty, DoubleAnimateObj);
 
-            DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 0d : 220d;
+            DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 0d : 420d;
             Storyboard storyboard = new();
             storyboard.Children.Add(DoubleAnimateObj);
             Storyboard.SetTarget(DoubleAnimateObj, FrameComponentColumn);
