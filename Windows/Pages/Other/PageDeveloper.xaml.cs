@@ -1,4 +1,5 @@
-﻿using IEL.Classes;
+﻿using AAC20.Windows.Frames;
+using IEL.Classes;
 using IEL.Interfaces.Core;
 using System;
 using System.Collections.Generic;
@@ -23,19 +24,13 @@ namespace AAC20.Windows.Pages.Other
     public partial class PageDeveloper : Page, IPageDefault
     {
         /// <summary>
-        /// Модуль страницы
+        /// Имя страницы
         /// </summary>
-        public ModulePage ModulePage { get; }
-
-        /// <summary>
-        /// Главная страница компонента
-        /// </summary>
-        public Grid MainGrid => GridMain;
+        public string PageName { get; } = nameof(PageDeveloper);
 
         public PageDeveloper()
         {
             InitializeComponent();
-            ModulePage = new(nameof(PageDeveloper));
             ListBoxDeveloper.Items.Add("[0] CountVisible=*");
             ListBoxDeveloper.Items.Add("[1] ActualHeight=*");
         }

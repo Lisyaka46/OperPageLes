@@ -84,6 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Windows\Pages\MainWindow\" />
     <Folder Include="Windows\Pages\Settings\" />
   </ItemGroup>
 

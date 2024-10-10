@@ -3,7 +3,6 @@ using AAC20.Classes.Flaging;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.MainWindow;
 using AAC20.Windows.Pages.Other;
 using IEL;
 using IEL.Classes;
@@ -62,11 +61,6 @@ namespace AAC20
             /// Страница буфера в панели действий
             /// </summary>
             internal static readonly PageBufferActionPanel PageBufferActPanel = new(H);
-
-            /// <summary>
-            /// Страница кнопок верхней панели главного меню программы
-            /// </summary>
-            internal static readonly PageUpMainButtons PageMainButtonsUp = new();
 
             /// <summary>
             /// Страница всех ярлыков
@@ -416,11 +410,6 @@ namespace AAC20
                     App.AppWindows.DiscriptionCommands.Activate();
                 }
             };
-            Pages.PageMainButtonsUp.IELButtonLabel.OnActivateMouseLeft += (key) =>
-            {
-                if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
-                FrameComponent.NextPage(Pages.PageObjLabelsAction);
-            };
             Pages.PageDeveloperState.IELButtonCreateLabel.OnActivateMouseLeft += () =>
             {
                 Pages.PageObjLabelsAction.AddLabel(new("Test", "Test", "Test"));
@@ -535,10 +524,6 @@ namespace AAC20
                     case Key.Apps:
                         IELActionPanelMain.UsingPanelAction(SettingsMain);
                         break;
-                    case Key.RightCtrl:
-                        Pages.PageMainButtonsUp.ModulePage.KeyboardMode = true;
-                        BorderButtonsUp.Focus();
-                        return;
                     default:
                         return;
                 }
