@@ -114,7 +114,7 @@ namespace AAC20.Windows.Pages.Other
             BorderScrollBackground.Width = 0d;
             ModulePage = new(nameof(PageLabels));
             ScrollBar = new(10, TrafficShare: 2);
-            SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(110, 130));
+            SettingsPanelActionElement = new(this, PageLabelActPanel, new(110, 130));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             SQLLabelActions = [];
             ObjectsLabel = [];

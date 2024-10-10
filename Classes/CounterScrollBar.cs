@@ -146,10 +146,7 @@ namespace AAC20.Classes
         {
             int Value = CountLines * TrafficShare;
             CountVisibleElements += Value;
-            if (_MaxValue > 0)
-            {
-                MaxDown(Value);
-            }
+            MaxDown(Value);
             return CountVisibleElements;
         }
 
@@ -166,7 +163,10 @@ namespace AAC20.Classes
                 MaxUp(Value);
                 return CountVisibleElements;
             }
-            else throw new Exception($"({nameof(Value)} <= 0) невозможно уменьшить значение ({CountVisibleElements - Value} < {TrafficShare})");
+            else
+            {
+                return MaxUp(Value);
+            }
         }
     }
 }
