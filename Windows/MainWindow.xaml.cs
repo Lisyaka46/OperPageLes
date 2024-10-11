@@ -62,11 +62,6 @@ namespace AAC20
             /// </summary>
             internal static readonly PageBufferActionPanel PageBufferActPanel = new(H);
 
-            /// <summary>
-            /// Страница всех ярлыков
-            /// </summary>
-            internal static readonly PageLabels PageObjLabelsAction = new();
-
             #if DEBUG
             /// <summary>
             /// Страница разработчика
@@ -137,6 +132,9 @@ namespace AAC20
         /// </summary>
         private bool HiAnimation = false;
 
+        //
+        private PageLabels? BrousePageLabels = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -149,8 +147,11 @@ namespace AAC20
                 "Отключает или включает анимацию у окна ярлыков",
                 (Command, param) =>
                 {
-                    if ((bool)param[0]) Pages.PageObjLabelsAction.AnimationLoadingStart();
-                    else Pages.PageObjLabelsAction.AnimationLoadingStop();
+                    if (BrousePageLabels == null)
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name,
+                            $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
+                    if ((bool)param[0]) BrousePageLabels.AnimationLoadingStart();
+                    else BrousePageLabels.AnimationLoadingStop();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -162,6 +163,8 @@ namespace AAC20
                 {
                     if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
                     //FrameComponent.NextPage(Pages.PageDeveloperState);
+                    IELBrowserPageMain.AddInlayPage(Pages.PageDeveloperState, "Страница разработчика",
+                        "Для взаимодействия со страницей разработчика является рискованным, ДЕЛАЙТЕ ТОЛЬКО ЕСЛИ ЗНАЕТЕ ЧТО ДЕЛАЕТЕ !");
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -212,7 +215,10 @@ namespace AAC20
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"",
                 (Command, param) =>
                 {
-                    Pages.PageObjLabelsAction.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
+                    if (BrousePageLabels == null)
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name,
+                            $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
+                    BrousePageLabels.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
                     //CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
                     //Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -223,8 +229,11 @@ namespace AAC20
                 new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
                 (Command, param) =>
                 {
+                    if (BrousePageLabels == null)
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name,
+                            $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
                     LabelAction? label = new WindowGenLabel().CreateLabel();
-                    if (label != null) Pages.PageObjLabelsAction.AddLabel(label);
+                    if (label != null) BrousePageLabels.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -412,8 +421,8 @@ namespace AAC20
             };
             Pages.PageDeveloperState.IELButtonCreateLabel.OnActivateMouseLeft += () =>
             {
-                Pages.PageObjLabelsAction.AddLabel(new("Test", "Test", "Test"));
-                Pages.PageDeveloperState.TextBlockLabelsCount.Text = $"={Pages.PageObjLabelsAction.CountLabel}";
+                //Pages.PageObjLabelsAction.AddLabel(new("Test", "Test", "Test"));
+                //Pages.PageDeveloperState.TextBlockLabelsCount.Text = $"={Pages.PageObjLabelsAction.CountLabel}";
             };
             #endregion
 
@@ -464,7 +473,8 @@ namespace AAC20
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
                 //FrameComponent.NextPage(Pages.PageObjLabelsAction);
-                IELBrowserPageMain.AddInlayPage(Pages.PageObjLabelsAction, "Ярлыки",
+                BrousePageLabels = new();
+                IELBrowserPageMain.AddInlayPage(BrousePageLabels, "Ярлыки",
                         "Ярлыки которые предаставляются программой для быстрого взаимодействия");
             };
 
@@ -632,7 +642,7 @@ namespace AAC20
                 TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             };*/
 
-            SizeChanged += (sender, e) =>
+            /*SizeChanged += (sender, e) =>
             {
                 if (Pages.PageObjLabelsAction.GridMain.ActualHeight == 0d) return;
                 int ScrollCountVisible = (int)(BorderFrameComponent.ActualHeight / 79d) * Pages.PageObjLabelsAction.ScrollBar.TrafficShare;
@@ -650,7 +660,7 @@ namespace AAC20
                         Pages.PageObjLabelsAction.ScrollBar.VisibleDown(Value);
                     }
                 }
-            };
+            };*/
 
             Activated += (sender, e) =>
             {

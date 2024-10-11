@@ -11,6 +11,7 @@ using System.Windows.Media;
 using AAC20.Classes.Flaging;
 using MySql.Data.MySqlClient;
 using System.Windows.Media.Imaging;
+using DataScroll;
 
 namespace AAC20.Windows.Pages.Other
 {
@@ -107,7 +108,7 @@ namespace AAC20.Windows.Pages.Other
             InitializeComponent();
             RowDefinitionSQLLabels.Height = new(0, GridUnitType.Star);
             BorderScrollBackground.Width = 0d;
-            ScrollBar = new(10, TrafficShare: 2);
+            ScrollBar = new(8, TrafficShare: 2);
             SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(110, 130));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             SQLLabelActions = [];
