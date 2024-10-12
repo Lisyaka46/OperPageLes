@@ -26,7 +26,9 @@
     <None Remove="Fonts\Domino Regular.otf" />
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\Pecita.otf" />
+    <None Remove="Fonts\pizza hut.otf" />
     <None Remove="Fonts\sangha.ttf" />
+    <None Remove="Windows\WindowsImages\Logo04.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +72,7 @@
     <Resource Include="Windows\WindowsImages\Logo03.png" />
     <Resource Include="Windows\WindowsImages\20.png" />
     <Resource Include="Windows\WindowsImages\Logo02.png" />
+    <Resource Include="Windows\WindowsImages\Logo04.png" />
     <Resource Include="Windows\WindowsImages\LogoDC.png" />
     <Resource Include="Windows\WindowsImages\RightMouseButton.png" />
     <Resource Include="Windows\WindowsImages\Search.png" />

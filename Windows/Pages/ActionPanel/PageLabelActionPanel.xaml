@@ -16,17 +16,17 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonExecuteLabel" FontFamily="Calibri" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D1" Margin="4,4,4,4" AnimationMillisecond="140" VisibleMouseImaging="False">
+        <GUI:IELButtonTextKey x:Name="IELButtonExecuteLabel" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D1" Margin="4,4,4,4" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14">
             <GUI:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF36BD88" NotEnabled="#FFD25959" Select="#FF35A99C" Used="White"/>
             </GUI:IELButtonTextKey.BackgroundSetting>
         </GUI:IELButtonTextKey>
-        <GUI:IELButtonTextKey x:Name="IELButtonChangeLabel" FontFamily="Calibri" Text="Изменить" CornerRadius="6,6,6,6" FontWeight="Bold" CharKeyKeyboard="D2" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1" VisibleMouseImaging="False">
+        <GUI:IELButtonTextKey x:Name="IELButtonChangeLabel" Text="Изменить" CornerRadius="6,6,6,6" FontWeight="Bold" CharKeyKeyboard="D2" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14">
             <GUI:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF36BD88" NotEnabled="#FFD25959" Select="#FF35A99C" Used="White"/>
             </GUI:IELButtonTextKey.BackgroundSetting>
         </GUI:IELButtonTextKey>
-        <GUI:IELButtonTextKey x:Name="IELButtonMovingLabel" FontFamily="Calibri" Text="Переместить" CornerRadius="6,6,6,6" FontWeight="Bold" CharKeyKeyboard="D3" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1" VisibleMouseImaging="False">
+        <GUI:IELButtonTextKey x:Name="IELButtonMovingLabel" Text="Переместить" CornerRadius="6,6,6,6" FontWeight="Bold" CharKeyKeyboard="D3" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14">
             <GUI:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF36BD88" NotEnabled="#FFD25959" Select="#FF35A99C" Used="White"/>
             </GUI:IELButtonTextKey.BackgroundSetting>

@@ -109,7 +109,7 @@ namespace AAC20.Windows.Pages.Other
             RowDefinitionSQLLabels.Height = new(0, GridUnitType.Star);
             BorderScrollBackground.Width = 0d;
             ScrollBar = new(8, TrafficShare: 2);
-            SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(110, 130));
+            SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(150, 140));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             SQLLabelActions = [];
             ObjectsLabel = [];

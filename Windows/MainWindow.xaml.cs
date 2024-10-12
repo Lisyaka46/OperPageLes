@@ -433,7 +433,7 @@ namespace AAC20
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
-            SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(250d, 230d));
+            SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(270d, 230d));
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
