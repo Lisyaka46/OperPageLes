@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Remove="Fonts\Aventura.ttf" />
     <None Remove="Fonts\Bree CYR var Regular.ttf" />
+    <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
     <None Remove="Fonts\Domino Regular.otf" />
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\Pecita.otf" />
@@ -42,6 +43,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Bree CYR var Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Brenzo Slab Personal Use.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Monocraft.otf">

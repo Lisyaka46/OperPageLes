@@ -12,7 +12,7 @@
         Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
         <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
-        <Image x:Name="ImageTest" HorizontalAlignment="Center" Height="200" VerticalAlignment="Center" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Width="200"/>
+        <Image x:Name="ImageTest" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Panel.ZIndex="1" StretchDirection="UpOnly"/>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="136"/>
@@ -109,7 +109,11 @@
                 </Border>
                 <Border x:Name="BorderFrameComponent" BorderBrush="#FF5F5F5F" BorderThickness="2,2,2,2" Grid.Column="1" Background="#CC4A7B7A" Panel.ZIndex="0" MinWidth="220" Margin="2,2,2,2">
                     <Grid x:Name="GridFrameComponent">
-                        <GUI:IELBrowserPage x:Name="IELBrowserPageMain"/>
+                        <GUI:IELBrowserPage x:Name="IELBrowserPageMain">
+                            <GUI:IELBrowserPage.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#CC4A7B60" NotEnabled="#CCEC5656" Select="#CC63A07E" Used="#CC47E08B"/>
+                            </GUI:IELBrowserPage.BackgroundSetting>
+                        </GUI:IELBrowserPage>
 
                     </Grid>
                 </Border>
@@ -142,7 +146,7 @@
                                 </Image.RenderTransform>
                             </Image>
                         </Border>
-                        <GUI:IELImageButton x:Name="IELButtonFrameComponentVisible" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/Windows/WindowsImages/ArrowFrameComponent.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="2000">
+                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/Windows/WindowsImages/ArrowFrameComponent.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="2000">
                             <GUI:IELImageButton.BorderBrushSetting>
                                 <Classes:BrushSettingQ Default="Black" NotEnabled="#FF400817" Select="#FF151729" Used="#FF173128"/>
                             </GUI:IELImageButton.BorderBrushSetting>

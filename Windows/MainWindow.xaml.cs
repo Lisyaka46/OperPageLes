@@ -132,9 +132,6 @@ namespace AAC20
         /// </summary>
         private bool HiAnimation = false;
 
-        //
-        private PageLabels? BrousePageLabels = null;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -147,11 +144,12 @@ namespace AAC20
                 "Отключает или включает анимацию у окна ярлыков",
                 (Command, param) =>
                 {
-                    if (BrousePageLabels == null)
+                    PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
+                    if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
                             $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
-                    if ((bool)param[0]) BrousePageLabels.AnimationLoadingStart();
-                    else BrousePageLabels.AnimationLoadingStop();
+                    if ((bool)param[0]) Page.AnimationLoadingStart();
+                    else Page.AnimationLoadingStop();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -200,7 +198,15 @@ namespace AAC20
                 {
                     Paragraph Massage = new();
                     Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                    Massage.Inlines.Add(new Run($"{App.BufferCommand.Count}/{App.BufferCommand.Length}:[{string.Join(',', App.BufferCommand.BufferElements)}]"));
+                    Massage.Inlines.Add(new Run($"{App.BufferCommand.Count}/{App.BufferCommand.Length}:" +
+                        $"[{string.Join(',', App.BufferCommand.BufferElements.Where((i) => 
+                        {
+                            if (i != null)
+                            {
+                                return i.Length > 0;
+                            }
+                            else return false;
+                        }))}]"));
                     RichTextBoxMainMessage.Document.Blocks.Add(Massage);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
@@ -215,10 +221,11 @@ namespace AAC20
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"",
                 (Command, param) =>
                 {
-                    if (BrousePageLabels == null)
+                    PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
+                    if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
                             $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
-                    BrousePageLabels.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
+                    Page.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
                     //CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
                     //Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -229,11 +236,12 @@ namespace AAC20
                 new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
                 (Command, param) =>
                 {
-                    if (BrousePageLabels == null)
+                    PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
+                    if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
                             $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
                     LabelAction? label = new WindowGenLabel().CreateLabel();
-                    if (label != null) BrousePageLabels.AddLabel(label);
+                    if (label != null) Page.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -473,8 +481,7 @@ namespace AAC20
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
                 //FrameComponent.NextPage(Pages.PageObjLabelsAction);
-                BrousePageLabels = new();
-                IELBrowserPageMain.AddInlayPage(BrousePageLabels, "Ярлыки",
+                IELBrowserPageMain.AddInlayPage(new PageLabels(), "Ярлыки",
                         "Ярлыки которые предаставляются программой для быстрого взаимодействия");
             };
 
@@ -484,29 +491,30 @@ namespace AAC20
             };
 
             #region IELButtonFrameComponentVisible
-            IELButtonFrameComponentVisible.RenderTransform = new TransformGroup();
-            ((TransformGroup)IELButtonFrameComponentVisible.RenderTransform).Children.Add(new RotateTransform(0d, 0d, 0d));
+            IELButtonBrowserPageVisible.RenderTransform = new TransformGroup();
+            ((TransformGroup)IELButtonBrowserPageVisible.RenderTransform).Children.Add(new RotateTransform(0d, 0d, 0d));
 
-            IELButtonFrameComponentVisible.OnActivateMouseLeft += () => 
+            IELButtonBrowserPageVisible.OnActivateMouseLeft += () => 
             {
                 UsingChangeStateFrameComponent();
                 IELMessageMain.CloseBorderInformation();
             };
-            IELButtonFrameComponentVisible.OnActivateMouseRight += () =>
+            IELButtonBrowserPageVisible.OnActivateMouseRight += () =>
             {
                 //FrameComponent.CloseFrame();
                 IELMessageMain.CloseBorderInformation();
             };
-            IELButtonFrameComponentVisible.MouseHover += (sender, e) =>
+            IELButtonBrowserPageVisible.MouseHover += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELButtonFrameComponentVisible, IELButtonFrameComponentVisible.Name,
+                IELMessageMain.UsingBorderInformation(IELButtonBrowserPageVisible, IELButtonBrowserPageVisible.Name,
                     (Flags.FlagFrameComponentVisible ? "Скрыть" : "Показать") + " глобальные страницы",
                     IELBlockMessage.OrientationBorderInfo.LeftUp);
             };
-            IELButtonFrameComponentVisible.MouseLeave += (sender, e) =>
+            IELButtonBrowserPageVisible.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
             };
+            UsingChangeStateFrameComponent();
             #endregion
 
             TextBoxCommandInput.KeyDown += (sender, e) =>
@@ -692,6 +700,7 @@ namespace AAC20
 
                     ThicknessAnimate.From = null;
                     ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
+
                     #endregion
                     #endregion
                 }
@@ -725,7 +734,7 @@ namespace AAC20
         {
             DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(560d);
             DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 180d : 0d;
-            ((RotateTransform)((TransformGroup)IELButtonFrameComponentVisible.RenderTransform).Children[0]).
+            ((RotateTransform)((TransformGroup)IELButtonBrowserPageVisible.RenderTransform).Children[0]).
                 BeginAnimation(RotateTransform.AngleProperty, DoubleAnimateObj);
 
             DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 0d : 420d;
@@ -772,13 +781,6 @@ namespace AAC20
                     Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
                     if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
                 };
-                /*Button.SettingAnimate = new IELSettingAnimate(
-                        new BrushSettingQ(
-                    Color.FromRgb(54, 255, 255), Color.FromRgb(58, 171, 108),
-                    Color.FromRgb(54, 169, 157), Color.FromRgb(227, 97, 116)),
-                        new BrushSettingQ(BrushSettingQ.CreateStyle.BorderBrush),
-                        new BrushSettingQ(BrushSettingQ.CreateStyle.Foreground)
-                        );*/
                 App.BufferCommand.Add(CommandString);
                 Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
                 Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
