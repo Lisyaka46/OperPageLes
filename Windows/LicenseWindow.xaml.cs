@@ -79,8 +79,8 @@ namespace AAC20.Windows
             ImageLicense.Opacity = 0d;
             ImageLicense.RenderSize = new Size(70, 70);
             ImageLicense.Margin = new(0, 45 - 15, 0, 35 - 15);
-            ImageLogo.Margin = new(12, 30 + 10, 0, 0);
-            Image20.Margin = new(-12, 84 - 10, 0, 0);
+            ImageLogo.Margin = new(12, -4 + 5, 0, 0);
+            Image20.Margin = new(-12, 96 - 5, 0, 0);
             FrameLicense.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             Closed += (sender, e) => GC.Collect(2, GCCollectionMode.Forced);
         }
@@ -92,9 +92,9 @@ namespace AAC20.Windows
             BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
 
             ThicknessAnimatePos.BeginTime = DoubleAnimateAppOpacity.BeginTime + TimeSpan.FromMilliseconds(20d);
-            ThicknessAnimatePos.To = new(0, 30, 0, 0);
+            ThicknessAnimatePos.To = new(0, -4, 0, 0);
             ImageLogo.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-            ThicknessAnimatePos.To = new(0, 84, 0, 0);
+            ThicknessAnimatePos.To = new(0, 96, 0, 0);
             Image20.BeginAnimation(MarginProperty, ThicknessAnimatePos);
             PageLicense license = new();
             FrameLicense.Navigate(license);

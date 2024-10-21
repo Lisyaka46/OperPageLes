@@ -10,19 +10,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Windows\Pages\MainWindow\**" />
     <Compile Remove="Windows\Pages\Settings\**" />
+    <EmbeddedResource Remove="Windows\Pages\MainWindow\**" />
     <EmbeddedResource Remove="Windows\Pages\Settings\**" />
+    <None Remove="Windows\Pages\MainWindow\**" />
     <None Remove="Windows\Pages\Settings\**" />
+    <Page Remove="Windows\Pages\MainWindow\**" />
     <Page Remove="Windows\Pages\Settings\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Fonts\Aventura.ttf" />
     <None Remove="Fonts\Bree CYR var Regular.ttf" />
+    <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
     <None Remove="Fonts\Domino Regular.otf" />
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\Pecita.otf" />
+    <None Remove="Fonts\pizza hut.otf" />
     <None Remove="Fonts\sangha.ttf" />
+    <None Remove="Windows\WindowsImages\Logo04.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +43,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Bree CYR var Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Brenzo Slab Personal Use.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Monocraft.otf">
@@ -66,6 +76,7 @@
     <Resource Include="Windows\WindowsImages\Logo03.png" />
     <Resource Include="Windows\WindowsImages\20.png" />
     <Resource Include="Windows\WindowsImages\Logo02.png" />
+    <Resource Include="Windows\WindowsImages\Logo04.png" />
     <Resource Include="Windows\WindowsImages\LogoDC.png" />
     <Resource Include="Windows\WindowsImages\RightMouseButton.png" />
     <Resource Include="Windows\WindowsImages\Search.png" />
@@ -91,6 +102,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CounterScrollBar\DataScroll.csproj" />
     <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>

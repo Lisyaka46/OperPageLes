@@ -26,13 +26,13 @@
                 <ColumnDefinition Width="103*"/>
                 <ColumnDefinition Width="46*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontFamily="Calibri" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" StateVisualization="LeftArrow">
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" StateVisualization="LeftArrow" FontSize="13">
                 <GUI:IELButtonTextKey.BackgroundSetting>
                     <Classes:BrushSettingQ Default="#FF4DA6B7" NotEnabled="#FFC13750" Select="#FF4DD7F1" Used="White"/>
                 </GUI:IELButtonTextKey.BackgroundSetting>
             </GUI:IELButtonTextKey>
             <TextBlock x:Name="TextBlockCounterBuffer" HorizontalAlignment="Center" Text="00/00" VerticalAlignment="Center" Foreground="#FF80EAE2" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}"/>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" FontFamily="Calibri" FontWeight="Bold" CharKeyKeyboard="D1" VisibleMouseImaging="False" Grid.Column="1" Margin="3,0,1,0" IsEnabled="False">
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" FontWeight="Bold" CharKeyKeyboard="D1" VisibleMouseImaging="False" Grid.Column="1" Margin="3,0,1,0" IsEnabled="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="13">
                 <GUI:IELButtonTextKey.BackgroundSetting>
                     <Classes:BrushSettingQ NotEnabled="#FFC13750" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
                 </GUI:IELButtonTextKey.BackgroundSetting>

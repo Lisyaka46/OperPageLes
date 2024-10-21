@@ -1,4 +1,12 @@
-﻿using IEL.Interfaces.Core;
+﻿using AAC20.Windows.Frames;
+using IEL.Classes;
+using IEL.Interfaces.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace AAC20.Windows.Pages.Other
@@ -12,11 +20,6 @@ namespace AAC20.Windows.Pages.Other
         /// Имя страницы
         /// </summary>
         public string PageName { get; } = nameof(PageDeveloper);
-
-        /// <summary>
-        /// Главная страница компонента
-        /// </summary>
-        public Grid MainGrid => GridMain;
 
         public PageDeveloper()
         {

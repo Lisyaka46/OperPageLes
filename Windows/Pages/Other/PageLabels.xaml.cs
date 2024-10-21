@@ -11,6 +11,7 @@ using System.Windows.Media;
 using AAC20.Classes.Flaging;
 using MySql.Data.MySqlClient;
 using System.Windows.Media.Imaging;
+using DataScroll;
 
 namespace AAC20.Windows.Pages.Other
 {
@@ -102,13 +103,17 @@ namespace AAC20.Windows.Pages.Other
         /// </summary>
         private readonly ThreadGenericProcess SQLLoadInformation;
 
+        /// <summary>
+        /// Константа размера одного ярлыка
+        /// </summary>
+        public const int WidthHeightLabel = 77;
+
         public PageLabels()
         {
             InitializeComponent();
             RowDefinitionSQLLabels.Height = new(0, GridUnitType.Star);
             BorderScrollBackground.Width = 0d;
-            ScrollBar = new(10, TrafficShare: 2);
-            SettingsPanelActionElement = new(this, PageLabelActPanel, new(110, 130));
+            SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(150, 140));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             SQLLabelActions = [];
             ObjectsLabel = [];
@@ -121,20 +126,24 @@ namespace AAC20.Windows.Pages.Other
 
             GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
             GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+            GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
 
             GridSQLLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
             GridSQLLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+            GridSQLLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
+
+            ScrollBar = new(12, TrafficShare: (ushort)GridDinamicLabels.ColumnDefinitions.Count);
 
             ScrollBar.ChangedValue += (NewValue) =>
             {
-                ThicknessAnimate.To = new(0, 0 - (75 + BorderDinamicLabels.Padding.Top) * NewValue, 0, 0);
+                ThicknessAnimate.To = new(0, 0 - (WidthHeightLabel + BorderDinamicLabels.Padding.Top) * NewValue, 0, 0);
                 GridMain.BeginAnimation(MarginProperty, ThicknessAnimate);
                 DoubleAnimateObj.To = ActualWidth / (int)(ScrollBar.MaxValue) * NewValue;
                 BorderScrollBackground.BeginAnimation(WidthProperty, DoubleAnimateObj);
             };
-            GridMain.MouseWheel += (sender, e) =>
+            MouseWheel += (sender, e) =>
             {
-                if (ScrollBar.MaxValue > 0 && ObjectsLabel.Count > 0)
+                if (ScrollBar.ScrollActivate && CountLabel > 0)
                 {
                     if (App.MainWindowApplication.IELActionPanelMain.NameFrameElement.Equals(SettingsPanelActionElement.ElementInPanel.Name))
                     {
@@ -176,11 +185,11 @@ namespace AAC20.Windows.Pages.Other
 
             SQLLoadInformation = new(() =>
             {
-                MySqlConnection Connection = new("Server=localhost; DataBase=aac20_control; Uid=root; Pwd=; charset=utf8;");
+                MySqlConnection Connection = new("Server=localhost; DataBase=aac_control; Uid=root; Pwd=; charset=utf8;");
                 try
                 {
                     Connection.Open();
-                    MySqlCommand command = new("SELECT labels.LabelConstruct FROM `labels` WHERE labels.id LIKE '%9%'", Connection);
+                    MySqlCommand command = new("SELECT labels.LabelConstruct FROM `labels` WHERE labels.Id LIKE '%9%'", Connection);
                     MySqlDataReader reader = command.ExecuteReader();
                     List<LabelAction> labels = [];
                     while (reader.Read())
@@ -200,6 +209,25 @@ namespace AAC20.Windows.Pages.Other
                 }
                 AnimationLoadingStop();
             });
+
+            SizeChanged += (sender, e) =>
+            {
+                if (GridMain.ActualHeight == 0d) return;
+                int ScrollCountVisible = (int)(ActualHeight / (WidthHeightLabel + BorderDinamicLabels.Padding.Top)) * ScrollBar.TrafficShare;
+                if (ScrollCountVisible != ScrollBar.CountVisibleElements)
+                {
+                    int Value = Math.Abs(ScrollCountVisible - ScrollBar.CountVisibleElements) / ScrollBar.TrafficShare;
+                    if (ScrollCountVisible > ScrollBar.CountVisibleElements)
+                    {
+                        ScrollBar.VisibleUp(Value);
+                    }
+                    else if (ScrollCountVisible < ScrollBar.CountVisibleElements)
+                    {
+                        ScrollBar.VisibleDown(Value);
+                    }
+                }
+            };
+
             void ProcessLoadSQLKill(bool NewValueFlag)
             {
                 if (!NewValueFlag)
@@ -210,7 +238,7 @@ namespace AAC20.Windows.Pages.Other
                         BorderDinamicLabels.BorderThickness = new(0, 1, 0, 0);
                         BorderSQLLabels.BorderThickness = new(0, 0, 0, 1);
                         RowDefinitionSQLLabels.Height = new(
-                            SQLLabelActions.Length / 2 * (75 + BorderDinamicLabels.Padding.Top) + BorderSQLLabels.Padding.Bottom,
+                            SQLLabelActions.Length / 2 * (WidthHeightLabel + BorderDinamicLabels.Padding.Top) + BorderSQLLabels.Padding.Bottom,
                             GridUnitType.Pixel);
                         foreach (LabelAction Element in SQLLabelActions)
                         {
@@ -254,9 +282,9 @@ namespace AAC20.Windows.Pages.Other
             Uri UriIconLabel = new($@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Labels\{NameFileLabelImage}");
             IELLabelCommand Label = new(label, Data.Count)
             {
-                Width = 75,
-                Height = 75,
-                Margin = new(0, (75 + BorderDinamicLabels.Padding.Top) * (Data.Count / grid.ColumnDefinitions.Count), 0, 0),
+                Width = WidthHeightLabel,
+                Height = WidthHeightLabel,
+                Margin = new(0, (WidthHeightLabel + BorderDinamicLabels.Padding.Top) * (Data.Count / grid.ColumnDefinitions.Count), 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 ContextMenu = null,
