@@ -75,23 +75,42 @@ namespace AAC20
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
-        private Dictionary<string, object> SettingProcess;
+        private Dictionary<string, string> SettingProcess;
 
         /// <summary>
         /// Массив ключей настроек <b>приложения</b>
         /// </summary>
-        internal Dictionary<string, object> SettingApplication;
+        internal Dictionary<string, string> SettingApplication;
 
         /// <summary>
         /// Константа директории файла настроек <b>процесса</b>
         /// </summary>
         private const string PathSettingProcess = "CurrentSettings.so";
 
+        //
+        private const string NameFileApplicationSetting = "ApplicationSettings";
+
         public App()
         {
             ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
             ThreadInternetCheckConnection.Start();
+            if (!File.Exists(PathSettingProcess))
+            {
+                File.WriteAllLines(PathSettingProcess,
+                    [
+                        $"SettingApplicationPath:{NameFileApplicationSetting}.so",
+                    ]);
+            }
             SettingProcess = ReadSettingFile(PathSettingProcess);
+            string PathSetting = SettingProcess["SettingApplicationPath"];
+            if (!File.Exists(PathSetting))
+            {
+                File.WriteAllLines(PathSetting,
+                    [
+                        $"SettingApplicationPath:{NameFileApplicationSetting}.so",
+                    ]);
+            }
+            SettingApplication = ReadSettingFile(PathSetting);
         }
 
         /// <summary>
@@ -109,10 +128,14 @@ namespace AAC20
             MainWindowApplication.Show();
         }
 
-        //
-        private Dictionary<string, object> ReadSettingFile(string Path)
+        /// <summary>
+        /// Прочитать файл настроек
+        /// </summary>
+        /// <param name="Path">Директория файла настроек .so</param>
+        /// <returns>Массив ключей объектов настроек</returns>
+        private Dictionary<string, string> ReadSettingFile(string Path)
         {
-            Dictionary<string, object> Result = [];
+            Dictionary<string, string> Result = [];
             string[] LinesText = File.ReadAllLines(Path);
             lock (Result)
             {
@@ -121,11 +144,11 @@ namespace AAC20
                     regexValue = RegexValueSettingParameter();
                 foreach (string Line in LinesText)
                 {
-                    // \bText(: ?)Value\n;
-
+                    // Text:Value
+                    Result.Add(regexName.Match(Line).Value[..^1], regexValue.Match(Line).Value[1..]);
                 }
-                return Result;
             }
+            return Result;
         }
 
         /// <summary>
@@ -157,10 +180,10 @@ namespace AAC20
             }
         }
 
-        [GeneratedRegex("\b[^:]+")]
-        private partial Regex RegexNameSettingParameter();
+        [GeneratedRegex("\\b[^:]+:")]
+        private static partial Regex RegexNameSettingParameter();
 
         [GeneratedRegex(":[^\n]+")]
-        private partial Regex RegexValueSettingParameter();
+        private static partial Regex RegexValueSettingParameter();
     }
 }
