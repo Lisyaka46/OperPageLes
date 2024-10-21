@@ -10,26 +10,41 @@ namespace AAC20.Windows.Pages.ActionPanel
     public partial class PageLabelActionPanel : Page, IPageKey
     {
         /// <summary>
-        /// Модуль страницы
+        /// Имя страницы
         /// </summary>
-        public ModulePageKey ModulePage { get; }
+        public string PageName { get; } = nameof(PageLabelActionPanel);
 
         /// <summary>
-        /// Главная страница компонента
+        /// Объект данных режима клавиатуры
         /// </summary>
-        public Grid MainGrid => GridMain;
+        private bool _KeyboardMode = false;
+
+        /// <summary>
+        /// Режим клавиатуры
+        /// </summary>
+        public bool KeyboardMode
+        {
+            get => _KeyboardMode;
+            set
+            {
+                _KeyboardMode = value;
+                KeyboardModeChanged?.Invoke(value);
+            }
+        }
+
+        /// <summary>
+        /// Объект события изменения состояния Alt режима
+        /// </summary>
+        public IPageKey.Delegate_KeyboardModeChanged? KeyboardModeChanged { get; set; }
 
         public PageLabelActionPanel()
         {
             InitializeComponent();
-            ModulePage = new(nameof(PageLabelActionPanel))
+            KeyboardModeChanged = (Mode) =>
             {
-                KeyboardModeChanged = (Mode) =>
-                {
-                    IELButtonExecuteLabel.CharKeyboardActivate = Mode;
-                    IELButtonChangeLabel.CharKeyboardActivate = Mode;
-                    IELButtonMovingLabel.CharKeyboardActivate = Mode;
-                }
+                IELButtonExecuteLabel.CharKeyboardActivate = Mode;
+                IELButtonChangeLabel.CharKeyboardActivate = Mode;
+                IELButtonMovingLabel.CharKeyboardActivate = Mode;
             };
         }
     }

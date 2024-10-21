@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="103*"/>
                 <ColumnDefinition Width="46*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontFamily="Calibri" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" StateVisualizationButton="LeftArrow">
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontFamily="Calibri" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" StateVisualization="LeftArrow">
                 <GUI:IELButtonTextKey.BackgroundSetting>
                     <Classes:BrushSettingQ Default="#FF4DA6B7" NotEnabled="#FFC13750" Select="#FF4DD7F1" Used="White"/>
                 </GUI:IELButtonTextKey.BackgroundSetting>

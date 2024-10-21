@@ -15,14 +15,32 @@ namespace AAC20.Windows.Pages.ActionPanel
     public partial class PageBufferActionPanel : Page, IPageKey
     {
         /// <summary>
-        /// Модуль страницы
+        /// Имя страницы
         /// </summary>
-        public ModulePageKey ModulePage { get; }
+        public string PageName { get; } = nameof(PageBufferActionPanel);
 
         /// <summary>
-        /// Главная страница компонента
+        /// Объект данных режима клавиатуры
         /// </summary>
-        public Grid MainGrid => GridMain;
+        private bool _KeyboardMode = false;
+
+        /// <summary>
+        /// Режим клавиатуры
+        /// </summary>
+        public bool KeyboardMode
+        {
+            get => _KeyboardMode;
+            set
+            {
+                _KeyboardMode = value;
+                KeyboardModeChanged?.Invoke(value);
+            }
+        }
+
+        /// <summary>
+        /// Объект события изменения состояния Alt режима
+        /// </summary>
+        public IPageKey.Delegate_KeyboardModeChanged? KeyboardModeChanged { get; set; }
 
         /// <summary>
         /// Объект анимации позиции сколла буфера
@@ -54,7 +72,6 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel(int HeightButtonCommand)
         {
             InitializeComponent();
-            ModulePage = new(nameof(PageBufferActionPanel));
             H = HeightButtonCommand;
             ScrollBar = new(3);
             ScrollBar.ChangedValue += (Value) =>
@@ -63,7 +80,7 @@ namespace AAC20.Windows.Pages.ActionPanel
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
             };
             TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
-            ModulePage.KeyboardModeChanged = (Mode) =>
+            KeyboardModeChanged = (Mode) =>
             {
                 IELButtonBackMainMenu.CharKeyboardActivate = Mode;
                 IELButtonClearBuffer.CharKeyboardActivate = Mode;
