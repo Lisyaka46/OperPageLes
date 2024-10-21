@@ -20,14 +20,9 @@ namespace AAC20.Windows.Pages.Other
     public partial class PageLabels : Page, IPageDefault
     {
         /// <summary>
-        /// Модуль страницы
+        /// Имя страницы
         /// </summary>
-        public ModulePage ModulePage { get; }
-
-        /// <summary>
-        /// Главная страница компонента
-        /// </summary>
-        public Grid MainGrid => GridMain;
+        public string PageName { get; } = nameof(PageLabels);
 
         /// <summary>
         /// Динамический массив ярлыков
@@ -112,7 +107,6 @@ namespace AAC20.Windows.Pages.Other
             InitializeComponent();
             RowDefinitionSQLLabels.Height = new(0, GridUnitType.Star);
             BorderScrollBackground.Width = 0d;
-            ModulePage = new(nameof(PageLabels));
             ScrollBar = new(10, TrafficShare: 2);
             SettingsPanelActionElement = new(this, PageLabelActPanel, new(110, 130));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
