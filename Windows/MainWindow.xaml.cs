@@ -198,14 +198,14 @@ namespace AAC20
                 {
                     Paragraph Massage = new();
                     Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                    Massage.Inlines.Add(new Run($"{App.BufferCommand.Count}/{App.BufferCommand.Length}:" +
-                        $"[{string.Join(',', App.BufferCommand.BufferElements.Where((i) => 
+                    Massage.Inlines.Add(new Run($"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}:" +
+                        $"[{string.Join(',', Pages.PageBufferActPanel.BufferCommand.BufferElements.Where((i) =>
                         {
                             if (i != null)
                             {
                                 return i.Length > 0;
                             }
-                            else return false;
+                            return false;
                         }))}]"));
                     RichTextBoxMainMessage.Document.Blocks.Add(Massage);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -451,32 +451,6 @@ namespace AAC20
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
-            App.BufferCommand.DelElement += (index) =>
-            {
-                Pages.PageBufferActPanel.GridBuffer.Children.RemoveAt(index);
-                Pages.PageBufferActPanel.ScrollBar.MaxDown(1);
-
-                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
-                {
-                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
-                };
-                Thickness ThicknessIndex = new(0);
-                for (int i = index; i < App.BufferCommand.Count; i++)
-                {
-                    IELButtonCommand Button = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
-                    Button.Index--;
-                    AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
-                    AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
-                    Button.BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
-                }
-            };
-
-            App.BufferCommand.ClearBuffer += () =>
-            {
-                Pages.PageBufferActPanel.GridBuffer.Children.Clear();
-                Pages.PageBufferActPanel.ScrollBar.MaxClear();
-            };
-
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
@@ -711,7 +685,7 @@ namespace AAC20
                         new RotateTransform(9d),
                         new ScaleTransform(0.3d, 0.3d)
                         ]
-                };
+                };*/
                 /*DoubleAnimateObj.To = 0d;
                 DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1200d);
                 ((RotateTransform)((TransformGroup)GridMain.RenderTransform).Children[0]).BeginAnimation(RotateTransform.AngleProperty, DoubleAnimateObj);
@@ -761,33 +735,34 @@ namespace AAC20
             string Name = ConsoleCommand.ReadNameCommand(CommandString);
             string[] Parameters = ConsoleCommand.ReadParametersCommand(CommandString);
             Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
-            if (App.BufferCommand.Count < App.BufferCommand.Length)
+            if (Pages.PageBufferActPanel.BufferCommand.Count < Pages.PageBufferActPanel.BufferCommand.Length)
             {
-                IELButtonCommand Button = new(Name, CommandString, App.BufferCommand.Count)
+                IELButtonCommand Button = new(Name, CommandString, Pages.PageBufferActPanel.BufferCommand.Count)
                 {
                     Height = H,
-                    Margin = new(0, (H + 2) * App.BufferCommand.Count, 0, 0),
-                    Index = App.BufferCommand.Count,
+                    Margin = new(0, (H + 2) * Pages.PageBufferActPanel.BufferCommand.Count, 0, 0),
+                    Index = Pages.PageBufferActPanel.BufferCommand.Count,
                 };
                 Button.OnActivateMouseLeft += () =>
                 {
                     IELActionPanelMain.ClosePanelAction();
                     App.MainWindowApplication.SummarizeCommandStateResult(
-                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], App.BufferCommand[Button.Index]));
+                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
                 };
                 Button.OnActivateMouseRight += () =>
                 {
-                    App.BufferCommand.Delete(Button.Index);
-                    Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
-                    if (App.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
+                    Pages.PageBufferActPanel.BufferCommand.Delete(Button.Index);
+                    Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
+                        $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
+                    if (Pages.PageBufferActPanel.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
                 };
-                App.BufferCommand.Add(CommandString);
+                Pages.PageBufferActPanel.BufferCommand.Add(CommandString);
                 Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
                 Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
             }
             else
             {
-                App.BufferCommand.Add(CommandString);
+                Pages.PageBufferActPanel.BufferCommand.Add(CommandString);
                 IELButtonCommand RealButton;
                 for (int i = 0; i < Pages.PageBufferActPanel.GridBuffer.Children.Count - 1; i++)
                 {
@@ -800,7 +775,8 @@ namespace AAC20
                 RealButton.Text = Name;
                 RealButton.TextCommand = CommandString;
             }
-            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
+                $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
             SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters));
         }
 

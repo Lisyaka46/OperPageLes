@@ -65,6 +65,11 @@ namespace AAC20.Windows.Pages.ActionPanel
         internal readonly CounterScrollBar ScrollBar;
 
         /// <summary>
+        /// Буфер объектов команд
+        /// </summary>
+        internal Interpreter.Classes.Buffer BufferCommand;
+
+        /// <summary>
         /// Константа размера Height для кнопок буфера
         /// </summary>
         [NotNull()]
@@ -73,6 +78,8 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel(int HeightButtonCommand)
         {
             InitializeComponent();
+            int BufferLength = 50;
+            BufferCommand = new(BufferLength);
             H = HeightButtonCommand;
             ScrollBar = new(3);
             ScrollBar.ChangedValue += (Value) =>
@@ -80,7 +87,7 @@ namespace AAC20.Windows.Pages.ActionPanel
                 ThicknessAnimationBuffer.To = new(0, 0 - (H + 2) * Value, 0, 0);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
             };
-            TextBlockCounterBuffer.Text = $"{App.BufferCommand.Count}/{App.BufferCommand.Length}";
+            TextBlockCounterBuffer.Text = $"{BufferCommand.Count}/{BufferCommand.Length}";
             KeyboardModeChanged = (Mode) =>
             {
                 IELButtonBackMainMenu.CharKeyboardActivate = Mode;
@@ -88,7 +95,7 @@ namespace AAC20.Windows.Pages.ActionPanel
             };
             BorderBuffer.MouseWheel += (sender, e) =>
             {
-                if (ScrollBar.MaxValue > 0 && App.BufferCommand.Count > 0)
+                if (ScrollBar.MaxValue > 0 && BufferCommand.Count > 0)
                 {
                     if (e.Delta > 0) ScrollBar.Up();
                     else if (e.Delta < 0) ScrollBar.Down();
@@ -103,14 +110,14 @@ namespace AAC20.Windows.Pages.ActionPanel
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 OpacityAnimationBuffer.To = 0d;
-                TextBlockCounterBuffer.Text = $"0/{App.BufferCommand.Length}";
-                for (int i = 0; i < App.BufferCommand.Count; i++)
+                TextBlockCounterBuffer.Text = $"0/{BufferCommand.Length}";
+                for (int i = 0; i < BufferCommand.Count; i++)
                 {
                     IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
-                    if (i == App.BufferCommand.Count - 1)
+                    if (i == BufferCommand.Count - 1)
                     {
                         OpacityAnimationBuffer.FillBehavior = FillBehavior.Stop;
-                        OpacityAnimationBuffer.Completed += (sender, e) => App.BufferCommand.DeleteAll();
+                        OpacityAnimationBuffer.Completed += (sender, e) => BufferCommand.DeleteAll();
                     }
                     ThicknessAnimationBuffer.To = new(-11, Button.Margin.Top + 11, 0, 0);
                     BeginTimeOffset.Add(TimeSpan.FromMilliseconds(60d));
@@ -120,10 +127,35 @@ namespace AAC20.Windows.Pages.ActionPanel
                     Button.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 }
                 OpacityAnimationBuffer.FillBehavior = FillBehavior.HoldEnd;
-                OpacityAnimationBuffer.Completed -= (sender, e) => App.BufferCommand.DeleteAll();
+                OpacityAnimationBuffer.Completed -= (sender, e) => BufferCommand.DeleteAll();
                 OpacityAnimationBuffer.BeginTime = TimeSpan.Zero;
                 ThicknessAnimationBuffer.BeginTime = TimeSpan.Zero;
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(300d);
+            };
+            BufferCommand.DelElement += (index) =>
+            {
+                GridBuffer.Children.RemoveAt(index);
+                ScrollBar.MaxDown(1);
+
+                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
+                {
+                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
+                };
+                Thickness ThicknessIndex = new(0);
+                for (int i = index; i < BufferCommand.Count; i++)
+                {
+                    IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
+                    Button.Index--;
+                    AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
+                    AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
+                    Button.BeginAnimation(MarginProperty, AnimationBuffer);
+                }
+            };
+
+            BufferCommand.ClearBuffer += () =>
+            {
+                GridBuffer.Children.Clear();
+                ScrollBar.MaxClear();
             };
         }
     }
