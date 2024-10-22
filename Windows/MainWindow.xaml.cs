@@ -436,8 +436,8 @@ namespace AAC20
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
-            ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
             BackgroundUpdateVisualData();
+            BrowserPageColumn.MaxWidth = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
@@ -450,6 +450,72 @@ namespace AAC20
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
+
+            string PathImage = App.CurrentApp.SettingApplication["PathMenuImage"];
+            if (!PathImage.Equals("!"))
+            {
+                ImageIndificator.Opacity = 1d;
+                BitmapImage bitmap = new(new Uri(PathImage, UriKind.RelativeOrAbsolute));
+                if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
+                {
+                    DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
+                    bitmap.DownloadCompleted += (sender, e) =>
+                    {
+                        ImageMenu.Source = bitmap;
+                        ThicknessAnimation animationThickness = ThicknessAnimate.Clone();
+
+                        animationDouble.From = 10d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
+
+                        animationThickness.From = new(-4);
+                        animationThickness.To = new(0);
+                        animationThickness.Duration = TimeSpan.FromMilliseconds(2300d);
+
+                        BlurEffectImageMenu.BeginAnimation(BlurEffect.RadiusProperty, animationDouble);
+                        ImageMenu.BeginAnimation(MarginProperty, animationThickness);
+
+                        animationDouble.From = 0d;
+                        animationDouble.To = 1d;
+                        ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
+
+                        animationDouble.From = 1d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+                    };
+                    bitmap.DownloadFailed += (sender, e) =>
+                    {
+                        Paragraph Message = new();
+                        Message.Inlines.Add(new Bold(new Run(">>> ")));
+                        Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
+                        {
+                            Background = new SolidColorBrush(Colors.IndianRed)
+                        });
+                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
+
+                        animationDouble.From = 1d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+                    };
+                    bitmap.DecodeFailed += (sender, e) =>
+                    {
+                        Paragraph Message = new();
+                        Message.Inlines.Add(new Bold(new Run(">>> ")));
+                        Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
+                        {
+                            Background = new SolidColorBrush(Colors.IndianRed)
+                        });
+                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
+
+                        animationDouble.From = 1d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+                    };
+                }
+            }
 
             App.BufferCommand.DelElement += (index) =>
             {
@@ -678,7 +744,7 @@ namespace AAC20
 
                     #region Anim Start
                     #region 1
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(400d);
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(1400d);
 
                     ThicknessAnimate.From = new(8);
                     ThicknessAnimate.To = BorderImageInformation.Margin;
@@ -699,7 +765,7 @@ namespace AAC20
                     BorderDateTime.BeginAnimation(MarginProperty, ThicknessAnimate);
 
                     ThicknessAnimate.From = null;
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(1400d);
 
                     #endregion
                     #endregion
@@ -740,7 +806,7 @@ namespace AAC20
             DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 0d : 420d;
             Storyboard storyboard = new();
             storyboard.Children.Add(DoubleAnimateObj);
-            Storyboard.SetTarget(DoubleAnimateObj, FrameComponentColumn);
+            Storyboard.SetTarget(DoubleAnimateObj, BrowserPageColumn);
             Storyboard.SetTargetProperty(DoubleAnimateObj, new PropertyPath("(ColumnDefinition.MaxWidth)"));
             storyboard.Begin();
             DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
@@ -870,9 +936,9 @@ namespace AAC20
                 else MousePoint = new(
                     (MousePoint.X - (ActualWidth / 2)) / 3,
                     (MousePoint.Y - (ActualHeight / 2)) / 3);
-                ImageTest.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
+                ImageMenu.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
             }
-            catch { ImageTest.Margin = new(0); }
+            catch { ImageMenu.Margin = new(0); }
             
         }
 

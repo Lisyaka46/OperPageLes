@@ -87,8 +87,15 @@ namespace AAC20
         /// </summary>
         private const string PathSettingProcess = "CurrentSettings.so";
 
-        //
+        /// <summary>
+        /// Имя файла настроек <b>приложения</b>
+        /// </summary>
         private const string NameFileApplicationSetting = "ApplicationSettings";
+
+        /// <summary>
+        /// Экземпляр созданного приложения
+        /// </summary>
+        internal static App CurrentApp => (App)Current;
 
         public App()
         {
@@ -108,6 +115,7 @@ namespace AAC20
                 File.WriteAllLines(PathSetting,
                     [
                         $"SettingApplicationPath:{NameFileApplicationSetting}.so",
+                        "PathMenuImage:!"
                     ]);
             }
             SettingApplication = ReadSettingFile(PathSetting);
