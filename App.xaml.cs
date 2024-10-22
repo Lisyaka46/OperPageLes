@@ -14,14 +14,6 @@ namespace AAC20
     public partial class App : Application
     {
         /// <summary>
-        /// Структура флагов программы
-        /// </summary>
-        internal readonly struct AppFlags
-        {
-            
-        }
-
-        /// <summary>
         /// Структура всех окон программы
         /// </summary>
         internal readonly struct AppWindows
@@ -51,11 +43,6 @@ namespace AAC20
         ];
 
         /// <summary>
-        /// Буфер объектов команд
-        /// </summary>
-        internal static Interpreter.Classes.Buffer BufferCommand = new(50);
-
-        /// <summary>
         /// Главное окно програмы
         /// </summary>
         internal static MainWindow MainWindowApplication => (MainWindow)Current.MainWindow;
@@ -64,6 +51,11 @@ namespace AAC20
         /// Поток обновляемый данные интернета
         /// </summary>
         private readonly ThreadGenericProcess ThreadInternetCheckConnection;
+
+        /// <summary>
+        /// Экземпляр созданного приложения
+        /// </summary>
+        internal static App CurrentApp => (App)Current;
 
         /// <summary>
         /// Состояние подключения к интернету
@@ -85,7 +77,9 @@ namespace AAC20
             Current.Shutdown(0);
         }
 
-        //
+        /// <summary>
+        /// Проверка подключения интернета
+        /// </summary>
         private static void CheckInternetConnection()
         {
             Ping ObjPing = new();
