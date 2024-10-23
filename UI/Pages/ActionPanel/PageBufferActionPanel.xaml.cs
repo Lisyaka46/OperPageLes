@@ -1,4 +1,4 @@
-﻿using AAC20.Classes;
+﻿using AAC20.CORE;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;

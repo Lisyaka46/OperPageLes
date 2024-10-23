@@ -1,4 +1,4 @@
-﻿using AAC20.Classes;
+﻿using AAC20.CORE;
 using AAC20.Windows.Pages.License;
 using System.Windows;
 using System.Windows.Media;
@@ -6,7 +6,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
-namespace AAC20.Windows
+namespace AAC20.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для LicenseWindow.xaml
@@ -41,14 +41,14 @@ namespace AAC20.Windows
             new("Lisyaka", "\"Не знаю...\"",
                 "- За всю разработку.",
                 new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"),
-                new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Logo02.png")
+                new Uri($"{App.PathImageApplication}/Logo02.png", UriKind.Relative)
                 )
             {
                 ColorNickName = Color.FromRgb(245, 225, 101),
                 ColorPhrase =  Color.FromRgb(219, 177, 205)
             },
             new("Minsi", "\"Спасибо что живая.\"",
-                "- За помощь в разработке.\n- За проектирование программы."
+                "- За помощь в разработке.\n- За проектирование программы.\n- За оценку качества программы."
                 )
             {
                 ColorNickName = Color.FromRgb(86, 255, 120),

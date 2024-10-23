@@ -10,14 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Windows\Pages\MainWindow\**" />
-    <Compile Remove="Windows\Pages\Settings\**" />
-    <EmbeddedResource Remove="Windows\Pages\MainWindow\**" />
-    <EmbeddedResource Remove="Windows\Pages\Settings\**" />
-    <None Remove="Windows\Pages\MainWindow\**" />
-    <None Remove="Windows\Pages\Settings\**" />
-    <Page Remove="Windows\Pages\MainWindow\**" />
-    <Page Remove="Windows\Pages\Settings\**" />
+    <Compile Remove="UI\Pages\MainWindow\**" />
+    <Compile Remove="UI\Pages\Settings\**" />
+    <EmbeddedResource Remove="UI\Pages\MainWindow\**" />
+    <EmbeddedResource Remove="UI\Pages\Settings\**" />
+    <None Remove="UI\Pages\MainWindow\**" />
+    <None Remove="UI\Pages\Settings\**" />
+    <Page Remove="UI\Pages\MainWindow\**" />
+    <Page Remove="UI\Pages\Settings\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
     <None Remove="Fonts\Pecita.otf" />
     <None Remove="Fonts\pizza hut.otf" />
     <None Remove="Fonts\sangha.ttf" />
-    <None Remove="Windows\WindowsImages\Logo04.png" />
+    <None Remove="UI\Images\Logo04.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,27 +63,27 @@
     <Resource Include="Fonts\Tablon-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Windows\WindowsImages\ArrowFrameComponent.png" />
-    <Resource Include="Windows\WindowsImages\DoubleMouseButton.png" />
-    <Resource Include="Windows\WindowsImages\Labels\Command.png" />
-    <Resource Include="Windows\WindowsImages\Labels\File.png" />
-    <Resource Include="Windows\WindowsImages\Labels\Folder.png" />
-    <Resource Include="Windows\WindowsImages\Labels\Link.png" />
-    <Resource Include="Windows\WindowsImages\LeftMouseButton.png" />
-    <Resource Include="Windows\WindowsImages\LicenseIco.png" />
-    <Resource Include="Windows\WindowsImages\Loading.gif" />
-    <Resource Include="Windows\WindowsImages\Logo01.png" />
-    <Resource Include="Windows\WindowsImages\Logo03.png" />
-    <Resource Include="Windows\WindowsImages\20.png" />
-    <Resource Include="Windows\WindowsImages\Logo02.png" />
-    <Resource Include="Windows\WindowsImages\Logo04.png" />
-    <Resource Include="Windows\WindowsImages\LogoDC.png" />
-    <Resource Include="Windows\WindowsImages\RightMouseButton.png" />
-    <Resource Include="Windows\WindowsImages\Search.png" />
-    <Resource Include="Windows\WindowsImages\Settings.png" />
-    <Resource Include="Windows\WindowsImages\Wifi.png" />
-    <Resource Include="Windows\WindowsImages\WifiOff.png" />
-    <Resource Include="Windows\WindowsImages\WifiOn.png" />
+    <Resource Include="UI\Images\ArrowFrameComponent.png" />
+    <Resource Include="UI\Images\DoubleMouseButton.png" />
+    <Resource Include="UI\Images\Labels\Command.png" />
+    <Resource Include="UI\Images\Labels\File.png" />
+    <Resource Include="UI\Images\Labels\Folder.png" />
+    <Resource Include="UI\Images\Labels\Link.png" />
+    <Resource Include="UI\Images\LeftMouseButton.png" />
+    <Resource Include="UI\Images\LicenseIco.png" />
+    <Resource Include="UI\Images\Loading.gif" />
+    <Resource Include="UI\Images\Logo01.png" />
+    <Resource Include="UI\Images\Logo03.png" />
+    <Resource Include="UI\Images\20.png" />
+    <Resource Include="UI\Images\Logo02.png" />
+    <Resource Include="UI\Images\Logo04.png" />
+    <Resource Include="UI\Images\LogoDC.png" />
+    <Resource Include="UI\Images\RightMouseButton.png" />
+    <Resource Include="UI\Images\Search.png" />
+    <Resource Include="UI\Images\Settings.png" />
+    <Resource Include="UI\Images\Wifi.png" />
+    <Resource Include="UI\Images\WifiOff.png" />
+    <Resource Include="UI\Images\WifiOn.png" />
   </ItemGroup>
 
   <ItemGroup>

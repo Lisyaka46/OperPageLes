@@ -1,11 +1,11 @@
-﻿using AAC20.Classes.Flaging;
+﻿using AAC20.CORE.Flaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AAC20.Classes
+namespace AAC20.CORE
 {
     public class ThreadGenericProcess
     {

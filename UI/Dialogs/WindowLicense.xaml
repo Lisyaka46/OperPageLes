@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AAC20.Windows"
-        xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="AAC20.Windows.LicenseWindow"
+        xmlns:local="clr-namespace:AAC20.UI.Dialogs"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="AAC20.UI.Dialogs.LicenseWindow"
         mc:Ignorable="d" Background="#FF4D735E" Height="450" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Topmost="True" Icon="{Binding Mode=OneWay, Source={StaticResource EmptyImage}}">
     <Grid>
         <Grid.RowDefinitions>
@@ -12,10 +12,10 @@
             <RowDefinition Height="153*"/>
             <RowDefinition Height="129*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="ImageLogo" Height="145" Margin="0,-4,0,0" VerticalAlignment="Top" Width="103" Source="/Windows/WindowsImages/Logo04.png" HorizontalAlignment="Center" Stretch="UniformToFill"/>
-        <Image x:Name="Image20" Margin="0,96,0,0" VerticalAlignment="Top" Source="/Windows/WindowsImages/20.png" Width="84" HorizontalAlignment="Center" Height="38"/>
+        <Image x:Name="ImageLogo" Height="145" Margin="0,-4,0,0" VerticalAlignment="Top" Width="103" Source="/UI/Images/Logo04.png" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+        <Image x:Name="Image20" Margin="0,96,0,0" VerticalAlignment="Top" Source="/UI/Images/20.png" Width="84" HorizontalAlignment="Center" Height="38"/>
         <Frame x:Name="FrameLicense" Content="" NavigationUIVisibility="Hidden" Grid.RowSpan="2" Margin="0,147,0,0"/>
-        <Image x:Name="ImageLicense" Margin="0,45,0,35" Source="/Windows/WindowsImages/LicenseIco.png"/>
+        <Image x:Name="ImageLicense" Margin="0,45,0,35" Source="/UI/Images/LicenseIco.png"/>
         <Frame x:Name="FrameThanks" Content="" Grid.Row="2" NavigationUIVisibility="Hidden" Padding="3,0,3,0" Margin="-4,1,-4,0"/>
 
     </Grid>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace AAC20.Classes
+namespace AAC20.CORE
 {
     internal sealed class UpdateBackgroundData
     {

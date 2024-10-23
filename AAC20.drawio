@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17" pages="3">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17" pages="4">
   <diagram id="NxpSJ8SUFjt9Wk7flwPs" name="Инструкция">
     <mxGraphModel dx="3034" dy="2036" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="800" pageHeight="1600" math="0" shadow="0">
       <root>
@@ -1673,38 +1673,49 @@
     </mxGraphModel>
   </diagram>
   <diagram id="0c8RebpdYSmeQoerZIm6" name="Иерархия ссылок">
-    <mxGraphModel dx="1569" dy="2103" grid="0" gridSize="10" guides="0" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1647" dy="2148" grid="0" gridSize="10" guides="0" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-1" value="InterpreterCommand" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;" vertex="1" parent="1">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-1" value="InterpreterCommand" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;" parent="1" vertex="1">
           <mxGeometry x="789" y="-896" width="243" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-2" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;strokeWidth=2;endArrow=none;endFill=0;flowAnimation=1;" edge="1" parent="1" source="HdPCVzvgQpKPLtggMwEr-5" target="HdPCVzvgQpKPLtggMwEr-1">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-2" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;strokeWidth=2;endArrow=none;endFill=0;flowAnimation=1;" parent="1" source="HdPCVzvgQpKPLtggMwEr-5" target="HdPCVzvgQpKPLtggMwEr-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="5" y="-732" as="sourcePoint" />
             <mxPoint x="750" y="-879" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-3" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=none;endFill=0;dashed=1;dashPattern=12 12;flowAnimation=1;" edge="1" parent="1" source="HdPCVzvgQpKPLtggMwEr-5" target="HdPCVzvgQpKPLtggMwEr-4">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-3" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=none;endFill=0;dashed=1;dashPattern=12 12;flowAnimation=1;" parent="1" source="HdPCVzvgQpKPLtggMwEr-5" target="HdPCVzvgQpKPLtggMwEr-4" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="632" y="-882" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-8" style="edgeStyle=none;shape=connector;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Lucida Console;fontSize=18;fontColor=#70967C;labelBackgroundColor=default;endArrow=none;endFill=0;flowAnimation=1;" edge="1" parent="1" source="HdPCVzvgQpKPLtggMwEr-4" target="HdPCVzvgQpKPLtggMwEr-6">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-8" style="edgeStyle=none;shape=connector;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Lucida Console;fontSize=18;fontColor=#70967C;labelBackgroundColor=default;endArrow=none;endFill=0;flowAnimation=1;" parent="1" source="HdPCVzvgQpKPLtggMwEr-4" target="HdPCVzvgQpKPLtggMwEr-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-4" value="IEL" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;" vertex="1" parent="1">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-4" value="IEL" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;" parent="1" vertex="1">
           <mxGeometry x="573" y="-760" width="180" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-7" style="edgeStyle=none;shape=connector;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Lucida Console;fontSize=18;fontColor=#70967C;labelBackgroundColor=default;endArrow=none;endFill=0;flowAnimation=1;" edge="1" parent="1" source="HdPCVzvgQpKPLtggMwEr-5" target="HdPCVzvgQpKPLtggMwEr-6">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-7" style="edgeStyle=none;shape=connector;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Lucida Console;fontSize=18;fontColor=#70967C;labelBackgroundColor=default;endArrow=none;endFill=0;flowAnimation=1;" parent="1" source="HdPCVzvgQpKPLtggMwEr-5" target="HdPCVzvgQpKPLtggMwEr-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-5" value="AAC20" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;strokeWidth=3;" vertex="1" parent="1">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-5" value="AAC20" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;strokeWidth=3;" parent="1" vertex="1">
           <mxGeometry x="567" y="-1060" width="180" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="HdPCVzvgQpKPLtggMwEr-6" value="DataScroll" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;" vertex="1" parent="1">
+        <mxCell id="HdPCVzvgQpKPLtggMwEr-6" value="DataScroll" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;" parent="1" vertex="1">
           <mxGeometry x="283" y="-888" width="180" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="koP4TnFQ7oDPtkM10yBT" name="Иерархия FRONT">
+    <mxGraphModel dx="1230" dy="1730" grid="0" gridSize="10" guides="0" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="uTEx95I60z28E4fJYkUw-1" value="ISetting" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="494" y="-646" width="180" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

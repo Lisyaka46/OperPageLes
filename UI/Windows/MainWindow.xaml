@@ -1,5 +1,5 @@
 ﻿<Window
-        xmlns:local="clr-namespace:AAC20"
+        xmlns:local="clr-namespace:AAC20.UI.Windows"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,12 +7,16 @@
         xmlns:GUI="clr-namespace:IEL;assembly=IEL"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
-        x:Name="window" x:Class="AAC20.MainWindow"
+        x:Name="window" x:Class="AAC20.UI.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/Windows/WindowsImages/Logo02.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
+        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/UI/Images/Logo02.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
         <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
-        <Image x:Name="ImageTest" Source="https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&amp;quality=95&amp;sign=b761945cee478f88087602b209cff6f9&amp;type=album" Panel.ZIndex="1" StretchDirection="UpOnly"/>
+        <Image x:Name="ImageMenu" Panel.ZIndex="1" Stretch="UniformToFill">
+            <Image.Effect>
+                <BlurEffect x:Name="BlurEffectImageMenu" Radius="0" KernelType="Gaussian"/>
+            </Image.Effect>
+        </Image>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="136"/>
@@ -49,7 +53,7 @@
                             <ColumnDefinition Width="55"/>
                         </Grid.ColumnDefinitions>
 
-                        <GUI:IELImageButton x:Name="IELButtonSettings" Imaging="/Windows/WindowsImages/Settings.png" Grid.ColumnSpan="1" Grid.Column="2" ImageMargin="2,2,2,2" Margin="3,0,0,0" AnimationMillisecond="140">
+                        <GUI:IELImageButton x:Name="IELButtonSettings" Imaging="/UI/Images/Settings.png" Grid.ColumnSpan="1" Grid.Column="2" ImageMargin="2,2,2,2" Margin="3,0,0,0" AnimationMillisecond="140">
                             <GUI:IELImageButton.ForegroundSetting>
                                 <Classes:BrushSettingQ Default="#FF1F262F" NotEnabled="#FF5F1717" Select="#FF232F31" Used="#FF093831"/>
                             </GUI:IELImageButton.ForegroundSetting>
@@ -72,7 +76,7 @@
                             </GUI:IELButtonText.BackgroundSetting>
                         </GUI:IELButtonText>
                     </Grid>
-                    <GUI:IELImageButton x:Name="ImageLogoApplication" Margin="3,3,3,3" Imaging="/Windows/WindowsImages/Logo02.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThicknessBlock="0.1,0.1,0.1,0.1">
+                    <GUI:IELImageButton x:Name="ImageLogoApplication" Margin="3,3,3,3" Imaging="/UI/Images/Logo02.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThicknessBlock="0.1,0.1,0.1,0.1">
                         <GUI:IELImageButton.BorderBrushSetting>
                             <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
                         </GUI:IELImageButton.BorderBrushSetting>
@@ -87,7 +91,7 @@
                     <ColumnDefinition Width="89*"/>
                     <ColumnDefinition Width="45*"/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/Windows/WindowsImages/Loading.gif" Margin="9,7,9,7" Grid.Column="1" Opacity="0"/>
+                <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
                 <GUI:IELButtonText x:Name="ButtonReturnCommand" FontFamily="Trebuchet MS" Text="Выполнить" Margin="2,4,2,5" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160">
                     <GUI:IELButtonText.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF55C7A5" NotEnabled="#FFCE4867" Select="#FF47F9C4" Used="White"/>
@@ -97,7 +101,7 @@
             <Grid x:Name="GridMainComponents" Grid.Row="1" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition x:Name="FrameComponentColumn" Width="420" MaxWidth="420" MinWidth="0"/>
+                    <ColumnDefinition x:Name="BrowserPageColumn" Width="420" MaxWidth="420" MinWidth="0"/>
                 </Grid.ColumnDefinitions>
                 <Border x:Name="BorderConsole" BorderBrush="#FF315842" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Margin="2,2,2,2" Panel.ZIndex="1">
                     <Grid x:Name="GridConsole">
@@ -132,7 +136,7 @@
                             <ColumnDefinition Width="43"/>
                         </Grid.ColumnDefinitions>
                         <Border x:Name="BorderInternetConnection" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CACBB" Margin="3,3,3,3">
-                            <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/Windows/WindowsImages/WifiOff.png" Margin="-2,0,0,0">
+                            <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/UI/Images/WifiOff.png" Margin="-2,0,0,0">
                                 <Image.Effect>
                                     <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
                                 </Image.Effect>
@@ -146,7 +150,7 @@
                                 </Image.RenderTransform>
                             </Image>
                         </Border>
-                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/Windows/WindowsImages/ArrowFrameComponent.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="2000">
+                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/UI/Images/ArrowFrameComponent.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="2000">
                             <GUI:IELImageButton.BorderBrushSetting>
                                 <Classes:BrushSettingQ Default="Black" NotEnabled="#FF400817" Select="#FF151729" Used="#FF173128"/>
                             </GUI:IELImageButton.BorderBrushSetting>

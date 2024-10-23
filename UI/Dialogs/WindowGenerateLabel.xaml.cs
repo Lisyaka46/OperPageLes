@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace AAC20.Windows
+namespace AAC20.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenLabel.xaml

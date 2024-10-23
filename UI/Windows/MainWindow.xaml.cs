@@ -1,5 +1,6 @@
-﻿using AAC20.Classes;
-using AAC20.Classes.Flaging;
+﻿using AAC20.CORE;
+using AAC20.CORE.Flaging;
+using AAC20.CORE.Settings;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
@@ -23,7 +24,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace AAC20
+namespace AAC20.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -240,7 +241,7 @@ namespace AAC20
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
                             $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
-                    LabelAction? label = new WindowGenLabel().CreateLabel();
+                    LabelAction? label = new Dialogs.WindowGenLabel().CreateLabel();
                     if (label != null) Page.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
@@ -385,7 +386,7 @@ namespace AAC20
             #region Event Flags
             Flags.FlagInternetConnection.ChangeStateFlag += (NewValue) =>
             {
-                ImageInternetConnection.Source = new BitmapImage(new Uri($"/Windows/WindowsImages/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
+                ImageInternetConnection.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
                 DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(800d);
                 DoubleAnimateObj.From = 10d;
                 DoubleAnimateObj.To = 0d;
@@ -436,8 +437,8 @@ namespace AAC20
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
-            ImageTest.Source = new BitmapImage(new Uri("C:/Users/killm/Рабочий стол/Main/Programm/С#/AAC20/Windows/WindowsImages/Logo02.png"));
             BackgroundUpdateVisualData();
+            BrowserPageColumn.MaxWidth = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
@@ -450,6 +451,98 @@ namespace AAC20
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
+
+            string PathImage = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
+            if (PathImage.Length > 0)
+            {
+                ImageIndificator.Opacity = 1d;
+                BitmapImage bitmap = new(new Uri(PathImage, UriKind.RelativeOrAbsolute));
+                if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
+                {
+                    DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
+                    bitmap.DownloadCompleted += (sender, e) =>
+                    {
+                        ImageMenu.Source = bitmap;
+                        ThicknessAnimation animationThickness = ThicknessAnimate.Clone();
+
+                        animationDouble.From = 10d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
+
+                        animationThickness.From = new(-4);
+                        animationThickness.To = new(0);
+                        animationThickness.Duration = TimeSpan.FromMilliseconds(2300d);
+
+                        BlurEffectImageMenu.BeginAnimation(BlurEffect.RadiusProperty, animationDouble);
+                        ImageMenu.BeginAnimation(MarginProperty, animationThickness);
+
+                        animationDouble.From = 0d;
+                        animationDouble.To = 1d;
+                        ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
+
+                        animationDouble.From = 1d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+                    };
+                    bitmap.DownloadFailed += (sender, e) =>
+                    {
+                        Paragraph Message = new();
+                        Message.Inlines.Add(new Bold(new Run(">>> ")));
+                        Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
+                        {
+                            Background = new SolidColorBrush(Colors.IndianRed)
+                        });
+                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
+
+                        animationDouble.From = 1d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+                    };
+                    bitmap.DecodeFailed += (sender, e) =>
+                    {
+                        Paragraph Message = new();
+                        Message.Inlines.Add(new Bold(new Run(">>> ")));
+                        Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
+                        {
+                            Background = new SolidColorBrush(Colors.IndianRed)
+                        });
+                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
+
+                        animationDouble.From = 1d;
+                        animationDouble.To = 0d;
+                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+                    };
+                }
+            }
+
+            App.BufferCommand.DelElement += (index) =>
+            {
+                Pages.PageBufferActPanel.GridBuffer.Children.RemoveAt(index);
+                Pages.PageBufferActPanel.ScrollBar.MaxDown(1);
+
+                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
+                {
+                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
+                };
+                Thickness ThicknessIndex = new(0);
+                for (int i = index; i < App.BufferCommand.Count; i++)
+                {
+                    IELButtonCommand Button = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
+                    Button.Index--;
+                    AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
+                    AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
+                    Button.BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
+                }
+            };
+
+            App.BufferCommand.ClearBuffer += () =>
+            {
+                Pages.PageBufferActPanel.GridBuffer.Children.Clear();
+                Pages.PageBufferActPanel.ScrollBar.MaxClear();
+            };
 
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
@@ -587,7 +680,7 @@ namespace AAC20
             {
                 DoubleAnimateObj.To = 1d;
                 ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-                LicenseWindow License = new();
+                Dialogs.LicenseWindow License = new();
                 License.ShowDialog();
             };
 
@@ -652,7 +745,7 @@ namespace AAC20
 
                     #region Anim Start
                     #region 1
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(400d);
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(1400d);
 
                     ThicknessAnimate.From = new(8);
                     ThicknessAnimate.To = BorderImageInformation.Margin;
@@ -673,7 +766,7 @@ namespace AAC20
                     BorderDateTime.BeginAnimation(MarginProperty, ThicknessAnimate);
 
                     ThicknessAnimate.From = null;
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(300d);
+                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(1400d);
 
                     #endregion
                     #endregion
@@ -714,7 +807,7 @@ namespace AAC20
             DoubleAnimateObj.To = Flags.FlagFrameComponentVisible ? 0d : 420d;
             Storyboard storyboard = new();
             storyboard.Children.Add(DoubleAnimateObj);
-            Storyboard.SetTarget(DoubleAnimateObj, FrameComponentColumn);
+            Storyboard.SetTarget(DoubleAnimateObj, BrowserPageColumn);
             Storyboard.SetTargetProperty(DoubleAnimateObj, new PropertyPath("(ColumnDefinition.MaxWidth)"));
             storyboard.Begin();
             DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
@@ -746,8 +839,8 @@ namespace AAC20
                 Button.OnActivateMouseLeft += () =>
                 {
                     IELActionPanelMain.ClosePanelAction();
-                    App.MainWindowApplication.SummarizeCommandStateResult(
-                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
+                    SummarizeCommandStateResult(
+                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], App.BufferCommand[Button.Index]));
                 };
                 Button.OnActivateMouseRight += () =>
                 {
@@ -786,7 +879,7 @@ namespace AAC20
             if (Result.State != ResultState.Complete && Result.Massage != null)
             {
                 Paragraph P_Massage = new();
-                foreach (Match Element in StringCommandError().Matches(Result.Massage))
+                foreach (Match Element in StringCommandError('"').Matches(Result.Massage))
                 {
                     if ((Element.Value[0], Element.Value[^1]) == ('"', '"'))
                     {
@@ -846,16 +939,15 @@ namespace AAC20
                 else MousePoint = new(
                     (MousePoint.X - (ActualWidth / 2)) / 3,
                     (MousePoint.Y - (ActualHeight / 2)) / 3);
-                ImageTest.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
+                ImageMenu.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
             }
-            catch { ImageTest.Margin = new(0); }
+            catch { ImageMenu.Margin = new(0); }
             
         }
 
-        [GeneratedRegex("([^\"]+|\"[^\"]+\"?)")]
         /// <summary>
         /// Функция регулярного выражения выделения текста в ковычках "текст"
         /// </summary>
-        private static partial Regex StringCommandError();
+        private static Regex StringCommandError(char symbol) => new($"([^\\{symbol}]+|\\{symbol}[^\\{symbol}]+\\{symbol}?)");
     }
 }

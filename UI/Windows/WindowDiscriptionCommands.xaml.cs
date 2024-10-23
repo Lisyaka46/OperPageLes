@@ -1,4 +1,4 @@
-﻿using AAC20.Classes.Flaging;
+﻿using AAC20.CORE.Flaging;
 using Interpreter.Commands;
 using System.Windows;
 using System.Windows.Controls;
