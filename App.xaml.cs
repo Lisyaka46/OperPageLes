@@ -1,5 +1,5 @@
-﻿using AAC20.Classes;
-using AAC20.Classes.Flaging;
+﻿using AAC20.CORE;
+using AAC20.CORE.Flaging;
 using AAC20.Windows;
 using Interpreter.Commands;
 using System.Diagnostics;
@@ -47,7 +47,7 @@ namespace AAC20
         /// <summary>
         /// Главное окно програмы
         /// </summary>
-        internal static MainWindow MainWindowApplication => (MainWindow)Current.MainWindow;
+        internal static UI.Windows.MainWindow MainWindowApplication => (UI.Windows.MainWindow)Current.MainWindow;
 
         /// <summary>
         /// Поток обновляемый данные интернета
@@ -84,11 +84,6 @@ namespace AAC20
         /// </summary>
         private const string NameFileApplicationSetting = "ApplicationSettings";
 
-        /// <summary>
-        /// Экземпляр созданного приложения
-        /// </summary>
-        internal static App CurrentApp => (App)Current;
-
         public App()
         {
             ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
@@ -120,7 +115,7 @@ namespace AAC20
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
-            Current.MainWindow = new MainWindow();
+            Current.MainWindow = new UI.Windows.MainWindow();
             Current.Exit += (sender, e) =>
             {
                 ThreadInternetCheckConnection.Kill();

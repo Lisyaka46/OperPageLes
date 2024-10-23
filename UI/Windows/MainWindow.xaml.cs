@@ -518,32 +518,6 @@ namespace AAC20.UI.Windows
                 }
             }
 
-            App.BufferCommand.DelElement += (index) =>
-            {
-                Pages.PageBufferActPanel.GridBuffer.Children.RemoveAt(index);
-                Pages.PageBufferActPanel.ScrollBar.MaxDown(1);
-
-                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
-                {
-                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
-                };
-                Thickness ThicknessIndex = new(0);
-                for (int i = index; i < App.BufferCommand.Count; i++)
-                {
-                    IELButtonCommand Button = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
-                    Button.Index--;
-                    AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
-                    AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
-                    Button.BeginAnimation(FrameworkElement.MarginProperty, AnimationBuffer);
-                }
-            };
-
-            App.BufferCommand.ClearBuffer += () =>
-            {
-                Pages.PageBufferActPanel.GridBuffer.Children.Clear();
-                Pages.PageBufferActPanel.ScrollBar.MaxClear();
-            };
-
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
@@ -840,7 +814,7 @@ namespace AAC20.UI.Windows
                 {
                     IELActionPanelMain.ClosePanelAction();
                     SummarizeCommandStateResult(
-                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], App.BufferCommand[Button.Index]));
+                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
                 };
                 Button.OnActivateMouseRight += () =>
                 {
