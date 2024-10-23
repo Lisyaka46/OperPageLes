@@ -1,0 +1,34 @@
+﻿<Page x:Class="AAC20.Windows.Pages.License.PageLicense"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.Windows.Pages.License"
+      mc:Ignorable="d"
+      Title="Page1" d:DesignHeight="117.526">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="27*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="TextBlockAAC" HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" Text="AAC20" VerticalAlignment="Top" Style="{Binding Mode=OneWay, Source={StaticResource Tablon}}" FontSize="36" FontWeight="Bold" Grid.RowSpan="1" Foreground="#FF42FF93"/>
+        <TextBlock x:Name="TextBlockLicenseText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Автор: Даниил Лисов" VerticalAlignment="Top" FontSize="16" Style="{Binding Mode=OneWay, Source={StaticResource Monocraft}}" Grid.Row="0" Margin="0,57,0,0">
+            <TextBlock.Foreground>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="1,0.3">
+                    <GradientStop Color="#FFFF8686" Offset="0.075"/>
+                    <GradientStop Color="#FFFF9CFB" Offset="0.89"/>
+                    <GradientStop Color="#FFD5FBDE" Offset="0.445"/>
+                    <GradientStop Color="#FFBCD847" Offset="0.647"/>
+                    <GradientStop Color="#FF5A9EEA" Offset="0.305"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+        </TextBlock>
+        <Border Grid.Row="1" BorderBrush="#FF102D21" BorderThickness="2,5,2,5" CornerRadius="6,6,6,6" Margin="0,0,0,10">
+            <Grid>
+                <TextBlock HorizontalAlignment="Center" Text="19-04-22 version:DEBUG" Style="{Binding Mode=OneWay, Source={StaticResource MOSCOW2024}}" VerticalAlignment="Center" Foreground="#FFFFBD48" FontWeight="Bold" Margin="2,2,0,0" FontSize="18" />
+            </Grid>
+        </Border>
+
+    </Grid>
+</Page>

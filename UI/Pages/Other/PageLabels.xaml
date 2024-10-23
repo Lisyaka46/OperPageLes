@@ -1,0 +1,50 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.Windows.Pages.Other"
+      x:Class="AAC20.Windows.Pages.Other.PageLabels"
+      mc:Ignorable="d"
+      Title="PageLabels" d:DesignHeight="144.46" d:DesignWidth="148.456">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="GridScaleManipulation" Grid.Row="1" ClipToBounds="True">
+            <Grid x:Name="GridMain" Grid.RowSpan="1" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition x:Name="RowDefinitionSQLLabels" Height="43*"/>
+                    <RowDefinition Height="76*"/>
+                </Grid.RowDefinitions>
+                <Border x:Name="BorderSQLLabels" BorderBrush="Black" Padding="0,0,0,3">
+                    <Grid x:Name="GridSQLLabels"/>
+                </Border>
+                <Border x:Name="BorderDinamicLabels" Grid.Row="1" BorderBrush="Black" Padding="0,5,0,0">
+                    <Grid x:Name="GridDinamicLabels"/>
+                </Border>
+            </Grid>
+        </Grid>
+        <Border x:Name="BorderNamingLabel" BorderThickness="0,0,0,4" Background="#FF37E2D6" Cursor="Hand">
+            <Border.BorderBrush>
+                <RadialGradientBrush Center="0,0.5" GradientOrigin="0.5,0.5" RadiusX="0.7" RadiusY="0.5" MappingMode="RelativeToBoundingBox" SpreadMethod="Pad" Opacity="1">
+                    <GradientStop Color="#FF37E2D6" Offset="0.88"/>
+                    <GradientStop Color="#004A7B60" Offset="1"/>
+                </RadialGradientBrush>
+            </Border.BorderBrush>
+            <Grid x:Name="GridButtonSearch">
+                <Border x:Name="BorderScrollBackground" HorizontalAlignment="Left" Width="10" Margin="0,2,0,2" Cursor="Hand" Panel.ZIndex="1">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                            <GradientStop Color="#FF37E2D6"/>
+                            <GradientStop Color="#FF25A7D2" Offset="0.729"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <TextBlock x:Name="TextBlockCount" Text="0 Ярлыков" HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="1" Margin="0,0,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

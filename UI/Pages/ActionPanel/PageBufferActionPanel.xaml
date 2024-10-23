@@ -1,0 +1,45 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.Windows.Pages.ActionPanel"
+      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+      xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
+      x:Class="AAC20.Windows.Pages.ActionPanel.PageBufferActionPanel"
+      mc:Ignorable="d" 
+      Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="251.791">
+
+    <Grid x:Name="GridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="94*"/>
+        </Grid.RowDefinitions>
+        <Border x:Name="BorderBuffer" BorderBrush="#FF163C26" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True" Background="#B21B2F24">
+            <Grid>
+                <Grid x:Name="GridBuffer"/>
+            </Grid>
+        </Border>
+        <Grid Margin="0,4,0,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="103*"/>
+                <ColumnDefinition Width="103*"/>
+                <ColumnDefinition Width="46*"/>
+            </Grid.ColumnDefinitions>
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" StateVisualization="LeftArrow" FontSize="13">
+                <GUI:IELButtonTextKey.BackgroundSetting>
+                    <Classes:BrushSettingQ Default="#FF4DA6B7" NotEnabled="#FFC13750" Select="#FF4DD7F1" Used="White"/>
+                </GUI:IELButtonTextKey.BackgroundSetting>
+            </GUI:IELButtonTextKey>
+            <TextBlock x:Name="TextBlockCounterBuffer" HorizontalAlignment="Center" Text="00/00" VerticalAlignment="Center" Foreground="#FF80EAE2" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" FontWeight="Bold" CharKeyKeyboard="D1" VisibleMouseImaging="False" Grid.Column="1" Margin="3,0,1,0" IsEnabled="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="13">
+                <GUI:IELButtonTextKey.BackgroundSetting>
+                    <Classes:BrushSettingQ NotEnabled="#FFC13750" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
+                </GUI:IELButtonTextKey.BackgroundSetting>
+            </GUI:IELButtonTextKey>
+        </Grid>
+
+
+
+    </Grid>
+</Page>
