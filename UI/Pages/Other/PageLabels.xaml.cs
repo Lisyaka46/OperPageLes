@@ -1,4 +1,4 @@
-﻿using AAC20.Classes;
+﻿using AAC20.CORE;
 using AAC20.Windows.Pages.ActionPanel;
 using Interpreter.Commands;
 using System.Windows;
@@ -8,7 +8,7 @@ using IEL.Classes;
 using IEL;
 using IEL.Interfaces.Core;
 using System.Windows.Media;
-using AAC20.Classes.Flaging;
+using AAC20.CORE.Flaging;
 using MySql.Data.MySqlClient;
 using System.Windows.Media.Imaging;
 using DataScroll;

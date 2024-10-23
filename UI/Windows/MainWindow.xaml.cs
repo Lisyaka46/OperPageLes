@@ -1,5 +1,6 @@
-﻿using AAC20.Classes;
-using AAC20.Classes.Flaging;
+﻿using AAC20.CORE;
+using AAC20.CORE.Flaging;
+using AAC20.CORE.Settings;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
@@ -451,8 +452,8 @@ namespace AAC20.UI.Windows
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
-            string PathImage = App.CurrentApp.SettingApplication["PathMenuImage"];
-            if (!PathImage.Equals("!"))
+            string PathImage = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
+            if (PathImage.Length > 0)
             {
                 ImageIndificator.Opacity = 1d;
                 BitmapImage bitmap = new(new Uri(PathImage, UriKind.RelativeOrAbsolute));

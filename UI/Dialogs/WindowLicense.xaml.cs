@@ -1,4 +1,4 @@
-﻿using AAC20.Classes;
+﻿using AAC20.CORE;
 using AAC20.Windows.Pages.License;
 using System.Windows;
 using System.Windows.Media;
