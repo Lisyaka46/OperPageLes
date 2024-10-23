@@ -1,6 +1,6 @@
 ﻿
 
-namespace AAC20.Classes.Flaging
+namespace AAC20.CORE.Flaging
 {
     /// <summary>
     /// Перечисление состояний ожидаемого типа флага
