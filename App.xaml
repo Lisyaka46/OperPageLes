@@ -28,6 +28,9 @@
         <Style x:Key="Brenzo Slab Personal Use">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Brenzo Slab Personal Use"/>
         </Style>
+        <Style x:Key="Vollda">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Vollda"/>
+        </Style>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>
