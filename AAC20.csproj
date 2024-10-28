@@ -29,6 +29,7 @@
     <None Remove="Fonts\Pecita.otf" />
     <None Remove="Fonts\pizza hut.otf" />
     <None Remove="Fonts\sangha.ttf" />
+    <None Remove="Fonts\Vollda-Bold.otf" />
     <None Remove="UI\Images\Logo04.png" />
   </ItemGroup>
 
@@ -61,6 +62,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Tablon-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Vollda-Bold.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\ArrowFrameComponent.png" />
