@@ -1710,13 +1710,10 @@
     </mxGraphModel>
   </diagram>
   <diagram id="koP4TnFQ7oDPtkM10yBT" name="Иерархия FRONT">
-    <mxGraphModel dx="1230" dy="1730" grid="0" gridSize="10" guides="0" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="836" grid="0" gridSize="10" guides="0" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="uTEx95I60z28E4fJYkUw-1" value="ISetting" style="rounded=1;whiteSpace=wrap;fontSize=18;fontColor=#70967C;fontFamily=Lucida Console;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="494" y="-646" width="180" height="80" as="geometry" />
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
