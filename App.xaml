@@ -28,6 +28,15 @@
         <Style x:Key="goosberry_version_02">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#goosberry_version_02"/>
         </Style>
+        <Style x:Key="zhuan_FuturaNowScript">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#zhuan_FuturaNowScript"/>
+        </Style>
+        <Style x:Key="RussianRail G Pro">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#RussianRail G Pro"/>
+        </Style>
+        <Style x:Key="Vollda">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Vollda"/>
+        </Style>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>

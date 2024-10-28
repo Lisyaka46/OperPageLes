@@ -2,22 +2,19 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="UI\Pages\MainWindow\**" />
-    <Compile Remove="UI\Pages\Settings\**" />
     <EmbeddedResource Remove="UI\Pages\MainWindow\**" />
-    <EmbeddedResource Remove="UI\Pages\Settings\**" />
     <None Remove="UI\Pages\MainWindow\**" />
-    <None Remove="UI\Pages\Settings\**" />
     <Page Remove="UI\Pages\MainWindow\**" />
-    <Page Remove="UI\Pages\Settings\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +25,10 @@
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\Pecita.otf" />
     <None Remove="Fonts\pizza hut.otf" />
+    <None Remove="Fonts\RussianRail G Pro.otf" />
     <None Remove="Fonts\sangha.ttf" />
+    <None Remove="Fonts\Vollda-Bold.otf" />
+    <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
     <None Remove="UI\Images\Logo04.png" />
   </ItemGroup>
 
@@ -57,10 +57,19 @@
     <Resource Include="Fonts\Pecita.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Fonts\RussianRail G Pro.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Fonts\sangha.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Tablon-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Vollda-Bold.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\zhuan_FuturaNowScript-Rg.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\ArrowFrameComponent.png" />
