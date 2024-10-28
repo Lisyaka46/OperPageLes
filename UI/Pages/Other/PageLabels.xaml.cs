@@ -319,7 +319,7 @@ namespace AAC20.Windows.Pages.Other
         internal void AddSQLLabel(LabelAction label)
         {
             IELLabelCommand Label = CreateLabel(label, ref ObjectsSQLLabel, ref GridSQLLabels);
-            Label.ImageTagSource = new BitmapImage(new Uri(@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Wifi.png"));
+            Label.ImageTagSource = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi.png", UriKind.RelativeOrAbsolute));
             Label.ImageTagVisible = true;
             ObjectsSQLLabel.Add(Label);
             GridSQLLabels.Children.Add(Label);
