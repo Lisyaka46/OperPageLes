@@ -1,6 +1,7 @@
 ﻿using AAC20.CORE;
 using AAC20.CORE.Flaging;
 using AAC20.CORE.Settings;
+using AAC20.UI.Dialogs;
 using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
@@ -450,73 +451,10 @@ namespace AAC20.UI.Windows
             ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
+
+            UpdateImageMenu();
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
-            string PathImage = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
-            if (PathImage.Length > 0)
-            {
-                ImageIndificator.Opacity = 1d;
-                BitmapImage bitmap = new(new Uri(PathImage, UriKind.RelativeOrAbsolute));
-                if (bitmap.PixelWidth > 0 && bitmap.PixelHeight > 0)
-                {
-                    DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
-                    bitmap.DownloadCompleted += (sender, e) =>
-                    {
-                        ImageMenu.Source = bitmap;
-                        ThicknessAnimation animationThickness = ThicknessAnimate.Clone();
-
-                        animationDouble.From = 10d;
-                        animationDouble.To = 0d;
-                        animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
-
-                        animationThickness.From = new(-4);
-                        animationThickness.To = new(0);
-                        animationThickness.Duration = TimeSpan.FromMilliseconds(2300d);
-
-                        BlurEffectImageMenu.BeginAnimation(BlurEffect.RadiusProperty, animationDouble);
-                        ImageMenu.BeginAnimation(MarginProperty, animationThickness);
-
-                        animationDouble.From = 0d;
-                        animationDouble.To = 1d;
-                        ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
-
-                        animationDouble.From = 1d;
-                        animationDouble.To = 0d;
-                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
-                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
-                    };
-                    bitmap.DownloadFailed += (sender, e) =>
-                    {
-                        Paragraph Message = new();
-                        Message.Inlines.Add(new Bold(new Run(">>> ")));
-                        Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
-                        {
-                            Background = new SolidColorBrush(Colors.IndianRed)
-                        });
-                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
-
-                        animationDouble.From = 1d;
-                        animationDouble.To = 0d;
-                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
-                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
-                    };
-                    bitmap.DecodeFailed += (sender, e) =>
-                    {
-                        Paragraph Message = new();
-                        Message.Inlines.Add(new Bold(new Run(">>> ")));
-                        Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
-                        {
-                            Background = new SolidColorBrush(Colors.IndianRed)
-                        });
-                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
-
-                        animationDouble.From = 1d;
-                        animationDouble.To = 0d;
-                        animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
-                        ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
-                    };
-                }
-            }
 
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
@@ -529,6 +467,11 @@ namespace AAC20.UI.Windows
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 TextBoxCommandInput.Focus();
+            };
+
+            IELButtonSettings.OnActivateMouseLeft += () =>
+            {
+                new WindowSetting().ShowDialog();
             };
 
             #region IELButtonFrameComponentVisible
@@ -918,6 +861,81 @@ namespace AAC20.UI.Windows
             catch { ImageMenu.Margin = new(0); }
             
         }
+
+        #region ImageMenu
+        /// <summary>
+        /// Обновить фотовое изображение
+        /// </summary>
+        internal void UpdateImageMenu()
+        {
+            ImageIndificator.Opacity = 1d;
+            string Path = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
+            BitmapImage BitmapImageMenu = new(
+                new Uri(Path, UriKind.RelativeOrAbsolute));
+            if (File.Exists(Path))
+            {
+                ComplitedInstallImageMenu(BitmapImageMenu);
+                return;
+            };
+            BitmapImageMenu.DownloadCompleted += (sender, e) =>
+            {
+                ComplitedInstallImageMenu(BitmapImageMenu);
+            };
+            BitmapImageMenu.DownloadFailed += (sender, e) => FailedInstallImageMenu();
+            BitmapImageMenu.DecodeFailed += (sender, e) => FailedInstallImageMenu();
+        }
+
+        /// <summary>
+        /// Успешная установка картинки фона
+        /// </summary>
+        /// <param name="bitmap">Карта изображения</param>
+        private void ComplitedInstallImageMenu(BitmapImage bitmap)
+        {
+            ImageMenu.Source = bitmap;
+            ThicknessAnimation animationThickness = ThicknessAnimate.Clone();
+            DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
+
+            animationDouble.From = 10d;
+            animationDouble.To = 0d;
+            animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
+
+            animationThickness.From = new(-4);
+            animationThickness.To = new(0);
+            animationThickness.Duration = TimeSpan.FromMilliseconds(2300d);
+
+            BlurEffectImageMenu.BeginAnimation(BlurEffect.RadiusProperty, animationDouble);
+            ImageMenu.BeginAnimation(MarginProperty, animationThickness);
+
+            animationDouble.From = 0d;
+            animationDouble.To = 1d;
+            ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
+
+            animationDouble.From = 1d;
+            animationDouble.To = 0d;
+            animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+            ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+        }
+
+        /// <summary>
+        /// Неудачное завершение установки картинки фона
+        /// </summary>
+        private void FailedInstallImageMenu()
+        {
+            DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
+            Paragraph Message = new();
+            Message.Inlines.Add(new Bold(new Run(">>> ")));
+            Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
+            {
+                Background = new SolidColorBrush(Colors.IndianRed)
+            });
+            RichTextBoxMainMessage.Document.Blocks.Add(Message);
+
+            animationDouble.From = 1d;
+            animationDouble.To = 0d;
+            animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
+            ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+        }
+        #endregion
 
         /// <summary>
         /// Функция регулярного выражения выделения текста в ковычках "текст"

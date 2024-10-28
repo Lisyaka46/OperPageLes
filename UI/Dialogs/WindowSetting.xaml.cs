@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IEL.Interfaces.Core;
+using AAC20.UI.Pages.Settings;
+using AAC20.CORE.Settings;
 
 namespace AAC20.UI.Dialogs
 {
@@ -20,7 +22,7 @@ namespace AAC20.UI.Dialogs
     /// </summary>
     public partial class WindowSetting : Window
     {
-        AAC20.UI. GeneralSetting;
+        readonly PageGeneralSetting GeneralSetting;
 
         public WindowSetting()
         {
@@ -28,7 +30,11 @@ namespace AAC20.UI.Dialogs
             GeneralSetting = new();
             GeneralSetting.EventChangeValue += (Name, Value) =>
             {
-                App.CurrentApp.SettingApplication.GetSettingValue(CORE.Settings.EnumSettingApplication.PathMenuImage);
+                if (Name.Equals(nameof(EnumSettingApplication.PathMenuImage)))
+                {
+                    App.CurrentApp.SettingApplication.SetSettingValue(EnumSettingApplication.PathMenuImage, Value);
+                    App.MainWindowApplication.UpdateImageMenu();
+                }
             };
             IELGeneralButton.OnActivateMouseLeft += () =>
             {

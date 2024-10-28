@@ -31,6 +31,8 @@ namespace AAC20.UI.Pages.Settings
         /// <summary>
         /// Делегат события изменения настроек
         /// </summary>
+        /// <param name="Name">Имя парметра</param>
+        /// <param name="NewValue">Новое значение параметрв</param>
         internal delegate void ChangeValue(string Name, string NewValue);
 
         /// <summary>
