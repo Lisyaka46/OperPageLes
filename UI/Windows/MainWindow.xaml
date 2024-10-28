@@ -160,7 +160,7 @@
                         </GUI:IELImageButton>
                     </Grid>
                 </Border>
-                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC4A7B60" Grid.ColumnSpan="1">
+                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC94ADC5" Grid.ColumnSpan="1">
                     <Grid MinWidth="114">
                         <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="16" FontFamily="Cascadia Code" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,2,0,0"/>
                         <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Cascadia Code" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>

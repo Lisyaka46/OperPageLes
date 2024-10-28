@@ -1,5 +1,6 @@
-﻿using AAC20.Classes;
-using AAC20.Classes.Flaging;
+﻿using AAC20.CORE;
+using AAC20.CORE.Flaging;
+using AAC20.CORE.Settings;
 using AAC20.Windows;
 using Interpreter.Commands;
 using System.Diagnostics;
@@ -47,7 +48,7 @@ namespace AAC20
         /// <summary>
         /// Главное окно програмы
         /// </summary>
-        internal static MainWindow MainWindowApplication => (MainWindow)Current.MainWindow;
+        internal static UI.Windows.MainWindow MainWindowApplication => (UI.Windows.MainWindow)Current.MainWindow;
 
         /// <summary>
         /// Поток обновляемый данные интернета
@@ -67,12 +68,12 @@ namespace AAC20
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
-        private Dictionary<string, string> SettingProcess;
+        private readonly Setting<EnumSettingProcess> SettingProcess;
 
         /// <summary>
         /// Массив ключей настроек <b>приложения</b>
         /// </summary>
-        internal Dictionary<string, string> SettingApplication;
+        internal Setting<EnumSettingApplication> SettingApplication;
 
         /// <summary>
         /// Константа директории файла настроек <b>процесса</b>
@@ -85,32 +86,24 @@ namespace AAC20
         private const string NameFileApplicationSetting = "ApplicationSettings";
 
         /// <summary>
-        /// Экземпляр созданного приложения
+        /// Релятивная директория папки изображений приложения
         /// </summary>
-        internal static App CurrentApp => (App)Current;
+        internal const string PathImageApplication = "/UI/Images";
 
         public App()
         {
             ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
             ThreadInternetCheckConnection.Start();
-            if (!File.Exists(PathSettingProcess))
-            {
-                File.WriteAllLines(PathSettingProcess,
-                    [
-                        $"SettingApplicationPath:{NameFileApplicationSetting}.so",
-                    ]);
-            }
-            SettingProcess = ReadSettingFile(PathSettingProcess);
-            string PathSetting = SettingProcess["SettingApplicationPath"];
-            if (!File.Exists(PathSetting))
-            {
-                File.WriteAllLines(PathSetting,
-                    [
-                        $"SettingApplicationPath:{NameFileApplicationSetting}.so",
-                        "PathMenuImage:!"
-                    ]);
-            }
-            SettingApplication = ReadSettingFile(PathSetting);
+            SettingProcess = new(PathSettingProcess,
+            [
+                // SettingApplicationPath
+                $"{NameFileApplicationSetting}.so",
+            ]);
+            SettingApplication = new(SettingProcess.GetSettingValue(EnumSettingProcess.SettingApplicationPath),
+            [
+                // PathMenuImage
+                "!"
+            ]);
         }
 
         /// <summary>
@@ -120,35 +113,12 @@ namespace AAC20
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
-            Current.MainWindow = new MainWindow();
+            Current.MainWindow = new UI.Windows.MainWindow();
             Current.Exit += (sender, e) =>
             {
                 ThreadInternetCheckConnection.Kill();
             };
             MainWindowApplication.Show();
-        }
-
-        /// <summary>
-        /// Прочитать файл настроек
-        /// </summary>
-        /// <param name="Path">Директория файла настроек .so</param>
-        /// <returns>Массив ключей объектов настроек</returns>
-        private Dictionary<string, string> ReadSettingFile(string Path)
-        {
-            Dictionary<string, string> Result = [];
-            string[] LinesText = File.ReadAllLines(Path);
-            lock (Result)
-            {
-                Regex 
-                    regexName = RegexNameSettingParameter(),
-                    regexValue = RegexValueSettingParameter();
-                foreach (string Line in LinesText)
-                {
-                    // Text:Value
-                    Result.Add(regexName.Match(Line).Value[..^1], regexValue.Match(Line).Value[1..]);
-                }
-            }
-            return Result;
         }
 
         /// <summary>
@@ -179,11 +149,5 @@ namespace AAC20
                 InternetPinging.Value = false;
             }
         }
-
-        [GeneratedRegex("\\b[^:]+:")]
-        private static partial Regex RegexNameSettingParameter();
-
-        [GeneratedRegex(":[^\n]+")]
-        private static partial Regex RegexValueSettingParameter();
     }
 }
