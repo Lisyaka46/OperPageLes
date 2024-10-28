@@ -25,8 +25,11 @@
         <Style x:Key="Bree CYR var Regular">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Bree CYR var Regular"/>
         </Style>
-        <Style x:Key="goosberry_version_02">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#goosberry_version_02"/>
+        <Style x:Key="Brenzo Slab Personal Use">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Brenzo Slab Personal Use"/>
+        </Style>
+        <Style x:Key="Vollda">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Vollda"/>
         </Style>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>

@@ -62,10 +62,10 @@ namespace AAC20.Windows
         /// <summary>
         /// Константа размера Height для элементов описания
         /// </summary>
-        private const int HeightElement = 34;
+        private const int HeightElement = 55;
 
         /// <summary>
-        /// Оффсет объектов описания
+        /// Расстояние между объектами описания
         /// </summary>
         private const int OffsetY = 4;
 
@@ -87,17 +87,17 @@ namespace AAC20.Windows
             };
             IELButtonConsole.OnActivateMouseLeft += () =>
             {
-                int i = 0;
                 DoubleAnimation animation = DoubleAnimate;
                 animation.To = 1d;
                 animation.BeginTime = TimeSpan.FromMilliseconds(10d);
                 animation.Duration = TimeSpan.FromMilliseconds(700d);
                 ScrollBar = CreateScrollBar(App.DataConsoleCommand.Count);
-                foreach (ConsoleCommand commandAAC in App.DataConsoleCommand)
+                for (int i = 0; i < App.DataConsoleCommand.Count; i++)
                 {
+                    ConsoleCommand commandAAC = App.DataConsoleCommand[i];
                     IELButtonText Button = GenerateCommandButton();
                     Button.Opacity = 0d;
-                    Button.Margin = new(3, (HeightElement + OffsetY) * i++ + OffsetY, 3, 0);
+                    Button.Margin = new(3, HeightElement * i + OffsetY * (i + 1), 3, 0);
                     Button.Text = commandAAC.Name;
                     Button.OnActivateMouseLeft += () => DetectNewDiscriptionCommand(commandAAC);
                     GridElements.Children.Add(Button);
@@ -108,7 +108,7 @@ namespace AAC20.Windows
             SizeChanged += (sender, e) =>
             {
                 if (GridMainElements.ActualHeight == 0d) return;
-                int ScrollCountVisible = (int)((ActualHeight) / (HeightElement + OffsetY * 2)) * ScrollBar.TrafficShare;
+                int ScrollCountVisible = (int)((GridMainElements.ActualHeight) / (HeightElement + OffsetY)) * ScrollBar.TrafficShare;
                 if (ScrollCountVisible != ScrollBar.CountVisibleElements)
                 {
                     int Value = Math.Abs(ScrollCountVisible - ScrollBar.CountVisibleElements) / ScrollBar.TrafficShare;
@@ -120,13 +120,13 @@ namespace AAC20.Windows
                     {
                         ScrollBar.VisibleDown(Value);
                     }
-                    if (ScrollBar.MaxValue > 0)
-                    {
-                        DoubleAnimate.To = ShareElement(ScrollBar.MaxValue);
-                        RectangleScrollBar.BeginAnimation(HeightProperty, DoubleAnimate);
-                        ThicknessAnimate.To = new(0, ShareElement(ScrollBar.MaxValue) * ScrollBar.Value, 0, 0);
-                        RectangleScrollBar.BeginAnimation(MarginProperty, ThicknessAnimate);
-                    }
+                }
+                if (ScrollBar.MaxValue > 0)
+                {
+                    DoubleAnimate.To = ShareElement(ScrollBar.MaxValue);
+                    RectangleScrollBar.BeginAnimation(HeightProperty, DoubleAnimate);
+                    ThicknessAnimate.To = new(0, ShareElement(ScrollBar.MaxValue) * ScrollBar.Value, 0, 0);
+                    RectangleScrollBar.BeginAnimation(MarginProperty, ThicknessAnimate);
                 }
             };
             Closing += (sender, e) =>
@@ -196,7 +196,7 @@ namespace AAC20.Windows
         /// <summary>
         /// Доля прокрутки одного элемента
         /// </summary>
-        private double ShareElement(int Max) => (BorderScroll.ActualHeight - BorderScroll.Padding.Top - BorderScroll.Padding.Bottom - 4) / (Max + 1);
+        private double ShareElement(int Max) => (BorderScroll.ActualHeight - OffsetY) / (Max + 1);
 
         /// <summary>
         /// Сгенерировать объект скролл-бара
@@ -205,12 +205,12 @@ namespace AAC20.Windows
         /// <returns>Скролл-бар</returns>
         private CounterScrollBar CreateScrollBar(int CountElements)
         {
-            CounterScrollBar Bar = new((int)Math.Ceiling(GridMainElements.ActualHeight / HeightElement), CountElements: CountElements);
+            CounterScrollBar Bar = new((int)Math.Ceiling(GridMainElements.ActualHeight / (HeightElement + OffsetY)), CountElements: CountElements);
             Bar.ChangedValue += (NewValue) =>
             {
-                ThicknessAnimate.To = new(0, -((HeightElement + OffsetY) + (OffsetY / 2)) * NewValue, 0, 0);
+                ThicknessAnimate.To = new(0, -(HeightElement + OffsetY) * NewValue, 0, 0);
                 GridElements.BeginAnimation(MarginProperty, ThicknessAnimate);
-                ThicknessAnimate.To = new(0, ShareElement(Bar.MaxValue) * NewValue, 0, 0);
+                ThicknessAnimate.To = new(0, OffsetY / 2 + ShareElement(Bar.MaxValue) * NewValue, 0, 0);
                 RectangleScrollBar.BeginAnimation(MarginProperty, ThicknessAnimate);
             };
             DoubleAnimation animation = DoubleAnimate.Clone();
