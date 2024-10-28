@@ -105,6 +105,22 @@ namespace AAC20.CORE
         }
 
         /// <summary>
+        /// Узнать значение параметра по его имени
+        /// </summary>
+        /// <param name="Parameter">Индексированное имя параметра</param>
+        /// <param name="Value">Новое значение параметра</param>
+        internal void SetSettingValue(T Parameter, string Value)
+        {
+            int index = Array.IndexOf(Enum.GetValues(TypeEnumerator), Parameter);
+            if (index > -1)
+            {
+                DataPropetry[(int)Convert.ChangeType(Parameter, TypeEnumerator)] = Value;
+                return;
+            }
+            throw new NotImplementedException($"Значение не соответствует предполагаемому типу \"{TypeEnumerator.Name}\": \"{Parameter.GetType().Name}\"");
+        }
+
+        /// <summary>
         /// Регулярное выражение имени параметра
         /// </summary>
         [GeneratedRegex("\\b[^:]+:")]
