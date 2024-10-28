@@ -249,7 +249,7 @@ namespace AAC20.UI.Windows
                 #endregion
 
                 #region open_link
-                new ConsoleCommand("open_link", [new Parameter("Link", typeof(string), true)],
+                new ConsoleCommand("open_link", [new Parameter("Link", typeof(string))],
                 "Открывает в браузере заданную ссылку \"Link\"",
                 (Command, param) =>
                 {
