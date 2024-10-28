@@ -12,7 +12,7 @@
     <Grid>
         <TextBox x:Name="TextBoxPathMenuImage" HorizontalAlignment="Left" Margin="9,34,0,0" Text="Директория" VerticalAlignment="Top" Width="212" Height="33" VerticalContentAlignment="Center" BorderThickness="1,0,1,0" Background="{x:Null}" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" MaxLines="1" IsUndoEnabled="False" IsReadOnly="True"/>
 
-        <IEL:IELButtonText x:Name="IElButtonDialogDirectoryFile" HorizontalAlignment="Left" Margin="231,33,0,0" VerticalAlignment="Top" Width="90" Text="Обзор" VisibleMouseImaging="False" StateVisualization="RightArrow" Height="35" AnimationMillisecond="160"/>
+        <IEL:IELButtonText x:Name="IElButtonDialogDirectoryFile" HorizontalAlignment="Left" Margin="231,33,0,0" VerticalAlignment="Top" Width="90" Text="Обзор" VisibleMouseImaging="False" StateVisualizationButton="RightArrow" Height="35" AnimationMillisecond="160"/>
         <TextBlock HorizontalAlignment="Left" Margin="9,18,0,0" TextWrapping="Wrap" Text="Изображение фона" VerticalAlignment="Top" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}"/>
 
     </Grid>

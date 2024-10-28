@@ -37,9 +37,6 @@
         <Style x:Key="RussianRail G Pro">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#RussianRail G Pro"/>
         </Style>
-        <Style x:Key="Vollda">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Vollda"/>
-        </Style>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>
