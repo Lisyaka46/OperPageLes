@@ -12,13 +12,9 @@
 
   <ItemGroup>
     <Compile Remove="UI\Pages\MainWindow\**" />
-    <Compile Remove="UI\Pages\Settings\**" />
     <EmbeddedResource Remove="UI\Pages\MainWindow\**" />
-    <EmbeddedResource Remove="UI\Pages\Settings\**" />
     <None Remove="UI\Pages\MainWindow\**" />
-    <None Remove="UI\Pages\Settings\**" />
     <Page Remove="UI\Pages\MainWindow\**" />
-    <Page Remove="UI\Pages\Settings\**" />
   </ItemGroup>
 
   <ItemGroup>

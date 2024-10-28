@@ -68,7 +68,7 @@ namespace AAC20
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
-        private Setting<EnumSettingProcess> SettingProcess;
+        private readonly Setting<EnumSettingProcess> SettingProcess;
 
         /// <summary>
         /// Массив ключей настроек <b>приложения</b>
