@@ -21,7 +21,7 @@
                 <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
             </GUI:IELButtonTextKey.BackgroundSetting>
         </GUI:IELButtonTextKey>
-            <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" Text="Командный буфер" Margin="0,5,0,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="1" CharKeyKeyboard="D2" Grid.RowSpan="1" AnimationMillisecond="200" VisibleMouseImaging="False" FontWeight="Bold" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16" StateVisualization="RightArrow">
+        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" Text="Командный буфер" Margin="0,5,0,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="1" CharKeyKeyboard="D2" Grid.RowSpan="1" AnimationMillisecond="200" VisibleMouseImaging="False" FontWeight="Bold" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16" StateVisualizationButton="RightArrow">
                 <GUI:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
             </GUI:IELButtonTextKey.BackgroundSetting>
