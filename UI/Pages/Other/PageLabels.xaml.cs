@@ -279,7 +279,7 @@ namespace AAC20.Windows.Pages.Other
                 "open_directory" => "Folder.png",
                 _ => "Command.png"
             };
-            Uri UriIconLabel = new($@"C:\Users\killm\Рабочий стол\Main\Programm\С#\AAC20\Windows\WindowsImages\Labels\{NameFileLabelImage}");
+            Uri UriIconLabel = new($@"{App.PathImageApplication}\Labels\{NameFileLabelImage}", UriKind.RelativeOrAbsolute);
             IELLabelCommand Label = new(label, Data.Count)
             {
                 Width = WidthHeightLabel,
