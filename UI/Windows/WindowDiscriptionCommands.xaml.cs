@@ -102,7 +102,6 @@ namespace AAC20.Windows
             StateDiscription = ActivateStateDiscription.NotActivated;
             //IELInputSearchCommand.Text = string.Empty;
             ScrollBar = new((int)(GridMainElements.ActualHeight / HeightElement));
-            GridMainDescription.Opacity = 0d;
             IELMessageInfo.Opacity = 0d;
             TextBlockTextCommand.Foreground = new SolidColorBrush(Colors.Black);
             GridMainElements.MouseWheel += (sender, e) =>
@@ -126,6 +125,7 @@ namespace AAC20.Windows
                 animation.BeginTime = TimeSpan.FromMilliseconds(10d);
                 animation.Duration = TimeSpan.FromMilliseconds(700d);
                 ScrollBar = CreateScrollBar(App.DataConsoleCommand.Count);
+                if (GridElements.Children.Count > 0) GridElements.Children.Clear();
                 for (int i = 0; i < App.DataConsoleCommand.Count; i++)
                 {
                     ConsoleCommand commandAAC = App.DataConsoleCommand[i];
@@ -141,11 +141,36 @@ namespace AAC20.Windows
             };
             IELButtonConsole.OnActivateMouseRight += () =>
             {
+                Keyboard.ClearFocus();
                 if (StateDiscription != ActivateStateDiscription.ConsoleCommand) return;
-                IELButtonConsole.BackgroundSetting.UsedState = false;
                 StateDiscription = ActivateStateDiscription.NotActivated;
-                GridElements.Children.Clear();
+                IELButtonConsole.BackgroundSetting.UsedState = false;
+                ScrollBar.Value = 0;
+                ThicknessAnimation AnimationMargin = ThicknessAnimate.Clone();
+                AnimationMargin.BeginTime = TimeSpan.Zero;
+                DoubleAnimation AnimationOpacity = DoubleAnimate.Clone();
+                AnimationOpacity.To = 0d;
+                Thickness MarginChild;
+                for (int i = 0; i < GridElements.Children.Count; i++)
+                {
+                    MarginChild = ((FrameworkElement)GridElements.Children[i]).Margin;
+                    AnimationMargin.BeginTime += TimeSpan.FromMilliseconds(1d * i);
+                    AnimationOpacity.BeginTime = AnimationMargin.BeginTime;
+                    AnimationMargin.To = new(MarginChild.Left, MarginChild.Top - 4, MarginChild.Right, MarginChild.Bottom + 4);
+                    if (i == GridElements.Children.Count - 1)
+                    {
+                        AnimationOpacity.FillBehavior = FillBehavior.Stop;
+                        AnimationOpacity.Completed += (sender, e) =>
+                        {
+                            if (StateDiscription == ActivateStateDiscription.NotActivated)
+                                GridElements.Children.Clear();
+                        };
+                    }
+                    GridElements.Children[i].BeginAnimation(MarginProperty, AnimationMargin);
+                    GridElements.Children[i].BeginAnimation(OpacityProperty, AnimationOpacity);
+                }
                 UpdateVisibleScrollBar(-1);
+                DetectNewDiscriptionCommand(null);
             };
             #endregion
             #region IELButtonUserCom
@@ -155,6 +180,54 @@ namespace AAC20.Windows
             #region IELButtonSearchCommand
             IELButtonSearchCommand.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonSearchCommand, 4);
             IELButtonSearchCommand.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonSearchCommand, 0);
+            IELButtonSearchCommand.OnActivateMouseLeft += () =>
+            {
+                switch (StateDiscription)
+                {
+                    case ActivateStateDiscription.NotActivated: return;
+                    case ActivateStateDiscription.ConsoleCommand:
+                        int[] Indexes = [..Enumerable.Range(0, App.DataConsoleCommand.Count).Where(
+                            i => App.DataConsoleCommand[i].Name.Contains(IELInputSearchCommand.Text))];
+                        if (IndexSearch.Length == 0)
+                        {
+                            IndexSearch = Indexes;
+                        }
+                        else
+                        {
+                            IEnumerable<int> EnumIndex = IndexSearch.AsEnumerable();
+                            foreach (int Index in Indexes)
+                            {
+                                if (EnumIndex.Contains(Index)) continue;
+                                EnumIndex = EnumIndex.Append(Index);
+                            }
+                            IndexSearch = [.. EnumIndex];
+                        }
+                        break;
+                }
+                IELButtonText Button;
+                foreach (int Index in IndexSearch)
+                {
+                    Button = (IELButtonText)GridElements.Children[Index];
+                    if (Button.BackgroundSetting.UsedState) continue;
+                    Button.BackgroundSetting.UsedState = true;
+                }
+            };
+            IELButtonSearchCommand.OnActivateMouseRight += () =>
+            {
+                Keyboard.ClearFocus();
+                if (IndexSearch.Length == 0) return;
+                if (StateDiscription != ActivateStateDiscription.NotActivated)
+                {
+                    IELButtonText Button;
+                    foreach (int Index in IndexSearch)
+                    {
+                        Button = (IELButtonText)GridElements.Children[Index];
+                        if (!Button.BackgroundSetting.UsedState) continue;
+                        Button.BackgroundSetting.UsedState = false;
+                    }
+                }
+                IndexSearch = [];
+            };
             #endregion
             SizeChanged += (sender, e) =>
             {
@@ -187,7 +260,6 @@ namespace AAC20.Windows
             };
             IELButtonInfoParameter.MouseEnter += (sender, e) =>
             {
-                if (GridMainDescription.Opacity == 0) return;
                 IELMessageInfo.UsingBorderInformation(IELButtonInfoParameter,
                     nameof(IELButtonInfoParameter),
                     "Символ \"~\" является пропускным символом, альтернамивой \" \", для записи пропущенного символа в параметры нужно ввести \"~~\"\n\n" +
@@ -202,39 +274,6 @@ namespace AAC20.Windows
                 Clipboard.SetText(TextBlockTextCommand.Text);
                 AnimationColor.To = Colors.Black;
                 TextBlockTextCommand.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
-            };
-            IELButtonSearchCommand.OnActivateMouseLeft += () =>
-            {
-                switch (StateDiscription)
-                {
-                    case ActivateStateDiscription.NotActivated: return;
-                    case ActivateStateDiscription.ConsoleCommand:
-                        IndexSearch = [..Enumerable.Range(0, App.DataConsoleCommand.Count).Where(
-                            i => App.DataConsoleCommand[i].Name.Contains(IELInputSearchCommand.Text))];
-                        break;
-                }
-                IELButtonText Button;
-                foreach (int Index in IndexSearch)
-                {
-                    Button = (IELButtonText)GridElements.Children[Index];
-                    if (Button.BackgroundSetting.UsedState) continue;
-                    Button.BackgroundSetting.UsedState = true;
-                }
-            };
-            IELButtonSearchCommand.OnActivateMouseRight += () =>
-            {
-                if (IndexSearch.Length == 0) return;
-                if (StateDiscription != ActivateStateDiscription.NotActivated)
-                {
-                    IELButtonText Button;
-                    foreach (int Index in IndexSearch)
-                    {
-                        Button = (IELButtonText)GridElements.Children[Index];
-                        if (!Button.BackgroundSetting.UsedState) continue;
-                        Button.BackgroundSetting.UsedState = false;
-                    }
-                }
-                IndexSearch = [];
             };
             RectangleScrollBar.MouseUp += (sender, e) =>
             {
@@ -254,7 +293,7 @@ namespace AAC20.Windows
         /// <returns>Скролл-бар</returns>
         private CounterScrollBar CreateScrollBar(int CountElements)
         {
-            CounterScrollBar Bar = new((int)Math.Ceiling(GridMainElements.ActualHeight / (HeightElement + OffsetY)), CountElements: CountElements);
+            CounterScrollBar Bar = new((int)GridMainElements.ActualHeight / (HeightElement + OffsetY), CountElements: CountElements);
             Bar.ChangedValue += (NewValue) =>
             {
                 ThicknessAnimate.To = new(0, -(HeightElement + OffsetY) * NewValue, 0, 0);
@@ -275,31 +314,22 @@ namespace AAC20.Windows
         /// Предоставить новое описание команды
         /// </summary>
         /// <param name="Command">Команда для описания</param>
-        private void DetectNewDiscriptionCommand(ICommandAAC Command)
+        private void DetectNewDiscriptionCommand(ICommandAAC? Command)
         {
-            if (GridMainDescription.Opacity == 0d)
+            if (Command == null)
             {
-                SetInformationCommand(Command);
-                DoubleAnimate.To = 1d;
-                GridMainDescription.BeginAnimation(OpacityProperty, DoubleAnimate);
+                TextBlockNameCommand.Text = "Команда не выбрана";
+                TextBlockDescriptionCountParameter.Text = string.Empty;
+                TextBlockTextCommand.Text = string.Empty;
+                TextBlockMainDescriptionCommand.Text = string.Empty;
+                IELButtonCloneTextCommand.IsEnabled = false;
                 return;
             }
-            DoubleAnimation AnimateOpacity = new(0, TimeSpan.FromMilliseconds(250d))
+            else
             {
-                DecelerationRatio = 0.2d,
-                EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
-                To = 0d,
-                FillBehavior = FillBehavior.Stop,
-            };
-            AnimateOpacity.Completed += (sender, e) =>
-            {
-                GridMainDescription.BeginAnimation(OpacityProperty, null);
-                GridMainDescription.Opacity = 0d;
+                IELButtonCloneTextCommand.IsEnabled = true;
                 SetInformationCommand(Command);
-                DoubleAnimate.To = 1d;
-                GridMainDescription.BeginAnimation(OpacityProperty, DoubleAnimate);
-            };
-            GridMainDescription.BeginAnimation(OpacityProperty, AnimateOpacity);
+            }
         }
 
         /// <summary>
@@ -340,7 +370,12 @@ namespace AAC20.Windows
                     $"{(Parameters[i].Absolutly ? string.Empty : '?')}" +
                     $"{(i < Parameters.Length - 1 ? ", " : string.Empty)}";
             }
-            TextBlockNameCommand.Text = $"0 команда: \"{Command.Name}\"";
+            string StateCommand = StateDiscription switch
+            {
+                ActivateStateDiscription.ConsoleCommand => "Консольная",
+                _ => string.Empty
+            };
+            TextBlockNameCommand.Text = $"{StateCommand} команда: \"{Command.Name}\"";
             TextBlockMainDescriptionCommand.Text = Command.Description;
             TextBlockDescriptionCountParameter.Text = CountParameters == 0 ?
             $"Команда \"{Command.Name}\" не использует параметров" : $"Команда \"{Command.Name}\" включает в себя {CountParameters} и больше параметров";
@@ -366,7 +401,7 @@ namespace AAC20.Windows
         private void UpdateVisibleScrollBar(int Max)
         {
             DoubleAnimation animation = DoubleAnimate.Clone();
-            animation.To = ScrollColumnDefinition.MaxWidth < 5d && Max > 0 ? 13d : 4d;
+            animation.To = Max > 0 ? 13d : 4d;
             Storyboard storyboard = new();
             storyboard.Children.Add(animation);
             Storyboard.SetTarget(animation, ScrollColumnDefinition);
