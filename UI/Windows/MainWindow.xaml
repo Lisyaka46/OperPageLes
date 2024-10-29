@@ -132,10 +132,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="43"/>
                             <ColumnDefinition Width="43"/>
+                            <ColumnDefinition Width="50"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="43"/>
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="BorderInternetConnection" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CACBB" Margin="3,3,3,3">
+                        <Border x:Name="BorderInternetConnection" BorderBrush="#FF085D2D" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CACBB" Margin="3,3,3,3" Cursor="Help">
                             <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/UI/Images/WifiOff.png" Margin="-2,0,0,0">
                                 <Image.Effect>
                                     <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
@@ -150,7 +151,7 @@
                                 </Image.RenderTransform>
                             </Image>
                         </Border>
-                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/UI/Images/ArrowFrameComponent.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="2000">
+                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="4" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/UI/Images/Arrow.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="1000">
                             <GUI:IELImageButton.BorderBrushSetting>
                                 <Classes:BrushSettingQ Default="Black" NotEnabled="#FF400817" Select="#FF151729" Used="#FF173128"/>
                             </GUI:IELImageButton.BorderBrushSetting>
@@ -158,10 +159,17 @@
                                 <Classes:BrushSettingQ Default="#FF3EBAD2" NotEnabled="#FFE24267" Select="#FF26DEDA" Used="White"/>
                             </GUI:IELImageButton.BackgroundSetting>
                         </GUI:IELImageButton>
-                        <Border x:Name="BorderStateRegister" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="1">
+                        <Border x:Name="BorderStateRegister" BorderBrush="#FF314E58" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="1" Cursor="Help">
                             <TextBlock x:Name="TextBlockRegister" TextWrapping="Wrap" Text="А" TextAlignment="Center" VerticalAlignment="Center" FontSize="23" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
                                 <TextBlock.Effect>
                                     <BlurEffect x:Name="BlurEffectTextBlockRegister" Radius="0" KernelType="Box" RenderingBias="Quality"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                        </Border>
+                        <Border x:Name="BorderCurrentLanguage" BorderBrush="#FF1C3326" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="2" Cursor="Help">
+                            <TextBlock x:Name="TextBlockLanguage" TextWrapping="Wrap" Text="ENG" TextAlignment="Center" VerticalAlignment="Center" FontSize="7" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
+                                <TextBlock.Effect>
+                                    <BlurEffect x:Name="BlurEffectTextBlockRegister1" Radius="0" KernelType="Box" RenderingBias="Quality"/>
                                 </TextBlock.Effect>
                             </TextBlock>
                         </Border>

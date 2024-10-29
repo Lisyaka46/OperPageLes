@@ -29,6 +29,7 @@
     <None Remove="Fonts\sangha.ttf" />
     <None Remove="Fonts\Vollda-Bold.otf" />
     <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
+    <None Remove="UI\Images\Arrow.png" />
     <None Remove="UI\Images\Logo04.png" />
   </ItemGroup>
 
@@ -72,7 +73,7 @@
     <Resource Include="Fonts\zhuan_FuturaNowScript-Rg.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\ArrowFrameComponent.png" />
+    <Resource Include="UI\Images\Arrow.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
     <Resource Include="UI\Images\Labels\Command.png" />
     <Resource Include="UI\Images\Labels\File.png" />

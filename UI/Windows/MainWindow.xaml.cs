@@ -13,6 +13,7 @@ using Interpreter.Commands;
 using Interpreter.Interfaces;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -93,9 +94,9 @@ namespace AAC20.UI.Windows
         private readonly UpdateBackgroundData UpdateBackgroundDataThis;
 
         /// <summary>
-        /// Объект управления фоновым обновлением информации в данном окне 60
+        /// Объект управления фоновым обновлением информации в данном окне 1
         /// </summary>
-        //private readonly UpdateBackgroundData UpdateBackgroundDataRunTime;
+        private readonly UpdateBackgroundData UpdateBackgroundDataRunTime;
 
         /// <summary>
         /// Объект анимации для управления позицией
@@ -133,6 +134,11 @@ namespace AAC20.UI.Windows
         private readonly SettingsPanelActionFrameworkElement SettingsMain;
 
         //private MMDeviceEnumerator Device = new();
+
+        /// <summary>
+        /// Страница ярлыков программы
+        /// </summary>
+        private PageLabels? PageLabelsApplication = null;
 
         /// <summary>
         /// Состояние воспроизведения приветственной анимации
@@ -384,18 +390,20 @@ namespace AAC20.UI.Windows
                 #region alias
                 new ConsoleCommand("alias", [new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
                     new Parameter("Replace", typeof(bool), false)],
-                "Создаёт алиас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"", (Main, param) =>
+                "Создаёт алиас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"\n" +
+                "- Если \"Replace\" true то при нахождении уже созданного алиаса с таким именем, у него будет изменена команда", (Main, param) =>
                 {
                     string[] NameAliases = [.. App.CurrentApp.DataAliases.Select(i => i.Name)];
                     Paragraph Message = new();
                     Message.Inlines.Add(new Bold(new Run(">>> ")));
-                    if (NameAliases.Contains((string)param[0]) && !(bool)param[2])
+                    string NameAlias = ((string)param[0]).ToLower();
+                    if (NameAliases.Contains(NameAlias) && !(bool)param[2])
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                            $"Aлиас \"{param[0]}\" невозможно создать, так как он уже создан\nДля переопределения введите третий параметр: true"));
+                            $"Aлиас \"{NameAlias}\" невозможно создать, так как он уже создан\nДля переопределения введите третий параметр: true"));
                     }
                     Message.Inlines.Add(new Run("Алиас "));
-                    Run RuningText = new($"\"{param[0]}\"")
+                    Run RuningText = new($"\"{NameAlias}\"")
                     {
                         Background = new SolidColorBrush(Colors.Green),
                         Cursor = Cursors.Hand,
@@ -411,14 +419,14 @@ namespace AAC20.UI.Windows
                         ColorAnimate.To = Colors.Green;
                         RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
                     };
-                    RuningText.MouseLeftButtonUp += (sender, e) => ActivateActionCommand((string)param[0]);
+                    RuningText.MouseLeftButtonUp += (sender, e) => ActivateActionCommand(NameAlias);
                     Message.Inlines.Add(RuningText);
                     Message.Inlines.Add(new Run($" на команду \"{param[1]}\" успешно {((bool)param[2] ? "изменён" : "создан")}"));
                     if (!(bool)param[2])
                         App.CurrentApp.DataAliases.Add(
-                            new((string)param[0], (string)param[1], [.. App.DataConsoleCommand]));
+                            new(NameAlias, (string)param[1], [.. App.DataConsoleCommand]));
                     else
-                        App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, (string)param[0])].Command = (string)param[1];
+                        App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, NameAlias)].Command = (string)param[1];
                     RichTextBoxMainMessage.Document.Blocks.Add(Message);
                     return Task.FromResult(CommandStateResult.Completed(Main.Name));
                 }),
@@ -436,6 +444,10 @@ namespace AAC20.UI.Windows
             {
                 TextBlockRegister.Text = NewValue ? "A" : "a";
                 AnimateBlurEffect(BlurEffectTextBlockRegister, 10u);
+                if (IELMessageMain.FlagMessage && IELMessageMain.NameParentObject.Equals(BorderStateRegister.Name))
+                    IELMessageMain.UsingBorderInformation(BorderStateRegister, BorderStateRegister.Name, Flags.FlagRegisterState ?
+                        "Установлен большой регистр" : "Установлен малый регистр",
+                        IELBlockMessage.OrientationBorderInfo.RightUp);
             };
             #endregion
 
@@ -479,7 +491,7 @@ namespace AAC20.UI.Windows
             #endregion
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
-            //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
+            UpdateBackgroundDataRunTime = new(1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
             BackgroundUpdateVisualData();
 
             #region SetParameteres
@@ -505,9 +517,8 @@ namespace AAC20.UI.Windows
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
-                //FrameComponent.NextPage(Pages.PageObjLabelsAction);
-                IELBrowserPageMain.AddInlayPage(new PageLabels(), "Ярлыки",
-                        "Ярлыки которые предаставляются программой для быстрого взаимодействия");
+                IELBrowserPageMain.AddInlayPage(PageLabelsApplication ??= new(), "Ярлыки",
+                        "Ярлыки которые предаставляются программой для хранения важных команд");
             };
 
             IELButtonSettings.OnActivateMouseLeft += () =>
@@ -519,6 +530,15 @@ namespace AAC20.UI.Windows
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 TextBoxCommandInput.Focus();
+            };
+
+            IELBrowserPageMain.EventCloseBrowser += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
+            IELBrowserPageMain.EventChangeActiveInlay += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
             };
 
             #region IELButtonFrameComponentVisible
@@ -605,14 +625,26 @@ namespace AAC20.UI.Windows
                 IELMessageMain.CloseBorderInformation();
             };
             #endregion
-            #region BorderInternetConnection
-            BorderInternetConnection.MouseEnter += (sender, e) =>
+            #region BorderStateRegister
+            BorderStateRegister.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, Flags.FlagInternetConnection ?
-                    "Есть подключение к интернету" : "Нет подключения к интернету",
+                IELMessageMain.UsingBorderInformation(BorderStateRegister, BorderStateRegister.Name, Flags.FlagRegisterState ?
+                    "Установлен большой регистр" : "Установлен малый регистр",
                     IELBlockMessage.OrientationBorderInfo.RightUp);
             };
-            BorderInternetConnection.MouseLeave += (sender, e) =>
+            BorderStateRegister.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+            #region BorderCurrentLanguage
+            BorderCurrentLanguage.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(BorderCurrentLanguage, BorderCurrentLanguage.Name,
+                    "Текущий язык раскладки клавиатуры",
+                    IELBlockMessage.OrientationBorderInfo.RightUp);
+            };
+            BorderCurrentLanguage.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
             };
@@ -700,8 +732,8 @@ namespace AAC20.UI.Windows
             };
 
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
+            UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
             TextBoxCommandInput.Focus();
-            //UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
         }
 
         /// <summary>
@@ -899,6 +931,7 @@ namespace AAC20.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualDataRunTime()
         {
+            TextBlockLanguage.Text = System.Windows.Forms.InputLanguage.CurrentInputLanguage.LayoutName;
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
             //byte rgbValue = (byte)(2.55d * Volume);
@@ -908,7 +941,7 @@ namespace AAC20.UI.Windows
             //ImageTest.Width = 10 + Volume;
             //ImageTest.Height = 10 + Volume;
 
-            try
+            /*try
             {
                 Point MousePoint = Mouse.GetPosition(this);
                 Point PointScreen = PointToScreen(new(0, 0));
@@ -922,8 +955,8 @@ namespace AAC20.UI.Windows
                     (MousePoint.Y - (ActualHeight / 2)) / 3);
                 ImageMenu.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
             }
-            catch { ImageMenu.Margin = new(0); }
-            
+            catch { ImageMenu.Margin = new(0); }*/
+
         }
 
         #region ImageMenu
