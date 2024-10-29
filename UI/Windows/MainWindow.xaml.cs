@@ -2,15 +2,15 @@
 using AAC20.CORE.Flaging;
 using AAC20.CORE.Settings;
 using AAC20.UI.Dialogs;
-using AAC20.Windows;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
 using AAC20.Windows.Pages.Other;
 using IEL;
 using IEL.Classes;
 using IEL.Interfaces.Core;
+using Interpreter.Classes;
 using Interpreter.Commands;
-using System;
+using Interpreter.Interfaces;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -24,10 +24,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Interpreter.Classes;
-using Interpreter.Interfaces;
-using MySqlX.XDevAPI.Common;
-using Windows.ApplicationModel.Store;
+
 namespace AAC20.UI.Windows
 {
     /// <summary>
@@ -388,7 +385,7 @@ namespace AAC20.UI.Windows
                 #region alias
                 new ConsoleCommand("alias", [new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
                     new Parameter("Replace", typeof(bool), false)],
-                "Создаёт алеас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"", (Main, param) =>
+                "Создаёт алиас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"", (Main, param) =>
                 {
                     string[] NameAliases = [.. App.CurrentApp.DataAliases.Select(i => i.Name)];
                     Paragraph Message = new();
@@ -396,9 +393,9 @@ namespace AAC20.UI.Windows
                     if (NameAliases.Contains(param[0].ToString() ?? string.Empty) && !(bool)param[2])
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                            $"Алеас \"{param[0]}\" уже создан\nДля переопределения введите третий параметр: true"));
+                            $"Aлиас \"{param[0]}\" невозможно создать, так как он уже создан\nДля переопределения введите третий параметр: true"));
                     }
-                    Message.Inlines.Add(new Run("Алеас "));
+                    Message.Inlines.Add(new Run("Алиас "));
                     Run RuningText = new($"\"{param[0]}\"")
                     {
                         Background = new SolidColorBrush(Colors.Green),
