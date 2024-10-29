@@ -47,6 +47,11 @@ namespace AAC20.UI.Windows
             /// Флаг состояния видимости объекта страниц
             /// </summary>
             internal static readonly Flag FlagFrameComponentVisible = new(true);
+
+            /// <summary>
+            /// Флаг состояния регистра
+            /// </summary>
+            internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
         };
 
         /// <summary>
@@ -431,12 +436,12 @@ namespace AAC20.UI.Windows
             Flags.FlagInternetConnection.ChangeStateFlag += (NewValue) =>
             {
                 ImageInternetConnection.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(800d);
-                DoubleAnimateObj.From = 10d;
-                DoubleAnimateObj.To = 0d;
-                BlurEffectImageInternetConnection.BeginAnimation(BlurEffect.RadiusProperty, DoubleAnimateObj);
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
-                DoubleAnimateObj.From = null;
+                AnimateBlurEffect(BlurEffectImageInternetConnection, 10u);
+            };
+            Flags.FlagRegisterState.ChangeStateFlag += (NewValue) =>
+            {
+                TextBlockRegister.Text = NewValue ? "A" : "a";
+                AnimateBlurEffect(BlurEffectTextBlockRegister, 10u);
             };
             #endregion
 
@@ -482,14 +487,18 @@ namespace AAC20.UI.Windows
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             //UpdateBackgroundDataRunTime = new(0.1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
             BackgroundUpdateVisualData();
+
+            #region SetParameteres
+            TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
             BrowserPageColumn.MaxWidth = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(270d, 230d));
-
+            
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
+            #endregion
 
             ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
@@ -498,7 +507,7 @@ namespace AAC20.UI.Windows
             UpdateImageMenu();
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
-
+            #region UpToolButtons
             IELButtonLabel.OnActivateMouseLeft += () =>
             {
                 if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
@@ -507,14 +516,15 @@ namespace AAC20.UI.Windows
                         "Ярлыки которые предаставляются программой для быстрого взаимодействия");
             };
 
-            IELActionPanelMain.EventClosingPanelAction += (Name) =>
-            {
-                TextBoxCommandInput.Focus();
-            };
-
             IELButtonSettings.OnActivateMouseLeft += () =>
             {
                 new WindowSetting().ShowDialog();
+            };
+            #endregion
+
+            IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            {
+                TextBoxCommandInput.Focus();
             };
 
             #region IELButtonFrameComponentVisible
@@ -578,24 +588,6 @@ namespace AAC20.UI.Windows
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
             };
 
-            BorderButtonsUp.KeyDown += (sender, e) =>
-            {
-                switch (e.Key)
-                {
-                    case Key.RightCtrl:
-                        break;
-                }
-            };
-
-            BorderButtonsUp.KeyUp += (sender, e) =>
-            {
-                switch (e.Key)
-                {
-                    case Key.Escape:
-                        break;
-                }
-            };
-
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
                 if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
@@ -607,6 +599,7 @@ namespace AAC20.UI.Windows
                 RichTextBoxMainMessage.ScrollToEnd();
             };
 
+            #region BorderInternetConnection
             BorderInternetConnection.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, Flags.FlagInternetConnection ?
@@ -617,6 +610,19 @@ namespace AAC20.UI.Windows
             {
                 IELMessageMain.CloseBorderInformation();
             };
+            #endregion
+            #region BorderInternetConnection
+            BorderInternetConnection.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, Flags.FlagInternetConnection ?
+                    "Есть подключение к интернету" : "Нет подключения к интернету",
+                    IELBlockMessage.OrientationBorderInfo.RightUp);
+            };
+            BorderInternetConnection.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
 
             ImageLogoApplication.MouseEnter += (sender, e) =>
             {
@@ -643,60 +649,10 @@ namespace AAC20.UI.Windows
                 Dialogs.LicenseWindow License = new();
                 License.ShowDialog();
             };
-
-            /*FrameComponent.OpenFrame += () =>
+            KeyDown += (sender, e) =>
             {
-                DoubleAnimation animation = DoubleAnimateObj.Clone();
-                void SetZIndex(object? INsender, EventArgs INe)
-                {
-                    Canvas.SetZIndex(TextBlockNullFrameElement, -1);
-                    TextBlockNullFrameElement.Opacity = 0d;
-                    animation.Completed -= SetZIndex;
-                    animation.FillBehavior = FillBehavior.HoldEnd;
-                }
-                animation.To = 0d;
-                animation.Completed += SetZIndex;
-                animation.FillBehavior = FillBehavior.Stop;
-                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, animation);
+                if (e.Key == Key.CapsLock) Flags.FlagRegisterState.Value = Console.CapsLock;
             };
-
-            FrameComponent.ChangeElementPage += (Name) =>
-            {
-                /*if (Name.Equals(Pages.PageObjLabelsAction.GetType().Name))
-                {
-                    if (Flags.FlagInternetConnection && !Pages.PageObjLabelsAction.SQLCompleteSearch)
-                    {
-                        Pages.PageObjLabelsAction.StartLoadSQL();
-                    }
-                }*/
-            /*};
-            FrameComponent.ClosingFrame += () =>
-            {
-                Canvas.SetZIndex(TextBlockNullFrameElement, 1);
-                DoubleAnimateObj.To = 1d;
-                TextBlockNullFrameElement.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            };*/
-
-            /*SizeChanged += (sender, e) =>
-            {
-                if (Pages.PageObjLabelsAction.GridMain.ActualHeight == 0d) return;
-                int ScrollCountVisible = (int)(BorderFrameComponent.ActualHeight / 79d) * Pages.PageObjLabelsAction.ScrollBar.TrafficShare;
-                Pages.PageDeveloperState.ListBoxDeveloper.Items[0] = $"[0] CountVisible= {ScrollCountVisible} : {Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements}";
-                Pages.PageDeveloperState.ListBoxDeveloper.Items[1] = $"[1] ActualHeight={Pages.PageObjLabelsAction.GridMain.ActualHeight}";
-                if (ScrollCountVisible != Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
-                {
-                    int Value = Math.Abs(ScrollCountVisible - Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements) / Pages.PageObjLabelsAction.ScrollBar.TrafficShare;
-                    if (ScrollCountVisible > Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
-                    {
-                        Pages.PageObjLabelsAction.ScrollBar.VisibleUp(Value);
-                    }
-                    else if (ScrollCountVisible < Pages.PageObjLabelsAction.ScrollBar.CountVisibleElements)
-                    {
-                        Pages.PageObjLabelsAction.ScrollBar.VisibleDown(Value);
-                    }
-                }
-            };*/
-
             Activated += (sender, e) =>
             {
                 if (!HiAnimation)
@@ -752,6 +708,79 @@ namespace AAC20.UI.Windows
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
             TextBoxCommandInput.Focus();
             //UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
+        }
+
+        /// <summary>
+        /// Добавить и отформатировать текст в консоль
+        /// </summary>
+        /// <param name="Text">Текст добавляемый в консоль</param>
+        /// <param name="Formatted">Форматировать или нет</param>
+        internal void AddTextInConsole(string Text, bool Formatted = true)
+        {
+            Paragraph Message = new();
+            Message.Inlines.Add(new Bold(new Run(">>> ")));
+            if (Formatted)
+            {
+                List<Inline> Inlines = [];
+                foreach (Match match in RegexFormattedText().Matches(Text))
+                {
+                    Inlines.Add(FormattedTextDetect(match.Value));
+                }
+                Message.Inlines.AddRange(Inlines);
+            }
+            else Message.Inlines.Add(new Run(Text));
+            RichTextBoxMainMessage.Document.Blocks.Add(Message);
+        }
+
+        /// <summary>
+        /// Изменить формативность текста с учётом первых знаков
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// %#FFFFFF** <b>Italic</b> **
+        /// </code>
+        /// ** <b>Bold</b> **
+        /// <code></code>
+        /// // <i>Italic</i> //
+        /// <code></code>
+        /// __ <u>UnderLine</u> __
+        /// <code></code>
+        /// </remarks>
+        /// <param name="Text">Текст форматирования</param>
+        /// <returns>Форматированный текст</returns>
+        private static Inline FormattedTextDetect(string Text)
+        {
+            Text = Text[1..]; // удаление "%"
+            Run RunText = new(Text[2..^2]);
+            SolidColorBrush? color = null;
+            if (Text[0] == '#')
+            {
+                color = new((Color)ColorConverter.ConvertFromString(
+                    RegexFormattedTextColor().Match(Text).Value));
+            }
+            Inline Result = $"{Text[0]}{Text[^1]}" switch
+            {
+                "**" => new Bold(RunText),
+                "//" => new Italic(RunText),
+                "__" => new Underline(RunText),
+                _ => new Run(Text),
+            };
+            if (color != null) Result.Background = color;
+            return Result;
+        }
+
+        /// <summary>
+        /// Анимировать еффект блюра - сигнализируя изменение
+        /// </summary>
+        /// <param name="Effect">Объект эффекта анимации</param>
+        /// <param name="Power">Сила блюра при старте</param>
+        private static void AnimateBlurEffect(BlurEffect Effect, uint Power)
+        {
+            DoubleAnimation animation = DoubleAnimateObj.Clone();
+            animation.Duration = TimeSpan.FromMilliseconds(700d);
+            animation.From = Power;
+            animation.To = 0d;
+            Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
         }
 
         /// <summary>
@@ -991,5 +1020,21 @@ namespace AAC20.UI.Windows
         /// Функция регулярного выражения выделения текста в ковычках "текст"
         /// </summary>
         private static Regex StringCommandError(char symbol) => new($"([^\\{symbol}]+|\\{symbol}[^\\{symbol}]+\\{symbol}?)");
+
+        /// <summary>
+        /// Регулярное выражение сортировки параметров от специальных символов
+        /// </summary>
+        /// <returns>Регулярное выражение</returns>
+        // Текст который является %#00FF00FF__%**регистрационным**__ и %#FFFFFF**может** %~~даже так~~ %--постоянно-- %__форматироваться__
+        [GeneratedRegex(@"([^%{2}]+|(\%(#[0-9A-F]{6})?)(\*{2}[^(\*{2})]+\*{2}|_{2}[^(_{2})]+_{2}|\/{2}[^(\/{2})]+\/{2})|\%)")]
+        private static partial Regex RegexFormattedText();
+
+        /// <summary>
+        /// Регулярное выражение сортировки параметров от специальных символов
+        /// </summary>
+        /// <returns>Регулярное выражение</returns>
+        // %   #FFFFFF   //%**d**//
+        [GeneratedRegex(@"#[0-9A-F]{6}")]
+        private static partial Regex RegexFormattedTextColor();
     }
 }

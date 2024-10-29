@@ -158,6 +158,13 @@
                                 <Classes:BrushSettingQ Default="#FF3EBAD2" NotEnabled="#FFE24267" Select="#FF26DEDA" Used="White"/>
                             </GUI:IELImageButton.BackgroundSetting>
                         </GUI:IELImageButton>
+                        <Border x:Name="BorderStateRegister" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="1">
+                            <TextBlock x:Name="TextBlockRegister" TextWrapping="Wrap" Text="А" TextAlignment="Center" VerticalAlignment="Center" FontSize="23" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
+                                <TextBlock.Effect>
+                                    <BlurEffect x:Name="BlurEffectTextBlockRegister" Radius="0" KernelType="Box" RenderingBias="Quality"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                        </Border>
                     </Grid>
                 </Border>
                 <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC94ADC5" Grid.ColumnSpan="1">
