@@ -10,6 +10,8 @@ using DataScroll;
 using System.Windows.Data;
 using System.Runtime.CompilerServices;
 using IEL.Interfaces.Front;
+using Interpreter.Classes;
+using Interpreter.Interfaces;
 
 namespace AAC20.Windows
 {
@@ -170,7 +172,7 @@ namespace AAC20.Windows
                     GridElements.Children[i].BeginAnimation(OpacityProperty, AnimationOpacity);
                 }
                 UpdateVisibleScrollBar(-1);
-                DetectNewDiscriptionCommand(null);
+                DetectNewDiscriptionCommand<ICommandAAC>(null);
             };
             #endregion
             #region IELButtonUserCom
@@ -314,7 +316,7 @@ namespace AAC20.Windows
         /// Предоставить новое описание команды
         /// </summary>
         /// <param name="Command">Команда для описания</param>
-        private void DetectNewDiscriptionCommand(ICommandAAC? Command)
+        private void DetectNewDiscriptionCommand<T>(T? Command) where T : ICommandAAC
         {
             if (Command == null)
             {
@@ -328,7 +330,15 @@ namespace AAC20.Windows
             else
             {
                 IELButtonCloneTextCommand.IsEnabled = true;
-                SetInformationCommand(Command);
+                switch (StateDiscription)
+                {
+                    case ActivateStateDiscription.ConsoleCommand:
+                        SetInformationCommand((IConsoleCommand)Command);
+                        break;
+                    default:
+                        SetInformationCommand(Command);
+                        break;
+                }
             }
         }
 
@@ -359,7 +369,7 @@ namespace AAC20.Windows
         /// Установить информацию о команде
         /// </summary>
         /// <param name="Command">Команда для описания</param>
-        private void SetInformationCommand(ICommandAAC Command)
+        private void SetInformationCommand(IConsoleCommand Command)
         {
             Parameter[] Parameters = Command.Parameters ?? [];
             int CountParameters = Parameters.Length;
@@ -380,6 +390,23 @@ namespace AAC20.Windows
             TextBlockDescriptionCountParameter.Text = CountParameters == 0 ?
             $"Команда \"{Command.Name}\" не использует параметров" : $"Команда \"{Command.Name}\" включает в себя {CountParameters} и больше параметров";
             TextBlockTextCommand.Text = Command.Name.Trim() + (CountParameters == 0 ? string.Empty : "* " + TextRegistration);
+        }
+
+        /// <summary>
+        /// Установить информацию о команде
+        /// </summary>
+        /// <param name="Command">Команда для описания</param>
+        private void SetInformationCommand(ICommandAAC Command)
+        {
+            string StateCommand = StateDiscription switch
+            {
+                ActivateStateDiscription.ConsoleCommand => "Консольная",
+                _ => string.Empty
+            };
+            TextBlockNameCommand.Text = $"{StateCommand} команда: \"{Command.Name}\"";
+            TextBlockMainDescriptionCommand.Text = string.Empty;
+            TextBlockDescriptionCountParameter.Text = $"Команда \"{Command.Name}\" не использует параметров";
+            TextBlockTextCommand.Text = Command.Name.Trim();
         }
 
         /// <summary>

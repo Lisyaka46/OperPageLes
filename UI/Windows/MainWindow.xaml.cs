@@ -24,7 +24,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-
+using Interpreter.Classes;
+using Interpreter.Interfaces;
+using MySqlX.XDevAPI.Common;
+using Windows.ApplicationModel.Store;
 namespace AAC20.UI.Windows
 {
     /// <summary>
@@ -290,7 +293,7 @@ namespace AAC20.UI.Windows
 
                 #region open_directory
                 new ConsoleCommand("open_directory", [new Parameter("Directory", typeof(string), string.Empty)],
-                "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать гравную страницу проводника",
+                "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника",
                 (Command, param) =>
                 {
                     Paragraph Message = new();
@@ -379,6 +382,49 @@ namespace AAC20.UI.Windows
                     }
                     else return Task.FromResult(
                         CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
+                }),
+                #endregion
+
+                #region alias
+                new ConsoleCommand("alias", [new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
+                    new Parameter("Replace", typeof(bool), false)],
+                "Создаёт алеас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"", (Main, param) =>
+                {
+                    string[] NameAliases = [.. App.CurrentApp.DataAliases.Select(i => i.Name)];
+                    Paragraph Message = new();
+                    Message.Inlines.Add(new Bold(new Run(">>> ")));
+                    if (NameAliases.Contains(param[0].ToString() ?? string.Empty) && !(bool)param[2])
+                    {
+                        return Task.FromResult(CommandStateResult.Failed(Main.Name,
+                            $"Алеас \"{param[0]}\" уже создан\nДля переопределения введите третий параметр: true"));
+                    }
+                    Message.Inlines.Add(new Run("Алеас "));
+                    Run RuningText = new($"\"{param[0]}\"")
+                    {
+                        Background = new SolidColorBrush(Colors.Green),
+                        Cursor = Cursors.Hand,
+                    };
+                    RuningText.MouseEnter += (sender, e) =>
+                    {
+                        ColorAnimate.To = Color.FromRgb(53, 161, 175);
+                        RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
+                    };
+                    RuningText.MouseLeave += (sender, e) =>
+                    {
+                        IELMessageMain.CloseBorderInformation();
+                        ColorAnimate.To = Colors.Green;
+                        RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
+                    };
+                    RuningText.MouseLeftButtonUp += (sender, e) => ActivateActionCommand(param[0].ToString() ?? string.Empty);
+                    Message.Inlines.Add(RuningText);
+                    Message.Inlines.Add(new Run($" на команду \"{param[1]}\" успешно {((bool)param[2] ? "изменён" : "создан")}"));
+                    if (!(bool)param[2])
+                        App.CurrentApp.DataAliases.Add(
+                            new(param[0].ToString() ?? string.Empty, param[1].ToString() ?? string.Empty, [.. App.DataConsoleCommand]));
+                    else
+                        App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, param[0].ToString())].Command = param[1].ToString() ?? string.Empty;
+                    RichTextBoxMainMessage.Document.Blocks.Add(Message);
+                    return Task.FromResult(CommandStateResult.Completed(Main.Name));
                 }),
                 #endregion
             ]);
@@ -736,14 +782,14 @@ namespace AAC20.UI.Windows
         /// Активировать команду
         /// </summary>
         /// <param name="CommandString">Ктрока команды</param>
-        private void ActivateActionCommand(string CommandString)
+        internal void ActivateActionCommand(string CommandString)
         {
             IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
-            ConsoleCommand? Command = ConsoleCommand.ReadCommand([.. App.DataConsoleCommand], CommandString);
-            string Name = ConsoleCommand.ReadNameCommand(CommandString);
-            string[] Parameters = ConsoleCommand.ReadParametersCommand(CommandString);
+            ConsoleCommand? Command = ICommandAAC.ReadCommand([.. App.DataConsoleCommand], CommandString);
+            string Name = ICommandAAC.ReadNameCommand(CommandString);
+            string[] Parameters = ICommandAAC.ReadParametersCommand(CommandString);
             Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
             if (Pages.PageBufferActPanel.BufferCommand.Count < Pages.PageBufferActPanel.BufferCommand.Length)
             {
@@ -757,7 +803,7 @@ namespace AAC20.UI.Windows
                 {
                     IELActionPanelMain.ClosePanelAction();
                     SummarizeCommandStateResult(
-                        ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
+                        ICommandAAC.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
                 };
                 Button.OnActivateMouseRight += () =>
                 {
@@ -787,7 +833,14 @@ namespace AAC20.UI.Windows
             }
             Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
                 $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
-            SummarizeCommandStateResult(Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters));
+
+            CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
+            if (result.State == ResultState.InvalidCommand)
+            {
+                AliasCommand<ICommandAAC>? Alias = ICommandAAC.ReadCommand([.. App.CurrentApp.DataAliases], CommandString);
+                result = Alias == null ? CommandStateResult.FaledCommand(Name) : Alias.ExecuteCommand();
+            }
+            SummarizeCommandStateResult(result);
         }
 
         [MTAThread()]

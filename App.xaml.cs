@@ -8,6 +8,8 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Interpreter.Classes;
+using Interpreter.Interfaces;
 
 namespace AAC20
 {
@@ -26,6 +28,11 @@ namespace AAC20
             /// </summary>
             internal static WindowDiscriptionCommands? DiscriptionCommands = null;
         }
+
+        /// <summary>
+        /// Массив консольных команд
+        /// </summary>
+        internal readonly List<AliasCommand<ICommandAAC>> DataAliases = [];
 
         /// <summary>
         /// Массив консольных команд

@@ -18,27 +18,27 @@
         <Border BorderThickness="0,0,0,2" BorderBrush="Black">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="216*"/>
-                    <ColumnDefinition Width="239*"/>
-                    <ColumnDefinition Width="299*"/>
-                    <ColumnDefinition Width="96*"/>
+                    <ColumnDefinition Width="108*"/>
+                    <ColumnDefinition Width="72*"/>
+                    <ColumnDefinition Width="197*"/>
+                    <ColumnDefinition Width="48*"/>
                 </Grid.ColumnDefinitions>
-                <GUI:IELButtonText x:Name="IELButtonConsole" Text="Консольные команды" CornerRadius="0,0,6,6" FontWeight="Bold" Margin="3,0,3,7" Grid.RowSpan="2" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" BorderThicknessBlock="3,0,3,3">
+                <GUI:IELButtonText x:Name="IELButtonConsole" Text="Консольные команды" CornerRadius="0,0,6,6" FontWeight="Bold" Margin="3,0,3,7" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" BorderThicknessBlock="3,0,3,3">
                     <GUI:IELButtonText.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF74C3B2" Select="#FF3AD483" Used="#FFBEF3D5" NotEnabled="#FFD84A50"/>
                     </GUI:IELButtonText.BackgroundSetting>
                 </GUI:IELButtonText>
-                <GUI:IELButtonText x:Name="IELButtonUserCom" Text="Пользовательские команды" CornerRadius="0,0,6,6" FontWeight="Bold" Grid.Column="1" Margin="3,0,3,7" Grid.RowSpan="2" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" BorderThicknessBlock="3,0,3,3">
+                <GUI:IELButtonText x:Name="IELButtonUserCom" Text="Алиасы" CornerRadius="0,0,6,6" FontWeight="Bold" Grid.Column="1" Margin="3,0,3,7" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" BorderThicknessBlock="3,0,3,3">
                     <GUI:IELButtonText.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF74C3B2" Select="#FF3AD483" Used="#FFBEF3D5" NotEnabled="#FFD84A50"/>
                     </GUI:IELButtonText.BackgroundSetting>
                 </GUI:IELButtonText>
-                <GUI:IELTextBox x:Name="IELInputSearchCommand" Grid.Column="2" BorderThicknessBlock="3,0,3,3" CornerRadius="0,0,6,6" Margin="3,0,3,7" Grid.RowSpan="2" Text="">
+                <GUI:IELTextBox x:Name="IELInputSearchCommand" Grid.Column="2" BorderThicknessBlock="3,0,3,3" CornerRadius="0,0,6,6" Margin="3,0,3,7" Text="">
                     <GUI:IELTextBox.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF68B3A3" Select="#FF3AD483" Used="#FFA0D0B5" NotEnabled="#FFD84A50"/>
                     </GUI:IELTextBox.BackgroundSetting>
                 </GUI:IELTextBox>
-                <GUI:IELImageButton x:Name="IELButtonSearchCommand" Grid.Column="3" Imaging="/UI/Images/Search.png" ImageMargin="1,1,1,1" BorderThicknessBlock="3,0,3,3" Margin="3,0,3,7" Grid.RowSpan="2" CornerRadius="0,0,10,10">
+                <GUI:IELImageButton x:Name="IELButtonSearchCommand" Grid.Column="3" Imaging="/UI/Images/Search.png" ImageMargin="1,1,1,1" BorderThicknessBlock="3,0,3,3" Margin="3,0,3,7" CornerRadius="0,0,10,10">
                     <GUI:IELImageButton.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF68B3A3" Select="#FF3AD483" Used="#FFA0D0B5" NotEnabled="#FFD84A50"/>
                     </GUI:IELImageButton.BackgroundSetting>
