@@ -190,10 +190,7 @@ namespace AAC20.UI.Windows
                 "Выводит все введёные параметры начиная с параметра \"Text\" в консоль главного меню программы",
                 (Command, param) =>
                 {
-                    Paragraph Massage = new();
-                    Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                    Massage.Inlines.Add(new Run(string.Join('\0', param)));
-                    RichTextBoxMainMessage.Document.Blocks.Add(Massage);
+                    AddTextInConsole((string)param[0]);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -203,18 +200,15 @@ namespace AAC20.UI.Windows
                 "Отображает содержание буфера команд в консоль главного меню программы",
                 (Command, param) =>
                 {
-                    Paragraph Massage = new();
-                    Massage.Inlines.Add(new Bold(new Run(">>> ")));
-                    Massage.Inlines.Add(new Run($"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}:" +
-                        $"[{string.Join(',', Pages.PageBufferActPanel.BufferCommand.BufferElements.Where((i) =>
+                    AddTextInConsole($"%//{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}://" +
+                        $"%**[**{string.Join(',', Pages.PageBufferActPanel.BufferCommand.BufferElements.Where((i) =>
                         {
                             if (i != null)
                             {
                                 return i.Length > 0;
                             }
                             return false;
-                        }))}]"));
-                    RichTextBoxMainMessage.Document.Blocks.Add(Massage);
+                        }))}%**]**");
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -231,7 +225,7 @@ namespace AAC20.UI.Windows
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
+                            $"Страница %#FF0000**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
                     Page.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
                     //CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
                     //Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
@@ -246,7 +240,7 @@ namespace AAC20.UI.Windows
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
+                            $"Страница %#FF0000**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
                     LabelAction? label = new Dialogs.WindowGenLabel().CreateLabel();
                     if (label != null) Page.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -395,7 +389,7 @@ namespace AAC20.UI.Windows
                     string[] NameAliases = [.. App.CurrentApp.DataAliases.Select(i => i.Name)];
                     Paragraph Message = new();
                     Message.Inlines.Add(new Bold(new Run(">>> ")));
-                    if (NameAliases.Contains(param[0].ToString() ?? string.Empty) && !(bool)param[2])
+                    if (NameAliases.Contains((string)param[0]) && !(bool)param[2])
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"{param[0]}\" невозможно создать, так как он уже создан\nДля переопределения введите третий параметр: true"));
@@ -417,14 +411,14 @@ namespace AAC20.UI.Windows
                         ColorAnimate.To = Colors.Green;
                         RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
                     };
-                    RuningText.MouseLeftButtonUp += (sender, e) => ActivateActionCommand(param[0].ToString() ?? string.Empty);
+                    RuningText.MouseLeftButtonUp += (sender, e) => ActivateActionCommand((string)param[0]);
                     Message.Inlines.Add(RuningText);
                     Message.Inlines.Add(new Run($" на команду \"{param[1]}\" успешно {((bool)param[2] ? "изменён" : "создан")}"));
                     if (!(bool)param[2])
                         App.CurrentApp.DataAliases.Add(
-                            new(param[0].ToString() ?? string.Empty, param[1].ToString() ?? string.Empty, [.. App.DataConsoleCommand]));
+                            new((string)param[0], (string)param[1], [.. App.DataConsoleCommand]));
                     else
-                        App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, param[0].ToString())].Command = param[1].ToString() ?? string.Empty;
+                        App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, (string)param[0])].Command = (string)param[1];
                     RichTextBoxMainMessage.Document.Blocks.Add(Message);
                     return Task.FromResult(CommandStateResult.Completed(Main.Name));
                 }),
@@ -750,19 +744,20 @@ namespace AAC20.UI.Windows
         /// <returns>Форматированный текст</returns>
         private static Inline FormattedTextDetect(string Text)
         {
-            Text = Text[1..]; // удаление "%"
-            Run RunText = new(Text[2..^2]);
+            if (Text.Length == 0 || (Text.Length == 1 && Text[0] == '%')) return new Run(Text);
+            if (Text[0] == '%') Text = Text[1..]; // удаление "%"
             SolidColorBrush? color = null;
             if (Text[0] == '#')
             {
                 color = new((Color)ColorConverter.ConvertFromString(
                     RegexFormattedTextColor().Match(Text).Value));
+                Text = Text[7..];
             }
             Inline Result = $"{Text[0]}{Text[^1]}" switch
             {
-                "**" => new Bold(RunText),
-                "//" => new Italic(RunText),
-                "__" => new Underline(RunText),
+                "**" => new Bold(new Run(Text[2..^2])),
+                "//" => new Italic(new Run(Text[2..^2])),
+                "__" => new Underline(new Run(Text[2..^2])),
                 _ => new Run(Text),
             };
             if (color != null) Result.Background = color;
@@ -874,17 +869,7 @@ namespace AAC20.UI.Windows
         {
             if (Result.State != ResultState.Complete && Result.Massage != null)
             {
-                Paragraph P_Massage = new();
-                foreach (Match Element in StringCommandError('"').Matches(Result.Massage))
-                {
-                    if ((Element.Value[0], Element.Value[^1]) == ('"', '"'))
-                    {
-                        P_Massage.Inlines.Add(new Italic(new Run(Element.Value)) { Background = new SolidColorBrush(Colors.IndianRed) });
-                        continue;
-                    }
-                    P_Massage.Inlines.Add(new Run(Element.Value));
-                }
-                RichTextBoxMainMessage.Document.Blocks.Add(P_Massage);
+                AddTextInConsole(Result.Massage);
             }
         }
 
