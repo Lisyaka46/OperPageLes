@@ -12,6 +12,7 @@ using AAC20.CORE.Flaging;
 using MySql.Data.MySqlClient;
 using System.Windows.Media.Imaging;
 using DataScroll;
+using Interpreter.Interfaces;
 
 namespace AAC20.Windows.Pages.Other
 {
@@ -120,7 +121,9 @@ namespace AAC20.Windows.Pages.Other
             ObjectsSQLLabel = [];
             PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
+                if (SelectIndexElementLabel == -1) return;
                 ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
+                SelectIndexElementLabel = -1;
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
 
@@ -272,7 +275,7 @@ namespace AAC20.Windows.Pages.Other
         /// <returns>Объект интерфейса ярлыка</returns>
         private IELLabelCommand CreateLabel(LabelAction label, ref List<IELLabelCommand> Data, ref Grid grid)
         {
-            string NameFileLabelImage = ConsoleCommand.ReadNameCommand(label.Command) switch
+            string NameFileLabelImage = ICommandAAC.ReadNameCommand(label.Command) switch
             {
                 "open_link" => "Link.png",
                 "open_file" => "File.png",
@@ -296,7 +299,7 @@ namespace AAC20.Windows.Pages.Other
             };
             Label.OnActivateMouseLeft += () =>
             {
-                App.MainWindowApplication.SummarizeCommandStateResult(ConsoleCommand.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], label.Command));
+                App.MainWindowApplication.ActivateActionCommand(label.Command);
             };
             Label.MouseHover += (sender, e) =>
             {
