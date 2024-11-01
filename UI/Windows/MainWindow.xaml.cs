@@ -15,6 +15,7 @@ using Interpreter.Interfaces;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 #endregion
 
 namespace AAC20.UI.Windows
@@ -54,6 +56,11 @@ namespace AAC20.UI.Windows
             /// Флаг состояния регистра
             /// </summary>
             internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
+
+            /// <summary>
+            /// Флаг обновления подсказок к командам
+            /// </summary>
+            internal static readonly Flag FlagHintRead = new(false);
         };
 
         /// <summary>
@@ -98,6 +105,11 @@ namespace AAC20.UI.Windows
         /// Объект управления фоновым обновлением информации в данном окне 1
         /// </summary>
         private readonly UpdateBackgroundData UpdateBackgroundDataRunTime;
+
+        /// <summary>
+        /// Поток обновляемый совпадающие команды
+        /// </summary>
+        private readonly ThreadGenericProcess UpdateSearchHintCommand;
 
         /// <summary>
         /// Объект анимации для управления позицией
@@ -145,6 +157,21 @@ namespace AAC20.UI.Windows
         /// Состояние воспроизведения приветственной анимации
         /// </summary>
         private bool HiAnimation = false;
+
+        /// <summary>
+        /// Массив всех отсортированных имён команд
+        /// </summary>
+        private string[]? AllHintNames;
+
+        /// <summary>
+        /// Динамический массив всех имён команд
+        /// </summary>
+        private readonly List<string> EnumerateNameCommand = [];
+
+        /// <summary>
+        /// Константа высоты элемента подсказки к командам
+        /// </summary>
+        private const int HeightHintElement = 20;
 
         public MainWindow()
         {
@@ -427,8 +454,11 @@ namespace AAC20.UI.Windows
                     Message.Inlines.Add(RuningText);
                     Message.Inlines.Add(new Run($" на команду \"{param[1]}\" успешно {((bool)param[2] ? "изменён" : "создан")}"));
                     if (!(bool)param[2])
+                    {
+                        EnumerateNameCommand.Add(NameAlias);
                         App.CurrentApp.DataAliases.Add(
                             new(NameAlias, (string)param[1], [.. App.DataConsoleCommand]));
+                    }
                     else
                         App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, NameAlias)].Command = (string)param[1];
                     RichTextBoxMainMessage.Document.Blocks.Add(Message);
@@ -476,16 +506,7 @@ namespace AAC20.UI.Windows
             Pages.PageMainActPanel.IELButtonDiscriptionCommand.OnActivateMouseLeft += (Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
-                if (App.AppWindows.DiscriptionCommands == null)
-                {
-                    App.AppWindows.DiscriptionCommands = new();
-                    App.AppWindows.DiscriptionCommands.Show();
-                }
-                else
-                {
-                    App.AppWindows.DiscriptionCommands.WindowState = WindowState.Normal;
-                    App.AppWindows.DiscriptionCommands.Activate();
-                }
+                UsingDiscriptionCommand();
             };
             Pages.PageDeveloperState.IELButtonCreateLabel.OnActivateMouseLeft += () =>
             {
@@ -494,23 +515,32 @@ namespace AAC20.UI.Windows
             };
             #endregion
 
+            #region BackgroundData
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
             UpdateBackgroundDataRunTime = new(1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
+            UpdateSearchHintCommand = new(() =>
+            {
+            });
             BackgroundUpdateVisualData();
+            #endregion
 
             #region SetParameteres
             TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
             BrowserPageColumn.MaxWidth = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
+            BorderHintCommand.Height = 0d;
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(270d, 230d));
-            
+
+            EnumerateNameCommand.AddRange(App.DataConsoleCommand.Select((i) => i.Name));
+            EnumerateNameCommand.AddRange(App.CurrentApp.DataAliases.Select((i) => i.Name));
+
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
             #endregion
 
-            ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
+            ButtonReboot.OnActivateMouseLeft += App.RebootApplication;
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text, true);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
 
@@ -599,11 +629,29 @@ namespace AAC20.UI.Windows
                     case Key.Apps:
                         IELActionPanelMain.UsingPanelAction(SettingsMain);
                         break;
-                    default:
-                        return;
                 }
                 TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
+                
+                DoubleAnimation animation = DoubleAnimateObj.Clone();
+                if (TextBoxCommandInput.Text.Length > 0)
+                {
+                    AllHintNames = [.. EnumerateNameCommand.Where((i) => { return i.Contains(TextBoxCommandInput.Text, StringComparison.CurrentCultureIgnoreCase); })];
+                    Sorting.SortNames(ref AllHintNames);
+                    GridHint.Children.Clear();
+                    foreach (string Name in AllHintNames)
+                    {
+                        TextBlock block = CreateHintBlock(Name, GridHint.Children.Count);
+                        GridHint.Children.Add(block);
+                    }
+                    animation.To = GridHint.Children.Count * HeightHintElement;
+                }
+                else
+                {
+                    animation.To = 0d;
+                }
+                animation.Duration = TimeSpan.FromMilliseconds(300d);
+                BorderHintCommand.BeginAnimation(HeightProperty, animation);
             };
 
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
@@ -649,6 +697,19 @@ namespace AAC20.UI.Windows
                     IELBlockMessage.OrientationBorderInfo.RightUp);
             };
             BorderCurrentLanguage.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+            #region IELImageButtonHelp
+            IELImageButtonHelp.OnActivateMouseLeft += UsingDiscriptionCommand;
+            IELImageButtonHelp.MouseHover += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELImageButtonHelp, IELImageButtonHelp.Name,
+                    "Быстрое открытие описания команд",
+                    IELBlockMessage.OrientationBorderInfo.RightUp);
+            };
+            IELImageButtonHelp.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
             };
@@ -738,6 +799,65 @@ namespace AAC20.UI.Windows
             UpdateBackgroundDataThis.TimerDataUpdate.Start();
             UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
             TextBoxCommandInput.Focus();
+        }
+
+        /// <summary>
+        /// Со
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="Index"></param>
+        /// <returns></returns>
+        private TextBlock CreateHintBlock(string Name, int Index)
+        {
+            ColorAnimation color_animation = ColorAnimate.Clone();
+            color_animation.Duration = TimeSpan.FromMilliseconds(120d);
+            TextBlock Result = new()
+            {
+                Height = HeightHintElement,
+                Text = Name,
+                TextAlignment = TextAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new(0, HeightHintElement * Index, 0, 0),
+                Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+            };
+            Result.MouseEnter += (sender, e) =>
+            {
+                color_animation.To = Color.FromArgb(100, 255, 255, 255);
+                Result.Background.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
+            };
+            Result.MouseLeave += (sender, e) =>
+            {
+                color_animation.To = Color.FromArgb(0, 255, 255, 255);
+                Result.Background.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
+            };
+            Result.MouseLeftButtonUp += (sender, e) =>
+            {
+                TextBoxCommandInput.Text = Result.Text;
+                DoubleAnimation animation = DoubleAnimateObj.Clone();
+                animation.To = 0d;
+                animation.Duration = TimeSpan.FromMilliseconds(300d);
+                BorderHintCommand.BeginAnimation(HeightProperty, animation);
+            };
+            return Result;
+        }
+
+        /// <summary>
+        /// Взаимодействовать с окном описания команд (Включает/Активирует)
+        /// </summary>
+        private void UsingDiscriptionCommand()
+        {
+            if (App.AppWindows.DiscriptionCommands == null)
+            {
+                App.AppWindows.DiscriptionCommands = new();
+                App.AppWindows.DiscriptionCommands.Show();
+            }
+            else
+            {
+                App.AppWindows.DiscriptionCommands.WindowState = WindowState.Normal;
+                App.AppWindows.DiscriptionCommands.Activate();
+            }
         }
 
         /// <summary>
@@ -971,7 +1091,12 @@ namespace AAC20.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualDataRunTime()
         {
-            TextBlockLanguage.Text = System.Windows.Forms.InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
+            string LangName = System.Windows.Forms.InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
+            if (!LangName.Equals(TextBlockLanguage.Text))
+            {
+                TextBlockLanguage.Text = LangName;
+                AnimateBlurEffect(BlurEffectLanguage, 10u);
+            }
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
             //byte rgbValue = (byte)(2.55d * Volume);

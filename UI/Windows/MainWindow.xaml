@@ -19,7 +19,7 @@
         </Image>
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="136"/>
+                <ColumnDefinition Width="145"/>
                 <ColumnDefinition Width="455*"/>
                 <ColumnDefinition Width="209*" MaxWidth="230"/>
             </Grid.ColumnDefinitions>
@@ -133,10 +133,11 @@
                             <ColumnDefinition Width="43"/>
                             <ColumnDefinition Width="43"/>
                             <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="43"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="43"/>
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="BorderInternetConnection" BorderBrush="#FF085D2D" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CACBB" Margin="3,3,3,3" Cursor="Help">
+                        <Border x:Name="BorderInternetConnection" BorderBrush="#FF085D2D" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CBBAC" Margin="3,3,3,3" Cursor="Help">
                             <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/UI/Images/WifiOff.png" Margin="-2,0,0,0">
                                 <Image.Effect>
                                     <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
@@ -151,7 +152,7 @@
                                 </Image.RenderTransform>
                             </Image>
                         </Border>
-                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="4" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/UI/Images/Arrow.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="1000">
+                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="5" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/UI/Images/Arrow.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="1000">
                             <GUI:IELImageButton.BorderBrushSetting>
                                 <Classes:BrushSettingQ Default="Black" NotEnabled="#FF400817" Select="#FF151729" Used="#FF173128"/>
                             </GUI:IELImageButton.BorderBrushSetting>
@@ -159,20 +160,28 @@
                                 <Classes:BrushSettingQ Default="#FF3EBAD2" NotEnabled="#FFE24267" Select="#FF26DEDA" Used="White"/>
                             </GUI:IELImageButton.BackgroundSetting>
                         </GUI:IELImageButton>
-                        <Border x:Name="BorderStateRegister" BorderBrush="#FF314E58" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="1" Cursor="Help">
+                        <Border x:Name="BorderStateRegister" BorderBrush="#FF314E58" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5C9FBB" Margin="3,3,3,3" Grid.Column="1" Cursor="Help">
                             <TextBlock x:Name="TextBlockRegister" TextWrapping="Wrap" Text="А" TextAlignment="Center" VerticalAlignment="Center" FontSize="23" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
                                 <TextBlock.Effect>
                                     <BlurEffect x:Name="BlurEffectTextBlockRegister" Radius="0" KernelType="Box" RenderingBias="Quality"/>
                                 </TextBlock.Effect>
                             </TextBlock>
                         </Border>
-                        <Border x:Name="BorderCurrentLanguage" BorderBrush="#FF1C3326" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="2" Cursor="Help">
+                        <Border x:Name="BorderCurrentLanguage" BorderBrush="#FF2D563E" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF65A081" Margin="3,3,3,3" Grid.Column="2" Cursor="Help">
                             <TextBlock x:Name="TextBlockLanguage" TextWrapping="Wrap" Text="ENG" TextAlignment="Center" VerticalAlignment="Center" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
                                 <TextBlock.Effect>
-                                    <BlurEffect x:Name="BlurEffectTextBlockRegister1" Radius="0" KernelType="Box" RenderingBias="Quality"/>
+                                    <BlurEffect x:Name="BlurEffectLanguage" RenderingBias="Quality" Radius="0" KernelType="Box"/>
                                 </TextBlock.Effect>
                             </TextBlock>
                         </Border>
+                        <GUI:IELImageButton x:Name="IELImageButtonHelp" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Imaging="/UI/Images/LightBulb.png" ImageMargin="1,1,1,1">
+                            <GUI:IELImageButton.BorderBrushSetting>
+                                <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
+                            </GUI:IELImageButton.BorderBrushSetting>
+                            <GUI:IELImageButton.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
+                            </GUI:IELImageButton.BackgroundSetting>
+                        </GUI:IELImageButton>
                     </Grid>
                 </Border>
                 <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC94ADC5" Grid.ColumnSpan="1">
@@ -182,7 +191,7 @@
                     </Grid>
                 </Border>
             </Grid>
-            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" Text="" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="2" ForgroundNaming="#FF11FF81"/>
+            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="2" ForgroundNaming="#FF11FF81" Panel.ZIndex="1" Text=""/>
             <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" CornerRadius="10,10,10,10" Margin="8,2,7,3" Grid.Column="2" FontWeight="Bold" FontFamily="Trebuchet MS" VisibleMouseImaging="False">
                 <GUI:IELButtonText.BorderBrushSetting>
                     <Classes:BrushSettingQ Default="#FF103823" NotEnabled="#FF502727" Select="#FF2D3C21" Used="#FF2F2D2D"/>
@@ -191,6 +200,9 @@
                     <Classes:BrushSettingQ Default="#FF79BF61" NotEnabled="#FFE0496C" Select="#FF93EC75" Used="#FFF2FFE8"/>
                 </GUI:IELButtonText.BackgroundSetting>
             </GUI:IELButtonText>
+            <Border x:Name="BorderHintCommand" BorderBrush="#B28FA065" BorderThickness="2,2,2,2" Grid.Row="1" Panel.ZIndex="0" Margin="3,0,0,37" Grid.RowSpan="3" CornerRadius="4,4,0,4" Height="70" VerticalAlignment="Bottom" Background="#FF8FA065">
+                <Grid x:Name="GridHint"/>
+            </Border>
         </Grid>
         <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6" FontFamily="Trebuchet MS"/>
     </Grid>
