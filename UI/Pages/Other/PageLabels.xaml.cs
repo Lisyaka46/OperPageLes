@@ -13,6 +13,8 @@ using MySql.Data.MySqlClient;
 using System.Windows.Media.Imaging;
 using DataScroll;
 using Interpreter.Interfaces;
+using AAC20.UI.Dialogs;
+using AAC20.UI.Pages.ActionPanel;
 
 namespace AAC20.Windows.Pages.Other
 {
@@ -42,14 +44,24 @@ namespace AAC20.Windows.Pages.Other
         private int SelectIndexElementLabel = -1;
         
         /// <summary>
-        /// Страница ярлыка в панели действий
+        /// Страница элемента ярлыка в панели действий
         /// </summary>
-        private static readonly PageLabelActionPanel PageLabelActPanel = new();
+        private readonly PageLabelActionPanel PageLabelActPanel;
+
+        /// <summary>
+        /// Главная страница вкладки в панели действий
+        /// </summary>
+        private readonly PageLabelMainActionPanel PageLabelMainActPanel;
 
         /// <summary>
         /// Настройка поведения панели действий для объектов ярлыка
         /// </summary>
         private SettingsPanelActionFrameworkElement SettingsPanelActionElement;
+
+        /// <summary>
+        /// Настройка поведения панели действий для взаимодействия со страницей
+        /// </summary>
+        private SettingsPanelActionFrameworkElement SettingsPanelActionPage;
 
         /// <summary>
         /// Скролл-бар страницы ярлыков
@@ -112,19 +124,33 @@ namespace AAC20.Windows.Pages.Other
         public PageLabels()
         {
             InitializeComponent();
+            PageLabelActPanel = new();
+            PageLabelMainActPanel = new();
             RowDefinitionSQLLabels.Height = new(0, GridUnitType.Star);
             BorderScrollBackground.Width = 0d;
             SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(150, 140));
+            SettingsPanelActionPage = new(this, PageLabelMainActPanel, new(210, 220));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
             SQLLabelActions = [];
             ObjectsLabel = [];
             ObjectsSQLLabel = [];
             PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
-                if (SelectIndexElementLabel == -1) return;
                 ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
                 SelectIndexElementLabel = -1;
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+            };
+            PageLabelActPanel.IELButtonChangeLabel.OnActivateMouseLeft += (Key) =>
+            {
+                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                ObjectsLabel[SelectIndexElementLabel].Label = 
+                    new WindowGenLabel().ChangeLabel(ObjectsLabel[SelectIndexElementLabel].Label);
+                SelectIndexElementLabel = -1;
+            };
+
+            PageLabelMainActPanel.IELButtonCreateLabel.OnActivateMouseLeft += (Key) =>
+            {
+                App.MainWindowApplication.ActivateActionCommand("create_label");
             };
 
             GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
@@ -157,6 +183,15 @@ namespace AAC20.Windows.Pages.Other
                     else if (e.Delta < 0) ScrollBar.Down();
                 }
             };
+            BorderNamingLabel.MouseRightButtonUp += (sender, e) =>
+            {
+                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(SettingsPanelActionPage);
+            };
+            BorderNamingLabel.MouseLeftButtonUp += (sender, e) =>
+            {
+                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                //StartLoadSQL();
+            };
 
             BorderNamingLabel.MouseEnter += (sender, e) =>
             {
@@ -174,16 +209,6 @@ namespace AAC20.Windows.Pages.Other
                 Storyboard ellipseStoryboard = new();
                 ellipseStoryboard.Children.Add(ThicknessAnimate);
                 ellipseStoryboard.Begin(BorderNamingLabel);
-            };
-
-            BorderNamingLabel.MouseLeftButtonUp += (sender, e) =>
-            {
-                StartLoadSQL();
-            };
-
-            BorderNamingLabel.MouseRightButtonUp += (sender, e) =>
-            {
-                ScrollBar.Value = 0;
             };
 
             SQLLoadInformation = new(() =>
@@ -299,7 +324,7 @@ namespace AAC20.Windows.Pages.Other
             };
             Label.OnActivateMouseLeft += () =>
             {
-                App.MainWindowApplication.ActivateActionCommand(label.Command);
+                App.MainWindowApplication.ActivateActionCommand(Label.Label.Command);
             };
             Label.MouseHover += (sender, e) =>
             {
