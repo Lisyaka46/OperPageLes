@@ -45,7 +45,7 @@ namespace AAC20.Windows.Pages.ActionPanel
             {
                 IELButtonExecuteLabel.CharKeyboardActivate = Mode;
                 IELButtonChangeLabel.CharKeyboardActivate = Mode;
-                IELButtonMovingLabel.CharKeyboardActivate = Mode;
+                IELButtonRemoveLabel.CharKeyboardActivate = Mode;
             };
         }
     }

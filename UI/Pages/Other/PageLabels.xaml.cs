@@ -147,6 +147,12 @@ namespace AAC20.Windows.Pages.Other
                     new WindowGenLabel().ChangeLabel(ObjectsLabel[SelectIndexElementLabel].Label);
                 SelectIndexElementLabel = -1;
             };
+            PageLabelActPanel.IELButtonRemoveLabel.OnActivateMouseLeft += (Key) =>
+            {
+                RemoveLabelAt(SelectIndexElementLabel);
+                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                SelectIndexElementLabel = -1;
+            };
 
             PageLabelMainActPanel.IELButtonCreateLabel.OnActivateMouseLeft += (Key) =>
             {
@@ -380,6 +386,31 @@ namespace AAC20.Windows.Pages.Other
             DoubleAnimateObj.To = 1d;
             Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             ScrollBar.MaxUp(1);
+        }
+
+        //
+        private void RemoveLabelAt(int Index)
+        {
+            GridDinamicLabels.Children.RemoveAt(Index);
+            ObjectsLabel.RemoveAt(Index);
+            IELLabelCommand Element;
+            ThicknessAnimation animation = ThicknessAnimate.Clone();
+            animation.Duration = TimeSpan.FromMilliseconds(70d);
+            animation.BeginTime = TimeSpan.Zero;
+            for (int i = Index; i < GridDinamicLabels.Children.Count; i++)
+            {
+                int ColumnIndex = i % GridDinamicLabels.ColumnDefinitions.Count;
+                Element = (IELLabelCommand)GridDinamicLabels.Children[i];
+                Element.Index--;
+                if (ColumnIndex == GridDinamicLabels.ColumnDefinitions.Count - 1)
+                {
+                    animation.BeginTime += TimeSpan.FromMilliseconds(50d);
+                    animation.To =
+                        new(0, Element.Margin.Top - (WidthHeightLabel + BorderDinamicLabels.Padding.Top), 0, 0);
+                    Element.BeginAnimation(MarginProperty, animation);
+                }
+                Grid.SetColumn(GridDinamicLabels.Children[i], ColumnIndex);
+            }
         }
 
         /// <summary>
