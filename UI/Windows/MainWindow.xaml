@@ -167,7 +167,7 @@
                             </TextBlock>
                         </Border>
                         <Border x:Name="BorderCurrentLanguage" BorderBrush="#FF1C3326" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5CACBB" Margin="3,3,3,3" Grid.Column="2" Cursor="Help">
-                            <TextBlock x:Name="TextBlockLanguage" TextWrapping="Wrap" Text="ENG" TextAlignment="Center" VerticalAlignment="Center" FontSize="7" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
+                            <TextBlock x:Name="TextBlockLanguage" TextWrapping="Wrap" Text="ENG" TextAlignment="Center" VerticalAlignment="Center" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
                                 <TextBlock.Effect>
                                     <BlurEffect x:Name="BlurEffectTextBlockRegister1" Radius="0" KernelType="Box" RenderingBias="Quality"/>
                                 </TextBlock.Effect>

@@ -1,4 +1,5 @@
-﻿using AAC20.CORE;
+﻿#region Link
+using AAC20.CORE;
 using AAC20.CORE.Flaging;
 using AAC20.CORE.Settings;
 using AAC20.UI.Dialogs;
@@ -13,7 +14,6 @@ using Interpreter.Commands;
 using Interpreter.Interfaces;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -25,6 +25,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+#endregion
 
 namespace AAC20.UI.Windows
 {
@@ -193,7 +194,7 @@ namespace AAC20.UI.Windows
 
                 #region print
                 new ConsoleCommand("print", [new Parameter("Text", typeof(string))],
-                "Выводит все введёные параметры начиная с параметра \"Text\" в консоль главного меню программы",
+                "Выводит введённый параметр \"Text\" в консоль главного меню программы, игнорируя другие параметры",
                 (Command, param) =>
                 {
                     AddTextInConsole((string)param[0]);
@@ -225,7 +226,8 @@ namespace AAC20.UI.Windows
                     new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
                     new Parameter("Description", typeof(string), string.Empty)
                 ],
-                "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"",
+                "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n" +
+                "- Ярлык создастся только если открыта страница ярлыков в браузере",
                 (Command, param) =>
                 {
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
@@ -240,15 +242,16 @@ namespace AAC20.UI.Windows
                 #endregion
 
                 #region create_label
-                new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
+                new ConsoleCommand("create_label", "Открывает окно создания ярлыка\n" +
+                "- Ярлык создастся только если открыта страница ярлыков в браузере",
                 (Command, param) =>
                 {
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
                             $"Страница %#FF0000**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
-                    LabelAction? label = new Dialogs.WindowGenLabel().CreateLabel();
-                    if (label != null) Page.AddLabel(label);
+                    LabelAction label = new WindowGenLabel().CreateLabel();
+                    if (label != LabelAction.Empty) Page.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -295,7 +298,8 @@ namespace AAC20.UI.Windows
 
                 #region open_directory
                 new ConsoleCommand("open_directory", [new Parameter("Directory", typeof(string), string.Empty)],
-                "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника",
+                "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника\n" +
+                "- Вписав \"*\" в параметры, откроет гравную директорию процесса приложения",
                 (Command, param) =>
                 {
                     Paragraph Message = new();
@@ -507,7 +511,7 @@ namespace AAC20.UI.Windows
             #endregion
 
             ButtonReboot.OnActivateMouseLeft += () => App.RebootApplication();
-            ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text);
+            ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text, true);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
 
             UpdateImageMenu();
@@ -587,7 +591,7 @@ namespace AAC20.UI.Windows
                 switch (e.Key)
                 {
                     case Key.Enter:
-                        ActivateActionCommand(TextBoxCommandInput.Text);
+                        ActivateActionCommand(TextBoxCommandInput.Text, true);
                         break;
                     case Key.Escape:
                         TextBoxCommandInput.Text = string.Empty;
@@ -834,8 +838,9 @@ namespace AAC20.UI.Windows
         /// <summary>
         /// Активировать команду
         /// </summary>
-        /// <param name="CommandString">Ктрока команды</param>
-        internal void ActivateActionCommand(string CommandString)
+        /// <param name="CommandString">Строка команды</param>
+        /// <param name="AppendBufferCommand">Состояние добавления команды в буфер</param>
+        private void ActivateActionCommand(string CommandString, bool AppendBufferCommand = true)
         {
             IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
@@ -843,49 +848,8 @@ namespace AAC20.UI.Windows
             ConsoleCommand? Command = ICommandAAC.ReadCommand([.. App.DataConsoleCommand], CommandString);
             string Name = ICommandAAC.ReadNameCommand(CommandString);
             string[] Parameters = ICommandAAC.ReadParametersCommand(CommandString);
-            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
-            if (Pages.PageBufferActPanel.BufferCommand.Count < Pages.PageBufferActPanel.BufferCommand.Length)
-            {
-                IELButtonCommand Button = new(Name, CommandString, Pages.PageBufferActPanel.BufferCommand.Count)
-                {
-                    Height = H,
-                    Margin = new(0, (H + 2) * Pages.PageBufferActPanel.BufferCommand.Count, 0, 0),
-                    Index = Pages.PageBufferActPanel.BufferCommand.Count,
-                };
-                Button.OnActivateMouseLeft += () =>
-                {
-                    IELActionPanelMain.ClosePanelAction();
-                    SummarizeCommandStateResult(
-                        ICommandAAC.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
-                };
-                Button.OnActivateMouseRight += () =>
-                {
-                    Pages.PageBufferActPanel.BufferCommand.Delete(Button.Index);
-                    Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
-                        $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
-                    if (Pages.PageBufferActPanel.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
-                };
-                Pages.PageBufferActPanel.BufferCommand.Add(CommandString);
-                Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
-                Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
-            }
-            else
-            {
-                Pages.PageBufferActPanel.BufferCommand.Add(CommandString);
-                IELButtonCommand RealButton;
-                for (int i = 0; i < Pages.PageBufferActPanel.GridBuffer.Children.Count - 1; i++)
-                {
-                    RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
-                    IELButtonCommand NextButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i + 1];
-                    RealButton.Text = NextButton.Text;
-                    RealButton.TextCommand = NextButton.TextCommand;
-                }
-                RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[^1];
-                RealButton.Text = Name;
-                RealButton.TextCommand = CommandString;
-            }
-            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
-                $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
+
+            if (AppendBufferCommand) InsertCommandFromBuffer(Name, CommandString);
 
             CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
             if (result.State == ResultState.InvalidCommand)
@@ -896,6 +860,16 @@ namespace AAC20.UI.Windows
             SummarizeCommandStateResult(result);
         }
 
+        /// <summary>
+        /// Активировать команду не добавляя в буфер
+        /// </summary>
+        /// <param name="CommandString">Строка команды</param>
+        internal void ActivateActionCommand(string CommandString) => ActivateActionCommand(CommandString, false);
+
+        /// <summary>
+        /// Создать действие над итогом выполнения команды
+        /// </summary>
+        /// <param name="Result">Объект итога выполнения команды</param>
         [MTAThread()]
         internal void SummarizeCommandStateResult(CommandStateResult Result)
         {
@@ -904,6 +878,72 @@ namespace AAC20.UI.Windows
                 AddTextInConsole(Result.Massage);
             }
         }
+
+        #region ManipulateBuffer
+        /// <summary>
+        /// Создать кнопку активации команды
+        /// </summary>
+        /// <param name="Name">Отображаемое имя</param>
+        /// <param name="Command">Выполняющаяся команда</param>
+        /// <returns>Кнопка выполняющая команду</returns>
+        private IELButtonCommand CreateBufferButton(string Name, string Command)
+        {
+            IELButtonCommand Button = new(Name, Command, Pages.PageBufferActPanel.BufferCommand.Count)
+            {
+                Height = H,
+                Margin = new(0, (H + 2) * Pages.PageBufferActPanel.BufferCommand.Count, 0, 0),
+                Index = Pages.PageBufferActPanel.BufferCommand.Count,
+            };
+            Button.OnActivateMouseLeft += () =>
+            {
+                IELActionPanelMain.ClosePanelAction();
+                SummarizeCommandStateResult(
+                    ICommandAAC.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
+            };
+            Button.OnActivateMouseRight += () =>
+            {
+                Pages.PageBufferActPanel.BufferCommand.Delete(Button.Index);
+                Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
+                    $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
+                if (Pages.PageBufferActPanel.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
+            };
+            return Button;
+        }
+
+        /// <summary>
+        /// Добавить команду в буфер
+        /// </summary>
+        /// <param name="Name">Имя команды</param>
+        /// <param name="Command">Строка команды</param>
+        private void InsertCommandFromBuffer(string Name, string Command)
+        {
+            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
+            if (Pages.PageBufferActPanel.BufferCommand.Count < Pages.PageBufferActPanel.BufferCommand.Length)
+            {
+                IELButtonCommand Button = CreateBufferButton(Name, Command);
+                Pages.PageBufferActPanel.BufferCommand.Add(Command);
+                Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
+                Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
+            }
+            else
+            {
+                Pages.PageBufferActPanel.BufferCommand.Add(Command);
+                IELButtonCommand RealButton;
+                for (int i = 0; i < Pages.PageBufferActPanel.GridBuffer.Children.Count - 1; i++)
+                {
+                    RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
+                    IELButtonCommand NextButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i + 1];
+                    RealButton.Text = NextButton.Text;
+                    RealButton.TextCommand = NextButton.TextCommand;
+                }
+                RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[^1];
+                RealButton.Text = Name;
+                RealButton.TextCommand = Command;
+            }
+            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
+                $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
+        }
+        #endregion
 
         /// <summary>
         /// Функция обновления визуальной информации в данном окне 100
@@ -931,7 +971,7 @@ namespace AAC20.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualDataRunTime()
         {
-            TextBlockLanguage.Text = System.Windows.Forms.InputLanguage.CurrentInputLanguage.LayoutName;
+            TextBlockLanguage.Text = System.Windows.Forms.InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
             //byte rgbValue = (byte)(2.55d * Volume);
@@ -1044,7 +1084,7 @@ namespace AAC20.UI.Windows
         /// </summary>
         /// <returns>Регулярное выражение</returns>
         // Текст который является %#00FF00FF__%**регистрационным**__ и %#FFFFFF**может** %~~даже так~~ %--постоянно-- %__форматироваться__
-        [GeneratedRegex(@"([^%{2}]+|(\%(#[0-9A-F]{6})?)(\*{2}[^(\*{2})]+\*{2}|_{2}[^(_{2})]+_{2}|\/{2}[^(\/{2})]+\/{2})|\%)")]
+        [GeneratedRegex(@"([^%]+|(\%(#[0-9A-F]{6})?)(\*{2}[^\*]+\*{2}|_{2}[^_]+_{2}|\/{2}[^\/]+\/{2})|\%)")]
         private static partial Regex RegexFormattedText();
 
         /// <summary>
