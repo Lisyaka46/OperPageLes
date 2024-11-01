@@ -59,10 +59,37 @@ namespace AAC20.UI.Dialogs
         /// Создать ярлык с помощью диалогового окна
         /// </summary>
         /// <returns>Созданный объект ярлыка</returns>
-        internal LabelAction? CreateLabel()
+        internal LabelAction CreateLabel()
         {
+            Title = "Создание ярлыка";
+            IELButtonCreateLabel.Text = "Создать ярлык";
             ShowDialog();
-            if (Cancel) return null;
+            if (Cancel) return LabelAction.Empty;
+            return new(
+                IELTextBoxNameLabel.Text,
+                IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty,
+                IELTextBoxCommand.Text);
+        }
+
+        /// <summary>
+        /// Изменить ярлык с помощью диалогового окна
+        /// </summary>
+        /// <param name="Source">Изменяемый объект ярлыка</param>
+        /// <returns>Изменённый объект ярлыка</returns>
+        internal LabelAction ChangeLabel(LabelAction Source)
+        {
+            IELTextBoxNameLabel.Text = Source.Name;
+            IELTextBoxDescription.Text = Source.Description ?? string.Empty;
+            IELTextBoxCommand.Text = Source.Command;
+            IELButtonCreateLabel.Text = "Изменить ярлык";
+            Title = "Изменение ярлыка";
+            ShowDialog();
+            if (Cancel ||
+                (
+                    IELTextBoxNameLabel.Text.Equals(Source.Name) &&
+                    IELTextBoxDescription.Text.Equals(Source.Description) &&
+                    IELTextBoxCommand.Text.Equals(Source.Command)
+                )) return Source;
             return new(
                 IELTextBoxNameLabel.Text,
                 IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty,
