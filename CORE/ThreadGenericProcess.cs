@@ -12,7 +12,7 @@ namespace AAC20.CORE
         /// <summary>
         /// Поток обновляемый данные
         /// </summary>
-        private Thread? ThreadInternetCheckConnection;
+        private Thread? ThreadUpdating;
 
         /// <summary>
         /// Флаг подключённый к потоку данных
@@ -34,10 +34,14 @@ namespace AAC20.CORE
         /// </summary>
         private readonly Action ThreadAction;
 
-        //
+        /// <summary>
+        /// Цикличный поток или нет
+        /// </summary>
         private readonly bool While;
 
-        //
+        /// <summary>
+        /// Количество миллисекунд ожидания
+        /// </summary>
         private readonly int MillisecondSleep;
 
         /// <summary>
@@ -75,7 +79,7 @@ namespace AAC20.CORE
             if (ParamManageThread) return;
             if (While)
             {
-                ThreadInternetCheckConnection = new(delegate ()
+                ThreadUpdating = new(delegate ()
                 {
                     while (ParamManageThread)
                     {
@@ -86,14 +90,14 @@ namespace AAC20.CORE
             }
             else
             {
-                ThreadInternetCheckConnection = new(delegate ()
+                ThreadUpdating = new(delegate ()
                 {
                     ThreadAction.Invoke();
                 });
             }
             ParamManageThread = true;
             FlagElement.Value = true;
-            ThreadInternetCheckConnection.Start();
+            ThreadUpdating.Start();
         }
 
         /// <summary>
@@ -103,7 +107,7 @@ namespace AAC20.CORE
         {
             ParamManageThread = false;
             FlagElement.Value = false;
-            ThreadInternetCheckConnection?.Join();
+            ThreadUpdating?.Join();
         }
     }
 }
