@@ -382,7 +382,7 @@ namespace AAC20.Windows.Pages.Other
             GridDinamicLabels.Children.Add(Label);
             Grid.SetColumn(Label, (ObjectsLabel.Count - 1) % GridDinamicLabels.ColumnDefinitions.Count);
 
-            TextBlockCount.Text = $"{CountLabel} Ярлыков";
+            TextBlockCount.Text = $"ярлыков: {CountLabel}";
             DoubleAnimateObj.To = 1d;
             Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
             ScrollBar.MaxUp(1);
@@ -396,10 +396,12 @@ namespace AAC20.Windows.Pages.Other
         {
             GridDinamicLabels.Children.RemoveAt(Index);
             ObjectsLabel.RemoveAt(Index);
+            ScrollBar.MaxDown(1);
             IELLabelCommand Element;
             ThicknessAnimation animation = ThicknessAnimate.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(70d);
             animation.BeginTime = TimeSpan.Zero;
+            TextBlockCount.Text = $"ярлыков: {CountLabel}";
             for (int i = Index; i < GridDinamicLabels.Children.Count; i++)
             {
                 int ColumnIndex = i % GridDinamicLabels.ColumnDefinitions.Count;
@@ -407,7 +409,7 @@ namespace AAC20.Windows.Pages.Other
                 Element.Index--;
                 if (ColumnIndex == GridDinamicLabels.ColumnDefinitions.Count - 1)
                 {
-                    animation.BeginTime += TimeSpan.FromMilliseconds(50d);
+                    animation.BeginTime += TimeSpan.FromMilliseconds(10d);
                     animation.To =
                         new(0, Element.Margin.Top - (WidthHeightLabel + BorderDinamicLabels.Padding.Top), 0, 0);
                     Element.BeginAnimation(MarginProperty, animation);
