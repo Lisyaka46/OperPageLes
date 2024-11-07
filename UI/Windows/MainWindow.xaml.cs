@@ -173,11 +173,6 @@ namespace AAC20.UI.Windows
         /// </summary>
         private const int HeightHintElement = 20;
 
-        /// <summary>
-        /// Состояние нажатия кнопки Shift при введении команды
-        /// </summary>
-        private bool ShiftDowningCommandTextInput = false;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -265,10 +260,8 @@ namespace AAC20.UI.Windows
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $"Страница %#FF0000**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
+                            $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
                     Page.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
-                    //CounterScrollBar g = Pages.PageObjLabelsAction.ScrollBar;
-                    //Test.Text = $"Value:{g.Value} Max:{g.MaxValue}";
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -281,7 +274,7 @@ namespace AAC20.UI.Windows
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $"Страница %#FF0000**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
+                            $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
                     LabelAction label = new WindowGenLabel().CreateLabel();
                     if (label != LabelAction.Empty) Page.AddLabel(label);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -322,7 +315,7 @@ namespace AAC20.UI.Windows
                     }
                     catch
                     {
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку \"{param[0]}\""));
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**"));
                     }
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
@@ -620,6 +613,7 @@ namespace AAC20.UI.Windows
                             if (TextBoxCommandInput.Text[^1] == '*')
                             {
                                 UsingAnimateBorderHintCommand(false);
+                                UsingAnimateBorderCollectionHintCommand(true);
                             }
                         }
                         return;
@@ -639,10 +633,25 @@ namespace AAC20.UI.Windows
                             new ColorAnimation(Color.FromRgb(255, 122, 84), TimeSpan.FromMilliseconds(90d)));
                         UsingAnimateBorderCollectionHintCommand(false);
                         break;
-                    case Key.LeftShift:
-                    case Key.RightShift:
-                        ShiftDowningCommandTextInput = true;
+                }
+            };
+            TextBoxCommandInput.TextChanged += (sender, e) =>
+            {
+                if (TextBoxCommandInput.Text.Length > 0)
+                {
+                    if (TextBoxCommandInput.Text[^1] == '*')
+                    {
+                        if (GridHint.Children.Count > 0)
+                        {
+                            if (((TextBlock)GridHint.Children[0]).Text.Equals(TextBoxCommandInput.Text[..^1]))
+                            {
+                                UsingAnimateBorderHintCommand(true);
+                                return;
+                            }
+                        }
+                        UsingAnimateBorderCollectionHintCommand(false);
                         return;
+                    }
                 }
             };
             TextBoxCommandInput.KeyUp += (sender, e) =>
@@ -658,25 +667,12 @@ namespace AAC20.UI.Windows
                     case Key.Apps:
                         IELActionPanelMain.UsingPanelAction(SettingsMain);
                         break;
-                    case Key.LeftShift:
-                    case Key.RightShift:
-                        ShiftDowningCommandTextInput = false;
-                        return;
                 }
                 TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
                 
                 DoubleAnimation animation = DoubleAnimateObj.Clone();
                 animation.Duration = TimeSpan.FromMilliseconds(300d);
-                if (TextBoxCommandInput.Text.Length > 0)
-                {
-                    if (ShiftDowningCommandTextInput && e.Key == Key.D8)
-                    {
-                        if (GridHint.Children.Count == 1) UsingAnimateBorderHintCommand(true);
-                        else UsingAnimateBorderCollectionHintCommand(false);
-                        return;
-                    }
-                }
                 if (!TextBoxCommandInput.Text.Contains('*')) UsingAnimateBorderCollectionHintCommand(TextBoxCommandInput.Text.Length > 0);
             };
 
@@ -835,20 +831,24 @@ namespace AAC20.UI.Windows
         {
             DoubleAnimation animation = DoubleAnimateObj.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(300d);
-            GridHint.Children.Clear();
             if (Activate)
             {
                 AllHintNames = [.. EnumerateNameCommand.Where((i) => { return i.Contains(TextBoxCommandInput.Text, StringComparison.CurrentCultureIgnoreCase); })];
                 if (AllHintNames.Length == GridHint.Children.Count) return;
-                Sorting.SortNames(ref AllHintNames);
-                foreach (string Name in AllHintNames)
+                GridHint.Children.Clear();
+                if (AllHintNames.Length > 0)
                 {
-                    TextBlock block = CreateHintBlock(Name, GridHint.Children.Count);
-                    GridHint.Children.Add(block);
+                    Sorting.SortNames(ref AllHintNames);
+                    foreach (string Name in AllHintNames)
+                    {
+                        TextBlock block = CreateHintBlock(Name, GridHint.Children.Count);
+                        GridHint.Children.Add(block);
+                    }
                 }
             }
+            else GridHint.Children.Clear();
             if (Canvas.GetZIndex(GridHintCommandParameter) == 1 && !Activate) UsingAnimateBorderHintCommand(false);
-            animation.To = Activate ? GridHint.Children.Count * HeightHintElement : 0d;
+            animation.To = Activate && GridHint.Children.Count > 0 ? GridHint.Children.Count * HeightHintElement : 0d;
             BorderHintCommand.BeginAnimation(HeightProperty, animation);
         }
 
@@ -1100,8 +1100,7 @@ namespace AAC20.UI.Windows
             Button.OnActivateMouseLeft += () =>
             {
                 IELActionPanelMain.ClosePanelAction();
-                SummarizeCommandStateResult(
-                    ICommandAAC.ReadAndExecuteCommand(null, [.. App.DataConsoleCommand], Pages.PageBufferActPanel.BufferCommand[Button.Index]));
+                ActivateActionCommand(Pages.PageBufferActPanel.BufferCommand[Button.Index]);
             };
             Button.OnActivateMouseRight += () =>
             {
