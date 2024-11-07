@@ -388,7 +388,10 @@ namespace AAC20.Windows.Pages.Other
             ScrollBar.MaxUp(1);
         }
 
-        //
+        /// <summary>
+        /// Удалить ярлык по индексу
+        /// </summary>
+        /// <param name="Index">индекс удаляемого ярлыка</param>
         private void RemoveLabelAt(int Index)
         {
             GridDinamicLabels.Children.RemoveAt(Index);

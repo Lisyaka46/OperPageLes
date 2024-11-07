@@ -161,7 +161,7 @@ namespace AAC20.UI.Windows
         /// <summary>
         /// Массив всех отсортированных имён команд
         /// </summary>
-        private string[]? AllHintNames;
+        private string[] AllHintNames;
 
         /// <summary>
         /// Динамический массив всех имён команд
@@ -172,6 +172,11 @@ namespace AAC20.UI.Windows
         /// Константа высоты элемента подсказки к командам
         /// </summary>
         private const int HeightHintElement = 20;
+
+        /// <summary>
+        /// Состояние нажатия кнопки Shift при введении команды
+        /// </summary>
+        private bool ShiftDowningCommandTextInput = false;
 
         public MainWindow()
         {
@@ -525,11 +530,14 @@ namespace AAC20.UI.Windows
             #endregion
 
             #region SetParameteres
+            AllHintNames = [];
             TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
             BrowserPageColumn.MaxWidth = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             BorderHintCommand.Height = 0d;
+            GridHintCommandParameter.Opacity = 0d;
+            Canvas.SetZIndex(GridHintCommandParameter, -1);
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(270d, 230d));
 
@@ -602,6 +610,21 @@ namespace AAC20.UI.Windows
             UsingChangeStateFrameComponent();
             #endregion
 
+            TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Back:
+                        if (TextBoxCommandInput.Text.Length > 0)
+                        {
+                            if (TextBoxCommandInput.Text[^1] == '*')
+                            {
+                                UsingAnimateBorderHintCommand(false);
+                            }
+                        }
+                        return;
+                }
+            };
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
                 switch (e.Key)
@@ -609,11 +632,17 @@ namespace AAC20.UI.Windows
                     case Key.Enter:
                         TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(160, 245, 200), TimeSpan.FromMilliseconds(90d)));
+                        UsingAnimateBorderCollectionHintCommand(false);
                         break;
                     case Key.Escape:
                         TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(255, 122, 84), TimeSpan.FromMilliseconds(90d)));
+                        UsingAnimateBorderCollectionHintCommand(false);
                         break;
+                    case Key.LeftShift:
+                    case Key.RightShift:
+                        ShiftDowningCommandTextInput = true;
+                        return;
                 }
             };
             TextBoxCommandInput.KeyUp += (sender, e) =>
@@ -629,29 +658,26 @@ namespace AAC20.UI.Windows
                     case Key.Apps:
                         IELActionPanelMain.UsingPanelAction(SettingsMain);
                         break;
+                    case Key.LeftShift:
+                    case Key.RightShift:
+                        ShiftDowningCommandTextInput = false;
+                        return;
                 }
                 TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
                             new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
                 
                 DoubleAnimation animation = DoubleAnimateObj.Clone();
+                animation.Duration = TimeSpan.FromMilliseconds(300d);
                 if (TextBoxCommandInput.Text.Length > 0)
                 {
-                    AllHintNames = [.. EnumerateNameCommand.Where((i) => { return i.Contains(TextBoxCommandInput.Text, StringComparison.CurrentCultureIgnoreCase); })];
-                    Sorting.SortNames(ref AllHintNames);
-                    GridHint.Children.Clear();
-                    foreach (string Name in AllHintNames)
+                    if (ShiftDowningCommandTextInput && e.Key == Key.D8)
                     {
-                        TextBlock block = CreateHintBlock(Name, GridHint.Children.Count);
-                        GridHint.Children.Add(block);
+                        if (GridHint.Children.Count == 1) UsingAnimateBorderHintCommand(true);
+                        else UsingAnimateBorderCollectionHintCommand(false);
+                        return;
                     }
-                    animation.To = GridHint.Children.Count * HeightHintElement;
                 }
-                else
-                {
-                    animation.To = 0d;
-                }
-                animation.Duration = TimeSpan.FromMilliseconds(300d);
-                BorderHintCommand.BeginAnimation(HeightProperty, animation);
+                if (!TextBoxCommandInput.Text.Contains('*')) UsingAnimateBorderCollectionHintCommand(TextBoxCommandInput.Text.Length > 0);
             };
 
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
@@ -802,11 +828,70 @@ namespace AAC20.UI.Windows
         }
 
         /// <summary>
-        /// Со
+        /// Манипулировать анимацией борьера подсказок к командам через всю коллекцию
         /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="Index"></param>
-        /// <returns></returns>
+        /// <param name="Activate">Активировать или дизактивировать аинмацией</param>
+        private void UsingAnimateBorderCollectionHintCommand(bool Activate)
+        {
+            DoubleAnimation animation = DoubleAnimateObj.Clone();
+            animation.Duration = TimeSpan.FromMilliseconds(300d);
+            GridHint.Children.Clear();
+            if (Activate)
+            {
+                AllHintNames = [.. EnumerateNameCommand.Where((i) => { return i.Contains(TextBoxCommandInput.Text, StringComparison.CurrentCultureIgnoreCase); })];
+                if (AllHintNames.Length == GridHint.Children.Count) return;
+                Sorting.SortNames(ref AllHintNames);
+                foreach (string Name in AllHintNames)
+                {
+                    TextBlock block = CreateHintBlock(Name, GridHint.Children.Count);
+                    GridHint.Children.Add(block);
+                }
+            }
+            if (Canvas.GetZIndex(GridHintCommandParameter) == 1 && !Activate) UsingAnimateBorderHintCommand(false);
+            animation.To = Activate ? GridHint.Children.Count * HeightHintElement : 0d;
+            BorderHintCommand.BeginAnimation(HeightProperty, animation);
+        }
+
+        /// <summary>
+        /// Манипулировать анимацией борьера подсказок к командам
+        /// </summary>
+        /// <param name="Activate">Активировать или дизактивировать аинмацией</param>
+        /// <param name="CommandTextActualHint">Константный текст поиска команды</param>
+        private void UsingAnimateBorderHintCommand(bool Activate, string? CommandTextActualHint = null)
+        {
+            DoubleAnimation animation = DoubleAnimateObj.Clone();
+            animation.Duration = TimeSpan.FromMilliseconds(300d);
+            if (Activate)
+            {
+                ICommandAAC? CommandHint = null;
+                string TextCommand = CommandTextActualHint ?? ((TextBlock)GridHint.Children[0]).Text;
+                CommandHint ??= ICommandAAC.ReadCommand([.. App.DataConsoleCommand], TextCommand);
+                CommandHint ??= ICommandAAC.ReadCommand([.. App.CurrentApp.DataAliases], TextCommand);
+                if (CommandHint == null) return;
+                Parameter[] Parameters = CommandHint.Parameters ?? [];
+                TextBlockHintCommand.Text = $"{CommandHint.Name}* ";
+                for (int i = 0; i < Parameters.Length; i++)
+                {
+                    TextBlockHintCommand.Text += $"{Parameters[i].Name}" +
+                        $"{(Parameters[i].Absolutly ? string.Empty : '?')}" +
+                        $"{(i < Parameters.Length - 1 ? ", " : string.Empty)}";
+                }
+                animation.To = HeightHintElement;
+                BorderHintCommand.BeginAnimation(HeightProperty, animation);
+            }
+            animation.To = Activate ? 1d : 0d;
+            Canvas.SetZIndex(GridHintCommandParameter, Activate ? 1 : -1);
+            GridHintCommandParameter.BeginAnimation(OpacityProperty, animation);
+            animation.To = Activate ? 300d : 142d;
+            BorderHintCommand.BeginAnimation(WidthProperty, animation);
+        }
+
+        /// <summary>
+        /// Создать объект подсказки к команде
+        /// </summary>
+        /// <param name="Name">Имя команды</param>
+        /// <param name="Index">Индекс местоположения по оси Y</param>
+        /// <returns>Объект подсказки к команде</returns>
         private TextBlock CreateHintBlock(string Name, int Index)
         {
             ColorAnimation color_animation = ColorAnimate.Clone();
@@ -821,6 +906,7 @@ namespace AAC20.UI.Windows
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new(0, HeightHintElement * Index, 0, 0),
                 Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                Cursor = Cursors.Hand,
             };
             Result.MouseEnter += (sender, e) =>
             {
@@ -834,11 +920,8 @@ namespace AAC20.UI.Windows
             };
             Result.MouseLeftButtonUp += (sender, e) =>
             {
-                TextBoxCommandInput.Text = Result.Text;
-                DoubleAnimation animation = DoubleAnimateObj.Clone();
-                animation.To = 0d;
-                animation.Duration = TimeSpan.FromMilliseconds(300d);
-                BorderHintCommand.BeginAnimation(HeightProperty, animation);
+                TextBoxCommandInput.Text = $"{Result.Text}*";
+                UsingAnimateBorderHintCommand(true, Result.Text);
             };
             return Result;
         }

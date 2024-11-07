@@ -200,8 +200,13 @@
                     <Classes:BrushSettingQ Default="#FF79BF61" NotEnabled="#FFE0496C" Select="#FF93EC75" Used="#FFF2FFE8"/>
                 </GUI:IELButtonText.BackgroundSetting>
             </GUI:IELButtonText>
-            <Border x:Name="BorderHintCommand" BorderBrush="#B28FA065" BorderThickness="2,2,2,2" Grid.Row="1" Panel.ZIndex="0" Margin="3,0,0,37" Grid.RowSpan="3" CornerRadius="4,4,0,4" Height="70" VerticalAlignment="Bottom" Background="#FF8FA065">
-                <Grid x:Name="GridHint"/>
+            <Border x:Name="BorderHintCommand" BorderBrush="#B28FA065" BorderThickness="2,2,2,2" Grid.Row="1" Panel.ZIndex="0" Margin="3,0,0,37" Grid.RowSpan="3" CornerRadius="4,4,0,4" Height="70" VerticalAlignment="Bottom" Background="#FF8FA065" Width="142" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+                <Grid>
+                    <Grid x:Name="GridHint"/>
+                    <Grid x:Name="GridHintCommandParameter" Background="#FF47C16F" Panel.ZIndex="1">
+                        <TextBlock x:Name="TextBlockHintCommand" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Close" VerticalAlignment="Top" Margin="2,0,0,0"/>
+                    </Grid>
+                </Grid>
             </Border>
         </Grid>
         <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6" FontFamily="Trebuchet MS"/>
