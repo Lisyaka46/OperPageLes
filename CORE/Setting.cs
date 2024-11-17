@@ -88,6 +88,21 @@ namespace AAC20.CORE
         }
 
         /// <summary>
+        /// Обновить файл настроек текущими значениями
+        /// </summary>
+        /// <param name="PathFileSetting">Директория файла настроек</param>
+        internal void UpdateFileSetting(string PathFileSetting)
+        {
+            string[] ArrayNameValueSetting = Enum.GetNames(TypeEnumerator);
+            List<string> NewLines = [];
+            for (int i = 0; i < ArrayNameValueSetting.Length; i++)
+            {
+                NewLines.Add($"{ArrayNameValueSetting[i]}:{DataPropetry[i]}");
+            }
+            File.WriteAllLines(PathFileSetting, NewLines);
+        }
+
+        /// <summary>
         /// Узнать значение параметра по его имени
         /// </summary>
         /// <param name="Parameter">Индексированное имя параметра</param>

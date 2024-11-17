@@ -53,7 +53,7 @@
                             <ColumnDefinition Width="55"/>
                         </Grid.ColumnDefinitions>
 
-                        <GUI:IELImageButton x:Name="IELButtonSettings" Imaging="/UI/Images/Settings.png" Grid.ColumnSpan="1" Grid.Column="2" ImageMargin="2,2,2,2" Margin="3,0,0,0" AnimationMillisecond="140">
+                        <GUI:IELImageButton x:Name="IELButtonSettings" Imaging="/UI/Images/Settings.png" Grid.ColumnSpan="1" Grid.Column="2" ImageMargin="2,2,2,2" AnimationMillisecond="140" Margin="3,1,0,1" BorderThicknessBlock="2,2,2,2">
                             <GUI:IELImageButton.ForegroundSetting>
                                 <Classes:BrushSettingQ Default="#FF1F262F" NotEnabled="#FF5F1717" Select="#FF232F31" Used="#FF093831"/>
                             </GUI:IELImageButton.ForegroundSetting>
@@ -64,7 +64,7 @@
                                 <Classes:BrushSettingQ Default="#FF50A79D" Select="#FF46C5B6" NotEnabled="#FFC13750" Used="White"/>
                             </GUI:IELImageButton.BackgroundSetting>
                         </GUI:IELImageButton>
-                        <GUI:IELButtonText x:Name="IELButtonLabel" RenderTransformOrigin="0,0" Text="Ярлыки" FontWeight="Bold" FontFamily="Trebuchet MS" Margin="0,0,3,0" AnimationMillisecond="140" VisibleMouseImaging="False" BorderThicknessBlock="3,3,3,3">
+                        <GUI:IELButtonText x:Name="IELButtonLabel" RenderTransformOrigin="0,0" Text="Ярлыки" FontWeight="Bold" FontFamily="Trebuchet MS" Margin="3,1,3,1" AnimationMillisecond="140" VisibleMouseImaging="False" BorderThicknessBlock="2,2,2,2">
                             <GUI:IELButtonText.ForegroundSetting>
                                 <Classes:BrushSettingQ Default="#FF1F262F" NotEnabled="#FF5F1717" Select="#FF232F31" Used="#FF093831"/>
                             </GUI:IELButtonText.ForegroundSetting>
@@ -76,7 +76,7 @@
                             </GUI:IELButtonText.BackgroundSetting>
                         </GUI:IELButtonText>
                     </Grid>
-                    <GUI:IELImageButton x:Name="ImageLogoApplication" Margin="3,3,3,3" Imaging="/UI/Images/Logo02.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThicknessBlock="0.1,0.1,0.1,0.1">
+                    <GUI:IELImageButton x:Name="ImageLogoApplication" Imaging="/UI/Images/Logo02.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThickness="0.1,0.1,0.1,0.1">
                         <GUI:IELImageButton.BorderBrushSetting>
                             <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
                         </GUI:IELImageButton.BorderBrushSetting>
@@ -92,7 +92,7 @@
                     <ColumnDefinition Width="45*"/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Margin="9,7,9,7" Grid.Column="1"/>
-                <GUI:IELButtonText x:Name="ButtonReturnCommand" FontFamily="Trebuchet MS" Text="Выполнить" Margin="2,4,2,5" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160">
+                <GUI:IELButtonText x:Name="ButtonReturnCommand" FontFamily="Trebuchet MS" Text="Выполнить" Margin="2,4,2,5" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160" BorderThicknessBlock="3,3,3,3">
                     <GUI:IELButtonText.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF55C7A5" NotEnabled="#FFCE4867" Select="#FF47F9C4" Used="White"/>
                     </GUI:IELButtonText.BackgroundSetting>
@@ -152,7 +152,7 @@
                                 </Image.RenderTransform>
                             </Image>
                         </Border>
-                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="5" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="100,100,100,100" Imaging="/UI/Images/Arrow.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="1000">
+                        <GUI:IELImageButton x:Name="IELButtonBrowserPageVisible" Grid.Column="5" Margin="3,3,3,3" CornerRadius="100,100,100,100" Imaging="/UI/Images/Arrow.png" RenderTransformOrigin="0.5,0.5" AnimationMillisecond="140" IntervalHover="1000" BorderThicknessBlock="2,2,2,2">
                             <GUI:IELImageButton.BorderBrushSetting>
                                 <Classes:BrushSettingQ Default="Black" NotEnabled="#FF400817" Select="#FF151729" Used="#FF173128"/>
                             </GUI:IELImageButton.BorderBrushSetting>
@@ -174,7 +174,7 @@
                                 </TextBlock.Effect>
                             </TextBlock>
                         </Border>
-                        <GUI:IELImageButton x:Name="IELImageButtonHelp" Grid.Column="3" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Imaging="/UI/Images/LightBulb.png" ImageMargin="1,1,1,1">
+                        <GUI:IELImageButton x:Name="IELImageButtonHelp" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Imaging="/UI/Images/LightBulb.png" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2">
                             <GUI:IELImageButton.BorderBrushSetting>
                                 <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
                             </GUI:IELImageButton.BorderBrushSetting>
@@ -192,7 +192,7 @@
                 </Border>
             </Grid>
             <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="3" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="2" ForgroundNaming="#FF11FF81" Panel.ZIndex="1" Text=""/>
-            <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" CornerRadius="10,10,10,10" Margin="8,2,7,3" Grid.Column="2" FontWeight="Bold" FontFamily="Trebuchet MS" VisibleMouseImaging="False">
+            <GUI:IELButtonText x:Name="ButtonReboot" Text="Перезапустить" CornerRadius="10,10,10,10" Margin="8,2,7,3" Grid.Column="2" FontWeight="Bold" FontFamily="Trebuchet MS" VisibleMouseImaging="False" BorderThicknessBlock="3,3,3,3">
                 <GUI:IELButtonText.BorderBrushSetting>
                     <Classes:BrushSettingQ Default="#FF103823" NotEnabled="#FF502727" Select="#FF2D3C21" Used="#FF2F2D2D"/>
                 </GUI:IELButtonText.BorderBrushSetting>
@@ -200,10 +200,22 @@
                     <Classes:BrushSettingQ Default="#FF79BF61" NotEnabled="#FFE0496C" Select="#FF93EC75" Used="#FFF2FFE8"/>
                 </GUI:IELButtonText.BackgroundSetting>
             </GUI:IELButtonText>
-            <Border x:Name="BorderHintCommand" BorderBrush="#B28FA065" BorderThickness="2,2,2,2" Grid.Row="1" Panel.ZIndex="0" Margin="3,0,0,37" Grid.RowSpan="3" CornerRadius="4,4,0,4" Height="70" VerticalAlignment="Bottom" Background="#FF8FA065" Width="142" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+            <Border x:Name="BorderHintCommand" BorderThickness="2,2,2,2" Grid.Row="1" Panel.ZIndex="0" Margin="3,0,0,37" Grid.RowSpan="3" CornerRadius="4,4,0,4" Height="70" VerticalAlignment="Bottom" Width="142" Grid.ColumnSpan="2" HorizontalAlignment="Left" Padding="0,5,0,0">
+                <Border.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#008FA260" Offset="0.06"/>
+                        <GradientStop Color="#FF8FA065" Offset="0.15"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#008FA260" Offset="0.03"/>
+                        <GradientStop Color="#FF8FA065" Offset="0.15"/>
+                    </LinearGradientBrush>
+                </Border.Background>
                 <Grid>
                     <Grid x:Name="GridHint"/>
-                    <Grid x:Name="GridHintCommandParameter" Background="#FF47C16F" Panel.ZIndex="1">
+                    <Grid x:Name="GridHintCommandParameter" Panel.ZIndex="1" Margin="2,2,2,2">
                         <TextBlock x:Name="TextBlockHintCommand" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Close" VerticalAlignment="Top" Margin="2,0,0,0"/>
                     </Grid>
                 </Grid>

@@ -64,12 +64,12 @@
                 <RowDefinition Height="26*"/>
                 <RowDefinition Height="26*"/>
             </Grid.RowDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="40,6,40,6" BorderThicknessBlock="2,2,2,2" Text="Создать ярлык" FontFamily="Bahnschrift" AnimationMillisecond="140">
+            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="40,6,40,6" BorderThickness="2,2,2,2" Text="Создать ярлык" FontFamily="Bahnschrift" AnimationMillisecond="140">
                 <IEL:IELButtonText.BackgroundSetting>
                     <Classes:BrushSettingQ Default="#FF61A6C3" Select="#FF54C38E" Used="#FF9CF9D5" NotEnabled="#FFE44242"/>
                 </IEL:IELButtonText.BackgroundSetting>
             </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="40,6,40,6" BorderThicknessBlock="2,2,2,2" Text="Отмена" FontFamily="Bahnschrift" Grid.Row="1" AnimationMillisecond="140">
+            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="40,6,40,6" BorderThickness="4,2,2,2" Text="Отмена" FontFamily="Bahnschrift" Grid.Row="1" AnimationMillisecond="140">
                 <IEL:IELButtonText.BackgroundSetting>
                     <Classes:BrushSettingQ Default="#FF61A6C3" Select="#FFDE587D" Used="#FFF99CB1" NotEnabled="#FFE44242"/>
                 </IEL:IELButtonText.BackgroundSetting>

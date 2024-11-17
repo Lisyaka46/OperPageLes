@@ -78,7 +78,8 @@ namespace AAC20.Windows.Pages.ActionPanel
         public PageBufferActionPanel(int HeightButtonCommand)
         {
             InitializeComponent();
-            int BufferLength = 50;
+            string StringSizeBuffer = App.CurrentApp.SettingApplication.GetSettingValue(CORE.Settings.EnumSettingApplication.BufferSize);
+            int BufferLength = Convert.ToInt32(StringSizeBuffer);
             BufferCommand = new(BufferLength);
             H = HeightButtonCommand;
             ScrollBar = new(3);
@@ -158,5 +159,69 @@ namespace AAC20.Windows.Pages.ActionPanel
                 ScrollBar.MaxClear();
             };
         }
+
+        #region ManipulateBuffer
+        /// <summary>
+        /// Создать кнопку активации команды
+        /// </summary>
+        /// <param name="Name">Отображаемое имя</param>
+        /// <param name="Command">Выполняющаяся команда</param>
+        /// <returns>Кнопка выполняющая команду</returns>
+        private IELButtonCommand CreateBufferButton(string Name, string Command)
+        {
+            IELButtonCommand Button = new(Name, Command, BufferCommand.Count)
+            {
+                Height = H,
+                Margin = new(0, (H + 2) * BufferCommand.Count, 0, 0),
+                Index = BufferCommand.Count,
+            };
+            Button.OnActivateMouseLeft += () =>
+            {
+                App.MainWindowApplication.ActivateActionCommand(App.CurrentApp.PageBufferActPanel.BufferCommand[Button.Index]);
+            };
+            Button.OnActivateMouseRight += () =>
+            {
+                BufferCommand.Delete(Button.Index);
+                TextBlockCounterBuffer.Text =
+                    $"{BufferCommand.Count}/{BufferCommand.Length}";
+                if (BufferCommand.Count == 0) IELButtonClearBuffer.IsEnabled = false;
+            };
+            return Button;
+        }
+
+        /// <summary>
+        /// Добавить команду в буфер
+        /// </summary>
+        /// <param name="Name">Имя команды</param>
+        /// <param name="Command">Строка команды</param>
+        internal void InsertCommandFromBuffer(string Name, string Command)
+        {
+            IELButtonClearBuffer.IsEnabled = true;
+            if (BufferCommand.Count < BufferCommand.Length)
+            {
+                IELButtonCommand Button = CreateBufferButton(Name, Command);
+                BufferCommand.Add(Command);
+                GridBuffer.Children.Add(Button);
+                ScrollBar.MaxUp(1);
+            }
+            else
+            {
+                BufferCommand.Add(Command);
+                IELButtonCommand RealButton;
+                for (int i = 0; i < GridBuffer.Children.Count - 1; i++)
+                {
+                    RealButton = (IELButtonCommand)GridBuffer.Children[i];
+                    IELButtonCommand NextButton = (IELButtonCommand)GridBuffer.Children[i + 1];
+                    RealButton.Text = NextButton.Text;
+                    RealButton.TextCommand = NextButton.TextCommand;
+                }
+                RealButton = (IELButtonCommand)GridBuffer.Children[^1];
+                RealButton.Text = Name;
+                RealButton.TextCommand = Command;
+            }
+            TextBlockCounterBuffer.Text =
+                $"{BufferCommand.Count}/{BufferCommand.Length}";
+        }
+        #endregion
     }
 }

@@ -15,5 +15,10 @@ namespace AAC20.CORE.Settings
         /// Ссылка на директорию изображения главного меню
         /// </summary>
         PathMenuImage = 0,
+
+        /// <summary>
+        /// Размер буфера команд
+        /// </summary>
+        BufferSize = 1,
     }
 }

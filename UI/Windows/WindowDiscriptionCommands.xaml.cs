@@ -355,6 +355,7 @@ namespace AAC20.Windows
                 Height = HeightElement,
                 VisibleMouseImaging = false,
                 FontSize = 13d,
+                BorderThicknessBlock = new(2),
             };
             Binding binding = new()
             {

@@ -73,11 +73,6 @@ namespace AAC20.UI.Windows
             /// </summary>
             internal static readonly PageMainActionPanel PageMainActPanel = new();
 
-            /// <summary>
-            /// Страница буфера в панели действий
-            /// </summary>
-            internal static readonly PageBufferActionPanel PageBufferActPanel = new(H);
-
             #if DEBUG
             /// <summary>
             /// Страница разработчика
@@ -138,12 +133,6 @@ namespace AAC20.UI.Windows
             EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
         };
 
-        /// <summary>
-        /// Константа размера Height для кнопок буфера
-        /// </summary>
-        [NotNull()]
-        const int H = 41;
-
         private readonly SettingsPanelActionFrameworkElement SettingsMain;
 
         //private MMDeviceEnumerator Device = new();
@@ -164,22 +153,22 @@ namespace AAC20.UI.Windows
         private string[] AllHintNames;
 
         /// <summary>
-        /// Динамический массив всех имён команд
-        /// </summary>
-        private readonly List<string> EnumerateNameCommand = [];
-
-        /// <summary>
         /// Константа высоты элемента подсказки к командам
         /// </summary>
         private const int HeightHintElement = 20;
+
+        /// <summary>
+        /// Строка вывода перед сообщением
+        /// </summary>
+        public const string ConsolePreMessage = "%**>>>**"; 
 
         public MainWindow()
         {
             InitializeComponent();
 
             #region Command
+            #if DEBUG
             App.DataConsoleCommand.AddRange([
-                #if DEBUG
                 #region anim
                 new ConsoleCommand("anim", [new Parameter("Value", typeof(bool))],
                 "Отключает или включает анимацию у окна ярлыков",
@@ -188,7 +177,7 @@ namespace AAC20.UI.Windows
                     PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (Page == null)
                         return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $">>> Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
+                            $"Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
                     if ((bool)param[0]) Page.AnimationLoadingStart();
                     else Page.AnimationLoadingStop();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -207,275 +196,20 @@ namespace AAC20.UI.Windows
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
-                #endif
-
-                #region clear
-                new ConsoleCommand("clear",
-                "Очищает текстовый вывод главного меню программы",
-                (Command, param) =>
-                {
-                    RichTextBoxMainMessage.Document = new();
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region print
-                new ConsoleCommand("print", [new Parameter("Text", typeof(string))],
-                "Выводит введённый параметр \"Text\" в консоль главного меню программы, игнорируя другие параметры",
-                (Command, param) =>
-                {
-                    AddTextInConsole((string)param[0]);
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region buffer
-                new ConsoleCommand("buffer",
-                "Отображает содержание буфера команд в консоль главного меню программы",
-                (Command, param) =>
-                {
-                    AddTextInConsole($"%//{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}://" +
-                        $"%**[**{string.Join(',', Pages.PageBufferActPanel.BufferCommand.BufferElements.Where((i) =>
-                        {
-                            if (i != null)
-                            {
-                                return i.Length > 0;
-                            }
-                            return false;
-                        }))}%**]**");
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region label
-                new ConsoleCommand("label",
-                [
-                    new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
-                    new Parameter("Description", typeof(string), string.Empty)
-                ],
-                "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n" +
-                "- Ярлык создастся только если открыта страница ярлыков в браузере",
-                (Command, param) =>
-                {
-                    PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
-                    if (Page == null)
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
-                    Page.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region create_label
-                new ConsoleCommand("create_label", "Открывает окно создания ярлыка\n" +
-                "- Ярлык создастся только если открыта страница ярлыков в браузере",
-                (Command, param) =>
-                {
-                    PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
-                    if (Page == null)
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
-                    LabelAction label = new WindowGenLabel().CreateLabel();
-                    if (label != LabelAction.Empty) Page.AddLabel(label);
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region open_link
-                new ConsoleCommand("open_link", [new Parameter("Link", typeof(string))],
-                "Открывает в браузере заданную ссылку \"Link\"",
-                (Command, param) =>
-                {
-                    try
-                    {
-                        string uri = (string)param[0];
-                        Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
-                        Paragraph Message = new();
-                        Run RuningText = new($"\"{param[0]}\"")
-                        {
-                            Background = new SolidColorBrush(Colors.Green),
-                            Cursor = Cursors.Hand,
-                        };
-                        RuningText.MouseEnter += (sender, e) =>
-                        {
-                            ColorAnimate.To = Color.FromRgb(53, 161, 175);
-                            RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                        };
-                        RuningText.MouseLeave += (sender, e) =>
-                        {
-                            IELMessageMain.CloseBorderInformation();
-                            ColorAnimate.To = Colors.Green;
-                            RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                        };
-                        RuningText.MouseLeftButtonUp += (sender, e) =>
-                            Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
-                        Message.Inlines.Add(new Bold(new Run(">>> Открытие ссылки ")));
-                        Message.Inlines.Add(RuningText);
-                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
-                    }
-                    catch
-                    {
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**"));
-                    }
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region open_directory
-                new ConsoleCommand("open_directory", [new Parameter("Directory", typeof(string), string.Empty)],
-                "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника\n" +
-                "- Вписав \"*\" в параметры, откроет гравную директорию процесса приложения",
-                (Command, param) =>
-                {
-                    Paragraph Message = new();
-                    Run RuningText = new()
-                    {
-                        Background = new SolidColorBrush(Colors.Green),
-                        Cursor = Cursors.Hand,
-                    };
-                    Message.Inlines.Add(new Bold(new Run(">>> Открытие директории ")));
-                    switch ((string)param[0])
-                    {
-                        case "":
-                            RuningText.Text = "\"MAIN\"";
-                            RuningText.MouseLeftButtonUp += (sender, e) => Process.Start("explorer.exe");
-                            Process.Start("explorer.exe");
-                            break;
-                        case "*":
-                            RuningText.Text = "\"APPLICATION MAIN\"";
-                            RuningText.MouseLeftButtonUp += (sender, e) => Process.Start("explorer.exe", Directory.GetCurrentDirectory());
-                            Process.Start("explorer.exe", Directory.GetCurrentDirectory());
-                            break;
-                        default:
-                            if (Directory.Exists((string)param[0]))
-                            {
-                                string Path = (string)param[0];
-                                RuningText.Text = Path.Length >= 20 ? $"..\"{Path[(Path.Length - 20)..]}\"" : $"\"{Path}\"";
-                                RuningText.MouseLeftButtonUp += (sender, e) => Process.Start("explorer.exe", (string)param[0]);
-                                Process.Start("explorer.exe", (string)param[0]);
-                                break;
-                            }
-                            return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Директория \"{param[0]}\" не распознана"));
-                    }
-                    RuningText.MouseEnter += (sender, e) =>
-                    {
-                        ColorAnimate.To = Color.FromRgb(53, 161, 175);
-                        RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                    };
-                    RuningText.MouseLeave += (sender, e) =>
-                    {
-                        IELMessageMain.CloseBorderInformation();
-                        ColorAnimate.To = Colors.Green;
-                        RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                    };
-                    Message.Inlines.Add(RuningText);
-                    RichTextBoxMainMessage.Document.Blocks.Add(Message);
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region open_file
-                new ConsoleCommand("open_file",
-                [
-                    new Parameter("File", typeof(string))
-                ],
-                "Открывает файл по его заданной директории",
-                (Command, param) =>
-                {
-                    string path = (string)param[0];
-                    Paragraph Message = new();
-                    if (File.Exists(path))
-                    {
-                        Message.Inlines.Add(new Bold(new Run(">>> Открытие файла ")));
-                        Run RuningText = new($"\"{Path.GetFileName(path)}\"")
-                        {
-                            Background = new SolidColorBrush(Colors.Green),
-                            Cursor = Cursors.Hand,
-                        };
-                        RuningText.MouseEnter += (sender, e) =>
-                        {
-                            ColorAnimate.To = Color.FromRgb(53, 161, 175);
-                            RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                        };
-                        RuningText.MouseLeave += (sender, e) =>
-                        {
-                            IELMessageMain.CloseBorderInformation();
-                            ColorAnimate.To = Colors.Green;
-                            RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                        };
-
-                        RuningText.MouseLeftButtonUp += (sender, e) => Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
-                        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
-
-                        Message.Inlines.Add(RuningText);
-                        RichTextBoxMainMessage.Document.Blocks.Add(Message);
-                        return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                    }
-                    else return Task.FromResult(
-                        CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
-                }),
-                #endregion
-
-                #region alias
-                new ConsoleCommand("alias", [new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
-                    new Parameter("Replace", typeof(bool), false)],
-                "Создаёт алиас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"\n" +
-                "- Если \"Replace\" true то при нахождении уже созданного алиаса с таким именем, у него будет изменена команда", (Main, param) =>
-                {
-                    string[] NameAliases = [.. App.CurrentApp.DataAliases.Select(i => i.Name)];
-                    Paragraph Message = new();
-                    Message.Inlines.Add(new Bold(new Run(">>> ")));
-                    string NameAlias = ((string)param[0]).ToLower();
-                    if (NameAliases.Contains(NameAlias) && !(bool)param[2])
-                    {
-                        return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                            $"Aлиас \"{NameAlias}\" невозможно создать, так как он уже создан\nДля переопределения введите третий параметр: true"));
-                    }
-                    Message.Inlines.Add(new Run("Алиас "));
-                    Run RuningText = new($"\"{NameAlias}\"")
-                    {
-                        Background = new SolidColorBrush(Colors.Green),
-                        Cursor = Cursors.Hand,
-                    };
-                    RuningText.MouseEnter += (sender, e) =>
-                    {
-                        ColorAnimate.To = Color.FromRgb(53, 161, 175);
-                        RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                    };
-                    RuningText.MouseLeave += (sender, e) =>
-                    {
-                        IELMessageMain.CloseBorderInformation();
-                        ColorAnimate.To = Colors.Green;
-                        RuningText.Background.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-                    };
-                    RuningText.MouseLeftButtonUp += (sender, e) => ActivateActionCommand(NameAlias);
-                    Message.Inlines.Add(RuningText);
-                    Message.Inlines.Add(new Run($" на команду \"{param[1]}\" успешно {((bool)param[2] ? "изменён" : "создан")}"));
-                    if (!(bool)param[2])
-                    {
-                        EnumerateNameCommand.Add(NameAlias);
-                        App.CurrentApp.DataAliases.Add(
-                            new(NameAlias, (string)param[1], [.. App.DataConsoleCommand]));
-                    }
-                    else
-                        App.CurrentApp.DataAliases[Array.IndexOf(NameAliases, NameAlias)].Command = (string)param[1];
-                    RichTextBoxMainMessage.Document.Blocks.Add(Message);
-                    return Task.FromResult(CommandStateResult.Completed(Main.Name));
-                }),
-                #endregion
             ]);
+            #endif
             #endregion
 
             #region Event Flags
             Flags.FlagInternetConnection.ChangeStateFlag += (NewValue) =>
             {
                 ImageInternetConnection.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
-                AnimateBlurEffect(BlurEffectImageInternetConnection, 10u);
+                App.AnimateBlurEffect(BlurEffectImageInternetConnection, 10u);
             };
             Flags.FlagRegisterState.ChangeStateFlag += (NewValue) =>
             {
                 TextBlockRegister.Text = NewValue ? "A" : "a";
-                AnimateBlurEffect(BlurEffectTextBlockRegister, 10u);
+                App.AnimateBlurEffect(BlurEffectTextBlockRegister, 10u);
                 if (IELMessageMain.FlagMessage && IELMessageMain.NameParentObject.Equals(BorderStateRegister.Name))
                     IELMessageMain.UsingBorderInformation(BorderStateRegister, BorderStateRegister.Name, Flags.FlagRegisterState ?
                         "Установлен большой регистр" : "Установлен малый регистр",
@@ -493,10 +227,10 @@ namespace AAC20.UI.Windows
 
             Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
             {
-                IELActionPanelMain.NextPage(Pages.PageBufferActPanel);
+                IELActionPanelMain.NextPage(App.CurrentApp.PageBufferActPanel);
             };
 
-            Pages.PageBufferActPanel.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
+            App.CurrentApp.PageBufferActPanel.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
             {
                 IELActionPanelMain.NextPage(Pages.PageMainActPanel, false);
             };
@@ -533,9 +267,6 @@ namespace AAC20.UI.Windows
             Canvas.SetZIndex(GridHintCommandParameter, -1);
             RichTextBoxMainMessage.Document = new();
             SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(270d, 230d));
-
-            EnumerateNameCommand.AddRange(App.DataConsoleCommand.Select((i) => i.Name));
-            EnumerateNameCommand.AddRange(App.CurrentApp.DataAliases.Select((i) => i.Name));
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
@@ -603,6 +334,7 @@ namespace AAC20.UI.Windows
             UsingChangeStateFrameComponent();
             #endregion
 
+            #region TextBoxCommandInput
             TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
             {
                 switch (e.Key)
@@ -643,7 +375,8 @@ namespace AAC20.UI.Windows
                     {
                         if (GridHint.Children.Count > 0)
                         {
-                            if (((TextBlock)GridHint.Children[0]).Text.Equals(TextBoxCommandInput.Text[..^1]))
+                            string CommandText = ICommandAAC.ReadNameCommand(TextBoxCommandInput.Text[..^1]);
+                            if (((TextBlock)GridHint.Children[0]).Text.Equals(CommandText))
                             {
                                 UsingAnimateBorderHintCommand(true);
                                 return;
@@ -675,6 +408,7 @@ namespace AAC20.UI.Windows
                 animation.Duration = TimeSpan.FromMilliseconds(300d);
                 if (!TextBoxCommandInput.Text.Contains('*')) UsingAnimateBorderCollectionHintCommand(TextBoxCommandInput.Text.Length > 0);
             };
+            #endregion
 
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
@@ -823,6 +557,7 @@ namespace AAC20.UI.Windows
             TextBoxCommandInput.Focus();
         }
 
+        #region HintCommandManipulate
         /// <summary>
         /// Манипулировать анимацией борьера подсказок к командам через всю коллекцию
         /// </summary>
@@ -833,7 +568,8 @@ namespace AAC20.UI.Windows
             animation.Duration = TimeSpan.FromMilliseconds(300d);
             if (Activate)
             {
-                AllHintNames = [.. EnumerateNameCommand.Where((i) => { return i.Contains(TextBoxCommandInput.Text, StringComparison.CurrentCultureIgnoreCase); })];
+                string CommandText = ICommandAAC.ReadNameCommand(TextBoxCommandInput.Text);
+                AllHintNames = [.. App.CurrentApp.AllNamesCommand.Where((i) => { return i.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase); })];
                 if (AllHintNames.Length == GridHint.Children.Count) return;
                 GridHint.Children.Clear();
                 if (AllHintNames.Length > 0)
@@ -848,7 +584,8 @@ namespace AAC20.UI.Windows
             }
             else GridHint.Children.Clear();
             if (Canvas.GetZIndex(GridHintCommandParameter) == 1 && !Activate) UsingAnimateBorderHintCommand(false);
-            animation.To = Activate && GridHint.Children.Count > 0 ? GridHint.Children.Count * HeightHintElement : 0d;
+            animation.To = Activate && GridHint.Children.Count > 0 ? 
+                GridHint.Children.Count * HeightHintElement + BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom : 0d;
             BorderHintCommand.BeginAnimation(HeightProperty, animation);
         }
 
@@ -876,12 +613,18 @@ namespace AAC20.UI.Windows
                         $"{(Parameters[i].Absolutly ? string.Empty : '?')}" +
                         $"{(i < Parameters.Length - 1 ? ", " : string.Empty)}";
                 }
-                animation.To = HeightHintElement;
+                animation.To = HeightHintElement + 
+                    BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom + 
+                    GridHintCommandParameter.Margin.Top + GridHintCommandParameter.Margin.Bottom;
                 BorderHintCommand.BeginAnimation(HeightProperty, animation);
             }
             animation.To = Activate ? 1d : 0d;
             Canvas.SetZIndex(GridHintCommandParameter, Activate ? 1 : -1);
             GridHintCommandParameter.BeginAnimation(OpacityProperty, animation);
+
+            animation.To = Activate ? 0d : 1d;
+            GridHint.BeginAnimation(OpacityProperty, animation);
+
             animation.To = Activate ? 300d : 142d;
             BorderHintCommand.BeginAnimation(WidthProperty, animation);
         }
@@ -905,18 +648,18 @@ namespace AAC20.UI.Windows
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new(0, HeightHintElement * Index, 0, 0),
-                Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
                 Cursor = Cursors.Hand,
             };
             Result.MouseEnter += (sender, e) =>
             {
-                color_animation.To = Color.FromArgb(100, 255, 255, 255);
-                Result.Background.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
+                color_animation.To = Color.FromRgb(255, 255, 255);
+                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
             };
             Result.MouseLeave += (sender, e) =>
             {
-                color_animation.To = Color.FromArgb(0, 255, 255, 255);
-                Result.Background.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
+                color_animation.To = Color.FromRgb(0, 0, 0);
+                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
             };
             Result.MouseLeftButtonUp += (sender, e) =>
             {
@@ -925,6 +668,7 @@ namespace AAC20.UI.Windows
             };
             return Result;
         }
+        #endregion
 
         /// <summary>
         /// Взаимодействовать с окном описания команд (Включает/Активирует)
@@ -943,6 +687,7 @@ namespace AAC20.UI.Windows
             }
         }
 
+        #region ManipulateText
         /// <summary>
         /// Добавить и отформатировать текст в консоль
         /// </summary>
@@ -950,8 +695,9 @@ namespace AAC20.UI.Windows
         /// <param name="Formatted">Форматировать или нет</param>
         internal void AddTextInConsole(string Text, bool Formatted = true)
         {
+            if (Text.Length == 0) return;
+            Text = $"{ConsolePreMessage} {Text}";
             Paragraph Message = new();
-            Message.Inlines.Add(new Bold(new Run(">>> ")));
             if (Formatted)
             {
                 List<Inline> Inlines = [];
@@ -964,6 +710,11 @@ namespace AAC20.UI.Windows
             else Message.Inlines.Add(new Run(Text));
             RichTextBoxMainMessage.Document.Blocks.Add(Message);
         }
+
+        /// <summary>
+        /// Очистить текст консоли
+        /// </summary>
+        internal void CleatConsoleText() => RichTextBoxMainMessage.Document = new();
 
         /// <summary>
         /// Изменить формативность текста с учётом первых знаков
@@ -1002,20 +753,7 @@ namespace AAC20.UI.Windows
             if (color != null) Result.Background = color;
             return Result;
         }
-
-        /// <summary>
-        /// Анимировать еффект блюра - сигнализируя изменение
-        /// </summary>
-        /// <param name="Effect">Объект эффекта анимации</param>
-        /// <param name="Power">Сила блюра при старте</param>
-        private static void AnimateBlurEffect(BlurEffect Effect, uint Power)
-        {
-            DoubleAnimation animation = DoubleAnimateObj.Clone();
-            animation.Duration = TimeSpan.FromMilliseconds(700d);
-            animation.From = Power;
-            animation.To = 0d;
-            Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
-        }
+        #endregion
 
         /// <summary>
         /// Изменить состояние глобальных страниц на противоположное
@@ -1038,6 +776,7 @@ namespace AAC20.UI.Windows
             IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
         }
 
+        #region CommandActivate
         /// <summary>
         /// Активировать команду
         /// </summary>
@@ -1052,7 +791,7 @@ namespace AAC20.UI.Windows
             string Name = ICommandAAC.ReadNameCommand(CommandString);
             string[] Parameters = ICommandAAC.ReadParametersCommand(CommandString);
 
-            if (AppendBufferCommand) InsertCommandFromBuffer(Name, CommandString);
+            if (AppendBufferCommand) App.CurrentApp.PageBufferActPanel.InsertCommandFromBuffer(Name, CommandString);
 
             CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
             if (result.State == ResultState.InvalidCommand)
@@ -1076,74 +815,7 @@ namespace AAC20.UI.Windows
         [MTAThread()]
         internal void SummarizeCommandStateResult(CommandStateResult Result)
         {
-            if (Result.State != ResultState.Complete && Result.Massage != null)
-            {
-                AddTextInConsole(Result.Massage);
-            }
-        }
-
-        #region ManipulateBuffer
-        /// <summary>
-        /// Создать кнопку активации команды
-        /// </summary>
-        /// <param name="Name">Отображаемое имя</param>
-        /// <param name="Command">Выполняющаяся команда</param>
-        /// <returns>Кнопка выполняющая команду</returns>
-        private IELButtonCommand CreateBufferButton(string Name, string Command)
-        {
-            IELButtonCommand Button = new(Name, Command, Pages.PageBufferActPanel.BufferCommand.Count)
-            {
-                Height = H,
-                Margin = new(0, (H + 2) * Pages.PageBufferActPanel.BufferCommand.Count, 0, 0),
-                Index = Pages.PageBufferActPanel.BufferCommand.Count,
-            };
-            Button.OnActivateMouseLeft += () =>
-            {
-                IELActionPanelMain.ClosePanelAction();
-                ActivateActionCommand(Pages.PageBufferActPanel.BufferCommand[Button.Index]);
-            };
-            Button.OnActivateMouseRight += () =>
-            {
-                Pages.PageBufferActPanel.BufferCommand.Delete(Button.Index);
-                Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
-                    $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
-                if (Pages.PageBufferActPanel.BufferCommand.Count == 0) Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = false;
-            };
-            return Button;
-        }
-
-        /// <summary>
-        /// Добавить команду в буфер
-        /// </summary>
-        /// <param name="Name">Имя команды</param>
-        /// <param name="Command">Строка команды</param>
-        private void InsertCommandFromBuffer(string Name, string Command)
-        {
-            Pages.PageBufferActPanel.IELButtonClearBuffer.IsEnabled = true;
-            if (Pages.PageBufferActPanel.BufferCommand.Count < Pages.PageBufferActPanel.BufferCommand.Length)
-            {
-                IELButtonCommand Button = CreateBufferButton(Name, Command);
-                Pages.PageBufferActPanel.BufferCommand.Add(Command);
-                Pages.PageBufferActPanel.GridBuffer.Children.Add(Button);
-                Pages.PageBufferActPanel.ScrollBar.MaxUp(1);
-            }
-            else
-            {
-                Pages.PageBufferActPanel.BufferCommand.Add(Command);
-                IELButtonCommand RealButton;
-                for (int i = 0; i < Pages.PageBufferActPanel.GridBuffer.Children.Count - 1; i++)
-                {
-                    RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i];
-                    IELButtonCommand NextButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[i + 1];
-                    RealButton.Text = NextButton.Text;
-                    RealButton.TextCommand = NextButton.TextCommand;
-                }
-                RealButton = (IELButtonCommand)Pages.PageBufferActPanel.GridBuffer.Children[^1];
-                RealButton.Text = Name;
-                RealButton.TextCommand = Command;
-            }
-            Pages.PageBufferActPanel.TextBlockCounterBuffer.Text =
-                $"{Pages.PageBufferActPanel.BufferCommand.Count}/{Pages.PageBufferActPanel.BufferCommand.Length}";
+            AddTextInConsole(Result.Message);
         }
         #endregion
 
@@ -1177,7 +849,7 @@ namespace AAC20.UI.Windows
             if (!LangName.Equals(TextBlockLanguage.Text))
             {
                 TextBlockLanguage.Text = LangName;
-                AnimateBlurEffect(BlurEffectLanguage, 10u);
+                App.AnimateBlurEffect(BlurEffectLanguage, 10u);
             }
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
@@ -1214,8 +886,7 @@ namespace AAC20.UI.Windows
         {
             ImageIndificator.Opacity = 1d;
             string Path = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
-            BitmapImage BitmapImageMenu = new(
-                new Uri(Path, UriKind.RelativeOrAbsolute));
+            BitmapImage BitmapImageMenu = new(new Uri(Path));
             if (File.Exists(Path))
             {
                 ComplitedInstallImageMenu(BitmapImageMenu);
@@ -1266,13 +937,7 @@ namespace AAC20.UI.Windows
         private void FailedInstallImageMenu()
         {
             DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
-            Paragraph Message = new();
-            Message.Inlines.Add(new Bold(new Run(">>> ")));
-            Message.Inlines.Add(new Run("Не удалось загрузить фоновое изображение...")
-            {
-                Background = new SolidColorBrush(Colors.IndianRed)
-            });
-            RichTextBoxMainMessage.Document.Blocks.Add(Message);
+            AddTextInConsole("Не удалось загрузить фоновое изображение...");
 
             animationDouble.From = 1d;
             animationDouble.To = 0d;
@@ -1281,6 +946,7 @@ namespace AAC20.UI.Windows
         }
         #endregion
 
+        #region Regex
         /// <summary>
         /// Функция регулярного выражения выделения текста в ковычках "текст"
         /// </summary>
@@ -1301,5 +967,6 @@ namespace AAC20.UI.Windows
         // %   #FFFFFF   //%**d**//
         [GeneratedRegex(@"#[0-9A-F]{6}")]
         private static partial Regex RegexFormattedTextColor();
+        #endregion
     }
 }

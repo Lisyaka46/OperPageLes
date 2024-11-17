@@ -38,7 +38,7 @@
                         <Classes:BrushSettingQ Default="#FF68B3A3" Select="#FF3AD483" Used="#FFA0D0B5" NotEnabled="#FFD84A50"/>
                     </GUI:IELTextBox.BackgroundSetting>
                 </GUI:IELTextBox>
-                <GUI:IELImageButton x:Name="IELButtonSearchCommand" Grid.Column="3" Imaging="/UI/Images/Search.png" ImageMargin="1,1,1,1" BorderThicknessBlock="3,0,3,3" Margin="3,0,3,7" CornerRadius="0,0,10,10">
+                <GUI:IELImageButton x:Name="IELButtonSearchCommand" Grid.Column="3" Imaging="/UI/Images/Search.png" ImageMargin="1,1,1,1" BorderThickness="3,0,1,3" Margin="3,0,3,7" CornerRadius="0,0,10,10" BorderThicknessBlock="3,0,3,3">
                     <GUI:IELImageButton.BackgroundSetting>
                         <Classes:BrushSettingQ Default="#FF68B3A3" Select="#FF3AD483" Used="#FFA0D0B5" NotEnabled="#FFD84A50"/>
                     </GUI:IELImageButton.BackgroundSetting>
@@ -81,8 +81,8 @@
                                 <ColumnDefinition Width="133"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Margin="5,0,5,0" FontSize="14" TextAlignment="Center" Grid.ColumnSpan="1" VerticalAlignment="Center" Height="19"/>
-                            <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" CornerRadius="6,6,6,6" Margin="3,0,3,0" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" FontSize="10" IsEnabled="False"/>
-                            <GUI:IELImageButton x:Name="IELButtonInfoParameter" Grid.Column="1" Imaging="/UI/Images/Logo03.png" ImageMargin="2,2,2,2" CornerRadius="6,6,6,6" Panel.ZIndex="2" Margin="2,0,2,0" BorderThicknessBlock="0,0,0,0" AnimationMillisecond="200">
+                            <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" CornerRadius="6,6,6,6" Margin="3,0,3,0" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" FontSize="10" IsEnabled="False" BorderThicknessBlock="3,3,3,3"/>
+                            <GUI:IELImageButton x:Name="IELButtonInfoParameter" Grid.Column="1" Imaging="/UI/Images/Logo03.png" ImageMargin="2,2,2,2" CornerRadius="6,6,6,6" Panel.ZIndex="2" Margin="2,0,2,0" AnimationMillisecond="200">
                                 <GUI:IELImageButton.BackgroundSetting>
                                     <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66C77F7F" Select="#4C3A9C8C" Used="#721AEFFF"/>
                                 </GUI:IELImageButton.BackgroundSetting>
