@@ -4,7 +4,7 @@ using AAC20.CORE.Settings;
 using AAC20.UI.Dialogs;
 using AAC20.Windows;
 using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Other;
+using AAC20.Windows.Pages.Browser;
 using IEL.Classes;
 using Interpreter.Classes;
 using Interpreter.Commands;

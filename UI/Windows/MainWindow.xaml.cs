@@ -6,7 +6,7 @@ using AAC20.UI.Dialogs;
 using AAC20.UI.Pages.ActionPanel;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Other;
+using AAC20.Windows.Pages.Browser;
 using IEL;
 using IEL.Classes;
 using IEL.Interfaces.Core;

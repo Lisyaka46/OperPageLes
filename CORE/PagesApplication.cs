@@ -1,5 +1,5 @@
 ﻿using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Other;
+using AAC20.Windows.Pages.Browser;
 using System;
 using System.Collections.Generic;
 using System.Linq;

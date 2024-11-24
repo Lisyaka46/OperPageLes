@@ -16,7 +16,7 @@ using Interpreter.Interfaces;
 using AAC20.UI.Dialogs;
 using AAC20.UI.Pages.ActionPanel;
 
-namespace AAC20.Windows.Pages.Other
+namespace AAC20.Windows.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml

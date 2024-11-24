@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AAC20.Windows.Pages.Other
+namespace AAC20.Windows.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml
