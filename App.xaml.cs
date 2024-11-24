@@ -36,14 +36,14 @@ namespace AAC20
         }
 
         /// <summary>
-        /// Страница буфера в панели действий
+        /// Объект всех страниц программы
         /// </summary>
-        internal PageBufferActionPanel PageBufferActPanel { get; set; }
+        internal readonly PagesApplication AllPages;
 
         /// <summary>
         /// Константа высоты размера кнопки буфера
         /// </summary>
-        internal const int HeightButtonBuffer = 41;
+        internal const int HeightButtonBuffer = 45;
 
         /// <summary>
         /// Массив сех имён команд и алиасов
@@ -100,7 +100,7 @@ namespace AAC20
             "Отображает содержание буфера команд в консоль главного меню программы",
             (Command, param) =>
             {
-                PageBufferActionPanel PageBuffer = CurrentApp.PageBufferActPanel;
+                PageBufferActionPanel PageBuffer = CurrentApp.AllPages.PageBuffer;
                 return Task.FromResult(CommandStateResult.Completed(Command.Name,
                     $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
                     $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
@@ -144,7 +144,7 @@ namespace AAC20
                         $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
                 LabelAction label = new WindowGenLabel().CreateLabel();
                 if (label != LabelAction.Empty) Page.AddLabel(label);
-                return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык \"%**{label.Name}**\" успешно создан"));
+                return Task.FromResult(CommandStateResult.Completed(Command.Name, label != LabelAction.Empty ? $"Ярлык \"%**{label.Name}**\" успешно создан" : null));
             }),
             #endregion
 
@@ -312,7 +312,7 @@ namespace AAC20
                 // BufferSize
                 "50"
             ]);
-            PageBufferActPanel = new(HeightButtonBuffer);
+            AllPages = new();
         }
 
         /// <summary>
