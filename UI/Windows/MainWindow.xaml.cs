@@ -3,6 +3,7 @@ using AAC20.CORE;
 using AAC20.CORE.Flaging;
 using AAC20.CORE.Settings;
 using AAC20.UI.Dialogs;
+using AAC20.UI.Pages.ActionPanel;
 using AAC20.Windows.Frames;
 using AAC20.Windows.Pages.ActionPanel;
 using AAC20.Windows.Pages.Other;
@@ -64,22 +65,14 @@ namespace AAC20.UI.Windows
         };
 
         /// <summary>
-        /// Класс страниц данной формы
+        /// Главная страница панели действий в консоли
         /// </summary>
-        private readonly struct Pages
-        {
-            /// <summary>
-            /// Главная страница панели действий
-            /// </summary>
-            internal static readonly PageMainActionPanel PageMainActPanel = new();
+        private static readonly PageMainConsolePanelAction PageConsolePA = new();
 
-            #if DEBUG
-            /// <summary>
-            /// Страница разработчика
-            /// </summary>
-            internal static readonly PageDeveloper PageDeveloperState = new();
-            #endif
-        }
+        /// <summary>
+        /// Страница взаимодействия с вкладками браузера страниц
+        /// </summary>
+        private static readonly PageActionInlay PageManipulateInlayPA = new();
 
         /// <summary>
         /// Реальное время
@@ -133,14 +126,17 @@ namespace AAC20.UI.Windows
             EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
         };
 
-        private readonly SettingsPanelActionFrameworkElement SettingsMain;
-
-        //private MMDeviceEnumerator Device = new();
+        /// <summary>
+        /// Настройки панели действий в консоли
+        /// </summary>
+        private readonly PanelActionSettingsFrameworkElement PASettingsConsole;
 
         /// <summary>
-        /// Страница ярлыков программы
+        /// Настройки панели действий в браузере
         /// </summary>
-        private PageLabels? PageLabelsApplication = null;
+        private readonly PanelActionSettingsFrameworkElement PASettingsBrowserManipulateInlay;
+
+        //private MMDeviceEnumerator Device = new();
 
         /// <summary>
         /// Состояние воспроизведения приветственной анимации
@@ -160,7 +156,7 @@ namespace AAC20.UI.Windows
         /// <summary>
         /// Строка вывода перед сообщением
         /// </summary>
-        public const string ConsolePreMessage = "%**>>>**"; 
+        public const string ConsolePreMessage = "%**>>>**";
 
         public MainWindow()
         {
@@ -180,19 +176,6 @@ namespace AAC20.UI.Windows
                             $"Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
                     if ((bool)param[0]) Page.AnimationLoadingStart();
                     else Page.AnimationLoadingStop();
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-
-                #region dev
-                new ConsoleCommand("dev",
-                "Открывает страницу разработчика",
-                (Command, param) =>
-                {
-                    if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
-                    //FrameComponent.NextPage(Pages.PageDeveloperState);
-                    IELBrowserPageMain.AddInlayPage(Pages.PageDeveloperState, "Страница разработчика",
-                        "Для взаимодействия со страницей разработчика является рискованным, ДЕЛАЙТЕ ТОЛЬКО ЕСЛИ ЗНАЕТЕ ЧТО ДЕЛАЕТЕ !");
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -218,32 +201,42 @@ namespace AAC20.UI.Windows
             #endregion
 
             #region Event Pages
-            Pages.PageMainActPanel.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
+            #region PageConsolePA
+            PageConsolePA.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
             {
                 RichTextBoxMainMessage.Document = new();
                 IELActionPanelMain.ClosePanelAction();
             };
-            Pages.PageMainActPanel.IELButtonCrearConsole.OnActivateMouseRight += (AltMode) => RichTextBoxMainMessage.Document = new();
+            PageConsolePA.IELButtonCrearConsole.OnActivateMouseRight += (AltMode) => RichTextBoxMainMessage.Document = new();
 
-            Pages.PageMainActPanel.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
+            PageConsolePA.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
             {
-                IELActionPanelMain.NextPage(App.CurrentApp.PageBufferActPanel);
+                IELActionPanelMain.NextPage(App.CurrentApp.AllPages.PageBuffer);
             };
 
-            App.CurrentApp.PageBufferActPanel.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
-            {
-                IELActionPanelMain.NextPage(Pages.PageMainActPanel, false);
-            };
-
-            Pages.PageMainActPanel.IELButtonDiscriptionCommand.OnActivateMouseLeft += (Key) =>
+            PageConsolePA.IELButtonDiscriptionCommand.OnActivateMouseLeft += (AltMode) =>
             {
                 IELActionPanelMain.ClosePanelAction();
                 UsingDiscriptionCommand();
             };
-            Pages.PageDeveloperState.IELButtonCreateLabel.OnActivateMouseLeft += () =>
+            #endregion
+            #region PageManipulateInlayPA
+            PageManipulateInlayPA.IELButtonPageOpenInlay.OnActivateMouseLeft += (AltMode) =>
             {
-                //Pages.PageObjLabelsAction.AddLabel(new("Test", "Test", "Test"));
-                //Pages.PageDeveloperState.TextBlockLabelsCount.Text = $"={Pages.PageObjLabelsAction.CountLabel}";
+                if (PageManipulateInlayPA.ActivateManipulateInlay != null)
+                    IELBrowserPageMain.ActivateInInlay(PageManipulateInlayPA.ActivateManipulateInlay);
+            };
+            PageManipulateInlayPA.IELButtonPageDeleteInlay.OnActivateMouseLeft += (AltMode) =>
+            {
+                IELActionPanelMain.ClosePanelAction();
+                if (PageManipulateInlayPA.ActivateManipulateInlay != null)
+                    IELBrowserPageMain.DeleteInlayPage(PageManipulateInlayPA.ActivateManipulateInlay);
+            };
+            #endregion
+
+            App.CurrentApp.AllPages.PageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
+            {
+                IELActionPanelMain.NextPage(PageConsolePA, false);
             };
             #endregion
 
@@ -266,13 +259,13 @@ namespace AAC20.UI.Windows
             GridHintCommandParameter.Opacity = 0d;
             Canvas.SetZIndex(GridHintCommandParameter, -1);
             RichTextBoxMainMessage.Document = new();
-            SettingsMain = new(RichTextBoxMainMessage, Pages.PageMainActPanel, new(270d, 230d));
+            PASettingsConsole = new(RichTextBoxMainMessage, PageConsolePA, new(270d, 230d));
+            PASettingsBrowserManipulateInlay = new(IELBrowserPageMain, PageManipulateInlayPA, new(200d, 240d));
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
             #endregion
 
-            ButtonReboot.OnActivateMouseLeft += App.RebootApplication;
             ButtonReturnCommand.OnActivateMouseLeft += () => ActivateActionCommand(TextBoxCommandInput.Text, true);
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
 
@@ -280,12 +273,6 @@ namespace AAC20.UI.Windows
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
             #region UpToolButtons
-            IELButtonLabel.OnActivateMouseLeft += () =>
-            {
-                if (!Flags.FlagFrameComponentVisible) UsingChangeStateFrameComponent();
-                IELBrowserPageMain.AddInlayPage(PageLabelsApplication ??= new(), "Ярлыки",
-                        "Ярлыки которые предаставляются программой для хранения важных команд");
-            };
 
             IELButtonSettings.OnActivateMouseLeft += () =>
             {
@@ -332,6 +319,20 @@ namespace AAC20.UI.Windows
                 IELMessageMain.CloseBorderInformation();
             };
             UsingChangeStateFrameComponent();
+            #endregion
+
+            #region IELBrowserPage
+            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += () =>
+            {
+                IELActionPanelMain.ClosePanelAction();
+                new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain);
+            };
+            IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
+            {
+                PageManipulateInlayPA.ActivateManipulateInlay = Inlay;
+                IELActionPanelMain.UsingPanelAction(PASettingsBrowserManipulateInlay);
+                //DialogManagerPage.ShowDialog();
+            };
             #endregion
 
             #region TextBoxCommandInput
@@ -398,7 +399,7 @@ namespace AAC20.UI.Windows
                         TextBoxCommandInput.Text = string.Empty;
                         break;
                     case Key.Apps:
-                        IELActionPanelMain.UsingPanelAction(SettingsMain);
+                        IELActionPanelMain.UsingPanelAction(PASettingsConsole);
                         break;
                 }
                 TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
@@ -413,7 +414,7 @@ namespace AAC20.UI.Windows
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
                 if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right) IELActionPanelMain.UsingPanelAction(SettingsMain);
+                else if (e.ChangedButton == MouseButton.Right) IELActionPanelMain.UsingPanelAction(PASettingsConsole);
             };
 
             RichTextBoxMainMessage.TextChanged += (sender, e) =>
@@ -784,14 +785,20 @@ namespace AAC20.UI.Windows
         /// <param name="AppendBufferCommand">Состояние добавления команды в буфер</param>
         private void ActivateActionCommand(string CommandString, bool AppendBufferCommand = true)
         {
-            IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
             if (CommandString.Length == 0) return;
             TextBoxCommandInput.Text = string.Empty;
             ConsoleCommand? Command = ICommandAAC.ReadCommand([.. App.DataConsoleCommand], CommandString);
             string Name = ICommandAAC.ReadNameCommand(CommandString);
             string[] Parameters = ICommandAAC.ReadParametersCommand(CommandString);
 
-            if (AppendBufferCommand) App.CurrentApp.PageBufferActPanel.InsertCommandFromBuffer(Name, CommandString);
+            if (AppendBufferCommand)
+            {
+                App.CurrentApp.AllPages.PageBuffer.InsertCommandFromBuffer(Name, CommandString,
+                () =>
+                {
+                    ActivateActionCommand(CommandString);
+                });
+            }
 
             CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
             if (result.State == ResultState.InvalidCommand)

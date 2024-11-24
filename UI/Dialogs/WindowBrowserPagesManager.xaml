@@ -1,0 +1,60 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AAC20.UI.Dialogs"
+        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="AAC20.UI.Dialogs.WindowBrowserPagesManager"
+        mc:Ignorable="d"
+        Title="Выбор открывающей страницы" Height="500" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Style="{Binding Mode=OneWay, Source={StaticResource EmptyImage}}" ShowInTaskbar="False" Topmost="True" SnapsToDevicePixels="True" Padding="4,4,4,4" UseLayoutRounding="True" WindowStyle="None" AllowsTransparency="True">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF5F9064" Offset="1"/>
+            <GradientStop Color="#FF60B6C7" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.3">
+                <LinearGradientBrush.RelativeTransform>
+                    <TransformGroup>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                        <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                        <RotateTransform Angle="90" CenterX="0.5" CenterY="0.5"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </LinearGradientBrush.RelativeTransform>
+                <GradientStop Color="#FFC5C5C5" Offset="0.014"/>
+                <GradientStop Color="#FFE660AF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid x:Name="GridMainPages" Grid.RowSpan="1">
+            <Border BorderThickness="2,2,2,2" BorderBrush="#4CC74379" CornerRadius="0,0,5,5">
+                <Grid x:Name="GridScrollPages">
+                    <IEL:IELButtonText x:Name="IELButtonAddPageLabel" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" VisibleMouseImaging="False" Text="Страница ярлыков" CornerRadius="6,6,6,6" Margin="5,5,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" AnimationMillisecond="200">
+                        <IEL:IELButtonText.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#9969819C" Select="#9986AEDA" Used="#990CCCB6" NotEnabled="#99AD354B"/>
+                        </IEL:IELButtonText.BackgroundSetting>
+                    </IEL:IELButtonText>
+                    <IEL:IELButtonText x:Name="IELButtonPageDeveloper" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" VisibleMouseImaging="False" Text="Страница разработчика" CornerRadius="6,6,6,6" Margin="5,60,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" AnimationMillisecond="200">
+                        <IEL:IELButtonText.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#9969819C" Select="#9986AEDA" Used="#990CCCB6" NotEnabled="#99AD354B"/>
+                        </IEL:IELButtonText.BackgroundSetting>
+                    </IEL:IELButtonText>
+                </Grid>
+            </Border>
+        </Grid>
+        <IEL:IELButtonText x:Name="IELButtonCancel" BorderThicknessBlock="3,3,3,3" VisibleMouseImaging="False" Text="Отмена добавления" CornerRadius="6,6,6,6" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" Grid.Row="1" Margin="5,5,5,5" AnimationMillisecond="200">
+            <IEL:IELButtonText.BorderBrushSetting>
+                <Classes:BrushSettingQ Default="#7F8C2E55" NotEnabled="#FFC5354F" Select="#99A03561" Used="#B2B3384E"/>
+            </IEL:IELButtonText.BorderBrushSetting>
+            <IEL:IELButtonText.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#99A95A82" NotEnabled="#FFDE5077" Select="#B2DE5299" Used="#CCECAAC2"/>
+            </IEL:IELButtonText.BackgroundSetting>
+        </IEL:IELButtonText>
+    </Grid>
+</Window>
