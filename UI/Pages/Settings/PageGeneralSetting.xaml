@@ -1,0 +1,83 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.UI.Pages.Settings"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" x:Class="AAC20.UI.Pages.Settings.PageGeneralSetting"
+      mc:Ignorable="d" 
+      d:DesignHeight="370.818" d:DesignWidth="570"
+      Title="PageGeneral" MinWidth="570">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*" MaxHeight="100" MinHeight="70"/>
+            <RowDefinition Height="75*" MinHeight="75" MaxHeight="90"/>
+            <RowDefinition Height="64*"/>
+            <RowDefinition Height="64*"/>
+            <RowDefinition Height="86*"/>
+        </Grid.RowDefinitions>
+        <Border x:Name="BorderPathImageBackground" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="6,6,6,6" Background="#B2485A44">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Image x:Name="ImageBackground" Source="/UI/Images/DoubleMouseButton.png" Grid.RowSpan="2" Panel.ZIndex="-1" Opacity="0.1" Stretch="UniformToFill" >
+                    <Image.Effect>
+                        <BlurEffect x:Name="BlurEffectImageBackground" KernelType="Box" RenderingBias="Quality" Radius="0"/>
+                    </Image.Effect>
+                </Image>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="131"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap" Text="Изображение фона" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" Margin="3,0,3,0" FontSize="14" VerticalAlignment="Center" Height="20"/>
+                    <TextBlock x:Name="TextBlockFailedImageSetup" Grid.Column="1" TextWrapping="Wrap" Text="Не удалось установить изображение по ссылке или директории" FontSize="14" VerticalAlignment="Center" Foreground="White" FontStyle="Italic"/>
+                </Grid>
+                <Grid Grid.Row="1" MaxHeight="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="250" MaxWidth="250"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TextBoxPathMenuImage" Margin="10,5,10,5" Text="Директория" VerticalContentAlignment="Center" BorderThickness="1,0,1,0" Background="{x:Null}" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" MaxLines="1" IsUndoEnabled="False" MinHeight="22" Focusable="False"/>
+                    <IEL:IELButtonText x:Name="IElButtonDialogDirectoryFile" HorizontalAlignment="Left" Text="Обзор" VisibleMouseImaging="False" AnimationMillisecond="160" Grid.Column="1" Grid.Row="0" Margin="2,5,0,5" Width="55" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2"/>
+                    <IEL:IELButtonText x:Name="IElButtonSetTextClipboard" HorizontalAlignment="Left" Text="Вставить ссылку из буфера" VisibleMouseImaging="False" AnimationMillisecond="160" Grid.Column="1" Grid.Row="0" Margin="65,5,0,5" Width="175" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2"/>
+                </Grid>
+            </Grid>
+        </Border>
+        <Grid Grid.RowSpan="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="40" MaxHeight="50"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="BorderBufferSize" BorderBrush="Black" BorderThickness="2,2,2,2" Margin="6,6,6,0" CornerRadius="5,5,5,5" Background="#B2485A44">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="108"/>
+                        <ColumnDefinition Width="11*" MinWidth="230"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap" Text="Размер буфера" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14" Padding="4,0,4,0" TextAlignment="Center" VerticalAlignment="Center" Height="19"/>
+                    <Slider x:Name="SliderBufferSize" SmallChange="1" Maximum="80" Minimum="10" TickPlacement="BottomRight" TickFrequency="1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#99FFFFFF"  IsSnapToTickEnabled="True" Value="10" Grid.Column="1" Grid.ColumnSpan="1" Margin="2,2,2,2" Grid.RowSpan="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBlock x:Name="TextBlockSliderBufferSize" TextWrapping="Wrap" Text="00" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontSize="16" VerticalAlignment="Center" Height="19"/>
+                </Grid>
+            </Border>
+            <Border x:Name="BorderSettingBufferSize" BorderBrush="Black" BorderThickness="2,0,2,2" Panel.ZIndex="-1" CornerRadius="0,0,5,5" Margin="12,0,12,0" Background="#E5713131" Grid.RowSpan="1" Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="316"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap" Text="Настройка активируется только после перезагрузки" Foreground="White" Padding="3,0,3,0" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <IEL:IELButtonText x:Name="IELButtonTextClearValue" HorizontalAlignment="Left" Grid.Column="1" CornerRadius="5,5,5,5" Margin="8,3,0,3" Text="По умолчанию" PaddingContent="8,0,8,0"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</Page>

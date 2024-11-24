@@ -1,0 +1,36 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AAC20.Windows.Frames"
+      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+      xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
+      x:Class="AAC20.Windows.Frames.PageMainConsolePanelAction"
+      mc:Ignorable="d"
+      Title="PageMainActionPanel" d:DesignHeight="170.12" d:DesignWidth="271.189">
+
+    <Grid x:Name="GridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="44*"/>
+        </Grid.RowDefinitions>
+        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" Text="Очистить текст консоли" Margin="0,5,0,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" AnimationMillisecond="200" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16">
+            <GUI:IELButtonTextKey.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
+            </GUI:IELButtonTextKey.BackgroundSetting>
+        </GUI:IELButtonTextKey>
+        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" Text="Командный буфер" Margin="0,5,0,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="1" CharKeyKeyboard="D2" Grid.RowSpan="1" AnimationMillisecond="200" VisibleMouseImaging="False" FontWeight="Bold" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16" StateVisualizationButton="RightArrow">
+                <GUI:IELButtonTextKey.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
+            </GUI:IELButtonTextKey.BackgroundSetting>
+        </GUI:IELButtonTextKey>
+        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" Text="Описание команд" Margin="0,5,0,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="2" FontWeight="Bold" CharKeyKeyboard="D3" Grid.RowSpan="1" AnimationMillisecond="200" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16">
+            <GUI:IELButtonTextKey.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
+            </GUI:IELButtonTextKey.BackgroundSetting>
+        </GUI:IELButtonTextKey>
+
+    </Grid>
+</Page>

@@ -2,22 +2,20 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Windows\Pages\MainWindow\**" />
-    <Compile Remove="Windows\Pages\Settings\**" />
-    <EmbeddedResource Remove="Windows\Pages\MainWindow\**" />
-    <EmbeddedResource Remove="Windows\Pages\Settings\**" />
-    <None Remove="Windows\Pages\MainWindow\**" />
-    <None Remove="Windows\Pages\Settings\**" />
-    <Page Remove="Windows\Pages\MainWindow\**" />
-    <Page Remove="Windows\Pages\Settings\**" />
+    <Compile Remove="UI\Pages\MainWindow\**" />
+    <EmbeddedResource Remove="UI\Pages\MainWindow\**" />
+    <None Remove="UI\Pages\MainWindow\**" />
+    <Page Remove="UI\Pages\MainWindow\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,13 +26,20 @@
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\Pecita.otf" />
     <None Remove="Fonts\pizza hut.otf" />
+    <None Remove="Fonts\RussianRail G Pro.otf" />
     <None Remove="Fonts\sangha.ttf" />
-    <None Remove="Windows\WindowsImages\Logo04.png" />
+    <None Remove="Fonts\Vollda-Bold.otf" />
+    <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
+    <None Remove="UI\Images\Arrow.png" />
+    <None Remove="UI\Images\LightBulb.png" />
+    <None Remove="UI\Images\Logo04.png" />
+    <None Remove="UI\Images\Plus.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="9.0.0" />
+    <PackageReference Include="MySql.Data" Version="9.1.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
@@ -57,33 +62,44 @@
     <Resource Include="Fonts\Pecita.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Fonts\RussianRail G Pro.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Fonts\sangha.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Tablon-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Windows\WindowsImages\ArrowFrameComponent.png" />
-    <Resource Include="Windows\WindowsImages\DoubleMouseButton.png" />
-    <Resource Include="Windows\WindowsImages\Labels\Command.png" />
-    <Resource Include="Windows\WindowsImages\Labels\File.png" />
-    <Resource Include="Windows\WindowsImages\Labels\Folder.png" />
-    <Resource Include="Windows\WindowsImages\Labels\Link.png" />
-    <Resource Include="Windows\WindowsImages\LeftMouseButton.png" />
-    <Resource Include="Windows\WindowsImages\LicenseIco.png" />
-    <Resource Include="Windows\WindowsImages\Loading.gif" />
-    <Resource Include="Windows\WindowsImages\Logo01.png" />
-    <Resource Include="Windows\WindowsImages\Logo03.png" />
-    <Resource Include="Windows\WindowsImages\20.png" />
-    <Resource Include="Windows\WindowsImages\Logo02.png" />
-    <Resource Include="Windows\WindowsImages\Logo04.png" />
-    <Resource Include="Windows\WindowsImages\LogoDC.png" />
-    <Resource Include="Windows\WindowsImages\RightMouseButton.png" />
-    <Resource Include="Windows\WindowsImages\Search.png" />
-    <Resource Include="Windows\WindowsImages\Settings.png" />
-    <Resource Include="Windows\WindowsImages\Wifi.png" />
-    <Resource Include="Windows\WindowsImages\WifiOff.png" />
-    <Resource Include="Windows\WindowsImages\WifiOn.png" />
+    <Resource Include="Fonts\Vollda-Bold.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\zhuan_FuturaNowScript-Rg.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\Arrow.png" />
+    <Resource Include="UI\Images\DoubleMouseButton.png" />
+    <Resource Include="UI\Images\Labels\Command.png" />
+    <Resource Include="UI\Images\Labels\File.png" />
+    <Resource Include="UI\Images\Labels\Folder.png" />
+    <Resource Include="UI\Images\Labels\Link.png" />
+    <Resource Include="UI\Images\LeftMouseButton.png" />
+    <Resource Include="UI\Images\LicenseIco.png" />
+    <Resource Include="UI\Images\LightBulb.png" />
+    <Resource Include="UI\Images\Loading.gif" />
+    <Resource Include="UI\Images\Logo01.png" />
+    <Resource Include="UI\Images\Logo03.png" />
+    <Resource Include="UI\Images\20.png" />
+    <Resource Include="UI\Images\Logo02.png" />
+    <Resource Include="UI\Images\Logo04.png" />
+    <Resource Include="UI\Images\LogoDC.png" />
+    <Resource Include="UI\Images\Plus.png" />
+    <Resource Include="UI\Images\RightMouseButton.png" />
+    <Resource Include="UI\Images\Search.png" />
+    <Resource Include="UI\Images\Settings.png" />
+    <Resource Include="UI\Images\Wifi.png" />
+    <Resource Include="UI\Images\WifiOff.png" />
+    <Resource Include="UI\Images\WifiOn.png" />
   </ItemGroup>
 
   <ItemGroup>
