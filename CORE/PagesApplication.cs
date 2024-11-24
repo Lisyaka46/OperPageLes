@@ -1,4 +1,5 @@
-﻿using AAC20.Windows.Pages.ActionPanel;
+﻿using AAC20.UI.Pages.Browser;
+using AAC20.Windows.Pages.ActionPanel;
 using AAC20.Windows.Pages.Browser;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,16 @@ namespace AAC20.CORE
         /// <summary>
         /// Страница буфера в панели действий
         /// </summary>
-        internal readonly PageBufferActionPanel PageBuffer = new(App.HeightButtonBuffer);
-
-        /// <summary>
-        /// Страница буфера в панели действий
-        /// </summary>
         internal readonly PageLabels PageLabelsApplication = new();
 
         /// <summary>
         /// Страница разработчика
         /// </summary>
         internal readonly PageDeveloper PageDeveloper = new();
+
+        /// <summary>
+        /// Страница консоли команд
+        /// </summary>
+        internal readonly PageConsole PageConsoleApplication = new();
     }
 }
