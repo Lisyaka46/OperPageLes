@@ -31,9 +31,11 @@
     <None Remove="Fonts\Vollda-Bold.otf" />
     <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
     <None Remove="UI\Images\Arrow.png" />
+    <None Remove="UI\Images\Done.png" />
     <None Remove="UI\Images\LightBulb.png" />
     <None Remove="UI\Images\Logo04.png" />
     <None Remove="UI\Images\Plus.png" />
+    <None Remove="UI\Images\Warning.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,6 +80,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\Arrow.png" />
+    <Resource Include="UI\Images\Done.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
     <Resource Include="UI\Images\Labels\Command.png" />
     <Resource Include="UI\Images\Labels\File.png" />
@@ -97,6 +100,7 @@
     <Resource Include="UI\Images\RightMouseButton.png" />
     <Resource Include="UI\Images\Search.png" />
     <Resource Include="UI\Images\Settings.png" />
+    <Resource Include="UI\Images\Warning.png" />
     <Resource Include="UI\Images\Wifi.png" />
     <Resource Include="UI\Images\WifiOff.png" />
     <Resource Include="UI\Images\WifiOn.png" />

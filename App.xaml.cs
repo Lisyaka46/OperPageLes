@@ -2,6 +2,7 @@
 using AAC20.CORE.Flaging;
 using AAC20.CORE.Settings;
 using AAC20.UI.Dialogs;
+using AAC20.UI.Pages.Browser;
 using AAC20.Windows;
 using AAC20.Windows.Pages.ActionPanel;
 using AAC20.Windows.Pages.Browser;
@@ -81,7 +82,7 @@ namespace AAC20
             "Очищает текстовый вывод главного меню программы",
             (Command, param) =>
             {
-                MainWindowApplication.CleatConsoleText();
+                CurrentApp.AllPages.PageConsoleApplication.ClearConsoleText();
                 return Task.FromResult(CommandStateResult.Completed(Command.Name));
             }),
             #endregion
@@ -100,7 +101,7 @@ namespace AAC20
             "Отображает содержание буфера команд в консоль главного меню программы",
             (Command, param) =>
             {
-                PageBufferActionPanel PageBuffer = CurrentApp.AllPages.PageBuffer;
+                PageBufferActionPanel PageBuffer = CurrentApp.AllPages.PageConsoleApplication.PageBufferPA;
                 return Task.FromResult(CommandStateResult.Completed(Command.Name,
                     $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
                     $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
@@ -295,6 +296,11 @@ namespace AAC20
         /// </summary>
         internal const string PathImageApplication = "/UI/Images";
 
+        /// <summary>
+        /// Строка вывода перед сообщением
+        /// </summary>
+        public const string ConsolePreMessage = "%**>>>**";
+
         public App()
         {
             InitializeComponent();
@@ -385,5 +391,71 @@ namespace AAC20
         /// </summary>
         internal void UpdateSettingApplication() => 
             SettingApplication.UpdateFileSetting(SettingProcess.GetSettingValue(EnumSettingProcess.SettingApplicationPath));
+
+        /// <summary>
+        /// Взаимодействовать с окном описания команд (Включает/Активирует)
+        /// </summary>
+        internal static void UsingDiscriptionCommand()
+        {
+            if (AppWindows.DiscriptionCommands == null)
+            {
+                AppWindows.DiscriptionCommands = new();
+                AppWindows.DiscriptionCommands.Show();
+            }
+            else
+            {
+                AppWindows.DiscriptionCommands.WindowState = WindowState.Normal;
+                AppWindows.DiscriptionCommands.Activate();
+            }
+        }
+
+        #region CommandActivate
+        /// <summary>
+        /// Активировать команду
+        /// </summary>
+        /// <param name="CommandString">Строка команды</param>
+        /// <param name="AppendBufferCommand">Состояние добавления команды в буфер</param>
+        internal void ActivateActionCommand(PageConsole? Console, string CommandString, bool AppendBufferCommand = true)
+        {
+            if (CommandString.Length == 0) return;
+            if (Console != null) Console.TextBoxCommandInput.Text = string.Empty;
+            ConsoleCommand? Command = ICommandAAC.ReadCommand([.. DataConsoleCommand], CommandString);
+            string Name = ICommandAAC.ReadNameCommand(CommandString);
+            string[] Parameters = ICommandAAC.ReadParametersCommand(CommandString);
+
+            if (AppendBufferCommand && Console != null)
+            {
+                Console.PageBufferPA.InsertCommandFromBuffer(Name, CommandString,
+                () =>
+                {
+                    ActivateActionCommand(Console, CommandString);
+                });
+            }
+
+            CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
+            if (result.State == ResultState.InvalidCommand)
+            {
+                AliasCommand<ICommandAAC>? Alias = ICommandAAC.ReadCommand([.. App.CurrentApp.DataAliases], CommandString);
+                result = Alias == null ? CommandStateResult.FaledCommand(Name) : Alias.ExecuteCommand();
+            }
+            if (Console != null) SummarizeCommandStateResult(Console, result);
+        }
+
+        /// <summary>
+        /// Активировать команду не добавляя в буфер
+        /// </summary>
+        /// <param name="CommandString">Строка команды</param>
+        public void ActivateActionCommand(PageConsole? Console, string CommandString) => ActivateActionCommand(Console, CommandString, false);
+
+        /// <summary>
+        /// Создать действие над итогом выполнения команды
+        /// </summary>
+        /// <param name="Result">Объект итога выполнения команды</param>
+        [MTAThread()]
+        internal static void SummarizeCommandStateResult(PageConsole Console, CommandStateResult Result)
+        {
+            Console.AddTextInConsole(Result.Message);
+        }
+        #endregion
     }
 }
