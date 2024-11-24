@@ -7,6 +7,7 @@ using IEL.Interfaces.Core;
 using IEL;
 using IEL.Classes;
 using DataScroll;
+using IEL.Interfaces.Front;
 
 namespace AAC20.Windows.Pages.ActionPanel
 {
@@ -175,17 +176,6 @@ namespace AAC20.Windows.Pages.ActionPanel
                 Margin = new(0, (H + 2) * BufferCommand.Count, 0, 0),
                 Index = BufferCommand.Count,
             };
-            Button.OnActivateMouseLeft += () =>
-            {
-                App.MainWindowApplication.ActivateActionCommand(App.CurrentApp.PageBufferActPanel.BufferCommand[Button.Index]);
-            };
-            Button.OnActivateMouseRight += () =>
-            {
-                BufferCommand.Delete(Button.Index);
-                TextBlockCounterBuffer.Text =
-                    $"{BufferCommand.Count}/{BufferCommand.Length}";
-                if (BufferCommand.Count == 0) IELButtonClearBuffer.IsEnabled = false;
-            };
             return Button;
         }
 
@@ -194,12 +184,21 @@ namespace AAC20.Windows.Pages.ActionPanel
         /// </summary>
         /// <param name="Name">Имя команды</param>
         /// <param name="Command">Строка команды</param>
-        internal void InsertCommandFromBuffer(string Name, string Command)
+        /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
+        internal void InsertCommandFromBuffer(string Name, string Command, IIELButtonDefault.Activate ActionActivateCommand)
         {
             IELButtonClearBuffer.IsEnabled = true;
             if (BufferCommand.Count < BufferCommand.Length)
             {
                 IELButtonCommand Button = CreateBufferButton(Name, Command);
+                Button.OnActivateMouseLeft += ActionActivateCommand;
+                Button.OnActivateMouseRight += () =>
+                {
+                    BufferCommand.Delete(Button.Index);
+                    TextBlockCounterBuffer.Text =
+                        $"{BufferCommand.Count}/{BufferCommand.Length}";
+                    if (BufferCommand.Count == 0) IELButtonClearBuffer.IsEnabled = false;
+                };
                 BufferCommand.Add(Command);
                 GridBuffer.Children.Add(Button);
                 ScrollBar.MaxUp(1);

@@ -56,12 +56,12 @@ namespace AAC20.Windows.Pages.Other
         /// <summary>
         /// Настройка поведения панели действий для объектов ярлыка
         /// </summary>
-        private SettingsPanelActionFrameworkElement SettingsPanelActionElement;
+        private PanelActionSettingsFrameworkElement SettingsPanelActionElement;
 
         /// <summary>
         /// Настройка поведения панели действий для взаимодействия со страницей
         /// </summary>
-        private SettingsPanelActionFrameworkElement SettingsPanelActionPage;
+        private PanelActionSettingsFrameworkElement SettingsPanelActionPage;
 
         /// <summary>
         /// Скролл-бар страницы ярлыков
@@ -180,7 +180,7 @@ namespace AAC20.Windows.Pages.Other
             {
                 if (ScrollBar.ScrollActivate && CountLabel > 0)
                 {
-                    if (App.MainWindowApplication.IELActionPanelMain.NameFrameElement.Equals(SettingsPanelActionElement.ElementInPanel.Name))
+                    if (App.MainWindowApplication.IELActionPanelMain.ActualNameFrameElement.Equals(SettingsPanelActionElement.ElementInPanel.Name))
                     {
                         SelectIndexElementLabel = -1;
                         App.MainWindowApplication.IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);

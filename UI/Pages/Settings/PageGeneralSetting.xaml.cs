@@ -98,6 +98,7 @@ namespace AAC20.UI.Pages.Settings
             IELButtonTextClearValue.OnActivateMouseLeft += () =>
             {
                 SliderBufferSize.Value = RealySizeBuffer;
+                EventChangeValue?.Invoke(EnumSettingApplication.BufferSize, SliderBufferSize.Value.ToString());
             };
             SliderBufferSize.MouseLeave += (sender, e) =>
             {

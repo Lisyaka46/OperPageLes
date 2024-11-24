@@ -9,12 +9,12 @@ namespace AAC20.Windows.Frames
     /// <summary>
     /// Логика взаимодействия для PageMainActionPanel.xaml
     /// </summary>
-    public partial class PageMainActionPanel : Page, IPageKey
+    public partial class PageMainConsolePanelAction : Page, IPageKey
     {
         /// <summary>
         /// Имя страницы
         /// </summary>
-        public string PageName { get; } = nameof(PageMainActionPanel);
+        public string PageName { get; } = nameof(PageMainConsolePanelAction);
 
         /// <summary>
         /// Объект данных режима клавиатуры
@@ -39,7 +39,7 @@ namespace AAC20.Windows.Frames
         /// </summary>
         public IPageKey.Delegate_KeyboardModeChanged? KeyboardModeChanged { get; set; }
 
-        public PageMainActionPanel()
+        public PageMainConsolePanelAction()
         {
             InitializeComponent();
             KeyboardModeChanged = (Mode) =>
