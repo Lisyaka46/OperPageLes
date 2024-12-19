@@ -23,6 +23,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace AAC20.UI.Pages.Browser
 {
@@ -339,6 +340,12 @@ namespace AAC20.UI.Pages.Browser
             if (Text.Length == 0) return;
             Text = $"{App.ConsolePreMessage} {Text}";
             Paragraph Message = new();
+            Binding binding = new()
+            {
+                Mode = BindingMode.OneWay,
+                Source = (Style)Application.Current.Resources["RussianRail G Pro"]
+            };
+            BindingOperations.SetBinding(Message, Paragraph.StyleProperty, binding);
             if (Formatted)
             {
                 List<Inline> Inlines = [];
