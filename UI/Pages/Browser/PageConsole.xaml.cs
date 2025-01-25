@@ -421,7 +421,7 @@ namespace AAC20.UI.Pages.Browser
         /// Регулярное выражение сортировки параметров от специальных символов
         /// </summary>
         /// <returns>Регулярное выражение</returns>
-        // %   #FFFFFF   //%**d**//
+        // %   #FFFFFF   //**d**//
         [GeneratedRegex(@"#[0-9A-F]{6}")]
         private static partial Regex RegexFormattedTextColor();
         #endregion

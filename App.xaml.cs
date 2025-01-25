@@ -316,7 +316,9 @@ namespace AAC20
                 // PathMenuImage
                 "!",
                 // BufferSize
-                "50"
+                "50",
+                // BlurBackgroundDataTime
+                "T"
             ]);
             AllPages = new();
         }

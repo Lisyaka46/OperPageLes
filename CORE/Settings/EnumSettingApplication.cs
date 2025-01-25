@@ -20,5 +20,10 @@ namespace AAC20.CORE.Settings
         /// Размер буфера команд
         /// </summary>
         BufferSize = 1,
+
+        /// <summary>
+        /// Блюр фона в панели даты и времени
+        /// </summary>
+        BlurBackgroundDataTime = 2,
     }
 }

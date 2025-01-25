@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Automation.Text;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -203,7 +204,8 @@ namespace AAC20.UI.Windows
 
             #region SetParameteres
             TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
-            
+
+            VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             
@@ -215,7 +217,10 @@ namespace AAC20.UI.Windows
 
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
 
+            #region Settings
             UpdateImageMenu();
+            ChangeBlurImageInDataTime(App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BlurBackgroundDataTime).Equals("T"));
+            #endregion
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
             #region UpToolButtons
@@ -429,6 +434,7 @@ namespace AAC20.UI.Windows
                 TextBlockLanguage.Text = LangName;
                 App.AnimateBlurEffect(BlurEffectLanguage, 10u);
             }
+            //VisualRectangleDateTimeBackground.Visual.
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
             //byte rgbValue = (byte)(2.55d * Volume);
@@ -523,6 +529,16 @@ namespace AAC20.UI.Windows
             animationDouble.To = 0d;
             animationDouble.Duration = TimeSpan.FromMilliseconds(1000d);
             ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+        }
+        #endregion
+
+        #region BlurBackgroundDataTime
+        internal void ChangeBlurImageInDataTime(bool State)
+        {
+            DoubleAnimation animation = DoubleAnimateObj.Clone();
+            animation.Duration = TimeSpan.FromMilliseconds(1300d);
+            animation.To = State ? 0.5d : 0d;
+            VisualRectangleDateTimeBackground.BeginAnimation(OpacityProperty, animation);
         }
         #endregion
     }

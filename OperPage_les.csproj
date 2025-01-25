@@ -35,8 +35,10 @@
     <None Remove="UI\Images\DoubleMouseButton.png" />
     <None Remove="UI\Images\LeftMouseButton.png" />
     <None Remove="UI\Images\LightBulb.png" />
-    <None Remove="UI\Images\Logo04.png" />
     <None Remove="UI\Images\Logo05.png" />
+    <None Remove="UI\Images\LogoMain.png" />
+    <None Remove="UI\Images\LogoProgram.png" />
+    <None Remove="UI\Images\LogoProgramText.png" />
     <None Remove="UI\Images\NotMouseButton.png" />
     <None Remove="UI\Images\Plus.png" />
     <None Remove="UI\Images\RightMouseButton.png" />
@@ -92,16 +94,17 @@
     <Resource Include="UI\Images\Labels\Folder.png" />
     <Resource Include="UI\Images\Labels\Link.png" />
     <Resource Include="UI\Images\LeftMouseButton.png" />
-    <Resource Include="UI\Images\LicenseIco.png" />
     <Resource Include="UI\Images\LightBulb.png" />
     <Resource Include="UI\Images\Loading.gif" />
     <Resource Include="UI\Images\Logo01.png" />
     <Resource Include="UI\Images\Logo03.png" />
     <Resource Include="UI\Images\20.png" />
     <Resource Include="UI\Images\Logo02.png" />
-    <Resource Include="UI\Images\Logo04.png" />
     <Resource Include="UI\Images\Logo05.png" />
     <Resource Include="UI\Images\LogoDC.png" />
+    <Resource Include="UI\Images\LogoMain.png" />
+    <Resource Include="UI\Images\LogoProgram.png" />
+    <Resource Include="UI\Images\LogoProgramText.png" />
     <Resource Include="UI\Images\NotMouseButton.png" />
     <Resource Include="UI\Images\Plus.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
@@ -129,7 +132,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CounterScrollBar\DataScroll.csproj" />
+    <ProjectReference Include="..\DataScroll\DataScroll.csproj" />
     <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>

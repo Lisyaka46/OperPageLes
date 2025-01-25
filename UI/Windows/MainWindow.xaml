@@ -9,7 +9,7 @@
         xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
         x:Name="window" x:Class="AAC20.UI.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/UI/Images/Logo02.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
+        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/UI/Images/LogoMain.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
         <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
         <Image x:Name="ImageMenu" Panel.ZIndex="1" Stretch="UniformToFill">
@@ -59,7 +59,7 @@
                             </GUI:IELImageButton.BackgroundSetting>
                         </GUI:IELImageButton>
                     </Grid>
-                    <GUI:IELImageButton x:Name="ImageLogoApplication" Imaging="/UI/Images/Logo02.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThickness="0.1,0.1,0.1,0.1">
+                    <GUI:IELImageButton x:Name="ImageLogoApplication" Imaging="/UI/Images/LogoMain.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThickness="0.1,0.1,0.1,0.1" ImageMargin="1,1,1,1">
                         <GUI:IELImageButton.BorderBrushSetting>
                             <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
                         </GUI:IELImageButton.BorderBrushSetting>
@@ -124,8 +124,27 @@
                         <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Margin="6,6,6,6" Grid.Column="5"/>
                     </Grid>
                 </Border>
-                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Background="#CC94ADC5" Grid.ColumnSpan="1" Grid.Column="1">
+                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" Grid.Column="1">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.36,-1">
+                            <GradientStop Color="#D8B2BFFF" Offset="0.22"/>
+                            <GradientStop Color="#E50061FF" Offset="0.933"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
                     <Grid MinWidth="114">
+                        <Grid>
+                            <Grid.Effect>
+                                <BlurEffect/>
+                            </Grid.Effect>
+                            <Rectangle x:Name="VisualRectangleDateTimeBackground" Margin="0" RadiusX="9.75" RadiusY="9.75">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{Binding ElementName=ImageMenu}" Stretch="UniformToFill" AutoLayoutContent="False" Opacity="0.5"/>
+                                </Rectangle.Fill>
+                                <Rectangle.CacheMode>
+                                    <BitmapCache/>
+                                </Rectangle.CacheMode>
+                            </Rectangle>
+                        </Grid>
                         <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="16" FontFamily="Cascadia Code" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,2,0,0"/>
                         <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Cascadia Code" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>
                     </Grid>
