@@ -31,9 +31,18 @@
     <None Remove="Fonts\Vollda-Bold.otf" />
     <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
     <None Remove="UI\Images\Arrow.png" />
+    <None Remove="UI\Images\Done.png" />
+    <None Remove="UI\Images\DoubleMouseButton.png" />
+    <None Remove="UI\Images\LeftMouseButton.png" />
     <None Remove="UI\Images\LightBulb.png" />
-    <None Remove="UI\Images\Logo04.png" />
+    <None Remove="UI\Images\Logo05.png" />
+    <None Remove="UI\Images\LogoMain.png" />
+    <None Remove="UI\Images\LogoProgram.png" />
+    <None Remove="UI\Images\LogoProgramText.png" />
+    <None Remove="UI\Images\NotMouseButton.png" />
     <None Remove="UI\Images\Plus.png" />
+    <None Remove="UI\Images\RightMouseButton.png" />
+    <None Remove="UI\Images\Warning.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,25 +87,30 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\Arrow.png" />
+    <Resource Include="UI\Images\Done.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
     <Resource Include="UI\Images\Labels\Command.png" />
     <Resource Include="UI\Images\Labels\File.png" />
     <Resource Include="UI\Images\Labels\Folder.png" />
     <Resource Include="UI\Images\Labels\Link.png" />
     <Resource Include="UI\Images\LeftMouseButton.png" />
-    <Resource Include="UI\Images\LicenseIco.png" />
     <Resource Include="UI\Images\LightBulb.png" />
     <Resource Include="UI\Images\Loading.gif" />
     <Resource Include="UI\Images\Logo01.png" />
     <Resource Include="UI\Images\Logo03.png" />
     <Resource Include="UI\Images\20.png" />
     <Resource Include="UI\Images\Logo02.png" />
-    <Resource Include="UI\Images\Logo04.png" />
+    <Resource Include="UI\Images\Logo05.png" />
     <Resource Include="UI\Images\LogoDC.png" />
+    <Resource Include="UI\Images\LogoMain.png" />
+    <Resource Include="UI\Images\LogoProgram.png" />
+    <Resource Include="UI\Images\LogoProgramText.png" />
+    <Resource Include="UI\Images\NotMouseButton.png" />
     <Resource Include="UI\Images\Plus.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
     <Resource Include="UI\Images\Search.png" />
     <Resource Include="UI\Images\Settings.png" />
+    <Resource Include="UI\Images\Warning.png" />
     <Resource Include="UI\Images\Wifi.png" />
     <Resource Include="UI\Images\WifiOff.png" />
     <Resource Include="UI\Images\WifiOn.png" />
@@ -118,7 +132,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CounterScrollBar\DataScroll.csproj" />
+    <ProjectReference Include="..\DataScroll\DataScroll.csproj" />
     <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>

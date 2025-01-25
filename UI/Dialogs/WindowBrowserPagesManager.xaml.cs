@@ -81,7 +81,7 @@ namespace AAC20.UI.Dialogs
                 if (BrowserPage != null)
                 {
                     BrowserPage.AddInlayPage(App.CurrentApp.AllPages.PageLabelsApplication, "Ярлыки",
-                        "Ярлыки которые предаставляются программой для хранения важных команд");
+                        "Ярлыки которые предаставляются программой для хранения важных команд.");
                     Cancel = false;
                 }
                 Close();
@@ -96,7 +96,20 @@ namespace AAC20.UI.Dialogs
                 {
                     BrowserPage.AddInlayPage(App.CurrentApp.AllPages.PageDeveloper, "Страница разработчика",
                         "Страница не предоставляется для обычных пользователей. " +
-                        "Взаимодействие со страницей может повлечь за собой непредвиденное реагирование программы");
+                        "Взаимодействие со страницей может повлечь за собой непредвиденное реагирование программы.");
+                    Cancel = false;
+                }
+                Close();
+            };
+            #endregion
+
+            #region IELButtonPageConsole
+            IELButtonPageConsole.OnActivateMouseLeft += () =>
+            {
+                if (BrowserPage != null)
+                {
+                    BrowserPage.AddInlayPage(App.CurrentApp.AllPages.PageConsoleApplication, "Консоль",
+                        "Консоль программы для более гибкой настройки и взаимодействия с программой.");
                     Cancel = false;
                 }
                 Close();

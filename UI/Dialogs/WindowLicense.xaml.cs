@@ -76,11 +76,6 @@ namespace AAC20.UI.Dialogs
                 EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
             };
             Opacity = 0d;
-            ImageLicense.Opacity = 0d;
-            ImageLicense.RenderSize = new Size(70, 70);
-            ImageLicense.Margin = new(0, 45 - 15, 0, 35 - 15);
-            ImageLogo.Margin = new(12, -4 + 5, 0, 0);
-            Image20.Margin = new(-12, 96 - 5, 0, 0);
             FrameLicense.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             Closed += (sender, e) => GC.Collect(2, GCCollectionMode.Forced);
         }
@@ -92,32 +87,18 @@ namespace AAC20.UI.Dialogs
             BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
 
             ThicknessAnimatePos.BeginTime = DoubleAnimateAppOpacity.BeginTime + TimeSpan.FromMilliseconds(20d);
-            ThicknessAnimatePos.To = new(0, -4, 0, 0);
+            ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(1600d);
+            ThicknessAnimatePos.From = new(0, 24, 0, 24);
+            ThicknessAnimatePos.To = new(0, 20, 0, 20);
             ImageLogo.BeginAnimation(MarginProperty, ThicknessAnimatePos);
+            ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(800d);
+            ThicknessAnimatePos.From = null;
             ThicknessAnimatePos.To = new(0, 96, 0, 0);
-            Image20.BeginAnimation(MarginProperty, ThicknessAnimatePos);
             PageLicense license = new();
             FrameLicense.Navigate(license);
             AnimationThanks();
-            LicenseAnimation();
             DoubleAnimateAppOpacity.BeginTime = TimeSpan.Zero;
             base.ShowDialog();
-        }
-
-        /// <summary>
-        /// Активировать анимацию страницы лицензии
-        /// </summary>
-        private void LicenseAnimation()
-        {
-            ThicknessAnimatePos.BeginTime = TimeSpan.FromMilliseconds(1200d);
-            ThicknessAnimatePos.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseIn };
-            ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(300d);
-            DoubleAnimateAppOpacity.BeginTime = TimeSpan.FromMilliseconds(1300d);
-            DoubleAnimateAppOpacity.Duration = TimeSpan.FromMilliseconds(600d);
-            ThicknessAnimatePos.To = new(0, 45, 0, 35);
-            DoubleAnimateAppOpacity.To = 1d;
-            ImageLicense.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-            ImageLicense.BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
         }
 
         /// <summary>
