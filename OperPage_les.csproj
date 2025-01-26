@@ -118,7 +118,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CounterScrollBar\DataScroll.csproj" />
+    <ProjectReference Include="..\DataScroll\DataScroll.csproj" />
     <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>
