@@ -15,6 +15,7 @@ using DataScroll;
 using Interpreter.Interfaces;
 using AAC20.UI.Dialogs;
 using AAC20.UI.Pages.ActionPanel;
+using AAC20.UI.Pages.Browser;
 
 namespace AAC20.Windows.Pages.Browser
 {
@@ -156,7 +157,7 @@ namespace AAC20.Windows.Pages.Browser
 
             PageLabelMainActPanel.IELButtonCreateLabel.OnActivateMouseLeft += (Key) =>
             {
-                App.MainWindowApplication.ActivateActionCommand("create_label");
+                App.CurrentApp.ActivateActionCommand(null, "create_label");
             };
 
             GridDinamicLabels.ColumnDefinitions.Add(new() { Width = new GridLength(90d, GridUnitType.Star) });
@@ -330,7 +331,8 @@ namespace AAC20.Windows.Pages.Browser
             };
             Label.OnActivateMouseLeft += () =>
             {
-                App.MainWindowApplication.ActivateActionCommand(Label.Label.Command);
+                PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();
+                App.CurrentApp.ActivateActionCommand(Console, Label.Label.Command);
             };
             Label.MouseHover += (sender, e) =>
             {

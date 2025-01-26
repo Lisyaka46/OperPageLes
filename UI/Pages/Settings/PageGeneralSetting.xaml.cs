@@ -107,6 +107,20 @@ namespace AAC20.UI.Pages.Settings
             };
             SliderBufferSize.Value = RealySizeBuffer;
             #endregion
+            #region BlurBackgroundDataTime
+            string BlurState = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BlurBackgroundDataTime);
+            CheckBoxBlurDataTimeImage.IsChecked = BlurState.Equals("T");
+            CheckBoxBlurDataTimeImage.Checked += (sender, e) =>
+            {
+                EventChangeValue?.Invoke(EnumSettingApplication.BlurBackgroundDataTime, "T");
+                App.MainWindowApplication.ChangeBlurImageInDataTime(true);
+            };
+            CheckBoxBlurDataTimeImage.Unchecked += (sender, e) =>
+            {
+                EventChangeValue?.Invoke(EnumSettingApplication.BlurBackgroundDataTime, "F");
+                App.MainWindowApplication.ChangeBlurImageInDataTime(false);
+            };
+            #endregion
         }
 
         /// <summary>

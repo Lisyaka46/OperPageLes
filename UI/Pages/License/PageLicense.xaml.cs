@@ -32,7 +32,7 @@ namespace AAC20.Windows.Pages.License
         {
             InitializeComponent();
             Opacity = 0d;
-            TextBlockAAC.Margin = new(0, 20, 0, 0);
+            TextBlockNameProgram.Margin = new(0, 20, 0, 0);
             TextBlockLicenseText.Margin = new(0, 67, 0, 0);
             DoubleAnimate.BeginTime = TimeSpan.FromMilliseconds(700d);
             ThicknessAnimatePos.BeginTime = TimeSpan.FromMilliseconds(700d);
@@ -48,7 +48,7 @@ namespace AAC20.Windows.Pages.License
             DoubleAnimate.To = 1d;
             BeginAnimation(OpacityProperty, DoubleAnimate);
             ThicknessAnimatePos.To = new(0, 10, 0, 0);
-            TextBlockAAC.BeginAnimation(MarginProperty, ThicknessAnimatePos);
+            TextBlockNameProgram.BeginAnimation(MarginProperty, ThicknessAnimatePos);
             ThicknessAnimatePos.BeginTime += TimeSpan.FromMilliseconds(72d);
             ThicknessAnimatePos.To = new(0, 57, 0, 0);
             TextBlockLicenseText.BeginAnimation(MarginProperty, ThicknessAnimatePos);
