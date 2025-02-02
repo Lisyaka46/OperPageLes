@@ -37,6 +37,9 @@
         <Style x:Key="RussianRail G Pro">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#RussianRail G Pro"/>
         </Style>
+        <Style x:Key="CureEater">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#CureEater"/>
+        </Style>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>

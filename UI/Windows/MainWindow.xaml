@@ -72,63 +72,53 @@
             <Grid Grid.Row="3" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition x:Name="TimeDataColumnDefinition" Width="124" MaxWidth="124"/>
+                    <ColumnDefinition x:Name="TimeDataColumnDefinition" Width="121" MaxWidth="124"/>
+                    <ColumnDefinition Width="53"/>
                 </Grid.ColumnDefinitions>
-                <Border x:Name="BorderImageInformation" BorderBrush="#FF315842" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#CC4A7B60" Grid.Column="0" Grid.ColumnSpan="1">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="43"/>
-                            <ColumnDefinition Width="43"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="43"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="43"/>
-                        </Grid.ColumnDefinitions>
-                        <Border x:Name="BorderInternetConnection" BorderBrush="#FF085D2D" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CBBAC" Margin="3,3,3,3" Cursor="Help">
-                            <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/UI/Images/WifiOff.png" Margin="-2,0,0,0">
-                                <Image.Effect>
-                                    <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
-                                </Image.Effect>
-                                <Image.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
-                                        <SkewTransform AngleY="0"/>
-                                        <RotateTransform Angle="0"/>
-                                        <TranslateTransform Y="0" X="0"/>
-                                    </TransformGroup>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Border>
-                        <Border x:Name="BorderStateRegister" BorderBrush="#FF314E58" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5C9FBB" Margin="3,3,3,3" Grid.Column="1" Cursor="Help">
-                            <TextBlock x:Name="TextBlockRegister" TextWrapping="Wrap" Text="А" TextAlignment="Center" VerticalAlignment="Center" FontSize="23" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
-                                <TextBlock.Effect>
-                                    <BlurEffect x:Name="BlurEffectTextBlockRegister" Radius="0" KernelType="Box" RenderingBias="Quality"/>
-                                </TextBlock.Effect>
-                            </TextBlock>
-                        </Border>
-                        <Border x:Name="BorderCurrentLanguage" BorderBrush="#FF2D563E" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF65A081" Margin="3,3,3,3" Grid.Column="2" Cursor="Help">
-                            <TextBlock x:Name="TextBlockLanguage" TextWrapping="Wrap" Text="ENG" TextAlignment="Center" VerticalAlignment="Center" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
-                                <TextBlock.Effect>
-                                    <BlurEffect x:Name="BlurEffectLanguage" RenderingBias="Quality" Radius="0" KernelType="Box"/>
-                                </TextBlock.Effect>
-                            </TextBlock>
-                        </Border>
-                        <GUI:IELImageButton x:Name="IELImageButtonHelp" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Imaging="/UI/Images/LightBulb.png" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2">
-                            <GUI:IELImageButton.BorderBrushSetting>
-                                <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
-                            </GUI:IELImageButton.BorderBrushSetting>
-                            <GUI:IELImageButton.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
-                            </GUI:IELImageButton.BackgroundSetting>
-                        </GUI:IELImageButton>
-                        <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Margin="6,6,6,6" Grid.Column="5"/>
-                    </Grid>
-                </Border>
-                <Border x:Name="BorderDateTime" BorderBrush="#FF315842" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" Grid.Column="1">
+                <Grid>
+                    <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#D8C2DFD4" Grid.ColumnSpan="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="43"/>
+                                <ColumnDefinition Width="43"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="43"/>
+                            </Grid.ColumnDefinitions>
+                            <GUI:IELImageButton x:Name="IELImageButtonHelp0" CornerRadius="5,5,5,5" Imaging="/UI/Images/Menu.png" ImageMargin="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" AnimationMillisecond="160">
+                                <GUI:IELImageButton.BorderBrushSetting>
+                                    <Classes:BrushSettingQ Default="#FF25546D" NotEnabled="#FFC15555" Select="#FF446B80" Used="#FF4B768C" UsedState="False"/>
+                                </GUI:IELImageButton.BorderBrushSetting>
+                                <GUI:IELImageButton.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9" UsedState="False"/>
+                                </GUI:IELImageButton.BackgroundSetting>
+                            </GUI:IELImageButton>
+                            <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="0,0,1,7" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160">
+                                <GUI:IELButtonText.ForegroundSetting>
+                                    <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
+                                </GUI:IELButtonText.ForegroundSetting>
+                                <GUI:IELButtonText.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
+                                </GUI:IELButtonText.BackgroundSetting>
+                            </GUI:IELButtonText>
+                            <Grid Grid.Column="2">
+                                <GUI:IELPageController x:Name="IELPageControllerButtons"/>
+                            </Grid>
+                            <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="1,0,0,7" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160">
+                                <GUI:IELButtonText.ForegroundSetting>
+                                    <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
+                                </GUI:IELButtonText.ForegroundSetting>
+                                <GUI:IELButtonText.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
+                                </GUI:IELButtonText.BackgroundSetting>
+                            </GUI:IELButtonText>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Border x:Name="BorderDateTime" BorderBrush="#FF528A86" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" Grid.Column="1">
                     <Border.Background>
-                        <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.36,-1">
-                            <GradientStop Color="#D8B2BFFF" Offset="0.22"/>
-                            <GradientStop Color="#E50061FF" Offset="0.933"/>
+                        <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.3,-2">
+                            <GradientStop Color="#FFCDFFEC" Offset="0.22"/>
+                            <GradientStop Color="#FF85A8E2" Offset="0.938"/>
                         </LinearGradientBrush>
                     </Border.Background>
                     <Grid MinWidth="114">
@@ -145,9 +135,12 @@
                                 </Rectangle.CacheMode>
                             </Rectangle>
                         </Grid>
-                        <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="16" FontFamily="Cascadia Code" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,2,0,0"/>
-                        <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontFamily="Cascadia Code" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,2"/>
+                        <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,3,0,0" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold"/>
+                        <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,3" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}"/>
                     </Grid>
+                </Border>
+                <Border x:Name="BorderIndicator" BorderBrush="#FF007D9E" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#CC77B0FD" Grid.Column="2">
+                    <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Margin="5,5,5,5" Grid.Column="5"/>
                 </Border>
             </Grid>
             <GUI:IELBrowserPage x:Name="IELBrowserPageMain" Grid.Row="1">

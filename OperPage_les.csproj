@@ -39,6 +39,7 @@
     <None Remove="UI\Images\LogoMain.png" />
     <None Remove="UI\Images\LogoProgram.png" />
     <None Remove="UI\Images\LogoProgramText.png" />
+    <None Remove="UI\Images\Menu.png" />
     <None Remove="UI\Images\NotMouseButton.png" />
     <None Remove="UI\Images\Plus.png" />
     <None Remove="UI\Images\RightMouseButton.png" />
@@ -105,6 +106,7 @@
     <Resource Include="UI\Images\LogoMain.png" />
     <Resource Include="UI\Images\LogoProgram.png" />
     <Resource Include="UI\Images\LogoProgramText.png" />
+    <Resource Include="UI\Images\Menu.png" />
     <Resource Include="UI\Images\NotMouseButton.png" />
     <Resource Include="UI\Images\Plus.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
