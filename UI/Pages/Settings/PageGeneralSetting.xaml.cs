@@ -57,9 +57,19 @@ namespace AAC20.UI.Pages.Settings
             #region PathMenuImage
             string PathBackgroundImage = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
             TextBlockFailedImageSetup.Opacity = 0d;
-            TextBoxPathMenuImage.Text = PathBackgroundImage;
-            ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
-            IElButtonDialogDirectoryFile.OnActivateMouseLeft += () =>
+            if (PathBackgroundImage.Length > 0)
+            {
+                TextBoxPathMenuImage.Text = PathBackgroundImage;
+                ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
+                IELButtonClearImage.IsEnabled = true;
+            }
+            else
+            {
+                ImageBackground.Opacity = 0d;
+                TextBoxPathMenuImage.Text = String.Empty;
+                IELButtonClearImage.IsEnabled = false;
+            }
+            IELButtonDialogDirectoryFile.OnActivateMouseLeft += () =>
             {
                 OpenFileDialog dialog = new()
                 {
@@ -77,9 +87,19 @@ namespace AAC20.UI.Pages.Settings
                 };
                 dialog.ShowDialog();
             };
-            IElButtonSetTextClipboard.OnActivateMouseLeft += () =>
+            IELButtonSetTextClipboard.OnActivateMouseLeft += () =>
             {
                 SetImageUriValue(Clipboard.GetText());
+            };
+            IELButtonClearImage.OnActivateMouseLeft += () =>
+            {
+                DoubleAnimation animation = DoubleAnimate.Clone();
+                animation.Duration = TimeSpan.FromMilliseconds(2000d);
+                animation.To = 0d;
+                ImageBackground.BeginAnimation(OpacityProperty, animation);
+                TextBoxPathMenuImage.Text = String.Empty;
+                IELButtonClearImage.IsEnabled = false;
+                EventChangeValue?.Invoke(EnumSettingApplication.PathMenuImage, "!");
             };
             #endregion
             #region BufferSize
@@ -129,6 +149,7 @@ namespace AAC20.UI.Pages.Settings
         /// <param name="Uri">Ссылка или директория на элемент картинки</param>
         private void SetImageUriValue(string Uri)
         {
+            DoubleAnimation animation = DoubleAnimate.Clone();
             try
             {
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
@@ -137,12 +158,16 @@ namespace AAC20.UI.Pages.Settings
                     TextBoxPathMenuImage.Text = Uri;
                     ImageBackground.Source = image;
                     App.AnimateBlurEffect(BlurEffectImageBackground, 10u, 2000d);
+                    IELButtonClearImage.IsEnabled = true;
                     EventChangeValue?.Invoke(EnumSettingApplication.PathMenuImage, Uri);
+
+                    animation.Duration = TimeSpan.FromMilliseconds(1000d);
+                    animation.To = 0.15d;
+                    ImageBackground.BeginAnimation(OpacityProperty, animation);
                 }
             }
             catch
             {
-                DoubleAnimation animation = DoubleAnimate.Clone();
                 animation.Duration = TimeSpan.FromMilliseconds(5000d);
                 animation.From = 1d;
                 animation.To = 0d;
