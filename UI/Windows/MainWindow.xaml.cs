@@ -62,11 +62,6 @@ namespace AAC20.UI.Windows
             /// Флаг состояния регистра
             /// </summary>
             internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
-
-            /// <summary>
-            /// Флаг обновления подсказок к командам
-            /// </summary>
-            internal static readonly Flag FlagHintRead = new(false);
         };
 
         /// <summary>
@@ -217,8 +212,8 @@ namespace AAC20.UI.Windows
 
             #region SetParameteres
             ActualIndexActivatePageDownToolButtons = -1;
-            IELPageControllerButtons.LeftAnimateSwitch = new(7, 0, 0, 0);
-            IELPageControllerButtons.RightAnimateSwitch = new(-7, 0, 0, 0);
+            IELPageControllerButtons.LeftAnimateSwitch = new(-10, 0, 0, 0);
+            IELPageControllerButtons.RightAnimateSwitch = new(10, 0, 0, 0);
             DownToolPageIndex0.TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
 
             VisualRectangleDateTimeBackground.Opacity = 0d;
@@ -274,6 +269,11 @@ namespace AAC20.UI.Windows
             IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
             IELImageButtonNextButtons.OnActivateMouseLeft += () => NextPageDownToolButtons();
             IELImageButtonBackButtons.OnActivateMouseLeft += () => NextPageDownToolButtons(false);
+
+            IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
+            IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
+            IELImageButtonBackButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(3, 0, 0, 0), 400u);
+            IELImageButtonBackButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
             #region IELBrowserPage
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += () =>
             {

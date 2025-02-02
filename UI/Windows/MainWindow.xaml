@@ -23,11 +23,11 @@
                 <RowDefinition Height="451*"/>
                 <RowDefinition Height="53" MaxHeight="52" MinHeight="40"/>
             </Grid.RowDefinitions>
-            <Border x:Name="BorderButtonsUp" BorderBrush="#FF386951" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.ColumnSpan="3" Grid.RowSpan="1" Focusable="True">
+            <Border x:Name="BorderButtonsUp" BorderBrush="#FF35755F" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.ColumnSpan="3" Grid.RowSpan="1" Focusable="True">
                 <Border.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.498,-0.5">
-                        <GradientStop Color="#CC386951" Offset="0.99"/>
-                        <GradientStop Color="#D8537E8C" Offset="0"/>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.47,-2.5">
+                        <GradientStop Color="#CC78A08C" Offset="0.99"/>
+                        <GradientStop Color="#D887E1FF" Offset="0"/>
                     </LinearGradientBrush>
                 </Border.Background>
                 <Border.FocusVisualStyle>
