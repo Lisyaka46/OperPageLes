@@ -6,54 +6,58 @@
       xmlns:GUI="clr-namespace:IEL;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
       xmlns:local="clr-namespace:OperPage_les.UI.Pages.PanelButtonInformation.MainWindow"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
       mc:Ignorable="d" 
       d:DesignHeight="42" d:DesignWidth="487">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="43"/>
             <ColumnDefinition Width="43"/>
+            <ColumnDefinition Width="57"/>
             <ColumnDefinition Width="43"/>
-            <ColumnDefinition Width="43"/>
-            <ColumnDefinition Width="43"/>
-            <ColumnDefinition Width="43"/>
+            <ColumnDefinition Width="36"/>
+            <ColumnDefinition Width="36"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Border x:Name="BorderInternetConnection" BorderBrush="#FF277B4B" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Padding="3,3,3,3" Background="#FF5CBBAC" Cursor="Help" Margin="3,3,3,3">
-            <Image x:Name="ImageInternetConnection" RenderTransformOrigin="0.5,0.5" Source="/UI/Images/WifiOff.png" Margin="-2,0,0,0">
-                <Image.Effect>
-                    <BlurEffect x:Name="BlurEffectImageInternetConnection" Radius="0" KernelType="Box" RenderingBias="Quality"/>
-                </Image.Effect>
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
-                        <SkewTransform AngleY="0"/>
-                        <RotateTransform Angle="0"/>
-                        <TranslateTransform Y="0" X="0"/>
-                    </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
-        </Border>
-        <Border x:Name="BorderStateRegister" BorderBrush="#FF314E58" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF5C9FBB" Cursor="Help" Margin="3,3,3,3" Grid.Column="1">
-            <TextBlock x:Name="TextBlockRegister" TextWrapping="Wrap" Text="А" TextAlignment="Center" VerticalAlignment="Center" FontSize="23" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
-                <TextBlock.Effect>
-                    <BlurEffect x:Name="BlurEffectTextBlockRegister" Radius="0" KernelType="Box" RenderingBias="Quality"/>
-                </TextBlock.Effect>
-            </TextBlock>
-        </Border>
-        <Border x:Name="BorderCurrentLanguage" BorderBrush="#FF2D563E" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="#FF65A081" Cursor="Help" Grid.Column="2" Margin="3,3,3,3">
-            <TextBlock x:Name="TextBlockLanguage" TextWrapping="Wrap" Text="ENG" TextAlignment="Center" VerticalAlignment="Center" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold">
-                <TextBlock.Effect>
-                    <BlurEffect x:Name="BlurEffectLanguage" RenderingBias="Quality" Radius="0" KernelType="Box"/>
-                </TextBlock.Effect>
-            </TextBlock>
-        </Border>
-        <GUI:IELImageButton x:Name="IELImageButtonHelp" CornerRadius="5,5,5,5" Imaging="/UI/Images/LightBulb.png" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="3" Margin="3,3,3,3">
-            <GUI:IELImageButton.BorderBrushSetting>
-                <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
-            </GUI:IELImageButton.BorderBrushSetting>
-            <GUI:IELImageButton.BackgroundSetting>
-                <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
-            </GUI:IELImageButton.BackgroundSetting>
-        </GUI:IELImageButton>
+        <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" Text="ENG" AnimationMillisecond="160" BorderThicknessBlock="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14">
+            <GUI:IELBlockInfoText.Effect>
+                <BlurEffect Radius="0"/>
+            </GUI:IELBlockInfoText.Effect>
+            <GUI:IELBlockInfoText.BorderBrushSetting>
+                <Classes:BrushSettingQ Default="#FF2D563E" NotEnabled="#FFF92929" Select="#FF4F5F56" Used="White" UsedState="False"/>
+            </GUI:IELBlockInfoText.BorderBrushSetting>
+            <GUI:IELBlockInfoText.ForegroundSetting>
+                <Classes:BrushSettingQ/>
+            </GUI:IELBlockInfoText.ForegroundSetting>
+            <GUI:IELBlockInfoText.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF65A081" NotEnabled="#FFF92929" Select="#FF86E4B2" Used="White" UsedState="False"/>
+            </GUI:IELBlockInfoText.BackgroundSetting>
+        </GUI:IELBlockInfoText>
+        <GUI:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" AnimationMillisecond="160">
+            <GUI:IELBlockInfoText.Effect>
+                <BlurEffect Radius="0"/>
+            </GUI:IELBlockInfoText.Effect>
+            <GUI:IELBlockInfoText.ForegroundSetting>
+                <Classes:BrushSettingQ/>
+            </GUI:IELBlockInfoText.ForegroundSetting>
+            <GUI:IELBlockInfoText.BorderBrushSetting>
+                <Classes:BrushSettingQ Default="#FF314E58" NotEnabled="#FFF92929" Select="#FF505E63" Used="White" UsedState="False"/>
+            </GUI:IELBlockInfoText.BorderBrushSetting>
+            <GUI:IELBlockInfoText.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF5C9FBB" NotEnabled="#FFF92929" Select="#FF56A6E4" Used="White" UsedState="False"/>
+            </GUI:IELBlockInfoText.BackgroundSetting>
+        </GUI:IELBlockInfoText>
+        <Image x:Name="ImageIndicatorLoadingInternetConnection" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25" Height="25" IsHitTestVisible="False"/>
+        <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" Imaging="/UI/Images/Wifi.png">
+            <GUI:IELBlockInfoImage.Effect>
+                <BlurEffect Radius="0"/>
+            </GUI:IELBlockInfoImage.Effect>
+            <GUI:IELBlockInfoImage.BorderBrushSetting>
+                <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White" UsedState="False"/>
+            </GUI:IELBlockInfoImage.BorderBrushSetting>
+            <GUI:IELBlockInfoImage.BackgroundSetting>
+                <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White" UsedState="False"/>
+            </GUI:IELBlockInfoImage.BackgroundSetting>
+        </GUI:IELBlockInfoImage>
     </Grid>
 </Page>

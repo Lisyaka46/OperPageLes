@@ -42,28 +42,6 @@ namespace AAC20.UI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        /// <summary>
-        /// Флаги данной формы
-        /// </summary>
-        private readonly struct Flags
-        {
-            /// <summary>
-            /// Флаг соеденения с интернетом
-            /// </summary>
-            internal static readonly Flag FlagInternetConnection = new(false);
-
-            /// <summary>
-            /// Флаг состояния видимости объекта страниц
-            /// </summary>
-            internal static readonly Flag FlagFrameComponentVisible = new(true);
-
-            /// <summary>
-            /// Флаг состояния регистра
-            /// </summary>
-            internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
-        };
-
         /// <summary>
         /// Страница взаимодействия с вкладками браузера страниц
         /// </summary>
@@ -141,14 +119,12 @@ namespace AAC20.UI.Windows
             new Page1(), new Page2()
         ];
 
-        private Page1 DownToolPageIndex0 = (Page1)PagesButtonsInformation[0];
-
         public MainWindow()
         {
             InitializeComponent();
 
             #region Command
-            #if DEBUG
+#if DEBUG
             App.DataConsoleCommand.AddRange([
                 #region anim
                 new ConsoleCommand("anim", [new Parameter("Value", typeof(bool))],
@@ -166,23 +142,6 @@ namespace AAC20.UI.Windows
                 #endregion
             ]);
             #endif
-            #endregion
-
-            #region Event Flags
-            Flags.FlagInternetConnection.ChangeStateFlag += (NewValue) =>
-            {
-                DownToolPageIndex0.ImageInternetConnection.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
-                App.AnimateBlurEffect(DownToolPageIndex0.BlurEffectImageInternetConnection, 10u);
-            };
-            Flags.FlagRegisterState.ChangeStateFlag += (NewValue) =>
-            {
-                DownToolPageIndex0.TextBlockRegister.Text = NewValue ? "A" : "a";
-                App.AnimateBlurEffect(DownToolPageIndex0.BlurEffectTextBlockRegister, 10u);
-                if (IELMessageMain.FlagMessage && IELMessageMain.NameParentObject.Equals(DownToolPageIndex0.BorderStateRegister.Name))
-                    IELMessageMain.UsingBorderInformation(DownToolPageIndex0.BorderStateRegister, DownToolPageIndex0.BorderStateRegister.Name, Flags.FlagRegisterState ?
-                        "Установлен большой регистр" : "Установлен малый регистр",
-                        IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
             #endregion
 
             #region Event Pages
@@ -212,9 +171,8 @@ namespace AAC20.UI.Windows
 
             #region SetParameteres
             ActualIndexActivatePageDownToolButtons = -1;
-            IELPageControllerButtons.LeftAnimateSwitch = new(-10, 0, 0, 0);
-            IELPageControllerButtons.RightAnimateSwitch = new(10, 0, 0, 0);
-            DownToolPageIndex0.TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
+            IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
+            IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
 
             VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
@@ -288,51 +246,15 @@ namespace AAC20.UI.Windows
             };
             #endregion
 
-            #region BorderInternetConnection
-            DownToolPageIndex0.BorderInternetConnection.MouseEnter += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(DownToolPageIndex0.BorderInternetConnection, DownToolPageIndex0.BorderInternetConnection.Name, Flags.FlagInternetConnection ?
-                    "Есть подключение к интернету" : "Нет подключения к интернету",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
-            DownToolPageIndex0.BorderInternetConnection.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
-            #region BorderStateRegister
-            DownToolPageIndex0.BorderStateRegister.MouseEnter += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(DownToolPageIndex0.BorderStateRegister, DownToolPageIndex0.BorderStateRegister.Name, Flags.FlagRegisterState ?
-                    "Установлен большой регистр" : "Установлен малый регистр",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
-            DownToolPageIndex0.BorderStateRegister.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
-            #region BorderCurrentLanguage
-            DownToolPageIndex0.BorderCurrentLanguage.MouseEnter += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(DownToolPageIndex0.BorderCurrentLanguage, DownToolPageIndex0.BorderCurrentLanguage.Name,
-                    "Текущий язык раскладки клавиатуры",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
-            DownToolPageIndex0.BorderCurrentLanguage.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
             #region IELImageButtonHelp
-            DownToolPageIndex0.IELImageButtonHelp.OnActivateMouseLeft += App.UsingDiscriptionCommand;
-            DownToolPageIndex0.IELImageButtonHelp.MouseHover += (sender, e) =>
+            IELImageButtonHelp.OnActivateMouseLeft += App.UsingDiscriptionCommand;
+            IELImageButtonHelp.MouseHover += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(DownToolPageIndex0.IELImageButtonHelp, DownToolPageIndex0.IELImageButtonHelp.Name,
+                IELMessageMain.UsingBorderInformation(IELImageButtonHelp, IELImageButtonHelp.Name,
                     "Быстрое открытие описания команд",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
+                    IELBlockMessage.OrientationBorderInfo.LeftDown);
             };
-            DownToolPageIndex0.IELImageButtonHelp.MouseLeave += (sender, e) =>
+            IELImageButtonHelp.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
             };
@@ -366,7 +288,7 @@ namespace AAC20.UI.Windows
             };
             KeyDown += (sender, e) =>
             {
-                if (e.Key == Key.CapsLock) Flags.FlagRegisterState.Value = Console.CapsLock;
+                if (e.Key == Key.CapsLock) App.Flags.FlagRegisterState.Value = Console.CapsLock;
             };
             Activated += (sender, e) =>
             {
@@ -449,18 +371,6 @@ namespace AAC20.UI.Windows
         {
             TextBlockTime.Text = RealTime;
             TextBlockData.Text = RealData;
-            if (!App.InternetPinging.Wait)
-            {
-                if (IELMessageMain.FlagMessage && Flags.FlagInternetConnection.Value != App.InternetPinging &&
-                    IELMessageMain.NameParentObject.Equals(DownToolPageIndex0.BorderInternetConnection.Name))
-                {
-                    IELMessageMain.Opacity = 0d;
-                    IELMessageMain.UsingBorderInformation(DownToolPageIndex0.BorderInternetConnection, DownToolPageIndex0.BorderInternetConnection.Name, App.InternetPinging ?
-                    "Есть подключение к интернету" : "Нет подключения к интернету",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-                }
-                Flags.FlagInternetConnection.Value = App.InternetPinging;
-            }
         }
 
         /// <summary>
@@ -468,12 +378,7 @@ namespace AAC20.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualDataRunTime()
         {
-            /*string LangName = System.Windows.Forms.InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
-            if (!LangName.Equals(TextBlockLanguage.Text))
-            {
-                TextBlockLanguage.Text = LangName;
-                App.AnimateBlurEffect(BlurEffectLanguage, 10u);
-            }*/
+            
             //VisualRectangleDateTimeBackground.Visual.
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;

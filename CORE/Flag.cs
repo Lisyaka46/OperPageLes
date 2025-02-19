@@ -34,9 +34,27 @@ namespace AAC20.CORE.Flaging
         public event EventChangeStateFlag? ChangeStateFlag;
 
         /// <summary>
+        /// Событие изменения состояния ожидания обновления флага
+        /// </summary>
+        public event EventChangeStateFlag? ChangeStateWait;
+
+        /// <summary>
+        /// Ресурсное значение состояния ожидания
+        /// </summary>
+        private bool _Wait = false;
+
+        /// <summary>
         /// Параметр состояния ожидания
         /// </summary>
-        public bool Wait { get; internal set; } = false;
+        public bool Wait
+        {
+            get => _Wait;
+            set
+            {
+                _Wait = value;
+                ChangeStateWait?.Invoke(value);
+            }
+        }
 
         /// <summary>
         /// Ресурсное значение флага

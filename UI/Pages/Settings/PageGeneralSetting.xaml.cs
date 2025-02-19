@@ -105,6 +105,9 @@ namespace AAC20.UI.Pages.Settings
             #region BufferSize
             string StringBufferSize = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BufferSize);
             int RealySizeBuffer = Convert.ToInt32(StringBufferSize);
+            SliderBufferSize.Value = RealySizeBuffer;
+            TextBlockSliderBufferSize.Text = SliderBufferSize.Value.ToString();
+            BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
             SliderBufferSize.ValueChanged += (sender, e) =>
             {
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
@@ -125,7 +128,6 @@ namespace AAC20.UI.Pages.Settings
                 if (SliderBufferSize.Value != RealySizeBuffer)
                     EventChangeValue?.Invoke(EnumSettingApplication.BufferSize, SliderBufferSize.Value.ToString());
             };
-            SliderBufferSize.Value = RealySizeBuffer;
             #endregion
             #region BlurBackgroundDataTime
             string BlurState = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BlurBackgroundDataTime);

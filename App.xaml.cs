@@ -36,6 +36,29 @@ namespace AAC20
             internal static WindowDiscriptionCommands? DiscriptionCommands = null;
         }
 
+        #region Application Flags
+        /// <summary>
+        /// Флаги данной формы
+        /// </summary>
+        internal readonly struct Flags
+        {
+            /// <summary>
+            /// Состояние подключения к интернету
+            /// </summary>
+            internal static readonly Flag InternetPinging = new(false);
+
+            /// <summary>
+            /// Флаг состояния видимости объекта страниц
+            /// </summary>
+            internal static readonly Flag FlagFrameComponentVisible = new(true);
+
+            /// <summary>
+            /// Флаг состояния регистра
+            /// </summary>
+            internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
+        };
+        #endregion
+
         /// <summary>
         /// Объект всех страниц программы
         /// </summary>
@@ -267,11 +290,6 @@ namespace AAC20
         internal static App CurrentApp => (App)Current;
 
         /// <summary>
-        /// Состояние подключения к интернету
-        /// </summary>
-        internal static readonly Flag InternetPinging = new(false);
-
-        /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
         private readonly Setting<EnumSettingProcess> SettingProcess;
@@ -355,15 +373,15 @@ namespace AAC20
             Ping ObjPing = new();
             try
             {
-                InternetPinging.Wait = true;
-                PingReply reply = ObjPing.SendPingAsync("yandex.ru", 800).Result;
-                InternetPinging.Wait = false;
-                InternetPinging.Value = reply.Status == IPStatus.Success;
+                Flags.InternetPinging.Wait = true;
+                PingReply reply = ObjPing.SendPingAsync("yandex.ru", 3000).Result;
+                Flags.InternetPinging.Wait = false;
+                Flags.InternetPinging.Value = reply.Status == IPStatus.Success;
             }
             catch
             {
-                InternetPinging.Wait = false;
-                InternetPinging.Value = false;
+                Flags.InternetPinging.Wait = false;
+                Flags.InternetPinging.Value = false;
             }
         }
 
@@ -373,19 +391,41 @@ namespace AAC20
         /// <param name="Effect">Объект эффекта анимации</param>
         /// <param name="Power">Сила блюра при старте</param>
         /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateBlurEffect(BlurEffect Effect, uint Power, double Duration = 700d)
+        /// <param name="EnterToOriginValue">Возвратиться к текущему значению</param>
+        internal static void AnimateBlurEffect(BlurEffect Effect, uint Power, double Duration = 700d, bool EnterToOriginValue = true)
         {
             DoubleAnimation animation = new()
             {
-                Duration = TimeSpan.FromMilliseconds(Duration),
-                From = Power,
-                To = 0d,
                 EasingFunction = new CubicEase()
                 {
                     EasingMode = EasingMode.EaseOut,
-                }
+                },
+                Duration = TimeSpan.FromMilliseconds(Duration),
+                From = EnterToOriginValue ? Power : Effect.Radius,
+                To = EnterToOriginValue ? 0d : Power
             };
             Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
+        }
+
+        /// <summary>
+        /// Анимировать числовой эффект объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateDoubleEffect(FrameworkElement Element, DependencyProperty Property, double To, double Duration = 700d)
+        {
+            DoubleAnimation animation = new()
+            {
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut,
+                },
+                Duration = TimeSpan.FromMilliseconds(Duration),
+                To = To,
+            };
+            Element.BeginAnimation(Property, animation);
         }
 
         /// <summary>
