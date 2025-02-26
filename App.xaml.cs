@@ -15,8 +15,10 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 
 namespace AAC20
 {
