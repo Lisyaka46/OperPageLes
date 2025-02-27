@@ -244,6 +244,11 @@ namespace AAC20.UI.Windows
                 IELActionPanelMain.UsingPanelAction(PASettingsBrowserManipulateInlay);
                 //DialogManagerPage.ShowDialog();
             };
+            IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
+            {
+                IELMessageMain.UsingBorderInformation(Element, Element.Name, Text, IELBlockMessage.OrientationBorderInfo.Auto);
+            };
+            IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
 
             #region IELImageButtonHelp
