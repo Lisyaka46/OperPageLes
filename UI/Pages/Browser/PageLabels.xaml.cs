@@ -30,6 +30,11 @@ namespace AAC20.Windows.Pages.Browser
         public string PageName { get; } = nameof(PageLabels);
 
         /// <summary>
+        /// Объект страницы
+        /// </summary>
+        public new Page Content => this;
+
+        /// <summary>
         /// Динамический массив ярлыков
         /// </summary>
         private List<IELLabelCommand> ObjectsLabel;

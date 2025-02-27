@@ -21,6 +21,11 @@ namespace AAC20.Windows.Pages.Browser
         /// </summary>
         public string PageName { get; } = nameof(PageDeveloper);
 
+        /// <summary>
+        /// Объект страницы
+        /// </summary>
+        public new Page Content => this;
+
         public PageDeveloper()
         {
             InitializeComponent();

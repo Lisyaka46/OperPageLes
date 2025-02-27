@@ -20,6 +20,11 @@ namespace AAC20.UI.Pages.Settings
         public string PageName { get; } = nameof(PageGeneralSetting);
 
         /// <summary>
+        /// Объект страницы
+        /// </summary>
+        public new Page Content => this;
+
+        /// <summary>
         /// Событие изменения значений настроек
         /// </summary>
         internal IPageSetting<EnumSettingApplication>.ChangeValue? EventChangeValue;

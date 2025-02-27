@@ -28,7 +28,7 @@
             <IEL:IELButtonText x:Name="IELGeneralButton" Margin="6,0,6,6" CornerRadius="0,0,8,8" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" Text="Общие" AnimationMillisecond="160" BorderThicknessBlock="3,0,3,3"/>
         </Grid>
         <Grid Grid.Row="1">
-            <IEL:IELFrameDefault x:Name="IELFrameSetting"/>
+            <IEL:IELPageController x:Name="MainPageController" RightAnimateSwitch="10,3,0,0" LeftAnimateSwitch="-10,3,0,0"/>
         </Grid>
     </Grid>
 </Window>

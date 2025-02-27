@@ -77,7 +77,7 @@ namespace AAC20.UI.Dialogs
             };
             IELGeneralButton.OnActivateMouseLeft += () =>
             {
-                IELFrameSetting.NextPage(GeneralSetting);
+                MainPageController.NextPage(GeneralSetting);
             };
             #endregion
             #region This

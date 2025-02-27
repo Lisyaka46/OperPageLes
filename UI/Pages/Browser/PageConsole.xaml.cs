@@ -38,6 +38,11 @@ namespace AAC20.UI.Pages.Browser
         public string PageName { get; } = nameof(PageConsole);
 
         /// <summary>
+        /// Объект страницы
+        /// </summary>
+        public new Page Content => this;
+
+        /// <summary>
         /// Главная страница панели действий в консоли
         /// </summary>
         private readonly PageMainConsolePanelAction PageConsolePA = new();
@@ -97,7 +102,6 @@ namespace AAC20.UI.Pages.Browser
             Canvas.SetZIndex(GridHintCommandParameter, -1);
             RichTextBoxMainMessage.Document = new();
             PASettingsConsole = new(RichTextBoxMainMessage, PageConsolePA, new(270d, 230d));
-
             ButtonReturnCommand.OnActivateMouseLeft += () => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
 
             #region PageConsolePA
