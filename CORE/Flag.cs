@@ -1,6 +1,6 @@
 ﻿
 
-namespace AAC20.CORE.Flaging
+namespace OperPage_les.CORE.Flaging
 {
     /// <summary>
     /// Перечисление состояний ожидаемого типа флага

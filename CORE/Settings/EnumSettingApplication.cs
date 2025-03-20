@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AAC20.CORE.Settings
+namespace OperPage_les.CORE.Settings
 {
     /// <summary>
     /// Перечисление именованных свойств настроек <b>приложения</b>
@@ -25,5 +25,10 @@ namespace AAC20.CORE.Settings
         /// Блюр фона в панели даты и времени
         /// </summary>
         BlurBackgroundDataTime = 2,
+
+        /// <summary>
+        /// Параметр отображения количества миллисекунд уходящее на подключение
+        /// </summary>
+        MillisecondInternetConnection = 3,
     }
 }

@@ -47,8 +47,8 @@
                 <Classes:BrushSettingQ Default="#FF5C9FBB" NotEnabled="#FFF92929" Select="#FF56A6E4" Used="White" UsedState="False"/>
             </GUI:IELBlockInfoText.BackgroundSetting>
         </GUI:IELBlockInfoText>
-        <Image x:Name="ImageIndicatorLoadingInternetConnection" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25" Height="25" IsHitTestVisible="False"/>
-        <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" Imaging="/UI/Images/Wifi.png">
+        <Image x:Name="ImageIndicatorLoadingInternetConnection" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25" Height="25" IsHitTestVisible="False" Opacity="0"/>
+        <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" Imaging="/UI/Images/WifiOff.png" ImageMargin="4,-3,4,6" Margin="-2,0,-2,0" BorderThicknessBlock="2,2,2,2">
             <GUI:IELBlockInfoImage.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoImage.Effect>
@@ -59,5 +59,10 @@
                 <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White" UsedState="False"/>
             </GUI:IELBlockInfoImage.BackgroundSetting>
         </GUI:IELBlockInfoImage>
+        <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" Margin="5,0,5,5" IsHitTestVisible="False">
+            <TextBlock.Effect>
+                <BlurEffect Radius="0"/>
+            </TextBlock.Effect>
+        </TextBlock>
     </Grid>
 </Page>

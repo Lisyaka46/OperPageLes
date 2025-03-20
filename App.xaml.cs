@@ -1,11 +1,11 @@
-﻿using AAC20.CORE;
-using AAC20.CORE.Flaging;
-using AAC20.CORE.Settings;
-using AAC20.UI.Dialogs;
-using AAC20.UI.Pages.Browser;
-using AAC20.Windows;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+﻿using OperPage_les.CORE;
+using OperPage_les.CORE.Flaging;
+using OperPage_les.CORE.Settings;
+using OperPage_les.UI.Dialogs;
+using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using IEL.Classes;
 using Interpreter.Classes;
 using Interpreter.Commands;
@@ -15,12 +15,10 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
 
-namespace AAC20
+namespace OperPage_les
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -321,9 +319,15 @@ namespace AAC20
         /// </summary>
         public const string ConsolePreMessage = "%**>>>**";
 
+        /// <summary>
+        /// Количество миллисекунд ушедших на подключение
+        /// </summary>
+        internal static volatile object MillisecondInternetConnection = -1L;
+
         public App()
         {
             InitializeComponent();
+            MillisecondInternetConnection = -1L;
             ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
             ThreadInternetCheckConnection.Start();
             SettingProcess = new(PathSettingProcess,
@@ -338,7 +342,9 @@ namespace AAC20
                 // BufferSize
                 "50",
                 // BlurBackgroundDataTime
-                "T"
+                "T",
+                // MillisecondInternetConnection
+                "T",
             ]);
             AllPages = new();
         }
@@ -350,6 +356,11 @@ namespace AAC20
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
+#if DEBUG
+            //Audio audio = new();
+            //audio.Play(OperPage_les.Properties.Resources.C7, Microsoft.VisualBasic.AudioPlayMode.WaitToComplete);
+            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.D_6);
+#endif
             Current.MainWindow = new UI.Windows.MainWindow();
             Current.Exit += (sender, e) =>
             {
@@ -379,12 +390,18 @@ namespace AAC20
                 PingReply reply = ObjPing.SendPingAsync("yandex.ru", 3000).Result;
                 Flags.InternetPinging.Wait = false;
                 Flags.InternetPinging.Value = reply.Status == IPStatus.Success;
+                MillisecondInternetConnection = reply.RoundtripTime;
             }
             catch
             {
                 Flags.InternetPinging.Wait = false;
                 Flags.InternetPinging.Value = false;
             }
+#if DEBUG
+            //Audio audio = new();
+            //audio.Play(OperPage_les.Properties.Resources.C7, Microsoft.VisualBasic.AudioPlayMode.WaitToComplete);
+            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.C7);
+#endif
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     /// <summary>
     /// Класс конвертации объектов текста в содержимое элементов AAC20

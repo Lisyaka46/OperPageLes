@@ -1,11 +1,11 @@
-﻿using AAC20.CORE.Flaging;
+﻿using OperPage_les.CORE.Flaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     public class ThreadGenericProcess
     {
@@ -87,6 +87,7 @@ namespace AAC20.CORE
                         Thread.Sleep(MillisecondSleep);
                     }
                 });
+                ThreadUpdating.IsBackground = true;
             }
             else
             {
@@ -94,6 +95,7 @@ namespace AAC20.CORE
                 {
                     ThreadAction.Invoke();
                 });
+                ThreadUpdating.IsBackground = true;
             }
             ParamManageThread = true;
             FlagElement.Value = true;

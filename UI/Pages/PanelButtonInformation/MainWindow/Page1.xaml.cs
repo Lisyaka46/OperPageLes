@@ -1,5 +1,5 @@
-﻿using AAC20;
-using AAC20.CORE;
+﻿using OperPage_les;
+using OperPage_les.CORE;
 using IEL;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,10 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static AAC20.App;
+using static OperPage_les.App;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using OperPage_les.CORE.Settings;
 
 namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
 {
@@ -26,6 +29,9 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
     /// </summary>
     public partial class Page1 : Page
     {
+        [LibraryImport("user32.dll", EntryPoint = "keybd_event")]
+        private static partial void Keybd_event(byte CodeButton, byte CodeScan, uint CodeState, UIntPtr dwExtralnfo);
+
         /// <summary>
         /// Сохранённое состояние флага подключения к интернету
         /// </summary>
@@ -46,10 +52,15 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
 
         public Page1()
         {
+            bool VisualMillisecondConnectionEnabled =
+                CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.MillisecondInternetConnection).Equals("T");
             InitializeComponent();
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(UpdateInformation));
             IELBlockInfoStateRegister.Text = Flags.FlagRegisterState ? "A" : "a";
             ImageIndicatorLoadingInternetConnection.Opacity = 0d;
+            TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
+            IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new Thickness(4, -3, 4, 6) : new Thickness(3);
+            IELBlockInfoInternetConnection.Margin = VisualMillisecondConnectionEnabled ? new Thickness(-2, 0, -2, 0) : new Thickness(0);
             #region BorderInternetConnection
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
@@ -68,6 +79,11 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister, IELBlockInfoStateRegister.Name,
                     Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
                     IELBlockMessage.OrientationBorderInfo.RightUp);
+            };
+            IELBlockInfoStateRegister.MouseUp += (sender, e) =>
+            {
+                Keybd_event(0x14, 0x45, 0x1, 0);
+                Keybd_event(0x14, 0x45, 0x1 | 0x2, 0);
             };
             IELBlockInfoStateRegister.MouseLeave += (sender, e) =>
             {
@@ -106,6 +122,8 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
         /// </summary>
         private void UpdateInformation()
         {
+            bool VisualMillisecondConnectionEnabled = 
+                CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.MillisecondInternetConnection).Equals("T");
             DoubleAnimation animation = new()
             {
                 EasingFunction = new CubicEase()
@@ -114,7 +132,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 },
                 Duration = TimeSpan.FromMilliseconds(700),
             };
-            string LangName = System.Windows.Forms.InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
+            string LangName = InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
             if (!LangName.Equals(IELBlockInfoCurrentLanguage.Text))
             {
                 IELBlockInfoCurrentLanguage.Text = LangName;
@@ -125,17 +143,34 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 animation.To = 10d;
                 ((BlurEffect)IELBlockInfoInternetConnection.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
 
+                if (VisualMillisecondConnectionEnabled)
+                {
+                    ((BlurEffect)TextBlockInternetConnectionMillisecond.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
+                }
+
                 animation.To = 1d;
                 ImageIndicatorLoadingInternetConnection.BeginAnimation(OpacityProperty, animation);
+
+                if (VisualMillisecondConnectionEnabled && ImageIndicatorLoadingInternetConnection.Opacity < 1d)
+                {
+                    ImageIndicatorLoadingInternetConnection.BeginAnimation(OpacityProperty, animation);
+                }
             }
             else
             {
                 IELBlockInfoInternetConnection.Imaging = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi{(Flags.InternetPinging ? "On" : "Off")}.png", UriKind.Relative));
-                
-                animation.To = 0d;
-                ((BlurEffect)IELBlockInfoInternetConnection.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
+                if (VisualMillisecondConnectionEnabled)
+                {
+                    TextBlockInternetConnectionMillisecond.Text = Flags.InternetPinging ? MillisecondInternetConnection.ToString() + "mc" : "???";
+                }
 
                 animation.To = 0d;
+                ((BlurEffect)IELBlockInfoInternetConnection.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
+                if (VisualMillisecondConnectionEnabled)
+                {
+                    ((BlurEffect)TextBlockInternetConnectionMillisecond.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
+                }
+
                 ImageIndicatorLoadingInternetConnection.BeginAnimation(OpacityProperty, animation);
 
                 if (Flags.InternetPinging != SaveUpdatingInternetConnect && CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
