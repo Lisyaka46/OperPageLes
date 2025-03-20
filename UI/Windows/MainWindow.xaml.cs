@@ -1,13 +1,13 @@
 ﻿#region Link
-using AAC20.CORE;
-using AAC20.CORE.Flaging;
-using AAC20.CORE.Settings;
-using AAC20.UI.Dialogs;
-using AAC20.UI.Pages.ActionPanel;
-using AAC20.UI.Pages.Browser;
-using AAC20.Windows.Frames;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+using OperPage_les.CORE;
+using OperPage_les.CORE.Flaging;
+using OperPage_les.CORE.Settings;
+using OperPage_les.UI.Dialogs;
+using OperPage_les.UI.Pages.ActionPanel;
+using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows.Frames;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using IEL;
 using IEL.Classes;
 using IEL.Interfaces.Core;
@@ -35,7 +35,7 @@ using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
 #endregion
 
-namespace AAC20.UI.Windows
+namespace OperPage_les.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -177,7 +177,23 @@ namespace AAC20.UI.Windows
             VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
-            
+            byte[,] ColorBytes = new byte[4, 4]
+            {
+                { 255, 55, 101, 144, },
+                { 255, 103, 120, 121, },
+                { 255, 45, 113, 95, },
+                { 255, 41, 91, 122, }
+            };
+            IELBrowserPageMain.QDataDefaultInlayBackground = new(new byte[4, 4]
+            {
+                { 255, 141, 195, 223, },
+                { 255, 199, 223, 224, },
+                { 255, 130, 224, 199, },
+                { 255, 230, 188, 224, }
+            });
+            IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
+            IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
+
             PASettingsBrowserManipulateInlay = new(IELBrowserPageMain, PageManipulateInlayPA, new(200d, 240d));
 
             Canvas.SetZIndex(IELMessageMain, -2);
@@ -246,10 +262,16 @@ namespace AAC20.UI.Windows
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
             {
+                AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B5);
                 IELMessageMain.UsingBorderInformation(Element, Element.Name, Text, IELBlockMessage.OrientationBorderInfo.Auto);
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
+
+            IELBrowserPageMain.EventChangeActiveInlay += () =>
+            {
+                AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B5);
+            };
 
             #region IELImageButtonHelp
             IELImageButtonHelp.OnActivateMouseLeft += App.UsingDiscriptionCommand;
@@ -376,6 +398,9 @@ namespace AAC20.UI.Windows
         {
             TextBlockTime.Text = RealTime;
             TextBlockData.Text = RealData;
+#if DEBUG
+            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B6);
+#endif
         }
 
         /// <summary>

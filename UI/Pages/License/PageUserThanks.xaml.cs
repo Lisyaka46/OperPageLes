@@ -1,11 +1,11 @@
-﻿using AAC20.CORE;
+﻿using OperPage_les.CORE;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace AAC20.Windows.Pages.License
+namespace OperPage_les.Windows.Pages.License
 {
     /// <summary>
     /// Логика взаимодействия для PageUser.xaml

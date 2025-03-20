@@ -2,9 +2,9 @@
 using IEL.Interfaces.Core;
 using IEL;
 using IEL.Classes;
-using AAC20.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.ActionPanel;
 
-namespace AAC20.Windows.Frames
+namespace OperPage_les.Windows.Frames
 {
     /// <summary>
     /// Логика взаимодействия для PageMainActionPanel.xaml

@@ -1,4 +1,4 @@
-﻿using AAC20.CORE;
+﻿using OperPage_les.CORE;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +9,7 @@ using IEL.Classes;
 using DataScroll;
 using IEL.Interfaces.Front;
 
-namespace AAC20.Windows.Pages.ActionPanel
+namespace OperPage_les.Windows.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml

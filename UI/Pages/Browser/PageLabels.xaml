@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AAC20.Windows.Pages.Browser" x:Name="MainPageLabel"
-      x:Class="AAC20.Windows.Pages.Browser.PageLabels"
+      xmlns:local="clr-namespace:OperPage_les.Windows.Pages.Browser" x:Name="MainPageLabel"
+      x:Class="OperPage_les.Windows.Pages.Browser.PageLabels"
       mc:Ignorable="d"
       Title="PageLabels" d:DesignHeight="144.46" d:DesignWidth="148.456">
 

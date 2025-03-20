@@ -1,12 +1,12 @@
-﻿using AAC20.CORE;
-using AAC20.Windows.Pages.License;
+﻿using OperPage_les.CORE;
+using OperPage_les.Windows.Pages.License;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
-namespace AAC20.UI.Dialogs
+namespace OperPage_les.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для LicenseWindow.xaml

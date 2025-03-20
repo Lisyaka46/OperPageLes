@@ -3,9 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AAC20.Windows.Pages.ActionPanel"
+      xmlns:local="clr-namespace:OperPage_les.Windows.Pages.ActionPanel"
       xmlns:GUI="clr-namespace:IEL;assembly=IEL"
-      xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="AAC20.Windows.Pages.ActionPanel.PageLabelActionPanel"
+      xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.Windows.Pages.ActionPanel.PageLabelActionPanel"
       mc:Ignorable="d" 
       d:DesignHeight="180" d:DesignWidth="150"
       Title="PageLabelActionPanel">

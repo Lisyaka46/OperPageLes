@@ -1,7 +1,7 @@
-﻿using AAC20.CORE;
-using AAC20.Windows.Frames;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+﻿using OperPage_les.CORE;
+using OperPage_les.Windows.Frames;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using IEL;
 using IEL.Interfaces.Core;
 using Interpreter.Classes;
@@ -25,7 +25,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
-namespace AAC20.UI.Pages.Browser
+namespace OperPage_les.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml

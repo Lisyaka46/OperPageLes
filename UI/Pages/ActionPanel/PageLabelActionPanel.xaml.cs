@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
-using AAC20.Windows.Frames;
+using OperPage_les.Windows.Frames;
 using IEL.Classes;
 using IEL.Interfaces.Core;
 
-namespace AAC20.Windows.Pages.ActionPanel
+namespace OperPage_les.Windows.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelActionPanel.xaml

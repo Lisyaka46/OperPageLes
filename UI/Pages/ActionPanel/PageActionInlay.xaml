@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AAC20.UI.Pages.ActionPanel"
-      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="AAC20.UI.Pages.ActionPanel.PageActionInlay"
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.ActionPanel.PageActionInlay"
       mc:Ignorable="d" 
       d:DesignHeight="270.544" d:DesignWidth="252.115"
       Title="PageActionInlay">

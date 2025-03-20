@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AAC20.UI.Pages.ActionPanel
+namespace OperPage_les.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageActionInlay.xaml

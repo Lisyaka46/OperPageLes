@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AAC20.UI.Dialogs"
-        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="AAC20.UI.Dialogs.WindowGenLabel"
+        xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
+        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowGenLabel"
         mc:Ignorable="d"
         Title="Создание ярлыка" d:DesignHeight="301.667" Icon="{DynamicResource EmptyImage}" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Width="273">
     <Grid>

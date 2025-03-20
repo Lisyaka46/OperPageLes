@@ -1,4 +1,4 @@
-﻿using AAC20.CORE.Settings;
+﻿using OperPage_les.CORE.Settings;
 using IEL.Interfaces.Core;
 using Microsoft.Win32;
 using System.Windows;
@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace AAC20.UI.Pages.Settings
+namespace OperPage_les.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PageGeneral.xaml
