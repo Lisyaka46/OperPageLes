@@ -11,18 +11,18 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="50*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" AnimationMillisecond="200" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16" BorderThicknessBlock="3,3,3,3" Margin="0,5,0,5">
+        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" AnimationMillisecond="200" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" BorderThicknessBlock="3,3,3,3" Margin="0,5,0,5" PaddingContent="0,10,0,10">
             <IEL:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
             </IEL:IELButtonTextKey.BackgroundSetting>
         </IEL:IELButtonTextKey>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2" AnimationMillisecond="200" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="16" Margin="0,5,0,5" BorderThicknessBlock="3,3,3,3" Grid.Row="1">
+        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2" AnimationMillisecond="200" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Margin="0,5,0,5" BorderThicknessBlock="3,3,3,3" Grid.Row="1" PaddingContent="0,10,0,10">
             <IEL:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF19A78A" NotEnabled="#FFE25770" Select="#FF18DCB4" Used="White"/>
             </IEL:IELButtonTextKey.BackgroundSetting>
