@@ -19,11 +19,11 @@
         <Style x:Key="Aventura">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Aventura"/>
         </Style>
+        <Style x:Key="Bree CYR var">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Bree CYR var"/>
+        </Style>
         <Style x:Key="Pecita">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Pecita"/>
-        </Style>
-        <Style x:Key="Bree CYR var Regular">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Bree CYR var Regular"/>
         </Style>
         <Style x:Key="Brenzo Slab Personal Use">
             <Setter Property="TextElement.FontFamily" Value="/Fonts/#Brenzo Slab Personal Use"/>

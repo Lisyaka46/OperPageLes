@@ -7,6 +7,7 @@ using OperPage_les.Windows;
 using OperPage_les.Windows.Pages.ActionPanel;
 using OperPage_les.Windows.Pages.Browser;
 using IEL.Classes;
+using IEL.Classes.Browser;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -17,13 +18,15 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using Windows.ApplicationModel.Store;
+using System.Windows.Media;
 
 namespace OperPage_les
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         /// <summary>
         /// Структура всех окон программы
@@ -59,10 +62,199 @@ namespace OperPage_les
         };
         #endregion
 
+        #region SystemBrowserPages
         /// <summary>
-        /// Объект всех страниц программы
+        /// Объект всех страниц браузера программы
         /// </summary>
-        internal readonly PagesApplication AllPages;
+        private readonly List<BrowserPage> AllSystemBrowserPages;
+
+        /// <summary>
+        /// Найти страницу в массиве по типу
+        /// </summary>
+        /// <typeparam name="T">Тип страницы</typeparam>
+        /// <returns>Выводимая страница</returns>
+        internal BrowserPage SearchElementInType(Type type)
+        {
+            for (int i = 0; i < AllSystemBrowserPages.Count; i++)
+            {
+                if (AllSystemBrowserPages[i].PageContent.GetType().Equals(type)) return AllSystemBrowserPages[i];
+            }
+            throw new Exception("Системные страницы не могут быть пустыми");
+        }
+
+        /// <summary>
+        /// Количество доступных системных страниц
+        /// </summary>
+        internal int CountSystemBrowserPages => AllSystemBrowserPages.Count;
+        #endregion
+
+        #region AnimationObject
+
+        #region ThicknessAnimation
+        /// <summary>
+        /// Объект анимации для управления позицией
+        /// </summary>
+        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
+        {
+            DecelerationRatio = 0.6d,
+            EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+            From = null
+        };
+
+        /// <summary>
+        /// Дать объект анимации
+        /// </summary>
+        /// <param name="NewDuration">Новое время анимации</param>
+        /// <returns>Объект анимации</returns>
+        internal static ThicknessAnimation GetThicknessAnimate(TimeSpan? NewDuration = null)
+        {
+            ThicknessAnimation Result = ThicknessAnimate.Clone();
+            if (NewDuration.HasValue) Result.Duration = NewDuration.Value;
+            return Result;
+        }
+
+        /// <summary>
+        /// Анимировать эффект цвета объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="From">Значение от которого начинается анимация</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateThicknessEffect(IAnimatable Element, DependencyProperty Property, Thickness From, Thickness To, TimeSpan? Duration = null)
+        {
+            ThicknessAnimation animation = GetThicknessAnimate(Duration);
+            animation.From = From;
+            animation.To = To;
+            Element.BeginAnimation(Property, animation);
+        }
+
+        /// <summary>
+        /// Анимировать эффект цвета объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateThicknessEffect(IAnimatable Element, DependencyProperty Property, Thickness To, TimeSpan? Duration = null)
+        {
+            ThicknessAnimation animation = GetThicknessAnimate(Duration);
+            animation.To = To;
+            Element.BeginAnimation(Property, animation);
+        }
+        #endregion
+
+        #region DoubleAnimation
+        /// <summary>
+        /// Объект анимации для управления double значением
+        /// </summary>
+        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
+        {
+            DecelerationRatio = 0.2d,
+            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
+            From = null
+        };
+
+        /// <summary>
+        /// Дать объект анимации
+        /// </summary>
+        /// <param name="NewDuration">Новое время анимации</param>
+        /// <returns>Объект анимации</returns>
+        internal static DoubleAnimation GetDoubleAnimate(TimeSpan? NewDuration = null)
+        {
+            DoubleAnimation Result = DoubleAnimate.Clone();
+            if (NewDuration.HasValue) Result.Duration = NewDuration.Value;
+            return Result;
+        }
+
+        /// <summary>
+        /// Анимировать числовой эффект объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="From">Значение от которого начинается анимация</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double From, double To, TimeSpan? Duration = null)
+        {
+            
+            DoubleAnimation animation = GetDoubleAnimate(Duration);
+            animation.From = From;
+            animation.To = To;
+            Element.BeginAnimation(Property, animation);
+        }
+        /// <summary>
+        /// Анимировать числовой эффект объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double To, TimeSpan? Duration = null)
+        {
+
+            DoubleAnimation animation = GetDoubleAnimate(Duration);
+            animation.To = To;
+            Element.BeginAnimation(Property, animation);
+        }
+        #endregion
+
+        #region ColorAnimation
+        /// <summary>
+        /// Объект анимации для управления Color значением
+        /// </summary>
+        private static readonly ColorAnimation ColorAnimate = new(Colors.Black, TimeSpan.FromMilliseconds(250d))
+        {
+            DecelerationRatio = 0.2d,
+            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
+            From = null
+        };
+
+        /// <summary>
+        /// Дать объект анимации
+        /// </summary>
+        /// <param name="NewDuration">Новое время анимации</param>
+        /// <returns>Объект анимации</returns>
+        internal static ColorAnimation GetColorAnimate(TimeSpan? NewDuration = null)
+        {
+            ColorAnimation Result = ColorAnimate.Clone();
+            if (NewDuration.HasValue) Result.Duration = NewDuration.Value;
+            return Result;
+        }
+
+        /// <summary>
+        /// Анимировать эффект цвета объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property,
+            System.Windows.Media.Color From, System.Windows.Media.Color To, TimeSpan? Duration = null)
+        {
+            ColorAnimation animation = GetColorAnimate(Duration);
+            animation.From = From;
+            animation.To = To;
+            Element.BeginAnimation(Property, animation);
+        }
+
+        /// <summary>
+        /// Анимировать эффект цвета объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="From">Значение от которого начинается анимация</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property, System.Windows.Media.Color To, TimeSpan? Duration = null)
+        {
+            ColorAnimation animation = GetColorAnimate(Duration);
+            animation.To = To;
+            Element.BeginAnimation(Property, animation);
+        }
+        #endregion
+
+        #endregion
 
         /// <summary>
         /// Константа высоты размера кнопки буфера
@@ -105,7 +297,7 @@ namespace OperPage_les
             "Очищает текстовый вывод главного меню программы",
             (Command, param) =>
             {
-                CurrentApp.AllPages.PageConsoleApplication.ClearConsoleText();
+                ((PageConsole)CurrentApp.SearchElementInType(typeof(PageConsole)).PageContent).ClearConsoleText();
                 return Task.FromResult(CommandStateResult.Completed(Command.Name));
             }),
             #endregion
@@ -124,7 +316,8 @@ namespace OperPage_les
             "Отображает содержание буфера команд в консоль главного меню программы",
             (Command, param) =>
             {
-                PageBufferActionPanel PageBuffer = CurrentApp.AllPages.PageConsoleApplication.PageBufferPA;
+                PageBufferActionPanel PageBuffer = ((PageConsole)CurrentApp.SearchElementInType(typeof(PageConsole)).PageContent).PageBufferPA ?? 
+                    throw new Exception("Системной страницы не существует!");
                 return Task.FromResult(CommandStateResult.Completed(Command.Name,
                     $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
                     $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
@@ -148,7 +341,7 @@ namespace OperPage_les
             "- Ярлык создастся только если открыта страница ярлыков в браузере",
             (Command, param) =>
             {
-                PageLabels? Page = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                PageLabels? Page = (PageLabels)CurrentApp.SearchElementInType(typeof(PageLabels)).PageContent;
                 if (Page == null)
                     return Task.FromResult(CommandStateResult.Failed(Command.Name,
                         $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
@@ -162,7 +355,7 @@ namespace OperPage_les
             "- Ярлык создастся только если открыта страница ярлыков в браузере",
             (Command, param) =>
             {
-                PageLabels? Page = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                PageLabels? Page = (PageLabels)CurrentApp.SearchElementInType(typeof(PageLabels)).PageContent;
                 if (Page == null)
                     return Task.FromResult(CommandStateResult.Failed(Command.Name,
                         $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
@@ -259,7 +452,7 @@ namespace OperPage_les
                 if (NameAliases.Contains(NameAlias) && !(bool)param[2])
                 {
                     return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                        $"Aлиас \"{NameAlias}\" невозможно создать, так как он уже создан\nДля переопределения введите третий параметр: true"));
+                        $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите третий параметр: %**true**//"));
                 }
                 if (!(bool)param[2])
                 {
@@ -267,9 +460,14 @@ namespace OperPage_les
                         new(NameAlias, (string)param[1], [.. DataConsoleCommand]));
                 }
                 else
-                    CurrentApp.DataAliases[Array.IndexOf(NameAliases, NameAlias)].Command = (string)param[1];
+                {
+                    int index = Array.IndexOf(NameAliases, NameAlias);
+                    if (index != -1) CurrentApp.DataAliases[Array.IndexOf(NameAliases, NameAlias)].Command = (string)param[1];
+                    else return Task.FromResult(CommandStateResult.Failed(Main.Name,
+                        $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не создан\n%#EA5555//Для переопределения введите третий параметр: %**false**//"));
+                }
                 return Task.FromResult(CommandStateResult.Completed(Main.Name,
-                    $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно {((bool)param[2] ? "изменён" : "создан")}"));
+                    $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**{((bool)param[2] ? "изменён" : "создан")}**"));
             }),
             #endregion
         ];
@@ -346,7 +544,22 @@ namespace OperPage_les
                 // MillisecondInternetConnection
                 "T",
             ]);
-            AllPages = new();
+            AllSystemBrowserPages = new([
+            new(new PageConsole()),
+            new(new PageWebBrowser()) {
+                EventUnfocusPage = (page) =>
+                {
+                    ((PageWebBrowser)page.PageContent).WebBrowserElement.Visibility = Visibility.Hidden;
+                },
+                EventFocusPage = (page) =>
+                {
+                    ((PageWebBrowser)page.PageContent).WebBrowserElement.Visibility = Visibility.Visible;
+                }
+            },
+            new(new PageLabels()),
+            new(new PageDeveloper()),
+
+            ]);
         }
 
         /// <summary>
@@ -356,11 +569,6 @@ namespace OperPage_les
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
-#if DEBUG
-            //Audio audio = new();
-            //audio.Play(OperPage_les.Properties.Resources.C7, Microsoft.VisualBasic.AudioPlayMode.WaitToComplete);
-            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.D_6);
-#endif
             Current.MainWindow = new UI.Windows.MainWindow();
             Current.Exit += (sender, e) =>
             {
@@ -397,11 +605,6 @@ namespace OperPage_les
                 Flags.InternetPinging.Wait = false;
                 Flags.InternetPinging.Value = false;
             }
-#if DEBUG
-            //Audio audio = new();
-            //audio.Play(OperPage_les.Properties.Resources.C7, Microsoft.VisualBasic.AudioPlayMode.WaitToComplete);
-            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.C7);
-#endif
         }
 
         /// <summary>
@@ -424,27 +627,6 @@ namespace OperPage_les
                 To = EnterToOriginValue ? 0d : Power
             };
             Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
-        }
-
-        /// <summary>
-        /// Анимировать числовой эффект объекта
-        /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateDoubleEffect(FrameworkElement Element, DependencyProperty Property, double To, double Duration = 700d)
-        {
-            DoubleAnimation animation = new()
-            {
-                EasingFunction = new CubicEase()
-                {
-                    EasingMode = EasingMode.EaseOut,
-                },
-                Duration = TimeSpan.FromMilliseconds(Duration),
-                To = To,
-            };
-            Element.BeginAnimation(Property, animation);
         }
 
         /// <summary>
