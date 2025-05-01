@@ -31,7 +31,11 @@
                 <ColumnDefinition Width="627*"/>
                 <ColumnDefinition Width="173*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="4,4,4,4" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="1" ForgroundNaming="#FF11FF81" Panel.ZIndex="1" Text=""/>
+            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,4,4,4" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="">
+                <GUI:IELTextBox.BorderBrushSetting>
+                    <Classes:BrushSettingQ NotEnabled="#FFDC5454" Select="#FF212121" Used="#FF333333" UsedState="False"/>
+                </GUI:IELTextBox.BorderBrushSetting>
+            </GUI:IELTextBox>
             <Grid Grid.Column="2" Grid.Row="2">
                 <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160" BorderThicknessBlock="3,3,3,3" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}">
                     <GUI:IELButtonText.BackgroundSetting>
@@ -40,23 +44,11 @@
                 </GUI:IELButtonText>
             </Grid>
         </Grid>
-        <Border x:Name="BorderHintCommand" BorderThickness="2,2,2,2" Margin="3,0,0,47" CornerRadius="4,4,0,4" Height="70" VerticalAlignment="Bottom" Width="142" HorizontalAlignment="Left" Padding="0,5,0,0" Panel.ZIndex="0" Grid.RowSpan="2">
-            <Border.BorderBrush>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#008FA260" Offset="0.06"/>
-                    <GradientStop Color="#FF8FA065" Offset="0.15"/>
-                </LinearGradientBrush>
-            </Border.BorderBrush>
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#008FA260" Offset="0.03"/>
-                    <GradientStop Color="#FF8FA065" Offset="0.15"/>
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border x:Name="BorderHintCommand" Margin="6,0,0,47" Height="70" VerticalAlignment="Bottom" Width="142" HorizontalAlignment="Left" Panel.ZIndex="0" Grid.RowSpan="2" Background="#7236C3FF" BorderThickness="3,3,3,3" BorderBrush="#FF152646" CornerRadius="3,3,0,0">
             <Grid>
-                <Grid x:Name="GridHint"/>
-                <Grid x:Name="GridHintCommandParameter" Panel.ZIndex="1" Margin="2,2,2,2">
-                    <TextBlock x:Name="TextBlockHintCommand" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Close" VerticalAlignment="Top" Margin="2,0,0,0"/>
+                <Grid x:Name="GridHint" Margin="2,0,2,0"/>
+                <Grid x:Name="GridHintOneCommand" Panel.ZIndex="1" Margin="2,0,2,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="TextBlockHintCommand" Text="Close" VerticalAlignment="Top" Margin="2,0,2,0" Padding="10,0,10,0" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="14" Height="18.7"/>
                 </Grid>
             </Grid>
         </Border>

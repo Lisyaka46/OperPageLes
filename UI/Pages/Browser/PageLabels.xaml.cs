@@ -1,48 +1,30 @@
-﻿using OperPage_les.CORE;
-using OperPage_les.Windows.Pages.ActionPanel;
-using Interpreter.Commands;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using IEL.Classes;
+﻿using DataScroll;
 using IEL;
+using IEL.Classes;
 using IEL.Interfaces.Core;
-using System.Windows.Media;
-using OperPage_les.CORE.Flaging;
-using MySql.Data.MySqlClient;
-using System.Windows.Media.Imaging;
-using DataScroll;
 using Interpreter.Interfaces;
+using OperPage_les.CORE.Flaging;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows.Pages.ActionPanel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace OperPage_les.Windows.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml
     /// </summary>
-    public partial class PageLabels : Page, IPageDefault
+    public partial class PageLabels : Page
     {
-        /// <summary>
-        /// Имя страницы
-        /// </summary>
-        public string PageName { get; } = nameof(PageLabels);
-
-        /// <summary>
-        /// Объект страницы
-        /// </summary>
-        public new Page Content => this;
-
         /// <summary>
         /// Динамический массив ярлыков
         /// </summary>
         private List<IELLabelCommand> ObjectsLabel;
-
-        /// <summary>
-        /// Динамический массив ярлыков
-        /// </summary>
-        private List<IELLabelCommand> ObjectsSQLLabel;
 
         /// <summary>
         /// Индекс выделенного элемента
@@ -77,7 +59,7 @@ namespace OperPage_les.Windows.Pages.Browser
         /// <summary>
         /// Узнать количество созданных ярлыков
         /// </summary>
-        internal int CountLabel => ObjectsLabel.Count + ObjectsSQLLabel.Count;
+        internal int CountLabel => ObjectsLabel.Count;
 
         /// <summary>
         /// Объект анимации для управления double значением
@@ -103,26 +85,6 @@ namespace OperPage_les.Windows.Pages.Browser
         private readonly Flag AnimateForeverLoading = new(false);
 
         /// <summary>
-        /// Флаг поиска данных о ярлыках в базе данных
-        /// </summary>
-        private readonly Flag SearchInfoSQL = new(false);
-
-        /// <summary>
-        /// Массив доступный из потока чтения базы данных
-        /// </summary>
-        private volatile LabelAction[] SQLLabelActions;
-
-        /// <summary>
-        /// Флаг успешного завершения чтения ярлыков из базы данных
-        /// </summary>
-        internal bool SQLCompleteSearch { get; private set; } = false;
-
-        /// <summary>
-        /// Поток чтения ярлыков из базы данных
-        /// </summary>
-        private readonly ThreadGenericProcess SQLLoadInformation;
-
-        /// <summary>
         /// Константа размера одного ярлыка
         /// </summary>
         public const int WidthHeightLabel = 77;
@@ -137,9 +99,7 @@ namespace OperPage_les.Windows.Pages.Browser
             SettingsPanelActionElement = new(GridMain, PageLabelActPanel, new(150, 140));
             SettingsPanelActionPage = new(this, PageLabelMainActPanel, new(210, 220));
             ((RadialGradientBrush)BorderNamingLabel.BorderBrush).Center = new(-1d, 0.5d);
-            SQLLabelActions = [];
             ObjectsLabel = [];
-            ObjectsSQLLabel = [];
             PageLabelActPanel.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
             {
                 ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
@@ -223,32 +183,32 @@ namespace OperPage_les.Windows.Pages.Browser
                 ellipseStoryboard.Begin(BorderNamingLabel);
             };
 
-            SQLLoadInformation = new(() =>
-            {
-                MySqlConnection Connection = new("Server=localhost; DataBase=aac_control; Uid=root; Pwd=; charset=utf8;");
-                try
-                {
-                    Connection.Open();
-                    MySqlCommand command = new("SELECT labels.LabelConstruct FROM `labels` WHERE labels.Id LIKE '%9%'", Connection);
-                    MySqlDataReader reader = command.ExecuteReader();
-                    List<LabelAction> labels = [];
-                    while (reader.Read())
-                    {
-                        string? Text = reader["LabelConstruct"].ToString();
-                        if (Text == null) continue;
-                        foreach (LabelAction Element in AACConverter.ConvertRegexToMassLabelAction(Text))
-                        {
-                            labels.Add(Element);
-                        }
-                    }
-                    SQLLabelActions = [.. labels];
-                }
-                catch
-                {
+            //SQLLoadInformation = new(() =>
+            //{
+            //    MySqlConnection Connection = new("Server=localhost; DataBase=aac_control; Uid=root; Pwd=; charset=utf8;");
+            //    try
+            //    {
+            //        Connection.Open();
+            //        MySqlCommand command = new("SELECT labels.LabelConstruct FROM `labels` WHERE labels.Id LIKE '%9%'", Connection);
+            //        MySqlDataReader reader = command.ExecuteReader();
+            //        List<LabelAction> labels = [];
+            //        while (reader.Read())
+            //        {
+            //            string? Text = reader["LabelConstruct"].ToString();
+            //            if (Text == null) continue;
+            //            foreach (LabelAction Element in AACConverter.ConvertRegexToMassLabelAction(Text))
+            //            {
+            //                labels.Add(Element);
+            //            }
+            //        }
+            //        SQLLabelActions = [.. labels];
+            //    }
+            //    catch
+            //    {
 
-                }
-                AnimationLoadingStop();
-            });
+            //    }
+            //    AnimationLoadingStop();
+            //});
 
             SizeChanged += (sender, e) =>
             {
@@ -268,40 +228,40 @@ namespace OperPage_les.Windows.Pages.Browser
                 }
             };
 
-            void ProcessLoadSQLKill(bool NewValueFlag)
-            {
-                if (!NewValueFlag)
-                {
-                    SQLLoadInformation.Kill();
-                    if (SQLLabelActions.Length > 0)
-                    {
-                        BorderDinamicLabels.BorderThickness = new(0, 1, 0, 0);
-                        BorderSQLLabels.BorderThickness = new(0, 0, 0, 1);
-                        RowDefinitionSQLLabels.Height = new(
-                            SQLLabelActions.Length / 2 * (WidthHeightLabel + BorderDinamicLabels.Padding.Top) + BorderSQLLabels.Padding.Bottom,
-                            GridUnitType.Pixel);
-                        foreach (LabelAction Element in SQLLabelActions)
-                        {
-                            AddSQLLabel(Element);
-                        }
-                        SQLLabelActions = [];
-                        SQLCompleteSearch = true;
-                    }
-                }
-            }
-            AnimateForeverLoading.ChangeStateFlag += ProcessLoadSQLKill;
+            //void ProcessLoadSQLKill(bool NewValueFlag)
+            //{
+            //    if (!NewValueFlag)
+            //    {
+            //        SQLLoadInformation.Kill();
+            //        if (SQLLabelActions.Length > 0)
+            //        {
+            //            BorderDinamicLabels.BorderThickness = new(0, 1, 0, 0);
+            //            BorderSQLLabels.BorderThickness = new(0, 0, 0, 1);
+            //            RowDefinitionSQLLabels.Height = new(
+            //                SQLLabelActions.Length / 2 * (WidthHeightLabel + BorderDinamicLabels.Padding.Top) + BorderSQLLabels.Padding.Bottom,
+            //                GridUnitType.Pixel);
+            //            foreach (LabelAction Element in SQLLabelActions)
+            //            {
+            //                AddSQLLabel(Element);
+            //            }
+            //            SQLLabelActions = [];
+            //            SQLCompleteSearch = true;
+            //        }
+            //    }
+            //}
+            //AnimateForeverLoading.ChangeStateFlag += ProcessLoadSQLKill;
         }
 
-        internal void StartLoadSQL()
-        {
-            if (SearchInfoSQL.Wait || SQLCompleteSearch) return;
-            SearchInfoSQL.Value = true;
-            SearchInfoSQL.Wait = true;
-            AnimationLoadingStart();
-            SQLLoadInformation.Start();
-            SearchInfoSQL.Wait = false;
-            SearchInfoSQL.Value = false;
-        }
+        //internal void StartLoadSQL()
+        //{
+        //    if (SearchInfoSQL.Wait || SQLCompleteSearch) return;
+        //    SearchInfoSQL.Value = true;
+        //    SearchInfoSQL.Wait = true;
+        //    AnimationLoadingStart();
+        //    SQLLoadInformation.Start();
+        //    SearchInfoSQL.Wait = false;
+        //    SearchInfoSQL.Value = false;
+        //}
 
         /// <summary>
         /// Сгенерировать объект интерфейса ярлыка
@@ -325,7 +285,7 @@ namespace OperPage_les.Windows.Pages.Browser
                 Width = WidthHeightLabel,
                 Height = WidthHeightLabel,
                 Margin = new(0, (WidthHeightLabel + BorderDinamicLabels.Padding.Top) * (Data.Count / grid.ColumnDefinitions.Count), 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 ContextMenu = null,
                 IntervalHover = 800d,
@@ -336,7 +296,7 @@ namespace OperPage_les.Windows.Pages.Browser
             };
             Label.OnActivateMouseLeft += () =>
             {
-                PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();
+                PageConsole? Console = (PageConsole)App.CurrentApp.SearchElementInType(typeof(PageConsole)).PageContent;
                 App.CurrentApp.ActivateActionCommand(Console, Label.Label.Command);
             };
             Label.MouseHover += (sender, e) =>
@@ -346,31 +306,31 @@ namespace OperPage_les.Windows.Pages.Browser
                 string Text = Element.Label.Description ?? string.Empty;
                 if (Text.Length > 0)
                     App.MainWindowApplication.IELMessageMain.UsingBorderInformation(Element, Label.Name, Text,
-                        IELBlockMessage.OrientationBorderInfo.LeftDown);
+                        IELBlockMessage.OrientationBorderInfo.Auto);
             };
             Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             Label.MouseLeftButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             return Label;
         }
 
-        /// <summary>
-        /// Добавить в страницу SQL элемент ялрыка
-        /// </summary>
-        /// <param name="label">Добавляеммый элемент ярлыка</param>
-        internal void AddSQLLabel(LabelAction label)
-        {
-            IELLabelCommand Label = CreateLabel(label, ref ObjectsSQLLabel, ref GridSQLLabels);
-            Label.ImageTagSource = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi.png", UriKind.RelativeOrAbsolute));
-            Label.ImageTagVisible = true;
-            ObjectsSQLLabel.Add(Label);
-            GridSQLLabels.Children.Add(Label);
-            Grid.SetColumn(Label, (ObjectsSQLLabel.Count - 1) % GridSQLLabels.ColumnDefinitions.Count);
+        ///// <summary>
+        ///// Добавить в страницу SQL элемент ялрыка
+        ///// </summary>
+        ///// <param name="label">Добавляеммый элемент ярлыка</param>
+        //internal void AddSQLLabel(LabelAction label)
+        //{
+        //    IELLabelCommand Label = CreateLabel(label, ref ObjectsSQLLabel, ref GridSQLLabels);
+        //    Label.ImageTagSource = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi.png", UriKind.RelativeOrAbsolute));
+        //    Label.ImageTagVisible = true;
+        //    ObjectsSQLLabel.Add(Label);
+        //    GridSQLLabels.Children.Add(Label);
+        //    Grid.SetColumn(Label, (ObjectsSQLLabel.Count - 1) % GridSQLLabels.ColumnDefinitions.Count);
 
-            TextBlockCount.Text = $"{CountLabel} Ярлыков";
-            DoubleAnimateObj.To = 1d;
-            Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-            ScrollBar.MaxUp(1);
-        }
+        //    TextBlockCount.Text = $"{CountLabel} Ярлыков";
+        //    DoubleAnimateObj.To = 1d;
+        //    Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+        //    ScrollBar.MaxUp(1);
+        //}
 
         /// <summary>
         /// Добавить в страницу элемент ялрыка

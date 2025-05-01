@@ -14,33 +14,21 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Drawing;
+using Microsoft.Maui.Controls;
 
 namespace OperPage_les.Windows.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml
     /// </summary>
-    public partial class PageDeveloper : Page, IPageDefault
+    public partial class PageDeveloper : System.Windows.Controls.Page
     {
-        /// <summary>
-        /// Имя страницы
-        /// </summary>
-        public string PageName { get; } = nameof(PageDeveloper);
-
-        /// <summary>
-        /// Объект страницы
-        /// </summary>
-        public new Page Content => this;
-
         private Bitmap image;
 
         public PageDeveloper()
         {
             InitializeComponent();
             image = new(1, 1);
-            ListBoxDeveloper.Items.Add("[0] CountVisible=*");
-            ListBoxDeveloper.Items.Add("[1] ActualHeight=*");
-
             ComboBoxStateInlay.SelectionChanged += (sender, e) =>
             {
                 StateSpectrum Spectrum = ComboBoxStateInlay.SelectedIndex switch
@@ -54,13 +42,6 @@ namespace OperPage_les.Windows.Pages.Browser
                 HeadInlay.BackgroundSetting.InvokeObjectUsedStateColor(Spectrum);
                 HeadInlay.BorderBrushSetting.InvokeObjectUsedStateColor(Spectrum);
                 HeadInlay.ForegroundSetting.InvokeObjectUsedStateColor(Spectrum);
-            };
-            ButtonPixelColor.Click += (sender, e) =>
-            {
-                OpenFileDialog FileDialog = new();
-                FileDialog.ShowDialog();
-                image = new Bitmap(FileDialog.FileName);
-                ImageSource.Source = new BitmapImage(new Uri(FileDialog.FileName, UriKind.Absolute));
             };
             ButtonPixelColorCopy.Click += (sender, e) =>
             {
