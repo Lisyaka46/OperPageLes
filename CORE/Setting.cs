@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.IO;
-using Org.BouncyCastle.Asn1.X509.Qualified;
-using System.Runtime.CompilerServices;
 
 namespace OperPage_les.CORE
 {
@@ -54,12 +47,14 @@ namespace OperPage_les.CORE
         /// Скопировать данные в значения по умолчанию учитывая тип перечисления
         /// </summary>
         /// <param name="Parameters">Массив значений по умолчанию</param>
-        /// <exception cref="ArgumentException">Искючение при меньшем количестве значений нежели в перечислении параметров настроек</exception>
         private void CopyDefaultDataPropertyEnumerator(string[] Parameters)
         {
             if (LengthEnumerator > Parameters.Length)
-                throw new ArgumentException("Размер значений по умолчанию ниже чем ожидалось в перечислении свойств настроек: " +
-                    $"(ENUM:{LengthEnumerator} > DEF:{Parameters.Length})");
+            {
+                List<string> ParametersList = [.. Parameters];
+                for (int i = ParametersList.Count; i < LengthEnumerator; i++) ParametersList.Add(string.Empty);
+                Parameters = [.. ParametersList];
+            }
             Array.Copy(Parameters, 0, DataPropetry, 0, LengthEnumerator);
         }
 
@@ -82,7 +77,14 @@ namespace OperPage_les.CORE
                     index = Array.IndexOf(MassEnumNameParameter, regexName.Match(Line).Value[..^1]);
                     if (index == -1) continue;
                     // Text:Value
-                    DataPropetry[index] = regexValue.Match(Line).Value[1..];
+                    try
+                    {
+                        DataPropetry[index] = regexValue.Match(Line).Value[1..];
+                    }
+                    catch
+                    {
+                        DataPropetry[index] = string.Empty;
+                    }
                 }
             }
         }

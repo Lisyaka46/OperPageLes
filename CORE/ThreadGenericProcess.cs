@@ -32,7 +32,7 @@ namespace OperPage_les.CORE
         /// <summary>
         /// Действие которое выполняет поток
         /// </summary>
-        private readonly Action ThreadAction;
+        private Action ThreadAction;
 
         /// <summary>
         /// Цикличный поток или нет
@@ -110,6 +110,17 @@ namespace OperPage_les.CORE
             ParamManageThread = false;
             FlagElement.Value = false;
             ThreadUpdating?.Join();
+        }
+
+        /// <summary>
+        /// Подключить новое действие в поток
+        /// </summary>
+        /// <param name="ActionProcess">Действие подключаемое в поток</param>
+        /// <exception cref="Exception">Исключение включнного потока данных</exception>
+        public void SetAction(Action ActionProcess)
+        {
+            if (ParamManageThread) throw new Exception("Невозможно подключить действие в выполняющимся потоке.");
+            ThreadAction = ActionProcess;
         }
     }
 }
