@@ -1,17 +1,14 @@
-﻿using OperPage_les.CORE.Flaging;
+﻿using DataScroll;
+using IEL;
+using Interpreter.Classes;
 using Interpreter.Commands;
+using Interpreter.Interfaces;
+using OperPage_les.CORE.Flaging;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using IEL;
-using DataScroll;
-using System.Windows.Data;
-using System.Runtime.CompilerServices;
-using IEL.Interfaces.Front;
-using Interpreter.Classes;
-using Interpreter.Interfaces;
 
 namespace OperPage_les.Windows
 {
@@ -273,7 +270,7 @@ namespace OperPage_les.Windows
             IELButtonInfoParameter.MouseLeave += (sender, e) => IELMessageInfo.CloseBorderInformation();
             IELButtonCloneTextCommand.OnActivateMouseLeft += () =>
             {
-                Clipboard.SetText(TextBlockTextCommand.Text);
+                System.Windows.Clipboard.SetText(TextBlockTextCommand.Text);
                 AnimationColor.To = Colors.Black;
                 TextBlockTextCommand.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimationColor);
             };
@@ -350,17 +347,17 @@ namespace OperPage_les.Windows
         {
             IELButtonText Element = new()
             {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = HeightElement,
                 VisibleMouseImaging = false,
                 FontSize = 13d,
                 BorderThicknessBlock = new(2),
             };
-            Binding binding = new()
+            System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
-                Source = (Style)Application.Current.Resources["Brenzo Slab Personal Use"]
+                Source = (Style)System.Windows.Application.Current.Resources["Brenzo Slab Personal Use"]
             };
             BindingOperations.SetBinding(Element, IELButtonText.StyleProperty, binding);
             return Element;

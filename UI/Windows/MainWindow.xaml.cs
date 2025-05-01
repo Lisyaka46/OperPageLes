@@ -33,6 +33,8 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.AxHost;
+using WpfAnimatedGif;
 #endregion
 
 namespace OperPage_les.UI.Windows
@@ -73,33 +75,6 @@ namespace OperPage_les.UI.Windows
         private readonly ThreadGenericProcess UpdateSearchHintCommand;
 
         /// <summary>
-        /// Объект анимации для управления позицией
-        /// </summary>
-        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
-        {
-            DecelerationRatio = 0.6d,
-            EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
-        /// Объект анимации для управления double значением
-        /// </summary>
-        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
-        /// Объект анимации для управления Color значением
-        /// </summary>
-        private static readonly ColorAnimation ColorAnimate = new(Colors.Black, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
         /// Настройки панели действий в браузере
         /// </summary>
         private readonly PanelActionSettingsFrameworkElement PASettingsBrowserManipulateInlay;
@@ -116,7 +91,7 @@ namespace OperPage_les.UI.Windows
         //
         private static readonly Page[] PagesButtonsInformation =
         [
-            new Page1(), new Page2()
+            new MainPageButtonInfo(), new Page2()
         ];
 
         public MainWindow()
@@ -124,24 +99,24 @@ namespace OperPage_les.UI.Windows
             InitializeComponent();
 
             #region Command
-#if DEBUG
-            App.DataConsoleCommand.AddRange([
-                #region anim
-                new ConsoleCommand("anim", [new Parameter("Value", typeof(bool))],
-                "Отключает или включает анимацию у окна ярлыков",
-                (Command, param) =>
-                {
-                    PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
-                    if (Page == null)
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $"Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
-                    if ((bool)param[0]) Page.AnimationLoadingStart();
-                    else Page.AnimationLoadingStop();
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
-            ]);
-            #endif
+            //#if DEBUG
+            //App.DataConsoleCommand.AddRange([
+            //    #region anim
+            //    new ConsoleCommand("anim", [new Parameter("Value", typeof(bool))],
+            //    "Отключает или включает анимацию у окна ярлыков",
+            //    (Command, param) =>
+            //    {
+            //        PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
+            //        if (Page == null)
+            //            return Task.FromResult(CommandStateResult.Failed(Command.Name,
+            //                $"Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
+            //        if ((bool)param[0]) Page.AnimationLoadingStart();
+            //        else Page.AnimationLoadingStop();
+            //        return Task.FromResult(CommandStateResult.Completed(Command.Name));
+            //    }),
+            //    #endregion
+            //]);
+            //#endif
             #endregion
 
             #region Event Pages
@@ -228,16 +203,6 @@ namespace OperPage_les.UI.Windows
                     default: return;
                 }
             };
-
-            IELBrowserPageMain.EventCloseBrowser += () =>
-            {
-                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
-            };
-            IELBrowserPageMain.EventChangeActiveInlay += () =>
-            {
-                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
-            };
-
             #region Down Tool Buttons Information
             ActualIndexActivatePageDownToolButtons = 0;
             IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
@@ -248,7 +213,20 @@ namespace OperPage_les.UI.Windows
             IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
             IELImageButtonBackButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(3, 0, 0, 0), 400u);
             IELImageButtonBackButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
+
             #region IELBrowserPage
+            IELBrowserPageMain.EventCloseBrowser += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
+            IELBrowserPageMain.EventChangeActiveInlay += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
+            IELBrowserPageMain.EventCloseInlay += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += () =>
             {
                 IELActionPanelMain.ClosePanelAction();
@@ -262,16 +240,17 @@ namespace OperPage_les.UI.Windows
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
             {
-                AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B5);
                 IELMessageMain.UsingBorderInformation(Element, Element.Name, Text, IELBlockMessage.OrientationBorderInfo.Auto);
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
-            #endregion
 
+#if DEBUG
             IELBrowserPageMain.EventChangeActiveInlay += () =>
             {
-                AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B5);
+                //AudioPlayerControl.PlayMP3(Properties.Resources.B5);
             };
+#endif
+            #endregion
 
             #region IELImageButtonHelp
             IELImageButtonHelp.OnActivateMouseLeft += App.UsingDiscriptionCommand;
@@ -290,26 +269,22 @@ namespace OperPage_les.UI.Windows
 
             ImageLogoApplication.MouseEnter += (sender, e) =>
             {
-                DoubleAnimate.To = 0.6d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
+                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.6d);
             };
 
             ImageLogoApplication.MouseLeave += (sender, e) =>
             {
-                DoubleAnimate.To = 1d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
+                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 1d);
             };
 
             ImageLogoApplication.MouseDown += (sender, e) =>
             {
-                DoubleAnimate.To = 0.4d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
+                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.4d);
             };
 
             ImageLogoApplication.MouseUp += (sender, e) =>
             {
-                DoubleAnimate.To = 1d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
+                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 1d);
                 Dialogs.LicenseWindow License = new();
                 License.ShowDialog();
             };
@@ -325,28 +300,21 @@ namespace OperPage_les.UI.Windows
 
                     #region Anim Start
                     #region 1
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(1400d);
-
-                    ThicknessAnimate.From = new(8);
-                    ThicknessAnimate.To = BorderImageInformation.Margin;
-                    BorderImageInformation.BeginAnimation(MarginProperty, ThicknessAnimate);
+                    App.AnimateThicknessEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
 
                     TimeDataColumnDefinition.MaxWidth = 0d;
-                    DoubleAnimate.Duration = TimeSpan.FromMilliseconds(1200d);
-                    DoubleAnimate.To = 124d;
+
+                    DoubleAnimation animation = App.GetDoubleAnimate();
+                    animation.Duration = TimeSpan.FromMilliseconds(1200d);
+                    animation.To = 124d;
                     Storyboard storyboard = new();
-                    storyboard.Children.Add(DoubleAnimate);
-                    Storyboard.SetTarget(DoubleAnimate, TimeDataColumnDefinition);
-                    Storyboard.SetTargetProperty(DoubleAnimate, new PropertyPath("(ColumnDefinition.MaxWidth)"));
+                    storyboard.Children.Add(animation);
+                    Storyboard.SetTarget(animation, TimeDataColumnDefinition);
+                    Storyboard.SetTargetProperty(animation, new PropertyPath("(ColumnDefinition.MaxWidth)"));
                     storyboard.Begin();
-                    DoubleAnimate.Duration = TimeSpan.FromMilliseconds(250d);
+                    animation.Duration = TimeSpan.FromMilliseconds(250d);
 
-                    ThicknessAnimate.From = new(8);
-                    ThicknessAnimate.To = BorderDateTime.Margin;
-                    BorderDateTime.BeginAnimation(MarginProperty, ThicknessAnimate);
-
-                    ThicknessAnimate.From = null;
-                    ThicknessAnimate.Duration = TimeSpan.FromMilliseconds(1400d);
+                    App.AnimateThicknessEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, TimeSpan.FromMilliseconds(1400d));
 
                     #endregion
                     #endregion
@@ -398,9 +366,6 @@ namespace OperPage_les.UI.Windows
         {
             TextBlockTime.Text = RealTime;
             TextBlockData.Text = RealData;
-#if DEBUG
-            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B6);
-#endif
         }
 
         /// <summary>
@@ -443,8 +408,7 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         internal void UpdateImageMenu()
         {
-            ImageIndificator.Opacity = 1d;
-            DoubleAnimation animationDouble = DoubleAnimate.Clone();
+            ActivateLoadingIndicator();
             string Path = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
             if (Path.Length > 0)
             {
@@ -465,14 +429,9 @@ namespace OperPage_les.UI.Windows
             }
             else
             {
-                animationDouble.To = 0d;
-                animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
-                ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
+                App.AnimateDoubleEffect(ImageMenu, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
             }
-
-            animationDouble.To = 0d;
-            animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
-            ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
+            DiactivateLoadingIndicator();
         }
 
         /// <summary>
@@ -482,24 +441,11 @@ namespace OperPage_les.UI.Windows
         private void ComplitedInstallImageMenu(BitmapImage bitmap)
         {
             ImageMenu.Source = bitmap;
-            ThicknessAnimation animationThickness = ThicknessAnimate.Clone();
-            DoubleAnimation animationDouble = DoubleAnimate.Clone();
 
-            animationDouble.From = 10d;
-            animationDouble.To = 0d;
-            animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
-
-            animationThickness.From = new(-4);
-            animationThickness.To = new(0);
-            animationThickness.Duration = TimeSpan.FromMilliseconds(2300d);
-
-            ImageIndificator.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Done.png", UriKind.RelativeOrAbsolute));
-            BlurEffectImageMenu.BeginAnimation(BlurEffect.RadiusProperty, animationDouble);
-            ImageMenu.BeginAnimation(MarginProperty, animationThickness);
-
-            animationDouble.From = 0d;
-            animationDouble.To = 1d;
-            ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
+            DiactivateLoadingIndicator();
+            App.AnimateDoubleEffect(BlurEffectImageMenu, BlurEffect.RadiusProperty, 10d, 0d, TimeSpan.FromMilliseconds(2300d));
+            App.AnimateThicknessEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
+            App.AnimateDoubleEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
         }
 
         /// <summary>
@@ -507,18 +453,37 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private void FailedInstallImageMenu()
         {
-            ImageIndificator.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Warning.png", UriKind.RelativeOrAbsolute));
+            DiactivateLoadingIndicator();
+            //ImageIndificator.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Warning.png", UriKind.RelativeOrAbsolute));
             //AddTextInConsole("Не удалось загрузить фоновое изображение...");
         }
+
+        internal void ChangeVisibilityMillisecondInternet(bool Value)
+        {
+            ((MainPageButtonInfo)PagesButtonsInformation[0]).VisibilityInternetMillisecond(Value);
+        }
         #endregion
+
+        #region Indicator
+        //
+        internal void ActivateLoadingIndicator()
+        {
+            ImageBehavior.SetAnimatedSource(ImageIndificator, new BitmapImage(new Uri($"{App.PathImageApplication}/Loading.gif", UriKind.RelativeOrAbsolute)));
+            App.AnimateDoubleEffect(ImageIndificator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+        }
+
+        //
+        internal void DiactivateLoadingIndicator()
+        {
+            App.AnimateDoubleEffect(ImageIndificator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1500d));
+        }
+        #endregion
+
 
         #region BlurBackgroundDataTime
         internal void ChangeBlurImageInDataTime(bool State)
         {
-            DoubleAnimation animation = DoubleAnimate.Clone();
-            animation.Duration = TimeSpan.FromMilliseconds(1300d);
-            animation.To = State ? 0.5d : 0d;
-            VisualRectangleDateTimeBackground.BeginAnimation(OpacityProperty, animation);
+            App.AnimateDoubleEffect(VisualRectangleDateTimeBackground, OpacityProperty, State ? 0.5d : 0d, TimeSpan.FromMilliseconds(1300d));
         }
         #endregion
     }

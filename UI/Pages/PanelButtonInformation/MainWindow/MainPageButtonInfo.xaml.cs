@@ -1,33 +1,20 @@
-﻿using OperPage_les;
+﻿using IEL;
 using OperPage_les.CORE;
-using IEL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OperPage_les.CORE.Settings;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static OperPage_les.App;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using OperPage_les.CORE.Settings;
 
 namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
 {
     /// <summary>
     /// Логика взаимодействия для Page1.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class MainPageButtonInfo : Page
     {
         [LibraryImport("user32.dll", EntryPoint = "keybd_event")]
         private static partial void Keybd_event(byte CodeButton, byte CodeScan, uint CodeState, UIntPtr dwExtralnfo);
@@ -50,7 +37,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
         private static bool CheckOpenMessageInObject(string NameObject) => MainWindowApplication.IELMessageMain.FlagMessage &&
                     MainWindowApplication.IELMessageMain.NameParentObject.Equals(NameObject);
 
-        public Page1()
+        public MainPageButtonInfo()
         {
             bool VisualMillisecondConnectionEnabled =
                 CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.MillisecondInternetConnection).Equals("T");
@@ -59,8 +46,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             IELBlockInfoStateRegister.Text = Flags.FlagRegisterState ? "A" : "a";
             ImageIndicatorLoadingInternetConnection.Opacity = 0d;
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
-            IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new Thickness(4, -3, 4, 6) : new Thickness(3);
-            IELBlockInfoInternetConnection.Margin = VisualMillisecondConnectionEnabled ? new Thickness(-2, 0, -2, 0) : new Thickness(0);
+            IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new Thickness(2, 0, 2, 8) : new Thickness(2, 0, 2, 4);
             #region BorderInternetConnection
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
@@ -181,6 +167,13 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 }
                 SaveUpdatingInternetConnect = Flags.InternetPinging;
             }
+        }
+
+        internal void VisibilityInternetMillisecond(bool Value)
+        {
+            AnimateThicknessEffect(IELBlockInfoInternetConnection.MainFrontImage, System.Windows.Controls.Image.MarginProperty, Value ? new(2, 0, 2, 8) : new Thickness(2, 0, 2, 4),
+                TimeSpan.FromMilliseconds(400d));
+            AnimateDoubleEffect(TextBlockInternetConnectionMillisecond, TextBlock.OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
         }
     }
 }

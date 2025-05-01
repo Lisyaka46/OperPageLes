@@ -9,7 +9,7 @@
         xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
         x:Name="window" x:Class="OperPage_les.UI.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/UI/Images/LogoMain.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
+        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/UI/Images/IconMainApplication.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
         <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
         <Image x:Name="ImageMenu" Panel.ZIndex="1" Stretch="UniformToFill">
@@ -27,7 +27,7 @@
                 <Border.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.47,-2.5">
                         <GradientStop Color="#CC78A08C" Offset="0.99"/>
-                        <GradientStop Color="#D887E1FF" Offset="0"/>
+                        <GradientStop Color="#D80082AD" Offset="0.129"/>
                     </LinearGradientBrush>
                 </Border.Background>
                 <Border.FocusVisualStyle>
@@ -55,7 +55,7 @@
                                 <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
                             </GUI:IELButtonImage.BackgroundSetting>
                         </GUI:IELButtonImage>
-                        <GUI:IELButtonImage x:Name="IELButtonSettings" Imaging="/UI/Images/Settings.png" Grid.ColumnSpan="1" Grid.Column="3" ImageMargin="2,2,2,2" AnimationMillisecond="140" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5">
+                        <GUI:IELButtonImage x:Name="IELButtonSettings" Imaging="/UI/Images/IconMainSettings.png" Grid.ColumnSpan="1" Grid.Column="3" ImageMargin="2,2,2,2" AnimationMillisecond="140" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5">
                             <GUI:IELButtonImage.ForegroundSetting>
                                 <Classes:BrushSettingQ Default="#FF1F262F" NotEnabled="#FF5F1717" Select="#FF232F31" Used="#FF093831"/>
                             </GUI:IELButtonImage.ForegroundSetting>
@@ -67,7 +67,7 @@
                             </GUI:IELButtonImage.BackgroundSetting>
                         </GUI:IELButtonImage>
                     </Grid>
-                    <GUI:IELButtonImage x:Name="ImageLogoApplication" Imaging="/UI/Images/LogoMain.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThickness="0.1,0.1,0.1,0.1" ImageMargin="2,1,2,1">
+                    <GUI:IELButtonImage x:Name="ImageLogoApplication" Imaging="/UI/Images/IconMainApplication.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThickness="0.1,0.1,0.1,0.1" ImageMargin="0,-2,0,-2">
                         <GUI:IELButtonImage.BorderBrushSetting>
                             <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
                         </GUI:IELButtonImage.BorderBrushSetting>
@@ -88,10 +88,10 @@
                         <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#D8C2DFD4" Grid.ColumnSpan="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="43"/>
-                                    <ColumnDefinition Width="43"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="43"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <GUI:IELButtonImage x:Name="IELImageButtonHelp0" CornerRadius="5,5,5,5" Imaging="/UI/Images/Menu.png" ImageMargin="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" AnimationMillisecond="160">
                                     <GUI:IELButtonImage.BorderBrushSetting>
@@ -101,7 +101,7 @@
                                         <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9" UsedState="False"/>
                                     </GUI:IELButtonImage.BackgroundSetting>
                                 </GUI:IELButtonImage>
-                                <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="0,0,1,7" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160">
+                                <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160" PaddingContent="4,0,5,6">
                                     <GUI:IELButtonText.ForegroundSetting>
                                         <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
                                     </GUI:IELButtonText.ForegroundSetting>
@@ -110,9 +110,9 @@
                                     </GUI:IELButtonText.BackgroundSetting>
                                 </GUI:IELButtonText>
                                 <Grid Grid.Column="2">
-                                    <GUI:IELPageController x:Name="IELPageControllerButtons"/>
+                                    <GUI:IELPageController x:Name="IELPageControllerButtons" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </Grid>
-                                <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="1,0,0,7" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160">
+                                <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160">
                                     <GUI:IELButtonText.ForegroundSetting>
                                         <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
                                     </GUI:IELButtonText.ForegroundSetting>
@@ -166,6 +166,6 @@
                 </GUI:IELBrowserPage.BackgroundSetting>
             </GUI:IELBrowserPage>
         </Grid>
-        <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6" FontFamily="Trebuchet MS"/>
+        <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6" FontFamily="Trebuchet MS" DefaultBackground="#FFC5FBE4"/>
     </Grid>
 </Window>
