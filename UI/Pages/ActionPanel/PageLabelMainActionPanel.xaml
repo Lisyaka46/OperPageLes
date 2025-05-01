@@ -6,27 +6,27 @@
       xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel"
       xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.ActionPanel.PageLabelMainActionPanel"
       mc:Ignorable="d" 
-      d:DesignHeight="220" d:DesignWidth="210"
+      d:DesignWidth="210"
       Title="PageLabelMainActionPanel">
 
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D1" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14" Margin="4,4,4,4">
+        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D1" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Margin="4,4,4,4" PaddingContent="0,10,0,10">
             <IEL:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF36BD88" NotEnabled="#FFD25959" Select="#FF35A99C" Used="White"/>
             </IEL:IELButtonTextKey.BackgroundSetting>
         </IEL:IELButtonTextKey>
-        <IEL:IELButtonTextKey x:Name="IELButtonImportLabel" Text="Импорт ярлыков из интернета" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D2" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14" Margin="4,4,4,4" Grid.Row="1">
+        <IEL:IELButtonTextKey x:Name="IELButtonImportLabel" Text="Импорт ярлыков из интернета" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D2" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Margin="4,4,4,4" Grid.Row="1" PaddingContent="0,10,0,10">
             <IEL:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF36BD88" NotEnabled="#FFD25959" Select="#FF35A99C" Used="White"/>
             </IEL:IELButtonTextKey.BackgroundSetting>
         </IEL:IELButtonTextKey>
-        <IEL:IELButtonTextKey x:Name="IELButtonExportLabel" Text="Экспорт ярлыков" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D3" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="14" Margin="4,4,4,4" Grid.Row="2" StateVisualizationButton="LeftArrow">
+        <IEL:IELButtonTextKey x:Name="IELButtonExportLabel" Text="Экспорт ярлыков" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontWeight="Bold" CharKeyKeyboard="D3" AnimationMillisecond="140" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Margin="4,4,4,4" Grid.Row="2" StateVisualizationButton="LeftArrow" PaddingContent="0,10,0,10">
             <IEL:IELButtonTextKey.BackgroundSetting>
                 <Classes:BrushSettingQ Default="#FF36BD88" NotEnabled="#FFD25959" Select="#FF35A99C" Used="White"/>
             </IEL:IELButtonTextKey.BackgroundSetting>

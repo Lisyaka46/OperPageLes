@@ -1,0 +1,45 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
+      xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageWebBrowser"
+      xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PageWebBrowser">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="18" ShowNameText="True" TextName="Ссылка" MarginNaming="0,-22,0,0" Margin="2,20,2,5" FontSizeNaming="16" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" ForgroundNaming="White" Text="" Grid.ColumnSpan="1" AnimationMillisecond="150">
+                <IEL:IELTextBox.BackgroundSetting>
+                    <Classes:BrushSettingQ Default="#FF82B3D2" NotEnabled="#FFE46060" UsedState="False" Used="#FF57EAE0" Select="#FF7688A5"/>
+                </IEL:IELTextBox.BackgroundSetting>
+            </IEL:IELTextBox>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="59*"/>
+                    <ColumnDefinition Width="41*"/>
+                </Grid.ColumnDefinitions>
+                <IEL:IELButtonImage Width="50" Height="50" Imaging="/UI/Images/Warning.png" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="GridBrowser" Grid.Row="1">
+            <cefSharp:ChromiumWebBrowser x:Name="WebBrowserElement" ResizeHackDelayInMs="70"/>
+            <!--<WebBrowser x:Name="WebBrowserElement"/>-->
+        </Grid>
+
+
+
+    </Grid>
+</Page>

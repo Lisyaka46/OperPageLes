@@ -8,31 +8,31 @@
       xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
       x:Class="OperPage_les.Windows.Pages.ActionPanel.PageBufferActionPanel"
       mc:Ignorable="d" 
-      Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="251.791">
+      Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="259.791">
 
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
-            <RowDefinition Height="35*"/>
-            <RowDefinition Height="94*"/>
+            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Border x:Name="BorderBuffer" BorderBrush="#FF163C26" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True" Background="#B21B2F24">
             <Grid>
                 <Grid x:Name="GridBuffer"/>
             </Grid>
         </Border>
-        <Grid Margin="0,4,0,4">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="103*"/>
-                <ColumnDefinition Width="103*"/>
-                <ColumnDefinition Width="46*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="37.718"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" Margin="0,0,3,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" StateVisualizationButton="LeftArrow" FontSize="13">
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontWeight="Bold" CharKeyKeyboard="Oem3" VisibleMouseImaging="False" FontSize="16" PaddingContent="15,0,15,0" StateVisualizationButton="LeftArrow" Margin="3,0,1,0">
                 <GUI:IELButtonTextKey.BackgroundSetting>
                     <Classes:BrushSettingQ Default="#FF4DA6B7" NotEnabled="#FFC13750" Select="#FF4DD7F1" Used="White"/>
                 </GUI:IELButtonTextKey.BackgroundSetting>
             </GUI:IELButtonTextKey>
-            <TextBlock x:Name="TextBlockCounterBuffer" HorizontalAlignment="Center" Text="00/00" VerticalAlignment="Center" Foreground="#FF80EAE2" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}"/>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" FontWeight="Bold" CharKeyKeyboard="D1" VisibleMouseImaging="False" Grid.Column="1" Margin="3,0,1,0" IsEnabled="False" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" FontSize="13">
+            <TextBlock x:Name="TextBlockCounterBuffer" Text="00 00" Foreground="#FF80EAE2" Grid.Column="2" TextAlignment="Center" FontSize="16" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" FontWeight="Bold" Margin="5,0,5,0"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" CharKeyKeyboard="D1" VisibleMouseImaging="False" Grid.Column="1" IsEnabled="False" FontSize="16" PaddingContent="15,0,15,0" FontWeight="Bold" Margin="1,0,0,0">
                 <GUI:IELButtonTextKey.BackgroundSetting>
                     <Classes:BrushSettingQ NotEnabled="#FFC13750" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
                 </GUI:IELButtonTextKey.BackgroundSetting>

@@ -30,5 +30,10 @@ namespace OperPage_les.CORE.Settings
         /// Параметр отображения количества миллисекунд уходящее на подключение
         /// </summary>
         MillisecondInternetConnection = 3,
+
+        /// <summary>
+        /// Ссылка по умолчанию при открытии веб-браузера
+        /// </summary>
+        DefaultOpenUrlWebView = 4,
     }
 }

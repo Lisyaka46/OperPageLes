@@ -1,18 +1,14 @@
-﻿using OperPage_les.CORE;
-using OperPage_les.Windows.Frames;
-using OperPage_les.Windows.Pages.ActionPanel;
-using OperPage_les.Windows.Pages.Browser;
-using IEL;
+﻿using IEL;
+using IEL.Classes;
 using IEL.Interfaces.Core;
 using Interpreter.Classes;
-using Interpreter.Commands;
 using Interpreter.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using OperPage_les.CORE;
+using OperPage_les.Windows.Frames;
+using OperPage_les.Windows.Pages.ActionPanel;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,28 +16,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
+using Color = System.Windows.Media.Color;
 
 namespace OperPage_les.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
     /// </summary>
-    public partial class PageConsole : Page, IPageDefault
+    public partial class PageConsole : Page
     {
-        /// <summary>
-        /// Имя страницы
-        /// </summary>
-        public string PageName { get; } = nameof(PageConsole);
-
-        /// <summary>
-        /// Объект страницы
-        /// </summary>
-        public new Page Content => this;
-
         /// <summary>
         /// Главная страница панели действий в консоли
         /// </summary>
@@ -92,18 +75,18 @@ namespace OperPage_les.UI.Pages.Browser
         /// <summary>
         /// Константа высоты элемента подсказки к командам
         /// </summary>
-        private const int HeightHintElement = 20;
+        private double HeightHintElement => TextBlockHintCommand.RenderSize.Height +
+            BorderHintCommand.BorderThickness.Top + BorderHintCommand.BorderThickness.Bottom + 6d;
 
         public PageConsole()
         {
             InitializeComponent();
             BorderHintCommand.Height = 0d;
-            GridHintCommandParameter.Opacity = 0d;
-            Canvas.SetZIndex(GridHintCommandParameter, -1);
+            GridHintOneCommand.Opacity = 0d;
+            Canvas.SetZIndex(GridHintOneCommand, -1);
             RichTextBoxMainMessage.Document = new();
             PASettingsConsole = new(RichTextBoxMainMessage, PageConsolePA, new(270d, 230d));
             ButtonReturnCommand.OnActivateMouseLeft += () => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
-
             #region PageConsolePA
             PageConsolePA.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
             {
@@ -235,27 +218,30 @@ namespace OperPage_les.UI.Pages.Browser
                 string[] AllHintNames = [.. App.CurrentApp.AllNamesCommand.Where((i) => { return i.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase); })];
                 if (AllHintNames.Length == GridHint.Children.Count) return;
                 GridHint.Children.Clear();
+                GridHint.RowDefinitions.Clear();
                 if (AllHintNames.Length > 0)
                 {
                     Sorting.SortNames(ref AllHintNames);
                     foreach (string Name in AllHintNames)
                     {
-                        TextBlock block = CreateHintBlock(Name, GridHint.Children.Count);
+                        TextBlock block = CreateHintBlock(Name);
+                        GridHint.RowDefinitions.Add(new() { Height = new(HeightHintElement), });
+                        Grid.SetRow(block, GridHint.RowDefinitions.Count - 1);
                         GridHint.Children.Add(block);
                     }
                 }
             }
             else GridHint.Children.Clear();
-            if (Canvas.GetZIndex(GridHintCommandParameter) == 1 && !Activate) UsingAnimateBorderHintCommand(false);
+            if (Canvas.GetZIndex(GridHintOneCommand) == 1 && !Activate) UsingAnimateBorderHintCommand(false);
             animation.To = Activate && GridHint.Children.Count > 0 ?
                 GridHint.Children.Count * HeightHintElement + BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom : 0d;
             BorderHintCommand.BeginAnimation(HeightProperty, animation);
         }
 
         /// <summary>
-        /// Манипулировать анимацией борьера подсказок к командам
+        /// Манипулировать анимацией борьера подсказок к конкретной команде
         /// </summary>
-        /// <param name="Activate">Активировать или дизактивировать аинмацией</param>
+        /// <param name="Activate">Активировать или дизактивировать анимацией</param>
         /// <param name="CommandTextActualHint">Константный текст поиска команды</param>
         private void UsingAnimateBorderHintCommand(bool Activate, string? CommandTextActualHint = null)
         {
@@ -276,19 +262,22 @@ namespace OperPage_les.UI.Pages.Browser
                         $"{(Parameters[i].Absolutly ? string.Empty : '?')}" +
                         $"{(i < Parameters.Length - 1 ? ", " : string.Empty)}";
                 }
+                TextBlockHintCommand.UpdateLayout();
                 animation.To = HeightHintElement +
                     BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom +
-                    GridHintCommandParameter.Margin.Top + GridHintCommandParameter.Margin.Bottom;
+                    GridHintOneCommand.Margin.Top + GridHintOneCommand.Margin.Bottom;
                 BorderHintCommand.BeginAnimation(HeightProperty, animation);
             }
             animation.To = Activate ? 1d : 0d;
-            Canvas.SetZIndex(GridHintCommandParameter, Activate ? 1 : -1);
-            GridHintCommandParameter.BeginAnimation(OpacityProperty, animation);
+            Canvas.SetZIndex(GridHintOneCommand, Activate ? 1 : -1);
+            GridHintOneCommand.BeginAnimation(OpacityProperty, animation);
 
             animation.To = Activate ? 0d : 1d;
             GridHint.BeginAnimation(OpacityProperty, animation);
 
-            animation.To = Activate ? 300d : 142d;
+            double OffsetWidth = BorderHintCommand.ActualWidth - GridHintOneCommand.ActualWidth;
+            OffsetWidth += TextBlockHintCommand.Padding.Right;
+            animation.To = Activate ? TextBlockHintCommand.RenderSize.Width + OffsetWidth : 142d;
             BorderHintCommand.BeginAnimation(WidthProperty, animation);
         }
 
@@ -296,33 +285,34 @@ namespace OperPage_les.UI.Pages.Browser
         /// Создать объект подсказки к команде
         /// </summary>
         /// <param name="Name">Имя команды</param>
-        /// <param name="Index">Индекс местоположения по оси Y</param>
         /// <returns>Объект подсказки к команде</returns>
-        private TextBlock CreateHintBlock(string Name, int Index)
+        private TextBlock CreateHintBlock(string Name)
         {
-            ColorAnimation color_animation = ColorAnimate.Clone();
-            color_animation.Duration = TimeSpan.FromMilliseconds(120d);
             TextBlock Result = new()
             {
-                Height = HeightHintElement,
                 Text = Name,
                 TextAlignment = TextAlignment.Center,
-                TextTrimming = TextTrimming.CharacterEllipsis,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
+                TextTrimming = TextTrimming.None,
+                TextWrapping = TextWrapping.NoWrap,
+                LineStackingStrategy = LineStackingStrategy.BlockLineHeight,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
-                Margin = new(0, HeightHintElement * Index, 0, 0),
+                Margin = new(0),
                 Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
-                Cursor = Cursors.Hand,
+                Cursor = System.Windows.Input.Cursors.Hand,
+                FontSize = 14d,
             };
             Result.MouseEnter += (sender, e) =>
             {
-                color_animation.To = Color.FromRgb(255, 255, 255);
-                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
+                ColorAnimate.Duration = TimeSpan.FromMilliseconds(120d);
+                ColorAnimate.To = Color.FromRgb(255, 255, 255);
+                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
             };
             Result.MouseLeave += (sender, e) =>
             {
-                color_animation.To = Color.FromRgb(0, 0, 0);
-                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, color_animation);
+                ColorAnimate.Duration = TimeSpan.FromMilliseconds(120d);
+                ColorAnimate.To = Color.FromRgb(0, 0, 0);
+                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
             };
             Result.MouseLeftButtonUp += (sender, e) =>
             {
@@ -343,23 +333,15 @@ namespace OperPage_les.UI.Pages.Browser
         {
             if (Text.Length == 0) return;
             Text = $"{App.ConsolePreMessage} {Text}";
-            Paragraph Message = new();
-            Binding binding = new()
+            Paragraph Message;
+            if (Formatted) FormattedAllTextDetect(out Message, Text);
+            else Message = new(new Run(Text));
+            System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
-                Source = (Style)Application.Current.Resources["RussianRail G Pro"]
+                Source = (Style)System.Windows.Application.Current.Resources["RussianRail G Pro"]
             };
             BindingOperations.SetBinding(Message, Paragraph.StyleProperty, binding);
-            if (Formatted)
-            {
-                List<Inline> Inlines = [];
-                foreach (Match match in RegexFormattedText().Matches(Text))
-                {
-                    Inlines.Add(FormattedTextDetect(match.Value));
-                }
-                Message.Inlines.AddRange(Inlines);
-            }
-            else Message.Inlines.Add(new Run(Text));
             RichTextBoxMainMessage.Document.Blocks.Add(Message);
         }
 
@@ -384,26 +366,64 @@ namespace OperPage_les.UI.Pages.Browser
         /// </remarks>
         /// <param name="Text">Текст форматирования</param>
         /// <returns>Форматированный текст</returns>
-        private static Inline FormattedTextDetect(string Text)
+        private static void FormattedAllTextDetect(out Paragraph Result, string Text)
         {
-            if (Text.Length == 0 || (Text.Length == 1 && Text[0] == '%')) return new Run(Text);
-            if (Text[0] == '%') Text = Text[1..]; // удаление "%"
-            SolidColorBrush? color = null;
+            // %//Italic %**Bold**//
+            Result = new();
+            foreach (Match match in RegexFormattedText().Matches(Text))
+            {
+                Result.Inlines.AddRange(FormattedBlockText(match.Value));
+            }
+        }
+
+        private static Inline[] FormattedBlockText(string Text)
+        {
+            Span Result = new();
+            if (Text.Length < 2 || Text[0] != '%')
+            {
+                Result.Inlines.Add(Text);
+                return [.. Result.Inlines];
+            }
+
+            Text = Text[1..]; // удаление "%"
+
+            // логика цвета
+            SolidColorBrush? BackgroundColor = null;
             if (Text[0] == '#')
             {
-                color = new((Color)ColorConverter.ConvertFromString(
+                BackgroundColor = new((Color)System.Windows.Media.ColorConverter.ConvertFromString(
                     RegexFormattedTextColor().Match(Text).Value));
                 Text = Text[7..];
             }
-            Inline Result = $"{Text[0]}{Text[^1]}" switch
+
+            MatchCollection CollectionRecurce = RegexFormattedText().Matches(Text[2..^2]);
+            foreach (Match match in CollectionRecurce)
             {
-                "**" => new Bold(new Run(Text[2..^2])),
-                "//" => new Italic(new Run(Text[2..^2])),
-                "__" => new Underline(new Run(Text[2..^2])),
-                _ => new Run(Text),
+                if (match.Value[0] == '%' && match.Value.Length > 1)
+                {
+                    foreach (Inline Element in FormattedBlockText(match.Value))
+                    {
+                        Result.Inlines.Add(SwitchBlockText([Text[0], Text[1]], Element));
+                        Result.Inlines.LastInline.Background = BackgroundColor;
+                    }
+                    continue;
+                }
+                Result.Inlines.Add(SwitchBlockText([Text[0], Text[1]], new Run(match.Value)));
+                Result.Inlines.LastInline.Background = BackgroundColor;
+            }
+            return [.. Result.Inlines];
+        }
+
+        private static Inline SwitchBlockText(char[] Parrent, Inline Context)
+        {
+            Contract.Requires(Parrent.Length == 2);
+            return string.Concat(Parrent) switch
+            {
+                "**" => new Bold(Context),
+                "//" => new Italic(Context),
+                "__" => new Underline(Context),
+                _ => Context,
             };
-            if (color != null) Result.Background = color;
-            return Result;
         }
         #endregion
 
@@ -418,7 +438,7 @@ namespace OperPage_les.UI.Pages.Browser
         /// </summary>
         /// <returns>Регулярное выражение</returns>
         // Текст который является %#00FF00FF__%**регистрационным**__ и %#FFFFFF**может** %~~даже так~~ %--постоянно-- %__форматироваться__
-        [GeneratedRegex(@"([^%]+|(\%(#[0-9A-F]{6})?)(\*{2}[^\*]+\*{2}|_{2}[^_]+_{2}|\/{2}[^\/]+\/{2})|\%)")]
+        [GeneratedRegex(@"([^%]+|(\%(#[0-9A-F]{6})?)(\*{2}([^\*]+(\*{3,}|\*)){1,}\*|_{2}([^_]+(_{3,}|_)){1,}_|\/{2}([^\/]+(\/{3,}|\/)){1,}\/)|\%)")]
         private static partial Regex RegexFormattedText();
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace OperPage_les.UI.Pages.Settings
         /// <summary>
         /// Объект страницы
         /// </summary>
-        public new Page Content => this;
+        public Page PageContent => this;
 
         /// <summary>
         /// Событие изменения значений настроек
@@ -56,6 +56,8 @@ namespace OperPage_les.UI.Pages.Settings
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
         };
 
+        private int RealySizeBuffer = -1;
+
         internal PageGeneralSetting()
         {
             InitializeComponent();
@@ -64,19 +66,28 @@ namespace OperPage_les.UI.Pages.Settings
             TextBlockFailedImageSetup.Opacity = 0d;
             if (PathBackgroundImage.Length > 0)
             {
-                TextBoxPathMenuImage.Text = PathBackgroundImage;
+                IELTextBoxDirectoryBackground.Text = PathBackgroundImage;
                 ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
                 IELButtonClearImage.IsEnabled = true;
             }
             else
             {
                 ImageBackground.Opacity = 0d;
-                TextBoxPathMenuImage.Text = String.Empty;
+                IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
             }
+            IELTextBoxDirectoryBackground.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case System.Windows.Input.Key.Escape:
+                        BorderPathImageBackground.Focus();
+                        break;
+                }
+            };
             IELButtonDialogDirectoryFile.OnActivateMouseLeft += () =>
             {
-                OpenFileDialog dialog = new()
+                System.Windows.Forms.OpenFileDialog dialog = new()
                 {
                     //FileName = "Обзор файла изображения", // Default file name
                     DefaultExt = ".png", // Default file extension
@@ -94,7 +105,7 @@ namespace OperPage_les.UI.Pages.Settings
             };
             IELButtonSetTextClipboard.OnActivateMouseLeft += () =>
             {
-                SetImageUriValue(Clipboard.GetText());
+                SetImageUriValue(System.Windows.Clipboard.GetText());
             };
             IELButtonClearImage.OnActivateMouseLeft += () =>
             {
@@ -102,25 +113,30 @@ namespace OperPage_les.UI.Pages.Settings
                 animation.Duration = TimeSpan.FromMilliseconds(2000d);
                 animation.To = 0d;
                 ImageBackground.BeginAnimation(OpacityProperty, animation);
-                TextBoxPathMenuImage.Text = String.Empty;
+                IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
                 EventChangeValue?.Invoke(EnumSettingApplication.PathMenuImage, "!");
             };
             #endregion
             #region BufferSize
             string StringBufferSize = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BufferSize);
-            int RealySizeBuffer = Convert.ToInt32(StringBufferSize);
+            RealySizeBuffer = Convert.ToInt32(StringBufferSize);
             SliderBufferSize.Value = RealySizeBuffer;
             TextBlockSliderBufferSize.Text = SliderBufferSize.Value.ToString();
-            BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
+            //BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
             SliderBufferSize.ValueChanged += (sender, e) =>
             {
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
-                if (BorderSettingBufferSize.Margin.Bottom != (e.NewValue == RealySizeBuffer ? 35 : 2))
+                if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != RealySizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
-                    ThicknessAnimation animation = ThicknessAnimate.Clone();
-                    animation.To = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, e.NewValue == RealySizeBuffer ? 35 : 2);
-                    BorderSettingBufferSize.BeginAnimation(MarginProperty, animation);
+                    DoubleAnimation animation = App.GetDoubleAnimate();
+                    animation.Duration = TimeSpan.FromMilliseconds(1200d);
+                    animation.To = e.NewValue != RealySizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
+                    Storyboard storyboard = new();
+                    storyboard.Children.Add(animation);
+                    Storyboard.SetTarget(animation, RowDefinitionBufferSize);
+                    Storyboard.SetTargetProperty(animation, new PropertyPath("(RowDefinition.MaxHeight)"));
+                    storyboard.Begin();
                 }
             };
             IELButtonTextClearValue.OnActivateMouseLeft += () =>
@@ -140,12 +156,39 @@ namespace OperPage_les.UI.Pages.Settings
             CheckBoxBlurDataTimeImage.Checked += (sender, e) =>
             {
                 EventChangeValue?.Invoke(EnumSettingApplication.BlurBackgroundDataTime, "T");
-                App.MainWindowApplication.ChangeBlurImageInDataTime(true);
             };
             CheckBoxBlurDataTimeImage.Unchecked += (sender, e) =>
             {
                 EventChangeValue?.Invoke(EnumSettingApplication.BlurBackgroundDataTime, "F");
-                App.MainWindowApplication.ChangeBlurImageInDataTime(false);
+            };
+            #endregion
+            #region MillisecondInternetConnection
+            string MillisecondConnection = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.MillisecondInternetConnection);
+            CheckBoxInternetConnectionMillisecond.IsChecked = MillisecondConnection.Equals("T");
+            CheckBoxInternetConnectionMillisecond.Checked += (sender, e) =>
+            {
+                EventChangeValue?.Invoke(EnumSettingApplication.MillisecondInternetConnection, "T");
+            };
+            CheckBoxInternetConnectionMillisecond.Unchecked += (sender, e) =>
+            {
+                EventChangeValue?.Invoke(EnumSettingApplication.MillisecondInternetConnection, "F");
+            };
+            #endregion
+            #region DefaultOpenUrlWebView
+            string DefaultUrl = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.DefaultOpenUrlWebView);
+            IELTextBoxDefaultUrl.Text = DefaultUrl;
+            IELTextBoxDefaultUrl.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case System.Windows.Input.Key.Escape:
+                        BorderPathImageBackground.Focus();
+                        break;
+                }
+            };
+            IELTextBoxDefaultUrl.TextChanged += (sender, e) =>
+            {
+                EventChangeValue?.Invoke(EnumSettingApplication.DefaultOpenUrlWebView, IELTextBoxDefaultUrl.Text);
             };
             #endregion
         }
@@ -162,14 +205,14 @@ namespace OperPage_les.UI.Pages.Settings
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
                 if (image.PixelWidth > 0 && image.PixelHeight > 0)
                 {
-                    TextBoxPathMenuImage.Text = Uri;
+                    IELTextBoxDirectoryBackground.Text = Uri;
                     ImageBackground.Source = image;
                     App.AnimateBlurEffect(BlurEffectImageBackground, 10u, 2000d);
                     IELButtonClearImage.IsEnabled = true;
                     EventChangeValue?.Invoke(EnumSettingApplication.PathMenuImage, Uri);
 
                     animation.Duration = TimeSpan.FromMilliseconds(1000d);
-                    animation.To = 0.15d;
+                    animation.To = 0.6d;
                     ImageBackground.BeginAnimation(OpacityProperty, animation);
                 }
             }

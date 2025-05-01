@@ -89,7 +89,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 ThicknessAnimationBuffer.To = new(0, 0 - (H + 2) * Value, 0, 0);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
             };
-            TextBlockCounterBuffer.Text = $"{BufferCommand.Count}/{BufferCommand.Length}";
+            TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
             KeyboardModeChanged = (Mode) =>
             {
                 IELButtonBackMainMenu.CharKeyboardActivate = Mode;
@@ -112,7 +112,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 OpacityAnimationBuffer.To = 0d;
-                TextBlockCounterBuffer.Text = $"0/{BufferCommand.Length}";
+                TextBlockCounterBuffer.Text = $"00 {BufferCommand.Length}";
                 for (int i = 0; i < BufferCommand.Count; i++)
                 {
                     IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
@@ -196,7 +196,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 {
                     BufferCommand.Delete(Button.Index);
                     TextBlockCounterBuffer.Text =
-                        $"{BufferCommand.Count}/{BufferCommand.Length}";
+                        $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
                     if (BufferCommand.Count == 0) IELButtonClearBuffer.IsEnabled = false;
                 };
                 BufferCommand.Add(Command);
@@ -219,7 +219,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 RealButton.TextCommand = Command;
             }
             TextBlockCounterBuffer.Text =
-                $"{BufferCommand.Count}/{BufferCommand.Length}";
+                $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
         }
         #endregion
     }
