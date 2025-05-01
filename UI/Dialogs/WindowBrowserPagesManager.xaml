@@ -50,6 +50,11 @@
                             <Classes:BrushSettingQ Default="#9969819C" Select="#9986AEDA" Used="#990CCCB6" NotEnabled="#99AD354B"/>
                         </IEL:IELButtonText.BackgroundSetting>
                     </IEL:IELButtonText>
+                    <IEL:IELButtonText x:Name="IELButtonPageBrowser" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" VisibleMouseImaging="False" Text="Страница веб-браузера" CornerRadius="6,6,6,6" Margin="5,173,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" AnimationMillisecond="200">
+                        <IEL:IELButtonText.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#9969819C" Select="#9986AEDA" Used="#990CCCB6" NotEnabled="#99AD354B"/>
+                        </IEL:IELButtonText.BackgroundSetting>
+                    </IEL:IELButtonText>
                 </Grid>
             </Border>
         </Grid>

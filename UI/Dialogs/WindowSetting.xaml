@@ -10,15 +10,15 @@
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF6C7565" Offset="0"/>
-                <GradientStop Color="#FF3D4437" Offset="1"/>
-                <GradientStop Color="#FF6D845D" Offset="0.317"/>
-                <GradientStop Color="#FF657B56" Offset="0.694"/>
+                <GradientStop Color="#FF657275" Offset="0"/>
+                <GradientStop Color="#FF375A4F" Offset="1"/>
+                <GradientStop Color="#FF687077" Offset="0.317"/>
+                <GradientStop Color="#FF60695A" Offset="0.694"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -28,7 +28,41 @@
             <IEL:IELButtonText x:Name="IELGeneralButton" Margin="6,0,6,6" CornerRadius="0,0,8,8" VisibleMouseImaging="False" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" Text="Общие" AnimationMillisecond="160" BorderThicknessBlock="3,0,3,3"/>
         </Grid>
         <Grid Grid.Row="1">
-            <IEL:IELPageController x:Name="MainPageController" RightAnimateSwitch="10,3,0,0" LeftAnimateSwitch="-10,3,0,0"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="17" MaxWidth="17"/>
+            </Grid.ColumnDefinitions>
+            <ScrollBar x:Name="ScrollBarElement" MinWidth="0" Foreground="Black" ViewportSize="20" SmallChange="10" Grid.Column="1" LargeChange="10" >
+                <ScrollBar.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF779E84"/>
+                        <GradientStop Color="#FF219BA4" Offset="1"/>
+                    </LinearGradientBrush>
+                </ScrollBar.Background>
+            </ScrollBar>
+            <Border x:Name="BorderElement" Grid.Row="0" ClipToBounds="True">
+                <Border.OpacityMask>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#00000000"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                        <GradientStop Color="Black" Offset="0.1"/>
+                        <GradientStop Color="Black" Offset="0.9"/>
+                    </LinearGradientBrush>
+                </Border.OpacityMask>
+                <Grid ClipToBounds="True">
+                    <IEL:IELPageController x:Name="MainPageController" RightAnimateSwitch="10,3,0,0" LeftAnimateSwitch="-10,3,0,0" Grid.ColumnSpan="1" Panel.ZIndex="-1"/>
+                </Grid>
+            </Border>
+            <Grid Panel.ZIndex="1">
+                <Grid.OpacityMask>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#00000000"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                        <GradientStop Color="Black" Offset="0.1"/>
+                        <GradientStop Color="Black" Offset="0.9"/>
+                    </LinearGradientBrush>
+                </Grid.OpacityMask>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

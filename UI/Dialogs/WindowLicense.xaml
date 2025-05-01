@@ -12,7 +12,7 @@
             <RowDefinition Height="153*"/>
             <RowDefinition Height="129*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="ImageLogo" HorizontalAlignment="Center" Source="/UI/Images/LogoProgram.png" Margin="0,20,0,20"/>
+        <Image x:Name="ImageLogo" HorizontalAlignment="Center" Source="/UI/Images/IconMainApplication.png" Margin="0,20,0,20"/>
         <Frame x:Name="FrameLicense" Content="" NavigationUIVisibility="Hidden" Grid.RowSpan="2" Margin="0,147,0,0"/>
         <Frame x:Name="FrameThanks" Content="" Grid.Row="2" NavigationUIVisibility="Hidden" Padding="3,0,3,0" Margin="-4,1,-4,0"/>
 

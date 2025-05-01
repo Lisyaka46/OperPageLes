@@ -62,6 +62,23 @@ namespace OperPage_les.UI.Dialogs
                     case EnumSettingApplication.BufferSize:
                         // REBOOT
                         break;
+                    case EnumSettingApplication.BlurBackgroundDataTime:
+                        App.MainWindowApplication.ChangeBlurImageInDataTime(Value.Equals("T"));
+                        break;
+                    case EnumSettingApplication.MillisecondInternetConnection:
+                        App.MainWindowApplication.ChangeVisibilityMillisecondInternet(Value.Equals("T"));
+                        break;
+                }
+            };
+            MouseWheel += (sender, e) =>
+            {
+                if (e.Delta > 0)
+                {
+                    ScrollBarElement.Value -= 40;
+                }
+                else if (e.Delta < 0)
+                {
+                    ScrollBarElement.Value += 40;
                 }
             };
             #region IELGeneralButton
@@ -78,6 +95,21 @@ namespace OperPage_les.UI.Dialogs
             IELGeneralButton.OnActivateMouseLeft += () =>
             {
                 MainPageController.NextPage(GeneralSetting);
+                double HeightScrollBar = GeneralSetting.ActualHeight - BorderElement.ActualHeight;
+                if (HeightScrollBar <= 0)
+                {
+
+                }
+                else
+                {
+                    ScrollBarElement.Maximum = HeightScrollBar;
+                    ScrollBarElement.Value = 0;
+                    MainPageController.Margin = new(0);
+                }
+            };
+            ScrollBarElement.ValueChanged += (sender, e) =>
+            {
+                App.AnimateThicknessEffect(MainPageController, MarginProperty, new(0, -e.NewValue, 0, 0), TimeSpan.FromMilliseconds(240d));
             };
             #endregion
             #region This

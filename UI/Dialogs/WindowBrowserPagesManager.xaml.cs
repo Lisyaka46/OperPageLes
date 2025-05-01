@@ -1,21 +1,11 @@
 ﻿using DataScroll;
 using IEL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows.Pages.Browser;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -80,7 +70,7 @@ namespace OperPage_les.UI.Dialogs
             {
                 if (BrowserPage != null)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.AllPages.PageLabelsApplication, "Ярлыки",
+                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageLabels)), "Ярлыки",
                         "Ярлыки которые предаставляются программой для хранения важных команд.");
                     Cancel = false;
                 }
@@ -94,7 +84,7 @@ namespace OperPage_les.UI.Dialogs
             {
                 if (BrowserPage != null)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.AllPages.PageDeveloper, "Страница разработчика",
+                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageDeveloper)), "Страница разработчика",
                         "Страница не предоставляется для обычных пользователей. " +
                         "Взаимодействие со страницей может повлечь за собой непредвиденное реагирование программы.");
                     Cancel = false;
@@ -108,8 +98,21 @@ namespace OperPage_les.UI.Dialogs
             {
                 if (BrowserPage != null)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.AllPages.PageConsoleApplication, "Консоль",
+                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageConsole)), "Консоль",
                         "Консоль программы для более гибкой настройки и взаимодействия с программой.");
+                    Cancel = false;
+                }
+                Close();
+            };
+            #endregion
+
+            #region IELButtonPageConsole
+            IELButtonPageBrowser.OnActivateMouseLeft += () =>
+            {
+                if (BrowserPage != null)
+                {
+                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageWebBrowser)), "Веб-браузер"
+                        );
                     Cancel = false;
                 }
                 Close();
