@@ -3,10 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AAC20.Windows.Frames"
+      xmlns:local="clr-namespace:OperPage_les.Windows.Frames"
       xmlns:GUI="clr-namespace:IEL;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
-      x:Class="AAC20.Windows.Frames.PageMainConsolePanelAction"
+      x:Class="OperPage_les.Windows.Frames.PageMainConsolePanelAction"
       mc:Ignorable="d"
       Title="PageMainActionPanel" d:DesignHeight="170.12" d:DesignWidth="271.189">
 

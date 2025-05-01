@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace AAC20.Windows.Pages.License
+namespace OperPage_les.Windows.Pages.License
 {
     /// <summary>
     /// Логика взаимодействия для Page1.xaml

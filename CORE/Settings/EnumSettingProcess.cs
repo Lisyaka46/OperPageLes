@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AAC20.CORE.Settings
+namespace OperPage_les.CORE.Settings
 {
     /// <summary>
     /// Перечисление именованных свойств настроек <b>процесса</b>

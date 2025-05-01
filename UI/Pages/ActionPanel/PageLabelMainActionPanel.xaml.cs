@@ -1,4 +1,4 @@
-﻿using AAC20.Windows.Pages.ActionPanel;
+﻿using OperPage_les.Windows.Pages.ActionPanel;
 using IEL.Interfaces.Core;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AAC20.UI.Pages.ActionPanel
+namespace OperPage_les.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelMainActionPanel.xaml

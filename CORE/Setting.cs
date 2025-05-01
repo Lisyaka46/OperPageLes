@@ -8,7 +8,7 @@ using System.IO;
 using Org.BouncyCastle.Asn1.X509.Qualified;
 using System.Runtime.CompilerServices;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     internal partial class Setting<T> where T : Enum
     {

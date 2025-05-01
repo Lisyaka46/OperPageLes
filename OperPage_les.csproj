@@ -30,6 +30,10 @@
     <None Remove="Fonts\sangha.ttf" />
     <None Remove="Fonts\Vollda-Bold.otf" />
     <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
+    <None Remove="Properties\Resouces\B5.wav" />
+    <None Remove="Properties\Resouces\B6.wav" />
+    <None Remove="Properties\Resouces\C7.wav" />
+    <None Remove="Properties\Resouces\D#6.wav" />
     <None Remove="UI\Images\Arrow.png" />
     <None Remove="UI\Images\Done.png" />
     <None Remove="UI\Images\DoubleMouseButton.png" />
@@ -39,10 +43,23 @@
     <None Remove="UI\Images\LogoMain.png" />
     <None Remove="UI\Images\LogoProgram.png" />
     <None Remove="UI\Images\LogoProgramText.png" />
+    <None Remove="UI\Images\Menu.png" />
     <None Remove="UI\Images\NotMouseButton.png" />
     <None Remove="UI\Images\Plus.png" />
     <None Remove="UI\Images\RightMouseButton.png" />
     <None Remove="UI\Images\Warning.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>6bf52a50-394a-11d3-b153-00c04f79faa6</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -86,6 +103,10 @@
     <Resource Include="Fonts\zhuan_FuturaNowScript-Rg.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Properties\Resouces\B5.wav" />
+    <Resource Include="Properties\Resouces\B6.wav" />
+    <Resource Include="Properties\Resouces\C7.wav" />
+    <Resource Include="Properties\Resouces\D#6.wav" />
     <Resource Include="UI\Images\Arrow.png" />
     <Resource Include="UI\Images\Done.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
@@ -105,6 +126,7 @@
     <Resource Include="UI\Images\LogoMain.png" />
     <Resource Include="UI\Images\LogoProgram.png" />
     <Resource Include="UI\Images\LogoProgramText.png" />
+    <Resource Include="UI\Images\Menu.png" />
     <Resource Include="UI\Images\NotMouseButton.png" />
     <Resource Include="UI\Images\Plus.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />

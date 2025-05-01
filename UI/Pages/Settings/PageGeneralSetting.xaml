@@ -3,27 +3,27 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AAC20.UI.Pages.Settings"
-      xmlns:IEL="clr-namespace:IEL;assembly=IEL" x:Class="AAC20.UI.Pages.Settings.PageGeneralSetting"
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Settings"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.Settings.PageGeneralSetting"
       mc:Ignorable="d" 
       d:DesignHeight="370.818" d:DesignWidth="570"
       Title="PageGeneral" MinWidth="570">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75*" MaxHeight="100" MinHeight="70"/>
-            <RowDefinition Height="41*" MinHeight="41" MaxHeight="45"/>
-            <RowDefinition Height="80*" MinHeight="75" MaxHeight="90"/>
-            <RowDefinition Height="57*"/>
-            <RowDefinition Height="117*"/>
+            <RowDefinition Height="120*" MinHeight="117"/>
+            <RowDefinition Height="59*" MinHeight="50"/>
+            <RowDefinition Height="111*" MinHeight="98"/>
+            <RowDefinition Height="48*"/>
+            <RowDefinition Height="35*"/>
         </Grid.RowDefinitions>
         <Border x:Name="BorderPathImageBackground" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="6,6,6,6" Background="#B2485A44">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="29"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Image x:Name="ImageBackground" Source="/UI/Images/DoubleMouseButton.png" Grid.RowSpan="2" Panel.ZIndex="-1" Opacity="0.1" Stretch="UniformToFill" >
+                <Image x:Name="ImageBackground" Source="/UI/Images/DoubleMouseButton.png" Grid.RowSpan="2" Panel.ZIndex="-1" Opacity="0.15" Stretch="UniformToFill" >
                     <Image.Effect>
                         <BlurEffect x:Name="BlurEffectImageBackground" KernelType="Box" RenderingBias="Quality" Radius="0"/>
                     </Image.Effect>
@@ -36,14 +36,32 @@
                     <TextBlock TextWrapping="Wrap" Text="Изображение фона" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" Margin="3,0,3,0" FontSize="14" VerticalAlignment="Center" Height="20"/>
                     <TextBlock x:Name="TextBlockFailedImageSetup" Grid.Column="1" TextWrapping="Wrap" Text="Не удалось установить изображение по ссылке или директории" FontSize="14" VerticalAlignment="Center" Foreground="White" FontStyle="Italic"/>
                 </Grid>
-                <Grid Grid.Row="1" MaxHeight="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="250" MaxWidth="250"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="TextBoxPathMenuImage" Margin="10,5,10,5" Text="Директория" VerticalContentAlignment="Center" BorderThickness="1,0,1,0" Background="{x:Null}" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" MaxLines="1" IsUndoEnabled="False" MinHeight="22" Focusable="False"/>
-                    <IEL:IELButtonText x:Name="IElButtonDialogDirectoryFile" HorizontalAlignment="Left" Text="Обзор" VisibleMouseImaging="False" AnimationMillisecond="160" Grid.Column="1" Grid.Row="0" Margin="2,5,0,5" Width="55" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2"/>
-                    <IEL:IELButtonText x:Name="IElButtonSetTextClipboard" HorizontalAlignment="Left" Text="Вставить ссылку из буфера" VisibleMouseImaging="False" AnimationMillisecond="160" Grid.Column="1" Grid.Row="0" Margin="65,5,0,5" Width="175" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2"/>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="90"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathMenuImage" Text="Директория" BorderThickness="1,0,1,0" Background="{x:Null}" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" MaxLines="1" IsUndoEnabled="False" Focusable="False" Grid.RowSpan="1" Grid.Row="0" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="1" Margin="5,3,5,3"/>
+                        <IEL:IELButtonText x:Name="IELButtonDialogDirectoryFile" Text="Обзор" VisibleMouseImaging="False" AnimationMillisecond="160" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="1" Margin="3,3,3,3"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <IEL:IELButtonText x:Name="IELButtonSetTextClipboard" Text="Вставить ссылку из буфера" VisibleMouseImaging="False" AnimationMillisecond="160" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="5,5,5,5"/>
+                        <IEL:IELButtonText x:Name="IELButtonClearImage" Text="Убрать фон" VisibleMouseImaging="False" AnimationMillisecond="160" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="0" Margin="5,5,5,5">
+                            <IEL:IELButtonText.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF778D98" NotEnabled="#FFFF1D65" Select="#FF35A1B5" Used="#FF3DEDE9" UsedState="False"/>
+                            </IEL:IELButtonText.BackgroundSetting>
+                        </IEL:IELButtonText>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>
@@ -79,7 +97,7 @@
             </Border>
         </Grid>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B2485A44">
-            <CheckBox x:Name="CheckBoxBlurDataTimeImage" Content="Отображать размытие картинки в панели времени и даты" VerticalContentAlignment="Center" Padding="4,0,4,0" IsChecked="False" Cursor="Hand" HorizontalAlignment="Left" FontSize="14" BorderBrush="Black" Background="#FF00DAD5" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" Margin="4,0,0,0"/>
+            <CheckBox x:Name="CheckBoxBlurDataTimeImage" Content="Отображать размытие картинки в панели времени и даты" VerticalContentAlignment="Center" Padding="4,0,4,0" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var Regular}}" Margin="4,0,0,0" HorizontalAlignment="Left"/>
         </Border>
 
     </Grid>

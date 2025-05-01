@@ -1,6 +1,6 @@
-﻿using AAC20.UI.Pages.Browser;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+﻿using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     internal class PagesApplication()
     {

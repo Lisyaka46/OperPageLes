@@ -1,21 +1,24 @@
 ﻿#region Link
-using AAC20.CORE;
-using AAC20.CORE.Flaging;
-using AAC20.CORE.Settings;
-using AAC20.UI.Dialogs;
-using AAC20.UI.Pages.ActionPanel;
-using AAC20.UI.Pages.Browser;
-using AAC20.Windows.Frames;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+using OperPage_les.CORE;
+using OperPage_les.CORE.Flaging;
+using OperPage_les.CORE.Settings;
+using OperPage_les.UI.Dialogs;
+using OperPage_les.UI.Pages.ActionPanel;
+using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows.Frames;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using IEL;
 using IEL.Classes;
 using IEL.Interfaces.Core;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
+using OperPage_les.UI.Pages.PanelButtonInformation.MainWindow;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -32,40 +35,13 @@ using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
 #endregion
 
-namespace AAC20.UI.Windows
+namespace OperPage_les.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        /// <summary>
-        /// Флаги данной формы
-        /// </summary>
-        private readonly struct Flags
-        {
-            /// <summary>
-            /// Флаг соеденения с интернетом
-            /// </summary>
-            internal static readonly Flag FlagInternetConnection = new(false);
-
-            /// <summary>
-            /// Флаг состояния видимости объекта страниц
-            /// </summary>
-            internal static readonly Flag FlagFrameComponentVisible = new(true);
-
-            /// <summary>
-            /// Флаг состояния регистра
-            /// </summary>
-            internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
-
-            /// <summary>
-            /// Флаг обновления подсказок к командам
-            /// </summary>
-            internal static readonly Flag FlagHintRead = new(false);
-        };
-
         /// <summary>
         /// Страница взаимодействия с вкладками браузера страниц
         /// </summary>
@@ -77,7 +53,7 @@ namespace AAC20.UI.Windows
         private static string RealTime => DateTime.Now.ToString("HH:mm:ss");
 
         /// <summary>
-        /// Реальное время
+        /// Реальная дата
         /// </summary>
         private static string RealData => DateTime.Now.ToString("dd.MM.yyyy");
 
@@ -108,7 +84,7 @@ namespace AAC20.UI.Windows
         /// <summary>
         /// Объект анимации для управления double значением
         /// </summary>
-        private static readonly DoubleAnimation DoubleAnimateObj = new(0, TimeSpan.FromMilliseconds(250d))
+        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
         {
             DecelerationRatio = 0.2d,
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
@@ -135,12 +111,20 @@ namespace AAC20.UI.Windows
         /// </summary>
         private bool HiAnimation = false;
 
+        private int ActualIndexActivatePageDownToolButtons;
+
+        //
+        private static readonly Page[] PagesButtonsInformation =
+        [
+            new Page1(), new Page2()
+        ];
+
         public MainWindow()
         {
             InitializeComponent();
 
             #region Command
-            #if DEBUG
+#if DEBUG
             App.DataConsoleCommand.AddRange([
                 #region anim
                 new ConsoleCommand("anim", [new Parameter("Value", typeof(bool))],
@@ -158,23 +142,6 @@ namespace AAC20.UI.Windows
                 #endregion
             ]);
             #endif
-            #endregion
-
-            #region Event Flags
-            Flags.FlagInternetConnection.ChangeStateFlag += (NewValue) =>
-            {
-                ImageInternetConnection.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi{(NewValue ? "On" : "Off")}.png", UriKind.Relative));
-                App.AnimateBlurEffect(BlurEffectImageInternetConnection, 10u);
-            };
-            Flags.FlagRegisterState.ChangeStateFlag += (NewValue) =>
-            {
-                TextBlockRegister.Text = NewValue ? "A" : "a";
-                App.AnimateBlurEffect(BlurEffectTextBlockRegister, 10u);
-                if (IELMessageMain.FlagMessage && IELMessageMain.NameParentObject.Equals(BorderStateRegister.Name))
-                    IELMessageMain.UsingBorderInformation(BorderStateRegister, BorderStateRegister.Name, Flags.FlagRegisterState ?
-                        "Установлен большой регистр" : "Установлен малый регистр",
-                        IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
             #endregion
 
             #region Event Pages
@@ -203,12 +170,30 @@ namespace AAC20.UI.Windows
             #endregion
 
             #region SetParameteres
-            TextBlockRegister.Text = Flags.FlagRegisterState ? "A" : "a";
+            ActualIndexActivatePageDownToolButtons = -1;
+            IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
+            IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
 
             VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
-            
+            byte[,] ColorBytes = new byte[4, 4]
+            {
+                { 255, 55, 101, 144, },
+                { 255, 103, 120, 121, },
+                { 255, 45, 113, 95, },
+                { 255, 41, 91, 122, }
+            };
+            IELBrowserPageMain.QDataDefaultInlayBackground = new(new byte[4, 4]
+            {
+                { 255, 141, 195, 223, },
+                { 255, 199, 223, 224, },
+                { 255, 130, 224, 199, },
+                { 255, 230, 188, 224, }
+            });
+            IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
+            IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
+
             PASettingsBrowserManipulateInlay = new(IELBrowserPageMain, PageManipulateInlayPA, new(200d, 240d));
 
             Canvas.SetZIndex(IELMessageMain, -2);
@@ -253,6 +238,16 @@ namespace AAC20.UI.Windows
                 if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
             };
 
+            #region Down Tool Buttons Information
+            ActualIndexActivatePageDownToolButtons = 0;
+            IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
+            IELImageButtonNextButtons.OnActivateMouseLeft += () => NextPageDownToolButtons();
+            IELImageButtonBackButtons.OnActivateMouseLeft += () => NextPageDownToolButtons(false);
+
+            IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
+            IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
+            IELImageButtonBackButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(3, 0, 0, 0), 400u);
+            IELImageButtonBackButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
             #region IELBrowserPage
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += () =>
             {
@@ -265,86 +260,62 @@ namespace AAC20.UI.Windows
                 IELActionPanelMain.UsingPanelAction(PASettingsBrowserManipulateInlay);
                 //DialogManagerPage.ShowDialog();
             };
+            IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
+            {
+                AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B5);
+                IELMessageMain.UsingBorderInformation(Element, Element.Name, Text, IELBlockMessage.OrientationBorderInfo.Auto);
+            };
+            IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
 
-            #region BorderInternetConnection
-            BorderInternetConnection.MouseEnter += (sender, e) =>
+            IELBrowserPageMain.EventChangeActiveInlay += () =>
             {
-                IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, Flags.FlagInternetConnection ?
-                    "Есть подключение к интернету" : "Нет подключения к интернету",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
+                AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B5);
             };
-            BorderInternetConnection.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
-            #region BorderStateRegister
-            BorderStateRegister.MouseEnter += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(BorderStateRegister, BorderStateRegister.Name, Flags.FlagRegisterState ?
-                    "Установлен большой регистр" : "Установлен малый регистр",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
-            BorderStateRegister.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
-            #region BorderCurrentLanguage
-            BorderCurrentLanguage.MouseEnter += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(BorderCurrentLanguage, BorderCurrentLanguage.Name,
-                    "Текущий язык раскладки клавиатуры",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-            };
-            BorderCurrentLanguage.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
+
             #region IELImageButtonHelp
             IELImageButtonHelp.OnActivateMouseLeft += App.UsingDiscriptionCommand;
             IELImageButtonHelp.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELImageButtonHelp, IELImageButtonHelp.Name,
                     "Быстрое открытие описания команд",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
+                    IELBlockMessage.OrientationBorderInfo.LeftDown);
             };
             IELImageButtonHelp.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
             };
             #endregion
+            #endregion
 
             ImageLogoApplication.MouseEnter += (sender, e) =>
             {
-                DoubleAnimateObj.To = 0.6d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                DoubleAnimate.To = 0.6d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
             };
 
             ImageLogoApplication.MouseLeave += (sender, e) =>
             {
-                DoubleAnimateObj.To = 1d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                DoubleAnimate.To = 1d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
             };
 
             ImageLogoApplication.MouseDown += (sender, e) =>
             {
-                DoubleAnimateObj.To = 0.4d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                DoubleAnimate.To = 0.4d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
             };
 
             ImageLogoApplication.MouseUp += (sender, e) =>
             {
-                DoubleAnimateObj.To = 1d;
-                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimateObj);
+                DoubleAnimate.To = 1d;
+                ImageLogoApplication.BeginAnimation(OpacityProperty, DoubleAnimate);
                 Dialogs.LicenseWindow License = new();
                 License.ShowDialog();
             };
             KeyDown += (sender, e) =>
             {
-                if (e.Key == Key.CapsLock) Flags.FlagRegisterState.Value = Console.CapsLock;
+                if (e.Key == Key.CapsLock) App.Flags.FlagRegisterState.Value = Console.CapsLock;
             };
             Activated += (sender, e) =>
             {
@@ -361,14 +332,14 @@ namespace AAC20.UI.Windows
                     BorderImageInformation.BeginAnimation(MarginProperty, ThicknessAnimate);
 
                     TimeDataColumnDefinition.MaxWidth = 0d;
-                    DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1200d);
-                    DoubleAnimateObj.To = 124d;
+                    DoubleAnimate.Duration = TimeSpan.FromMilliseconds(1200d);
+                    DoubleAnimate.To = 124d;
                     Storyboard storyboard = new();
-                    storyboard.Children.Add(DoubleAnimateObj);
-                    Storyboard.SetTarget(DoubleAnimateObj, TimeDataColumnDefinition);
-                    Storyboard.SetTargetProperty(DoubleAnimateObj, new PropertyPath("(ColumnDefinition.MaxWidth)"));
+                    storyboard.Children.Add(DoubleAnimate);
+                    Storyboard.SetTarget(DoubleAnimate, TimeDataColumnDefinition);
+                    Storyboard.SetTargetProperty(DoubleAnimate, new PropertyPath("(ColumnDefinition.MaxWidth)"));
                     storyboard.Begin();
-                    DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(250d);
+                    DoubleAnimate.Duration = TimeSpan.FromMilliseconds(250d);
 
                     ThicknessAnimate.From = new(8);
                     ThicknessAnimate.To = BorderDateTime.Margin;
@@ -402,6 +373,24 @@ namespace AAC20.UI.Windows
             UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
         }
 
+        //
+        private void NextPageDownToolButtons(bool UpIndex = true)
+        {
+            if (UpIndex)
+            {
+                if (ActualIndexActivatePageDownToolButtons == PagesButtonsInformation.Length - 1)
+                    ActualIndexActivatePageDownToolButtons = 0;
+                else ActualIndexActivatePageDownToolButtons++;
+            }
+            else
+            {
+                if (ActualIndexActivatePageDownToolButtons == 0)
+                    ActualIndexActivatePageDownToolButtons = PagesButtonsInformation.Length - 1;
+                else ActualIndexActivatePageDownToolButtons--;
+            }
+            IELPageControllerButtons.NextPage(PagesButtonsInformation[ActualIndexActivatePageDownToolButtons], UpIndex);
+        }
+
         /// <summary>
         /// Функция обновления визуальной информации в данном окне 100
         /// </summary>
@@ -409,18 +398,9 @@ namespace AAC20.UI.Windows
         {
             TextBlockTime.Text = RealTime;
             TextBlockData.Text = RealData;
-            if (!App.InternetPinging.Wait)
-            {
-                if (IELMessageMain.FlagMessage && Flags.FlagInternetConnection.Value != App.InternetPinging &&
-                    IELMessageMain.NameParentObject.Equals(BorderInternetConnection.Name))
-                {
-                    IELMessageMain.Opacity = 0d;
-                    IELMessageMain.UsingBorderInformation(BorderInternetConnection, BorderInternetConnection.Name, App.InternetPinging ?
-                    "Есть подключение к интернету" : "Нет подключения к интернету",
-                    IELBlockMessage.OrientationBorderInfo.RightUp);
-                }
-                Flags.FlagInternetConnection.Value = App.InternetPinging;
-            }
+#if DEBUG
+            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.B6);
+#endif
         }
 
         /// <summary>
@@ -428,12 +408,7 @@ namespace AAC20.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualDataRunTime()
         {
-            string LangName = System.Windows.Forms.InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
-            if (!LangName.Equals(TextBlockLanguage.Text))
-            {
-                TextBlockLanguage.Text = LangName;
-                App.AnimateBlurEffect(BlurEffectLanguage, 10u);
-            }
+            
             //VisualRectangleDateTimeBackground.Visual.
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
@@ -469,19 +444,35 @@ namespace AAC20.UI.Windows
         internal void UpdateImageMenu()
         {
             ImageIndificator.Opacity = 1d;
+            DoubleAnimation animationDouble = DoubleAnimate.Clone();
             string Path = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
-            BitmapImage BitmapImageMenu = new(new Uri(Path));
-            if (File.Exists(Path))
+            if (Path.Length > 0)
             {
-                ComplitedInstallImageMenu(BitmapImageMenu);
-                return;
-            };
-            BitmapImageMenu.DownloadCompleted += (sender, e) =>
+                BitmapImage BitmapImageMenu = new(new Uri(Path));
+                if (File.Exists(Path))
+                {
+                    ComplitedInstallImageMenu(BitmapImageMenu);
+                }
+                else
+                {
+                    BitmapImageMenu.DownloadCompleted += (sender, e) =>
+                    {
+                        ComplitedInstallImageMenu(BitmapImageMenu);
+                    };
+                    BitmapImageMenu.DownloadFailed += (sender, e) => FailedInstallImageMenu();
+                    BitmapImageMenu.DecodeFailed += (sender, e) => FailedInstallImageMenu();
+                }
+            }
+            else
             {
-                ComplitedInstallImageMenu(BitmapImageMenu);
-            };
-            BitmapImageMenu.DownloadFailed += (sender, e) => FailedInstallImageMenu();
-            BitmapImageMenu.DecodeFailed += (sender, e) => FailedInstallImageMenu();
+                animationDouble.To = 0d;
+                animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
+                ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
+            }
+
+            animationDouble.To = 0d;
+            animationDouble.Duration = TimeSpan.FromMilliseconds(2300d);
+            ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
         }
 
         /// <summary>
@@ -492,7 +483,7 @@ namespace AAC20.UI.Windows
         {
             ImageMenu.Source = bitmap;
             ThicknessAnimation animationThickness = ThicknessAnimate.Clone();
-            DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
+            DoubleAnimation animationDouble = DoubleAnimate.Clone();
 
             animationDouble.From = 10d;
             animationDouble.To = 0d;
@@ -509,11 +500,6 @@ namespace AAC20.UI.Windows
             animationDouble.From = 0d;
             animationDouble.To = 1d;
             ImageMenu.BeginAnimation(OpacityProperty, animationDouble);
-
-            animationDouble.From = 1d;
-            animationDouble.To = 0d;
-            animationDouble.Duration = TimeSpan.FromMilliseconds(700d);
-            ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
         }
 
         /// <summary>
@@ -521,21 +507,15 @@ namespace AAC20.UI.Windows
         /// </summary>
         private void FailedInstallImageMenu()
         {
-            DoubleAnimation animationDouble = DoubleAnimateObj.Clone();
             ImageIndificator.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Warning.png", UriKind.RelativeOrAbsolute));
             //AddTextInConsole("Не удалось загрузить фоновое изображение...");
-
-            animationDouble.From = 1d;
-            animationDouble.To = 0d;
-            animationDouble.Duration = TimeSpan.FromMilliseconds(1000d);
-            ImageIndificator.BeginAnimation(OpacityProperty, animationDouble);
         }
         #endregion
 
         #region BlurBackgroundDataTime
         internal void ChangeBlurImageInDataTime(bool State)
         {
-            DoubleAnimation animation = DoubleAnimateObj.Clone();
+            DoubleAnimation animation = DoubleAnimate.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(1300d);
             animation.To = State ? 0.5d : 0d;
             VisualRectangleDateTimeBackground.BeginAnimation(OpacityProperty, animation);

@@ -1,4 +1,4 @@
-﻿using AAC20.CORE.Flaging;
+﻿using OperPage_les.CORE.Flaging;
 using Interpreter.Commands;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +13,7 @@ using IEL.Interfaces.Front;
 using Interpreter.Classes;
 using Interpreter.Interfaces;
 
-namespace AAC20.Windows
+namespace OperPage_les.Windows
 {
     /// <summary>
     /// Логика взаимодействия для WindowDiscriptionCommands.xaml

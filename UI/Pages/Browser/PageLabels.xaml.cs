@@ -1,5 +1,5 @@
-﻿using AAC20.CORE;
-using AAC20.Windows.Pages.ActionPanel;
+﻿using OperPage_les.CORE;
+using OperPage_les.Windows.Pages.ActionPanel;
 using Interpreter.Commands;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,16 +8,16 @@ using IEL.Classes;
 using IEL;
 using IEL.Interfaces.Core;
 using System.Windows.Media;
-using AAC20.CORE.Flaging;
+using OperPage_les.CORE.Flaging;
 using MySql.Data.MySqlClient;
 using System.Windows.Media.Imaging;
 using DataScroll;
 using Interpreter.Interfaces;
-using AAC20.UI.Dialogs;
-using AAC20.UI.Pages.ActionPanel;
-using AAC20.UI.Pages.Browser;
+using OperPage_les.UI.Dialogs;
+using OperPage_les.UI.Pages.ActionPanel;
+using OperPage_les.UI.Pages.Browser;
 
-namespace AAC20.Windows.Pages.Browser
+namespace OperPage_les.Windows.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml
@@ -28,6 +28,11 @@ namespace AAC20.Windows.Pages.Browser
         /// Имя страницы
         /// </summary>
         public string PageName { get; } = nameof(PageLabels);
+
+        /// <summary>
+        /// Объект страницы
+        /// </summary>
+        public new Page Content => this;
 
         /// <summary>
         /// Динамический массив ярлыков

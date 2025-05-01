@@ -59,5 +59,45 @@ namespace OperPage_les.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] B5 {
+            get {
+                object obj = ResourceManager.GetObject("B5", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] B6 {
+            get {
+                object obj = ResourceManager.GetObject("B6", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] C7 {
+            get {
+                object obj = ResourceManager.GetObject("C7", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] D_6 {
+            get {
+                object obj = ResourceManager.GetObject("D#6", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

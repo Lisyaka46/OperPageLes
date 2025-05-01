@@ -12,11 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IEL.Interfaces.Core;
-using AAC20.UI.Pages.Settings;
-using AAC20.CORE.Settings;
+using OperPage_les.UI.Pages.Settings;
+using OperPage_les.CORE.Settings;
 using System.Windows.Media.Animation;
 
-namespace AAC20.UI.Dialogs
+namespace OperPage_les.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSetting.xaml
@@ -77,7 +77,7 @@ namespace AAC20.UI.Dialogs
             };
             IELGeneralButton.OnActivateMouseLeft += () =>
             {
-                IELFrameSetting.NextPage(GeneralSetting);
+                MainPageController.NextPage(GeneralSetting);
             };
             #endregion
             #region This

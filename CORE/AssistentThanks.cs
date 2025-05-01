@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using static System.Windows.Forms.LinkLabel;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     internal class AssistentThanks(string nickname, string phrase, string message, Uri? link = null, Uri? pathbitmap = null)
     {

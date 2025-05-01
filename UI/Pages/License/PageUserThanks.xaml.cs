@@ -1,11 +1,11 @@
-﻿using AAC20.CORE;
+﻿using OperPage_les.CORE;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace AAC20.Windows.Pages.License
+namespace OperPage_les.Windows.Pages.License
 {
     /// <summary>
     /// Логика взаимодействия для PageUser.xaml
@@ -73,7 +73,7 @@ namespace AAC20.Windows.Pages.License
             if (assistent.LinkImage != null || assistent.PathImage != null)
             {
                 BitmapImage bitmap;
-                if (assistent.LinkImage != null && App.InternetPinging.Value) bitmap = new(assistent.LinkImage);
+                if (assistent.LinkImage != null && App.Flags.InternetPinging) bitmap = new(assistent.LinkImage);
                 else bitmap = new BitmapImage(assistent.PathImage);
                 ImageIconNickName.Source = bitmap;
                 ImageIconNickName.Opacity = 0.4d;

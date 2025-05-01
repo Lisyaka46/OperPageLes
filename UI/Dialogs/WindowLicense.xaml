@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AAC20.UI.Dialogs"
-        xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="AAC20.UI.Dialogs.LicenseWindow"
+        xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="OperPage_les.UI.Dialogs.LicenseWindow"
         mc:Ignorable="d" Background="#FF4D735E" Height="450" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Topmost="True" Icon="{Binding Mode=OneWay, Source={StaticResource EmptyImage}}">
     <Grid>
         <Grid.RowDefinitions>

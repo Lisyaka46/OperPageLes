@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     /// <summary>
     /// Класс сортировки элементов

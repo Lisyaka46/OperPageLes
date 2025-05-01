@@ -1,11 +1,11 @@
-﻿using AAC20.CORE;
-using AAC20.CORE.Flaging;
-using AAC20.CORE.Settings;
-using AAC20.UI.Dialogs;
-using AAC20.UI.Pages.Browser;
-using AAC20.Windows;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+﻿using OperPage_les.CORE;
+using OperPage_les.CORE.Flaging;
+using OperPage_les.CORE.Settings;
+using OperPage_les.UI.Dialogs;
+using OperPage_les.UI.Pages.Browser;
+using OperPage_les.Windows;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using IEL.Classes;
 using Interpreter.Classes;
 using Interpreter.Commands;
@@ -18,7 +18,7 @@ using System.Windows.Documents;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 
-namespace AAC20
+namespace OperPage_les
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -35,6 +35,29 @@ namespace AAC20
             /// </summary>
             internal static WindowDiscriptionCommands? DiscriptionCommands = null;
         }
+
+        #region Application Flags
+        /// <summary>
+        /// Флаги данной формы
+        /// </summary>
+        internal readonly struct Flags
+        {
+            /// <summary>
+            /// Состояние подключения к интернету
+            /// </summary>
+            internal static readonly Flag InternetPinging = new(false);
+
+            /// <summary>
+            /// Флаг состояния видимости объекта страниц
+            /// </summary>
+            internal static readonly Flag FlagFrameComponentVisible = new(true);
+
+            /// <summary>
+            /// Флаг состояния регистра
+            /// </summary>
+            internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
+        };
+        #endregion
 
         /// <summary>
         /// Объект всех страниц программы
@@ -267,11 +290,6 @@ namespace AAC20
         internal static App CurrentApp => (App)Current;
 
         /// <summary>
-        /// Состояние подключения к интернету
-        /// </summary>
-        internal static readonly Flag InternetPinging = new(false);
-
-        /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
         private readonly Setting<EnumSettingProcess> SettingProcess;
@@ -301,9 +319,15 @@ namespace AAC20
         /// </summary>
         public const string ConsolePreMessage = "%**>>>**";
 
+        /// <summary>
+        /// Количество миллисекунд ушедших на подключение
+        /// </summary>
+        internal static volatile object MillisecondInternetConnection = -1L;
+
         public App()
         {
             InitializeComponent();
+            MillisecondInternetConnection = -1L;
             ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
             ThreadInternetCheckConnection.Start();
             SettingProcess = new(PathSettingProcess,
@@ -318,7 +342,9 @@ namespace AAC20
                 // BufferSize
                 "50",
                 // BlurBackgroundDataTime
-                "T"
+                "T",
+                // MillisecondInternetConnection
+                "T",
             ]);
             AllPages = new();
         }
@@ -330,6 +356,11 @@ namespace AAC20
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
+#if DEBUG
+            //Audio audio = new();
+            //audio.Play(OperPage_les.Properties.Resources.C7, Microsoft.VisualBasic.AudioPlayMode.WaitToComplete);
+            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.D_6);
+#endif
             Current.MainWindow = new UI.Windows.MainWindow();
             Current.Exit += (sender, e) =>
             {
@@ -355,16 +386,22 @@ namespace AAC20
             Ping ObjPing = new();
             try
             {
-                InternetPinging.Wait = true;
-                PingReply reply = ObjPing.SendPingAsync("yandex.ru", 800).Result;
-                InternetPinging.Wait = false;
-                InternetPinging.Value = reply.Status == IPStatus.Success;
+                Flags.InternetPinging.Wait = true;
+                PingReply reply = ObjPing.SendPingAsync("yandex.ru", 3000).Result;
+                Flags.InternetPinging.Wait = false;
+                Flags.InternetPinging.Value = reply.Status == IPStatus.Success;
+                MillisecondInternetConnection = reply.RoundtripTime;
             }
             catch
             {
-                InternetPinging.Wait = false;
-                InternetPinging.Value = false;
+                Flags.InternetPinging.Wait = false;
+                Flags.InternetPinging.Value = false;
             }
+#if DEBUG
+            //Audio audio = new();
+            //audio.Play(OperPage_les.Properties.Resources.C7, Microsoft.VisualBasic.AudioPlayMode.WaitToComplete);
+            AudioPlayerControl.PlayMP3(AudioPlayerControl.AudioFiles.C7);
+#endif
         }
 
         /// <summary>
@@ -373,19 +410,41 @@ namespace AAC20
         /// <param name="Effect">Объект эффекта анимации</param>
         /// <param name="Power">Сила блюра при старте</param>
         /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateBlurEffect(BlurEffect Effect, uint Power, double Duration = 700d)
+        /// <param name="EnterToOriginValue">Возвратиться к текущему значению</param>
+        internal static void AnimateBlurEffect(BlurEffect Effect, uint Power, double Duration = 700d, bool EnterToOriginValue = true)
         {
             DoubleAnimation animation = new()
             {
-                Duration = TimeSpan.FromMilliseconds(Duration),
-                From = Power,
-                To = 0d,
                 EasingFunction = new CubicEase()
                 {
                     EasingMode = EasingMode.EaseOut,
-                }
+                },
+                Duration = TimeSpan.FromMilliseconds(Duration),
+                From = EnterToOriginValue ? Power : Effect.Radius,
+                To = EnterToOriginValue ? 0d : Power
             };
             Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
+        }
+
+        /// <summary>
+        /// Анимировать числовой эффект объекта
+        /// </summary>
+        /// <param name="Element">Объект анимации</param>
+        /// <param name="Property">Анимируемое свойство</param>
+        /// <param name="To">Значение к которому стремится анимация</param>
+        /// <param name="Duration">Количество миллисекунд для анимации</param>
+        internal static void AnimateDoubleEffect(FrameworkElement Element, DependencyProperty Property, double To, double Duration = 700d)
+        {
+            DoubleAnimation animation = new()
+            {
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut,
+                },
+                Duration = TimeSpan.FromMilliseconds(Duration),
+                To = To,
+            };
+            Element.BeginAnimation(Property, animation);
         }
 
         /// <summary>

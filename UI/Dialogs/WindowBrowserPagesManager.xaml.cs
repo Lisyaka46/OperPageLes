@@ -17,7 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace AAC20.UI.Dialogs
+namespace OperPage_les.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowBrowserPagesManager.xaml

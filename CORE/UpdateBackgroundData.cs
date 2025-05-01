@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace AAC20.CORE
+namespace OperPage_les.CORE
 {
     internal sealed class UpdateBackgroundData
     {

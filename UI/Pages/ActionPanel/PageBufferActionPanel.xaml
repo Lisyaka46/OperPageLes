@@ -3,10 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AAC20.Windows.Pages.ActionPanel"
+      xmlns:local="clr-namespace:OperPage_les.Windows.Pages.ActionPanel"
       xmlns:GUI="clr-namespace:IEL;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
-      x:Class="AAC20.Windows.Pages.ActionPanel.PageBufferActionPanel"
+      x:Class="OperPage_les.Windows.Pages.ActionPanel.PageBufferActionPanel"
       mc:Ignorable="d" 
       Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="251.791">
 

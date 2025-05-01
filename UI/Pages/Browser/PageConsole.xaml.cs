@@ -1,7 +1,7 @@
-﻿using AAC20.CORE;
-using AAC20.Windows.Frames;
-using AAC20.Windows.Pages.ActionPanel;
-using AAC20.Windows.Pages.Browser;
+﻿using OperPage_les.CORE;
+using OperPage_les.Windows.Frames;
+using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.Windows.Pages.Browser;
 using IEL;
 using IEL.Interfaces.Core;
 using Interpreter.Classes;
@@ -25,7 +25,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
-namespace AAC20.UI.Pages.Browser
+namespace OperPage_les.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
@@ -36,6 +36,11 @@ namespace AAC20.UI.Pages.Browser
         /// Имя страницы
         /// </summary>
         public string PageName { get; } = nameof(PageConsole);
+
+        /// <summary>
+        /// Объект страницы
+        /// </summary>
+        public new Page Content => this;
 
         /// <summary>
         /// Главная страница панели действий в консоли
@@ -97,7 +102,6 @@ namespace AAC20.UI.Pages.Browser
             Canvas.SetZIndex(GridHintCommandParameter, -1);
             RichTextBoxMainMessage.Document = new();
             PASettingsConsole = new(RichTextBoxMainMessage, PageConsolePA, new(270d, 230d));
-
             ButtonReturnCommand.OnActivateMouseLeft += () => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
 
             #region PageConsolePA
