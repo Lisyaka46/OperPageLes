@@ -1,0 +1,48 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+             xmlns:local="clr-namespace:OperPage_les;assembly=OperPage_les" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.UserElementControl.LabelCommand" 
+             mc:Ignorable="d" Cursor="Hand" Height="130">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border x:Name="BorderMainLabel" BorderThickness="2,2,2,2" Background="White" CornerRadius="6,6,6,6" BorderBrush="Black" Grid.ColumnSpan="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="56"/>
+                </Grid.RowDefinitions>
+                <Image x:Name="ImageTag" Grid.RowSpan="1" Margin="40,2,0,3"/>
+                <Image x:Name="ImageElementLabel" Grid.RowSpan="1" Source="/UI/Images/Labels/Link.png"/>
+                <TextBlock x:Name="TextBlockNameLabel" TextWrapping="Wrap" Text="12345678901234567890" FontSize="14" FontWeight="Bold" TextAlignment="Center" Foreground="Black" Grid.Row="1" VerticalAlignment="Bottom"/>
+
+            </Grid>
+        </Border>
+        <Border x:Name="BorderTags" BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Column="1" CornerRadius="6,6,6,6" HorizontalAlignment="Left" Panel.ZIndex="-1">
+            <StackPanel>
+                <GUI:IELBlockInfoText x:Name="IELBlockTagIndex" BorderThicknessBlock="1,1,1,1" CornerRadius="4,4,4,4" Text="01" PaddingContent="1,2,1,2" Margin="2,2,2,2" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontSize="14">
+                    <GUI:IELBlockInfoText.IELSettingObject>
+                        <ObjectSettings:IELUsingObjectSetting>
+                            <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
+                                <Classes:BrushSettingQ NotEnabled="#FF3A0808" Select="#FF13230C" Used="#FF2F2C09" UsedState="False"/>
+                            </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
+                            <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                                <Classes:BrushSettingQ NotEnabled="#FF3A0808" Select="#FF13230C" Used="#FF2F2C09" UsedState="False"/>
+                            </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                            <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF74DC50" NotEnabled="#FFDE5757" Select="#FFB4FF9A" Used="#FFC4EFC9" UsedState="False"/>
+                            </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
+                        </ObjectSettings:IELUsingObjectSetting>
+                    </GUI:IELBlockInfoText.IELSettingObject>
+                </GUI:IELBlockInfoText>
+
+            </StackPanel>
+
+        </Border>
+    </Grid>
+</UserControl>

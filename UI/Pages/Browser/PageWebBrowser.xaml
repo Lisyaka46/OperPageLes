@@ -4,8 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
-      xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageWebBrowser"
+      xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageWebBrowser"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageWebBrowser">
@@ -19,24 +20,49 @@
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="18" ShowNameText="True" TextName="Ссылка" MarginNaming="0,-22,0,0" Margin="2,20,2,5" FontSizeNaming="16" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" ForgroundNaming="White" Text="" Grid.ColumnSpan="1" AnimationMillisecond="150">
-                <IEL:IELTextBox.BackgroundSetting>
-                    <Classes:BrushSettingQ Default="#FF82B3D2" NotEnabled="#FFE46060" UsedState="False" Used="#FF57EAE0" Select="#FF7688A5"/>
-                </IEL:IELTextBox.BackgroundSetting>
+            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="16" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" Text="Https://ya.ru" Grid.ColumnSpan="1" Margin="5,12,5,12" BorderThicknessBlock="1,1,1,1">
+                <IEL:IELTextBox.IELSettingObject>
+                    <ObjectSettings:IELObjectSetting>
+                        <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
+                        </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
+                        </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FFB8E4C7" Select="#FF5E9470" Used="#FFDBF5E4" UsedState="False" NotEnabled="#FFAD6363"/>
+                        </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELObjectSetting>
+                </IEL:IELTextBox.IELSettingObject>
             </IEL:IELTextBox>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="59*"/>
-                    <ColumnDefinition Width="41*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
-                <IEL:IELButtonImage Width="50" Height="50" Imaging="/UI/Images/Warning.png" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2"/>
+                <IEL:IELButtonImage x:Name="IELButtonReloadPage" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="8,8,8,8" PaddingContent="2,2,2,2">
+                    <IEL:IELButtonImage.IELSettingObject>
+                        <ObjectSettings:IELButtonObjectSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF1E2512" Used="#FF282B20"/>
+                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF85967F" NotEnabled="#FFEF4949" Select="#FF91C77E" Used="#FFA6FF87" UsedState="False"/>
+                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        </ObjectSettings:IELButtonObjectSetting>
+                    </IEL:IELButtonImage.IELSettingObject>
+                </IEL:IELButtonImage>
+                <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Column="1" CornerRadius="6,6,6,6" Margin="5,5,5,5" Background="#FF88A6B9">
+                    <Image x:Name="ImageIndicator" Margin="2,2,2,2"/>
+                </Border>
             </Grid>
         </Grid>
         <Grid x:Name="GridBrowser" Grid.Row="1">
-            <cefSharp:ChromiumWebBrowser x:Name="WebBrowserElement" ResizeHackDelayInMs="70"/>
-            <!--<WebBrowser x:Name="WebBrowserElement"/>-->
+            <Wpf:WebView2 x:Name="WebBrowserElement"/>
+
+            <!--<cefSharp:ChromiumWebBrowser x:Name="WebBrowserElement"/>-->
         </Grid>
 
 

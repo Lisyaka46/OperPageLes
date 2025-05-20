@@ -1,0 +1,68 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Description"
+      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.Description.PageDescriptionConsole"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PageDescriptionConsole">
+
+    <Grid>
+        <Grid x:Name="GridMainDescription" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="TextBlockNameCommand" FontSize="20" FontFamily="Cascadia Code" TextAlignment="Center" Margin="5,0,5,0" Text="Команда не выбрана" Padding="0,2,0,2" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" FontWeight="Bold"/>
+            <Grid x:Name="GridDiscription" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" MaxHeight="40" MinHeight="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="TextBlockDescriptionCountParameter" FontSize="16" VerticalAlignment="Center" Margin="5,0,5,0" TextTrimming="CharacterEllipsis" Height="21" TextDecorations="Underline" FontFamily="Cascadia Code"/>
+                <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" CornerRadius="5,5,5,5" Margin="5,0,5,0" Padding="0,2,0,2">
+                    <Grid Margin="2,2,2,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="39.737" MaxWidth="40"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Margin="5,0,5,0" FontSize="16" TextAlignment="Center" Grid.ColumnSpan="1" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
+                        <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" CornerRadius="5,5,5,5" Margin="3,0,3,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" BorderThicknessBlock="2,2,2,2" PaddingContent="10,2,10,2">
+                            <GUI:IELButtonText.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
+                                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF1F0000" Select="#FF191919" Used="#FF001F0F"/>
+                                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF3A0000" Select="#FF191919" Used="#FF212121"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF5996CE" Select="#FF49D0FD" Used="#FF29DAB5" UsedState="False" NotEnabled="#FFF74141"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </GUI:IELButtonText.IELSettingObject>
+                        </GUI:IELButtonText>
+                        <GUI:IELButtonImage x:Name="IELButtonInfoParameter" Grid.Column="1" ImageMargin="2,2,2,2" CornerRadius="6,6,6,6" Panel.ZIndex="2" Margin="2,0,2,0">
+                            <GUI:IELButtonImage.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#3335C1BE" Used="#6635C1BE" UsedState="False"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </GUI:IELButtonImage.IELSettingObject>
+                            <!--<GUI:IELButtonImage.BackgroundSetting>
+                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66C77F7F" Select="#4C3A9C8C" Used="#721AEFFF"/>
+                    </GUI:IELButtonImage.BackgroundSetting>-->
+                        </GUI:IELButtonImage>
+                    </Grid>
+                </Border>
+                <TextBlock x:Name="TextBlockMainDescriptionCommand" Grid.Row="2" Margin="20,5,20,5" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="текст" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

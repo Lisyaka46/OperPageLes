@@ -6,10 +6,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:GUI="clr-namespace:IEL;assembly=IEL"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
+        xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+        xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+        xmlns:resx="clr-namespace:OperPage_les.Properties"
         x:Name="window" x:Class="OperPage_les.UI.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Icon="/UI/Images/IconMainApplication.png" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
+        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
         <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
         <Image x:Name="ImageMenu" Panel.ZIndex="1" Stretch="UniformToFill">
@@ -47,33 +49,48 @@
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
-                        <GUI:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="5,5,5,5" Imaging="/UI/Images/LightBulb.png" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3">
-                            <GUI:IELButtonImage.BorderBrushSetting>
-                                <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
-                            </GUI:IELButtonImage.BorderBrushSetting>
-                            <GUI:IELButtonImage.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
-                            </GUI:IELButtonImage.BackgroundSetting>
+                        <GUI:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="5,5,5,5" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3">
+                            <GUI:IELButtonImage.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </GUI:IELButtonImage.IELSettingObject>
                         </GUI:IELButtonImage>
-                        <GUI:IELButtonImage x:Name="IELButtonSettings" Imaging="/UI/Images/IconMainSettings.png" Grid.ColumnSpan="1" Grid.Column="3" ImageMargin="2,2,2,2" AnimationMillisecond="140" Margin="3,3,3,3" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5">
-                            <GUI:IELButtonImage.ForegroundSetting>
-                                <Classes:BrushSettingQ Default="#FF1F262F" NotEnabled="#FF5F1717" Select="#FF232F31" Used="#FF093831"/>
-                            </GUI:IELButtonImage.ForegroundSetting>
-                            <GUI:IELButtonImage.BorderBrushSetting>
-                                <Classes:BrushSettingQ Default="#FF3D4848" NotEnabled="#FFD24B64" Select="#FF475B5B" Used="#FF0E5B5B"/>
+                        <GUI:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="3" ImageMargin="0,-1,0,-1" CornerRadius="6,6,6,6">
+                            <GUI:IELButtonImage.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#00000000" Select="#99266FA7" NotEnabled="#CCC13750" Used="#A52891E2"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </GUI:IELButtonImage.IELSettingObject>
+                            <!--<GUI:IELButtonImage.BorderBrushSetting>
+                                <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
                             </GUI:IELButtonImage.BorderBrushSetting>
                             <GUI:IELButtonImage.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF50A79D" Select="#FF46C5B6" NotEnabled="#FFC13750" Used="White"/>
-                            </GUI:IELButtonImage.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#00000000" Select="#99266FA7" NotEnabled="#CCC13750" Used="#A52891E2"/>
+                            </GUI:IELButtonImage.BackgroundSetting>-->
                         </GUI:IELButtonImage>
                     </Grid>
-                    <GUI:IELButtonImage x:Name="ImageLogoApplication" Imaging="/UI/Images/IconMainApplication.png" CornerRadius="6,6,6,6" AnimationMillisecond="250" BorderThickness="0.1,0.1,0.1,0.1" ImageMargin="0,-2,0,-2">
-                        <GUI:IELButtonImage.BorderBrushSetting>
-                            <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
-                        </GUI:IELButtonImage.BorderBrushSetting>
-                        <GUI:IELButtonImage.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#00000000" NotEnabled="#FFA55B5B" Select="#7F457560" Used="#9950A79D"/>
-                        </GUI:IELButtonImage.BackgroundSetting>
+                    <GUI:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" BorderThickness="0.1,0.1,0.1,0.1" ImageMargin="0,-2,0,-2">
+                        <GUI:IELButtonImage.IELSettingObject>
+                            <ObjectSettings:IELButtonObjectSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
+                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#00000000" NotEnabled="#FFA55B5B" Select="#7F457560" Used="#9950A79D"/>
+                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            </ObjectSettings:IELButtonObjectSetting>
+                        </GUI:IELButtonImage.IELSettingObject>
                     </GUI:IELButtonImage>
                 </Grid>
             </Border>
@@ -93,32 +110,44 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <GUI:IELButtonImage x:Name="IELImageButtonHelp0" CornerRadius="5,5,5,5" Imaging="/UI/Images/Menu.png" ImageMargin="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" AnimationMillisecond="160">
-                                    <GUI:IELButtonImage.BorderBrushSetting>
-                                        <Classes:BrushSettingQ Default="#FF25546D" NotEnabled="#FFC15555" Select="#FF446B80" Used="#FF4B768C" UsedState="False"/>
-                                    </GUI:IELButtonImage.BorderBrushSetting>
-                                    <GUI:IELButtonImage.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9" UsedState="False"/>
-                                    </GUI:IELButtonImage.BackgroundSetting>
+                                <GUI:IELButtonImage x:Name="IELImageButtonMenu" CornerRadius="5,5,5,5" ImageMargin="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3">
+                                    <GUI:IELButtonImage.IELSettingObject>
+                                        <ObjectSettings:IELButtonObjectSetting>
+                                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                                <Classes:BrushSettingQ Default="#FF25546D" NotEnabled="#FFC15555" Select="#FF446B80" Used="#FF4B768C" UsedState="False"/>
+                                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                                <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9" UsedState="False"/>
+                                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        </ObjectSettings:IELButtonObjectSetting>
+                                    </GUI:IELButtonImage.IELSettingObject>
                                 </GUI:IELButtonImage>
-                                <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160" PaddingContent="4,0,5,6">
-                                    <GUI:IELButtonText.ForegroundSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
-                                    </GUI:IELButtonText.ForegroundSetting>
-                                    <GUI:IELButtonText.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
-                                    </GUI:IELButtonText.BackgroundSetting>
+                                <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" BorderThicknessBlock="2,2,2,2" PaddingContent="4,0,5,6">
+                                    <GUI:IELButtonText.IELSettingObject>
+                                        <ObjectSettings:IELButtonObjectSetting>
+                                            <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                                <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
+                                            </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                                <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
+                                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        </ObjectSettings:IELButtonObjectSetting>
+                                    </GUI:IELButtonText.IELSettingObject>
                                 </GUI:IELButtonText>
                                 <Grid Grid.Column="2">
                                     <GUI:IELPageController x:Name="IELPageControllerButtons" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </Grid>
-                                <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2" AnimationMillisecond="160">
-                                    <GUI:IELButtonText.ForegroundSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
-                                    </GUI:IELButtonText.ForegroundSetting>
-                                    <GUI:IELButtonText.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
-                                    </GUI:IELButtonText.BackgroundSetting>
+                                <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2">
+                                    <GUI:IELButtonText.IELSettingObject>
+                                        <ObjectSettings:IELButtonObjectSetting>
+                                            <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                                <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black"/>
+                                            </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                                <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
+                                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        </ObjectSettings:IELButtonObjectSetting>
+                                    </GUI:IELButtonText.IELSettingObject>
                                 </GUI:IELButtonText>
                             </Grid>
                         </Border>
@@ -149,21 +178,29 @@
                         </Grid>
                     </Border>
                     <Border x:Name="BorderIndicator" BorderBrush="#FF007D9E" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#CC77B0FD" Grid.Column="2">
-                        <Image x:Name="ImageIndificator" gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif" Margin="5,5,5,5" Grid.Column="5"/>
+                        <Image x:Name="ImageIndicator" Margin="5,5,5,5" Grid.Column="5"/>
                     </Border>
                 </Grid>
             </Border>
             <GUI:IELBrowserPage x:Name="IELBrowserPageMain" Margin="0,1,0,0" Grid.Row="1">
+                <GUI:IELBrowserPage.IELSettingObject>
+                    <ObjectSettings:IELObjectSetting>
+                        <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#9969AFAE" NotEnabled="#99960000" Select="#992FD6D4" Used="#9931C887" UsedState="False"/>
+                        </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELObjectSetting>
+                </GUI:IELBrowserPage.IELSettingObject>
                 <GUI:IELBrowserPage.IELButtonAddInlay>
-                    <GUI:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" BorderThicknessBlock="2,2,2,2" Imaging="/UI/Images/Plus.png" ImageMargin="5,5,5,5" CornerRadius="5,5,5,5" AnimationMillisecond="200">
-                        <GUI:IELButtonImage.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#FF3A9896" NotEnabled="#FFC52146" Select="#FF5FCECC" Used="#FF5FCEA8"/>
-                        </GUI:IELButtonImage.BackgroundSetting>
+                    <GUI:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" BorderThicknessBlock="2,2,2,2" ImageMargin="5,5,5,5" CornerRadius="5,5,5,5">
+                        <GUI:IELButtonImage.IELSettingObject>
+                            <ObjectSettings:IELButtonObjectSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#FF3A9896" NotEnabled="#FFC52146" Select="#FF5FCECC" Used="#FF5FCEA8"/>
+                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            </ObjectSettings:IELButtonObjectSetting>
+                        </GUI:IELButtonImage.IELSettingObject>
                     </GUI:IELButtonImage>
                 </GUI:IELBrowserPage.IELButtonAddInlay>
-                <GUI:IELBrowserPage.BackgroundSetting>
-                    <Classes:BrushSettingQ Default="#9969AFAE" NotEnabled="#99960000" Select="#992FD6D4" Used="#9931C887" UsedState="False"/>
-                </GUI:IELBrowserPage.BackgroundSetting>
             </GUI:IELBrowserPage>
         </Grid>
         <GUI:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" RadiusMagnite="2" Text="Hello" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" RadiusDefault="15" OffsetLeftRight="6" FontFamily="Trebuchet MS" DefaultBackground="#FFC5FBE4"/>

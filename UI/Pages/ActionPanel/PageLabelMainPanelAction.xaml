@@ -1,0 +1,36 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.ActionPanel.PageLabelMainActionPanel"
+      mc:Ignorable="d" 
+      d:DesignWidth="210"
+      Title="PageLabelMainActionPanel">
+
+    <Grid x:Name="GridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Margin="4,4,4,4" PaddingContent="0,10,0,10">
+            <IEL:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting>
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ Default="Black" Select="#FF2D2C1D" Used="#FF38382F" UsedState="False" NotEnabled="#FF541D1D"/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ Default="Black" Select="#FF2D2C1D" Used="#FF38382F" UsedState="False" NotEnabled="#FF541D1D"/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ Default="#FFAFAC60" Select="#FFD6D494" Used="#FFF7F6CC" UsedState="False" NotEnabled="#FFD84F4F"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </IEL:IELButtonTextKey.IELSettingObject>
+        </IEL:IELButtonTextKey>
+
+    </Grid>
+</Page>

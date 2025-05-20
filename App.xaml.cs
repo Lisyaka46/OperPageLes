@@ -1,25 +1,27 @@
-﻿using OperPage_les.CORE;
+﻿using IEL.CORE.Classes;
+using IEL.CORE.Classes.Browser;
+using Interpreter.Classes;
+using Interpreter.Commands;
+using Newtonsoft.Json;
+using OperPage_les.CORE;
 using OperPage_les.CORE.Flaging;
-using OperPage_les.CORE.Settings;
+using OperPage_les.CORE.Settings.Struct;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.Windows;
 using OperPage_les.Windows.Pages.ActionPanel;
 using OperPage_les.Windows.Pages.Browser;
-using IEL.Classes;
-using IEL.Classes.Browser;
-using Interpreter.Classes;
-using Interpreter.Commands;
-using Interpreter.Interfaces;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using Windows.ApplicationModel.Store;
-using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Interpreter.Interfaces;
 
 namespace OperPage_les
 {
@@ -29,15 +31,9 @@ namespace OperPage_les
     public partial class App : System.Windows.Application
     {
         /// <summary>
-        /// Структура всех окон программы
+        /// Окно описания всех команд
         /// </summary>
-        internal readonly struct AppWindows
-        {
-            /// <summary>
-            /// Окно описания всех команд
-            /// </summary>
-            internal static WindowDiscriptionCommands? DiscriptionCommands = null;
-        }
+        private WindowDiscriptionCommands? DiscriptionCommands;
 
         #region Application Flags
         /// <summary>
@@ -60,32 +56,6 @@ namespace OperPage_les
             /// </summary>
             internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
         };
-        #endregion
-
-        #region SystemBrowserPages
-        /// <summary>
-        /// Объект всех страниц браузера программы
-        /// </summary>
-        private readonly List<BrowserPage> AllSystemBrowserPages;
-
-        /// <summary>
-        /// Найти страницу в массиве по типу
-        /// </summary>
-        /// <typeparam name="T">Тип страницы</typeparam>
-        /// <returns>Выводимая страница</returns>
-        internal BrowserPage SearchElementInType(Type type)
-        {
-            for (int i = 0; i < AllSystemBrowserPages.Count; i++)
-            {
-                if (AllSystemBrowserPages[i].PageContent.GetType().Equals(type)) return AllSystemBrowserPages[i];
-            }
-            throw new Exception("Системные страницы не могут быть пустыми");
-        }
-
-        /// <summary>
-        /// Количество доступных системных страниц
-        /// </summary>
-        internal int CountSystemBrowserPages => AllSystemBrowserPages.Count;
         #endregion
 
         #region AnimationObject
@@ -269,7 +239,7 @@ namespace OperPage_les
         /// <summary>
         /// Массив консольных команд
         /// </summary>
-        internal readonly List<AliasCommand<ICommandAAC>> DataAliases = [];
+        internal readonly List<AliasCommand<ICommandOPER>> DataAliases = [];
 
         /// <summary>
         /// Массив консольных команд
@@ -297,7 +267,7 @@ namespace OperPage_les
             "Очищает текстовый вывод главного меню программы",
             (Command, param) =>
             {
-                ((PageConsole)CurrentApp.SearchElementInType(typeof(PageConsole)).PageContent).ClearConsoleText();
+                App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>()?.ClearConsoleText();
                 return Task.FromResult(CommandStateResult.Completed(Command.Name));
             }),
             #endregion
@@ -316,8 +286,7 @@ namespace OperPage_les
             "Отображает содержание буфера команд в консоль главного меню программы",
             (Command, param) =>
             {
-                PageBufferActionPanel PageBuffer = ((PageConsole)CurrentApp.SearchElementInType(typeof(PageConsole)).PageContent).PageBufferPA ?? 
-                    throw new Exception("Системной страницы не существует!");
+                PageBufferPanelAction PageBuffer = PageConsole.BufferPage;
                 return Task.FromResult(CommandStateResult.Completed(Command.Name,
                     $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
                     $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
@@ -341,7 +310,7 @@ namespace OperPage_les
             "- Ярлык создастся только если открыта страница ярлыков в браузере",
             (Command, param) =>
             {
-                PageLabels? Page = (PageLabels)CurrentApp.SearchElementInType(typeof(PageLabels)).PageContent;
+                PageLabels? Page = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
                 if (Page == null)
                     return Task.FromResult(CommandStateResult.Failed(Command.Name,
                         $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
@@ -355,7 +324,7 @@ namespace OperPage_les
             "- Ярлык создастся только если открыта страница ярлыков в браузере",
             (Command, param) =>
             {
-                PageLabels? Page = (PageLabels)CurrentApp.SearchElementInType(typeof(PageLabels)).PageContent;
+                PageLabels? Page = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
                 if (Page == null)
                     return Task.FromResult(CommandStateResult.Failed(Command.Name,
                         $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
@@ -436,40 +405,6 @@ namespace OperPage_les
                     CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
             }),
             #endregion
-
-            #region alias
-            new ConsoleCommand("alias",
-            [
-                new Parameter("Name", typeof(string)),
-                new Parameter("Command", typeof(string)),
-                new Parameter("Replace", typeof(bool), false)
-            ],
-            "Создаёт алиас \"Name\" на команду \"Command\".\nВозможно изменение через параметр \"Replace\"\n" +
-            "- Если \"Replace\" true то при нахождении уже созданного алиаса с таким именем, у него будет изменена команда", (Main, param) =>
-            {
-                string[] NameAliases = [.. CurrentApp.DataAliases.Select(i => i.Name)];
-                string NameAlias = ((string)param[0]).ToLower();
-                if (NameAliases.Contains(NameAlias) && !(bool)param[2])
-                {
-                    return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                        $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите третий параметр: %**true**//"));
-                }
-                if (!(bool)param[2])
-                {
-                    CurrentApp.DataAliases.Add(
-                        new(NameAlias, (string)param[1], [.. DataConsoleCommand]));
-                }
-                else
-                {
-                    int index = Array.IndexOf(NameAliases, NameAlias);
-                    if (index != -1) CurrentApp.DataAliases[Array.IndexOf(NameAliases, NameAlias)].Command = (string)param[1];
-                    else return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                        $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не создан\n%#EA5555//Для переопределения введите третий параметр: %**false**//"));
-                }
-                return Task.FromResult(CommandStateResult.Completed(Main.Name,
-                    $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**{((bool)param[2] ? "изменён" : "создан")}**"));
-            }),
-            #endregion
         ];
 
         /// <summary>
@@ -490,32 +425,52 @@ namespace OperPage_les
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
-        private readonly Setting<EnumSettingProcess> SettingProcess;
+        private SettingProcess SettingApplicationProcess;
 
         /// <summary>
         /// Массив ключей настроек <b>приложения</b>
         /// </summary>
-        internal Setting<EnumSettingApplication> SettingApplication;
+        internal SettingApplication SettingMainApplication;
 
         /// <summary>
-        /// Константа директории файла настроек <b>процесса</b>
+        /// Файл настроек <b>процесса</b>
         /// </summary>
-        private const string PathSettingProcess = "CurrentSettings.so";
+        private readonly string PathSettingProcess = MainDirectoryApplication + "/CurrentSettings.json";
 
         /// <summary>
         /// Имя файла настроек <b>приложения</b>
         /// </summary>
-        private const string NameFileApplicationSetting = "ApplicationSettings";
-
-        /// <summary>
-        /// Релятивная директория папки изображений приложения
-        /// </summary>
-        internal const string PathImageApplication = "/UI/Images";
+        private readonly string PathSettingApplication = MainDirectoryApplication + "/ApplicationSettings.json";
 
         /// <summary>
         /// Строка вывода перед сообщением
         /// </summary>
         public const string ConsolePreMessage = "%**>>>**";
+
+        /// <summary>
+        /// Директория файла открытых настроек <b>приложения</b>
+        /// </summary>
+        private string ActivePathSettingApplication = string.Empty;
+
+        /// <summary>
+        /// Главная директория ресурсов проекта
+        /// </summary>
+        internal static readonly string MainDirectoryApplication = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"/OperPage_les/";
+
+        /// <summary>
+        /// Главная директория файлов изображений
+        /// </summary>
+        internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
+
+        /// <summary>
+        /// Директория файла анимации загрузки
+        /// </summary>
+        internal static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.png";
+
+        /// <summary>
+        /// Реальное время
+        /// </summary>
+        internal static DateTime RealTime => DateTime.Now;
 
         /// <summary>
         /// Количество миллисекунд ушедших на подключение
@@ -524,42 +479,98 @@ namespace OperPage_les
 
         public App()
         {
+            DataConsoleCommand.AddRange([
+                #region alias
+                new ConsoleCommand("alias",
+                [
+                    new Parameter("Name", typeof(string)),
+                    new Parameter("Command", typeof(string)),
+                    new Parameter("Description", typeof(string), string.Empty)
+                ],
+                "Создаёт алиас \"Name\" на команду \"Command\". С описанием \"Description\"", (Main, param) =>
+                {
+                    string[] NameAliases = [.. CurrentApp.DataAliases.Select(i => i.Name)];
+                    string NameAlias = ((string)param[0]).ToLower();
+                    if (NameAliases.Contains(NameAlias))
+                    {
+                        return Task.FromResult(CommandStateResult.Failed(Main.Name,
+                            $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите команду: %**alias_replace**//"));
+                    }
+                    CurrentApp.DataAliases.Add(new(NameAlias, (string)param[1], (string)param[2], ICommandOPER.ReadCommand([.. DataConsoleCommand], (string)param[1])));
+                    if (DiscriptionCommands != null) DiscriptionCommands.IELButtonAlias.IsEnabled = CurrentApp.DataAliases.Count > 0;
+                    return Task.FromResult(CommandStateResult.Completed(Main.Name,
+                        $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**создан**"));
+                }),
+                #endregion
+
+                #region alias_replace
+                new ConsoleCommand("alias_replace",
+                [
+                    new Parameter("Name", typeof(string)),
+                    new Parameter("Command", typeof(string)),
+                    new Parameter("Description", typeof(string), string.Empty)
+                ],
+                "Изменяет алиас \"Name\" на новую команду алиаса \"Command\". С необязательным изменением описания \"Description\"", (Main, param) =>
+                {
+                    string[] NameAliases = [.. CurrentApp.DataAliases.Select(i => i.Name)];
+                    string NameAlias = ((string)param[0]).ToLower();
+                    int index_replace = Array.IndexOf(NameAliases, NameAlias);
+                    if (index_replace == -1)
+                    {
+                        return Task.FromResult(CommandStateResult.Failed(Main.Name,
+                            $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не существует \n%#EA5555//Для создания алиаса введите команду: %**alias**//"));
+                    }
+                    CommandStateResult Result = CurrentApp.DataAliases[index_replace].ChangeSourceCommand(
+                        [.. DataConsoleCommand], (string)param[1], ((string)param[2]).Length > 0 ? (string)param[2] : null);
+                    return Task.FromResult(CommandStateResult.Completed(Main.Name,
+                        $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
+                }),
+                #endregion
+            ]);
             InitializeComponent();
+            Directory.CreateDirectory(MainDirectoryApplication);
+            Directory.CreateDirectory(DirectoryImagesApplication);
+            Log("Инициализация параметров приложения");
+
             MillisecondInternetConnection = -1L;
             ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
             ThreadInternetCheckConnection.Start();
-            SettingProcess = new(PathSettingProcess,
-            [
-                // SettingApplicationPath
-                $"{NameFileApplicationSetting}.so",
-            ]);
-            SettingApplication = new(SettingProcess.GetSettingValue(EnumSettingProcess.SettingApplicationPath),
-            [
-                // PathMenuImage
-                "!",
-                // BufferSize
-                "50",
-                // BlurBackgroundDataTime
-                "T",
-                // MillisecondInternetConnection
-                "T",
-            ]);
-            AllSystemBrowserPages = new([
-            new(new PageConsole()),
-            new(new PageWebBrowser()) {
-                EventUnfocusPage = (page) =>
-                {
-                    ((PageWebBrowser)page.PageContent).WebBrowserElement.Visibility = Visibility.Hidden;
-                },
-                EventFocusPage = (page) =>
-                {
-                    ((PageWebBrowser)page.PageContent).WebBrowserElement.Visibility = Visibility.Visible;
-                }
-            },
-            new(new PageLabels()),
-            new(new PageDeveloper()),
 
-            ]);
+            #region Settings
+            Log("Инициализация настроек");
+            SetSettingProcess();
+
+            if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
+            else if (File.Exists(PathSettingApplication)) SetSettingApplication(PathSettingApplication);
+            else
+            {
+                SettingMainApplication = new();
+                string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
+                File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
+                ActivePathSettingApplication = PathSettingApplication;
+            }
+
+            SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
+            {
+                MainWindowApplication.UpdateImageMenu(New);
+            };
+            SettingMainApplication.BlurBackgroundDataTime.Changed += (Old, New) =>
+            {
+                MainWindowApplication.ChangeBlurImageInDataTime(New);
+            };
+            SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
+            {
+                MainWindowApplication.ChangeVisibilityMillisecondInternet(New);
+            };
+
+            if (!File.Exists(DirectoryImageLoading))
+            {
+                FileStream stream = File.Create(DirectoryImageLoading);
+                stream.Position = 0;
+                stream.Write(OperPage_les.Properties.Resources.Loading);
+                stream.Close();
+            }
+            #endregion
         }
 
         /// <summary>
@@ -569,12 +580,26 @@ namespace OperPage_les
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
+            Log("Подключение программной точки входа");
             Current.MainWindow = new UI.Windows.MainWindow();
+            Current.MainWindow.Closed += (sender, e) =>
+            {
+                DiscriptionCommands?.Close();
+            };
             Current.Exit += (sender, e) =>
             {
                 ThreadInternetCheckConnection.Kill();
+                UpdateSettingApplication();
             };
-            MainWindowApplication.Show();
+            Log("Открытие главного окна");
+            try
+            {
+                MainWindowApplication.Show();
+            }
+            catch (Exception ex)
+            {
+                Log($"{ex.Message}");
+            }
         }
 
         /// <summary>
@@ -584,6 +609,31 @@ namespace OperPage_les
         {
             Process.Start(Process.GetCurrentProcess().ProcessName, Environment.GetCommandLineArgs());
             Current.Shutdown(0);
+        }
+
+        internal static BitmapImage LoadImage(byte[] imageData)
+        {
+            if (imageData == null || imageData.Length == 0) throw new Exception("Неожиданное содержание нулевого массива байтов.");
+            var image = new BitmapImage();
+            using (var mem = new MemoryStream(imageData))
+            {
+                mem.Position = 0;
+                image.BeginInit();
+                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = null;
+                image.StreamSource = mem;
+                image.EndInit();
+            }
+            //image.Freeze();
+            return image;
+        }
+
+        internal static void Log(string log)
+        {
+            StreamWriter stream = File.AppendText(MainDirectoryApplication + @"/Access.log");
+            stream.WriteLine($"{DateTime.Now.ToLocalTime()}: " + log);
+            stream.Close();
         }
 
         /// <summary>
@@ -630,25 +680,98 @@ namespace OperPage_les
         }
 
         /// <summary>
+        /// Задать значение настроек процесса
+        /// </summary>
+        private void SetSettingProcess()
+        {
+            if (!File.Exists(PathSettingProcess))
+            {
+                SettingApplicationProcess = new();
+                string SettingProcessJSON = JsonConvert.SerializeObject(SettingApplicationProcess);
+                File.WriteAllText(PathSettingProcess, SettingProcessJSON);
+                return;
+            }
+            SettingProcess Setting = JsonConvert.DeserializeObject<SettingProcess>(File.ReadAllText(PathSettingProcess));
+            SettingApplicationProcess = EqualsNullPropertyInObject(Setting) ? new() : Setting;
+        }
+
+        /// <summary>
+        /// Задать значение настроек приложения по директории json файла
+        /// </summary>
+        /// <param name="PathJsonFile">Директория файла настроек</param>
+        private void SetSettingApplication(string PathJsonFile)
+        {
+            SettingApplication Setting = JsonConvert.DeserializeObject<SettingApplication>(File.ReadAllText(PathJsonFile));
+            PropertyInfo? NullableProperty = GetPropertyInfoNullPropertyInObject(Setting);
+            if (NullableProperty != null)
+            {
+                MessageBoxResult Result = System.Windows.MessageBox.Show($"Файл настроек \"{PathJsonFile}\" не соответствует целевому файлу настроек для программы.\n" +
+                    $"Все данные будут заменены на значения по умолчанию. Разрешить редактирование данного файла для записи настроек?\n" +
+                    $"При отказе редактирования файла настроек программа будет закрыта!\n" +
+                    $"[{NullableProperty.Name}=null])", "Ошибка чтения настроек",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No, System.Windows.MessageBoxOptions.DefaultDesktopOnly);
+                if (Result == MessageBoxResult.No) Environment.Exit(0);
+                Setting = new();
+            }
+            SettingMainApplication = Setting;
+            ActivePathSettingApplication = PathJsonFile;
+        }
+
+        /// <summary>
         /// Обновить файл настроек программы
         /// </summary>
-        internal void UpdateSettingApplication() => 
-            SettingApplication.UpdateFileSetting(SettingProcess.GetSettingValue(EnumSettingProcess.SettingApplicationPath));
+        internal void UpdateSettingApplication()
+        {
+            string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
+            File.WriteAllText(ActivePathSettingApplication, SettingApplicationJSON);
+        }
+
+        #region SearchNullableProperty
+        /// <summary>
+        /// Проверить, содержатся ли пустые поля <b>Nullable</b> в объекте
+        /// </summary>
+        /// <param name="Element">Проверяемый объект</param>
+        /// <returns>Значение отображающее наличие пустых полей в объекте</returns>
+        internal static bool EqualsNullPropertyInObject(object? Element)
+        {
+            if (Element == null) return true;
+            return GetPropertyInfoNullPropertyInObject(Element) != null;
+        }
+
+        /// <summary>
+        /// Получить значение пустого поля <b>Nullable</b> в объекте
+        /// </summary>
+        /// <param name="Element">Проверяемый объект</param>
+        /// <returns>Возможно пустое поле</returns>
+        internal static PropertyInfo? GetPropertyInfoNullPropertyInObject(object Element)
+        {
+            PropertyInfo[] properties = Element.GetType().GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                if (properties[i].GetValue(Element, null) == null) return properties[i];
+            }
+            return null;
+        }
+        #endregion
 
         /// <summary>
         /// Взаимодействовать с окном описания команд (Включает/Активирует)
         /// </summary>
-        internal static void UsingDiscriptionCommand()
+        internal void UsingDiscriptionCommand()
         {
-            if (AppWindows.DiscriptionCommands == null)
+            if (DiscriptionCommands == null)
             {
-                AppWindows.DiscriptionCommands = new();
-                AppWindows.DiscriptionCommands.Show();
+                DiscriptionCommands = new();
+                DiscriptionCommands.Closing += (sender, e) =>
+                {
+                    DiscriptionCommands = null;
+                };
+                DiscriptionCommands.Show();
             }
             else
             {
-                AppWindows.DiscriptionCommands.WindowState = WindowState.Normal;
-                AppWindows.DiscriptionCommands.Activate();
+                DiscriptionCommands.WindowState = WindowState.Normal;
+                DiscriptionCommands.Activate();
             }
         }
 
@@ -662,14 +785,14 @@ namespace OperPage_les
         {
             if (CommandString.Length == 0) return;
             if (Console != null) Console.TextBoxCommandInput.Text = string.Empty;
-            ConsoleCommand? Command = ICommandAAC.ReadCommand([.. DataConsoleCommand], CommandString);
-            string Name = ICommandAAC.ReadNameCommand(CommandString);
-            string[] Parameters = ICommandAAC.ReadParametersCommand(CommandString);
+            ConsoleCommand? Command = ICommandOPER.ReadCommand([.. DataConsoleCommand], CommandString);
+            string Name = ICommandOPER.ReadNameCommand(CommandString);
+            string[] Parameters = ICommandOPER.ReadParametersCommand(CommandString);
 
             if (AppendBufferCommand && Console != null)
             {
-                Console.PageBufferPA.InsertCommandFromBuffer(Name, CommandString,
-                () =>
+                PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString,
+                (Key) =>
                 {
                     ActivateActionCommand(Console, CommandString);
                 });
@@ -678,8 +801,8 @@ namespace OperPage_les
             CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
             if (result.State == ResultState.InvalidCommand)
             {
-                AliasCommand<ICommandAAC>? Alias = ICommandAAC.ReadCommand([.. App.CurrentApp.DataAliases], CommandString);
-                result = Alias == null ? CommandStateResult.FaledCommand(Name) : Alias.ExecuteCommand();
+                AliasCommand<ICommandOPER>? Alias = ICommandOPER.ReadCommand([.. App.CurrentApp.DataAliases], CommandString);
+                result = Alias == null ? CommandStateResult.FaledCommand(Name) : Alias.ExecuteCommand(Parameters);
             }
             if (Console != null) SummarizeCommandStateResult(Console, result);
         }

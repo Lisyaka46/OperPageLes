@@ -1,39 +1,22 @@
 ﻿#region Link
+using IEL;
+using IEL.CORE.Classes;
+using IEL.CORE.Classes.Browser;
+using IEL.CORE.Enums;
 using OperPage_les.CORE;
-using OperPage_les.CORE.Flaging;
 using OperPage_les.CORE.Settings;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
-using OperPage_les.Windows.Frames;
-using OperPage_les.Windows.Pages.ActionPanel;
-using OperPage_les.Windows.Pages.Browser;
-using IEL;
-using IEL.Classes;
-using IEL.Interfaces.Core;
-using Interpreter.Classes;
-using Interpreter.Commands;
-using Interpreter.Interfaces;
 using OperPage_les.UI.Pages.PanelButtonInformation.MainWindow;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Automation.Text;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.AxHost;
 using WpfAnimatedGif;
 #endregion
 
@@ -44,20 +27,23 @@ namespace OperPage_les.UI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region PanelAction
+        #region Source
         /// <summary>
         /// Страница взаимодействия с вкладками браузера страниц
         /// </summary>
-        private static readonly PageActionInlay PageManipulateInlayPA = new();
+        private static readonly PageInlayPanelAction PageInlay = new();
+        #endregion
+        /// <summary>
+        /// Настройки панели действий для браузера страниц
+        /// </summary>
+        private readonly PanelActionSettingVisual PanelActionSettingsInlay;
 
         /// <summary>
-        /// Реальное время
+        /// Страница панели действий взаимодействия с вкладками браузера страниц
         /// </summary>
-        private static string RealTime => DateTime.Now.ToString("HH:mm:ss");
-
-        /// <summary>
-        /// Реальная дата
-        /// </summary>
-        private static string RealData => DateTime.Now.ToString("dd.MM.yyyy");
+        private readonly PagePanelAction PanelActionPageInlay;
+        #endregion
 
         /// <summary>
         /// Объект управления фоновым обновлением информации в данном окне 1000
@@ -74,11 +60,6 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private readonly ThreadGenericProcess UpdateSearchHintCommand;
 
-        /// <summary>
-        /// Настройки панели действий в браузере
-        /// </summary>
-        private readonly PanelActionSettingsFrameworkElement PASettingsBrowserManipulateInlay;
-
         //private MMDeviceEnumerator Device = new();
 
         /// <summary>
@@ -88,16 +69,25 @@ namespace OperPage_les.UI.Windows
 
         private int ActualIndexActivatePageDownToolButtons;
 
-        //
-        private static readonly Page[] PagesButtonsInformation =
-        [
-            new MainPageButtonInfo(), new Page2()
-        ];
+        /// <summary>
+        /// Страницы информации нижней панели
+        /// </summary>
+        private readonly Page[] PagesButtonsInformation;
 
         public MainWindow()
         {
             InitializeComponent();
-
+            ImageLogoApplication.Imaging = App.LoadImage(Properties.Resources.IconMainApplication);
+            IELImageButtonHelp.Imaging = App.LoadImage(Properties.Resources.LightBulb);
+            IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
+            IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
+            IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
+            ImageBehavior.SetAnimatedSource(ImageIndicator, new BitmapImage(new Uri(App.DirectoryImageLoading)));
+            PanelActionPageInlay = new(PageInlay);
+            PagesButtonsInformation =
+            [
+                new MainPageButtonInfo(), new Page2()
+            ];
             #region Command
             //#if DEBUG
             //App.DataConsoleCommand.AddRange([
@@ -119,20 +109,27 @@ namespace OperPage_les.UI.Windows
             //#endif
             #endregion
 
-            #region Event Pages
-            #region PageManipulateInlayPA
-            PageManipulateInlayPA.IELButtonPageOpenInlay.OnActivateMouseLeft += (AltMode) =>
+            #region PanelAction
+
+            #region PageInlay
+            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (AltMode) =>
             {
-                if (PageManipulateInlayPA.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.ActivateInInlay(PageManipulateInlayPA.ActivateManipulateInlay);
+                if (PageInlay.ActivateManipulateInlay != null)
+                    IELBrowserPageMain.ActivateInInlay(PageInlay.ActivateManipulateInlay);
             };
-            PageManipulateInlayPA.IELButtonPageDeleteInlay.OnActivateMouseLeft += (AltMode) =>
+            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (AltMode) =>
             {
                 IELActionPanelMain.ClosePanelAction();
-                if (PageManipulateInlayPA.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.DeleteInlayPage(PageManipulateInlayPA.ActivateManipulateInlay);
+                if (PageInlay.ActivateManipulateInlay != null)
+                    IELBrowserPageMain.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
             };
             #endregion
+            PanelActionPageInlay.IsKeyboardModeChanged += (Source, NewValue) =>
+            {
+                PageInlay.IELButtonPageOpenInlay.CharKeyboardActivate = NewValue;
+                PageInlay.IELButtonPageDeleteInlay.CharKeyboardActivate = NewValue;
+            };
+            PanelActionSettingsInlay = new(IELBrowserPageMain, PanelActionPageInlay, new(200d, 240d));
             #endregion
 
             #region BackgroundData
@@ -169,23 +166,21 @@ namespace OperPage_les.UI.Windows
             IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
 
-            PASettingsBrowserManipulateInlay = new(IELBrowserPageMain, PageManipulateInlayPA, new(200d, 240d));
-
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
             #endregion
 
-            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(IELPanelAction.PositionAnimActionPanel.CenterObject);
+            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
 
             #region Settings
-            UpdateImageMenu();
-            ChangeBlurImageInDataTime(App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BlurBackgroundDataTime).Equals("T"));
+            UpdateImageMenu(App.CurrentApp.SettingMainApplication.PathMenuImage);
+            ChangeBlurImageInDataTime(App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime);
             #endregion
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
             #region UpToolButtons
 
-            IELButtonSettings.OnActivateMouseLeft += () =>
+            IELButtonSettings.OnActivateMouseLeft += (Key) =>
             {
                 new WindowSetting().ShowDialog();
             };
@@ -193,12 +188,12 @@ namespace OperPage_les.UI.Windows
 
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                IPageDefault? Page = IELBrowserPageMain.ActualInlay?.Page;
+                BrowserPage? Page = IELBrowserPageMain.ActualInlay?.Page;
                 if (Page == null) return;
                 switch(Page.PageName)
                 {
                     case nameof(PageConsole):
-                        ((PageConsole)Page).TextBoxCommandInput.Focus();
+                        ((PageConsole)Page.PageContent).TextBoxCommandInput.Focus();
                         break;
                     default: return;
                 }
@@ -206,8 +201,8 @@ namespace OperPage_les.UI.Windows
             #region Down Tool Buttons Information
             ActualIndexActivatePageDownToolButtons = 0;
             IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
-            IELImageButtonNextButtons.OnActivateMouseLeft += () => NextPageDownToolButtons();
-            IELImageButtonBackButtons.OnActivateMouseLeft += () => NextPageDownToolButtons(false);
+            IELImageButtonNextButtons.OnActivateMouseLeft += (Key) => NextPageDownToolButtons();
+            IELImageButtonBackButtons.OnActivateMouseLeft += (Key) => NextPageDownToolButtons(false);
 
             IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
             IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
@@ -227,20 +222,20 @@ namespace OperPage_les.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
             };
-            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += () =>
+            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
                 new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain);
             };
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
             {
-                PageManipulateInlayPA.ActivateManipulateInlay = Inlay;
-                IELActionPanelMain.UsingPanelAction(PASettingsBrowserManipulateInlay);
+                PageInlay.ActivateManipulateInlay = Inlay;
+                IELActionPanelMain.UsingPanelAction(PanelActionSettingsInlay);
                 //DialogManagerPage.ShowDialog();
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
             {
-                IELMessageMain.UsingBorderInformation(Element, Element.Name, Text, IELBlockMessage.OrientationBorderInfo.Auto);
+                IELMessageMain.UsingBorderInformation(Element, Text, OrientationBorderPosition.Auto);
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
 
@@ -253,12 +248,12 @@ namespace OperPage_les.UI.Windows
             #endregion
 
             #region IELImageButtonHelp
-            IELImageButtonHelp.OnActivateMouseLeft += App.UsingDiscriptionCommand;
-            IELImageButtonHelp.MouseHover += (sender, e) =>
+            IELImageButtonHelp.OnActivateMouseLeft += (Key) => App.CurrentApp.UsingDiscriptionCommand();
+            IELImageButtonHelp.IELSettingObject.MouseHover += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELImageButtonHelp, IELImageButtonHelp.Name,
+                IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
                     "Быстрое открытие описания команд",
-                    IELBlockMessage.OrientationBorderInfo.LeftDown);
+                    OrientationBorderPosition.LeftDown);
             };
             IELImageButtonHelp.MouseLeave += (sender, e) =>
             {
@@ -364,8 +359,8 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualData()
         {
-            TextBlockTime.Text = RealTime;
-            TextBlockData.Text = RealData;
+            TextBlockTime.Text = App.RealTime.ToShortTimeString();
+            TextBlockData.Text = App.RealTime.ToShortDateString();
         }
 
         /// <summary>
@@ -406,10 +401,9 @@ namespace OperPage_les.UI.Windows
         /// <summary>
         /// Обновить фотовое изображение
         /// </summary>
-        internal void UpdateImageMenu()
+        internal void UpdateImageMenu(string Path)
         {
             ActivateLoadingIndicator();
-            string Path = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
             if (Path.Length > 0)
             {
                 BitmapImage BitmapImageMenu = new(new Uri(Path));
@@ -454,8 +448,7 @@ namespace OperPage_les.UI.Windows
         private void FailedInstallImageMenu()
         {
             DiactivateLoadingIndicator();
-            //ImageIndificator.Source = new BitmapImage(new Uri($"{App.PathImageApplication}/Warning.png", UriKind.RelativeOrAbsolute));
-            //AddTextInConsole("Не удалось загрузить фоновое изображение...");
+            System.Windows.MessageBox.Show("Не удалось загрузить фоновое изображение...", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
 
         internal void ChangeVisibilityMillisecondInternet(bool Value)
@@ -465,17 +458,21 @@ namespace OperPage_les.UI.Windows
         #endregion
 
         #region Indicator
-        //
+        /// <summary>
+        /// Включить индикатор загрузки
+        /// </summary>
         internal void ActivateLoadingIndicator()
         {
-            ImageBehavior.SetAnimatedSource(ImageIndificator, new BitmapImage(new Uri($"{App.PathImageApplication}/Loading.gif", UriKind.RelativeOrAbsolute)));
-            App.AnimateDoubleEffect(ImageIndificator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+            ImageBehavior.SetAnimatedSource(ImageIndicator, new BitmapImage(new Uri(App.DirectoryImageLoading)));
+            App.AnimateDoubleEffect(ImageIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
 
-        //
+        /// <summary>
+        /// Выключить индикатор загрузки
+        /// </summary>
         internal void DiactivateLoadingIndicator()
         {
-            App.AnimateDoubleEffect(ImageIndificator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1500d));
+            App.AnimateDoubleEffect(ImageIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
         }
         #endregion
 

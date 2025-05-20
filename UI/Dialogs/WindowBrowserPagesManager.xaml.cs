@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using IEL.CORE.Classes.Browser;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -27,9 +28,9 @@ namespace OperPage_les.UI.Dialogs
             DWMWCP_ROUNDSMALL = 3
         }
 
-        [LibraryImport("dwmapi.dll", StringMarshalling = StringMarshalling.Utf8, SetLastError = false)]
-        private static partial int DwmSetWindowAttribute
-            (IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
+        //[LibraryImport("dwmapi.dll", StringMarshalling = StringMarshalling.Utf8, SetLastError = false)]
+        //private static partial int DwmSetWindowAttribute
+        //    (IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
 
         /// <summary>
         /// Скроллбар выбора ярлыков
@@ -39,7 +40,7 @@ namespace OperPage_les.UI.Dialogs
         /// <summary>
         /// Объект браузера страниц
         /// </summary>
-        public IELBrowserPage? BrowserPage;
+        public IELBrowserPage? MainBrowserPage;
 
         /// <summary>
         /// Состояние отмены
@@ -59,32 +60,41 @@ namespace OperPage_les.UI.Dialogs
         {
             InitializeComponent();
 
-            IntPtr hWnd = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
-            DWM_WINDOW_CORNER_PREFERENCE DWMWCP_ROUND = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
-            Marshal.ThrowExceptionForHR(DwmSetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE, ref DWMWCP_ROUND, sizeof(uint)));
+            //IntPtr hWnd = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
+            //DWM_WINDOW_CORNER_PREFERENCE DWMWCP_ROUND = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+            //Marshal.ThrowExceptionForHR(DwmSetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE, ref DWMWCP_ROUND, sizeof(uint)));
 
             ScrollBar = new(1);
-
-            #region IELButtonAddPageLabel
-            IELButtonAddPageLabel.OnActivateMouseLeft += () =>
+            KeyUp += (sender, e) =>
             {
-                if (BrowserPage != null)
+                switch (e.Key)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageLabels)), "Ярлыки",
+                    case System.Windows.Input.Key.Escape:
+                        Close();
+                        break;
+                }
+            };
+
+            IELButtonCancel.OnActivateMouseLeft += (Key) => Close();
+            #region IELButtonAddPageLabel
+            IELButtonAddPageLabel.OnActivateMouseLeft += (Key) =>
+            {
+                if (MainBrowserPage != null)
+                {
+                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageLabels()), "Ярлыки",
                         "Ярлыки которые предаставляются программой для хранения важных команд.");
                     Cancel = false;
                 }
                 Close();
             };
-            IELButtonCancel.OnActivateMouseLeft += Close;
             #endregion
 
             #region IELButtonPageDeveloper
-            IELButtonPageDeveloper.OnActivateMouseLeft += () =>
+            IELButtonPageDeveloper.OnActivateMouseLeft += (Key) =>
             {
-                if (BrowserPage != null)
+                if (MainBrowserPage != null)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageDeveloper)), "Страница разработчика",
+                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageDeveloper()), "Страница разработчика",
                         "Страница не предоставляется для обычных пользователей. " +
                         "Взаимодействие со страницей может повлечь за собой непредвиденное реагирование программы.");
                     Cancel = false;
@@ -94,11 +104,11 @@ namespace OperPage_les.UI.Dialogs
             #endregion
 
             #region IELButtonPageConsole
-            IELButtonPageConsole.OnActivateMouseLeft += () =>
+            IELButtonPageConsole.OnActivateMouseLeft += (Key) =>
             {
-                if (BrowserPage != null)
+                if (MainBrowserPage != null)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageConsole)), "Консоль",
+                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageConsole()), "Консоль",
                         "Консоль программы для более гибкой настройки и взаимодействия с программой.");
                     Cancel = false;
                 }
@@ -106,18 +116,26 @@ namespace OperPage_les.UI.Dialogs
             };
             #endregion
 
-            #region IELButtonPageConsole
-            IELButtonPageBrowser.OnActivateMouseLeft += () =>
+            #region IELButtonPageBrowser
+            IELButtonPageBrowser.OnActivateMouseLeft += (Key) =>
             {
-                if (BrowserPage != null)
+                App.Log("Создаю браузер.");
+                if (MainBrowserPage != null)
                 {
-                    BrowserPage.AddInlayPage(App.CurrentApp.SearchElementInType(typeof(PageWebBrowser)), "Веб-браузер"
-                        );
+                    App.Log("Успешная проверка на наличие браузера страниц");
+                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageWebBrowser()), "Веб-браузер");
                     Cancel = false;
                 }
+                App.Log("Инициализация готова!");
                 Close();
             };
             #endregion
+
+            Loaded += (sender, e) =>
+            {
+                IELButtonAddPageLabel.IsEnabled = MainBrowserPage?.SearchPageType<PageLabels>() == null;
+                IELButtonPageDeveloper.IsEnabled = MainBrowserPage?.SearchPageType<PageDeveloper>() == null;
+            };
         }
 
         /// <summary>
@@ -133,7 +151,7 @@ namespace OperPage_les.UI.Dialogs
             animation.Duration = TimeSpan.FromMilliseconds(1200d);
             animation.From = 0d;
             animation.To = 0.97d;
-            this.BrowserPage = BrowserPage;
+            this.MainBrowserPage = BrowserPage;
             BeginAnimation(OpacityProperty, animation);
             ShowDialog();
             return !Cancel;

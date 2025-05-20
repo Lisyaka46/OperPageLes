@@ -41,37 +41,18 @@ namespace OperPage_les.UI.Pages.Browser
 
         public PageWebBrowser()
         {
-            var cefSettings = new CefSettings();
-
-
-
-
-            cefSettings.CefCommandLineArgs.Add("enable-media-stream", "1"); //Enable WebRTC
-
-
-
-            //NOTE: The following function will set all three params
-
-            cefSettings.CefCommandLineArgs.Add("disable-gpu", "1");
-
-            cefSettings.CefCommandLineArgs.Add("disable-gpu-compositing", "1");
-
-            cefSettings.CefCommandLineArgs["autoplay-policy"] = "no-user-gesture-required";
-
-            //NOTE: The Custom Scheme set up to embedded resources
-
-            cefSettings.CefCommandLineArgs.Add("enable-video", "1");
-            Cef.Initialize(cefSettings);
-
+            App.Log("Инициализация объектов станицы браузера");
             InitializeComponent();
-            WebBrowserElement.BrowserSettings.Javascript = CefState.Enabled;
-            WebBrowserElement.BrowserSettings.ImageLoading = CefState.Enabled;
-            WebBrowserElement.BrowserSettings.JavascriptAccessClipboard = CefState.Enabled;
-            WebBrowserElement.BrowserSettings.JavascriptDomPaste = CefState.Enabled;
-            WebBrowserElement.BrowserSettings.Databases = CefState.Enabled;
-            WebBrowserElement.BrowserSettings.BackgroundColor = 0;
-            //WebDriver.FindElement(By.Name(nameof(WebBrowserElement)));
-            if (WebBrowserElement.DataContext != null) ((FrameworkElement)WebBrowserElement.DataContext).Opacity = 0.1d;
+            IELButtonReloadPage.Imaging = App.LoadImage(Properties.Resources.Reload);
+            App.Log("Инициализация станицы браузера");
+            //WebBrowserElement.BrowserSettings.Javascript = CefState.Enabled;
+            //WebBrowserElement.BrowserSettings.ImageLoading = CefState.Enabled;
+            //WebBrowserElement.BrowserSettings.JavascriptAccessClipboard = CefState.Enabled;
+            //WebBrowserElement.BrowserSettings.JavascriptDomPaste = CefState.Enabled;
+            //WebBrowserElement.BrowserSettings.Databases = CefState.Enabled;
+            //WebBrowserElement.BrowserSettings.BackgroundColor = 0;
+            ////WebDriver.FindElement(By.Name(nameof(WebBrowserElement)));
+            //if (WebBrowserElement.DataContext != null) ((FrameworkElement)WebBrowserElement.DataContext).Opacity = 0.1d;
             TextBoxLink.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -90,30 +71,31 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 TextBoxLink.Text = WebBrowserElement.Uid;
             };
-            //WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
-            //{
-            //    WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
-            //    {
-            //        App.MainWindowApplication.ActivateLoadingIndicator();
-            //        WebBrowserElement.Source = new Uri(e.Uri);
-            //    };
-            //    WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
-            //    {
-            //        App.MainWindowApplication.DiactivateLoadingIndicator();
-            //    };
-            //};
-            WebBrowserElement.LostFocus += (sender, e) =>
+            WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
             {
-               // WebBrowserElement.Visibility = Visibility.Hidden;
+                WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
+                {
+                    App.MainWindowApplication.ActivateLoadingIndicator();
+                    WebBrowserElement.Source = new Uri(e.Uri);
+                };
+                WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
+                {
+                    App.MainWindowApplication.DiactivateLoadingIndicator();
+                };
             };
-            Loaded += (sender, e) =>
+            Initialized += (sender, e) =>
             {
-                string DefaultUrl = App.CurrentApp.SettingApplication.GetSettingValue(CORE.Settings.EnumSettingApplication.DefaultOpenUrlWebView);
+                string DefaultUrl = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
                 if (DefaultUrl.Length > 0)
                 {
                     WebViewGoUrl(DefaultUrl);
                 }
             };
+            IELButtonReloadPage.OnActivateMouseLeft += (Key) =>
+            {
+                WebViewGoUrl(TextBoxLink.Text);
+            };
+            App.Log("Инициализация станицы браузера - Готово!");
         }
 
         internal void WebViewGoUrl(string Url)
@@ -126,9 +108,11 @@ namespace OperPage_les.UI.Pages.Browser
         {
             try
             {
-                WebBrowserElement.Address = TextBoxLink.Text;
-                //if (WebBrowserElement.CoreWebView2 == null) App.MainWindowApplication.ActivateLoadingIndicator();
+                WebBrowserElement.Source = new Uri(TextBoxLink.Text);
                 WebBrowserElement.Focus();
+                //webbrowserelement.address = textboxlink.text;
+                ////if (webbrowserelement.corewebview2 == null) app.mainwindowapplication.activateloadingindicator();
+                //webbrowserelement.focus();
             }
             catch
             {

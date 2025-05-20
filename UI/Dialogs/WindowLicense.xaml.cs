@@ -1,9 +1,11 @@
 ﻿using OperPage_les.CORE;
 using OperPage_les.Windows.Pages.License;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using Color = System.Windows.Media.Color;
+using System.Windows.Input;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -12,16 +14,6 @@ namespace OperPage_les.UI.Dialogs
     /// </summary>
     public partial class LicenseWindow : Window
     {
-        /// <summary>
-        /// Объект анимации для управления прозрачностью приложения
-        /// </summary>
-        private readonly DoubleAnimation DoubleAnimateAppOpacity;
-
-        /// <summary>
-        /// Объект анимации для управления позицией
-        /// </summary>
-        private readonly ThicknessAnimation ThicknessAnimatePos;
-
         /// <summary>
         /// Объект фонового обновления благодарностей
         /// </summary>
@@ -37,21 +29,29 @@ namespace OperPage_les.UI.Dialogs
         /// </summary>
         private readonly AssistentThanks[] Assistents =
         [
-            new("Lisyaka", "\"Не знаю...\"",
-                "- За всю разработку.",
-                new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"),
-                new Uri($"{App.PathImageApplication}/IconMainGray.png", UriKind.Relative)
-                )
+            new("Lisyaka", "Не знаю...",
+                "- За всю разработку.")
             {
-                ColorNickName = Color.FromRgb(245, 225, 101),
-                ColorPhrase =  Color.FromRgb(219, 177, 205)
+                UriImage = new Uri("https://sun9-46.userapi.com/impg/euj8JteQPLq-XpWDbR03hU2Dlz3IhzwLs4W9DA/bYNM9VcaP-w.jpg?size=800x800&quality=95&sign=b761945cee478f88087602b209cff6f9&type=album"),
+                //PathImage = new Uri($"{App.PathImageApplication}/IconMainGray.png", UriKind.Relative)
             },
-            new("Minsi", "\"Спасибо что живая.\"",
-                "- За помощь в разработке.\n- За проектирование программы.\n- За оценку качества программы."
-                )
+            new("Minsi", "Спасибо что живая.",
+                "- За помощь в разработке." +
+                "\n- За проектирование программы." +
+                "\n- За оценку качества программы.")
             {
                 ColorNickName = Color.FromRgb(86, 255, 120),
-                ColorPhrase =  Color.FromRgb(195, 189, 222)
+                ColorPhrase = Color.FromRgb(195, 189, 222),
+                MapImage = App.LoadImage(Properties.Resources.IconMainGray)
+            },
+            new("Vector", "Разработчик это художник, а дизайнер это кисть.",
+                "- За работу в дизайне." +
+                "\n- За проектирование стиля." +
+                "\n- За планировку вида.")
+            {
+                ColorNickName = Color.FromRgb(62, 180, 137),
+                ColorPhrase = Color.FromRgb(80, 200, 120),
+                MapImage = App.LoadImage(Properties.Resources.VECTOR)
             },
         ];
 
@@ -63,40 +63,52 @@ namespace OperPage_les.UI.Dialogs
         public LicenseWindow()
         {
             InitializeComponent();
+            ImageLogo.Margin = new(20);
             UpdateInfoThanks = new(10000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
-            DoubleAnimateAppOpacity = new(0, TimeSpan.FromMilliseconds(1050d))
-            {
-                DecelerationRatio = 0.2d,
-                EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-            };
-            ThicknessAnimatePos = new(new Thickness(0), TimeSpan.FromMilliseconds(800d))
-            {
-                DecelerationRatio = 0.6d,
-                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
-            };
             Opacity = 0d;
-            FrameLicense.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             Closed += (sender, e) => GC.Collect(2, GCCollectionMode.Forced);
+            Loaded += (sender, e) =>
+            {
+                DoubleAnimation anim = new()
+                {
+                    From = 0d,
+                    To = 360d,
+                    Duration = TimeSpan.FromSeconds(4d),
+                    RepeatBehavior = RepeatBehavior.Forever,
+                };
+                RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim);
+                anim.Duration = TimeSpan.FromSeconds(20d);
+                RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, anim);
+            };
+            KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Escape:
+                        Close();
+                        break;
+                }
+            };
         }
 
         public new void ShowDialog()
         {
-            DoubleAnimateAppOpacity.BeginTime = TimeSpan.FromMilliseconds(70d);
-            DoubleAnimateAppOpacity.To = 1d;
-            BeginAnimation(OpacityProperty, DoubleAnimateAppOpacity);
+            DoubleAnimation animDouble = App.GetDoubleAnimate(TimeSpan.FromMilliseconds(1200d));
+            animDouble.BeginTime = TimeSpan.FromMilliseconds(70d);
+            animDouble.To = 1d;
+            BeginAnimation(OpacityProperty, animDouble);
 
-            ThicknessAnimatePos.BeginTime = DoubleAnimateAppOpacity.BeginTime + TimeSpan.FromMilliseconds(20d);
-            ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(1600d);
-            ThicknessAnimatePos.From = new(0, 24, 0, 24);
-            ThicknessAnimatePos.To = new(0, 20, 0, 20);
-            ImageLogo.BeginAnimation(MarginProperty, ThicknessAnimatePos);
-            ThicknessAnimatePos.Duration = TimeSpan.FromMilliseconds(800d);
-            ThicknessAnimatePos.From = null;
-            ThicknessAnimatePos.To = new(0, 96, 0, 0);
-            PageLicense license = new();
-            FrameLicense.Navigate(license);
+            ThicknessAnimation animThickness = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(1200d));
+            animThickness.BeginTime = animDouble.BeginTime + TimeSpan.FromMilliseconds(20d);
+            animThickness.Duration = TimeSpan.FromMilliseconds(1600d);
+            animThickness.To = new(0);
+            animThickness.EasingFunction = new BackEase()
+            {
+                EasingMode = EasingMode.EaseOut,
+                Amplitude = 0.78d,
+            };
+            ImageLogo.BeginAnimation(MarginProperty, animThickness);
             AnimationThanks();
-            DoubleAnimateAppOpacity.BeginTime = TimeSpan.Zero;
             base.ShowDialog();
         }
 

@@ -1,12 +1,13 @@
-﻿<Page x:Class="OperPage_les.UI.Pages.Browser.PageConsole"
+﻿<Page
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
       xmlns:GUI="clr-namespace:IEL;assembly=IEL"
-      xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL"
+      xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageConsole"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageConsole">
@@ -22,7 +23,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC4A7B60" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" Cursor="Cross" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1" BorderBrush="{x:Null}"/>
+                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC727760" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1" BorderBrush="{x:Null}" Cursor="Arrow"/>
                 </Grid>
             </Border>
         </Grid>
@@ -31,24 +32,41 @@
                 <ColumnDefinition Width="627*"/>
                 <ColumnDefinition Width="173*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,4,4,4" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="">
-                <GUI:IELTextBox.BorderBrushSetting>
-                    <Classes:BrushSettingQ NotEnabled="#FFDC5454" Select="#FF212121" Used="#FF333333" UsedState="False"/>
-                </GUI:IELTextBox.BorderBrushSetting>
+            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,4,4,4" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="" FontSizeText="17" FontFamily="Bahnschrift">
+                <GUI:IELTextBox.IELSettingObject>
+                    <ObjectSettings:IELObjectSetting>
+                        <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FFEC4343" Default="#FF807B55" Select="#FFABA574" Used="#FFE4D779" UsedState="False"/>
+                        </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELObjectSetting>
+                </GUI:IELTextBox.IELSettingObject>
             </GUI:IELTextBox>
             <Grid Grid.Column="2" Grid.Row="2">
-                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" VisibleMouseImaging="False" AnimationMillisecond="160" BorderThicknessBlock="3,3,3,3" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}">
-                    <GUI:IELButtonText.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF55C7A5" NotEnabled="#FFCE4867" Select="#FF47F9C4" Used="White"/>
-                    </GUI:IELButtonText.BackgroundSetting>
+                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" BorderThicknessBlock="3,3,3,3" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontSize="16">
+                    <GUI:IELButtonText.IELSettingObject>
+                        <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="RightArrow">
+                            <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                <Classes:BrushSettingQ/>
+                            </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF76AAD2" NotEnabled="#FFD66767" Select="#FF99D3FF" Used="#FFDAE9F5" UsedState="False"/>
+                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        </ObjectSettings:IELButtonObjectSetting>
+                    </GUI:IELButtonText.IELSettingObject>
                 </GUI:IELButtonText>
             </Grid>
         </Grid>
-        <Border x:Name="BorderHintCommand" Margin="6,0,0,47" Height="70" VerticalAlignment="Bottom" Width="142" HorizontalAlignment="Left" Panel.ZIndex="0" Grid.RowSpan="2" Background="#7236C3FF" BorderThickness="3,3,3,3" BorderBrush="#FF152646" CornerRadius="3,3,0,0">
+        <Border x:Name="BorderHintCommand" Margin="6,0,0,47" Height="70" VerticalAlignment="Bottom" Width="142" HorizontalAlignment="Left" Panel.ZIndex="0" Grid.RowSpan="2" Background="#FF2A90BB" BorderThickness="3,3,3,3" BorderBrush="#FF152646" CornerRadius="3,3,0,0">
             <Grid>
                 <Grid x:Name="GridHint" Margin="2,0,2,0"/>
                 <Grid x:Name="GridHintOneCommand" Panel.ZIndex="1" Margin="2,0,2,0" VerticalAlignment="Center">
-                    <TextBlock x:Name="TextBlockHintCommand" Text="Close" VerticalAlignment="Top" Margin="2,0,2,0" Padding="10,0,10,0" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="14" Height="18.7"/>
+                    <TextBlock x:Name="TextBlockHintCommand" Text="Close" VerticalAlignment="Top" Margin="2,0,2,0" Padding="10,0,10,0" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="16" Height="18.7"/>
                 </Grid>
             </Grid>
         </Border>

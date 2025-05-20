@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OperPage_les.UI.Pages.Settings"
-      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" xmlns:gif="http://wpfanimatedgif.codeplex.com" x:Class="OperPage_les.UI.Pages.Settings.PageGeneralSetting"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:gif="http://wpfanimatedgif.codeplex.com" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Settings.PageGeneralSetting"
       mc:Ignorable="d" 
       d:DesignHeight="626.41" d:DesignWidth="570"
       Title="PageGeneral" MinWidth="570">
@@ -12,12 +12,13 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="190"/>
+            <RowDefinition Height="170"/>
             <RowDefinition Height="Auto" MaxHeight="60"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" MaxHeight="60"/>
             <RowDefinition Height="Auto" MaxHeight="75"/>
-            <RowDefinition Height="111*"/>
+            <RowDefinition Height="55*"/>
+            <RowDefinition Height="116*"/>
         </Grid.RowDefinitions>
         <Border x:Name="BorderPathImageBackground" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="6,6,6,6" Background="#7C44535A" MaxWidth="600" ClipToBounds="True" Focusable="True">
             <Grid>
@@ -34,7 +35,14 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock TextWrapping="Wrap" Text="Изображение фона" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="18" Grid.RowSpan="1" TextAlignment="Center" Padding="0,0,0,20"/>
+                <TextBlock TextWrapping="Wrap" Text="Изображение фона" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="18" Grid.RowSpan="1" TextAlignment="Center" Padding="0,0,0,10">
+                    <TextBlock.Background>
+                        <RadialGradientBrush GradientOrigin="0.5,-1" RadiusX="0.3" RadiusY="1" Center="0.5,0">
+                            <GradientStop Offset="1"/>
+                            <GradientStop Color="#CC417AA5" Offset="0"/>
+                        </RadialGradientBrush>
+                    </TextBlock.Background>
+                </TextBlock>
 
                 <Image x:Name="ImageBackground" Source="/UI/Images/DoubleMouseButton.png" Panel.ZIndex="-1" Opacity="0.6" Grid.RowSpan="2" IsHitTestVisible="False" gif:ImageBehavior.AutoStart="False" Stretch="UniformToFill" VerticalAlignment="Center" >
                     <Image.OpacityMask>
@@ -68,10 +76,20 @@
                             <RowDefinition/>
                             <RowDefinition Height="Auto" MinHeight="34.73"/>
                         </Grid.RowDefinitions>
-                        <IEL:IELTextBox x:Name="IELTextBoxDirectoryBackground" FontSizeText="15" TextName="Директория или ссылка на картинку" MarginNaming="0,-27,0,0" FontSizeNaming="15" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Grid.RowSpan="1" PaddingNaming="2,0,2,0" CornerRadius="3,3,3,3" IsReadOnly="True" MaxHeight="40" Margin="10,0,10,0" ShowNameText="True" Padding="0,5,0,5">
-                            <IEL:IELTextBox.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF9DD8D4" NotEnabled="#FFEA7373" Select="#FF8DB1E2" Used="#FFEFCEFF" UsedState="False"/>
-                            </IEL:IELTextBox.BackgroundSetting>
+                        <IEL:IELTextBox x:Name="IELTextBoxDirectoryBackground" FontSizeText="16" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Grid.RowSpan="1" CornerRadius="3,3,3,3" IsReadOnly="True" MaxHeight="40" Margin="10,0,10,0" Padding="0,2,0,2">
+                            <IEL:IELTextBox.IELSettingObject>
+                                <ObjectSettings:IELObjectSetting>
+                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF314640" Select="#FF4D6F65" Used="#FF478472" NotEnabled="#FF712424"/>
+                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ Default="#FF176D53" Select="#FF80BDAB" Used="#FF78C5AE" NotEnabled="#FF962E2E"/>
+                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF9EE9D3" Select="#FF599F8A" Used="#FF57D4AE" NotEnabled="#FFE06161"/>
+                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELObjectSetting>
+                            </IEL:IELTextBox.IELSettingObject>
                         </IEL:IELTextBox>
                         <TextBlock x:Name="TextBlockFailedImageSetup" TextWrapping="Wrap" Text="Не удалось установить изображение по ссылке или директории" FontSize="17" Foreground="White" FontStyle="Italic" Grid.Row="1" TextAlignment="Center" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" Padding="0,2,0,2"/>
                     </Grid>
@@ -81,13 +99,51 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="147"/>
                         </Grid.ColumnDefinitions>
-                        <IEL:IELButtonText x:Name="IELButtonSetTextClipboard" Text="Вставить ссылку из буфера" VisibleMouseImaging="False" AnimationMillisecond="160" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" PaddingContent="0,3,0,3" Margin="10,0,10,0" FontSize="14" Padding="0,5,0,5"/>
-                        <IEL:IELButtonText x:Name="IELButtonClearImage" Text="Убрать фон" VisibleMouseImaging="False" AnimationMillisecond="160" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,10,0" PaddingContent="0,3,0,3" FontSize="14" Padding="0,5,0,5">
-                            <IEL:IELButtonText.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FFA46969" NotEnabled="#FFFF1D65" Select="#FF987474" Used="#FFF77E7E" UsedState="False"/>
-                            </IEL:IELButtonText.BackgroundSetting>
+                        <IEL:IELButtonText x:Name="IELButtonSetTextClipboard" Text="Вставить ссылку из буфера" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" PaddingContent="0,3,0,3" Margin="10,0,10,0" FontSize="14" Padding="0,5,0,5">
+                            <IEL:IELButtonText.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF314640" Select="#FF4D6F65" Used="#FF478472" NotEnabled="#FF712424"/>
+                                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ Default="#FF176D53" Select="#FF80BDAB" Used="#FF78C5AE" NotEnabled="#FF962E2E"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF9EE9D3" Select="#FF599F8A" Used="#FF57D4AE" NotEnabled="#FFE06161"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </IEL:IELButtonText.IELSettingObject>
                         </IEL:IELButtonText>
-                        <IEL:IELButtonText x:Name="IELButtonDialogDirectoryFile" Text="Обзор" VisibleMouseImaging="False" AnimationMillisecond="160" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="10,0,10,0" VerticalAlignment="Center" PaddingContent="0,3,0,3" FontSize="14" Padding="0,5,0,5"/>
+                        <IEL:IELButtonText x:Name="IELButtonClearImage" Text="Убрать фон" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,10,0" PaddingContent="0,3,0,3" FontSize="14" Padding="0,5,0,5">
+                            <IEL:IELButtonText.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF314640" Select="#FF4D6F65" Used="#FF478472" NotEnabled="#FF712424"/>
+                                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ Default="#FF176D53" Select="#FF80BDAB" Used="#FF78C5AE" NotEnabled="#FF962E2E"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF9EE9D3" Select="#FF599F8A" Used="#FF57D4AE" NotEnabled="#FFE06161"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </IEL:IELButtonText.IELSettingObject>
+                        </IEL:IELButtonText>
+                        <IEL:IELButtonText x:Name="IELButtonDialogDirectoryFile" Text="Обзор" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="10,0,10,0" VerticalAlignment="Center" PaddingContent="0,3,0,3" FontSize="14" Padding="0,5,0,5">
+                            <IEL:IELButtonText.IELSettingObject>
+                                <ObjectSettings:IELButtonObjectSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF314640" Select="#FF4D6F65" Used="#FF478472" NotEnabled="#FF712424"/>
+                                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ Default="#FF176D53" Select="#FF80BDAB" Used="#FF78C5AE" NotEnabled="#FF962E2E"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF9EE9D3" Select="#FF599F8A" Used="#FF57D4AE" NotEnabled="#FFE06161"/>
+                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELButtonObjectSetting>
+                            </IEL:IELButtonText.IELSettingObject>
+                        </IEL:IELButtonText>
                     </Grid>
                 </Grid>
             </Grid>
@@ -95,9 +151,9 @@
         <Grid Grid.Row="2" MaxWidth="600" Grid.RowSpan="1" Margin="0,6,0,6">
             <Grid.RowDefinitions>
                 <RowDefinition MaxHeight="50" Height="Auto"/>
-                <RowDefinition x:Name="RowDefinitionBufferSize" Height="50" MaxHeight="50" MinHeight="0"/>
+                <RowDefinition x:Name="RowDefinitionBufferSize" Height="50" MaxHeight="50" MinHeight="6"/>
             </Grid.RowDefinitions>
-            <Border x:Name="BorderBufferSize" BorderBrush="Black" BorderThickness="2,2,2,2" Margin="6,6,6,0" CornerRadius="5,5,5,5" Background="#B2485A44" Padding="0,5,0,5">
+            <Border x:Name="BorderBufferSize" BorderBrush="Black" BorderThickness="2,2,2,2" Margin="6,6,6,0" CornerRadius="5,5,5,5" Background="#B2866A36" Padding="0,5,0,5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -106,32 +162,61 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock TextWrapping="Wrap" Text="Размер буфера" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="14" Padding="4,0,4,0" TextAlignment="Center" VerticalAlignment="Center"/>
                     <Slider x:Name="SliderBufferSize" SmallChange="1" Maximum="80" Minimum="10" TickPlacement="BottomRight" TickFrequency="1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#99FFFFFF"  IsSnapToTickEnabled="True" Value="10" Grid.Column="1" Grid.ColumnSpan="1" Margin="2,2,2,2" Grid.RowSpan="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Delay="100" IsMoveToPointEnabled="True"/>
-                    <TextBlock x:Name="TextBlockSliderBufferSize" TextWrapping="Wrap" Text="00" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontSize="16" VerticalAlignment="Center" Height="19" Padding="0,0,10,0"/>
+                    <TextBlock x:Name="TextBlockSliderBufferSize" TextWrapping="Wrap" Text="00" Grid.Column="2" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontSize="16" VerticalAlignment="Center" Padding="0,0,10,0"/>
                 </Grid>
             </Border>
-            <Border x:Name="BorderSettingBufferSize" BorderBrush="Black" BorderThickness="2,0,2,2" Panel.ZIndex="-1" CornerRadius="0,0,5,5" Background="#E5713131" Grid.RowSpan="1" Grid.Row="1" Padding="0,2,0,2" Margin="12,0,12,0">
+            <Border x:Name="BorderSettingBufferSize" BorderBrush="Black" BorderThickness="2,0,2,2" Panel.ZIndex="-1" CornerRadius="0,0,5,5" Background="#B2772A2A" Grid.RowSpan="1" Grid.Row="1" Padding="0,2,0,2" Margin="12,0,12,0">
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock TextWrapping="Wrap" Text="Настройка активируется только после перезагрузки" Foreground="White" Padding="10,0,10,0" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                    <IEL:IELButtonText x:Name="IELButtonTextClearValue" Grid.Column="1" CornerRadius="5,5,5,5" Margin="5,3,5,3" Text="По умолчанию" PaddingContent="8,0,8,0" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" FontSize="14"/>
+                    <IEL:IELButtonText x:Name="IELButtonTextClearValue" Grid.Column="1" CornerRadius="5,5,5,5" Margin="5,3,5,3" Text="По умолчанию" PaddingContent="8,0,8,0" Style="{Binding Mode=OneWay, Source={StaticResource Vollda}}" FontSize="14">
+                        <IEL:IELButtonText.IELSettingObject>
+                            <ObjectSettings:IELButtonObjectSetting>
+                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                    <Classes:BrushSettingQ Default="#FF314640" Select="#FF4D6F65" Used="#FF478472" NotEnabled="#FF712424"/>
+                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <Classes:BrushSettingQ Default="#FF176D53" Select="#FF80BDAB" Used="#FF78C5AE" NotEnabled="#FF962E2E"/>
+                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#FF9EE9D3" Select="#FF599F8A" Used="#FF57D4AE" NotEnabled="#FFE06161"/>
+                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            </ObjectSettings:IELButtonObjectSetting>
+                        </IEL:IELButtonText.IELSettingObject>
+                    </IEL:IELButtonText>
                 </Grid>
             </Border>
         </Grid>
-        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B2485A44" MaxWidth="600">
+        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B26599AF" MaxWidth="600">
             <CheckBox x:Name="CheckBoxBlurDataTimeImage" Content="Отображать размытие картинки в панели времени и даты" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Margin="4,0,0,0" HorizontalAlignment="Left"/>
         </Border>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="3" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B2485A44" MaxWidth="600">
             <CheckBox x:Name="CheckBoxInternetConnectionMillisecond" Content="Отображать скорость отклика интернета в миллисекундах" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Margin="4,0,0,0" HorizontalAlignment="Left"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="4" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B20F8E98" MaxWidth="600" Grid.RowSpan="1">
+        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="4" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B26974CC" MaxWidth="600" Grid.RowSpan="1">
             <Grid>
-                <IEL:IELTextBox x:Name="IELTextBoxDefaultUrl" FontSizeText="15" TextName="Ссылка по умолчанию для веб-браузера" ShowNameText="True" FontSizeNaming="15" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Grid.RowSpan="1" PaddingNaming="2,0,2,0" CornerRadius="3,3,3,3" MaxHeight="40" MarginNaming="0,-25,0,0" Margin="5,25,5,5">
-                    <IEL:IELTextBox.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF9DD8D4" NotEnabled="#FFEA7373" Select="#FF8DB1E2" Used="#FFEFCEFF" UsedState="False"/>
-                    </IEL:IELTextBox.BackgroundSetting>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Ссылка по умолчанию для веб-браузера" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Padding="4,0,4,0" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" FontSize="14"/>
+                <IEL:IELTextBox x:Name="IELTextBoxDefaultUrl" FontSizeText="15" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Grid.RowSpan="1" CornerRadius="3,3,3,3" MaxHeight="40" Grid.Row="1" Margin="5,5,5,5">
+                    <IEL:IELTextBox.IELSettingObject>
+                        <ObjectSettings:IELObjectSetting>
+                            <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                <Classes:BrushSettingQ Default="#FFD2D2D2" Select="#FFB7B7B7" Used="#FF001127" NotEnabled="#FFB35050"/>
+                            </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                            <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF20283A" Select="#FF011F63" Used="#FF7A9CEA" UsedState="False" NotEnabled="#FF843535"/>
+                            </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                            <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                <Classes:BrushSettingQ Default="#FF827AD8" Select="#FF0089A4" Used="#FFA1CAFF" NotEnabled="#FFB35050"/>
+                            </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                        </ObjectSettings:IELObjectSetting>
+                    </IEL:IELTextBox.IELSettingObject>
                 </IEL:IELTextBox>
             </Grid>
         </Border>

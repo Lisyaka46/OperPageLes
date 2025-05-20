@@ -1,7 +1,7 @@
 ﻿using IEL;
-using IEL.Classes;
-using IEL.Interfaces.Core;
+using IEL.CORE.Classes;
 using Interpreter.Classes;
+using Interpreter.Commands;
 using Interpreter.Interfaces;
 using OperPage_les.CORE;
 using OperPage_les.Windows.Frames;
@@ -25,20 +25,30 @@ namespace OperPage_les.UI.Pages.Browser
     /// </summary>
     public partial class PageConsole : Page
     {
-        /// <summary>
-        /// Главная страница панели действий в консоли
-        /// </summary>
-        private readonly PageMainConsolePanelAction PageConsolePA = new();
-
+        #region PanelActionConsole
+        #region Source
+        private static readonly PageMainConsolePanelAction ConsolePage = new();
         /// <summary>
         /// Страница буфера в панели действий
         /// </summary>
-        internal readonly PageBufferActionPanel PageBufferPA = new(App.HeightButtonBuffer);
+        internal static readonly PageBufferPanelAction BufferPage = new(App.HeightButtonBuffer);
+        #endregion
 
         /// <summary>
-        /// Настройки панели действий в консоли
+        /// Настройки панели действий для страниц во вкладке консоли
         /// </summary>
-        private readonly PanelActionSettingsFrameworkElement PASettingsConsole;
+        private readonly PanelActionSettingVisual PanelActionSettingsConsole;
+
+        /// <summary>
+        /// Главная страница панели действий во вкладке консоли
+        /// </summary>
+        private readonly PagePanelAction PanelActionConsolePage = new(ConsolePage);
+
+        /// <summary>
+        /// Страница буфера панели действий во вкладке консоли
+        /// </summary>
+        private readonly PagePanelAction PanelActionBufferPage = new(BufferPage);
+        #endregion
 
         /// <summary>
         /// Панель действий доступная в программе
@@ -73,51 +83,87 @@ namespace OperPage_les.UI.Pages.Browser
         };
 
         /// <summary>
+        /// Состояние видимости подсказок
+        /// </summary>
+        private bool StateVisibleHit;
+
+        /// <summary>
+        /// Активный индекс команды в буфере для строки ввода
+        /// </summary>
+        private int ActiveIndexBufferInput;
+
+        /// <summary>
+        /// Сохранённая строка для обозначения введённого текста перед перечислением элементов (Вверх/Вниз)
+        /// </summary>
+        private string SaveStringPrintBuffer;
+
+        /// <summary>
         /// Константа высоты элемента подсказки к командам
         /// </summary>
         private double HeightHintElement => TextBlockHintCommand.RenderSize.Height +
             BorderHintCommand.BorderThickness.Top + BorderHintCommand.BorderThickness.Bottom + 6d;
 
+
         public PageConsole()
         {
             InitializeComponent();
+            StateVisibleHit = false;
+            ActiveIndexBufferInput = -1;
+            SaveStringPrintBuffer = string.Empty;
             BorderHintCommand.Height = 0d;
             GridHintOneCommand.Opacity = 0d;
             Canvas.SetZIndex(GridHintOneCommand, -1);
             RichTextBoxMainMessage.Document = new();
-            PASettingsConsole = new(RichTextBoxMainMessage, PageConsolePA, new(270d, 230d));
-            ButtonReturnCommand.OnActivateMouseLeft += () => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
-            #region PageConsolePA
-            PageConsolePA.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
+            ButtonReturnCommand.OnActivateMouseLeft += (Key) => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+            #region PanelAction
+            #region ConsolePage
+            ConsolePage.IELButtonCrearConsole.OnActivateMouseLeft += (AltMode) =>
             {
                 RichTextBoxMainMessage.Document = new();
                 IELActionPanelMain.ClosePanelAction();
             };
-            PageConsolePA.IELButtonCrearConsole.OnActivateMouseRight += (AltMode) => RichTextBoxMainMessage.Document = new();
+            ConsolePage.IELButtonCrearConsole.OnActivateMouseRight += (AltMode) => RichTextBoxMainMessage.Document = new();
 
-            PageConsolePA.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
+            ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (AltMode) =>
             {
-                IELActionPanelMain.NextPage(PageBufferPA);
+                IELActionPanelMain.NextPage(PanelActionBufferPage);
             };
 
-            PageConsolePA.IELButtonDiscriptionCommand.OnActivateMouseLeft += (AltMode) =>
+            ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (AltMode) =>
             {
                 IELActionPanelMain.ClosePanelAction();
-                App.UsingDiscriptionCommand();
+                App.CurrentApp.UsingDiscriptionCommand();
             };
             #endregion
-            #region PageBufferPA
-            PageBufferPA.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
+            #region BufferPage
+            BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (AltMode) =>
             {
-                IELActionPanelMain.NextPage(PageConsolePA, false);
+                IELActionPanelMain.NextPage(PanelActionConsolePage, false);
             };
+            #endregion
+            PanelActionConsolePage.IsKeyboardModeChanged += (Source, NewValue) =>
+            {
+                ConsolePage.IELButtonCrearConsole.CharKeyboardActivate = NewValue;
+                ConsolePage.IELButtonCommandBuffer.CharKeyboardActivate = NewValue;
+                ConsolePage.IELButtonDiscriptionCommand.CharKeyboardActivate = NewValue;
+            };
+            PanelActionBufferPage.IsKeyboardModeChanged += (Source, NewValue) =>
+            {
+                BufferPage.IELButtonBackMainMenu.CharKeyboardActivate = NewValue;
+                BufferPage.IELButtonClearBuffer.CharKeyboardActivate = NewValue;
+            };
+            App.MainWindowApplication.IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            {
+                if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
+            };
+            PanelActionSettingsConsole = new(RichTextBoxMainMessage, PanelActionConsolePage, new(305d, 240d));
             #endregion
             #region RichTextBoxMainMessage
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
                 if (e.ChangedButton == MouseButton.Left && IELActionPanelMain.PanelActionActivate)
                     IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right) IELActionPanelMain.UsingPanelAction(PASettingsConsole);
+                else if (e.ChangedButton == MouseButton.Right) IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
             };
 
             RichTextBoxMainMessage.TextChanged += (sender, e) =>
@@ -144,6 +190,11 @@ namespace OperPage_les.UI.Pages.Browser
             };
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
+                if (e.Key != Key.Up && e.Key != Key.Down && e.Key != Key.Enter && e.Key != Key.Escape)
+                {
+                    ActiveIndexBufferInput = -1;
+                    SaveStringPrintBuffer = string.Empty;
+                }
                 switch (e.Key)
                 {
                     case Key.Enter:
@@ -166,7 +217,7 @@ namespace OperPage_les.UI.Pages.Browser
                     {
                         if (GridHint.Children.Count > 0)
                         {
-                            string CommandText = ICommandAAC.ReadNameCommand(TextBoxCommandInput.Text[..^1]);
+                            string CommandText = ICommandOPER.ReadNameCommand(TextBoxCommandInput.Text[..^1]);
                             if (((TextBlock)GridHint.Children[0]).Text.Equals(CommandText))
                             {
                                 UsingAnimateBorderHintCommand(true);
@@ -183,17 +234,42 @@ namespace OperPage_les.UI.Pages.Browser
                 switch (e.Key)
                 {
                     case Key.Enter:
+                        ActiveIndexBufferInput = -1;
+                        SaveStringPrintBuffer = string.Empty;
                         App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+                        UsingAnimateBorderCollectionHintCommand(false);
                         break;
                     case Key.Escape:
-                        TextBoxCommandInput.Text = string.Empty;
+                        TextBoxCommandInput.Text = SaveStringPrintBuffer.Length > 0 ? SaveStringPrintBuffer : string.Empty;
+                        SaveStringPrintBuffer = string.Empty;
+                        ActiveIndexBufferInput = -1;
                         break;
                     case Key.Apps:
-                        IELActionPanelMain.UsingPanelAction(PASettingsConsole);
+                        IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
+                        break;
+                    case Key.Up:
+                        if (BufferPage.BufferCommand.Count == 0) return;
+                        if (ActiveIndexBufferInput == -1)
+                        {
+                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                            ActiveIndexBufferInput = BufferPage.BufferCommand.Count - 1;
+                        }
+                        else ActiveIndexBufferInput = ActiveIndexBufferInput > 0 ? ActiveIndexBufferInput - 1 : BufferPage.BufferCommand.Count - 1;
+                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                        break;
+                    case Key.Down:
+                        if (BufferPage.BufferCommand.Count == 0) return;
+                        if (ActiveIndexBufferInput == -1)
+                        {
+                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                            ActiveIndexBufferInput = 0;
+                        }
+                        else ActiveIndexBufferInput = ActiveIndexBufferInput < BufferPage.BufferCommand.Count - 1 ? ActiveIndexBufferInput + 1 : 0;
+                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
                         break;
                 }
                 TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
-                            new ColorAnimation(Color.FromRgb(120, 204, 160), TimeSpan.FromMilliseconds(430d)));
+                            new ColorAnimation(TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d)));
 
                 DoubleAnimation animation = DoubleAnimate.Clone();
                 animation.Duration = TimeSpan.FromMilliseconds(300d);
@@ -210,11 +286,12 @@ namespace OperPage_les.UI.Pages.Browser
         /// <param name="Activate">Активировать или дизактивировать аинмацией</param>
         private void UsingAnimateBorderCollectionHintCommand(bool Activate)
         {
+            StateVisibleHit = Activate;
             DoubleAnimation animation = DoubleAnimate.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(300d);
             if (Activate)
             {
-                string CommandText = ICommandAAC.ReadNameCommand(TextBoxCommandInput.Text);
+                string CommandText = ICommandOPER.ReadNameCommand(TextBoxCommandInput.Text);
                 string[] AllHintNames = [.. App.CurrentApp.AllNamesCommand.Where((i) => { return i.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase); })];
                 if (AllHintNames.Length == GridHint.Children.Count) return;
                 GridHint.Children.Clear();
@@ -245,14 +322,15 @@ namespace OperPage_les.UI.Pages.Browser
         /// <param name="CommandTextActualHint">Константный текст поиска команды</param>
         private void UsingAnimateBorderHintCommand(bool Activate, string? CommandTextActualHint = null)
         {
+            StateVisibleHit = false;
             DoubleAnimation animation = DoubleAnimate.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(300d);
             if (Activate)
             {
-                ICommandAAC? CommandHint = null;
+                ICommandOPER? CommandHint = null;
                 string TextCommand = CommandTextActualHint ?? ((TextBlock)GridHint.Children[0]).Text;
-                CommandHint ??= ICommandAAC.ReadCommand([.. App.DataConsoleCommand], TextCommand);
-                CommandHint ??= ICommandAAC.ReadCommand([.. App.CurrentApp.DataAliases], TextCommand);
+                CommandHint ??= ICommandOPER.ReadCommand([.. App.DataConsoleCommand], TextCommand);
+                CommandHint ??= ICommandOPER.ReadCommand([.. App.CurrentApp.DataAliases], TextCommand);
                 if (CommandHint == null) return;
                 Parameter[] Parameters = CommandHint.Parameters ?? [];
                 TextBlockHintCommand.Text = $"{CommandHint.Name}* ";
@@ -300,7 +378,7 @@ namespace OperPage_les.UI.Pages.Browser
                 Margin = new(0),
                 Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
                 Cursor = System.Windows.Input.Cursors.Hand,
-                FontSize = 14d,
+                FontSize = 15d,
             };
             Result.MouseEnter += (sender, e) =>
             {

@@ -38,78 +38,35 @@ namespace OperPage_les.UI.Dialogs
         };
 
         /// <summary>
-        /// Константа дизактивированной кнопки страницы настроек
+        /// Константа анимации наведения на кнопку страницы настроек
         /// </summary>
-        private const int DiactivateButtonMatginBottomPage = 6;
-
-        /// <summary>
-        /// Константа активированной кнопки страницы настроек
-        /// </summary>
-        private const int ActivateButtonMatginBottomPage = 2;
+        private const int ButtonChangeMatginBottomPage = 4;
 
         public WindowSetting()
         {
             InitializeComponent();
             GeneralSetting = new();
-            GeneralSetting.EventChangeValue += (Name, Value) =>
-            {
-                App.CurrentApp.SettingApplication.SetSettingValue(Name, Value);
-                switch (Name)
-                {
-                    case EnumSettingApplication.PathMenuImage:
-                        App.MainWindowApplication.UpdateImageMenu();
-                        break;
-                    case EnumSettingApplication.BufferSize:
-                        // REBOOT
-                        break;
-                    case EnumSettingApplication.BlurBackgroundDataTime:
-                        App.MainWindowApplication.ChangeBlurImageInDataTime(Value.Equals("T"));
-                        break;
-                    case EnumSettingApplication.MillisecondInternetConnection:
-                        App.MainWindowApplication.ChangeVisibilityMillisecondInternet(Value.Equals("T"));
-                        break;
-                }
-            };
-            MouseWheel += (sender, e) =>
-            {
-                if (e.Delta > 0)
-                {
-                    ScrollBarElement.Value -= 40;
-                }
-                else if (e.Delta < 0)
-                {
-                    ScrollBarElement.Value += 40;
-                }
-            };
             #region IELGeneralButton
             IELGeneralButton.MouseEnter += (sender, e) =>
             {
-                ThicknessAnimate.To = new(IELGeneralButton.Margin.Left, 0, IELGeneralButton.Margin.Right, ActivateButtonMatginBottomPage);
-                IELGeneralButton.BeginAnimation(MarginProperty, ThicknessAnimate);
+                App.AnimateThicknessEffect(IELGeneralButton, MarginProperty,
+                    GetMarginAnimatePageButton(IELGeneralButton.Margin, true), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
             IELGeneralButton.MouseLeave += (sender, e) =>
             {
-                ThicknessAnimate.To = new(IELGeneralButton.Margin.Left, 0, IELGeneralButton.Margin.Right, DiactivateButtonMatginBottomPage);
-                IELGeneralButton.BeginAnimation(MarginProperty, ThicknessAnimate);
+                App.AnimateThicknessEffect(IELGeneralButton, MarginProperty,
+                    GetMarginAnimatePageButton(IELGeneralButton.Margin, false), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
-            IELGeneralButton.OnActivateMouseLeft += () =>
+            IELGeneralButton.OnActivateMouseLeft += (Key) =>
             {
                 MainPageController.NextPage(GeneralSetting);
-                double HeightScrollBar = GeneralSetting.ActualHeight - BorderElement.ActualHeight;
-                if (HeightScrollBar <= 0)
-                {
-
-                }
-                else
-                {
-                    ScrollBarElement.Maximum = HeightScrollBar;
-                    ScrollBarElement.Value = 0;
-                    MainPageController.Margin = new(0);
-                }
+                IELGeneralButton.IELSettingObject.BackgroundSetting.UsedState = true;
             };
-            ScrollBarElement.ValueChanged += (sender, e) =>
+            IELGeneralButton.OnActivateMouseRight += (Key) =>
             {
-                App.AnimateThicknessEffect(MainPageController, MarginProperty, new(0, -e.NewValue, 0, 0), TimeSpan.FromMilliseconds(240d));
+                if (!IELGeneralButton.IELSettingObject.BackgroundSetting.UsedState) return;
+                MainPageController.ClosePage();
+                IELGeneralButton.IELSettingObject.BackgroundSetting.UsedState = false;
             };
             #endregion
             #region This
@@ -119,5 +76,14 @@ namespace OperPage_les.UI.Dialogs
             };
             #endregion
         }
+
+        /// <summary>
+        /// Узнать Thickness при наведении на кнопку страницы настроек
+        /// </summary>
+        /// <param name="Source">Текущий Thickness кнопки</param>
+        /// <param name="Activate">Состояние активации наведения</param>
+        /// <returns>Будущий Thickness для анимирования наведения</returns>
+        private static Thickness GetMarginAnimatePageButton(Thickness Source, bool Activate) => 
+            new(Source.Left, Source.Top, Source.Right, Source.Bottom + (Activate ? -ButtonChangeMatginBottomPage : ButtonChangeMatginBottomPage));
     }
 }

@@ -1,4 +1,4 @@
-﻿using IEL.Classes;
+﻿using IEL.CORE.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

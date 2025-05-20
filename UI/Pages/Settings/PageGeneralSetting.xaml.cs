@@ -12,57 +12,15 @@ namespace OperPage_les.UI.Pages.Settings
     /// <summary>
     /// Логика взаимодействия для PageGeneral.xaml
     /// </summary>
-    public partial class PageGeneralSetting : Page, IPageSetting<EnumSettingApplication>
+    public partial class PageGeneralSetting : Page
     {
-        /// <summary>
-        /// Имя страницы
-        /// </summary>
-        public string PageName { get; } = nameof(PageGeneralSetting);
-
-        /// <summary>
-        /// Объект страницы
-        /// </summary>
-        public Page PageContent => this;
-
-        /// <summary>
-        /// Событие изменения значений настроек
-        /// </summary>
-        internal IPageSetting<EnumSettingApplication>.ChangeValue? EventChangeValue;
-
-        /// <summary>
-        /// Объект анимации для управления позицией
-        /// </summary>
-        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
-        {
-            DecelerationRatio = 0.6d,
-            EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
-        /// Объект анимации для управления Color значением
-        /// </summary>
-        private static readonly ColorAnimation ColorAnimate = new(Colors.Black, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
-        /// Объект анимации для управления double значением
-        /// </summary>
-        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-        };
-
         private int RealySizeBuffer = -1;
 
         internal PageGeneralSetting()
         {
             InitializeComponent();
             #region PathMenuImage
-            string PathBackgroundImage = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.PathMenuImage);
+            string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;
             TextBlockFailedImageSetup.Opacity = 0d;
             if (PathBackgroundImage.Length > 0)
             {
@@ -85,7 +43,7 @@ namespace OperPage_les.UI.Pages.Settings
                         break;
                 }
             };
-            IELButtonDialogDirectoryFile.OnActivateMouseLeft += () =>
+            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (Key) =>
             {
                 System.Windows.Forms.OpenFileDialog dialog = new()
                 {
@@ -103,24 +61,22 @@ namespace OperPage_les.UI.Pages.Settings
                 };
                 dialog.ShowDialog();
             };
-            IELButtonSetTextClipboard.OnActivateMouseLeft += () =>
+            IELButtonSetTextClipboard.OnActivateMouseLeft += (Key) =>
             {
                 SetImageUriValue(System.Windows.Clipboard.GetText());
             };
-            IELButtonClearImage.OnActivateMouseLeft += () =>
+            IELButtonClearImage.OnActivateMouseLeft += (Key) =>
             {
-                DoubleAnimation animation = DoubleAnimate.Clone();
-                animation.Duration = TimeSpan.FromMilliseconds(2000d);
-                animation.To = 0d;
-                ImageBackground.BeginAnimation(OpacityProperty, animation);
+                App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
-                EventChangeValue?.Invoke(EnumSettingApplication.PathMenuImage, "!");
+                App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
             };
             #endregion
             #region BufferSize
-            string StringBufferSize = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BufferSize);
-            RealySizeBuffer = Convert.ToInt32(StringBufferSize);
+            BorderSettingBufferSize.Opacity = 0d;
+            RowDefinitionBufferSize.MaxHeight = RowDefinitionBufferSize.MinHeight;
+            RealySizeBuffer = App.CurrentApp.SettingMainApplication.BufferSize;
             SliderBufferSize.Value = RealySizeBuffer;
             TextBlockSliderBufferSize.Text = SliderBufferSize.Value.ToString();
             //BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
@@ -130,6 +86,7 @@ namespace OperPage_les.UI.Pages.Settings
                 if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != RealySizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
                     DoubleAnimation animation = App.GetDoubleAnimate();
+                    animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
                     animation.Duration = TimeSpan.FromMilliseconds(1200d);
                     animation.To = e.NewValue != RealySizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
                     Storyboard storyboard = new();
@@ -137,58 +94,58 @@ namespace OperPage_les.UI.Pages.Settings
                     Storyboard.SetTarget(animation, RowDefinitionBufferSize);
                     Storyboard.SetTargetProperty(animation, new PropertyPath("(RowDefinition.MaxHeight)"));
                     storyboard.Begin();
+
+                    animation.To = e.NewValue != RealySizeBuffer ? 1d : 0d;
+                    BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
                 }
             };
-            IELButtonTextClearValue.OnActivateMouseLeft += () =>
+            IELButtonTextClearValue.OnActivateMouseLeft += (Key) =>
             {
                 SliderBufferSize.Value = RealySizeBuffer;
-                EventChangeValue?.Invoke(EnumSettingApplication.BufferSize, SliderBufferSize.Value.ToString());
+                App.CurrentApp.SettingMainApplication.BufferSize.Value = RealySizeBuffer;
             };
             SliderBufferSize.MouseLeave += (sender, e) =>
             {
                 if (SliderBufferSize.Value != RealySizeBuffer)
-                    EventChangeValue?.Invoke(EnumSettingApplication.BufferSize, SliderBufferSize.Value.ToString());
+                    App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
             };
             #endregion
             #region BlurBackgroundDataTime
-            string BlurState = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.BlurBackgroundDataTime);
-            CheckBoxBlurDataTimeImage.IsChecked = BlurState.Equals("T");
+            CheckBoxBlurDataTimeImage.IsChecked = App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime;
             CheckBoxBlurDataTimeImage.Checked += (sender, e) =>
             {
-                EventChangeValue?.Invoke(EnumSettingApplication.BlurBackgroundDataTime, "T");
+                App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime.Value = true;
             };
             CheckBoxBlurDataTimeImage.Unchecked += (sender, e) =>
             {
-                EventChangeValue?.Invoke(EnumSettingApplication.BlurBackgroundDataTime, "F");
+                App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime.Value = false;
             };
             #endregion
             #region MillisecondInternetConnection
-            string MillisecondConnection = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.MillisecondInternetConnection);
-            CheckBoxInternetConnectionMillisecond.IsChecked = MillisecondConnection.Equals("T");
+            CheckBoxInternetConnectionMillisecond.IsChecked = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             CheckBoxInternetConnectionMillisecond.Checked += (sender, e) =>
             {
-                EventChangeValue?.Invoke(EnumSettingApplication.MillisecondInternetConnection, "T");
+                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = true;
             };
             CheckBoxInternetConnectionMillisecond.Unchecked += (sender, e) =>
             {
-                EventChangeValue?.Invoke(EnumSettingApplication.MillisecondInternetConnection, "F");
+                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = false;
             };
             #endregion
             #region DefaultOpenUrlWebView
-            string DefaultUrl = App.CurrentApp.SettingApplication.GetSettingValue(EnumSettingApplication.DefaultOpenUrlWebView);
-            IELTextBoxDefaultUrl.Text = DefaultUrl;
+            IELTextBoxDefaultUrl.Text = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
             IELTextBoxDefaultUrl.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
                 {
                     case System.Windows.Input.Key.Escape:
-                        BorderPathImageBackground.Focus();
+                        Focus();
                         break;
                 }
             };
             IELTextBoxDefaultUrl.TextChanged += (sender, e) =>
             {
-                EventChangeValue?.Invoke(EnumSettingApplication.DefaultOpenUrlWebView, IELTextBoxDefaultUrl.Text);
+                App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView.Value = IELTextBoxDefaultUrl.Text;
             };
             #endregion
         }
@@ -199,7 +156,6 @@ namespace OperPage_les.UI.Pages.Settings
         /// <param name="Uri">Ссылка или директория на элемент картинки</param>
         private void SetImageUriValue(string Uri)
         {
-            DoubleAnimation animation = DoubleAnimate.Clone();
             try
             {
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
@@ -209,19 +165,14 @@ namespace OperPage_les.UI.Pages.Settings
                     ImageBackground.Source = image;
                     App.AnimateBlurEffect(BlurEffectImageBackground, 10u, 2000d);
                     IELButtonClearImage.IsEnabled = true;
-                    EventChangeValue?.Invoke(EnumSettingApplication.PathMenuImage, Uri);
+                    App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 
-                    animation.Duration = TimeSpan.FromMilliseconds(1000d);
-                    animation.To = 0.6d;
-                    ImageBackground.BeginAnimation(OpacityProperty, animation);
+                    App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
                 }
             }
             catch
             {
-                animation.Duration = TimeSpan.FromMilliseconds(5000d);
-                animation.From = 1d;
-                animation.To = 0d;
-                TextBlockFailedImageSetup.BeginAnimation(OpacityProperty, animation);
+                App.AnimateDoubleEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
             }
         }
     }

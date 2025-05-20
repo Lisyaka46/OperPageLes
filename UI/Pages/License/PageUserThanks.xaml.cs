@@ -52,8 +52,8 @@ namespace OperPage_les.Windows.Pages.License
         /// <param name="assistent">Данные помошника разработки</param>
         internal void NextUser(AssistentThanks assistent)
         {
+            AnimMargin.To = new(0, 14, 0, 0);
             AnimOpacity.Completed += (sender, e) => UpdateInfo(ref assistent);
-            AnimMargin.To = new(0, -14, 0, 0);
             BeginAnimation(OpacityProperty, AnimOpacity);
             BeginAnimation(MarginProperty, AnimMargin);
         }
@@ -67,17 +67,17 @@ namespace OperPage_les.Windows.Pages.License
             Opacity = 0d;
             TextBlockNickName.Foreground = new SolidColorBrush(assistent.ColorNickName);
             TextBlockNickName.Text = assistent.NickName;
-            TextBlockPhrase.Text = assistent.Phrase;
+            TextBlockPhrase.Text = $"\"{assistent.Phrase}\"";
             TextBlockPhrase.Foreground = new SolidColorBrush(assistent.ColorPhrase);
             TextBlockMessage.Text = assistent.Message;
-            if (assistent.LinkImage != null || assistent.PathImage != null)
+            if (assistent.UriImage != null || assistent.MapImage != null)
             {
-                BitmapImage bitmap;
-                if (assistent.LinkImage != null && App.Flags.InternetPinging) bitmap = new(assistent.LinkImage);
-                else bitmap = new BitmapImage(assistent.PathImage);
+                BitmapImage? bitmap;
+                if (assistent.UriImage != null && App.Flags.InternetPinging) bitmap = new(assistent.UriImage);
+                else bitmap = assistent.MapImage;
                 ImageIconNickName.Source = bitmap;
                 ImageIconNickName.Opacity = 0.4d;
-                AnimMargin.To = new(0, -140, 0, 0);
+                AnimMargin.To = new(0, -50, 0, 0);
                 AnimMargin.Duration = TimeSpan.FromMilliseconds(12000d);
                 AnimMargin.EasingFunction = null;
                 ImageIconNickName.BeginAnimation(MarginProperty, AnimMargin);

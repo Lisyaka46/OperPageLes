@@ -1,7 +1,8 @@
-﻿using IEL.Classes;
+﻿using IEL.CORE.Classes;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Input;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -27,32 +28,88 @@ namespace OperPage_les.UI.Dialogs
         public WindowGenLabel()
         {
             InitializeComponent();
-            Width = 300;
-            Height = 300;
-            IELButtonCancel.OnActivateMouseLeft += delegate ()
+            Width = 315d;
+            Height = 336d;
+            IELButtonCancel.OnActivateMouseLeft += (Key) =>
             {
                 Cancel = true;
                 Close();
             };
-            IELButtonCreateLabel.OnActivateMouseLeft += delegate ()
+            IELButtonCreateLabel.OnActivateMouseLeft += (Key) =>
             {
-                if (IELTextBoxNameLabel.Text.Length == 0)
-                {
-                    ButtonAnimationColor.From = Colors.Red;
-                    ButtonAnimationColor.To = IELTextBoxNameLabel.BackgroundSetting.Default;
-                    IELTextBoxNameLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
-                    return;
-                }
-                if (IELTextBoxCommand.Text.Length == 0)
-                {
-                    ButtonAnimationColor.From = Colors.Red;
-                    ButtonAnimationColor.To = IELTextBoxCommand.BackgroundSetting.Default;
-                    IELTextBoxCommand.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
-                    return;
-                }
-                Cancel = false;
-                Close();
+                Create();
             };
+            IELTextBoxNameLabel.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Down:
+                    case Key.Enter:
+                        IELTextBoxCommand.Focus();
+                        break;
+                    case Key.Escape:
+                        Close();
+                        break;
+                }
+            };
+            IELTextBoxCommand.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Down:
+                    case Key.Enter:
+                        IELTextBoxDescription.Focus();
+                        break;
+                    case Key.Up:
+                        IELTextBoxNameLabel.Focus();
+                        break;
+                    case Key.Escape:
+                        Close();
+                        break;
+                }
+            };
+            IELTextBoxDescription.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        Create();
+                        break;
+                    case Key.Up:
+                        IELTextBoxCommand.Focus();
+                        break;
+                    case Key.Escape:
+                        Close();
+                        break;
+                }
+            };
+            Loaded += (sender, e) =>
+            {
+                IELTextBoxNameLabel.Focus();
+            };
+        }
+        
+        /// <summary>
+        /// Сгенерировать итоговое исполнение создания ярлыка
+        /// </summary>
+        private void Create()
+        {
+            if (IELTextBoxNameLabel.Text.Length == 0)
+            {
+                ButtonAnimationColor.From = Colors.Red;
+                ButtonAnimationColor.To = IELTextBoxNameLabel.IELSettingObject.BackgroundSetting.Default;
+                IELTextBoxNameLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                return;
+            }
+            if (IELTextBoxCommand.Text.Length == 0)
+            {
+                ButtonAnimationColor.From = Colors.Red;
+                ButtonAnimationColor.To = IELTextBoxCommand.IELSettingObject.BackgroundSetting.Default;
+                IELTextBoxCommand.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                return;
+            }
+            Cancel = false;
+            Close();
         }
 
         /// <summary>
@@ -63,6 +120,7 @@ namespace OperPage_les.UI.Dialogs
         {
             Title = "Создание ярлыка";
             IELButtonCreateLabel.Text = "Создать ярлык";
+            Focus();
             ShowDialog();
             if (Cancel) return LabelAction.Empty;
             return new(

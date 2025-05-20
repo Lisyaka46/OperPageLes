@@ -4,11 +4,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OperPage_les.Windows.Pages.Browser"
-      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" x:Class="OperPage_les.Windows.Pages.Browser.PageDeveloper"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" x:Class="OperPage_les.Windows.Pages.Browser.PageDeveloper"
       mc:Ignorable="d" 
       d:DesignHeight="400"
       Title="PageDeveloper">
-
+    
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="274"/>
@@ -23,7 +23,7 @@
             <TextBlock TextWrapping="Wrap" Text="Developer Page" FontSize="18" TextAlignment="Center" Style="{Binding Mode=OneWay, Source={StaticResource Brenzo Slab Personal Use}}" Background="White"/>
             <Grid Grid.Row="1"/>
             <IEL:IELInlay x:Name="HeadInlay" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Height="32" Width="93" IsEnabled="False" CornerRadius="5,5,0,0" BorderThicknessBlock="2,2,2,2">
-                <IEL:IELInlay.ForegroundSetting>
+                <!--<IEL:IELInlay.ForegroundSetting>
                     <Classes:BrushSettingQ Default="#FF4679C2" Select="#FF2D715F" Used="#FF295B7A" NotEnabled="#FF677879"/>
                 </IEL:IELInlay.ForegroundSetting>
                 <IEL:IELInlay.BorderBrushSetting>
@@ -31,7 +31,7 @@
                 </IEL:IELInlay.BorderBrushSetting>
                 <IEL:IELInlay.BackgroundSetting>
                     <Classes:BrushSettingQ Default="#FF8DE1DF" Select="#FF82E0C7" Used="#FF82BCE0" NotEnabled="#FFC7DFE0"/>
-                </IEL:IELInlay.BackgroundSetting>
+                </IEL:IELInlay.BackgroundSetting>-->
             </IEL:IELInlay>
             <ComboBox x:Name="ComboBoxStateInlay" HorizontalAlignment="Left" Margin="100,6,0,0" Grid.Row="2" VerticalAlignment="Top" Width="90" Height="22">
                 <TextBlock Text="Обычный"/>

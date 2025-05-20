@@ -4,58 +4,88 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
-        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowGenLabel"
+        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowGenLabel"
         mc:Ignorable="d"
-        Title="Создание ярлыка" d:DesignHeight="301.667" Icon="{DynamicResource EmptyImage}" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Width="273">
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF69A6BB" Offset="0.738"/>
-                <GradientStop Color="#FF2C5E6F" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+        Title="Создание ярлыка" WindowStartupLocation="CenterScreen" Background="{x:Null}" ResizeMode="NoResize" Topmost="True">
+    <Grid Background="#FF1FB5B9">
         <Grid.RowDefinitions>
             <RowDefinition Height="175*"/>
             <RowDefinition Height="111*"/>
         </Grid.RowDefinitions>
         <Grid>
-            <Grid.Background>
-                <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.6" RadiusY="0.6">
-                    <GradientStop Color="#FFA0C8D6"/>
-                    <GradientStop Color="#FF69A6BB" Offset="1"/>
-                </RadialGradientBrush>
-            </Grid.Background>
-            <Border BorderBrush="#FF254A67" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="#4C42CC97" Margin="30,20,30,20">
+            <Border BorderBrush="#FF6D6D6D" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="#4C356352" Margin="5,5,5,5">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30*"/>
-                        <RowDefinition Height="30*"/>
-                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <IEL:IELTextBox x:Name="IELTextBoxNameLabel" Margin="2,2,2,7" TextName="Имя ярлыка*" Text="" ShowNameText="True" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center">
-                        <IEL:IELTextBox.BackgroundNaming>
-                            <RadialGradientBrush RadiusX="0.6">
-                                <GradientStop Color="#0072ABBF" Offset="1"/>
-                                <GradientStop Color="#CC74ADC1" Offset="0.404"/>
-                            </RadialGradientBrush>
-                        </IEL:IELTextBox.BackgroundNaming>
-                    </IEL:IELTextBox>
-                    <IEL:IELTextBox x:Name="IELTextBoxCommand" TextName="Команда*" Text="" Grid.Row="1" Margin="2,2,2,7" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center" ShowNameText="True">
-                        <IEL:IELTextBox.BackgroundNaming>
-                            <RadialGradientBrush RadiusX="0.6">
-                                <GradientStop Color="#0072ABBF" Offset="1"/>
-                                <GradientStop Color="#CC74ADC1" Offset="0.404"/>
-                            </RadialGradientBrush>
-                        </IEL:IELTextBox.BackgroundNaming>
-                    </IEL:IELTextBox>
-                    <IEL:IELTextBox x:Name="IELTextBoxDescription" TextName="Описание ярлыка" Text="" ShowNameText="True" Grid.Row="2" Margin="4,1,0,3" PaddingNaming="6,0,6,0" TextBoxVerticalAlignment="Center" MaxLines="5">
-                        <IEL:IELTextBox.BackgroundNaming>
-                            <RadialGradientBrush RadiusX="0.6">
-                                <GradientStop Color="#0072ABBF" Offset="1"/>
-                                <GradientStop Color="#CC74ADC1" Offset="0.562"/>
-                            </RadialGradientBrush>
-                        </IEL:IELTextBox.BackgroundNaming>
-                    </IEL:IELTextBox>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <IEL:IELTextBox x:Name="IELTextBoxNameLabel" Text="" TextBoxVerticalAlignment="Center" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThicknessBlock="1.7,1.7,1.7,1.7">
+                            <IEL:IELTextBox.IELSettingObject>
+                                <ObjectSettings:IELObjectSetting>
+                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
+                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
+                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FFA7BB94" Select="#FF72F7AB" Used="#FFD6FFDA" NotEnabled="#FFC85353"/>
+                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELObjectSetting>
+                            </IEL:IELTextBox.IELSettingObject>
+                        </IEL:IELTextBox>
+                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Название ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="14" Padding="0,0,0,2"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Команда ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="14" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Padding="0,8,0,2"/>
+                        <IEL:IELTextBox x:Name="IELTextBoxCommand" Text="" TextBoxVerticalAlignment="Center" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThicknessBlock="1.7,1.7,1.7,1.7">
+                            <IEL:IELTextBox.IELSettingObject>
+                                <ObjectSettings:IELObjectSetting>
+                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
+                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
+                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FFA7BB94" Select="#FF72F7AB" Used="#FFD6FFDA" NotEnabled="#FFC85353"/>
+                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELObjectSetting>
+                            </IEL:IELTextBox.IELSettingObject>
+                        </IEL:IELTextBox>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,0,0,2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="12*"/>
+                            <RowDefinition Height="37*"/>
+                        </Grid.RowDefinitions>
+                        <IEL:IELTextBox x:Name="IELTextBoxDescription" Text="" TextBoxVerticalAlignment="Center" MaxLines="5" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThicknessBlock="1.7,1.7,1.7,1.7">
+                            <IEL:IELTextBox.IELSettingObject>
+                                <ObjectSettings:IELObjectSetting>
+                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
+                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
+                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
+                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
+                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                        <Classes:BrushSettingQ Default="#FF94A1BB" Select="#FF729EF7" Used="#FFD6E4FF" NotEnabled="#FFC85353"/>
+                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
+                                </ObjectSettings:IELObjectSetting>
+                            </IEL:IELTextBox.IELSettingObject>
+                        </IEL:IELTextBox>
+                        <TextBlock TextWrapping="Wrap" Text="Описание ярлыка" VerticalAlignment="Top" Margin="5,0,5,0" Padding="0,8,0,2" FontSize="14" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
+                    </Grid>
                 </Grid>
             </Border>
         </Grid>
@@ -64,15 +94,35 @@
                 <RowDefinition Height="26*"/>
                 <RowDefinition Height="26*"/>
             </Grid.RowDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonCreateLabel" Margin="40,6,40,6" BorderThickness="2,2,2,2" Text="Создать ярлык" FontFamily="Bahnschrift" AnimationMillisecond="140">
-                <IEL:IELButtonText.BackgroundSetting>
-                    <Classes:BrushSettingQ Default="#FF61A6C3" Select="#FF54C38E" Used="#FF9CF9D5" NotEnabled="#FFE44242"/>
-                </IEL:IELButtonText.BackgroundSetting>
+            <IEL:IELButtonText x:Name="IELButtonCreateLabel" BorderThickness="2,2,2,2" Text="Создать ярлык" BorderThicknessBlock="2,2,2,2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Padding="15,5,15,5" PaddingContent="5,2,5,2">
+                <IEL:IELButtonText.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ Default="#FF102B1B" Select="#FF133C24" Used="#FF34423A" NotEnabled="#FF521717"/>
+                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ Default="#FF102B1B" Select="#FF133C24" Used="#FF34423A" NotEnabled="#FF521717"/>
+                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FF44B373" Select="#FF4DE88E" Used="#FFA7F1C6" NotEnabled="#FF942E2E"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonText.IELSettingObject>
             </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELButtonCancel" Margin="40,6,40,6" BorderThickness="4,2,2,2" Text="Отмена" FontFamily="Bahnschrift" Grid.Row="1" AnimationMillisecond="140">
-                <IEL:IELButtonText.BackgroundSetting>
-                    <Classes:BrushSettingQ Default="#FF61A6C3" Select="#FFDE587D" Used="#FFF99CB1" NotEnabled="#FFE44242"/>
-                </IEL:IELButtonText.BackgroundSetting>
+            <IEL:IELButtonText x:Name="IELButtonCancel" BorderThickness="4,2,2,2" Text="Отмена" Grid.Row="1" BorderThicknessBlock="2,2,2,2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Padding="15,5,15,5" PaddingContent="5,2,5,2">
+                <IEL:IELButtonText.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FFCA7474" NotEnabled="#FFE03939" Select="#FFFF7575" Used="#FFFDCBCB" UsedState="False"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ Default="#FF332525" Select="#FF422C2C" Used="#FF423434" NotEnabled="#FF521717"/>
+                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ Default="#FF332525" Select="#FF422C2C" Used="#FF423434" NotEnabled="#FF521717"/>
+                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonText.IELSettingObject>
             </IEL:IELButtonText>
         </Grid>
     </Grid>

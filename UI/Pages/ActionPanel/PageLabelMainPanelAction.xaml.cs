@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OperPage_les.Windows.Pages.ActionPanel;
+using IEL.Interfaces.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,23 +15,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OperPage_les.UI.Pages
+namespace OperPage_les.UI.Pages.ActionPanel
 {
     /// <summary>
-    /// Логика взаимодействия для Test.xaml
+    /// Логика взаимодействия для PageLabelMainActionPanel.xaml
     /// </summary>
-    public partial class Test : Page
+    public partial class PageLabelMainActionPanel : Page
     {
-        int i = 0;
-        public Test()
+        public PageLabelMainActionPanel()
         {
             InitializeComponent();
-            u.Text = $"Click 0";
-        }
-
-        private void ClickLeftUp(object sender, MouseButtonEventArgs e)
-        {
-            u.Text = $"Click {++i}";
         }
     }
 }

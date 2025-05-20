@@ -1,49 +1,18 @@
-﻿using OperPage_les.CORE;
+﻿using DataScroll;
+using IEL.Interfaces.Front;
+using IEL;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using IEL.Interfaces.Core;
-using IEL;
-using IEL.Classes;
-using DataScroll;
-using IEL.Interfaces.Front;
 
 namespace OperPage_les.Windows.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
     /// </summary>
-    public partial class PageBufferActionPanel : Page, IPageKey
+    public partial class PageBufferPanelAction : Page
     {
-        /// <summary>
-        /// Имя страницы
-        /// </summary>
-        public string PageName { get; } = nameof(PageBufferActionPanel);
-
-        /// <summary>
-        /// Объект данных режима клавиатуры
-        /// </summary>
-        private bool _KeyboardMode = false;
-
-        /// <summary>
-        /// Режим клавиатуры
-        /// </summary>
-        public bool KeyboardMode
-        {
-            get => _KeyboardMode;
-            set
-            {
-                _KeyboardMode = value;
-                KeyboardModeChanged?.Invoke(value);
-            }
-        }
-
-        /// <summary>
-        /// Объект события изменения состояния Alt режима
-        /// </summary>
-        public IPageKey.Delegate_KeyboardModeChanged? KeyboardModeChanged { get; set; }
-
         /// <summary>
         /// Объект анимации позиции сколла буфера
         /// </summary>
@@ -76,12 +45,10 @@ namespace OperPage_les.Windows.Pages.ActionPanel
         [NotNull()]
         private readonly int H;
 
-        public PageBufferActionPanel(int HeightButtonCommand)
+        public PageBufferPanelAction(int HeightButtonCommand)
         {
             InitializeComponent();
-            string StringSizeBuffer = App.CurrentApp.SettingApplication.GetSettingValue(CORE.Settings.EnumSettingApplication.BufferSize);
-            int BufferLength = Convert.ToInt32(StringSizeBuffer);
-            BufferCommand = new(BufferLength);
+            BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
             H = HeightButtonCommand;
             ScrollBar = new(3);
             ScrollBar.ChangedValue += (Value) =>
@@ -90,11 +57,6 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
             };
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
-            KeyboardModeChanged = (Mode) =>
-            {
-                IELButtonBackMainMenu.CharKeyboardActivate = Mode;
-                IELButtonClearBuffer.CharKeyboardActivate = Mode;
-            };
             BorderBuffer.MouseWheel += (sender, e) =>
             {
                 if (ScrollBar.MaxValue > 0 && BufferCommand.Count > 0)
@@ -185,14 +147,14 @@ namespace OperPage_les.Windows.Pages.ActionPanel
         /// <param name="Name">Имя команды</param>
         /// <param name="Command">Строка команды</param>
         /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
-        internal void InsertCommandFromBuffer(string Name, string Command, IIELButtonDefault.Activate ActionActivateCommand)
+        internal void InsertCommandFromBuffer(string Name, string Command, IIELButton.Activate ActionActivateCommand)
         {
             IELButtonClearBuffer.IsEnabled = true;
             if (BufferCommand.Count < BufferCommand.Length)
             {
                 IELButtonCommand Button = CreateBufferButton(Name, Command);
                 Button.OnActivateMouseLeft += ActionActivateCommand;
-                Button.OnActivateMouseRight += () =>
+                Button.OnActivateMouseRight += (Key) =>
                 {
                     BufferCommand.Delete(Button.Index);
                     TextBlockCounterBuffer.Text =

@@ -9,7 +9,6 @@ using System.Media;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
-using WMPLib;
 
 namespace OperPage_les.CORE
 {
@@ -18,7 +17,7 @@ namespace OperPage_les.CORE
         /// <summary>
         /// Плеер для воспроизведения аудио
         /// </summary>
-        private static readonly WindowsMediaPlayer Player = new();
+        //private static readonly WindowsMediaPlayer Player = new();
 
         /// <summary>
         /// Воспроизвести звуковой файл
