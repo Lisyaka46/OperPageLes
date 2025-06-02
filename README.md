@@ -1,7 +1,5 @@
 # OperPage_les
 
-![AAC20Pulse](https://github.com/user-attachments/assets/7f3695e4-98fe-46d5-9633-f6716ee398d5)
-
 OperPage_les - это программа для упрощения взаимодействия с windows.\
 Представляет консоль для которой описанные команды.\
 Имеет 2 типа команд:
