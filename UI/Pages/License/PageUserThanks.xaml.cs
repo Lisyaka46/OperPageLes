@@ -70,14 +70,16 @@ namespace OperPage_les.Windows.Pages.License
             TextBlockPhrase.Text = $"\"{assistent.Phrase}\"";
             TextBlockPhrase.Foreground = new SolidColorBrush(assistent.ColorPhrase);
             TextBlockMessage.Text = assistent.Message;
+            ImageIconNickName.Margin = new(0);
             if (assistent.UriImage != null || assistent.MapImage != null)
             {
-                BitmapImage? bitmap;
+                BitmapImage bitmap;
                 if (assistent.UriImage != null && App.Flags.InternetPinging) bitmap = new(assistent.UriImage);
-                else bitmap = assistent.MapImage;
+                else bitmap = assistent.MapImage ?? new();
                 ImageIconNickName.Source = bitmap;
                 ImageIconNickName.Opacity = 0.4d;
-                AnimMargin.To = new(0, -50, 0, 0);
+                AnimMargin.From = new(0);
+                AnimMargin.To = new(-50);
                 AnimMargin.Duration = TimeSpan.FromMilliseconds(12000d);
                 AnimMargin.EasingFunction = null;
                 ImageIconNickName.BeginAnimation(MarginProperty, AnimMargin);
@@ -88,7 +90,6 @@ namespace OperPage_les.Windows.Pages.License
             {
                 ImageIconNickName.Opacity = 0d;
                 ImageIconNickName.BeginAnimation(MarginProperty, null);
-                ImageIconNickName.Margin = new(0);
             }
             VisiblePage();
         }

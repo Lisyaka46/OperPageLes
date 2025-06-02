@@ -42,7 +42,7 @@ namespace OperPage_les.UI.Dialogs
             {
                 ColorNickName = Color.FromRgb(86, 255, 120),
                 ColorPhrase = Color.FromRgb(195, 189, 222),
-                MapImage = App.LoadImage(Properties.Resources.IconMainGray)
+                MapImage = App.LoadImage(Properties.Resources.MINSI)
             },
             new("Vector", "Разработчик это художник, а дизайнер это кисть.",
                 "- За работу в дизайне." +
@@ -119,7 +119,7 @@ namespace OperPage_les.UI.Dialogs
         {
             FrameThanks.Navigate(PageThanks);
             UpdateThanks();
-            UpdateInfoThanks.TimerDataUpdate.Start();
+            UpdateInfoThanks.Start();
         }
 
         /// <summary>

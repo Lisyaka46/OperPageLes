@@ -39,48 +39,36 @@
                 </Border.FocusVisualStyle>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="Auto" MinWidth="50"/>
                         <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto" MinWidth="50"/>
+                        <ColumnDefinition Width="Auto" MinWidth="50"/>
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="1" Margin="0,1,0,1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="47*"/>
-                            <ColumnDefinition Width="84*"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
-                        <GUI:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="5,5,5,5" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3">
-                            <GUI:IELButtonImage.IELSettingObject>
-                                <ObjectSettings:IELButtonObjectSetting>
-                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                        <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
-                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
-                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                </ObjectSettings:IELButtonObjectSetting>
-                            </GUI:IELButtonImage.IELSettingObject>
-                        </GUI:IELButtonImage>
-                        <GUI:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="3" ImageMargin="0,-1,0,-1" CornerRadius="6,6,6,6">
-                            <GUI:IELButtonImage.IELSettingObject>
-                                <ObjectSettings:IELButtonObjectSetting>
-                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
-                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#00000000" Select="#99266FA7" NotEnabled="#CCC13750" Used="#A52891E2"/>
-                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                </ObjectSettings:IELButtonObjectSetting>
-                            </GUI:IELButtonImage.IELSettingObject>
-                            <!--<GUI:IELButtonImage.BorderBrushSetting>
-                                <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
-                            </GUI:IELButtonImage.BorderBrushSetting>
-                            <GUI:IELButtonImage.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#00000000" Select="#99266FA7" NotEnabled="#CCC13750" Used="#A52891E2"/>
-                            </GUI:IELButtonImage.BackgroundSetting>-->
-                        </GUI:IELButtonImage>
-                    </Grid>
-                    <GUI:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" BorderThickness="0.1,0.1,0.1,0.1" ImageMargin="0,-2,0,-2">
+                    <GUI:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3" Grid.ColumnSpan="1">
+                        <GUI:IELButtonImage.IELSettingObject>
+                            <ObjectSettings:IELButtonObjectSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
+                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
+                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            </ObjectSettings:IELButtonObjectSetting>
+                        </GUI:IELButtonImage.IELSettingObject>
+                    </GUI:IELButtonImage>
+                    <GUI:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" PaddingContent="2,2,2,2" Margin="3,3,3,3">
+                        <GUI:IELButtonImage.IELSettingObject>
+                            <ObjectSettings:IELButtonObjectSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
+                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#00000000" Select="#99266FA7" NotEnabled="#CCC13750" Used="#A52891E2"/>
+                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            </ObjectSettings:IELButtonObjectSetting>
+                        </GUI:IELButtonImage.IELSettingObject>
+                    </GUI:IELButtonImage>
+                    <GUI:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" ImageMargin="2,2,2,2">
                         <GUI:IELButtonImage.IELSettingObject>
                             <ObjectSettings:IELButtonObjectSetting>
                                 <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
@@ -122,7 +110,7 @@
                                         </ObjectSettings:IELButtonObjectSetting>
                                     </GUI:IELButtonImage.IELSettingObject>
                                 </GUI:IELButtonImage>
-                                <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" BorderThicknessBlock="2,2,2,2" PaddingContent="4,0,5,6">
+                                <GUI:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30"  FontWeight="Bold" BorderThicknessBlock="2,2,2,2" PaddingContent="4,0,5,6" FontFamily="{DynamicResource RussianRail G Pro}">
                                     <GUI:IELButtonText.IELSettingObject>
                                         <ObjectSettings:IELButtonObjectSetting>
                                             <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -137,7 +125,7 @@
                                 <Grid Grid.Column="2">
                                     <GUI:IELPageController x:Name="IELPageControllerButtons" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </Grid>
-                                <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2">
+                                <GUI:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30"  FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2" FontFamily="{DynamicResource RussianRail G Pro}">
                                     <GUI:IELButtonText.IELSettingObject>
                                         <ObjectSettings:IELButtonObjectSetting>
                                             <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -173,8 +161,8 @@
                                     </Rectangle.CacheMode>
                                 </Rectangle>
                             </Grid>
-                            <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,3,0,0" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" FontWeight="Bold"/>
-                            <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,3" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}"/>
+                            <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="8,3,0,0"  FontWeight="Bold" FontFamily="{DynamicResource RussianRail G Pro}"/>
+                            <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8,0,0,3" FontFamily="{DynamicResource RussianRail G Pro}" />
                         </Grid>
                     </Border>
                     <Border x:Name="BorderIndicator" BorderBrush="#FF007D9E" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#CC77B0FD" Grid.Column="2">

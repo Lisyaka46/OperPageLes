@@ -1,4 +1,18 @@
-﻿using IEL.CORE.Enums;
+﻿using CefSharp;
+using IEL.CORE.Enums;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Graphics;
+using OperPage_les.CORE;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Reflection.Metadata;
+using System.Security.Cryptography;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using WinRT.Interop;
 
 namespace OperPage_les.Windows.Pages.Browser
 {
@@ -10,24 +24,43 @@ namespace OperPage_les.Windows.Pages.Browser
         public PageDeveloper()
         {
             InitializeComponent();
-            ComboBoxStateInlay.SelectionChanged += (sender, e) =>
+            IELButtonGenerateImage.OnActivateMouseLeft += (sender, Key) =>
             {
-                StateSpectrum Spectrum = ComboBoxStateInlay.SelectedIndex switch
+                ImageElement.Source = Imaging.CreateBitmapSourceFromHBitmap(GenImage().GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                ImageElement.UpdateLayout();
+            };
+            SliderElementWidth.ValueChanged += (sender, e) =>
+            {
+                TextBlockSliderValueWidth.Text = $"{(e.NewValue < 10 ? "0" : string.Empty)}{(int)e.NewValue}";
+            };
+            SliderElementHeight.ValueChanged += (sender, e) =>
+            {
+                TextBlockSliderValueHeight.Text = $"{(e.NewValue < 10 ? "0" : string.Empty)}{(int)e.NewValue}";
+            };
+            IELButtonDownloadImage.OnActivateMouseLeft += (sender, Key) =>
+            {
+                Bitmap bitmap = GenImage();
+                bitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gen.png");
+            };
+        } 
+        
+        private Bitmap GenImage()
+        {
+            int X, Y;
+            Bitmap bitmap = new((int)SliderElementWidth.Value, (int)SliderElementHeight.Value);
+            for (Y = 0; Y < bitmap.Height; Y++)
+            {
+                double NumY = Math.Tan(Y + 1) * 100;
+                for (X = 0; X < bitmap.Width; X++)
                 {
-                    0 => StateSpectrum.Default,
-                    1 => StateSpectrum.NotEnabled,
-                    2 => StateSpectrum.Select,
-                    3 => StateSpectrum.Used,
-                    _ => StateSpectrum.Default,
-                };
-                HeadInlay.IELSettingObject.BackgroundSetting.InvokeObjectUsedStateColor(Spectrum);
-                HeadInlay.IELSettingObject.BorderBrushSetting.InvokeObjectUsedStateColor(Spectrum);
-                HeadInlay.IELSettingObject.ForegroundSetting.InvokeObjectUsedStateColor(Spectrum);
-            };
-            ButtonPixelColorCopy.Click += (sender, e) =>
-            {
-                System.Windows.Clipboard.SetText(TextBoxColorCode.Text);
-            };
-        }   
+                    double Num = Math.Cos(X + 1) * 100;
+                    double R = Math.Tan(Num) * 10 - (Math.Ceiling(NumY / 2) + Math.Acosh(NumY) * 10) / (Math.Tan(Num) * 10) + Math.Atanh(Num);
+                    double G = Math.Cbrt(NumY) * 10 + (Math.Cosh(NumY) - Math.Tan(Num) * 10) / (Math.Atan(NumY) * Math.Cos(Num)) + Math.Exp(Num) * 10;
+                    double B = (Math.Truncate(Math.Cbrt(Num) + Math.Atan(NumY) * 10) - Math.Atan(NumY)) / (Math.Cbrt(Math.Cos(Num)) / Math.Ceiling(NumY)) - Math.Tan(Num) * 10;
+                    bitmap.SetPixel(X, Y, System.Drawing.Color.FromArgb((byte)R, (byte)G, (byte)B));
+                }
+            }
+            return bitmap;
+        }
     }
 }

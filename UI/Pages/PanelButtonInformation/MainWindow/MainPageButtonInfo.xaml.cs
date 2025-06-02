@@ -105,7 +105,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                             OrientationBorderPosition.RightUp);
             };
             #endregion
-            UpdateBackgroundDataThis.TimerDataUpdate.Start();
+            UpdateBackgroundDataThis.Start();
         }
 
         /// <summary>

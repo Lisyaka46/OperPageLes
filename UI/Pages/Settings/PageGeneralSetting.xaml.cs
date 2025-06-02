@@ -14,7 +14,10 @@ namespace OperPage_les.UI.Pages.Settings
     /// </summary>
     public partial class PageGeneralSetting : Page
     {
-        private int RealySizeBuffer = -1;
+        /// <summary>
+        /// Размер буфера из настроек
+        /// </summary>
+        private readonly int OriginalSizeBuffer = -1;
 
         internal PageGeneralSetting()
         {
@@ -43,7 +46,7 @@ namespace OperPage_les.UI.Pages.Settings
                         break;
                 }
             };
-            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (Key) =>
+            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, Key) =>
             {
                 System.Windows.Forms.OpenFileDialog dialog = new()
                 {
@@ -61,11 +64,11 @@ namespace OperPage_les.UI.Pages.Settings
                 };
                 dialog.ShowDialog();
             };
-            IELButtonSetTextClipboard.OnActivateMouseLeft += (Key) =>
+            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, Key) =>
             {
                 SetImageUriValue(System.Windows.Clipboard.GetText());
             };
-            IELButtonClearImage.OnActivateMouseLeft += (Key) =>
+            IELButtonClearImage.OnActivateMouseLeft += (sender, Key) =>
             {
                 App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
@@ -76,37 +79,37 @@ namespace OperPage_les.UI.Pages.Settings
             #region BufferSize
             BorderSettingBufferSize.Opacity = 0d;
             RowDefinitionBufferSize.MaxHeight = RowDefinitionBufferSize.MinHeight;
-            RealySizeBuffer = App.CurrentApp.SettingMainApplication.BufferSize;
-            SliderBufferSize.Value = RealySizeBuffer;
+            OriginalSizeBuffer = App.CurrentApp.SettingMainApplication.BufferSize;
+            SliderBufferSize.Value = OriginalSizeBuffer;
             TextBlockSliderBufferSize.Text = SliderBufferSize.Value.ToString();
             //BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
             SliderBufferSize.ValueChanged += (sender, e) =>
             {
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
-                if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != RealySizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
+                if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
                     DoubleAnimation animation = App.GetDoubleAnimate();
                     animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
                     animation.Duration = TimeSpan.FromMilliseconds(1200d);
-                    animation.To = e.NewValue != RealySizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
+                    animation.To = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
                     Storyboard storyboard = new();
                     storyboard.Children.Add(animation);
                     Storyboard.SetTarget(animation, RowDefinitionBufferSize);
                     Storyboard.SetTargetProperty(animation, new PropertyPath("(RowDefinition.MaxHeight)"));
                     storyboard.Begin();
 
-                    animation.To = e.NewValue != RealySizeBuffer ? 1d : 0d;
+                    animation.To = e.NewValue != OriginalSizeBuffer ? 1d : 0d;
                     BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
                 }
             };
-            IELButtonTextClearValue.OnActivateMouseLeft += (Key) =>
+            IELButtonTextClearValue.OnActivateMouseLeft += (sender, Key) =>
             {
-                SliderBufferSize.Value = RealySizeBuffer;
-                App.CurrentApp.SettingMainApplication.BufferSize.Value = RealySizeBuffer;
+                SliderBufferSize.Value = OriginalSizeBuffer;
+                App.CurrentApp.SettingMainApplication.BufferSize.Value = OriginalSizeBuffer;
             };
             SliderBufferSize.MouseLeave += (sender, e) =>
             {
-                if (SliderBufferSize.Value != RealySizeBuffer)
+                if (SliderBufferSize.Value != OriginalSizeBuffer)
                     App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
             };
             #endregion
@@ -146,6 +149,17 @@ namespace OperPage_les.UI.Pages.Settings
             IELTextBoxDefaultUrl.TextChanged += (sender, e) =>
             {
                 App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView.Value = IELTextBoxDefaultUrl.Text;
+            };
+            #endregion
+            #region UseOpenLinkInPageBrowser
+            CheckBoxUsePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
+            CheckBoxUsePageBrowser.Checked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = true;
+            };
+            CheckBoxUsePageBrowser.Unchecked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = false;
             };
             #endregion
         }

@@ -40,14 +40,14 @@
                                 </ObjectSettings:IELObjectSetting>
                             </IEL:IELTextBox.IELSettingObject>
                         </IEL:IELTextBox>
-                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Название ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="14" Padding="0,0,0,2"/>
+                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Название ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0"  FontSize="14" Padding="0,0,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Команда ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="14" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" Padding="0,8,0,2"/>
+                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Команда ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="14"  Padding="0,8,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
                         <IEL:IELTextBox x:Name="IELTextBoxCommand" Text="" TextBoxVerticalAlignment="Center" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThicknessBlock="1.7,1.7,1.7,1.7">
                             <IEL:IELTextBox.IELSettingObject>
                                 <ObjectSettings:IELObjectSetting>
@@ -84,7 +84,7 @@
                                 </ObjectSettings:IELObjectSetting>
                             </IEL:IELTextBox.IELSettingObject>
                         </IEL:IELTextBox>
-                        <TextBlock TextWrapping="Wrap" Text="Описание ярлыка" VerticalAlignment="Top" Margin="5,0,5,0" Padding="0,8,0,2" FontSize="14" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Описание ярлыка" VerticalAlignment="Top" Margin="5,0,5,0" Padding="0,8,0,2" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" />
                     </Grid>
                 </Grid>
             </Border>
@@ -94,7 +94,7 @@
                 <RowDefinition Height="26*"/>
                 <RowDefinition Height="26*"/>
             </Grid.RowDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonCreateLabel" BorderThickness="2,2,2,2" Text="Создать ярлык" BorderThicknessBlock="2,2,2,2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Padding="15,5,15,5" PaddingContent="5,2,5,2">
+            <IEL:IELButtonText x:Name="IELButtonCreateLabel" BorderThickness="2,2,2,2" Text="Создать ярлык" BorderThicknessBlock="2,2,2,2"  FontSize="16" Padding="15,5,15,5" PaddingContent="5,2,5,2" FontFamily="{DynamicResource Bree CYR var}">
                 <IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -109,7 +109,7 @@
                     </ObjectSettings:IELButtonObjectSetting>
                 </IEL:IELButtonText.IELSettingObject>
             </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELButtonCancel" BorderThickness="4,2,2,2" Text="Отмена" Grid.Row="1" BorderThicknessBlock="2,2,2,2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Padding="15,5,15,5" PaddingContent="5,2,5,2">
+            <IEL:IELButtonText x:Name="IELButtonCancel" BorderThickness="4,2,2,2" Text="Отмена" Grid.Row="1" BorderThicknessBlock="2,2,2,2"  FontSize="16" Padding="15,5,15,5" PaddingContent="5,2,5,2" FontFamily="{DynamicResource Bree CYR var}">
                 <IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>

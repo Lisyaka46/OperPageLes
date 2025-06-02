@@ -1,9 +1,21 @@
 ﻿using IEL.Interfaces.Core;
+using OperPage_les.CORE.Label;
+using static OperPage_les.CORE.Label.LabelTag;
 
 namespace IEL.CORE.Classes
 {
-    public struct LabelAction(string name, string description, string command)
+    public class LabelAction(string name, string description, string command)
     {
+        /// <summary>
+        /// Событие добавления ярлыка
+        /// </summary>
+        internal event ValueChangedHandler<LabelTag>? AddTag;
+
+        /// <summary>
+        /// Событие удаления ярлыка
+        /// </summary>
+        internal event ValueChangedHandler<LabelTag>? DeleteTag;
+
         /// <summary>
         /// Имя ярлыка
         /// </summary>
@@ -19,34 +31,43 @@ namespace IEL.CORE.Classes
         /// </summary>
         public string Command { get; set; } = command;
 
+        private readonly List<LabelTag> _Tags = [];
         /// <summary>
-        /// Пустой объект ярлыка
+        /// Теги ярлыка
         /// </summary>
-        public static LabelAction Empty { get; } = new LabelAction(string.Empty, string.Empty, string.Empty);
+        public List<LabelTag> Tags
+        {
+            get => _Tags;
+        }
 
         /// <summary>
-        /// Сравнение двух объектов ярлыка
+        /// Добавить тег в ярлык
         /// </summary>
-        /// <param name="A">Левый объект ярлыка</param>
-        /// <param name="B">Правый объект ярлыка</param>
-        public static bool operator !=(LabelAction A, LabelAction B) => !(A.Name.Equals(B.Name) && A.Command.Equals(B.Command));
+        /// <param name="index">Индекс тега</param>
+        internal void AppendTag(LabelTag NewTag)
+        {
+            Tags.Add(NewTag);
+            AddTag?.Invoke(null, Tags[^1]);
+        }
 
         /// <summary>
-        /// Сравнение двух объектов ярлыка
+        /// Удалить тег по индексу из ярлыка
         /// </summary>
-        /// <param name="A">Левый объект ярлыка</param>
-        /// <param name="B">Правый объект ярлыка</param>
-        public static bool operator ==(LabelAction A, LabelAction B) => A.Name.Equals(B.Name) && A.Command.Equals(B.Command);
+        /// <param name="index">Индекс тега</param>
+        internal void RemoveAtTag(int index)
+        {
+            DeleteTag?.Invoke(Tags[index], null);
+            Tags.RemoveAt(index);
+        }
 
         /// <summary>
-        /// Сравнить объект ярлыка между другим объектом
+        /// Удалить тег из ярлыка
         /// </summary>
-        /// <param name="Value">Сравниваемый объект</param>
-        public readonly override bool Equals(object? Value) => base.Equals(Value);
-
-        /// <summary>
-        /// Узнать текущий код объекта ярлыка
-        /// </summary>
-        public readonly override int GetHashCode() => base.GetHashCode();
+        /// <param name="tag">Тег</param>
+        internal void RemoveTag(LabelTag tag)
+        {
+            DeleteTag?.Invoke(tag, null);
+            Tags.Remove(tag);
+        }
     }
 }

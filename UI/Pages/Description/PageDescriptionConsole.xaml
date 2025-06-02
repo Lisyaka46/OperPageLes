@@ -31,8 +31,8 @@
                             <ColumnDefinition Width="39.737" MaxWidth="40"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Margin="5,0,5,0" FontSize="16" TextAlignment="Center" Grid.ColumnSpan="1" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
-                        <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" CornerRadius="5,5,5,5" Margin="3,0,3,0" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" BorderThicknessBlock="2,2,2,2" PaddingContent="10,2,10,2">
+                        <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Margin="5,0,5,0" FontSize="16" TextAlignment="Center" Grid.ColumnSpan="1" />
+                        <GUI:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="2" Text="Копировать" CornerRadius="5,5,5,5" Margin="3,0,3,0"  FontSize="16" BorderThicknessBlock="2,2,2,2" PaddingContent="10,2,10,2" FontFamily="{DynamicResource Bree CYR var}">
                             <GUI:IELButtonText.IELSettingObject>
                                 <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
                                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -55,13 +55,10 @@
                                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                 </ObjectSettings:IELButtonObjectSetting>
                             </GUI:IELButtonImage.IELSettingObject>
-                            <!--<GUI:IELButtonImage.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66C77F7F" Select="#4C3A9C8C" Used="#721AEFFF"/>
-                    </GUI:IELButtonImage.BackgroundSetting>-->
                         </GUI:IELButtonImage>
                     </Grid>
                 </Border>
-                <TextBlock x:Name="TextBlockMainDescriptionCommand" Grid.Row="2" Margin="20,5,20,5" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="текст" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
+                <TextBlock x:Name="TextBlockMainDescriptionCommand" Grid.Row="2" Margin="20,5,20,5" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="текст" FontFamily="{DynamicResource Bree CYR var}" />
             </Grid>
         </Grid>
     </Grid>

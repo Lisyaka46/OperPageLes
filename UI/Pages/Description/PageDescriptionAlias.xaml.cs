@@ -26,7 +26,7 @@ namespace OperPage_les.UI.Pages.Description
         public PageDescriptionAlias()
         {
             InitializeComponent();
-            IELButtonCopyCommandAlias.OnActivateMouseLeft += (Key) =>
+            IELButtonCopyCommandAlias.OnActivateMouseLeft += (sender, Key) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockAliasCommand.Text);
             };

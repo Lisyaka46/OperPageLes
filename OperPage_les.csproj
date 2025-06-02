@@ -21,21 +21,25 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Fonts\Aventura.ttf" />
+    <None Remove="Fonts\Bree CYR var.ttf" />
     <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
-    <None Remove="Fonts\Domino Regular.otf" />
+    <None Remove="Fonts\Deledda Open Regular.ttf" />
+    <None Remove="Fonts\Monocraft.otf" />
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\Pecita.otf" />
-    <None Remove="Fonts\pizza hut.otf" />
+    <None Remove="Fonts\Plup.ttf" />
     <None Remove="Fonts\RussianRail G Pro.otf" />
     <None Remove="Fonts\sangha.ttf" />
-    <None Remove="Fonts\Vollda-Bold.otf" />
-    <None Remove="Fonts\zhuan_FuturaNowScript-Rg.ttf" />
+    <None Remove="Fonts\Tablon.ttf" />
+    <None Remove="Fonts\Vollda.otf" />
     <None Remove="UI\Images\Arrow.png" />
+    <None Remove="UI\Images\BrowserChangeSystem.png" />
+    <None Remove="UI\Images\Cross.png" />
     <None Remove="UI\Images\DoubleMouseButton.png" />
     <None Remove="UI\Images\IconMainApplication.png" />
     <None Remove="UI\Images\IconMainGray.png" />
     <None Remove="UI\Images\IconMainSettings.png" />
+    <None Remove="UI\Images\Labels\Folder.png" />
     <None Remove="UI\Images\LeftMouseButton.png" />
     <None Remove="UI\Images\LightBulb.png" />
     <None Remove="UI\Images\Loading.gif" />
@@ -46,6 +50,7 @@
     <None Remove="UI\Images\Reload.png" />
     <None Remove="UI\Images\RightMouseButton.png" />
     <None Remove="UI\Images\Search.png" />
+    <None Remove="UI\Images\Tag.png" />
     <None Remove="UI\Images\Warning.png" />
     <None Remove="UI\Images\Wifi.png" />
     <None Remove="UI\Images\WifiOff.png" />
@@ -65,47 +70,37 @@
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
-
+	
   <ItemGroup>
-    <Resource Include="Fonts\Aventura.ttf">
+    <Resource Include="Fonts\Bree CYR var.ttf" />
+    <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
+    <Resource Include="Fonts\Deledda Open Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Fonts\Bree CYR var.ttf">
+    <Resource Include="Fonts\Monocraft.otf" />
+    <Resource Include="Fonts\MOSCOW2024.otf" />
+    <Resource Include="Fonts\Pecita.otf" />
+    <Resource Include="Fonts\Plup.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Fonts\Brenzo Slab Personal Use.otf">
+    <Resource Include="Fonts\RussianRail G Pro.otf" />
+    <Resource Include="Fonts\sangha.ttf" />
+    <Resource Include="Fonts\Tablon.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Fonts\Monocraft.otf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\MOSCOW2024.otf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\Pecita.otf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\RussianRail G Pro.otf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\sangha.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\Tablon-Regular.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\Vollda-Bold.otf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Fonts\zhuan_FuturaNowScript-Rg.ttf">
+    <Resource Include="Fonts\Vollda.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\Arrow.png" />
+    <Resource Include="UI\Images\Autor\MINSI.jpg" />
     <Resource Include="UI\Images\Autor\VECTOR.jpg" />
+    <Resource Include="UI\Images\BrowserChangeSystem.png" />
+    <Resource Include="UI\Images\Cross.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
     <Resource Include="UI\Images\IconMainApplication.png" />
     <Resource Include="UI\Images\IconMainGray.png" />
     <Resource Include="UI\Images\IconMainSettings.png" />
+    <Resource Include="UI\Images\Labels\Folder.png" />
     <Resource Include="UI\Images\LeftMouseButton.png" />
     <Resource Include="UI\Images\LightBulb.png" />
     <Resource Include="UI\Images\Loading.gif" />
@@ -115,6 +110,7 @@
     <Resource Include="UI\Images\Reload.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
     <Resource Include="UI\Images\Search.png" />
+    <Resource Include="UI\Images\Tag.png" />
     <Resource Include="UI\Images\Warning.png" />
     <Resource Include="UI\Images\Wifi.png" />
     <Resource Include="UI\Images\WifiOff.png" />
@@ -143,7 +139,48 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CORE\Enums\" />
+    <Resource Update="Fonts\Aventura.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\barboskinsakzident.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\Bree CYR var.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\Brenzo Slab Personal Use.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\ChakraPetch-Regular.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\CureEater-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\Monocraft.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\MOSCOW2024.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\Pecita.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\RussianRail G Pro.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\sangha.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\Tablon-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\Vollda-Bold.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Update="Fonts\zhuan_FuturaNowScript-Rg.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

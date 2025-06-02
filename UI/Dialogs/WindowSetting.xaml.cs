@@ -15,6 +15,8 @@ using IEL.Interfaces.Core;
 using OperPage_les.UI.Pages.Settings;
 using OperPage_les.CORE.Settings;
 using System.Windows.Media.Animation;
+using IEL;
+using IEL.CORE.Classes;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -29,23 +31,26 @@ namespace OperPage_les.UI.Dialogs
         private readonly PageGeneralSetting GeneralSetting;
 
         /// <summary>
-        /// Объект анимации для управления позицией
+        /// Страница настроек консоли
         /// </summary>
-        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
-        {
-            DecelerationRatio = 0.6d,
-            EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut }
-        };
+        private readonly PageConsoleSetting ConsoleSetting;
 
         /// <summary>
-        /// Константа анимации наведения на кнопку страницы настроек
+        /// Активная настройка
         /// </summary>
-        private const int ButtonChangeMatginBottomPage = 4;
+        private BrushSettingQ? ActiveBackgroundSetting;
+
+        /// <summary>
+        /// Активный индекс столбца позиции складки настроек
+        /// </summary>
+        private int ActiveIndexColumn = -1;
 
         public WindowSetting()
         {
             InitializeComponent();
             GeneralSetting = new();
+            ConsoleSetting = new();
+            #region IELButtonsSetting
             #region IELGeneralButton
             IELGeneralButton.MouseEnter += (sender, e) =>
             {
@@ -57,17 +62,37 @@ namespace OperPage_les.UI.Dialogs
                 App.AnimateThicknessEffect(IELGeneralButton, MarginProperty,
                     GetMarginAnimatePageButton(IELGeneralButton.Margin, false), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
-            IELGeneralButton.OnActivateMouseLeft += (Key) =>
+            IELGeneralButton.OnActivateMouseLeft += (sender, Key) =>
             {
-                MainPageController.NextPage(GeneralSetting);
-                IELGeneralButton.IELSettingObject.BackgroundSetting.UsedState = true;
+                int OriginIndex = Grid.GetColumn(IELGeneralButton);
+                if (ActiveBackgroundSetting != null) ActiveBackgroundSetting.UsedState = false;
+                ActiveBackgroundSetting = IELGeneralButton.IELSettingObject.BackgroundSetting;
+                MainPageController.NextPage(GeneralSetting, ActiveIndexColumn < OriginIndex);
+                ActiveIndexColumn = OriginIndex;
+                ActiveBackgroundSetting.UsedState = true;
             };
-            IELGeneralButton.OnActivateMouseRight += (Key) =>
+            #endregion
+            #region IELConsoleButton
+            IELConsoleButton.MouseEnter += (sender, e) =>
             {
-                if (!IELGeneralButton.IELSettingObject.BackgroundSetting.UsedState) return;
-                MainPageController.ClosePage();
-                IELGeneralButton.IELSettingObject.BackgroundSetting.UsedState = false;
+                App.AnimateThicknessEffect(IELConsoleButton, MarginProperty,
+                    GetMarginAnimatePageButton(IELConsoleButton.Margin, true), TimeSpan.FromMilliseconds(IELConsoleButton.IELSettingObject.AnimationMillisecond));
             };
+            IELConsoleButton.MouseLeave += (sender, e) =>
+            {
+                App.AnimateThicknessEffect(IELConsoleButton, MarginProperty,
+                    GetMarginAnimatePageButton(IELConsoleButton.Margin, false), TimeSpan.FromMilliseconds(IELConsoleButton.IELSettingObject.AnimationMillisecond));
+            };
+            IELConsoleButton.OnActivateMouseLeft += (sender, Key) =>
+            {
+                int OriginIndex = Grid.GetColumn(IELConsoleButton);
+                if (ActiveBackgroundSetting != null) ActiveBackgroundSetting.UsedState = false;
+                ActiveBackgroundSetting = IELConsoleButton.IELSettingObject.BackgroundSetting;
+                MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
+                ActiveIndexColumn = OriginIndex;
+                ActiveBackgroundSetting.UsedState = true;
+            };
+            #endregion
             #endregion
             #region This
             Closed += (sender, e) =>
@@ -84,6 +109,6 @@ namespace OperPage_les.UI.Dialogs
         /// <param name="Activate">Состояние активации наведения</param>
         /// <returns>Будущий Thickness для анимирования наведения</returns>
         private static Thickness GetMarginAnimatePageButton(Thickness Source, bool Activate) => 
-            new(Source.Left, Source.Top, Source.Right, Source.Bottom + (Activate ? -ButtonChangeMatginBottomPage : ButtonChangeMatginBottomPage));
+            new(Source.Left, Source.Top, Source.Right, Activate ? 6 : 10);
     }
 }

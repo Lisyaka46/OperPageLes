@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
         xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowBrowserPagesManager"
         mc:Ignorable="d"
-        Title="Выбор открывающей страницы" Height="500" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Style="{Binding Mode=OneWay, Source={StaticResource EmptyImage}}" ShowInTaskbar="False" Topmost="True" SnapsToDevicePixels="True" Padding="4,4,4,4" UseLayoutRounding="True" WindowStyle="None" AllowsTransparency="True">
+        Title="Выбор открывающей страницы" Height="500" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  ShowInTaskbar="False" Topmost="True" SnapsToDevicePixels="True" Padding="4,4,4,4" UseLayoutRounding="True" WindowStyle="None" AllowsTransparency="True">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF5F9064" Offset="1"/>
@@ -35,7 +35,7 @@
         <Grid x:Name="GridMainPages" Grid.RowSpan="1">
             <Border BorderThickness="2,2,2,2" BorderBrush="#4CC74379" CornerRadius="0,0,5,5">
                 <Grid x:Name="GridScrollPages">
-                    <IEL:IELButtonText x:Name="IELButtonAddPageLabel" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница ярлыков" CornerRadius="6,6,6,6" Margin="5,5,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}">
+                    <IEL:IELButtonText x:Name="IELButtonAddPageLabel" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница ярлыков" CornerRadius="6,6,6,6" Margin="5,5,5,0" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
                         <IEL:IELButtonText.IELSettingObject>
                             <ObjectSettings:IELButtonObjectSetting>
                                 <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -50,7 +50,7 @@
                             </ObjectSettings:IELButtonObjectSetting>
                         </IEL:IELButtonText.IELSettingObject>
                     </IEL:IELButtonText>
-                    <IEL:IELButtonText x:Name="IELButtonPageDeveloper" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница разработчика" CornerRadius="6,6,6,6" Margin="5,60,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}">
+                    <IEL:IELButtonText x:Name="IELButtonPageDeveloper" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница разработчика" CornerRadius="6,6,6,6" Margin="5,60,5,0" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
                         <IEL:IELButtonText.IELSettingObject>
                             <ObjectSettings:IELButtonObjectSetting>
                                 <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -65,7 +65,7 @@
                             </ObjectSettings:IELButtonObjectSetting>
                         </IEL:IELButtonText.IELSettingObject>
                     </IEL:IELButtonText>
-                    <IEL:IELButtonText x:Name="IELButtonPageConsole" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница консоли" CornerRadius="6,6,6,6" Margin="5,115,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}">
+                    <IEL:IELButtonText x:Name="IELButtonPageConsole" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница консоли" CornerRadius="6,6,6,6" Margin="5,115,5,0" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
                         <IEL:IELButtonText.IELSettingObject>
                             <ObjectSettings:IELButtonObjectSetting>
                                 <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
@@ -80,7 +80,7 @@
                             </ObjectSettings:IELButtonObjectSetting>
                         </IEL:IELButtonText.IELSettingObject>
                     </IEL:IELButtonText>
-                    <IEL:IELButtonText x:Name="IELButtonPageBrowser" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница веб-браузера" CornerRadius="6,6,6,6" Margin="5,173,5,0" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}">
+                    <IEL:IELButtonText x:Name="IELButtonPageBrowser" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="Страница веб-браузера" CornerRadius="6,6,6,6" Margin="5,173,5,0" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
                         <IEL:IELButtonText.IELSettingObject>
                             <ObjectSettings:IELButtonObjectSetting>
                                 <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
@@ -98,7 +98,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <IEL:IELButtonText x:Name="IELButtonCancel" BorderThicknessBlock="3,3,3,3" Text="Отмена добавления" CornerRadius="6,6,6,6" Style="{Binding Mode=OneWay, Source={StaticResource Aventura}}" Grid.Row="1" Margin="5,5,5,5">
+        <IEL:IELButtonText x:Name="IELButtonCancel" BorderThicknessBlock="3,3,3,3" Text="Отмена добавления" CornerRadius="6,6,6,6"  Grid.Row="1" Margin="5,5,5,5" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
             <IEL:IELButtonText.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>

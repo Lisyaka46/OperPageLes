@@ -2,12 +2,16 @@
 using IEL.CORE.Classes.Browser;
 using Interpreter.Classes;
 using Interpreter.Commands;
+using Interpreter.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OperPage_les.CORE;
 using OperPage_les.CORE.Flaging;
+using OperPage_les.CORE.Settings;
 using OperPage_les.CORE.Settings.Struct;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.Browser;
+using OperPage_les.UI.UserElementControl;
 using OperPage_les.Windows;
 using OperPage_les.Windows.Pages.ActionPanel;
 using OperPage_les.Windows.Pages.Browser;
@@ -21,7 +25,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using Interpreter.Interfaces;
 
 namespace OperPage_les
 {
@@ -236,11 +239,13 @@ namespace OperPage_les
         /// </summary>
         public string[] AllNamesCommand => [.. DataAliases.Select(x => x.Name).Concat(DataConsoleCommand.Select(x => x.Name))];
 
+        #region Data
         /// <summary>
         /// Массив консольных команд
         /// </summary>
         internal readonly List<AliasCommand<ICommandOPER>> DataAliases = [];
 
+        #region Console command
         /// <summary>
         /// Массив консольных команд
         /// </summary>
@@ -300,40 +305,6 @@ namespace OperPage_les
             }),
             #endregion
 
-            #region label
-            new ConsoleCommand("label",
-            [
-                new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
-                new Parameter("Description", typeof(string), string.Empty)
-            ],
-            "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n" +
-            "- Ярлык создастся только если открыта страница ярлыков в браузере",
-            (Command, param) =>
-            {
-                PageLabels? Page = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
-                if (Page == null)
-                    return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                        $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
-                Page.AddLabel(new((string)param[0], (string)param[2], (string)param[1]));
-                return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык \"%**{(string)param[0]}**\" успешно создан"));
-            }),
-            #endregion
-
-            #region create_label
-            new ConsoleCommand("create_label", "Открывает окно создания ярлыка\n" +
-            "- Ярлык создастся только если открыта страница ярлыков в браузере",
-            (Command, param) =>
-            {
-                PageLabels? Page = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
-                if (Page == null)
-                    return Task.FromResult(CommandStateResult.Failed(Command.Name,
-                        $"Страница %#EA5555**\"{nameof(PageLabels)}\"** в браузере %__не инициализирована!__"));
-                LabelAction label = new WindowGenLabel().CreateLabel();
-                if (label != LabelAction.Empty) Page.AddLabel(label);
-                return Task.FromResult(CommandStateResult.Completed(Command.Name, label != LabelAction.Empty ? $"Ярлык \"%**{label.Name}**\" успешно создан" : null));
-            }),
-            #endregion
-
             #region open_link
             new ConsoleCommand("open_link", [new Parameter("Link", typeof(string))],
             "Открывает в браузере заданную ссылку \"Link\"",
@@ -341,9 +312,30 @@ namespace OperPage_les
             {
                 try
                 {
-                    string uri = (string)param[0];
-                    Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{uri}\""));
+                    string url = (string)param[0];
+                    bool UsePageBroswer = CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
+                    if (UsePageBroswer)
+                    {
+                        PageWebBrowser?[]? AllWebBrowsers = MainWindowApplication.IELBrowserPageMain.SearchAllPageType<PageWebBrowser>();
+                        if (AllWebBrowsers != null)
+                        {
+                            PageWebBrowser? pageWebBrowser = AllWebBrowsers.FirstOrDefault();
+                            pageWebBrowser?.WebViewGoUrl(url);
+                            MainWindowApplication.IELBrowserPageMain.ActivateInlayIndex(Array.IndexOf(AllWebBrowsers, pageWebBrowser));
+                        }
+                        else
+                        {
+                            BrowserPage browser_page_element = new(new PageWebBrowser(), "Веб-браузер", null);
+                            browser_page_element.Disposed += (sender) =>
+                            {
+                                ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
+                            };
+                            MainWindowApplication.IELBrowserPageMain.AddInlayPage(browser_page_element);
+                            ((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
+                        }
+                    }
+                    else Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{url}\""));
                 }
                 catch
                 {
@@ -406,6 +398,13 @@ namespace OperPage_les
             }),
             #endregion
         ];
+        #endregion
+
+        /// <summary>
+        /// Массив консольных команд
+        /// </summary>
+        internal readonly List<LabelAction> DataLabels = [];
+        #endregion
 
         /// <summary>
         /// Главное окно програмы
@@ -423,6 +422,11 @@ namespace OperPage_les
         internal static App CurrentApp => (App)Current;
 
         /// <summary>
+        /// Страница взаимодествия с ярлыками
+        /// </summary>
+        internal PageLabels? MainPageLabels;
+
+        /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
         private SettingProcess SettingApplicationProcess;
@@ -430,7 +434,7 @@ namespace OperPage_les
         /// <summary>
         /// Массив ключей настроек <b>приложения</b>
         /// </summary>
-        internal SettingApplication SettingMainApplication;
+        internal SettingApplication SettingMainApplication { get; private set; }
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -452,6 +456,7 @@ namespace OperPage_les
         /// </summary>
         private string ActivePathSettingApplication = string.Empty;
 
+        #region DIRECTIRY RESOURCES
         /// <summary>
         /// Главная директория ресурсов проекта
         /// </summary>
@@ -463,9 +468,20 @@ namespace OperPage_les
         internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
 
         /// <summary>
+        /// Главная директория ресурсов
+        /// </summary>
+        internal static readonly string DirectoryResourcesApplication = MainDirectoryApplication + @"/Resources/";
+
+        /// <summary>
+        /// Главная директория ресурсов
+        /// </summary>
+        internal static readonly string DirectoryDataLabels = DirectoryResourcesApplication + "Labels.json";
+
+        /// <summary>
         /// Директория файла анимации загрузки
         /// </summary>
-        internal static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.png";
+        internal static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.gif";
+        #endregion
 
         /// <summary>
         /// Реальное время
@@ -526,14 +542,39 @@ namespace OperPage_les
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
                 }),
                 #endregion
+
+                #region label
+                new ConsoleCommand("label",
+                [
+                    new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
+                    new Parameter("Description", typeof(string), string.Empty)
+                ],
+                "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
+                (Command, param) =>
+                {
+                    DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык \"%**{(string)param[0]}**\" успешно создан"));
+                }),
+                #endregion
+
+                #region create_label
+                new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
+                (Command, param) =>
+                {
+                    LabelAction? label = new WindowGenLabel().CreateLabel();
+                    if (label != null) DataLabels.Add(label);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык \"%**{label?.Name}**\" успешно создан" : null));
+                }),
+                #endregion
             ]);
             InitializeComponent();
             Directory.CreateDirectory(MainDirectoryApplication);
             Directory.CreateDirectory(DirectoryImagesApplication);
+            Directory.CreateDirectory(DirectoryResourcesApplication);
             Log("Инициализация параметров приложения");
 
             MillisecondInternetConnection = -1L;
-            ThreadInternetCheckConnection = new(CheckInternetConnection, 900);
+            ThreadInternetCheckConnection = new(CheckInternetConnection, 5100);
             ThreadInternetCheckConnection.Start();
 
             #region Settings
@@ -548,6 +589,18 @@ namespace OperPage_les
                 string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
                 File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
                 ActivePathSettingApplication = PathSettingApplication;
+            }
+
+            DataLabels = [];
+            if (!File.Exists(DirectoryDataLabels))
+            {
+                string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabels);
+                File.WriteAllText(DirectoryDataLabels, SettingApplicationJSON);
+            }
+            else
+            {
+                LabelAction[]? Labels = JsonConvert.DeserializeObject<LabelAction[]>(File.ReadAllText(DirectoryDataLabels));
+                if (Labels != null) DataLabels.AddRange(Labels);
             }
 
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
@@ -589,7 +642,10 @@ namespace OperPage_les
             Current.Exit += (sender, e) =>
             {
                 ThreadInternetCheckConnection.Kill();
+#if !DEBUG
                 UpdateSettingApplication();
+                UpdateFileDataLabel();
+#endif
             };
             Log("Открытие главного окна");
             try
@@ -679,6 +735,7 @@ namespace OperPage_les
             Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
         }
 
+        #region Setting Manipulate
         /// <summary>
         /// Задать значение настроек процесса
         /// </summary>
@@ -701,17 +758,32 @@ namespace OperPage_les
         /// <param name="PathJsonFile">Директория файла настроек</param>
         private void SetSettingApplication(string PathJsonFile)
         {
-            SettingApplication Setting = JsonConvert.DeserializeObject<SettingApplication>(File.ReadAllText(PathJsonFile));
-            PropertyInfo? NullableProperty = GetPropertyInfoNullPropertyInObject(Setting);
-            if (NullableProperty != null)
+            SettingApplication Setting;
+            try
             {
-                MessageBoxResult Result = System.Windows.MessageBox.Show($"Файл настроек \"{PathJsonFile}\" не соответствует целевому файлу настроек для программы.\n" +
-                    $"Все данные будут заменены на значения по умолчанию. Разрешить редактирование данного файла для записи настроек?\n" +
-                    $"При отказе редактирования файла настроек программа будет закрыта!\n" +
-                    $"[{NullableProperty.Name}=null])", "Ошибка чтения настроек",
+                Setting = new();
+                object ObjSetting = Setting;
+                JObject? ObjectSetting = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(PathJsonFile));
+                PropertyInfo[] properties = Setting.GetType().GetProperties();
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    object? Value = ObjectSetting?.GetValue(properties[i].Name)?.ToObject(properties[i].PropertyType);
+                    if (Value == null) continue;
+                    properties[i].SetValue(ObjSetting, Value);
+                }
+                Setting = (SettingApplication)ObjSetting;
+            }
+            catch
+            {
+                MessageBoxResult Result = System.Windows.MessageBox.Show($"Файл настроек \"{PathJsonFile}\" Выдал критическую ошибку.\n" +
+                    $"Все настройки будут изменены на значения по умолчанию.\n" +
+                    $"Разрешить редактирование данного файла для записи настроек?\n" +
+                    $"ПРИМЕЧАНИЕ: При отказе редактирования файла настроек программа будет закрыта!", "Ошибка чтения настроек",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No, System.Windows.MessageBoxOptions.DefaultDesktopOnly);
                 if (Result == MessageBoxResult.No) Environment.Exit(0);
                 Setting = new();
+                string SettingApplicationJSON = JsonConvert.SerializeObject(Setting);
+                File.WriteAllText(PathJsonFile, SettingApplicationJSON);
             }
             SettingMainApplication = Setting;
             ActivePathSettingApplication = PathJsonFile;
@@ -725,6 +797,18 @@ namespace OperPage_les
             string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
             File.WriteAllText(ActivePathSettingApplication, SettingApplicationJSON);
         }
+
+        #endregion
+        #region Labels Manipulate
+        /// <summary>
+        /// Обновить файл данных ярлыков
+        /// </summary>
+        internal void UpdateFileDataLabel()
+        {
+            string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabels);
+            File.WriteAllText(DirectoryDataLabels, SettingApplicationJSON);
+        }
+        #endregion
 
         #region SearchNullableProperty
         /// <summary>
@@ -745,6 +829,7 @@ namespace OperPage_les
         /// <returns>Возможно пустое поле</returns>
         internal static PropertyInfo? GetPropertyInfoNullPropertyInObject(object Element)
         {
+            if (Element == null) return null;
             PropertyInfo[] properties = Element.GetType().GetProperties();
             for (int i = 0; i < properties.Length; i++)
             {
@@ -792,7 +877,7 @@ namespace OperPage_les
             if (AppendBufferCommand && Console != null)
             {
                 PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString,
-                (Key) =>
+                (sender, Key) =>
                 {
                     ActivateActionCommand(Console, CommandString);
                 });

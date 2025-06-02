@@ -86,16 +86,20 @@ namespace OperPage_les.CORE
                         ThreadAction.Invoke();
                         Thread.Sleep(MillisecondSleep);
                     }
-                });
-                ThreadUpdating.IsBackground = true;
+                })
+                {
+                    IsBackground = true
+                };
             }
             else
             {
                 ThreadUpdating = new(delegate ()
                 {
                     ThreadAction.Invoke();
-                });
-                ThreadUpdating.IsBackground = true;
+                })
+                {
+                    IsBackground = true
+                };
             }
             ParamManageThread = true;
             FlagElement.Value = true;

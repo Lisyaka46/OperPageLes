@@ -2,6 +2,7 @@
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
+using OperPage_les.CORE.Label;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,9 +13,9 @@ using Color = System.Windows.Media.Color;
 namespace OperPage_les.UI.UserElementControl
 {
     /// <summary>
-    /// Логика взаимодействия для IELLabelCommand.xaml
+    /// Логика взаимодействия для OPLLabelCommand.xaml
     /// </summary>
-    public partial class LabelCommand : System.Windows.Controls.UserControl
+    public partial class OPLLabelCommand : System.Windows.Controls.UserControl, IIELButton
     {
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
@@ -75,68 +76,57 @@ namespace OperPage_les.UI.UserElementControl
         }
 
         /// <summary>
-        /// Данные изображения тега
+        /// Скругление границ
         /// </summary>
-        public ImageSource ImageTagSource
+        public CornerRadius CornerRadius
         {
-            get => ImageTag.Source;
-            set => ImageTag.Source = value;
+            get => BorderMainLabel.CornerRadius;
+            set
+            {
+                BorderMainLabel.CornerRadius = value;
+                BorderTags.CornerRadius = value;
+            }
         }
 
-        private bool _ImageTagVisible;
         /// <summary>
-        /// Видимость изображения тега
+        /// Толщина границ
         /// </summary>
-        public bool ImageTagVisible
+        public Thickness BorderThicknessBlock
         {
-            get => _ImageTagVisible;
+            get => BorderMainLabel.BorderThickness;
             set
             {
-                App.AnimateDoubleEffect(ImageTag, OpacityProperty, value ? 1d : 0d);
-                _ImageTagVisible = value;
+                BorderMainLabel.BorderThickness = value;
+                BorderTags.BorderThickness = value;
             }
         }
 
-        private LabelAction _Label = LabelAction.Empty;
         /// <summary>
-        /// Ярлык который выполняется объектом
+        /// Элемент ярлыка
         /// </summary>
-        public LabelAction Label
-        {
-            get => _Label;
-            set
-            {
-                _Label = value;
-                if (value == LabelAction.Empty) IsEnabled = false;
-                else
-                {
-                    if (!IsEnabled) IsEnabled = true;
-                    TextBlockNameLabel.Text = _Label.Name;
-                }
-            }
-        }
+        internal LabelAction SourceLabel { get; set; }
 
-        private int _Index;
-        public int Index
-        {
-            get => _Index;
-            set
-            {
-                int pre = value + 1;
-                IELBlockTagIndex.Text = $"{(pre < 10 ? "0" : string.Empty)}{pre}";
-                _Index = value;
-            }
-        }
-
-        public LabelCommand(LabelAction Label, int Index = 0)
+        public OPLLabelCommand(LabelAction Label)
         {
             InitializeComponent();
+            SourceLabel = Label;
+            SourceLabel.AddTag += (Old, New) =>
+            {
+                if (New == null) return;
+                StackPanelTags.Children.Add(CreateVisualTag(New));
+            };
+            SourceLabel.DeleteTag += (Old, New) =>
+            {
+                if (Old == null) return;
+                StackPanelTags.Children.RemoveAt(SourceLabel.Tags.IndexOf(Old));
+            };
             BorderTags.Margin = new(-35, 0, 0, 0);
-            this.Label = Label;
-            this.Index = Index;
+            foreach (LabelTag Tag in Label.Tags)
+            {
+                StackPanelTags.Children.Add(CreateVisualTag(Tag));
+            }
 
-            TextBlockNameLabel.Text = this.Label.Name;
-            ImageTagVisible = false;
+            TextBlockNameLabel.Text = Label.Name;
             
             IsEnabledChanged += (sender, e) =>
             {
@@ -192,8 +182,9 @@ namespace OperPage_les.UI.UserElementControl
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
                     MouseEnterAnimation();
-                    OnActivateMouseLeft?.Invoke();
+                    OnActivateMouseLeft?.Invoke(this);
                 }
+                e.Handled = true;
             };
 
             MouseRightButtonUp += (sender, e) =>
@@ -201,8 +192,9 @@ namespace OperPage_les.UI.UserElementControl
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
                     MouseEnterAnimation();
-                    OnActivateMouseRight?.Invoke();
+                    OnActivateMouseRight?.Invoke(this);
                 }
+                e.Handled = true;
             };
         }
 
@@ -247,6 +239,8 @@ namespace OperPage_les.UI.UserElementControl
             App.AnimateColorEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
 
             App.AnimateThicknessEffect(BorderTags, MarginProperty, new(0), span);
+            BorderMainLabel.CornerRadius = new(6, 0, 0, 6);
+            App.AnimateDoubleEffect(BorderTags, OpacityProperty, 1d, span);
         }
 
         /// <summary>
@@ -268,7 +262,51 @@ namespace OperPage_les.UI.UserElementControl
 
             App.AnimateColorEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
 
-            App.AnimateThicknessEffect(BorderTags, MarginProperty, new(-35, 0, 0, 0), span);
+            App.AnimateThicknessEffect(BorderTags, MarginProperty, new(-BorderTags.ActualWidth / 1.2d, 0, 0, 0), span);
+            BorderMainLabel.CornerRadius = new(6);
+            App.AnimateDoubleEffect(BorderTags, OpacityProperty, 0d, span);
+        }
+
+        /// <summary>
+        /// Создать визуальный элемент тега
+        /// </summary>
+        /// <param name="value">Значение отображаемое тега</param>
+        /// <returns></returns>
+        internal static OPLLabelTag CreateVisualTag(LabelTag NewTag)
+        {
+            return new()
+            {
+                BorderThicknessBlock = new(1),
+                CornerRadius = new(5),
+                Text = string.Empty,
+                PaddingContent = new(4, 2, 4, 2),
+                FontSize = 14d,
+                Tag = NewTag,
+                IELSettingObject = new()
+                {
+                    BackgroundSetting = new(new byte[,]
+                        {
+                        { 255, 116, 220, 80 },
+                        { 255, 180, 255, 154 },
+                        { 255, 196, 239, 201 },
+                        { 255, 222, 87, 87 },
+                        }),
+                    BorderBrushSetting = new(new byte[,]
+                        {
+                        { 255, 0, 0, 0 },
+                        { 255, 19, 35, 12 },
+                        { 255, 47, 44, 9 },
+                        { 255, 58, 8, 8 },
+                        }),
+                    ForegroundSetting = new(new byte[,]
+                        {
+                        { 255, 0, 0, 0 },
+                        { 255, 19, 35, 12 },
+                        { 255, 47, 44, 9 },
+                        { 255, 58, 8, 8 },
+                        }),
+                },
+            };
         }
     }
 }

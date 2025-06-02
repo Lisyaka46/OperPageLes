@@ -1,0 +1,101 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
+        xmlns:GUI="clr-namespace:OperPage_les.UI.UserElementControl"
+        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowManipulateLabelTags"
+        mc:Ignorable="d" Height="300" Width="400" Background="#FF838A7B" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Title="Окно манипуляции над тегами">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.RowSpan="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="149"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="BorderMainLabel" BorderThickness="2,2,2,2" CornerRadius="0,0,0,6" BorderBrush="Black" Grid.ColumnSpan="1" Grid.RowSpan="1">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                        <GradientStop Color="#FF3CB7AF" Offset="0.524"/>
+                        <GradientStop Color="#FF9DBB61" Offset="0.952"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image x:Name="ImageElementLabel" Grid.RowSpan="1" Source="/UI/Images/Labels/Link.png" Margin="5,5,5,5"/>
+                    <TextBlock x:Name="TextBlockNameLabel" TextWrapping="Wrap" Text="12345678901234567890" FontSize="16" FontWeight="Bold" TextAlignment="Center" Foreground="Black" Grid.Row="1" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+            <Border x:Name="BorderTags" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="0,0,6,0" Panel.ZIndex="-1" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="1.2,0" StartPoint="0,-0.14">
+                        <GradientStop Color="#FF9DBB61" Offset="0.628"/>
+                        <GradientStop Color="#FF34F79A" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <ScrollViewer HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel x:Name="StackPanelTags" MinWidth="10"/>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+        <Grid Grid.RowSpan="1" Grid.Row="1" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <IEL:IELButtonText x:Name="IELButtonAddTag" CornerRadius="5,5,5,5" Margin="5,5,5,5" Grid.Column="2" Text="Добавить тег" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}">
+                <IEL:IELButtonText.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FF82B187" NotEnabled="#FFF34A4A" Select="#FF72DC7D" Used="#FFC7C015" UsedState="False"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonText.IELSettingObject>
+            </IEL:IELButtonText>
+            <IEL:IELButtonText x:Name="IELButtonRemoveTag" CornerRadius="5,5,5,5" Margin="5,5,5,5" Text="Удалить тег" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}">
+                <IEL:IELButtonText.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FFB1828D" NotEnabled="#FFF34A4A" Select="#FFFF86A2" Used="#FFFFD2E7" UsedState="False"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonText.IELSettingObject>
+            </IEL:IELButtonText>
+            <IEL:IELButtonText x:Name="IELButtonChangeTag" CornerRadius="5,5,5,5" Margin="5,5,5,5" Grid.Column="1" Text="Изменить тег" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}">
+                <IEL:IELButtonText.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ/>
+                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FF82A7B1" NotEnabled="#FFF34A4A" Select="#FF72A9DC" Used="#FF6ADC90" UsedState="False"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonText.IELSettingObject>
+            </IEL:IELButtonText>
+        </Grid>
+    </Grid>
+</Window>

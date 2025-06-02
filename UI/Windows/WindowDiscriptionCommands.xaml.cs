@@ -105,7 +105,7 @@ namespace OperPage_les.Windows
             #region IELButtonConsole
             IELButtonConsole.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonConsole, 4);
             IELButtonConsole.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonConsole, 0);
-            IELButtonConsole.OnActivateMouseLeft += (Key) =>
+            IELButtonConsole.OnActivateMouseLeft += (sender, Key) =>
             {
                 IELButtonConsole.IELSettingObject.BackgroundSetting.UsedState = true;
                 if (App.CurrentApp.DataAliases.Count == 0 && IELButtonAlias.IsEnabled)
@@ -118,7 +118,7 @@ namespace OperPage_les.Windows
                 {
                     IELButtonText Button = GenerateCommandButton();
                     Button.Text = Element.Name;
-                    Button.OnActivateMouseLeft += (Key) =>
+                    Button.OnActivateMouseLeft += (sender, Key) =>
                     {
                         DescriptionConsole.UpdateInformation(Element);
                         App.AnimateDoubleEffect(DescriptionConsole, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
@@ -136,7 +136,7 @@ namespace OperPage_les.Windows
             #region IELButtonAlias
             IELButtonAlias.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonAlias, 4);
             IELButtonAlias.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonAlias, 0);
-            IELButtonAlias.OnActivateMouseLeft += (Key) =>
+            IELButtonAlias.OnActivateMouseLeft += (sender, Key) =>
             {
                 if (App.CurrentApp.DataAliases.Count == 0 && IELButtonAlias.IsEnabled) return;
                 IELButtonAlias.IELSettingObject.BackgroundSetting.UsedState = true;
@@ -149,7 +149,7 @@ namespace OperPage_les.Windows
                 {
                     IELButtonText Button = GenerateCommandButton();
                     Button.Text = Element.Name;
-                    Button.OnActivateMouseLeft += (Key) =>
+                    Button.OnActivateMouseLeft += (sender, Key) =>
                     {
                         DescriptionAlias.UpdateInformation(Element);
                         App.AnimateDoubleEffect(DescriptionAlias, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
@@ -167,7 +167,7 @@ namespace OperPage_les.Windows
             #region IELButtonSearchCommand
             IELButtonSearchCommand.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonSearchCommand, 4);
             IELButtonSearchCommand.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonSearchCommand, 0);
-            IELButtonSearchCommand.OnActivateMouseLeft += (Key) =>
+            IELButtonSearchCommand.OnActivateMouseLeft += (sender, Key) =>
             {
                 if (GridMainElements.Children.Count == 0) return;
                 int[] Indexes = [..Enumerable.Range(0, App.DataConsoleCommand.Count).Where(
@@ -194,7 +194,7 @@ namespace OperPage_les.Windows
                     Button.IELSettingObject.BackgroundSetting.UsedState = true;
                 }
             };
-            IELButtonSearchCommand.OnActivateMouseRight += (Key) =>
+            IELButtonSearchCommand.OnActivateMouseRight += (sender, Key) =>
             {
                 Keyboard.ClearFocus();
                 if (IndexSearch.Length == 0) return;
@@ -226,7 +226,7 @@ namespace OperPage_les.Windows
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = HeightElement,
-                FontSize = 13d,
+                FontSize = 16d,
                 BorderThicknessBlock = new(2),
                 IELSettingObject = new()
                 {
@@ -246,9 +246,9 @@ namespace OperPage_les.Windows
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
-                Source = (Style)System.Windows.Application.Current.Resources["Brenzo Slab Personal Use"]
+                Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Deledda Open Regular"]
             };
-            BindingOperations.SetBinding(Element, IELButtonText.StyleProperty, binding);
+            BindingOperations.SetBinding(Element, IELButtonText.FontFamilyProperty, binding);
             return Element;
         }
 

@@ -17,7 +17,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" BorderThicknessBlock="3,3,3,3" Margin="0,4,0,4" PaddingContent="0,10,0,10">
+        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1"  FontSize="16" BorderThicknessBlock="3,3,3,3" Margin="0,4,0,4" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}">
             <IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
@@ -32,7 +32,7 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </IEL:IELButtonTextKey.IELSettingObject>
         </IEL:IELButtonTextKey>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" BorderThicknessBlock="3,3,3,3" Grid.Row="1" PaddingContent="0,10,0,10" Margin="0,4,0,4">
+        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2"  FontSize="16" BorderThicknessBlock="3,3,3,3" Grid.Row="1" PaddingContent="0,10,0,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}">
             <IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>

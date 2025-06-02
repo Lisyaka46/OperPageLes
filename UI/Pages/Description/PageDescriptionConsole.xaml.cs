@@ -26,7 +26,7 @@ namespace OperPage_les.UI.Pages.Description
         {
             InitializeComponent();
             TextBlockTextCommand.Foreground = new SolidColorBrush(Colors.Black);
-            IELButtonCloneTextCommand.OnActivateMouseLeft += (Key) =>
+            IELButtonCloneTextCommand.OnActivateMouseLeft += (sender, Key) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockTextCommand.Text);
                 App.AnimateColorEffect(TextBlockTextCommand.Foreground, SolidColorBrush.ColorProperty,

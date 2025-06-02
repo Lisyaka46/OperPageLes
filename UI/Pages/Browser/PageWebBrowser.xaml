@@ -22,7 +22,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="16" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" Text="Https://ya.ru" Grid.ColumnSpan="1" Margin="5,12,5,12" BorderThicknessBlock="1,1,1,1">
+            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="18"  Text="" Grid.ColumnSpan="1" Margin="5,8,5,8" BorderThicknessBlock="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}">
                 <IEL:IELTextBox.IELSettingObject>
                     <ObjectSettings:IELObjectSetting>
                         <ObjectSettings:IELObjectSetting.ForegroundSetting>
@@ -54,9 +54,18 @@
                         </ObjectSettings:IELButtonObjectSetting>
                     </IEL:IELButtonImage.IELSettingObject>
                 </IEL:IELButtonImage>
-                <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Column="1" CornerRadius="6,6,6,6" Margin="5,5,5,5" Background="#FF88A6B9">
-                    <Image x:Name="ImageIndicator" Margin="2,2,2,2"/>
-                </Border>
+                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="8,8,8,8" PaddingContent="2,2,2,2" Grid.Column="1">
+                    <IEL:IELButtonImage.IELSettingObject>
+                        <ObjectSettings:IELButtonObjectSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF122325" Used="#FF352D3C"/>
+                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FF7F8E96" NotEnabled="#FFEF4949" Select="#FF7EB1C7" Used="#FFFFEF87" UsedState="False"/>
+                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        </ObjectSettings:IELButtonObjectSetting>
+                    </IEL:IELButtonImage.IELSettingObject>
+                </IEL:IELButtonImage>
             </Grid>
         </Grid>
         <Grid x:Name="GridBrowser" Grid.Row="1">

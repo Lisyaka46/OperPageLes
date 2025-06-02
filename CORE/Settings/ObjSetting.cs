@@ -2,7 +2,7 @@
 
 namespace OperPage_les.CORE.Settings
 {
-    internal class ObjSetting<T>(T DefaultValue)
+    internal class ObjSetting<T>(T DefaultValue) : ISetting
     {
         /// <summary>
         /// Событие изменения значения объекта настроек

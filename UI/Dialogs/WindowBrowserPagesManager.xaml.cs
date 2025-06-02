@@ -7,6 +7,10 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using IEL.CORE.Classes.Browser;
+using OperPage_les.CORE.Enums;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Windows.Controls;
+using OperPage_les.CORE;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -15,37 +19,20 @@ namespace OperPage_les.UI.Dialogs
     /// </summary>
     public partial class WindowBrowserPagesManager : Window
     {
-        private enum DWMWINDOWATTRIBUTE
-        {
-            DWMWA_WINDOW_CORNER_PREFERENCE = 33
-        }
-
-        private enum DWM_WINDOW_CORNER_PREFERENCE
-        {
-            DWMWCP_DEFAULT = 0,
-            DWMWCP_DONOTROUND = 1,
-            DWMWCP_ROUND = 2,
-            DWMWCP_ROUNDSMALL = 3
-        }
-
-        //[LibraryImport("dwmapi.dll", StringMarshalling = StringMarshalling.Utf8, SetLastError = false)]
-        //private static partial int DwmSetWindowAttribute
-        //    (IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
+        /// <summary>
+        /// Фоновое создание страницы
+        /// </summary>
+        private readonly UpdateBackgroundData CreatingBackgroundPage;
 
         /// <summary>
-        /// Скроллбар выбора ярлыков
+        /// Идёт ли создание объекта страницы
         /// </summary>
-        private readonly CounterScrollBar ScrollBar;
+        private bool Creating = false;
 
         /// <summary>
-        /// Объект браузера страниц
+        /// Состояние добавляемого объекта браузера страниц
         /// </summary>
-        public IELBrowserPage? MainBrowserPage;
-
-        /// <summary>
-        /// Состояние отмены
-        /// </summary>
-        private bool Cancel = true;
+        private BrowserPage? AppendElementPage = null;
 
         /// <summary>
         /// Объект анимации для управления double значением
@@ -59,12 +46,7 @@ namespace OperPage_les.UI.Dialogs
         public WindowBrowserPagesManager()
         {
             InitializeComponent();
-
-            //IntPtr hWnd = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
-            //DWM_WINDOW_CORNER_PREFERENCE DWMWCP_ROUND = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
-            //Marshal.ThrowExceptionForHR(DwmSetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE, ref DWMWCP_ROUND, sizeof(uint)));
-
-            ScrollBar = new(1);
+            CreatingBackgroundPage = new(delegate { });
             KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -75,67 +57,83 @@ namespace OperPage_les.UI.Dialogs
                 }
             };
 
-            IELButtonCancel.OnActivateMouseLeft += (Key) => Close();
+            IELButtonCancel.OnActivateMouseLeft += (sender, Key) => Close();
             #region IELButtonAddPageLabel
-            IELButtonAddPageLabel.OnActivateMouseLeft += (Key) =>
+            IELButtonAddPageLabel.OnActivateMouseLeft += (sender, Key) =>
             {
-                if (MainBrowserPage != null)
+                if (Creating) return;
+                Creating = true;
+                App.MainWindowApplication.ActivateLoadingIndicator();
+                CreatingBackgroundPage.EventElapsed = (sender, e) => Dispatcher.BeginInvoke(() =>
                 {
-                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageLabels()), "Ярлыки",
-                        "Ярлыки которые предаставляются программой для хранения важных команд.");
-                    Cancel = false;
-                }
-                Close();
+                    if (App.CurrentApp.MainPageLabels == null) App.CurrentApp.MainPageLabels = new();
+                    AppendElementPage = new(App.CurrentApp.MainPageLabels, "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
+                    AppendElementPage.Disposed += (sender) =>
+                    {
+
+                    };
+                    App.MainWindowApplication.DiactivateLoadingIndicator();
+                    Close();
+                });
+                CreatingBackgroundPage.Start();
             };
             #endregion
 
             #region IELButtonPageDeveloper
-            IELButtonPageDeveloper.OnActivateMouseLeft += (Key) =>
+            IELButtonPageDeveloper.OnActivateMouseLeft += (sender, Key) =>
             {
-                if (MainBrowserPage != null)
+                PageDeveloper page = new();
+                AppendElementPage = new(page, "Страница разработчика", null);
+                AppendElementPage.Disposed += (sender) =>
                 {
-                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageDeveloper()), "Страница разработчика",
-                        "Страница не предоставляется для обычных пользователей. " +
-                        "Взаимодействие со страницей может повлечь за собой непредвиденное реагирование программы.");
-                    Cancel = false;
-                }
+
+                };
                 Close();
             };
             #endregion
 
             #region IELButtonPageConsole
-            IELButtonPageConsole.OnActivateMouseLeft += (Key) =>
+            IELButtonPageConsole.OnActivateMouseLeft += (sender, Key) =>
             {
-                if (MainBrowserPage != null)
+                PageConsole page = new();
+                AppendElementPage = new(page, "Консоль", "Гибкий инструмент управления программой с помощью вводимых команд");
+                AppendElementPage.Disposed += (sender) =>
                 {
-                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageConsole()), "Консоль",
-                        "Консоль программы для более гибкой настройки и взаимодействия с программой.");
-                    Cancel = false;
-                }
+
+                };
                 Close();
             };
             #endregion
 
             #region IELButtonPageBrowser
-            IELButtonPageBrowser.OnActivateMouseLeft += (Key) =>
+            IELButtonPageBrowser.OnActivateMouseLeft += (sender, Key) =>
             {
-                App.Log("Создаю браузер.");
-                if (MainBrowserPage != null)
+                PageWebBrowser page = new();
+                AppendElementPage = new(page, "Веб-браузер", null);
+                AppendElementPage.Disposed += (sender) =>
                 {
-                    App.Log("Успешная проверка на наличие браузера страниц");
-                    MainBrowserPage.AddInlayPage(new BrowserPage(new PageWebBrowser()), "Веб-браузер");
-                    Cancel = false;
-                }
-                App.Log("Инициализация готова!");
+                    page.WebBrowserElement.Dispose();
+                };
                 Close();
             };
             #endregion
+        }
 
-            Loaded += (sender, e) =>
-            {
-                IELButtonAddPageLabel.IsEnabled = MainBrowserPage?.SearchPageType<PageLabels>() == null;
-                IELButtonPageDeveloper.IsEnabled = MainBrowserPage?.SearchPageType<PageDeveloper>() == null;
-            };
+        internal static new void Show() => throw new Exception("Данное окно нельзя открыть не использовав специальный метод перегрузки с объектом привязки браузера");
+        internal static new void ShowDialog() => throw new Exception("Данное окно нельзя открыть не использовав специальный метод перегрузки с объектом привязки браузера");
+
+        internal void Show(IELBrowserPage browserPage)
+        {
+            IELButtonAddPageLabel.IsEnabled = browserPage.SearchPageType<PageLabels>() == null;
+            IELButtonPageDeveloper.IsEnabled = browserPage.SearchPageType<PageDeveloper>() == null;
+            base.Show();
+        }
+
+        internal void ShowDialog(IELBrowserPage browserPage)
+        {
+            IELButtonAddPageLabel.IsEnabled = browserPage.SearchPageType<PageLabels>() == null;
+            IELButtonPageDeveloper.IsEnabled = browserPage.SearchPageType<PageDeveloper>() == null;
+            base.ShowDialog();
         }
 
         /// <summary>
@@ -143,18 +141,17 @@ namespace OperPage_les.UI.Dialogs
         /// </summary>
         /// <param name="BrowserPage">Браузер для взаимодействия</param>
         /// <returns>Успешно или нет</returns>
-        public bool AddNewPageInBrowser(IELBrowserPage BrowserPage)
+        internal BrowserPage? AddNewPageInBrowser(IELBrowserPage browserPage)
         {
             Opacity = 0d;
             DoubleAnimation animation = DoubleAnimate.Clone();
             animation.BeginTime = TimeSpan.FromMilliseconds(10d);
-            animation.Duration = TimeSpan.FromMilliseconds(1200d);
+            animation.Duration = TimeSpan.FromMilliseconds(670d);
             animation.From = 0d;
             animation.To = 0.97d;
-            this.MainBrowserPage = BrowserPage;
             BeginAnimation(OpacityProperty, animation);
-            ShowDialog();
-            return !Cancel;
+            ShowDialog(browserPage);
+            return AppendElementPage;
         }
     }
 }

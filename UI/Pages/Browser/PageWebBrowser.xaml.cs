@@ -1,4 +1,6 @@
-﻿using IEL.Interfaces.Core;
+﻿using CefSharp;
+using CefSharp.Wpf;
+using IEL.Interfaces.Core;
 using Microsoft.Maui.Platform;
 using Microsoft.Win32;
 using System;
@@ -8,6 +10,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,8 +23,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CefSharp.Wpf;
-using CefSharp;
 
 namespace OperPage_les.UI.Pages.Browser
 {
@@ -30,46 +31,17 @@ namespace OperPage_les.UI.Pages.Browser
     /// </summary>
     public partial class PageWebBrowser : Page
     {
-        /// <summary>
-        /// Объект анимации для управления double значением
-        /// </summary>
-        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-        };
-
         public PageWebBrowser()
         {
             App.Log("Инициализация объектов станицы браузера");
             InitializeComponent();
             IELButtonReloadPage.Imaging = App.LoadImage(Properties.Resources.Reload);
+            IELButtonUnopenPageSystemBrowser.Imaging = App.LoadImage(Properties.Resources.BrowserChangeSystem);
             App.Log("Инициализация станицы браузера");
-            //WebBrowserElement.BrowserSettings.Javascript = CefState.Enabled;
-            //WebBrowserElement.BrowserSettings.ImageLoading = CefState.Enabled;
-            //WebBrowserElement.BrowserSettings.JavascriptAccessClipboard = CefState.Enabled;
-            //WebBrowserElement.BrowserSettings.JavascriptDomPaste = CefState.Enabled;
-            //WebBrowserElement.BrowserSettings.Databases = CefState.Enabled;
-            //WebBrowserElement.BrowserSettings.BackgroundColor = 0;
-            ////WebDriver.FindElement(By.Name(nameof(WebBrowserElement)));
-            //if (WebBrowserElement.DataContext != null) ((FrameworkElement)WebBrowserElement.DataContext).Opacity = 0.1d;
-            TextBoxLink.KeyUp += (sender, e) =>
+            #region WebBrowserElement_Events
+            WebBrowserElement.SourceChanged += (sender, e) =>
             {
-                switch (e.Key)
-                {
-                    case Key.Enter:
-                        ActivateWebViewUrl();
-                        break;
-                    case Key.Escape:
-                        WebBrowserElement.Focus();
-                        break;
-                    default:
-                        break;
-                };
-            };
-            WebBrowserElement.SourceUpdated += (sender, e) =>
-            {
-                TextBoxLink.Text = WebBrowserElement.Uid;
+                TextBoxLink.Text = WebBrowserElement.Source.ToString();
             };
             WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
             {
@@ -82,42 +54,47 @@ namespace OperPage_les.UI.Pages.Browser
                 {
                     App.MainWindowApplication.DiactivateLoadingIndicator();
                 };
-            };
-            Initialized += (sender, e) =>
-            {
-                string DefaultUrl = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
-                if (DefaultUrl.Length > 0)
+                WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
                 {
-                    WebViewGoUrl(DefaultUrl);
-                }
+                    e.NewWindow = WebBrowserElement.CoreWebView2;
+                };
             };
-            IELButtonReloadPage.OnActivateMouseLeft += (Key) =>
+            #endregion
+            TextBoxLink.KeyUp += (sender, e) =>
             {
-                WebViewGoUrl(TextBoxLink.Text);
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        WebViewGoUrl(TextBoxLink.Text);
+                        break;
+                    case Key.Escape:
+                        WebBrowserElement.Focus();
+                        break;
+                    default:
+                        break;
+                };
             };
+            IELButtonReloadPage.OnActivateMouseLeft += (sender, Key) =>
+            {
+                WebBrowserElement.Reload();
+            };
+            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, Key) =>
+            {
+                Process.Start(new ProcessStartInfo(TextBoxLink.Text) { UseShellExecute = true });
+                WebBrowserElement.Stop();
+            };
+            string DefaultUrl = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
+            if (DefaultUrl.Length > 0)
+            {
+                WebViewGoUrl(DefaultUrl);
+            }
             App.Log("Инициализация станицы браузера - Готово!");
         }
 
         internal void WebViewGoUrl(string Url)
         {
-            TextBoxLink.Text = Url;
-            ActivateWebViewUrl();
-        }
-
-        private void ActivateWebViewUrl()
-        {
-            try
-            {
-                WebBrowserElement.Source = new Uri(TextBoxLink.Text);
-                WebBrowserElement.Focus();
-                //webbrowserelement.address = textboxlink.text;
-                ////if (webbrowserelement.corewebview2 == null) app.mainwindowapplication.activateloadingindicator();
-                //webbrowserelement.focus();
-            }
-            catch
-            {
-
-            }
+            WebBrowserElement.Source = new Uri(Url);
+            WebBrowserElement.Focus();
         }
     }
 }

@@ -32,7 +32,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <GUI:IELButtonText x:Name="IELButtonCopyCommandAlias" Grid.Column="2" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Text="Копировать" FontSize="16" Margin="2,2,2,2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" PaddingContent="10,2,10,2">
+                        <GUI:IELButtonText x:Name="IELButtonCopyCommandAlias" Grid.Column="2" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Text="Копировать" FontSize="16" Margin="2,2,2,2"  PaddingContent="10,2,10,2" FontFamily="{DynamicResource Bree CYR var}">
                             <GUI:IELButtonText.IELSettingObject>
                                 <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
                                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -48,12 +48,12 @@
                             </GUI:IELButtonText.IELSettingObject>
                         </GUI:IELButtonText>
                         <TextBlock x:Name="TextBlockAliasCommand" Text="TextBlock" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" FontStyle="Italic" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="1" FontFamily="Cascadia Code"/>
-                        <TextBlock Text="alias*" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="0"/>
+                        <TextBlock Text="alias*" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}"/>
                     </Grid>
-                    <TextBlock x:Name="TextBlockDescriptionAliasCommand" Grid.Row="1" Text="Текст" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Margin="2,0,2,0" Padding="0,2,0,2" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}"/>
+                    <TextBlock x:Name="TextBlockDescriptionAliasCommand" Grid.Row="1" Text="Текст" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Margin="2,0,2,0" Padding="0,2,0,2" />
                 </Grid>
             </Border>
-            <TextBlock x:Name="TextBlockDescriptionAlias" Grid.Row="3" Text="текст" FontSize="16" TextTrimming="CharacterEllipsis" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" TextWrapping="Wrap" Margin="20,5,20,5" FontStyle="Italic"/>
+            <TextBlock x:Name="TextBlockDescriptionAlias" Grid.Row="3" Text="текст" FontSize="16" TextTrimming="CharacterEllipsis"  TextWrapping="Wrap" Margin="20,5,20,5" FontFamily="{DynamicResource Tablon}" FontStyle="Italic"/>
         </Grid>
     </Grid>
 </Page>

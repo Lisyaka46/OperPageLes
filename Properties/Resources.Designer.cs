@@ -73,9 +73,29 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] BrowserChangeSystem {
+            get {
+                object obj = ResourceManager.GetObject("BrowserChangeSystem", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Command {
             get {
                 object obj = ResourceManager.GetObject("Command", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Cross {
+            get {
+                object obj = ResourceManager.GetObject("Cross", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -193,6 +213,16 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] MINSI {
+            get {
+                object obj = ResourceManager.GetObject("MINSI", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] NotMouseButton {
             get {
                 object obj = ResourceManager.GetObject("NotMouseButton", resourceCulture);
@@ -236,6 +266,16 @@ namespace OperPage_les.Properties {
         internal static byte[] Search {
             get {
                 object obj = ResourceManager.GetObject("Search", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Tag {
+            get {
+                object obj = ResourceManager.GetObject("Tag", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="197*"/>
                     <ColumnDefinition Width="48*"/>
                 </Grid.ColumnDefinitions>
-                <GUI:IELButtonText x:Name="IELButtonConsole" Text="Консольные команды" CornerRadius="0,0,6,6" FontWeight="Bold" Margin="3,0,3,7" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" BorderThicknessBlock="3,0,3,3">
+                <GUI:IELButtonText x:Name="IELButtonConsole" Text="Консольные команды" CornerRadius="0,0,6,6" FontWeight="Bold" Margin="3,0,3,7"  BorderThicknessBlock="3,0,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
                     <GUI:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
@@ -39,7 +39,7 @@
                         </ObjectSettings:IELButtonObjectSetting>
                     </GUI:IELButtonText.IELSettingObject>
                 </GUI:IELButtonText>
-                <GUI:IELButtonText x:Name="IELButtonAlias" Text="Алиасы" CornerRadius="0,0,6,6" FontWeight="Bold" Grid.Column="1" Margin="3,0,3,7" Style="{Binding Mode=OneWay, Source={StaticResource RussianRail G Pro}}" BorderThicknessBlock="3,0,3,3">
+                <GUI:IELButtonText x:Name="IELButtonAlias" Text="Алиасы" CornerRadius="0,0,6,6" FontWeight="Bold" Grid.Column="1" Margin="3,0,3,7"  BorderThicknessBlock="3,0,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
                     <GUI:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>

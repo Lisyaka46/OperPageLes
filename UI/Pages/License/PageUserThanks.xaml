@@ -20,7 +20,7 @@
                     <ColumnDefinition Width="Auto" MaxWidth="90"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="TextBlockNickName" Text="A" FontSize="18" Style="{Binding Mode=OneWay, Source={StaticResource Tablon}}" FontWeight="Bold" Foreground="#FF56FF78" TextAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="1" Padding="5,0,5,0" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis"/>
+                <TextBlock x:Name="TextBlockNickName" Text="A" FontSize="18"  FontWeight="Bold" Foreground="#FF56FF78" TextAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="1" Padding="5,0,5,0" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" FontFamily="{DynamicResource Tablon}"/>
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

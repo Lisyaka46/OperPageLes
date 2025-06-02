@@ -4,42 +4,18 @@
              xmlns:local="clr-namespace:OperPage_les"
              x:Class="OperPage_les.App">
     <Application.Resources>
-        <Style x:Key="Tablon">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Tablon"/>
-        </Style>
-        <Style x:Key="Monocraft">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Monocraft"/>
-        </Style>
-        <Style x:Key="MOSCOW2024">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#MOSCOW2024"/>
-        </Style>
-        <Style x:Key="sangha">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#sangha"/>
-        </Style>
-        <Style x:Key="Aventura">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Aventura"/>
-        </Style>
-        <Style x:Key="Bree CYR var">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Bree CYR var"/>
-        </Style>
-        <Style x:Key="Pecita">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Pecita"/>
-        </Style>
-        <Style x:Key="Brenzo Slab Personal Use">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Brenzo Slab Personal Use"/>
-        </Style>
-        <Style x:Key="Vollda">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Vollda"/>
-        </Style>
-        <Style x:Key="zhuan_FuturaNowScript">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#zhuan_FuturaNowScript"/>
-        </Style>
-        <Style x:Key="RussianRail G Pro">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#RussianRail G Pro"/>
-        </Style>
-        <Style x:Key="CureEater">
-            <Setter Property="TextElement.FontFamily" Value="/Fonts/#CureEater"/>
-        </Style>
+        <FontFamily x:Key="Monocraft">/Fonts/#Monocraft</FontFamily>
+        <FontFamily x:Key="Tablon">/Fonts/#Tablon</FontFamily>
+        <FontFamily x:Key="ShareTechMono">/Fonts/#ShareTechMono</FontFamily>
+        <FontFamily x:Key="MOSCOW2024">/Fonts/#MOSCOW2024</FontFamily>
+        <FontFamily x:Key="sangha">/Fonts/#sangha</FontFamily>
+        <FontFamily x:Key="Bree CYR var">/Fonts/#Bree CYR var</FontFamily>
+        <FontFamily x:Key="Pecita">/Fonts/#Pecita</FontFamily>
+        <FontFamily x:Key="Brenzo Slab Personal Use">/Fonts/#Brenzo Slab Personal Use</FontFamily>
+        <FontFamily x:Key="Vollda">/Fonts/#Vollda</FontFamily>
+        <FontFamily x:Key="RussianRail G Pro">/Fonts/#RussianRail G Pro</FontFamily>
+        <FontFamily x:Key="Plup">/Fonts/#Plup</FontFamily>
+        <FontFamily x:Key="Deledda Open Regular">/Fonts/#Deledda Open Regular</FontFamily>
         <DrawingImage x:Key="EmptyImage"/>
     </Application.Resources>
 </Application>

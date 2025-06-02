@@ -77,6 +77,7 @@ namespace OperPage_les.UI.Windows
         public MainWindow()
         {
             InitializeComponent();
+            Icon = App.LoadImage(Properties.Resources.IconMainApplication);
             ImageLogoApplication.Imaging = App.LoadImage(Properties.Resources.IconMainApplication);
             IELImageButtonHelp.Imaging = App.LoadImage(Properties.Resources.LightBulb);
             IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
@@ -112,12 +113,12 @@ namespace OperPage_les.UI.Windows
             #region PanelAction
 
             #region PageInlay
-            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (AltMode) =>
+            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, Key) =>
             {
                 if (PageInlay.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.ActivateInInlay(PageInlay.ActivateManipulateInlay);
+                    IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.PageElement);
             };
-            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (AltMode) =>
+            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
                 if (PageInlay.ActivateManipulateInlay != null)
@@ -179,20 +180,44 @@ namespace OperPage_les.UI.Windows
             //Closing += (sender, e) => App.Current.Shutdown(0);
 
             #region UpToolButtons
-
-            IELButtonSettings.OnActivateMouseLeft += (Key) =>
+            #region IELImageButtonHelp
+            IELImageButtonHelp.OnActivateMouseLeft += (sender, Key) => App.CurrentApp.UsingDiscriptionCommand();
+            IELImageButtonHelp.IELSettingObject.MouseHover += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
+                    "Быстрое открытие описания команд",
+                    OrientationBorderPosition.LeftDown);
+            };
+            IELImageButtonHelp.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+            #region IELButtonSettings
+            IELButtonSettings.IELSettingObject.MouseHover += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELButtonSettings,
+                    "Настройки программы",
+                    OrientationBorderPosition.LeftDown);
+            };
+            IELButtonSettings.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            IELButtonSettings.OnActivateMouseLeft += (sender, Key) =>
             {
                 new WindowSetting().ShowDialog();
             };
             #endregion
+            #endregion
 
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                BrowserPage? Page = IELBrowserPageMain.ActualInlay?.Page;
+                BrowserPage? Page = IELBrowserPageMain.ActualInlay?.PageElement;
                 if (Page == null) return;
-                switch(Page.PageName)
+                switch(Page.GetType().Name)
                 {
-                    case nameof(PageConsole):
+                    case "PageConsole":
                         ((PageConsole)Page.PageContent).TextBoxCommandInput.Focus();
                         break;
                     default: return;
@@ -201,8 +226,8 @@ namespace OperPage_les.UI.Windows
             #region Down Tool Buttons Information
             ActualIndexActivatePageDownToolButtons = 0;
             IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
-            IELImageButtonNextButtons.OnActivateMouseLeft += (Key) => NextPageDownToolButtons();
-            IELImageButtonBackButtons.OnActivateMouseLeft += (Key) => NextPageDownToolButtons(false);
+            IELImageButtonNextButtons.OnActivateMouseLeft += (sender, Key) => NextPageDownToolButtons();
+            IELImageButtonBackButtons.OnActivateMouseLeft += (sender, Key) => NextPageDownToolButtons(false);
 
             IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
             IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
@@ -222,10 +247,10 @@ namespace OperPage_les.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
             };
-            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (Key) =>
+            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
-                new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain);
+                IELBrowserPageMain.AddInlayPage(new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
             };
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
             {
@@ -247,40 +272,27 @@ namespace OperPage_les.UI.Windows
 #endif
             #endregion
 
-            #region IELImageButtonHelp
-            IELImageButtonHelp.OnActivateMouseLeft += (Key) => App.CurrentApp.UsingDiscriptionCommand();
-            IELImageButtonHelp.IELSettingObject.MouseHover += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
-                    "Быстрое открытие описания команд",
-                    OrientationBorderPosition.LeftDown);
-            };
-            IELImageButtonHelp.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
-            };
-            #endregion
+            
             #endregion
 
-            ImageLogoApplication.MouseEnter += (sender, e) =>
-            {
-                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.6d);
-            };
+            //ImageLogoApplication.MouseEnter += (sender, e) =>
+            //{
+            //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.6d);
+            //};
 
-            ImageLogoApplication.MouseLeave += (sender, e) =>
-            {
-                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 1d);
-            };
+            //ImageLogoApplication.MouseLeave += (sender, e) =>
+            //{
+            //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 1d);
+            //};
 
-            ImageLogoApplication.MouseDown += (sender, e) =>
-            {
-                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.4d);
-            };
+            //ImageLogoApplication.MouseDown += (sender, e) =>
+            //{
+            //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.4d);
+            //};
 
-            ImageLogoApplication.MouseUp += (sender, e) =>
+            ImageLogoApplication.OnActivateMouseLeft += (sender, Key) =>
             {
-                App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 1d);
-                Dialogs.LicenseWindow License = new();
+                LicenseWindow License = new();
                 License.ShowDialog();
             };
             KeyDown += (sender, e) =>
@@ -332,8 +344,8 @@ namespace OperPage_les.UI.Windows
                 DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(300d);*/
             };
 
-            UpdateBackgroundDataThis.TimerDataUpdate.Start();
-            UpdateBackgroundDataRunTime.TimerDataUpdate.Start();
+            UpdateBackgroundDataThis.Start();
+            UpdateBackgroundDataRunTime.Start();
         }
 
         //

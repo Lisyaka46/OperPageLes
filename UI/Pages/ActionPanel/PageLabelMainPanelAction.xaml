@@ -16,7 +16,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" FontSize="16" Margin="4,4,4,4" PaddingContent="0,10,0,10">
+        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1"  FontSize="16" Margin="4,4,4,4" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}">
             <IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>

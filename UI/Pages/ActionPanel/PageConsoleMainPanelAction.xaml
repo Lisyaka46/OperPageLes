@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" Text="Очистить текст консоли" Margin="0,4,0,4" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" FontSize="16" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" PaddingContent="0,10,0,10">
+        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" Text="Очистить текст консоли" Margin="0,4,0,4" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" FontSize="16"  PaddingContent="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}">
             <GUI:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True">
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
@@ -32,7 +32,7 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </GUI:IELButtonTextKey.IELSettingObject>
         </GUI:IELButtonTextKey>
-        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" Text="Командный буфер" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="1" CharKeyKeyboard="D2" Grid.RowSpan="1" FontSize="16" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" PaddingContent="0,10,0,10" Margin="0,4,0,4">
+        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" Text="Командный буфер" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="1" CharKeyKeyboard="D2" Grid.RowSpan="1" FontSize="16"  PaddingContent="0,10,0,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}">
             <GUI:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="RightArrow" VisibleMouseImaging="True">
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
@@ -47,7 +47,7 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </GUI:IELButtonTextKey.IELSettingObject>
         </GUI:IELButtonTextKey>
-        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" Text="Описание команд" Margin="0,4,0,4" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="2" CharKeyKeyboard="D3" Grid.RowSpan="1" FontSize="16" Style="{Binding Mode=OneWay, Source={StaticResource Bree CYR var}}" PaddingContent="0,10,0,10">
+        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" Text="Описание команд" Margin="0,4,0,4" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="2" CharKeyKeyboard="D3" Grid.RowSpan="1" FontSize="16"  PaddingContent="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}">
             <GUI:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>

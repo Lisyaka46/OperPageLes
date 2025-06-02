@@ -65,7 +65,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                     else if (e.Delta < 0) ScrollBar.Down();
                 }
             };
-            IELButtonClearBuffer.OnActivateMouseLeft += (Key) =>
+            IELButtonClearBuffer.OnActivateMouseLeft += (sender, Key) =>
             {
                 TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(ScrollBar.Value > 0 ? 50d : 0d);
                 IELButtonClearBuffer.IsEnabled = false;
@@ -154,7 +154,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
             {
                 IELButtonCommand Button = CreateBufferButton(Name, Command);
                 Button.OnActivateMouseLeft += ActionActivateCommand;
-                Button.OnActivateMouseRight += (Key) =>
+                Button.OnActivateMouseRight += (sender, Key) =>
                 {
                     BufferCommand.Delete(Button.Index);
                     TextBlockCounterBuffer.Text =

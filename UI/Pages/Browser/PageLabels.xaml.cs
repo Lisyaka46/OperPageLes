@@ -23,14 +23,14 @@ namespace OperPage_les.Windows.Pages.Browser
     public partial class PageLabels : Page
     {
         /// <summary>
-        /// Динамический массив ярлыков
+        /// Индекс выделенного элемента курсором мыши
         /// </summary>
-        private readonly List<LabelCommand> ObjectsLabel;
+        private OPLLabelCommand? SelectLabelInMouse;
 
         /// <summary>
-        /// Индекс выделенного элемента
+        /// Индекс выделенного элемента панелью
         /// </summary>
-        private int SelectIndexElementLabel = -1;
+        private OPLLabelCommand? SelectLabelInPage;
 
         #region PanelAction
         #region Source
@@ -66,29 +66,19 @@ namespace OperPage_les.Windows.Pages.Browser
         #endregion
 
         /// <summary>
-        /// Узнать количество созданных ярлыков
+        /// Константа размера одного ярлыка
         /// </summary>
-        internal int CountLabel => ObjectsLabel.Count;
-
-        /// <summary>
-        /// Возможен ли повтор анимации загрузки
-        /// </summary>
-        private readonly Flag AnimateForeverLoading = new(false);
+        public const int WidthLabel = 145;
 
         /// <summary>
         /// Константа размера одного ярлыка
         /// </summary>
-        public const int WidthLabel = 165;
-
-        /// <summary>
-        /// Константа размера одного ярлыка
-        /// </summary>
-        public const int HeightLabel = 130;
+        public const int HeightLabel = 115;
 
         /// <summary>
         /// Константа отступа одного ярлыка
         /// </summary>
-        public const int MarginLabel = 2;
+        public const int MarginLabel = 4;
 
         /// <summary>
         /// Константа размера одного ярлыка с отступом
@@ -103,62 +93,158 @@ namespace OperPage_les.Windows.Pages.Browser
         /// <summary>
         /// Количество объектов в одной линии
         /// </summary>
-        public int CountOneLineLabel => (int)(BorderDinamicLabels.ActualWidth / FULL_WidthLabel);
+        private int CountOneLineLabel => (int)(BorderDinamicLabels.ActualWidth / FULL_WidthLabel);
 
         /// <summary>
-        /// Настройка отображения элементов списка ярлыков
+        /// Сохранённое значение количества ярлыков в одной линии
         /// </summary>
-        private readonly static BrushSettingQ BorderForegroundSetting = new(new byte[,]
-                        {
-                        { 255, 150, 31, 96 },
-                        { 255, 243, 164, 207 },
-                        { 255, 243, 164, 207 },
-                        { 255, 248, 218, 233 },
-                        });
+        private int SaveCountOneLineLabel = 0;
 
-        /// <summary>
-        /// Настройка отображения элементов списка ярлыков
-        /// </summary>
-        private readonly static BrushSettingQ BackgroundSetting = new(new byte[,]
+        ///// <summary>
+        ///// Настройка отображения элементов списка ярлыков
+        ///// </summary>
+        //private readonly static BrushSettingQ BorderForegroundSetting = new(new byte[,]
+        //                {
+        //                { 255, 150, 31, 96 },
+        //                { 255, 243, 164, 207 },
+        //                { 255, 243, 164, 207 },
+        //                { 255, 248, 218, 233 },
+        //                });
+
+        ///// <summary>
+        ///// Настройка отображения элементов списка ярлыков
+        ///// </summary>
+        //private readonly static BrushSettingQ BackgroundSetting = new(new byte[,]
+        //                {
+        //                { 255, 243, 164, 207 },
+        //                { 255, 173, 97, 138 },
+        //                { 255, 243, 136, 194 },
+        //                { 255, 190, 166, 181 },
+        //                });
+        #region Styles
+        internal static readonly BrushSettingQ[] BackgroundStyles =
+        [
+            new(new byte[,]
                         {
-                        { 255, 243, 164, 207 },
-                        { 255, 173, 97, 138 },
-                        { 255, 243, 136, 194 },
-                        { 255, 190, 166, 181 },
-                        });
+                        { 255, 116, 220, 80 },
+                        { 255, 180, 255, 154 },
+                        { 255, 196, 239, 201 },
+                        { 255, 222, 87, 87 },
+                        }),
+            new(new byte[,]
+                        {
+                        { 255, 155, 179, 169 },
+                        { 255, 160, 200, 175 },
+                        { 255, 221, 254, 241 },
+                        { 255, 111, 127, 121 },
+                        }),
+            new(new byte[,]
+                        {
+                        { 255, 239, 250, 195 },
+                        { 255, 240, 246, 210 },
+                        { 255, 195, 218, 250 },
+                        { 255, 250, 201, 195 },
+                        }),
+            new(new byte[,]
+                        {
+                        { 255, 85, 150, 181 },
+                        { 255, 90, 140, 185 },
+                        { 255, 181, 137, 85 },
+                        { 255, 84, 107, 117 },
+                        }),
+        ];
+        internal static readonly BrushSettingQ[] Borderbrush_Foreground_Styles =
+        [
+            new(new byte[,]
+                        {
+                        { 255, 0, 0, 0 },
+                        { 255, 19, 35, 12 },
+                        { 255, 47, 44, 9 },
+                        { 255, 58, 8, 8 },
+                        }),
+            new(new byte[,]
+                        {
+                        { 255, 62, 96, 82 },
+                        { 255, 65, 100, 85 },
+                        { 255, 100, 154, 133 },
+                        { 255, 38, 68, 57 },
+                        }),
+            new(new byte[,]
+                        {
+                        { 255, 126, 139, 73 },
+                        { 255, 130, 150, 69 },
+                        { 255, 79, 110, 152 },
+                        { 255, 153, 100, 94 },
+                        }),
+            new(new byte[,]
+                        {
+                        { 255, 24, 86, 116 },
+                        { 255, 30, 83, 107 },
+                        { 255, 109, 72, 28 },
+                        { 255, 24, 47, 56 },
+                        }),
+        ];
+        #endregion
 
         public PageLabels()
         {
             InitializeComponent();
-            ObjectsLabel = [];
             BorderScrollBackground.Width = 0d;
 
             #region PanelAction
             #region PageLabel
-            PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += (Key) =>
+            PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += (sender, Key) =>
             {
+                int CountOld = App.CurrentApp.DataLabels.Count;
                 App.CurrentApp.ActivateActionCommand(null, "create_label");
+                if (CountOld != App.CurrentApp.DataLabels.Count)
+                {
+                    OPLLabelCommand Label = CreateVisualLabel(CountOld);
+                    GridMainLabels.Children.Add(Label);
+                    UpdatePositionLabels(CountOld, false);
+                    App.AnimateDoubleEffect(Label, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+                    TextBlockCount.Text = $"ярлыков: {App.CurrentApp.DataLabels.Count}";
+                }
             };
             #endregion
             #region PageLabelElement
-            PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += (Key) =>
+            PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += (sender, Key) =>
             {
-                ObjectsLabel[SelectIndexElementLabel].OnActivateMouseLeft?.Invoke();
-                SelectIndexElementLabel = -1;
+                if (SelectLabelInPage != null)
+                {
+                    PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();
+                    App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
+                    SelectLabelInPage = null;
+                }
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
-            PageLabelElement.IELButtonChangeLabel.OnActivateMouseLeft += (Key) =>
+            PageLabelElement.IELButtonChangeLabel.OnActivateMouseLeft += (sender, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                ObjectsLabel[SelectIndexElementLabel].Label =
-                    new WindowGenLabel().ChangeLabel(ObjectsLabel[SelectIndexElementLabel].Label);
-                SelectIndexElementLabel = -1;
+                if (SelectLabelInPage != null)
+                {
+                    new WindowGenLabel().ChangeLabel(SelectLabelInPage.SourceLabel);
+                    SelectLabelInPage = null;
+                }
             };
-            PageLabelElement.IELButtonRemoveLabel.OnActivateMouseLeft += (Key) =>
+            PageLabelElement.IELButtonRemoveLabel.OnActivateMouseLeft += (sender, Key) =>
             {
-                RemoveLabelAt(SelectIndexElementLabel);
+                if (SelectLabelInPage != null)
+                {
+                    RemoveLabelAt(App.CurrentApp.DataLabels.IndexOf(SelectLabelInPage.SourceLabel));
+                    SelectLabelInPage = null;
+                }
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                SelectIndexElementLabel = -1;
+            };
+            PageLabelElement.IELButtonCreateLabelTag.OnActivateMouseLeft += (sender, Key) =>
+            {
+                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                if (SelectLabelInPage != null)
+                {
+                    new WindowManipulateLabelTags(SelectLabelInPage).ShowDialog();
+                    //SelectLabelInPage.AppendTag(new("Tag"));
+                    SelectLabelInPage = null;
+                }
             };
             #endregion
             PanelActionPageLabel.IsKeyboardModeChanged += (Source, NewValue) =>
@@ -172,38 +258,120 @@ namespace OperPage_les.Windows.Pages.Browser
                 PageLabelElement.IELButtonExecuteLabel.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonChangeLabel.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonRemoveLabel.CharKeyboardActivate = NewValue;
+                PageLabelElement.IELButtonCreateLabelTag.CharKeyboardActivate = NewValue;
             };
-            PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(150d, 190d));
+            PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(230d, 236d));
             #endregion
 
-            BorderNamingLabel.MouseRightButtonUp += (sender, e) =>
+            MouseRightButtonUp += (sender, e) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabel);
             };
-            BorderNamingLabel.MouseLeftButtonUp += (sender, e) =>
+            MouseLeftButtonUp += (sender, e) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
+            ScrollLabels.ScrollChanged += (sender, e) =>
+            {
+                UpdateScroll();
+            };
+            SizeChanged += (sender, e) =>
+            {
+                if (SaveCountOneLineLabel == CountOneLineLabel) return;
+                SaveCountOneLineLabel = CountOneLineLabel;
+                UpdatePositionLabels(0);
+            };
+            CreateAllVisualLabels();
+        }
 
+        /// <summary>
+        /// Обновить визуализацию прокрутки
+        /// </summary>
+        private void UpdatePositionLabels(int StartIndex, bool Animatable = true)
+        {
+            if (GridMainLabels.Children.Count == 0) return;
+            BorderDinamicLabels.UpdateLayout();
+            for (int i = StartIndex; i < GridMainLabels.Children.Count; i++)
+            {
+                OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
+                int CountOneLine = i % CountOneLineLabel;
+                int CountLine = i / CountOneLineLabel;
+                int Left = CountOneLine == 0 ? MarginLabel : CountOneLine * FULL_WidthLabel;
+                int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
+                if (Element.Margin.Left == Left && Element.Margin.Top == Top) continue;
+                if (Animatable)
+                {
+                    ThicknessAnimation animation = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(Element.IELSettingObject.AnimationMillisecond));
+                    animation.To = new(Left, Top, 0, 0);
+                    animation.FillBehavior = FillBehavior.Stop;
+                    animation.Completed += (sender, e) =>
+                    {
+                        Element.Margin = new(Left, Top, 0, 0);
+                    };
+                    Element.ApplyAnimationClock(MarginProperty, animation.CreateClock());
+                }
+                else Element.Margin = new(Left, Top, 0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Обновить визуализацию прокрутки
+        /// </summary>
+        private void UpdateScroll()
+        {
+            double Offset = 0d;
+            if (ScrollLabels.ScrollableHeight > 0d)
+            {
+                double One = BorderNamingLabel.ActualWidth / ScrollLabels.ScrollableHeight;
+                Offset = One * ScrollLabels.VerticalOffset;
+            }
+            App.AnimateDoubleEffect(BorderScrollBackground, WidthProperty, Offset, TimeSpan.FromMilliseconds(300d));
+        }
+
+        /// <summary>
+        /// Сгенерировать все объекты интерфейса ярлыка
+        /// </summary>
+        private void CreateAllVisualLabels()
+        {
+            for (int i = 0; i < App.CurrentApp.DataLabels.Count; i++)
+            {
+                OPLLabelCommand Label = CreateVisualLabel(i);
+                GridMainLabels.Children.Add(Label);
+                App.AnimateDoubleEffect(Label, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+                App.MainWindowApplication.UpdateLayout();
+            }
+            TextBlockCount.Text = $"ярлыков: {App.CurrentApp.DataLabels.Count}";
+            //UpdatePositionLabels(0, false);
         }
 
         /// <summary>
         /// Сгенерировать объект интерфейса ярлыка
         /// </summary>
-        /// <param name="label">Объект ссылки на данные ярлыка</param>
-        /// <param name="Data">Массив ярлыков</param>
-        /// <param name="grid">Контейнер нахождения ярлыка</param>
-        /// <returns>Объект интерфейса ярлыка</returns>
-        private LabelCommand CreateLabel(LabelAction label)
+        private OPLLabelCommand CreateVisualLabel(int IndexData)
         {
-            byte[] ByteLabelImage = ICommandOPER.ReadNameCommand(label.Command) switch
+            string name_command = ICommandOPER.ReadNameCommand(App.CurrentApp.DataLabels[IndexData].Command);
+            byte[] ByteLabelImage;
+            int IndexUseStyle;
+            switch(name_command)
             {
-                "open_link" => Properties.Resources.Link,
-                "open_file" => Properties.Resources.File,
-                "open_directory" => Properties.Resources.Folder,
-                _ => Properties.Resources.Command
+                case "open_link":
+                    IndexUseStyle = 2;
+                    ByteLabelImage = Properties.Resources.Link;
+                    break;
+                case "open_file":
+                    IndexUseStyle = 1;
+                    ByteLabelImage = Properties.Resources.File;
+                    break;
+                case "open_directory":
+                    IndexUseStyle = 3;
+                    ByteLabelImage = Properties.Resources.Folder;
+                    break;
+                default:
+                    IndexUseStyle = 0;
+                    ByteLabelImage = Properties.Resources.Command;
+                    break;
             };
-            LabelCommand Label = new(label, ObjectsLabel.Count)
+            OPLLabelCommand Label = new(App.CurrentApp.DataLabels[IndexData])
             {
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
@@ -211,78 +379,47 @@ namespace OperPage_les.Windows.Pages.Browser
                 IELSettingObject = new()
                 {
                     IntervalHover = 800d,
-                    AnimationMillisecond = 300,
-                    BackgroundSetting = BackgroundSetting,
-                    BorderBrushSetting = BorderForegroundSetting,
-                    ForegroundSetting = BorderForegroundSetting,
-                }
+                    AnimationMillisecond = 230,
+                    BackgroundSetting = BackgroundStyles[IndexUseStyle],
+                    BorderBrushSetting = Borderbrush_Foreground_Styles[IndexUseStyle],
+                    ForegroundSetting = Borderbrush_Foreground_Styles[IndexUseStyle],
+                },
+                Opacity = 0d,
+                ColumnWidth = new()
+                {
+                    Width = new(WidthLabel)
+                },
+                Width = WidthLabel + 10,
+                Height = HeightLabel,
             };
-            Label.OnActivateMouseLeft += (Key) =>
+            Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            Label.MouseRightButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.OnActivateMouseRight += (sender, Key) =>
+            {
+                SelectLabelInPage = Label;
+                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
+            };
+            Label.OnActivateMouseLeft += (sender, Key) =>
             {
                 PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();
-                App.CurrentApp.ActivateActionCommand(Console, Label.Label.Command);
+                App.CurrentApp.ActivateActionCommand(Console, Label.SourceLabel.Command);
+            };
+            Label.MouseEnter += (sender, e) =>
+            {
+                SelectLabelInMouse = Label;
             };
             Label.IELSettingObject.MouseHover += (sender, e) =>
             {
                 if (sender == null) return;
-                string Text = Label.Label.Description ?? string.Empty;
+                string Text = Label.SourceLabel.Description ?? string.Empty;
                 if (Text.Length > 0)
                     App.MainWindowApplication.IELMessageMain.UsingBorderInformation(Label, Text,
-                        OrientationBorderPosition.Auto);
+                        IEL.CORE.Enums.OrientationBorderPosition.Auto);
             };
             Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             Label.MouseLeftButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             return Label;
-        }
-
-        ///// <summary>
-        ///// Добавить в страницу SQL элемент ялрыка
-        ///// </summary>
-        ///// <param name="label">Добавляеммый элемент ярлыка</param>
-        //internal void AddSQLLabel(LabelAction label)
-        //{
-        //    IELLabelCommand Label = CreateLabel(label, ref ObjectsSQLLabel, ref GridSQLLabels);
-        //    Label.ImageTagSource = new BitmapImage(new Uri($"{App.PathImageApplication}/Wifi.png", UriKind.RelativeOrAbsolute));
-        //    Label.ImageTagVisible = true;
-        //    ObjectsSQLLabel.Add(Label);
-        //    GridSQLLabels.Children.Add(Label);
-        //    Grid.SetColumn(Label, (ObjectsSQLLabel.Count - 1) % GridSQLLabels.ColumnDefinitions.Count);
-
-        //    TextBlockCount.Text = $"{CountLabel} Ярлыков";
-        //    DoubleAnimateObj.To = 1d;
-        //    Label.BeginAnimation(OpacityProperty, DoubleAnimateObj);
-        //    ScrollBar.MaxUp(1);
-        //}
-
-        /// <summary>
-        /// Добавить в страницу элемент ялрыка
-        /// </summary>
-        /// <param name="label">Добавляеммый элемент ярлыка</param>
-        internal void AddLabel(LabelAction label)
-        {
-            LabelCommand Label = CreateLabel(label);
-            Label.Opacity = 0d;
-            Label.Width = WidthLabel;
-            Label.Height = HeightLabel;
-            Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            Label.MouseRightButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
-            Label.OnActivateMouseRight += (Key) =>
-            {
-                SelectIndexElementLabel = Label.Index;
-                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
-            };
-            int CountOneLine = CountLabel % CountOneLineLabel;
-            int CountLine = CountLabel / CountOneLineLabel;
-            int Left = CountOneLine == 0 ? MarginLabel : CountOneLine * FULL_WidthLabel;
-            int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
-            Label.Margin = new(Left, Top, 0, 0);
-            ObjectsLabel.Add(Label);
-            GridMainLabels.Children.Add(Label);
-            //StackPanelLabels.Children.Add(Label);
-
-            TextBlockCount.Text = $"ярлыков: {CountLabel}";
-            App.AnimateDoubleEffect(Label, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
 
         /// <summary>
@@ -297,20 +434,12 @@ namespace OperPage_les.Windows.Pages.Browser
             animation.Completed += (sender, e) =>
             {
                 GridMainLabels.Children.RemoveAt(Index);
+                UpdatePositionLabels(Index);
             };
-            LabelCommand Label = ObjectsLabel[Index];
+            UIElement Label = GridMainLabels.Children[Index];
             Label.BeginAnimation(OpacityProperty, animation);
-            ObjectsLabel.RemoveAt(Index);
-            for (int i = Index; i < ObjectsLabel.Count; i++)
-            {
-                int CountOneLine = i % CountOneLineLabel;
-                int CountLine = i / CountOneLineLabel;
-                int Left = CountOneLine == 0 ? MarginLabel : CountOneLine * FULL_WidthLabel;
-                int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
-                App.AnimateThicknessEffect(ObjectsLabel[i], MarginProperty, new(Left, Top, 0, 0), TimeSpan.FromMilliseconds(270d));
-                ObjectsLabel[i].Index = i;
-            }
-            TextBlockCount.Text = $"ярлыков: {CountLabel}";
+            App.CurrentApp.DataLabels.RemoveAt(Index);
+            TextBlockCount.Text = $"ярлыков: {App.CurrentApp.DataLabels.Count}";
         }
     }
 }

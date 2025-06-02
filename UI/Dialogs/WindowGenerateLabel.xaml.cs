@@ -30,12 +30,12 @@ namespace OperPage_les.UI.Dialogs
             InitializeComponent();
             Width = 315d;
             Height = 336d;
-            IELButtonCancel.OnActivateMouseLeft += (Key) =>
+            IELButtonCancel.OnActivateMouseLeft += (sender, Key) =>
             {
                 Cancel = true;
                 Close();
             };
-            IELButtonCreateLabel.OnActivateMouseLeft += (Key) =>
+            IELButtonCreateLabel.OnActivateMouseLeft += (sender, Key) =>
             {
                 Create();
             };
@@ -116,13 +116,13 @@ namespace OperPage_les.UI.Dialogs
         /// Создать ярлык с помощью диалогового окна
         /// </summary>
         /// <returns>Созданный объект ярлыка</returns>
-        internal LabelAction CreateLabel()
+        internal LabelAction? CreateLabel()
         {
             Title = "Создание ярлыка";
             IELButtonCreateLabel.Text = "Создать ярлык";
             Focus();
             ShowDialog();
-            if (Cancel) return LabelAction.Empty;
+            if (Cancel) return null;
             return new(
                 IELTextBoxNameLabel.Text,
                 IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty,
@@ -134,7 +134,7 @@ namespace OperPage_les.UI.Dialogs
         /// </summary>
         /// <param name="Source">Изменяемый объект ярлыка</param>
         /// <returns>Изменённый объект ярлыка</returns>
-        internal LabelAction ChangeLabel(LabelAction Source)
+        internal void ChangeLabel(LabelAction Source)
         {
             IELTextBoxNameLabel.Text = Source.Name;
             IELTextBoxDescription.Text = Source.Description ?? string.Empty;
@@ -147,11 +147,11 @@ namespace OperPage_les.UI.Dialogs
                     IELTextBoxNameLabel.Text.Equals(Source.Name) &&
                     IELTextBoxDescription.Text.Equals(Source.Description) &&
                     IELTextBoxCommand.Text.Equals(Source.Command)
-                )) return Source;
-            return new(
-                IELTextBoxNameLabel.Text,
-                IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty,
-                IELTextBoxCommand.Text);
+                )) return;
+            Source.Name = IELTextBoxNameLabel.Text;
+            Source.Description = IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty;
+            Source.Command = IELTextBoxCommand.Text;
+            return;
         }
     }
 }
