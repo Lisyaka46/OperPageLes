@@ -36,39 +36,38 @@ namespace OperPage_les.UI.Dialogs
         {
             InitializeComponent();
             LabelManipulate = OPLLabel;
+            for (int i = 0; i < LabelManipulate.SourceLabel.Tags.Count; i++)
+            {
+                AddVisualTag(LabelManipulate.SourceLabel.Tags[i]);
+            }
             ImageElementLabel.Source = LabelManipulate.ImageElementLabel.Source;
             TextBlockNameLabel.Text = LabelManipulate.TextBlockNameLabel.Text;
             Icon = App.LoadImage(Properties.Resources.Tag);
-            Opacity = 0;
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
-            Loaded += (sender, e) =>
-            {
-                App.AnimateDoubleEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
-                for (int i = 0; i < LabelManipulate.SourceLabel.Tags.Count; i++)
-                {
-                    AddVisualTag(LabelManipulate.SourceLabel.Tags[i]);
-                }
-            };
-            IELButtonAddTag.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonAddTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 LabelTag? Tag = new WindowGenDataLabelTag().GenereteTag();
                 if (Tag == null) return;
                 LabelManipulate.SourceLabel.AppendTag(Tag);
                 AddVisualTag(Tag);
             };
-            IELButtonChangeTag.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonChangeTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (SelectedTag == null) return;
                 new WindowGenDataLabelTag().ChangeDataTag(SelectedTag.Tag);
                 ClearSelectTag();
             };
-            IELButtonRemoveTag.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonRemoveTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (SelectedTag == null) return;
                 LabelManipulate.SourceLabel.RemoveTag(SelectedTag.Tag);
                 StackPanelTags.Children.Remove(SelectedTag);
                 ClearSelectTag();
+            };
+            IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                Close();
             };
         }
 
@@ -83,21 +82,15 @@ namespace OperPage_les.UI.Dialogs
 
             OPLTag.MouseLeftButtonUp += (sender, e) =>
             {
-                if (SelectedTag != null)
-                {
-                    SelectedTag.IELSettingObject.BackgroundSetting.UsedState = false;
-                }
-                OPLTag.IELSettingObject.BackgroundSetting.UsedState = true;
+                SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
+                OPLTag.IELSettingObject.BackgroundSetting.SetUsedState(true);
                 SelectedTag = OPLTag;
                 IELButtonChangeTag.IsEnabled = true;
                 IELButtonRemoveTag.IsEnabled = true;
             };
             OPLTag.MouseRightButtonUp += (sender, e) =>
             {
-                if (SelectedTag != null)
-                {
-                    SelectedTag.IELSettingObject.BackgroundSetting.UsedState = false;
-                }
+                SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
                 ClearSelectTag();
             };
             OPLTag.Opacity = 0d;
@@ -110,6 +103,7 @@ namespace OperPage_les.UI.Dialogs
         /// </summary>
         private void ClearSelectTag()
         {
+            SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
             SelectedTag = null;
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;

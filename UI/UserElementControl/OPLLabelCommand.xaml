@@ -5,29 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:GUI="clr-namespace:IEL;assembly=IEL"
              xmlns:local="clr-namespace:OperPage_les;assembly=OperPage_les" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.UserElementControl.OPLLabelCommand" 
-             mc:Ignorable="d" Cursor="Hand" Height="110">
+             mc:Ignorable="d" Cursor="Hand" Width="110" Height="110">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="ColumnWidth" Width="110"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Border x:Name="BorderMainLabel" BorderThickness="2,2,2,2" Background="White" CornerRadius="6,6,6,6" BorderBrush="Black" Grid.ColumnSpan="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image x:Name="ImageElementLabel" Grid.RowSpan="1" Source="/UI/Images/Labels/Link.png" Margin="5,5,5,5"/>
-                <TextBlock x:Name="TextBlockNameLabel" TextWrapping="Wrap" Text="12345678901234567890" FontSize="14" FontWeight="Bold" TextAlignment="Center" Foreground="Black" Grid.Row="1" VerticalAlignment="Bottom"/>
+                <Image x:Name="ImageElementLabel" Grid.RowSpan="1" Source="/UI/Images/Labels/Link.png"/>
+                <TextBlock x:Name="TextBlockNameLabel" TextWrapping="Wrap" Text="12345678901234567890" FontSize="14" FontWeight="Bold" TextAlignment="Center" Foreground="Black" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="2,0,2,0"/>
 
             </Grid>
-        </Border>
-        <Border x:Name="BorderTags" BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Column="1" CornerRadius="0,6,6,0" HorizontalAlignment="Left" Panel.ZIndex="-1">
-            <ScrollViewer HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
-                <StackPanel x:Name="StackPanelTags" MinWidth="10">
-                </StackPanel>
-            </ScrollViewer>
-
         </Border>
     </Grid>
 </UserControl>

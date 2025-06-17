@@ -25,11 +25,11 @@ namespace OperPage_les.UI.Dialogs
         {
             InitializeComponent();
             Icon = App.LoadImage(Properties.Resources.Tag);
-            IELButtonClose.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonClose.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 Close();
             };
-            IELButtonComplete.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (IELTextBoxNameTag.Text.Length == 0)
                 {
