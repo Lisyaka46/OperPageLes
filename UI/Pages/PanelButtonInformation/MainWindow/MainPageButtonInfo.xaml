@@ -20,13 +20,13 @@
             <GUI:IELBlockInfoText.IELSettingObject>
                 <ObjectSettings:IELUsingObjectSetting>
                     <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF2D563E" NotEnabled="#FFF92929" Select="#FF4F5F56" Used="White" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FF2D563E" NotEnabled="#FFF92929" Select="#FF4F5F56" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                     <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
                         <Classes:BrushSettingQ/>
                     </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
                     <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF65A081" NotEnabled="#FFF92929" Select="#FF86E4B2" Used="White" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FF65A081" NotEnabled="#FFF92929" Select="#FF86E4B2" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELUsingObjectSetting>
             </GUI:IELBlockInfoText.IELSettingObject>
@@ -41,10 +41,10 @@
                         <Classes:BrushSettingQ/>
                     </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
                     <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF314E58" NotEnabled="#FFF92929" Select="#FF505E63" Used="White" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FF314E58" NotEnabled="#FFF92929" Select="#FF505E63" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                     <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF5C9FBB" NotEnabled="#FFF92929" Select="#FF56A6E4" Used="White" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FF5C9FBB" NotEnabled="#FFF92929" Select="#FF56A6E4" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELUsingObjectSetting>
             </GUI:IELBlockInfoText.IELSettingObject>
@@ -61,10 +61,10 @@
             <GUI:IELBlockInfoImage.IELSettingObject>
                 <ObjectSettings:IELUsingObjectSetting>
                     <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                     <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELUsingObjectSetting>
             </GUI:IELBlockInfoImage.IELSettingObject>

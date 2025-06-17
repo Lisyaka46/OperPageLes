@@ -20,13 +20,13 @@
             <IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ Default="Black" Select="#FF2D2C1D" Used="#FF38382F" UsedState="False" NotEnabled="#FF541D1D"/>
+                        <Classes:BrushSettingQ Default="Black" Select="#FF2D2C1D" Used="#FF38382F" NotEnabled="#FF541D1D"/>
                     </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="Black" Select="#FF2D2C1D" Used="#FF38382F" UsedState="False" NotEnabled="#FF541D1D"/>
+                        <Classes:BrushSettingQ Default="Black" Select="#FF2D2C1D" Used="#FF38382F" NotEnabled="#FF541D1D"/>
                     </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FFAFAC60" Select="#FFD6D494" Used="#FFF7F6CC" UsedState="False" NotEnabled="#FFD84F4F"/>
+                        <Classes:BrushSettingQ Default="#FFAFAC60" Select="#FFD6D494" Used="#FFF7F6CC" NotEnabled="#FFD84F4F"/>
                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELButtonObjectSetting>
             </IEL:IELButtonTextKey.IELSettingObject>

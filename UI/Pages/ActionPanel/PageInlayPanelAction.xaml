@@ -42,7 +42,7 @@
                         <Classes:BrushSettingQ NotEnabled="#FF310000" Select="#FF1F0B0B" Used="#FF171717"/>
                     </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FFA97474" NotEnabled="#FFD04747" Select="#FFEF9696" Used="#FFF7D4D4" UsedState="False"/>
+                        <Classes:BrushSettingQ Default="#FFA97474" NotEnabled="#FFD04747" Select="#FFEF9696" Used="#FFF7D4D4"/>
                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELButtonObjectSetting>
             </IEL:IELButtonTextKey.IELSettingObject>

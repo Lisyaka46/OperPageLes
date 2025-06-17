@@ -46,7 +46,7 @@ namespace OperPage_les.UI.Pages.Settings
                         break;
                 }
             };
-            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 System.Windows.Forms.OpenFileDialog dialog = new()
                 {
@@ -64,11 +64,11 @@ namespace OperPage_les.UI.Pages.Settings
                 };
                 dialog.ShowDialog();
             };
-            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 SetImageUriValue(System.Windows.Clipboard.GetText());
             };
-            IELButtonClearImage.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonClearImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
@@ -102,7 +102,7 @@ namespace OperPage_les.UI.Pages.Settings
                     BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
                 }
             };
-            IELButtonTextClearValue.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonTextClearValue.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 SliderBufferSize.Value = OriginalSizeBuffer;
                 App.CurrentApp.SettingMainApplication.BufferSize.Value = OriginalSizeBuffer;
@@ -160,6 +160,17 @@ namespace OperPage_les.UI.Pages.Settings
             CheckBoxUsePageBrowser.Unchecked += (sender, e) =>
             {
                 App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = false;
+            };
+            #endregion
+            #region UseOnlyCreatePageWebBrowser
+            CheckBoxUseOnlyCreatePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser;
+            CheckBoxUseOnlyCreatePageBrowser.Checked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = true;
+            };
+            CheckBoxUseOnlyCreatePageBrowser.Unchecked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = false;
             };
             #endregion
         }

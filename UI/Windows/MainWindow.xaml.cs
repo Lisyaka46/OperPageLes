@@ -113,12 +113,12 @@ namespace OperPage_les.UI.Windows
             #region PanelAction
 
             #region PageInlay
-            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, Key) =>
+            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (PageInlay.ActivateManipulateInlay != null)
                     IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.PageElement);
             };
-            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, Key) =>
+            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
                 if (PageInlay.ActivateManipulateInlay != null)
@@ -181,7 +181,7 @@ namespace OperPage_les.UI.Windows
 
             #region UpToolButtons
             #region IELImageButtonHelp
-            IELImageButtonHelp.OnActivateMouseLeft += (sender, Key) => App.CurrentApp.UsingDiscriptionCommand();
+            IELImageButtonHelp.OnActivateMouseLeft += (sender, e, Key) => App.CurrentApp.UsingDiscriptionCommand();
             IELImageButtonHelp.IELSettingObject.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
@@ -204,7 +204,7 @@ namespace OperPage_les.UI.Windows
             {
                 IELMessageMain.CloseBorderInformation();
             };
-            IELButtonSettings.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonSettings.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 new WindowSetting().ShowDialog();
             };
@@ -226,8 +226,8 @@ namespace OperPage_les.UI.Windows
             #region Down Tool Buttons Information
             ActualIndexActivatePageDownToolButtons = 0;
             IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
-            IELImageButtonNextButtons.OnActivateMouseLeft += (sender, Key) => NextPageDownToolButtons();
-            IELImageButtonBackButtons.OnActivateMouseLeft += (sender, Key) => NextPageDownToolButtons(false);
+            IELImageButtonNextButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons();
+            IELImageButtonBackButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons(false);
 
             IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
             IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
@@ -247,7 +247,7 @@ namespace OperPage_les.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
             };
-            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, Key) =>
+            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
                 IELBrowserPageMain.AddInlayPage(new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
@@ -290,7 +290,7 @@ namespace OperPage_les.UI.Windows
             //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.4d);
             //};
 
-            ImageLogoApplication.OnActivateMouseLeft += (sender, Key) =>
+            ImageLogoApplication.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 LicenseWindow License = new();
                 License.ShowDialog();

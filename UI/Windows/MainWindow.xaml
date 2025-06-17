@@ -48,10 +48,10 @@
                         <GUI:IELButtonImage.IELSettingObject>
                             <ObjectSettings:IELButtonObjectSetting>
                                 <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954" UsedState="False"/>
+                                    <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954"/>
                                 </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                                 <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                    <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797" UsedState="False"/>
+                                    <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797"/>
                                 </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             </ObjectSettings:IELButtonObjectSetting>
                         </GUI:IELButtonImage.IELSettingObject>
@@ -102,10 +102,10 @@
                                     <GUI:IELButtonImage.IELSettingObject>
                                         <ObjectSettings:IELButtonObjectSetting>
                                             <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                                <Classes:BrushSettingQ Default="#FF25546D" NotEnabled="#FFC15555" Select="#FF446B80" Used="#FF4B768C" UsedState="False"/>
+                                                <Classes:BrushSettingQ Default="#FF25546D" NotEnabled="#FFC15555" Select="#FF446B80" Used="#FF4B768C"/>
                                             </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                                <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9" UsedState="False"/>
+                                                <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9"/>
                                             </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                         </ObjectSettings:IELButtonObjectSetting>
                                     </GUI:IELButtonImage.IELSettingObject>
@@ -174,7 +174,7 @@
                 <GUI:IELBrowserPage.IELSettingObject>
                     <ObjectSettings:IELObjectSetting>
                         <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#9969AFAE" NotEnabled="#99960000" Select="#992FD6D4" Used="#9931C887" UsedState="False"/>
+                            <Classes:BrushSettingQ Default="#9969AFAE" NotEnabled="#99960000" Select="#992FD6D4" Used="#9931C887"/>
                         </ObjectSettings:IELObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELObjectSetting>
                 </GUI:IELBrowserPage.IELSettingObject>

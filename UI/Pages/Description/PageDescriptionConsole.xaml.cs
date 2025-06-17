@@ -1,5 +1,6 @@
 ﻿using Interpreter.Classes;
 using Interpreter.Commands;
+using Interpreter.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace OperPage_les.UI.Pages.Description
         {
             InitializeComponent();
             TextBlockTextCommand.Foreground = new SolidColorBrush(Colors.Black);
-            IELButtonCloneTextCommand.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonCloneTextCommand.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockTextCommand.Text);
                 App.AnimateColorEffect(TextBlockTextCommand.Foreground, SolidColorBrush.ColorProperty,
@@ -38,7 +39,7 @@ namespace OperPage_les.UI.Pages.Description
         /// Обновить описание
         /// </summary>
         /// <param name="command"></param>
-        public void UpdateInformation(ConsoleCommand command)
+        public void UpdateInformation(ICommandOPER command)
         {
             Parameter[] Parameters = command.Parameters ?? [];
             int CountParameters = Parameters.Length;
@@ -50,7 +51,7 @@ namespace OperPage_les.UI.Pages.Description
                     $"{(i < Parameters.Length - 1 ? ", " : string.Empty)}";
             }
             TextBlockNameCommand.Text = $"Консольная команда: \"{command.Name}\"";
-            TextBlockMainDescriptionCommand.Text = command.Description;
+            if (command.GetType() == typeof(ConsoleCommand)) TextBlockMainDescriptionCommand.Text = ((ConsoleCommand)command).Description;
             TextBlockDescriptionCountParameter.Text = CountParameters == 0 ?
             $"Команда \"{command.Name}\" не использует параметров" : $"Команда \"{command.Name}\" включает в себя {CountParameters} и больше параметров";
             TextBlockTextCommand.Text = command.Name.Trim() + (CountParameters == 0 ? string.Empty : "* " + TextRegistration);

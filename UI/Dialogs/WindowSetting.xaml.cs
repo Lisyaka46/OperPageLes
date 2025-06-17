@@ -62,14 +62,14 @@ namespace OperPage_les.UI.Dialogs
                 App.AnimateThicknessEffect(IELGeneralButton, MarginProperty,
                     GetMarginAnimatePageButton(IELGeneralButton.Margin, false), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
-            IELGeneralButton.OnActivateMouseLeft += (sender, Key) =>
+            IELGeneralButton.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 int OriginIndex = Grid.GetColumn(IELGeneralButton);
-                if (ActiveBackgroundSetting != null) ActiveBackgroundSetting.UsedState = false;
+                ActiveBackgroundSetting?.SetUsedState(false);
                 ActiveBackgroundSetting = IELGeneralButton.IELSettingObject.BackgroundSetting;
                 MainPageController.NextPage(GeneralSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
-                ActiveBackgroundSetting.UsedState = true;
+                ActiveBackgroundSetting.SetUsedState(true);
             };
             #endregion
             #region IELConsoleButton
@@ -83,14 +83,14 @@ namespace OperPage_les.UI.Dialogs
                 App.AnimateThicknessEffect(IELConsoleButton, MarginProperty,
                     GetMarginAnimatePageButton(IELConsoleButton.Margin, false), TimeSpan.FromMilliseconds(IELConsoleButton.IELSettingObject.AnimationMillisecond));
             };
-            IELConsoleButton.OnActivateMouseLeft += (sender, Key) =>
+            IELConsoleButton.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 int OriginIndex = Grid.GetColumn(IELConsoleButton);
-                if (ActiveBackgroundSetting != null) ActiveBackgroundSetting.UsedState = false;
+                ActiveBackgroundSetting?.SetUsedState(false);
                 ActiveBackgroundSetting = IELConsoleButton.IELSettingObject.BackgroundSetting;
                 MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
-                ActiveBackgroundSetting.UsedState = true;
+                ActiveBackgroundSetting.SetUsedState(true);
             };
             #endregion
             #endregion

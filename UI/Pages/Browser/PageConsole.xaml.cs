@@ -3,6 +3,7 @@ using IEL.CORE.Classes;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
+using InterpreterCommand.Classes;
 using OperPage_les.CORE;
 using OperPage_les.CORE.Enums;
 using OperPage_les.Windows.Frames;
@@ -34,7 +35,7 @@ namespace OperPage_les.UI.Pages.Browser
         /// <summary>
         /// Страница буфера в панели действий
         /// </summary>
-        internal static readonly PageBufferPanelAction BufferPage = new(App.HeightButtonBuffer);
+        internal static readonly PageBufferPanelAction BufferPage = new();
         #endregion
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace OperPage_les.UI.Pages.Browser
             GridHintOneCommand.Opacity = 0d;
             Canvas.SetZIndex(GridHintOneCommand, -1);
             RichTextBoxMainMessage.Document = new();
-            ButtonReturnCommand.OnActivateMouseLeft += (sender, Key) => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+            ButtonReturnCommand.OnActivateMouseLeft += (sender, e, Key) => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
             #region Setting
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
             {
@@ -126,26 +127,26 @@ namespace OperPage_les.UI.Pages.Browser
             #endregion
             #region PanelAction
             #region ConsolePage
-            ConsolePage.IELButtonCrearConsole.OnActivateMouseLeft += (sender, Key) =>
+            ConsolePage.IELButtonCrearConsole.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 RichTextBoxMainMessage.Document = new();
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
-            ConsolePage.IELButtonCrearConsole.OnActivateMouseRight += (sender, Key) => RichTextBoxMainMessage.Document = new();
+            ConsolePage.IELButtonCrearConsole.OnActivateMouseRight += (sender, e, Key) => RichTextBoxMainMessage.Document = new();
 
-            ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, Key) =>
+            ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionBufferPage);
             };
 
-            ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, Key) =>
+            ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
                 App.CurrentApp.UsingDiscriptionCommand();
             };
             #endregion
             #region BufferPage
-            BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, Key) =>
+            BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionConsolePage, false);
             };
@@ -290,8 +291,9 @@ namespace OperPage_les.UI.Pages.Browser
             StateVisibleHit = ConsoleHitStateEnum.VisibleMainCommands;
             TimeSpan span = TimeSpan.FromMilliseconds(300d);
 
-            string CommandText = ICommandOPER.ReadNameCommand(TextBoxCommandInput.Text);
-            string[] AllHintNames = [.. App.CurrentApp.AllNamesCommand.Where((i) => { return i.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase); })];
+            string CommandText = COMInterpreter.ReadNameCommand(TextBoxCommandInput.Text);
+            string[] AllHintNames =
+                [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase)).Select((i) => i.Name)];
             StackPanelAllHit.Children.Clear();
             double AnimateWidth = 0d, AnimateHeight = 0d;
             BorderHintCommand.Width = 0d;
@@ -337,8 +339,7 @@ namespace OperPage_les.UI.Pages.Browser
         private void UsingOneHitCommand(string TextCommand)
         {
             ICommandOPER? CommandHint;
-            CommandHint = ICommandOPER.ReadCommand([.. App.DataConsoleCommand], TextCommand);
-            CommandHint ??= ICommandOPER.ReadCommand([.. App.CurrentApp.DataAliases], TextCommand);
+            CommandHint = App.CurrentApp.Interpreter.ReadCommand(TextCommand);
             if (CommandHint == null) return;
             StateVisibleHit = ConsoleHitStateEnum.VisibleOneCommand;
             TimeSpan span = TimeSpan.FromMilliseconds(300d);
@@ -428,9 +429,9 @@ namespace OperPage_les.UI.Pages.Browser
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
-                Source = (Style)System.Windows.Application.Current.Resources["RussianRail G Pro"]
+                Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["RussianRail G Pro"]
             };
-            BindingOperations.SetBinding(Message, Paragraph.StyleProperty, binding);
+            BindingOperations.SetBinding(Message, Paragraph.FontFamilyProperty, binding);
             RichTextBoxMainMessage.Document.Blocks.Add(Message);
         }
 

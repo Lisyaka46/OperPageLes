@@ -74,11 +74,11 @@ namespace OperPage_les.UI.Pages.Browser
                         break;
                 };
             };
-            IELButtonReloadPage.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonReloadPage.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 WebBrowserElement.Reload();
             };
-            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 Process.Start(new ProcessStartInfo(TextBoxLink.Text) { UseShellExecute = true });
                 WebBrowserElement.Stop();

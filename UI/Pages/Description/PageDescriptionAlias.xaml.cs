@@ -26,7 +26,7 @@ namespace OperPage_les.UI.Pages.Description
         public PageDescriptionAlias()
         {
             InitializeComponent();
-            IELButtonCopyCommandAlias.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonCopyCommandAlias.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockAliasCommand.Text);
             };
@@ -42,11 +42,8 @@ namespace OperPage_les.UI.Pages.Description
             TextBlockNameAlias.Text = command.Name;
             TextBlockAlias.Text = "alias* " + command.NameCommand;
             TextBlockAliasCommand.Text = command.NameCommand;
-            try
-            {
-                TextBlockDescriptionAliasCommand.Text = App.DataConsoleCommand[Array.IndexOf([.. App.DataConsoleCommand.Select((i) => i.Name)], NameCommand)].Description;
-            }
-            catch { TextBlockDescriptionAliasCommand.Text = "Такой команды не существует."; }
+            ICommandOPER? SourceCommandAlias = App.CurrentApp.Interpreter.GetCommandFindName(NameCommand);
+            TextBlockDescriptionAliasCommand.Text = SourceCommandAlias != null ? SourceCommandAlias.Description : "Такой команды не существует.";
             TextBlockDescriptionAlias.Text = command.Description;
         }
 

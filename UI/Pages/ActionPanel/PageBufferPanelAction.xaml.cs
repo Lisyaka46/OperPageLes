@@ -1,6 +1,6 @@
-﻿using DataScroll;
+﻿using IEL;
+using IEL.CORE.Classes;
 using IEL.Interfaces.Front;
-using IEL;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +13,17 @@ namespace OperPage_les.Windows.Pages.ActionPanel
     /// </summary>
     public partial class PageBufferPanelAction : Page
     {
+        /// <summary>
+        /// Стиль отображения элементов в буфере
+        /// </summary>
+        private readonly BrushSettingQ BackgroundSetting = new(new byte[,]
+                        {
+                        { 255, 243, 164, 207 },
+                        { 255, 173, 97, 138 },
+                        { 255, 243, 136, 194 },
+                        { 255, 190, 166, 181 },
+                        });
+
         /// <summary>
         /// Объект анимации позиции сколла буфера
         /// </summary>
@@ -30,46 +41,19 @@ namespace OperPage_les.Windows.Pages.ActionPanel
         };
 
         /// <summary>
-        /// Скролл-бар страницы визуализации буфера
-        /// </summary>
-        internal readonly CounterScrollBar ScrollBar;
-
-        /// <summary>
         /// Буфер объектов команд
         /// </summary>
         internal Interpreter.Classes.Buffer BufferCommand;
 
-        /// <summary>
-        /// Константа размера Height для кнопок буфера
-        /// </summary>
-        [NotNull()]
-        private readonly int H;
-
-        public PageBufferPanelAction(int HeightButtonCommand)
+        public PageBufferPanelAction()
         {
             InitializeComponent();
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
-            H = HeightButtonCommand;
-            ScrollBar = new(3);
-            ScrollBar.ChangedValue += (Value) =>
-            {
-                ThicknessAnimationBuffer.To = new(0, 0 - (H + 2) * Value, 0, 0);
-                GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
-            };
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
-            BorderBuffer.MouseWheel += (sender, e) =>
+            IELButtonClearBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (ScrollBar.MaxValue > 0 && BufferCommand.Count > 0)
-                {
-                    if (e.Delta > 0) ScrollBar.Up();
-                    else if (e.Delta < 0) ScrollBar.Down();
-                }
-            };
-            IELButtonClearBuffer.OnActivateMouseLeft += (sender, Key) =>
-            {
-                TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(ScrollBar.Value > 0 ? 50d : 0d);
+                TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(50d);
                 IELButtonClearBuffer.IsEnabled = false;
-                ScrollBar.MaxClear();
                 ThicknessAnimationBuffer.To = new(0);
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
@@ -99,7 +83,6 @@ namespace OperPage_les.Windows.Pages.ActionPanel
             BufferCommand.DelElement += (index) =>
             {
                 GridBuffer.Children.RemoveAt(index);
-                ScrollBar.MaxDown(1);
 
                 ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
                 {
@@ -110,7 +93,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 {
                     IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
                     Button.Index--;
-                    AnimationBuffer.To = new Thickness(0, (H + 2) * i, 0, 0);
+                    AnimationBuffer.To = new Thickness(0, (Button.Height + 2) * i, 0, 0);
                     AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
                     Button.BeginAnimation(MarginProperty, AnimationBuffer);
                 }
@@ -119,7 +102,6 @@ namespace OperPage_les.Windows.Pages.ActionPanel
             BufferCommand.ClearBuffer += () =>
             {
                 GridBuffer.Children.Clear();
-                ScrollBar.MaxClear();
             };
         }
 
@@ -134,10 +116,11 @@ namespace OperPage_les.Windows.Pages.ActionPanel
         {
             IELButtonCommand Button = new(Name, Command, BufferCommand.Count)
             {
-                Height = H,
-                Margin = new(0, (H + 2) * BufferCommand.Count, 0, 0),
+                Height = 40,
+                Margin = new(0, (40 + 2) * BufferCommand.Count, 0, 0),
                 Index = BufferCommand.Count,
             };
+            Button.IELSettingObject.BackgroundSetting = BackgroundSetting;
             return Button;
         }
 
@@ -154,7 +137,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
             {
                 IELButtonCommand Button = CreateBufferButton(Name, Command);
                 Button.OnActivateMouseLeft += ActionActivateCommand;
-                Button.OnActivateMouseRight += (sender, Key) =>
+                Button.OnActivateMouseRight += (sender, e, Key) =>
                 {
                     BufferCommand.Delete(Button.Index);
                     TextBlockCounterBuffer.Text =
@@ -163,7 +146,6 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 };
                 BufferCommand.Add(Command);
                 GridBuffer.Children.Add(Button);
-                ScrollBar.MaxUp(1);
             }
             else
             {

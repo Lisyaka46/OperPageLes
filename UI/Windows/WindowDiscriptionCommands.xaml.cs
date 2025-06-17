@@ -79,7 +79,7 @@ namespace OperPage_les.Windows
         {
             App.Log("Создание окна описания элементов");
             InitializeComponent();
-            IELButtonAlias.IsEnabled = App.CurrentApp.DataAliases.Count > 0;
+            IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
             IELButtonSearchCommand.Imaging = App.LoadImage(Properties.Resources.Search);
 
             IELMessageInfo.Opacity = 0d;
@@ -105,22 +105,22 @@ namespace OperPage_les.Windows
             #region IELButtonConsole
             IELButtonConsole.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonConsole, 4);
             IELButtonConsole.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonConsole, 0);
-            IELButtonConsole.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonConsole.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                IELButtonConsole.IELSettingObject.BackgroundSetting.UsedState = true;
-                if (App.CurrentApp.DataAliases.Count == 0 && IELButtonAlias.IsEnabled)
-                    IELButtonAlias.IELSettingObject.BackgroundSetting.UsedState = false;
+                IELButtonConsole.IELSettingObject.BackgroundSetting.SetUsedState(true);
+                if (App.CurrentApp.Interpreter.AliasesCount == 0 && IELButtonAlias.IsEnabled)
+                    IELButtonAlias.IELSettingObject.BackgroundSetting.SetUsedState(false);
                 IELControllerDescription.NextPage(DescriptionConsole, false);
                 GridMainElements.Opacity = 0d;
                 GridMainElements.Children.Clear();
                 GridMainElements.RowDefinitions.Clear();
-                foreach (ConsoleCommand Element in App.DataConsoleCommand)
+                foreach (KeyValuePair<string, ICommandOPER> Element in App.CurrentApp.Interpreter.Commands)
                 {
                     IELButtonText Button = GenerateCommandButton();
-                    Button.Text = Element.Name;
-                    Button.OnActivateMouseLeft += (sender, Key) =>
+                    Button.Text = Element.Value.Name;
+                    Button.OnActivateMouseLeft += (sender, e, Key) =>
                     {
-                        DescriptionConsole.UpdateInformation(Element);
+                        DescriptionConsole.UpdateInformation(Element.Value);
                         App.AnimateDoubleEffect(DescriptionConsole, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                     };
                     GridMainElements.RowDefinitions.Add(new RowDefinition()
@@ -136,22 +136,22 @@ namespace OperPage_les.Windows
             #region IELButtonAlias
             IELButtonAlias.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonAlias, 4);
             IELButtonAlias.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonAlias, 0);
-            IELButtonAlias.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonAlias.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (App.CurrentApp.DataAliases.Count == 0 && IELButtonAlias.IsEnabled) return;
-                IELButtonAlias.IELSettingObject.BackgroundSetting.UsedState = true;
-                IELButtonConsole.IELSettingObject.BackgroundSetting.UsedState = false;
+                if (App.CurrentApp.Interpreter.AliasesCount == 0 && IELButtonAlias.IsEnabled) return;
+                IELButtonAlias.IELSettingObject.BackgroundSetting.SetUsedState(true);
+                IELButtonConsole.IELSettingObject.BackgroundSetting.SetUsedState(false);
                 IELControllerDescription.NextPage(DescriptionAlias, true);
                 GridMainElements.Opacity = 0d;
                 GridMainElements.Children.Clear();
                 GridMainElements.RowDefinitions.Clear();
-                foreach (AliasCommand<ICommandOPER> Element in App.CurrentApp.DataAliases)
+                foreach (KeyValuePair<string, AliasCommand<ICommandOPER>> Element in App.CurrentApp.Interpreter.Aliases)
                 {
                     IELButtonText Button = GenerateCommandButton();
-                    Button.Text = Element.Name;
-                    Button.OnActivateMouseLeft += (sender, Key) =>
+                    Button.Text = Element.Value.Name;
+                    Button.OnActivateMouseLeft += (sender, e, Key) =>
                     {
-                        DescriptionAlias.UpdateInformation(Element);
+                        DescriptionAlias.UpdateInformation(Element.Value);
                         App.AnimateDoubleEffect(DescriptionAlias, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                     };
                     GridMainElements.RowDefinitions.Add(new RowDefinition()
@@ -167,34 +167,47 @@ namespace OperPage_les.Windows
             #region IELButtonSearchCommand
             IELButtonSearchCommand.MouseEnter += (sender, e) => AnimateButtonBookmark(IELButtonSearchCommand, 4);
             IELButtonSearchCommand.MouseLeave += (sender, e) => AnimateButtonBookmark(IELButtonSearchCommand, 0);
-            IELButtonSearchCommand.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonSearchCommand.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (GridMainElements.Children.Count == 0) return;
-                int[] Indexes = [..Enumerable.Range(0, App.DataConsoleCommand.Count).Where(
-                            i => App.DataConsoleCommand[i].Name.Contains(IELInputSearchCommand.Text))];
-                if (IndexSearch.Length == 0)
-                {
-                    IndexSearch = Indexes;
-                }
-                else
-                {
-                    IEnumerable<int> EnumIndex = IndexSearch.AsEnumerable();
-                    foreach (int Index in Indexes)
-                    {
-                        if (EnumIndex.Contains(Index)) continue;
-                        EnumIndex = EnumIndex.Append(Index);
-                    }
-                    IndexSearch = [.. EnumIndex];
-                }
                 IELButtonText Button;
+                if (IndexSearch.Length > 0)
+                {
+                    foreach (int Index in IndexSearch)
+                    {
+                        Button = (IELButtonText)GridMainElements.Children[Index];
+                        if (!Button.IELSettingObject.BackgroundSetting.GetUsedState()) continue;
+                        Button.IELSettingObject.BackgroundSetting.SetUsedState(false);
+                    }
+                    IndexSearch = [];
+                }
+                ICommandOPER[] SearchCommands = [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(IELInputSearchCommand.Text))];
+                if (SearchCommands.Length > 0)
+                {
+                    List<int> ArraySearch = [];
+                    for (int i = 0; i < GridMainElements.Children.Count; i++)
+                    {
+                        Button = (IELButtonText)GridMainElements.Children[i];
+                        for (int j = 0; j < SearchCommands.Length; j++)
+                        {
+                            if (Button.Text.Contains(SearchCommands[j].Name))
+                            {
+                                ArraySearch.Add(i);
+                                break;
+                            }
+                        }
+                    }
+                    IndexSearch = [.. ArraySearch];
+                }
+                else return;
                 foreach (int Index in IndexSearch)
                 {
                     Button = (IELButtonText)GridMainElements.Children[Index];
-                    if (Button.IELSettingObject.BackgroundSetting.UsedState) continue;
-                    Button.IELSettingObject.BackgroundSetting.UsedState = true;
+                    if (Button.IELSettingObject.BackgroundSetting.GetUsedState()) continue;
+                    Button.IELSettingObject.BackgroundSetting.SetUsedState(true);
                 }
             };
-            IELButtonSearchCommand.OnActivateMouseRight += (sender, Key) =>
+            IELButtonSearchCommand.OnActivateMouseRight += (sender, e, Key) =>
             {
                 Keyboard.ClearFocus();
                 if (IndexSearch.Length == 0) return;
@@ -202,12 +215,21 @@ namespace OperPage_les.Windows
                 foreach (int Index in IndexSearch)
                 {
                     Button = (IELButtonText)GridMainElements.Children[Index];
-                    if (!Button.IELSettingObject.BackgroundSetting.UsedState) continue;
-                    Button.IELSettingObject.BackgroundSetting.UsedState = false;
+                    if (!Button.IELSettingObject.BackgroundSetting.GetUsedState()) continue;
+                    Button.IELSettingObject.BackgroundSetting.SetUsedState(false);
                 }
                 IndexSearch = [];
             };
             #endregion
+            IELInputSearchCommand.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Escape:
+                        Keyboard.ClearFocus();
+                        break;
+                }
+            };
             Closing += (sender, e) =>
             {
                 App.MainWindowApplication?.Activate();

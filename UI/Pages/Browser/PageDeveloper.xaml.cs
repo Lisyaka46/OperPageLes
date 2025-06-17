@@ -24,7 +24,7 @@ namespace OperPage_les.Windows.Pages.Browser
         public PageDeveloper()
         {
             InitializeComponent();
-            IELButtonGenerateImage.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonGenerateImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 ImageElement.Source = Imaging.CreateBitmapSourceFromHBitmap(GenImage().GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 ImageElement.UpdateLayout();
@@ -37,7 +37,7 @@ namespace OperPage_les.Windows.Pages.Browser
             {
                 TextBlockSliderValueHeight.Text = $"{(e.NewValue < 10 ? "0" : string.Empty)}{(int)e.NewValue}";
             };
-            IELButtonDownloadImage.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonDownloadImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 Bitmap bitmap = GenImage();
                 bitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gen.png");

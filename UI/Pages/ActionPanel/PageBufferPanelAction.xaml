@@ -17,9 +17,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Border x:Name="BorderBuffer" BorderBrush="#FF163C26" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True" Background="#B21B2F24">
-            <Grid>
+            <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Hidden">
                 <Grid x:Name="GridBuffer"/>
-            </Grid>
+            </ScrollViewer>
         </Border>
         <Grid>
             <Grid.ColumnDefinitions>

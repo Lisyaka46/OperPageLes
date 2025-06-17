@@ -8,8 +8,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="626.41"
       Title="PageGeneral">
-
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="170"/>
@@ -162,7 +160,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock TextWrapping="Wrap" Text="Размер буфера"  FontSize="14" Padding="4,0,4,0" TextAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Bree CYR var}"/>
                     <Slider x:Name="SliderBufferSize" SmallChange="1" Maximum="80" Minimum="10" TickPlacement="BottomRight" TickFrequency="1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#99FFFFFF"  IsSnapToTickEnabled="True" Value="10" Grid.Column="1" Grid.ColumnSpan="1" Margin="2,2,2,2" Grid.RowSpan="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Delay="100" IsMoveToPointEnabled="True"/>
-                    <TextBlock x:Name="TextBlockSliderBufferSize" TextWrapping="Wrap" Text="00" Grid.Column="2"  FontSize="16" VerticalAlignment="Center" Padding="0,0,10,0" FontFamily="{DynamicResource Bree CYR var}"/>
+                    <TextBlock x:Name="TextBlockSliderBufferSize" TextWrapping="Wrap" Text="00" Grid.Column="2"  FontSize="16" VerticalAlignment="Center" FontFamily="{DynamicResource Brenzo Slab Personal Use}" Padding="3,0,8,0"/>
                 </Grid>
             </Border>
             <Border x:Name="BorderSettingBufferSize" BorderBrush="Black" BorderThickness="2,0,2,2" Panel.ZIndex="-1" CornerRadius="0,0,5,5" Background="#FF772A2A" Grid.RowSpan="1" Grid.Row="1" Padding="0,2,0,2" Margin="12,0,12,0">
@@ -190,7 +188,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#FF8497A0" MaxWidth="600">
+        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#FF89979E" MaxWidth="600">
             <CheckBox x:Name="CheckBoxBlurDataTimeImage" Content="Отображать размытие картинки в панели времени и даты" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
         </Border>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="3" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#FF485A44" MaxWidth="600">
@@ -204,6 +202,7 @@
             <Border BorderBrush="Black" BorderThickness="3,3,3,3" Grid.Row="1" Margin="6,-6,6,6" CornerRadius="5,5,5,5" VerticalAlignment="Top">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -221,7 +220,7 @@
                                             <Classes:BrushSettingQ Default="#FFD2D2D2" Select="#FFB7B7B7" Used="#FF001127" NotEnabled="#FFB35050"/>
                                         </ObjectSettings:IELObjectSetting.ForegroundSetting>
                                         <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                            <Classes:BrushSettingQ Default="#FF20283A" Select="#FF011F63" Used="#FF7A9CEA" UsedState="False" NotEnabled="#FF843535"/>
+                                            <Classes:BrushSettingQ Default="#FF20283A" Select="#FF011F63" Used="#FF7A9CEA" NotEnabled="#FF843535"/>
                                         </ObjectSettings:IELObjectSetting.BackgroundSetting>
                                         <ObjectSettings:IELObjectSetting.BorderBrushSetting>
                                             <Classes:BrushSettingQ Default="#FF827AD8" Select="#FF0089A4" Used="#FFA1CAFF" NotEnabled="#FFB35050"/>
@@ -231,12 +230,29 @@
                             </IEL:IELTextBox>
                         </Grid>
                     </Border>
-                    <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#FF8C5DC8" MaxWidth="600">
-                        <CheckBox x:Name="CheckBoxUsePageBrowser" Content="Использовать страницу браузера для открытия ссылок по умолчанию" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
-                    </Border>
+                    <Grid Grid.Row="1" Margin="6,6,6,6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="0" CornerRadius="5,5,5,5" Background="#FF8C5DC8" MaxWidth="600">
+                            <CheckBox x:Name="CheckBoxUsePageBrowser" Content="Использовать страницу браузера для открытия ссылок по умолчанию" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
+                        </Border>
+                        <Border BorderBrush="#72000000" Grid.Row="1" BorderThickness="2,0,0,0" Margin="10,2,0,2" MaxWidth="590">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="11*"/>
+                                    <RowDefinition Height="9*"/>
+                                </Grid.RowDefinitions>
+                                <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="0" CornerRadius="5,5,5,5" Background="#FF9B8FAB" Margin="6,6,0,6">
+                                    <CheckBox x:Name="CheckBoxUseOnlyCreatePageBrowser" Content="Всегда создавать новую страницу браузера при открытии ссылки" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
                 </Grid>
             </Border>
-            <TextBlock TextWrapping="Wrap" Text="Свойства браузера" HorizontalAlignment="Left" Padding="5,0,5,0" FontSize="20" Panel.ZIndex="1" Foreground="#FF49C3DA"  Margin="20,0,0,0"/>
+            <TextBlock TextWrapping="Wrap" Text="Свойства браузера" HorizontalAlignment="Left" Padding="5,0,5,0" FontSize="20" Panel.ZIndex="1" Foreground="#FF49C3DA"  Margin="20,0,0,0" FontFamily="{DynamicResource RussianRail G Pro}"/>
         </Grid>
     </Grid>
 </Page>
