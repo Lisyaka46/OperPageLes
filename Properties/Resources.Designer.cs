@@ -73,6 +73,16 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] BlackSquare {
+            get {
+                object obj = ResourceManager.GetObject("BlackSquare", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] BrowserChangeSystem {
             get {
                 object obj = ResourceManager.GetObject("BrowserChangeSystem", resourceCulture);
@@ -266,6 +276,46 @@ namespace OperPage_les.Properties {
         internal static byte[] Search {
             get {
                 object obj = ResourceManager.GetObject("Search", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Sorting_NameAZ {
+            get {
+                object obj = ResourceManager.GetObject("Sorting_NameAZ", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Sorting_NameZA {
+            get {
+                object obj = ResourceManager.GetObject("Sorting_NameZA", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Sorting_Not {
+            get {
+                object obj = ResourceManager.GetObject("Sorting_Not", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Sorting_Tag {
+            get {
+                object obj = ResourceManager.GetObject("Sorting_Tag", resourceCulture);
                 return ((byte[])(obj));
             }
         }

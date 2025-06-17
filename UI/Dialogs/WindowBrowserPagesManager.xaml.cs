@@ -1,16 +1,10 @@
-﻿using DataScroll;
-using IEL;
+﻿using IEL;
+using IEL.CORE.Classes.Browser;
+using OperPage_les.CORE;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.Windows.Pages.Browser;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media.Animation;
-using IEL.CORE.Classes.Browser;
-using OperPage_les.CORE.Enums;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Windows.Controls;
-using OperPage_les.CORE;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -57,9 +51,9 @@ namespace OperPage_les.UI.Dialogs
                 }
             };
 
-            IELButtonCancel.OnActivateMouseLeft += (sender, Key) => Close();
+            IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) => Close();
             #region IELButtonAddPageLabel
-            IELButtonAddPageLabel.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonAddPageLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (Creating) return;
                 Creating = true;
@@ -80,7 +74,7 @@ namespace OperPage_les.UI.Dialogs
             #endregion
 
             #region IELButtonPageDeveloper
-            IELButtonPageDeveloper.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonPageDeveloper.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageDeveloper page = new();
                 AppendElementPage = new(page, "Страница разработчика", null);
@@ -93,7 +87,7 @@ namespace OperPage_les.UI.Dialogs
             #endregion
 
             #region IELButtonPageConsole
-            IELButtonPageConsole.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonPageConsole.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageConsole page = new();
                 AppendElementPage = new(page, "Консоль", "Гибкий инструмент управления программой с помощью вводимых команд");
@@ -106,7 +100,7 @@ namespace OperPage_les.UI.Dialogs
             #endregion
 
             #region IELButtonPageBrowser
-            IELButtonPageBrowser.OnActivateMouseLeft += (sender, Key) =>
+            IELButtonPageBrowser.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageWebBrowser page = new();
                 AppendElementPage = new(page, "Веб-браузер", null);

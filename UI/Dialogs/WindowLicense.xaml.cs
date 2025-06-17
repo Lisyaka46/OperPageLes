@@ -60,12 +60,30 @@ namespace OperPage_les.UI.Dialogs
         /// </summary>
         private int Value = -1;
 
+        #region Other
+        /// <summary>
+        /// Количество нажатий на изображение иконки
+        /// </summary>
+        private int CountClickImageLogo = 0;
+
+        private readonly DoubleAnimation LogoRotateAnimate = new()
+        {
+            To = 360d,
+            Duration = TimeSpan.FromSeconds(20d),
+            RepeatBehavior = RepeatBehavior.Forever,
+        };
+        #endregion
+
         public LicenseWindow()
         {
             InitializeComponent();
             ImageLogo.Margin = new(20);
             UpdateInfoThanks = new(10000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
             Opacity = 0d;
+            ImageLogo.MouseLeftButtonUp += (sender, e) =>
+            {
+                ExecuteEventClickImageLogo(++CountClickImageLogo);
+            };
             Closed += (sender, e) => GC.Collect(2, GCCollectionMode.Forced);
             Loaded += (sender, e) =>
             {
@@ -77,8 +95,7 @@ namespace OperPage_les.UI.Dialogs
                     RepeatBehavior = RepeatBehavior.Forever,
                 };
                 RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim);
-                anim.Duration = TimeSpan.FromSeconds(20d);
-                RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, anim);
+                RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, LogoRotateAnimate);
             };
             KeyUp += (sender, e) =>
             {
@@ -89,6 +106,53 @@ namespace OperPage_les.UI.Dialogs
                         break;
                 }
             };
+        }
+
+        /// <summary>
+        /// Совершить событие нажатия по изображению иконки
+        /// </summary>
+        /// <param name="CountClick">количество нажатий</param>
+        private void ExecuteEventClickImageLogo(int CountClick)
+        {
+            switch (CountClick)
+            {
+                case 10:
+                    LogoRotateAnimate.Duration = TimeSpan.FromSeconds(60d);
+                    RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, LogoRotateAnimate);
+                    break;
+                case 15:
+                    RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, null);
+                    break;
+                case 25:
+                    System.Windows.Forms.MessageBox.Show("Всё, больше ничего не будет.");
+                    System.Windows.Forms.MessageBox.Show("Я правду говорю");
+                    break;
+                case 50:
+                case 60:
+                case 65:
+                case 75:
+                case 87:
+                    int RandomOffset = new Random(CountClick).Next(0, 45);
+                    App.AnimateThicknessEffect(ImageLogo, MarginProperty, new(0, RandomOffset, 0, RandomOffset), TimeSpan.FromMilliseconds(800d));
+                    break;
+                case 99:
+                    System.Windows.Forms.MessageBox.Show("Прекрати!");
+                    break;
+                case 101:
+                    System.Windows.Forms.MessageBox.Show("Как хочешь...");
+                    break;
+                case 150:
+                    App.AnimateDoubleEffect(ImageLogo, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                    System.Windows.Forms.MessageBox.Show("АХАХАХ АХАХАХАА ХАХАХАХ");
+                    break;
+                case 200:
+                    ImageLogo.BeginAnimation(OpacityProperty, null);
+                    ImageLogo.Opacity = 1d;
+                    ImageLogo.Source = App.LoadImage(Properties.Resources.BlackSquare);
+                    ImageLogo.UpdateLayout();
+                    for (int i = 0; i < 7; i++) System.Windows.Forms.MessageBox.Show(string.Empty);
+                    break;
+            }
         }
 
         public new void ShowDialog()
