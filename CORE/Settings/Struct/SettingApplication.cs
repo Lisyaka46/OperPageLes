@@ -51,6 +51,11 @@ namespace OperPage_les.CORE.Settings.Struct
         public ObjSetting<bool> UseOpenLinkInPageBrowser { get; internal set; } = true;
 
         /// <summary>
+        /// Использование открытия ссылки исключительно в новой станице браузера
+        /// </summary>
+        public ObjSetting<bool> UseOnlyCreatePageWebBrowser { get; internal set; } = false;
+
+        /// <summary>
         /// Сколлапсировать пустые значения настроек в значения по умолчанию
         /// </summary>
         /// <param name="setting">Изменяемая ссылка настроек</param>

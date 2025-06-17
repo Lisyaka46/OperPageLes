@@ -1,8 +1,10 @@
-﻿using IEL.CORE.Classes;
+﻿using IEL;
+using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
+using InterpreterCommand.Classes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OperPage_les.CORE;
@@ -19,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -48,11 +51,6 @@ namespace OperPage_les
             /// Состояние подключения к интернету
             /// </summary>
             internal static readonly Flag InternetPinging = new(false);
-
-            /// <summary>
-            /// Флаг состояния видимости объекта страниц
-            /// </summary>
-            internal static readonly Flag FlagFrameComponentVisible = new(true);
 
             /// <summary>
             /// Флаг состояния регистра
@@ -234,171 +232,11 @@ namespace OperPage_les
         /// </summary>
         internal const int HeightButtonBuffer = 45;
 
-        /// <summary>
-        /// Массив сех имён команд и алиасов
-        /// </summary>
-        public string[] AllNamesCommand => [.. DataAliases.Select(x => x.Name).Concat(DataConsoleCommand.Select(x => x.Name))];
-
         #region Data
         /// <summary>
-        /// Массив консольных команд
+        /// Интерпретатор команд
         /// </summary>
-        internal readonly List<AliasCommand<ICommandOPER>> DataAliases = [];
-
-        #region Console command
-        /// <summary>
-        /// Массив консольных команд
-        /// </summary>
-        internal static readonly List<ConsoleCommand> DataConsoleCommand =
-        [
-            #region reboot
-            new ConsoleCommand("reboot", "Перезагружает программу", (Command, param) =>
-            {
-                RebootApplication();
-                return Task.FromResult(CommandStateResult.Completed(Command.Name));
-            }),
-            #endregion
-
-            #region close
-            new ConsoleCommand("close", "Закрывает программу", (Command, param) =>
-            {
-                Current.Shutdown(0);
-                return Task.FromResult(CommandStateResult.Completed(Command.Name));
-            }),
-            #endregion
-
-            #region clear
-            new ConsoleCommand("clear",
-            "Очищает текстовый вывод главного меню программы",
-            (Command, param) =>
-            {
-                App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>()?.ClearConsoleText();
-                return Task.FromResult(CommandStateResult.Completed(Command.Name));
-            }),
-            #endregion
-
-            #region print
-            new ConsoleCommand("print", [new Parameter("Text", typeof(string))],
-            "Выводит введённый параметр \"Text\" в консоль главного меню программы, игнорируя другие параметры",
-            (Command, param) =>
-            {
-                return Task.FromResult(CommandStateResult.Completed(Command.Name, (string)param[0]));
-            }),
-            #endregion
-
-            #region buffer
-            new ConsoleCommand("buffer",
-            "Отображает содержание буфера команд в консоль главного меню программы",
-            (Command, param) =>
-            {
-                PageBufferPanelAction PageBuffer = PageConsole.BufferPage;
-                return Task.FromResult(CommandStateResult.Completed(Command.Name,
-                    $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
-                    $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
-                    {
-                        if (i != null)
-                        {
-                            return i.Length > 0;
-                        }
-                        return false;
-                    }))}%**]**"));
-            }),
-            #endregion
-
-            #region open_link
-            new ConsoleCommand("open_link", [new Parameter("Link", typeof(string))],
-            "Открывает в браузере заданную ссылку \"Link\"",
-            (Command, param) =>
-            {
-                try
-                {
-                    string url = (string)param[0];
-                    bool UsePageBroswer = CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
-                    if (UsePageBroswer)
-                    {
-                        PageWebBrowser?[]? AllWebBrowsers = MainWindowApplication.IELBrowserPageMain.SearchAllPageType<PageWebBrowser>();
-                        if (AllWebBrowsers != null)
-                        {
-                            PageWebBrowser? pageWebBrowser = AllWebBrowsers.FirstOrDefault();
-                            pageWebBrowser?.WebViewGoUrl(url);
-                            MainWindowApplication.IELBrowserPageMain.ActivateInlayIndex(Array.IndexOf(AllWebBrowsers, pageWebBrowser));
-                        }
-                        else
-                        {
-                            BrowserPage browser_page_element = new(new PageWebBrowser(), "Веб-браузер", null);
-                            browser_page_element.Disposed += (sender) =>
-                            {
-                                ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
-                            };
-                            MainWindowApplication.IELBrowserPageMain.AddInlayPage(browser_page_element);
-                            ((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
-                        }
-                    }
-                    else Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{url}\""));
-                }
-                catch
-                {
-                    return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**"));
-                }
-            }),
-            #endregion
-
-            #region open_directory
-            new ConsoleCommand("open_directory",
-            [
-                new Parameter("Directory", typeof(string), string.Empty)
-            ],
-            "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника\n" +
-            "- Вписав \"*\" в параметры, откроет гравную директорию процесса приложения",
-            (Command, param) =>
-            {
-                string Text = "Открытие директории ";
-                switch ((string)param[0])
-                {
-                    case "":
-                        Text += "\"MAIN\"";
-                        Process.Start("explorer.exe");
-                        break;
-                    case "*":
-                        Text += "\"APPLICATION MAIN\"";
-                        Process.Start("explorer.exe", Directory.GetCurrentDirectory());
-                        break;
-                    default:
-                        if (Directory.Exists((string)param[0]))
-                        {
-                            string Path = (string)param[0];
-                            Text += Path.Length >= 20 ? $"..\"{Path[(Path.Length - 20)..]}\"" : $"\"{Path}\"";
-                            Process.Start("explorer.exe", (string)param[0]);
-                            break;
-                        }
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Директория \"{param[0]}\" не распознана"));
-                }
-                return Task.FromResult(CommandStateResult.Completed(Command.Name, Text));
-            }),
-            #endregion
-
-            #region open_file
-            new ConsoleCommand("open_file",
-            [
-                new Parameter("File", typeof(string))
-            ],
-            "Открывает файл по его заданной директории",
-            (Command, param) =>
-            {
-                string path = (string)param[0];
-                Paragraph Message = new();
-                if (File.Exists(path))
-                {
-                    Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие файла \"{Path.GetFileName(path)}\""));
-                }
-                else return Task.FromResult(
-                    CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
-            }),
-            #endregion
-        ];
-        #endregion
+        internal readonly COMInterpreter Interpreter;
 
         /// <summary>
         /// Массив консольных команд
@@ -481,6 +319,11 @@ namespace OperPage_les
         /// Директория файла анимации загрузки
         /// </summary>
         internal static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.gif";
+
+        /// <summary>
+        /// Директория файла анимации загрузки
+        /// </summary>
+        internal static readonly string DirectoryKeyValidFile = MainDirectoryApplication + "Key";
         #endregion
 
         /// <summary>
@@ -495,7 +338,7 @@ namespace OperPage_les
 
         public App()
         {
-            DataConsoleCommand.AddRange([
+            Interpreter = new([
                 #region alias
                 new ConsoleCommand("alias",
                 [
@@ -505,20 +348,18 @@ namespace OperPage_les
                 ],
                 "Создаёт алиас \"Name\" на команду \"Command\". С описанием \"Description\"", (Main, param) =>
                 {
-                    string[] NameAliases = [.. CurrentApp.DataAliases.Select(i => i.Name)];
                     string NameAlias = ((string)param[0]).ToLower();
-                    if (NameAliases.Contains(NameAlias))
+                    bool CompleteCreateAlias = Interpreter?.AddAliasCommand(NameAlias, (string)param[1], (string)param[2]) ?? false;
+                    if (!CompleteCreateAlias)
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите команду: %**alias_replace**//"));
                     }
-                    CurrentApp.DataAliases.Add(new(NameAlias, (string)param[1], (string)param[2], ICommandOPER.ReadCommand([.. DataConsoleCommand], (string)param[1])));
-                    if (DiscriptionCommands != null) DiscriptionCommands.IELButtonAlias.IsEnabled = CurrentApp.DataAliases.Count > 0;
+                    if (DiscriptionCommands != null) DiscriptionCommands.IELButtonAlias.IsEnabled = Interpreter?.AliasesCount > 0;
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**создан**"));
                 }),
                 #endregion
-
                 #region alias_replace
                 new ConsoleCommand("alias_replace",
                 [
@@ -528,16 +369,15 @@ namespace OperPage_les
                 ],
                 "Изменяет алиас \"Name\" на новую команду алиаса \"Command\". С необязательным изменением описания \"Description\"", (Main, param) =>
                 {
-                    string[] NameAliases = [.. CurrentApp.DataAliases.Select(i => i.Name)];
                     string NameAlias = ((string)param[0]).ToLower();
-                    int index_replace = Array.IndexOf(NameAliases, NameAlias);
-                    if (index_replace == -1)
+                    AliasCommand<ICommandOPER>? alias = Interpreter?.ReadAliasCommand(NameAlias);
+                    if (alias == null)
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не существует \n%#EA5555//Для создания алиаса введите команду: %**alias**//"));
                     }
-                    CommandStateResult Result = CurrentApp.DataAliases[index_replace].ChangeSourceCommand(
-                        [.. DataConsoleCommand], (string)param[1], ((string)param[2]).Length > 0 ? (string)param[2] : null);
+                    ICommandOPER? Com = Interpreter?.ReadCommand((string)param[1]);
+                    CommandStateResult Result = alias.ChangeSourceCommand(Com, (string)param[1], ((string)param[2]).Length > 0 ? (string)param[2] : null);
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
                 }),
@@ -566,7 +406,163 @@ namespace OperPage_les
                     return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык \"%**{label?.Name}**\" успешно создан" : null));
                 }),
                 #endregion
-            ]);
+
+                #region reboot
+                new ConsoleCommand("reboot", "Перезагружает программу", (Command, param) =>
+                {
+                    RebootApplication();
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+                #endregion
+
+                #region close
+                new ConsoleCommand("close", "Закрывает программу", (Command, param) =>
+                {
+                    Current.Shutdown(0);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+                #endregion
+
+                #region clear
+                new ConsoleCommand("clear",
+                "Очищает текстовый вывод главного меню программы",
+                (Command, param) =>
+                {
+                    App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>()?.ClearConsoleText();
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+                #endregion
+
+                #region print
+                new ConsoleCommand("print", [new Parameter("Text", typeof(string))],
+                "Выводит введённый параметр \"Text\" в консоль главного меню программы, игнорируя другие параметры",
+                (Command, param) =>
+                {
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, (string)param[0]));
+                }),
+                #endregion
+
+                #region buffer
+                new ConsoleCommand("buffer",
+                "Отображает содержание буфера команд в консоль главного меню программы",
+                (Command, param) =>
+                {
+                    PageBufferPanelAction PageBuffer = PageConsole.BufferPage;
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name,
+                        $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
+                        $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
+                        {
+                            if (i != null)
+                            {
+                                return i.Length > 0;
+                            }
+                            return false;
+                        }))}%**]**"));
+                }),
+                #endregion
+
+                #region open_link
+                new ConsoleCommand("open_link", [new Parameter("Link", typeof(string))],
+                "Открывает в браузере заданную ссылку \"Link\"",
+                (Command, param) =>
+                {
+                    try
+                    {
+                        string url = (string)param[0];
+                        bool UsePageBroswer = CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
+                        if (UsePageBroswer)
+                        {
+                            if (!CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser)
+                            {
+                                IELInlay[] AllWebBrowsers = [..MainWindowApplication.IELBrowserPageMain.Inlays.Where(
+                                    (i) => i.PageElement?.PageContent.GetType() == typeof(PageWebBrowser))];
+                                if (AllWebBrowsers.Length > 1)
+                                {
+
+                                }
+                                else if (AllWebBrowsers.Length == 1)
+                                {
+                                    PageWebBrowser? PageBrowser = (PageWebBrowser?)AllWebBrowsers[0].PageElement?.PageContent;
+                                    if (PageBrowser == null)
+                                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**\n" +
+                                            $"%//Произошла критическая ошибка обнаружения браузера.//"));
+                                    PageBrowser?.WebViewGoUrl(url);
+                                    MainWindowApplication.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].PageElement);
+                                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки в странице браузера \"{url}\""));
+                                }
+                            }
+                            BrowserPage browser_page_element = new(new PageWebBrowser(), "Веб-браузер", null);
+                            browser_page_element.Disposed += (sender) =>
+                            {
+                                ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
+                            };
+                            MainWindowApplication.IELBrowserPageMain.AddInlayPage(browser_page_element);
+                            ((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
+                        }
+                        else Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                        return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{url}\""));
+                    }
+                    catch
+                    {
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**"));
+                    }
+                }),
+                #endregion
+
+                #region open_directory
+                new ConsoleCommand("open_directory",
+                [
+                    new Parameter("Directory", typeof(string), string.Empty)
+                ],
+                "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника\n" +
+                "- Вписав \"*\" в параметры, откроет гравную директорию процесса приложения",
+                (Command, param) =>
+                {
+                    string Text = "Открытие директории ";
+                    switch ((string)param[0])
+                    {
+                        case "":
+                            Text += "\"MAIN\"";
+                            Process.Start("explorer.exe");
+                            break;
+                        case "*":
+                            Text += "\"APPLICATION MAIN\"";
+                            Process.Start("explorer.exe", Directory.GetCurrentDirectory());
+                            break;
+                        default:
+                            if (Directory.Exists((string)param[0]))
+                            {
+                                string Path = (string)param[0];
+                                Text += Path.Length >= 20 ? $"..\"{Path[(Path.Length - 20)..]}\"" : $"\"{Path}\"";
+                                Process.Start("explorer.exe", (string)param[0]);
+                                break;
+                            }
+                            return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Директория \"{param[0]}\" не распознана"));
+                    }
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, Text));
+                }),
+                #endregion
+
+                #region open_file
+                new ConsoleCommand("open_file",
+                [
+                    new Parameter("File", typeof(string))
+                ],
+                "Открывает файл по его заданной директории",
+                (Command, param) =>
+                {
+                    string path = (string)param[0];
+                    Paragraph Message = new();
+                    if (File.Exists(path))
+                    {
+                        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+                        return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие файла \"{Path.GetFileName(path)}\""));
+                    }
+                    else return Task.FromResult(
+                        CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
+                }),
+                #endregion
+                ]);
             InitializeComponent();
             Directory.CreateDirectory(MainDirectoryApplication);
             Directory.CreateDirectory(DirectoryImagesApplication);
@@ -575,7 +571,6 @@ namespace OperPage_les
 
             MillisecondInternetConnection = -1L;
             ThreadInternetCheckConnection = new(CheckInternetConnection, 5100);
-            ThreadInternetCheckConnection.Start();
 
             #region Settings
             Log("Инициализация настроек");
@@ -634,6 +629,30 @@ namespace OperPage_les
         {
             //base.OnStartup(e);
             Log("Подключение программной точки входа");
+            bool InitKeyValid = false;
+            if (File.Exists(DirectoryKeyValidFile))
+            {
+                string MainPackAndValidKey = File.ReadAllText(DirectoryKeyValidFile);
+                string Pack = RegexPackValidKey().Match(MainPackAndValidKey).Value;
+                string Key = MainPackAndValidKey[(Pack.Length + 1)..];
+                try
+                {
+                    InitKeyValid = ConsoleManipulateKey.CORE.Manipulate.CheckKeyValid(Pack, Key);
+                }
+                catch
+                {
+                    InitKeyValid = false;
+                }
+                if (!InitKeyValid) System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (!InitKeyValid)
+            {
+                WindowInputProgramKey DialodKey = new();
+                InitKeyValid = DialodKey.SetKeyValid();
+            }
+            if (!InitKeyValid) Current.Shutdown();
+            ThreadInternetCheckConnection.Start();
             Current.MainWindow = new UI.Windows.MainWindow();
             Current.MainWindow.Closed += (sender, e) =>
             {
@@ -870,14 +889,14 @@ namespace OperPage_les
         {
             if (CommandString.Length == 0) return;
             if (Console != null) Console.TextBoxCommandInput.Text = string.Empty;
-            ConsoleCommand? Command = ICommandOPER.ReadCommand([.. DataConsoleCommand], CommandString);
-            string Name = ICommandOPER.ReadNameCommand(CommandString);
-            string[] Parameters = ICommandOPER.ReadParametersCommand(CommandString);
+            ConsoleCommand? Command = (ConsoleCommand?)Interpreter.ReadCommand(CommandString);
+            string Name = COMInterpreter.ReadNameCommand(CommandString);
+            string[] Parameters = COMInterpreter.ReadParametersCommand(CommandString);
 
             if (AppendBufferCommand && Console != null)
             {
                 PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString,
-                (sender, Key) =>
+                (sender, e, Key) =>
                 {
                     ActivateActionCommand(Console, CommandString);
                 });
@@ -886,7 +905,7 @@ namespace OperPage_les
             CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
             if (result.State == ResultState.InvalidCommand)
             {
-                AliasCommand<ICommandOPER>? Alias = ICommandOPER.ReadCommand([.. App.CurrentApp.DataAliases], CommandString);
+                AliasCommand<ICommandOPER>? Alias = Interpreter.ReadAliasCommand(CommandString);
                 result = Alias == null ? CommandStateResult.FaledCommand(Name) : Alias.ExecuteCommand(Parameters);
             }
             if (Console != null) SummarizeCommandStateResult(Console, result);
@@ -907,6 +926,9 @@ namespace OperPage_les
         {
             Console.AddTextInConsole(Result.Message);
         }
+
+        [GeneratedRegex(@"[^ ]+")]
+        private static partial Regex RegexPackValidKey();
         #endregion
     }
 }

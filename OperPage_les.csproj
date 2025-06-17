@@ -50,6 +50,10 @@
     <None Remove="UI\Images\Reload.png" />
     <None Remove="UI\Images\RightMouseButton.png" />
     <None Remove="UI\Images\Search.png" />
+    <None Remove="UI\Images\Sorting\Sorting-NameAZ.png" />
+    <None Remove="UI\Images\Sorting\Sorting-NameZA.png" />
+    <None Remove="UI\Images\Sorting\Sorting-Not.png" />
+    <None Remove="UI\Images\Sorting\Sorting-Tag.png" />
     <None Remove="UI\Images\Tag.png" />
     <None Remove="UI\Images\Warning.png" />
     <None Remove="UI\Images\Wifi.png" />
@@ -110,6 +114,10 @@
     <Resource Include="UI\Images\Reload.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
     <Resource Include="UI\Images\Search.png" />
+    <Resource Include="UI\Images\Sorting\Sorting-NameAZ.png" />
+    <Resource Include="UI\Images\Sorting\Sorting-NameZA.png" />
+    <Resource Include="UI\Images\Sorting\Sorting-Not.png" />
+    <Resource Include="UI\Images\Sorting\Sorting-Tag.png" />
     <Resource Include="UI\Images\Tag.png" />
     <Resource Include="UI\Images\Warning.png" />
     <Resource Include="UI\Images\Wifi.png" />
@@ -133,7 +141,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataScroll\DataScroll.csproj" />
+    <ProjectReference Include="..\ConsoleManipulateKey\ConsoleManipulateKey.csproj" />
     <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>
