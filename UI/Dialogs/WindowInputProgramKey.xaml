@@ -110,7 +110,7 @@
                                 </IEL:IELButtonText.IELSettingObject>
                             </IEL:IELButtonText>
                         </Grid>
-                        <TextBlock x:Name="TextBlockPack" TextWrapping="Wrap" Text="SUNHSkhBR0lJQklGSEVIQ0lDQkFISEFHSElER0ZHQkdC" FontSize="14" Padding="2,5,2,5" FontFamily="{DynamicResource Vollda}" Foreground="#FF0D3254"/>
+                        <TextBlock x:Name="TextBlockPack" Text="SUNHSkhBR0lJQklGSEVIQ0lDQkFISEFHSElER0ZHQkdC" FontSize="12" FontFamily="{DynamicResource Vollda}" Foreground="#FF0D3254" TextTrimming="CharacterEllipsis" Padding="10,0,0,0" TextWrapping="WrapWithOverflow"/>
                     </Grid>
                     <IEL:IELTextBox x:Name="IELTextBoxKey" Grid.Row="2" BorderThicknessBlock="2,2,2,2" FontSizeText="20" FontFamily="{DynamicResource RussianRail G Pro}" Margin="10,5,10,5" Text="">
                         <IEL:IELTextBox.IELSettingObject>

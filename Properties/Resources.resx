@@ -199,6 +199,9 @@
   <data name="Tag" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Tag.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ValidKeyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\ValidKeyIcon.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="VECTOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Autor\VECTOR.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

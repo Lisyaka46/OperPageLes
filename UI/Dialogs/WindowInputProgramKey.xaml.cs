@@ -15,6 +15,7 @@ namespace OperPage_les.UI.Dialogs
         public WindowInputProgramKey()
         {
             InitializeComponent();
+            Icon = App.LoadImage(Properties.Resources.ValidKeyIcon);
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
             IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e, Key) =>
@@ -79,7 +80,7 @@ namespace OperPage_les.UI.Dialogs
             }
             if (!Cancel)
             {
-                System.IO.File.WriteAllText(App.DirectoryKeyValidFile, $"{TextBlockPack.Text} {IELTextBoxKey.Text}");
+                System.IO.File.WriteAllText(App.DirectoryKeyValidFile, $"{Manipulate.GetCodeUUID()} {TextBlockPack.Text} {IELTextBoxKey.Text}");
                 Close();
             }
             else App.AnimateColorEffect(IELTextBoxKey.Background, SolidColorBrush.ColorProperty,

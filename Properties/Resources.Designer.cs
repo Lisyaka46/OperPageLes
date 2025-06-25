@@ -333,6 +333,16 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] ValidKeyIcon {
+            get {
+                object obj = ResourceManager.GetObject("ValidKeyIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] VECTOR {
             get {
                 object obj = ResourceManager.GetObject("VECTOR", resourceCulture);
