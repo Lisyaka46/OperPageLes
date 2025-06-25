@@ -61,7 +61,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 TextBlockCounterBuffer.Text = $"00 {BufferCommand.Length}";
                 for (int i = 0; i < BufferCommand.Count; i++)
                 {
-                    IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
+                    OPLButtonBufferCommand Button = (OPLButtonBufferCommand)GridBuffer.Children[i];
                     if (i == BufferCommand.Count - 1)
                     {
                         OpacityAnimationBuffer.FillBehavior = FillBehavior.Stop;
@@ -91,7 +91,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
                 Thickness ThicknessIndex = new(0);
                 for (int i = index; i < BufferCommand.Count; i++)
                 {
-                    IELButtonCommand Button = (IELButtonCommand)GridBuffer.Children[i];
+                    OPLButtonBufferCommand Button = (OPLButtonBufferCommand)GridBuffer.Children[i];
                     Button.Index--;
                     AnimationBuffer.To = new Thickness(0, (Button.Height + 2) * i, 0, 0);
                     AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
@@ -112,9 +112,9 @@ namespace OperPage_les.Windows.Pages.ActionPanel
         /// <param name="Name">Отображаемое имя</param>
         /// <param name="Command">Выполняющаяся команда</param>
         /// <returns>Кнопка выполняющая команду</returns>
-        private IELButtonCommand CreateBufferButton(string Name, string Command)
+        private OPLButtonBufferCommand CreateBufferButton(string Name, string Command)
         {
-            IELButtonCommand Button = new(Name, Command, BufferCommand.Count)
+            OPLButtonBufferCommand Button = new(Name, Command, BufferCommand.Count)
             {
                 Height = 40,
                 Margin = new(0, (40 + 2) * BufferCommand.Count, 0, 0),
@@ -135,7 +135,7 @@ namespace OperPage_les.Windows.Pages.ActionPanel
             IELButtonClearBuffer.IsEnabled = true;
             if (BufferCommand.Count < BufferCommand.Length)
             {
-                IELButtonCommand Button = CreateBufferButton(Name, Command);
+                OPLButtonBufferCommand Button = CreateBufferButton(Name, Command);
                 Button.OnActivateMouseLeft += ActionActivateCommand;
                 Button.OnActivateMouseRight += (sender, e, Key) =>
                 {
@@ -150,15 +150,15 @@ namespace OperPage_les.Windows.Pages.ActionPanel
             else
             {
                 BufferCommand.Add(Command);
-                IELButtonCommand RealButton;
+                OPLButtonBufferCommand RealButton;
                 for (int i = 0; i < GridBuffer.Children.Count - 1; i++)
                 {
-                    RealButton = (IELButtonCommand)GridBuffer.Children[i];
-                    IELButtonCommand NextButton = (IELButtonCommand)GridBuffer.Children[i + 1];
+                    RealButton = (OPLButtonBufferCommand)GridBuffer.Children[i];
+                    OPLButtonBufferCommand NextButton = (OPLButtonBufferCommand)GridBuffer.Children[i + 1];
                     RealButton.Text = NextButton.Text;
                     RealButton.TextCommand = NextButton.TextCommand;
                 }
-                RealButton = (IELButtonCommand)GridBuffer.Children[^1];
+                RealButton = (OPLButtonBufferCommand)GridBuffer.Children[^1];
                 RealButton.Text = Name;
                 RealButton.TextCommand = Command;
             }
