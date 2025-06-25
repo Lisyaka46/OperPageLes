@@ -7,6 +7,9 @@
         xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowInputProgramKey"
         mc:Ignorable="d"
         Title="Ввод ключа доступа" Height="300" Width="561" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Window.Resources>
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF8EB9C7"/>
@@ -110,7 +113,7 @@
                                 </IEL:IELButtonText.IELSettingObject>
                             </IEL:IELButtonText>
                         </Grid>
-                        <TextBlock x:Name="TextBlockPack" Text="SUNHSkhBR0lJQklGSEVIQ0lDQkFISEFHSElER0ZHQkdC" FontSize="12" FontFamily="{DynamicResource Vollda}" Foreground="#FF0D3254" TextTrimming="CharacterEllipsis" Padding="10,0,0,0" TextWrapping="WrapWithOverflow"/>
+                        <TextBlock x:Name="TextBlockPack" Text="SUNHSkhBR0lJQklGSEVIQ0lDQkFISEFHSElER0ZHQkdC" FontSize="12" FontFamily="{DynamicResource Vollda}" Foreground="#FF0D3254" TextTrimming="CharacterEllipsis" Padding="10,0,10,0" TextWrapping="Wrap" MaxHeight="36"/>
                     </Grid>
                     <IEL:IELTextBox x:Name="IELTextBoxKey" Grid.Row="2" BorderThicknessBlock="2,2,2,2" FontSizeText="20" FontFamily="{DynamicResource RussianRail G Pro}" Margin="10,5,10,5" Text="">
                         <IEL:IELTextBox.IELSettingObject>

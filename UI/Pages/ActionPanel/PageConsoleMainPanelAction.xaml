@@ -10,7 +10,9 @@
       x:Class="OperPage_les.Windows.Frames.PageMainConsolePanelAction"
       mc:Ignorable="d"
       Title="PageMainActionPanel" d:DesignWidth="271.189">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -9,7 +9,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageDescriptionAlias">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="GridMainDescription" Grid.Column="1">
         <Grid x:Name="GridDiscription" Grid.Row="1">
             <Grid.RowDefinitions>

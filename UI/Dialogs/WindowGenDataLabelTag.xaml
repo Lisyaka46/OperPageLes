@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
         xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowGenDataLabelTag"
         mc:Ignorable="d" Height="450" Width="450" WindowStartupLocation="CenterScreen" Background="#FF5BBFAF"  ResizeMode="NoResize">
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

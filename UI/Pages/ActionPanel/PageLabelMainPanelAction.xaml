@@ -8,7 +8,9 @@
       mc:Ignorable="d" 
       d:DesignWidth="210"
       Title="PageLabelMainActionPanel">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

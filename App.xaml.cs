@@ -564,7 +564,6 @@ namespace OperPage_les
                 }),
                 #endregion
                 ]);
-            InitializeComponent();
             Directory.CreateDirectory(MainDirectoryApplication);
             Directory.CreateDirectory(DirectoryImagesApplication);
             Directory.CreateDirectory(DirectoryResourcesApplication);

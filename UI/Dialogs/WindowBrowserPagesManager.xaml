@@ -13,6 +13,9 @@
             <GradientStop Color="#FF60B6C7" Offset="0"/>
         </LinearGradientBrush>
     </Window.Background>
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

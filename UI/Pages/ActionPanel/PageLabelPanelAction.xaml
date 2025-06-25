@@ -8,7 +8,9 @@
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.Windows.Pages.ActionPanel.PageLabelElementActionPanel"
       mc:Ignorable="d"
       Title="PageLabelActionPanel" Width="220">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>

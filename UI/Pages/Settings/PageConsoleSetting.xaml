@@ -7,7 +7,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="450"
       Title="PageConsoleSetting" Width="516">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -10,6 +10,9 @@
         x:Class="OperPage_les.Windows.WindowDiscriptionCommands"
         mc:Ignorable="d"
         Title="Описание всех команд" Height="442" Width="850" WindowStartupLocation="CenterOwner" MinWidth="720" MinHeight="430" Background="{x:Null}">
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="40" MinHeight="30" Height="20*"/>

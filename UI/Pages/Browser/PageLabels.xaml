@@ -7,7 +7,9 @@
       x:Class="OperPage_les.Windows.Pages.Browser.PageLabels"
       mc:Ignorable="d"
       Title="PageLabels" d:DesignHeight="208.793" d:DesignWidth="313.123">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -5,14 +5,20 @@ using Microsoft.Maui.Graphics;
 using OperPage_les.CORE;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WinRT.Interop;
+using Binding = System.Windows.Data.Binding;
+using Color = System.Windows.Media.Color;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace OperPage_les.Windows.Pages.Browser
 {
@@ -21,46 +27,88 @@ namespace OperPage_les.Windows.Pages.Browser
     /// </summary>
     public partial class PageDeveloper : System.Windows.Controls.Page
     {
+        private bool ScaleMode = false;
+        private bool KeyEventActivate = false;
         public PageDeveloper()
         {
             InitializeComponent();
             IELButtonGenerateImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                ImageElement.Source = Imaging.CreateBitmapSourceFromHBitmap(GenImage().GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                ImageElement.UpdateLayout();
-            };
-            SliderElementWidth.ValueChanged += (sender, e) =>
-            {
-                TextBlockSliderValueWidth.Text = $"{(e.NewValue < 10 ? "0" : string.Empty)}{(int)e.NewValue}";
-            };
-            SliderElementHeight.ValueChanged += (sender, e) =>
-            {
-                TextBlockSliderValueHeight.Text = $"{(e.NewValue < 10 ? "0" : string.Empty)}{(int)e.NewValue}";
+                ImageMap.Source = GenImage();
             };
             IELButtonDownloadImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                Bitmap bitmap = GenImage();
-                bitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gen.png");
+                //Bitmap bitmap = GenImage();
+                //bitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gen.png");
             };
-        } 
-        
-        private Bitmap GenImage()
-        {
-            int X, Y;
-            Bitmap bitmap = new((int)SliderElementWidth.Value, (int)SliderElementHeight.Value);
-            for (Y = 0; Y < bitmap.Height; Y++)
+            GridScale.MouseWheel += (sender, e) =>
             {
-                double NumY = Math.Tan(Y + 1) * 100;
-                for (X = 0; X < bitmap.Width; X++)
+                if (ScaleMode)
                 {
-                    double Num = Math.Cos(X + 1) * 100;
-                    double R = Math.Tan(Num) * 10 - (Math.Ceiling(NumY / 2) + Math.Acosh(NumY) * 10) / (Math.Tan(Num) * 10) + Math.Atanh(Num);
-                    double G = Math.Cbrt(NumY) * 10 + (Math.Cosh(NumY) - Math.Tan(Num) * 10) / (Math.Atan(NumY) * Math.Cos(Num)) + Math.Exp(Num) * 10;
-                    double B = (Math.Truncate(Math.Cbrt(Num) + Math.Atan(NumY) * 10) - Math.Atan(NumY)) / (Math.Cbrt(Math.Cos(Num)) / Math.Ceiling(NumY)) - Math.Tan(Num) * 10;
-                    bitmap.SetPixel(X, Y, System.Drawing.Color.FromArgb((byte)R, (byte)G, (byte)B));
+                    double UpdateScale = e.Delta > 0 ? -0.23d : 0.23d;
+                    ScaleTransformBox.ScaleX += UpdateScale;
+                    ScaleTransformBox.ScaleY += UpdateScale;
+                }
+            };
+            Map.KeyDown += (sender, e) =>
+            {
+                if (KeyEventActivate) return;
+                KeyEventActivate = true;
+                switch (e.Key)
+                {
+                    case System.Windows.Input.Key.LeftCtrl:
+                        ScaleMode = true;
+                        break;
+                }
+                e.Handled = true;
+            };
+            Map.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case System.Windows.Input.Key.LeftCtrl:
+                        ScaleMode = false;
+                        break;
+                }
+                KeyEventActivate = false;
+                e.Handled = true;
+            };
+            #region Sliders
+            SliderX.ValueChanged += (sender, e) =>
+            {
+                TextBlockX.Text = $"X:{e.NewValue}";
+            };
+            SliderY.ValueChanged += (sender, e) =>
+            {
+                TextBlockY.Text = $"Y:{e.NewValue}";
+            };
+            #endregion
+        }
+
+        //
+        internal System.Drawing.Color SetColorFunction(int X, int Y)
+        {
+            return System.Drawing.Color.FromArgb(
+                (byte)(Math.Cos(X / SliderX.Value) * 255),
+                (byte)(Math.Cos(Y / SliderY.Value) * 255),
+                (byte)(Math.Sin(X / SliderY.Value) * 255));
+        }
+
+        private BitmapSource GenImage()
+        {
+            int LengthY = 200, LengthX = 200;
+            Bitmap bitmap = new(LengthX, LengthY);
+            for (int Y = 0; Y < LengthY; Y++)
+            {
+                for (int X = 0; X < LengthX; X++)
+                {
+                    bitmap.SetPixel(X, Y, System.Drawing.Color.Black);
+                    //ArrayRectangle[Y, X].SetBinding(Rectangle.FillProperty, ColorBinding);
                 }
             }
-            return bitmap;
+            return Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),
+                   IntPtr.Zero, Int32Rect.Empty,
+                   BitmapSizeOptions.FromEmptyOptions());
         }
     }
 }

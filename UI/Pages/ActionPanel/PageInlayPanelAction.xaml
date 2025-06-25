@@ -8,7 +8,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="270.544" d:DesignWidth="252.115"
       Title="PageActionInlay">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

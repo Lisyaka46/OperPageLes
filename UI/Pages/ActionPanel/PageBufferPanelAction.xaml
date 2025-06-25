@@ -10,7 +10,9 @@
       x:Class="OperPage_les.Windows.Pages.ActionPanel.PageBufferPanelAction"
       mc:Ignorable="d" 
       Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="259.791">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="40"/>

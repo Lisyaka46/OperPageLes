@@ -7,6 +7,9 @@
         xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowGenLabel"
         mc:Ignorable="d"
         Title="Создание ярлыка" WindowStartupLocation="CenterScreen" Background="{x:Null}" ResizeMode="NoResize" Topmost="True">
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Window.Resources>
     <Grid Background="#FF1FB5B9">
         <Grid.RowDefinitions>
             <RowDefinition/>

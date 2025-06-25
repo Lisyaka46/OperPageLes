@@ -7,7 +7,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="213" d:DesignWidth="258.333"
       Title="PageUser">
-
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid x:Name="MainGrid" ClipToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="65"/>

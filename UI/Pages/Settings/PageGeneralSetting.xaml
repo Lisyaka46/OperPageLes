@@ -8,6 +8,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="626.41"
       Title="PageGeneral">
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="170"/>
