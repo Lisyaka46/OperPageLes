@@ -1,6 +1,7 @@
 ﻿using IEL;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
+using IEL.CORE.Classes.ObjectSettings;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -321,7 +322,7 @@ namespace OperPage_les
         internal static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.gif";
 
         /// <summary>
-        /// Директория файла анимации загрузки
+        /// Директория файла валидного ключа
         /// </summary>
         internal static readonly string DirectoryKeyValidFile = MainDirectoryApplication + "Key";
         #endregion
@@ -632,12 +633,15 @@ namespace OperPage_les
             bool InitKeyValid = false;
             if (File.Exists(DirectoryKeyValidFile))
             {
-                string MainPackAndValidKey = File.ReadAllText(DirectoryKeyValidFile);
-                string Pack = RegexPackValidKey().Match(MainPackAndValidKey).Value;
-                string Key = MainPackAndValidKey[(Pack.Length + 1)..];
                 try
                 {
-                    InitKeyValid = ConsoleManipulateKey.CORE.Manipulate.CheckKeyValid(Pack, Key);
+                    string MainPackAndValidKey = File.ReadAllText(DirectoryKeyValidFile);
+                    string UUID = RegexPackValidKey().Match(MainPackAndValidKey).Value;
+                    MainPackAndValidKey = MainPackAndValidKey[(UUID.Length + 1)..];
+                    string Pack = RegexPackValidKey().Match(MainPackAndValidKey).Value;
+                    string Key = MainPackAndValidKey[(Pack.Length + 1)..];
+                    InitKeyValid = ConsoleManipulateKey.CORE.Manipulate.CheckKeyValid(Pack, Key) && UUID.Equals(ConsoleManipulateKey.CORE.Manipulate.GetCodeUUID());
+                    IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
                 }
                 catch
                 {
@@ -648,8 +652,9 @@ namespace OperPage_les
             }
             if (!InitKeyValid)
             {
-                WindowInputProgramKey DialodKey = new();
+                OperPage_les.UI.Dialogs.WindowInputProgramKey DialodKey = new();
                 InitKeyValid = DialodKey.SetKeyValid();
+                if (InitKeyValid) IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
             }
             if (!InitKeyValid) Current.Shutdown();
             ThreadInternetCheckConnection.Start();

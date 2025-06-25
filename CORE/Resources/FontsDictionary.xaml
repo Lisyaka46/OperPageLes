@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="Monocraft">/Fonts/#Monocraft</FontFamily>
+    <FontFamily x:Key="Tablon">/Fonts/#Tablon</FontFamily>
+    <FontFamily x:Key="ShareTechMono">/Fonts/#ShareTechMono</FontFamily>
+    <FontFamily x:Key="MOSCOW2024">/Fonts/#MOSCOW2024</FontFamily>
+    <FontFamily x:Key="sangha">/Fonts/#sangha</FontFamily>
+    <FontFamily x:Key="Bree CYR var">/Fonts/#Bree CYR var</FontFamily>
+    <FontFamily x:Key="Pecita">/Fonts/#Pecita</FontFamily>
+    <FontFamily x:Key="Brenzo Slab Personal Use">/Fonts/#Brenzo Slab Personal Use</FontFamily>
+    <FontFamily x:Key="Vollda">/Fonts/#Vollda</FontFamily>
+    <FontFamily x:Key="RussianRail G Pro">/Fonts/#RussianRail G Pro</FontFamily>
+    <FontFamily x:Key="Plup">/Fonts/#Plup</FontFamily>
+    <FontFamily x:Key="Deledda Open Regular">/Fonts/#Deledda Open Regular</FontFamily>
+</ResourceDictionary>

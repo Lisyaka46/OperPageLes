@@ -10,6 +10,9 @@
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.PanelButtonInformation.MainWindow.MainPageButtonInfo"
       mc:Ignorable="d" 
       d:DesignHeight="42">
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml" />
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
