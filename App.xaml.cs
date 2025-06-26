@@ -655,7 +655,12 @@ namespace OperPage_les
                 InitKeyValid = DialodKey.SetKeyValid();
                 if (InitKeyValid) IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
             }
-            if (!InitKeyValid) Current.Shutdown();
+            if (!InitKeyValid)
+            {
+                ThreadInternetCheckConnection.Kill();
+                Current.Shutdown();
+                return;
+            }
             ThreadInternetCheckConnection.Start();
             Current.MainWindow = new UI.Windows.MainWindow();
             Current.MainWindow.Closed += (sender, e) =>
@@ -665,15 +670,13 @@ namespace OperPage_les
             Current.Exit += (sender, e) =>
             {
                 ThreadInternetCheckConnection.Kill();
-#if !DEBUG
                 UpdateSettingApplication();
                 UpdateFileDataLabel();
-#endif
             };
             Log("Открытие главного окна");
             try
             {
-                MainWindowApplication.Show();
+                Current.MainWindow.Show();
             }
             catch (Exception ex)
             {

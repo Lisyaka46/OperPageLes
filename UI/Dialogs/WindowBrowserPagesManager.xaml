@@ -98,6 +98,21 @@
                             </ObjectSettings:IELButtonObjectSetting>
                         </IEL:IELButtonText.IELSettingObject>
                     </IEL:IELButtonText>
+                    <IEL:IELButtonText x:Name="IELButtonGenerate" VerticalAlignment="Top" Height="50" BorderThicknessBlock="3,3,3,3" Text="NEW" CornerRadius="6,6,6,6" Margin="5,236,5,0" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
+                        <IEL:IELButtonText.IELSettingObject>
+                            <ObjectSettings:IELButtonObjectSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    <Classes:BrushSettingQ Default="#FF5EACC7" NotEnabled="#FFAD354B" Select="#FF59D4FF" Used="#FFD6E2E6"/>
+                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                    <Classes:BrushSettingQ/>
+                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
+                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            </ObjectSettings:IELButtonObjectSetting>
+                        </IEL:IELButtonText.IELSettingObject>
+                    </IEL:IELButtonText>
                 </Grid>
             </Border>
         </Grid>

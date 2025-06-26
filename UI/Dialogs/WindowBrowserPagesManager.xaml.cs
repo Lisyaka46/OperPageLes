@@ -1,10 +1,14 @@
 ﻿using IEL;
 using IEL.CORE.Classes.Browser;
+using Microsoft.Maui.Controls.Xaml;
 using OperPage_les.CORE;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.Windows.Pages.Browser;
+using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
+using System.Xaml;
+using Microsoft.Build.Utilities;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -109,6 +113,61 @@ namespace OperPage_les.UI.Dialogs
                     page.WebBrowserElement.Dispose();
                 };
                 Close();
+            };
+            #endregion
+
+            #region NEW
+            IELButtonGenerate.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                //#region C#
+                //CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
+                //CompilerParameters cp = new CompilerParameters();
+                //// Generate an executable instead of
+                //// a class library.
+                //cp.GenerateExecutable = false;
+
+                //// Specify the assembly file name to generate.
+                ////cp.OutputAssembly = exeName;
+
+                //// Save the assembly as a physical file.
+                //cp.GenerateInMemory = false;
+
+                //// Set whether to treat all warnings as errors.
+                //cp.TreatWarningsAsErrors = false;
+
+                //CompilerResults cr = provider.(cp,
+                //    @"C:\Users\killm\Рабочий стол\PageTest.xaml.cs");
+                //#endregion
+                //Microsoft.Build.Utilities.
+                //string Xaml = File.ReadAllText(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
+                //Assembly assembly = System.Reflection.Assembly.LoadFile(@"C:\Users\killm\Рабочий стол\PageTest.xaml.cs");
+
+                //string defaultNamespace = "Test";
+                //string folderName = "UI.Pages";
+                //string fileName = "PageTest.xaml";
+
+                //string path = String.Format("{0}.{1}.{2}", defaultNamespace, folderName, fileName);
+                //XamlObjectReader reader = new()
+                //XamlObjectWriterSettings.RootObjectInstance = assembly;
+                //object page = XamlServices.Load(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
+                // new System.Windows.Controls.Page().LoadFromXaml(Xaml);
+                //object XAMLObj = System.Xaml.XamlServices.Load(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
+                //Page root = (Page)App.LoadComponent(new Uri("pack://application:,,,/WpfApp1;component/PageTest.xaml", UriKind.Relative));
+
+                    //XmlReader xmlReader = new XmlReader(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
+                    //UIElement elementLoaded = (UIElement)XamlReader.Load(xmlReader);
+                    //System.Windows.Resources.StreamResourceInfo res =
+                    //    System.Windows.Application.GetResourceStream(new(@"C:\Users\killm\Рабочий стол\PageTest.xaml", UriKind.Absolute));
+                    //CompilerResults PageCompuler = cr.LoadFromXaml(Xaml);
+                    //Assembly assembly = PageCompuler.CompiledAssembly;
+                    //Type classType = assembly.GetType("Page") ?? throw new Exception("Скомпилированный файл не имеет ожидаемый тип Page");
+                    //Page SourcePage = (Page)(Activator.CreateInstance(classType) ?? throw new Exception("Скомпилированный файл неконвертируемый тип Page"));
+                //AppendElementPage = new((System.Windows.Controls.Page)page, "TEST", null);
+                //AppendElementPage.Disposed += (sender) =>
+                //{
+
+                //};
+                //Close();
             };
             #endregion
         }
