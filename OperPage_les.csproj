@@ -65,7 +65,12 @@
   <ItemGroup>
     <PackageReference Include="CefSharp.Common.NETCore" Version="135.0.220" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="135.0.220" />
+    <PackageReference Include="coverlet.msbuild" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="ManagedNativeWifi" Version="2.7.1" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.14.8" />
     <PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="4.13.0" />
     <PackageReference Include="Microsoft.Maui.Controls.Xaml" Version="9.0.60" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
