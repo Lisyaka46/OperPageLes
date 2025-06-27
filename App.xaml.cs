@@ -10,14 +10,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OperPage_les.CORE;
 using OperPage_les.CORE.Flaging;
-using OperPage_les.CORE.Settings;
 using OperPage_les.CORE.Settings.Struct;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.Browser;
-using OperPage_les.UI.UserElementControl;
 using OperPage_les.Windows;
 using OperPage_les.Windows.Pages.ActionPanel;
 using OperPage_les.Windows.Pages.Browser;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -149,7 +148,7 @@ namespace OperPage_les
         /// <param name="Duration">Количество миллисекунд для анимации</param>
         internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double From, double To, TimeSpan? Duration = null)
         {
-            
+
             DoubleAnimation animation = GetDoubleAnimate(Duration);
             animation.From = From;
             animation.To = To;
@@ -663,15 +662,45 @@ namespace OperPage_les
             }
             ThreadInternetCheckConnection.Start();
             Current.MainWindow = new UI.Windows.MainWindow();
-            Current.MainWindow.Closed += (sender, e) =>
+            Current.MainWindow.Closing += (sender, e) =>
             {
+                Current.MainWindow.Hide();
                 DiscriptionCommands?.Close();
+                bool WindowSaveClose = false;
+                WindowSaveWait windowSave = new();
+                windowSave.Closed += (sender, e) =>
+                {
+                    WindowSaveClose = true;
+                };
+                windowSave.OpenOnToComplete();
+                windowSave.Focus();
+
+                Thread thread = new(() =>
+                {
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы"));
+                    ThreadInternetCheckConnection.Kill();
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки"));
+                    UpdateSettingApplication();
+                    Thread.Sleep(300);
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки"));
+                    UpdateFileDataLabel();
+                    Thread.Sleep(700);
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения..."));
+                    windowSave.Complete();
+                });
+                thread.Start();
+
+                Task.Run(() =>
+                {
+                    while (!WindowSaveClose);
+                    thread.Join();
+                });
             };
             Current.Exit += (sender, e) =>
             {
-                ThreadInternetCheckConnection.Kill();
-                UpdateSettingApplication();
-                UpdateFileDataLabel();
             };
             Log("Открытие главного окна");
             try
