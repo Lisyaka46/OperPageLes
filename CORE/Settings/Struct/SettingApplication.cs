@@ -1,12 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static OperPage_les.CORE.Settings.ISetting;
+﻿using System.Reflection;
 
 namespace OperPage_les.CORE.Settings.Struct
 {

@@ -1,15 +1,13 @@
-﻿using IEL;
+﻿using IEL.CORE.Enums;
 using OperPage_les.CORE;
-using OperPage_les.CORE.Settings;
-using IEL.CORE.Enums;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using static OperPage_les.App;
 using WpfAnimatedGif;
+using static OperPage_les.App;
 
 namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
 {
@@ -100,9 +98,9 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 IELBlockInfoStateRegister.Text = NewValue ? "A" : "a";
                 AnimateBlurEffect((BlurEffect)IELBlockInfoStateRegister.Effect, 10u);
                 if (CheckOpenMessageInObject(IELBlockInfoStateRegister.Name))
-                        MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
-                            Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
-                            OrientationBorderPosition.RightUp);
+                    MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
+                        Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
+                        OrientationBorderPosition.RightUp);
             };
             #endregion
             UpdateBackgroundDataThis.Start();

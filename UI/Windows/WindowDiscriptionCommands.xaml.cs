@@ -2,13 +2,13 @@
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using Interpreter.Commands;
+using Interpreter.Interfaces;
 using OperPage_les.CORE.Flaging;
 using OperPage_les.UI.Pages.Description;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Interpreter.Interfaces;
 
 namespace OperPage_les.Windows
 {

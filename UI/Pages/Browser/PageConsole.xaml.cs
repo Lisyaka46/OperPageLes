@@ -1,17 +1,11 @@
-﻿using IEL;
-using IEL.CORE.Classes;
-using Interpreter.Classes;
-using Interpreter.Commands;
+﻿using IEL.CORE.Classes;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using OperPage_les.CORE;
 using OperPage_les.CORE.Enums;
 using OperPage_les.Windows.Frames;
 using OperPage_les.Windows.Pages.ActionPanel;
-using System;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -343,7 +337,7 @@ namespace OperPage_les.UI.Pages.Browser
             if (CommandHint == null) return;
             StateVisibleHit = ConsoleHitStateEnum.VisibleOneCommand;
             TimeSpan span = TimeSpan.FromMilliseconds(300d);
-            string[] Parameters = [..CommandHint.Parameters?.Select((i) => $"{i.Name}{(i.Absolutly ? string.Empty : "?")}") ?? []];
+            string[] Parameters = [.. CommandHint.Parameters?.Select((i) => $"{i.Name}{(i.Absolutly ? string.Empty : "?")}") ?? []];
             TextBlockHintCommand.Text = $"{CommandHint.Name}* {string.Join(",", Parameters)}";
             TextBlockHintCommand.UpdateLayout();
 

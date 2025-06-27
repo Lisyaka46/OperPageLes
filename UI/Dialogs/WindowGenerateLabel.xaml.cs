@@ -1,9 +1,9 @@
 ﻿using IEL.CORE.Classes;
+using OperPage_les.UI.UserElementControl;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Input;
-using OperPage_les.UI.UserElementControl;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -89,7 +89,7 @@ namespace OperPage_les.UI.Dialogs
                 IELTextBoxNameLabel.Focus();
             };
         }
-        
+
         /// <summary>
         /// Сгенерировать итоговое исполнение создания ярлыка
         /// </summary>

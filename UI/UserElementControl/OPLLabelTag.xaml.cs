@@ -1,7 +1,6 @@
 ﻿using IEL.CORE.Classes.ObjectSettings;
 using OperPage_les.CORE.Label;
 using System.Windows;
-using static OperPage_les.UI.UserElementControl.OPLLabelTag;
 
 namespace OperPage_les.UI.UserElementControl
 {

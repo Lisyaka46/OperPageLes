@@ -1,17 +1,4 @@
-﻿using CefSharp.DevTools.CSS;
-using IEL;
-using IEL.CORE.Classes;
-using IEL.CORE.Classes.ObjectSettings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using static OperPage_les.CORE.Label.LabelTag;
-
-namespace OperPage_les.CORE.Label
+﻿namespace OperPage_les.CORE.Label
 {
     public class LabelTag
     {

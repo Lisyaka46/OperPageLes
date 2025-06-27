@@ -1,24 +1,6 @@
-﻿using CefSharp;
-using IEL.CORE.Enums;
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Graphics;
-using OperPage_les.CORE;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Windows;
-using System.Windows.Data;
+﻿using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using WinRT.Interop;
-using Binding = System.Windows.Data.Binding;
-using Color = System.Windows.Media.Color;
-using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace OperPage_les.Windows.Pages.Browser
 {

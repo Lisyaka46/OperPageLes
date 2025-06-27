@@ -1,9 +1,4 @@
 ﻿using OperPage_les.CORE.Flaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OperPage_les.CORE
 {

@@ -1,14 +1,14 @@
 ﻿using IEL;
 using IEL.CORE.Classes.Browser;
-using Microsoft.Maui.Controls.Xaml;
+using Microsoft.Build.Locator;
+using Microsoft.CSharp;
 using OperPage_les.CORE;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.Windows.Pages.Browser;
+using System.CodeDom.Compiler;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
-using System.Xaml;
-using Microsoft.Build.Utilities;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -119,6 +119,7 @@ namespace OperPage_les.UI.Dialogs
             #region NEW
             IELButtonGenerate.OnActivateMouseLeft += (sender, e, Key) =>
             {
+#if DEBUG
                 //#region C#
                 //CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
                 //CompilerParameters cp = new CompilerParameters();
@@ -139,9 +140,21 @@ namespace OperPage_les.UI.Dialogs
                 //    @"C:\Users\killm\Рабочий стол\PageTest.xaml.cs");
                 //#endregion
                 //Microsoft.Build.Utilities.
-                //string Xaml = File.ReadAllText(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
-                //Assembly assembly = System.Reflection.Assembly.LoadFile(@"C:\Users\killm\Рабочий стол\PageTest.xaml.cs");
+                string Code = File.ReadAllText(@"C:\Users\killm\Рабочий стол\PageTest.xaml.cs");
+                //Page? CourcePage = (Page?)System.Reflection.Assembly.LoadFile(@"C:\Users\killm\Рабочий стол\PageTest.xaml.cs").CreateInstance(typeof(Page).ToString());
+                VisualStudioInstance vs = MSBuildLocator.RegisterDefaults();
+                CSharpCodeProvider codeProvider = new CSharpCodeProvider();
 
+#pragma warning disable CS0618 // Тип или член устарел
+                ICodeCompiler icc = codeProvider.CreateCompiler();
+#pragma warning restore CS0618 // Тип или член устарел
+
+                CompilerParameters parameters = new CompilerParameters
+                {
+                    //Make sure we generate an EXE, not a DLL
+                    GenerateExecutable = false,
+                };
+                CompilerResults results = icc.CompileAssemblyFromSource(parameters, Code);
                 //string defaultNamespace = "Test";
                 //string folderName = "UI.Pages";
                 //string fileName = "PageTest.xaml";
@@ -154,20 +167,22 @@ namespace OperPage_les.UI.Dialogs
                 //object XAMLObj = System.Xaml.XamlServices.Load(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
                 //Page root = (Page)App.LoadComponent(new Uri("pack://application:,,,/WpfApp1;component/PageTest.xaml", UriKind.Relative));
 
-                    //XmlReader xmlReader = new XmlReader(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
-                    //UIElement elementLoaded = (UIElement)XamlReader.Load(xmlReader);
-                    //System.Windows.Resources.StreamResourceInfo res =
-                    //    System.Windows.Application.GetResourceStream(new(@"C:\Users\killm\Рабочий стол\PageTest.xaml", UriKind.Absolute));
-                    //CompilerResults PageCompuler = cr.LoadFromXaml(Xaml);
-                    //Assembly assembly = PageCompuler.CompiledAssembly;
-                    //Type classType = assembly.GetType("Page") ?? throw new Exception("Скомпилированный файл не имеет ожидаемый тип Page");
-                    //Page SourcePage = (Page)(Activator.CreateInstance(classType) ?? throw new Exception("Скомпилированный файл неконвертируемый тип Page"));
-                //AppendElementPage = new((System.Windows.Controls.Page)page, "TEST", null);
+                //XmlReader xmlReader = new XmlReader(@"C:\Users\killm\Рабочий стол\PageTest.xaml");
+                //UIElement elementLoaded = (UIElement)XamlReader.Load(xmlReader);
+                //System.Windows.Resources.StreamResourceInfo res =
+                //    System.Windows.Application.GetResourceStream(new(@"C:\Users\killm\Рабочий стол\PageTest.xaml", UriKind.Absolute));
+                //CompilerResults PageCompuler = cr.LoadFromXaml(Xaml);
+                //Assembly assembly = PageCompuler.CompiledAssembly;
+                //Type classType = assembly.GetType("Page") ?? throw new Exception("Скомпилированный файл не имеет ожидаемый тип Page");
+                //Page SourcePage = (Page)(Activator.CreateInstance(classType) ?? throw new Exception("Скомпилированный файл неконвертируемый тип Page"));
+                //if (CourcePage == null) return;
+                //AppendElementPage = new(CourcePage, "TEST", null);
                 //AppendElementPage.Disposed += (sender) =>
                 //{
 
                 //};
-                //Close();
+                Close();
+#endif
             };
             #endregion
         }

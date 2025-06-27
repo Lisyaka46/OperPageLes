@@ -1,10 +1,8 @@
 ﻿#region Link
-using IEL;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
 using OperPage_les.CORE;
-using OperPage_les.CORE.Settings;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
@@ -215,7 +213,7 @@ namespace OperPage_les.UI.Windows
             {
                 BrowserPage? Page = IELBrowserPageMain.ActualInlay?.PageElement;
                 if (Page == null) return;
-                switch(Page.GetType().Name)
+                switch (Page.GetType().Name)
                 {
                     case "PageConsole":
                         ((PageConsole)Page.PageContent).TextBoxCommandInput.Focus();
@@ -272,7 +270,7 @@ namespace OperPage_les.UI.Windows
 #endif
             #endregion
 
-            
+
             #endregion
 
             //ImageLogoApplication.MouseEnter += (sender, e) =>
@@ -380,7 +378,7 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private void BackgroundUpdateVisualDataRunTime()
         {
-            
+
             //VisualRectangleDateTimeBackground.Visual.
             //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
             //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;

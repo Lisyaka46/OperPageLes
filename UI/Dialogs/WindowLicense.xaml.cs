@@ -1,11 +1,10 @@
 ﻿using OperPage_les.CORE;
 using OperPage_les.Windows.Pages.License;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 using Color = System.Windows.Media.Color;
-using System.Windows.Input;
 
 namespace OperPage_les.UI.Dialogs
 {

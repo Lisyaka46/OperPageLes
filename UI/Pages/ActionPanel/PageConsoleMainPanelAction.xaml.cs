@@ -10,7 +10,7 @@ namespace OperPage_les.Windows.Frames
         public PageMainConsolePanelAction()
         {
             InitializeComponent();
-            
+
         }
     }
 }

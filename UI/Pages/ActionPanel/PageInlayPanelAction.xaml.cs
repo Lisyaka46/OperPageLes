@@ -1,5 +1,4 @@
 ﻿using IEL;
-using IEL.Interfaces.Core;
 using System.Windows.Controls;
 
 namespace OperPage_les.UI.Pages.ActionPanel
@@ -13,7 +12,7 @@ namespace OperPage_les.UI.Pages.ActionPanel
         /// <summary>
         /// Активная вкладка для взаимодействия с ней
         /// </summary>
-        internal IELInlay? ActivateManipulateInlay 
+        internal IELInlay? ActivateManipulateInlay
         {
             get
             {

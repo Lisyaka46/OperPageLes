@@ -1,5 +1,4 @@
-﻿using IEL.Interfaces.Core;
-using OperPage_les.CORE.Label;
+﻿using OperPage_les.CORE.Label;
 using static OperPage_les.CORE.Label.LabelTag;
 
 namespace IEL.CORE.Classes

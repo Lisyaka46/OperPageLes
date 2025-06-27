@@ -1,15 +1,14 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
-using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
 using OperPage_les.CORE.Label;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Color = System.Windows.Media.Color;
+using IEL.CORE.Enums;
 
 namespace OperPage_les.UI.UserElementControl
 {
@@ -19,7 +18,7 @@ namespace OperPage_les.UI.UserElementControl
     public partial class OPLLabelCommand : System.Windows.Controls.UserControl, IIELButton
     {
         #region Styles
-        internal static readonly BrushSettingQ[] BackgroundStyles =
+        internal static readonly QData[] BackgroundStyles =
         [
             new(new byte[,]
                         {
@@ -50,7 +49,7 @@ namespace OperPage_les.UI.UserElementControl
                         { 255, 84, 107, 117 },
                         }),
         ];
-        internal static readonly BrushSettingQ[] Borderbrush_Foreground_Styles =
+        internal static readonly QData[] Borderbrush_Foreground_Styles =
         [
             new(new byte[,]
                         {
@@ -83,7 +82,7 @@ namespace OperPage_les.UI.UserElementControl
         ];
         #endregion
 
-        private IELUsingObjectSetting _IELSettingObject;
+        private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
         /// Настройка использования объекта
         /// </summary>
@@ -92,23 +91,49 @@ namespace OperPage_les.UI.UserElementControl
             get => _IELSettingObject;
             set
             {
-                value.BackgroundQChanged += (NewValue) =>
+                value.BackgroundSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
                 {
-                    SolidColorBrush color = new(NewValue);
-                    BorderMainLabel.Background = color;
-                };
-                value.BorderBrushQChanged += (NewValue) =>
+                    if (Animated)
+                    {
+                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        anim.To = NewValue;
+                        BorderMainLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                    }
+                    else
+                    {
+                        SolidColorBrush color = new(NewValue);
+                        BorderMainLabel.Background = color;
+                    }
+                });
+                value.BorderBrushSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
                 {
-                    SolidColorBrush color = new(NewValue);
-                    BorderMainLabel.BorderBrush = color;
-                };
-                value.ForegroundQChanged += (NewValue) =>
+                    if (Animated)
+                    {
+                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        anim.To = NewValue;
+                        BorderMainLabel.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                    }
+                    else
+                    {
+                        SolidColorBrush color = new(NewValue);
+                        BorderMainLabel.BorderBrush = color;
+                    }
+                });
+                value.ForegroundSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
                 {
-                    SolidColorBrush color = new(NewValue);
-                    TextBlockNameLabel.Foreground = color;
-                };
+                    if (Animated)
+                    {
+                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        anim.To = NewValue;
+                        TextBlockNameLabel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                    }
+                    else
+                    {
+                        SolidColorBrush color = new(NewValue);
+                        TextBlockNameLabel.Foreground = color;
+                    }
+                });
                 _IELSettingObject = value;
-                _IELSettingObject.UseActiveQSetting();
             }
         }
 
@@ -172,7 +197,7 @@ namespace OperPage_les.UI.UserElementControl
         public OPLLabelCommand(LabelAction Label)
         {
             InitializeComponent();
-            _IELSettingObject = IELSettingObject = new();
+            IELSettingObject = new();
             SourceLabel = Label;
             SourceLabel.AddTag += (Old, New) =>
             {
@@ -183,7 +208,7 @@ namespace OperPage_les.UI.UserElementControl
             UpdateVisualStyle();
 
             TextBlockNameLabel.Text = Label.Name;
-            
+
             IsEnabledChanged += (sender, e) =>
             {
                 bool NewValue = (bool)e.NewValue;
@@ -204,7 +229,7 @@ namespace OperPage_les.UI.UserElementControl
             {
                 if (IsEnabled)
                 {
-                    MouseEnterAnimation();
+                    IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
                     IELSettingObject.StartHover();
                 }
             };
@@ -213,7 +238,7 @@ namespace OperPage_les.UI.UserElementControl
             {
                 if (IsEnabled)
                 {
-                    MouseLeaveAnimation();
+                    IELSettingObject.UseActiveQSetting(StateSpectrum.Default);
                     IELSettingObject.StopHover();
                 }
             };
@@ -226,7 +251,7 @@ namespace OperPage_les.UI.UserElementControl
                     (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ||
                     (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null))
                     {
-                        ClickDownAnimation();
+                        IELSettingObject.UseActiveQSetting(StateSpectrum.Used);
                         IELSettingObject.StopHover();
                     }
                 }
@@ -236,7 +261,7 @@ namespace OperPage_les.UI.UserElementControl
             {
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
-                    MouseEnterAnimation();
+                    IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
                     OnActivateMouseLeft?.Invoke(this, e);
                 }
             };
@@ -245,7 +270,7 @@ namespace OperPage_les.UI.UserElementControl
             {
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
-                    MouseEnterAnimation();
+                    IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
                     OnActivateMouseRight?.Invoke(this, e);
                 }
             };
@@ -277,67 +302,14 @@ namespace OperPage_les.UI.UserElementControl
                     IndexUseStyle = 0;
                     ByteLabelImage = Properties.Resources.Command;
                     break;
-            };
+            }
+            ;
             ImageElementLabel.Source = App.LoadImage(ByteLabelImage);
             ImageElementLabel.UpdateLayout();
-            IELSettingObject.BackgroundSetting = (BrushSettingQ)BackgroundStyles[IndexUseStyle].Clone();
-            IELSettingObject.BorderBrushSetting = (BrushSettingQ)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
-            IELSettingObject.ForegroundSetting = (BrushSettingQ)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
-        }
-
-        /// <summary>
-        /// Анимировать нажатие на кнопку (Down)
-        /// </summary>
-        /// <param name="StyleClickColor">Стиль нажатия на кнопку</param>
-        private void ClickDownAnimation()
-        {
-            Color
-                Background = IELSettingObject.BackgroundSetting.Used,
-                BorderBrush = IELSettingObject.BorderBrushSetting.Used,
-                Foreground = IELSettingObject.ForegroundSetting.Used;
-            TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-
-            App.AnimateColorEffect(BorderMainLabel.Background, SolidColorBrush.ColorProperty, Background, span);
-
-            App.AnimateColorEffect(BorderMainLabel.BorderBrush, SolidColorBrush.ColorProperty, BorderBrush, span);
-
-            App.AnimateColorEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
-        }
-
-        /// <summary>
-        /// Анимация выделения объекта мышью
-        /// </summary>
-        private void MouseEnterAnimation()
-        {
-            Color
-                Foreground = IELSettingObject.ForegroundSetting.Select,
-                Background = IELSettingObject.BackgroundSetting.Select,
-                BorderBrush = IELSettingObject.BorderBrushSetting.Select;
-            TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-
-            App.AnimateColorEffect(BorderMainLabel.Background, SolidColorBrush.ColorProperty, Background, span);
-
-            App.AnimateColorEffect(BorderMainLabel.BorderBrush, SolidColorBrush.ColorProperty, BorderBrush, span);
-
-            App.AnimateColorEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
-        }
-
-        /// <summary>
-        /// Анимация отключения выделения мышью
-        /// </summary>
-        private void MouseLeaveAnimation()
-        {
-            Color
-                Foreground = IELSettingObject.ForegroundSetting.Default,
-                Background = IELSettingObject.BackgroundSetting.Default,
-                BorderBrush = IELSettingObject.BorderBrushSetting.Default;
-            TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-
-            App.AnimateColorEffect(BorderMainLabel.Background, SolidColorBrush.ColorProperty, Background, span);
-
-            App.AnimateColorEffect(BorderMainLabel.BorderBrush, SolidColorBrush.ColorProperty, BorderBrush, span);
-
-            App.AnimateColorEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
+            IELSettingObject.BackgroundSetting.ColorData = (QData)BackgroundStyles[IndexUseStyle].Clone();
+            IELSettingObject.BorderBrushSetting.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
+            IELSettingObject.ForegroundSetting.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
+            IELSettingObject.UseActiveQSetting(StateSpectrum.Default);
         }
 
         /// <summary>

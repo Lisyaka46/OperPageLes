@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IEL.CORE.Classes;
+using OperPage_les.UI.Pages.Settings;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using IEL.Interfaces.Core;
-using OperPage_les.UI.Pages.Settings;
-using OperPage_les.CORE.Settings;
-using System.Windows.Media.Animation;
-using IEL;
-using IEL.CORE.Classes;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -108,7 +93,7 @@ namespace OperPage_les.UI.Dialogs
         /// <param name="Source">Текущий Thickness кнопки</param>
         /// <param name="Activate">Состояние активации наведения</param>
         /// <returns>Будущий Thickness для анимирования наведения</returns>
-        private static Thickness GetMarginAnimatePageButton(Thickness Source, bool Activate) => 
+        private static Thickness GetMarginAnimatePageButton(Thickness Source, bool Activate) =>
             new(Source.Left, Source.Top, Source.Right, Activate ? 6 : 10);
     }
 }

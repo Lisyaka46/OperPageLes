@@ -25,7 +25,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC727760" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1" BorderBrush="{x:Null}" Cursor="Arrow"/>
+                    <RichTextBox x:Name="RichTextBoxMainMessage" Background="#CC797D6D" SelectionBrush="#FF115236" BorderThickness="0,0,0,0" FontSize="14" MinWidth="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsReadOnly="True" FontWeight="Normal" Focusable="False" VerticalScrollBarVisibility="Auto" Panel.ZIndex="1" BorderBrush="{x:Null}" Cursor="Arrow"/>
                 </Grid>
             </Border>
         </Grid>
@@ -57,7 +57,7 @@
                                 <Classes:BrushSettingQ/>
                             </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF76AAD2" NotEnabled="#FFD66767" Select="#FF99D3FF" Used="#FFDAE9F5"/>
+                                <Classes:BrushSettingQ Default="#FF6A9FC8" NotEnabled="#FFD66767" Select="#FF99D3FF" Used="#FFDAE9F5"/>
                             </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                         </ObjectSettings:IELButtonObjectSetting>
                     </GUI:IELButtonText.IELSettingObject>
