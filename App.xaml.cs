@@ -388,10 +388,16 @@ namespace OperPage_les
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
                 (Command, param) =>
                 {
-                    DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
                     PageLabels? SourcePage = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                    if (SourcePage != null)
+                    {
+                        if (SourcePage.SelectLabelsMode) return
+                            Task.FromResult(CommandStateResult.Failed(Command.Name,
+                            $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
+                    }
+                    DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
                     SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык \"%**{(string)param[0]}**\" успешно создан"));
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык %#006B3C**\"{(string)param[0]}\"** успешно создан"));
                 }),
                 #endregion
 
@@ -405,11 +411,17 @@ namespace OperPage_les
                     App.MainWindowApplication.ActiveDialog = null;
                     if (label != null)
                     {
-                        DataLabels.Add(label);
                         PageLabels? SourcePage = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                        if (SourcePage != null)
+                        {
+                            if (SourcePage.SelectLabelsMode) return
+                                Task.FromResult(CommandStateResult.Failed(Command.Name,
+                                $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
+                        }
+                        DataLabels.Add(label);
                         SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
                     }
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык \"%**{label?.Name}**\" успешно создан" : null));
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык %#006B3C**\"{label?.Name}\"** успешно создан" : null));
                 }),
                 #endregion
 

@@ -120,10 +120,10 @@ namespace OperPage_les.Windows.Pages.Browser
         /// <summary>
         /// Режим выделения ярлыков для манипуляции
         /// </summary>
-        private bool SelectLabelsMode
+        internal bool SelectLabelsMode
         {
             get => _SelectLabelsMode;
-            set
+            private set
             {
                 PageLabel.IELButtonSelectLabel.Text = value ? "Выйти из режима выделения" : "Режим выделения";
                 PageLabel.IELButtonSelectLabel.FontSize = value ? 12d : 16d;
