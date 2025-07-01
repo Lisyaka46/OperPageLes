@@ -260,11 +260,6 @@ namespace OperPage_les
         internal static App CurrentApp => (App)Current;
 
         /// <summary>
-        /// Страница взаимодествия с ярлыками
-        /// </summary>
-        internal PageLabels? MainPageLabels;
-
-        /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
         private SettingProcess SettingApplicationProcess;
@@ -294,7 +289,7 @@ namespace OperPage_les
         /// </summary>
         private string ActivePathSettingApplication = string.Empty;
 
-        #region DIRECTIRY RESOURCES
+        #region DIRECTORY RESOURCES
         /// <summary>
         /// Главная директория ресурсов проекта
         /// </summary>
@@ -360,6 +355,7 @@ namespace OperPage_les
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**создан**"));
                 }),
                 #endregion
+
                 #region alias_replace
                 new ConsoleCommand("alias_replace",
                 [
@@ -393,6 +389,8 @@ namespace OperPage_les
                 (Command, param) =>
                 {
                     DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
+                    PageLabels? SourcePage = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                    SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык \"%**{(string)param[0]}**\" успешно создан"));
                 }),
                 #endregion
@@ -401,8 +399,16 @@ namespace OperPage_les
                 new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
                 (Command, param) =>
                 {
-                    LabelAction? label = new WindowGenLabel().CreateLabel();
-                    if (label != null) DataLabels.Add(label);
+                    WindowGenLabel GenLabel = new();
+                    App.MainWindowApplication.ActiveDialog = GenLabel;
+                    LabelAction? label = GenLabel.CreateLabel();
+                    App.MainWindowApplication.ActiveDialog = null;
+                    if (label != null)
+                    {
+                        DataLabels.Add(label);
+                        PageLabels? SourcePage = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                        SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
+                    }
                     return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык \"%**{label?.Name}**\" успешно создан" : null));
                 }),
                 #endregion

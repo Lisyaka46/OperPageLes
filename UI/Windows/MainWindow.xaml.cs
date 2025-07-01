@@ -72,6 +72,11 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private readonly Page[] PagesButtonsInformation;
 
+        /// <summary>
+        /// Активое окно которое является дочерним от основного
+        /// </summary>
+        internal Window? ActiveDialog = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -324,6 +329,10 @@ namespace OperPage_les.UI.Windows
                     #endregion
                     #endregion
                 }
+                if (ActiveDialog != null && HiAnimation)
+                {
+                    ActiveDialog.Activate();
+                }
                 //TextBoxCommandInput.Focus();
                 /*GridMain.RenderTransform = new TransformGroup()
                 {
@@ -341,6 +350,7 @@ namespace OperPage_les.UI.Windows
                 ((ScaleTransform)((TransformGroup)GridMain.RenderTransform).Children[1]).BeginAnimation(ScaleTransform.ScaleYProperty, DoubleAnimateObj);
                 DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(300d);*/
             };
+            
 
             UpdateBackgroundDataThis.Start();
             UpdateBackgroundDataRunTime.Start();
