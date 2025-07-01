@@ -44,6 +44,9 @@ namespace OperPage_les.UI.Dialogs
         public WindowBrowserPagesManager()
         {
             InitializeComponent();
+#if !DEBUG
+            IELButtonGenerate.IsEnabled = false;
+#endif
             CreatingBackgroundPage = new(delegate { });
             KeyUp += (sender, e) =>
             {
@@ -64,8 +67,7 @@ namespace OperPage_les.UI.Dialogs
                 App.MainWindowApplication.ActivateLoadingIndicator();
                 CreatingBackgroundPage.EventElapsed = (sender, e) => Dispatcher.BeginInvoke(() =>
                 {
-                    if (App.CurrentApp.MainPageLabels == null) App.CurrentApp.MainPageLabels = new();
-                    AppendElementPage = new(App.CurrentApp.MainPageLabels, "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
+                    AppendElementPage = new(new PageLabels(), "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
                     AppendElementPage.Disposed += (sender) =>
                     {
 
@@ -119,7 +121,6 @@ namespace OperPage_les.UI.Dialogs
             #region NEW
             IELButtonGenerate.OnActivateMouseLeft += (sender, e, Key) =>
             {
-#if DEBUG
                 //#region C#
                 //CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
                 //CompilerParameters cp = new CompilerParameters();
@@ -182,7 +183,6 @@ namespace OperPage_les.UI.Dialogs
 
                 //};
                 Close();
-#endif
             };
             #endregion
         }

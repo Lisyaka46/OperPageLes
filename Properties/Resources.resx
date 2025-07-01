@@ -127,6 +127,9 @@
   <data name="BrowserChangeSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\BrowserChangeSystem.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Check" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Check.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Command" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\Command.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

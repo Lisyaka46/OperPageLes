@@ -33,6 +33,20 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </IEL:IELButtonTextKey.IELSettingObject>
         </IEL:IELButtonTextKey>
-
+        <IEL:IELButtonTextKey x:Name="IELButtonSelectLabel" Text="Режим выделения" CornerRadius="6,6,6,6" CharKeyKeyboard="D2" Margin="4,4,4,4" Grid.Row="4" Grid.RowSpan="1" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
+            <IEL:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="Default">
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ NotEnabled="#FFF12727" Default="#FF80BB3C" Select="#FFA4ED50" Used="#FFDDF3C3"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </IEL:IELButtonTextKey.IELSettingObject>
+        </IEL:IELButtonTextKey>
     </Grid>
 </Page>

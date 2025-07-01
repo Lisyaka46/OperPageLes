@@ -194,10 +194,26 @@ namespace OperPage_les.UI.UserElementControl
         /// </summary>
         internal LabelAction SourceLabel { get; set; }
 
+        private bool _Selected;
+        /// <summary>
+        /// Состояние выделенного элемента
+        /// </summary>
+        internal bool Selected
+        {
+            get => _Selected;
+            set
+            {
+                App.AnimateDoubleEffect(BorderSelectElement, OpacityProperty, value ? 1d : 0d, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                _Selected = value;
+            }
+        }
+
         public OPLLabelCommand(LabelAction Label)
         {
             InitializeComponent();
             IELSettingObject = new();
+            _Selected = false;
+            BorderSelectElement.Opacity = 0d;
             SourceLabel = Label;
             SourceLabel.AddTag += (Old, New) =>
             {

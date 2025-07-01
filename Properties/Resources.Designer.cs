@@ -93,6 +93,16 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Check {
+            get {
+                object obj = ResourceManager.GetObject("Check", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Command {
             get {
                 object obj = ResourceManager.GetObject("Command", resourceCulture);
