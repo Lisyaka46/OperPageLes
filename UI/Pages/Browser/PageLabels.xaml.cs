@@ -1,17 +1,15 @@
 ﻿using IEL.CORE.Classes;
+using IEL.CORE.Enums;
 using OperPage_les.CORE.Enums;
 using OperPage_les.UI.Dialogs;
-using OperPage_les.UI.Pages.ActionPanel;
-using OperPage_les.UI.Pages.Browser;
+using OperPage_les.UI.Pages.ActionPanel.PageLabel;
 using OperPage_les.UI.UserElementControl;
-using OperPage_les.Windows.Pages.ActionPanel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using IEL.CORE.Enums;
 
-namespace OperPage_les.Windows.Pages.Browser
+namespace OperPage_les.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml
@@ -19,7 +17,7 @@ namespace OperPage_les.Windows.Pages.Browser
     public partial class PageLabels : Page
     {
         /// <summary>
-        /// Индекс выделенного элемента панелью
+        /// Выделенный элемент панелью действий
         /// </summary>
         private OPLLabelCommand? SelectLabelInPage;
 
@@ -157,6 +155,22 @@ namespace OperPage_les.Windows.Pages.Browser
                     AppendNewOPLLbel(CountOld);
                 }
             };
+            PageLabel.IELButtonSelectLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                SelectLabelsMode = !SelectLabelsMode;
+                UpdateTextInfoLabels();
+
+                if (!SelectLabelsMode)
+                {
+                    OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().ToArray().Where((i) => i.Selected)];
+                    for (int i = 0; i < LabelsElements.Length; i++)
+                    {
+                        LabelsElements[i].Selected = false;
+                    }
+                }
+
+                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+            };
             #endregion
             #region PageLabelElement
             PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += (sender, e, Key) =>
@@ -198,22 +212,6 @@ namespace OperPage_les.Windows.Pages.Browser
                 }
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
-            PageLabel.IELButtonSelectLabel.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                SelectLabelsMode = !SelectLabelsMode;
-                UpdateTextInfoLabels();
-
-                if (!SelectLabelsMode)
-                {
-                    OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().ToArray().Where((i) => i.Selected)];
-                    for (int i = 0; i < LabelsElements.Length; i++)
-                    {
-                        LabelsElements[i].Selected = false;
-                    }
-                }
-
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-            };
             PageLabelElement.IELButtonCreateLabelTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
@@ -224,6 +222,66 @@ namespace OperPage_les.Windows.Pages.Browser
                     SelectLabelInPage = null;
                 }
             };
+            PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                App.MainWindowApplication.IELActionPanelMain.NextPage(PageLabelElement.PanelActionPageSelectLabel);
+            };
+            #region PageLabelSelectManipulate
+            PageLabelElement.PageLabelSelectManipulate.IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionSettingsLabelElement.ActiveSource, false);
+            };
+            PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                if (SelectLabelInPage == null) return;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = true;
+                if (SelectLabelsMode)
+                {
+                    SelectLabelInPage.Selected = true;
+                    return;
+                }
+
+                SelectLabelsMode = true;
+                UpdateTextInfoLabels();
+                SelectLabelInPage.Selected = true;
+            };
+            PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseRight += (sender, e, Key) =>
+            {
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = true;
+                OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>()];
+                for (int i = 0; i < LabelsElements.Length; i++)
+                {
+                    LabelsElements[i].Selected = true;
+                }
+                SelectLabelsMode = true;
+                UpdateTextInfoLabels();
+            };
+            PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                if (SelectLabelInPage == null) return;
+                if (SelectLabelsMode)
+                {
+                    SelectLabelInPage.Selected = false;
+                    PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = false;
+                    if (!GridMainLabels.Children.OfType<OPLLabelCommand>().Any((i) => i.Selected))
+                    {
+                        SelectLabelsMode = false;
+                        UpdateTextInfoLabels();
+                    }
+                }
+            };
+            PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.OnActivateMouseRight += (sender, e, Key) =>
+            {
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = false;
+                OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().Where((i) => i.Selected)];
+                for (int i = 0; i < LabelsElements.Length; i++)
+                {
+                    LabelsElements[i].Selected = false;
+                }
+                SelectLabelsMode = false;
+                UpdateTextInfoLabels();
+            };
+            #endregion
             #endregion
             PanelActionPageLabel.IsKeyboardModeChanged += (Source, NewValue) =>
             {
@@ -238,8 +296,16 @@ namespace OperPage_les.Windows.Pages.Browser
                 PageLabelElement.IELButtonChangeLabel.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonRemoveLabel.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonCreateLabelTag.CharKeyboardActivate = NewValue;
+                PageLabelElement.IELButtonActivateSelectMenu.CharKeyboardActivate = NewValue;
             };
-            PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(236d, 268d));
+            PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(236d, 323d));
+
+            PageLabelElement.PanelActionPageSelectLabel.IsKeyboardModeChanged += (Source, NewValue) =>
+            {
+                PageLabelElement.PageLabelSelectManipulate.IELButtonBack.CharKeyboardActivate = NewValue;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.CharKeyboardActivate = NewValue;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.CharKeyboardActivate = NewValue;
+            };
             #endregion
             IELButtonSorting.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -455,6 +521,7 @@ namespace OperPage_les.Windows.Pages.Browser
             Label.OnActivateMouseRight += (sender, e, Key) =>
             {
                 SelectLabelInPage = Label;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = SelectLabelInPage.Selected && SelectLabelsMode;
                 App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
                 PageLabelElement.UpdateVisibleTag([.. Label.SourceLabel.Tags]);
                 e.Handled = true;
@@ -464,6 +531,12 @@ namespace OperPage_les.Windows.Pages.Browser
                 if (SelectLabelsMode)
                 {
                     Label.Selected = !Label.Selected;
+                    if (Label.Selected) return;
+                    if (!GridMainLabels.Children.OfType<OPLLabelCommand>().Any((i) => i.Selected))
+                    {
+                        SelectLabelsMode = false;
+                        UpdateTextInfoLabels();
+                    }
                     return;
                 }
                 PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();

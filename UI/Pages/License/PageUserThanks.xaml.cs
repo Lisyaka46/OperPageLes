@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace OperPage_les.Windows.Pages.License
+namespace OperPage_les.UI.Pages.License
 {
     /// <summary>
     /// Логика взаимодействия для PageUser.xaml
@@ -50,7 +50,7 @@ namespace OperPage_les.Windows.Pages.License
         /// Переключить страцину на другого пользователя
         /// </summary>
         /// <param name="assistent">Данные помошника разработки</param>
-        internal void NextUser(AssistentThanks assistent)
+        internal void NextUser(Assistents.AssistentElement assistent)
         {
             AnimMargin.To = new(0, 14, 0, 0);
             AnimOpacity.Completed += (sender, e) => UpdateInfo(ref assistent);
@@ -62,7 +62,7 @@ namespace OperPage_les.Windows.Pages.License
         /// Обновить данные
         /// </summary>
         /// <param name="assistent">Объект данных помошника</param>
-        private void UpdateInfo(ref AssistentThanks assistent)
+        private void UpdateInfo(ref Assistents.AssistentElement assistent)
         {
             Opacity = 0d;
             TextBlockNickName.Foreground = new SolidColorBrush(assistent.ColorNickName);

@@ -10,7 +10,8 @@ namespace OperPage_les.Windows.Frames
         public PageMainConsolePanelAction()
         {
             InitializeComponent();
-
+            IELButtonCrearConsole.IELSettingObject.SettingMouseImage = App.ResourceDefaultMouseImageSetting;
+            IELButtonCommandBuffer.IELSettingObject.SettingMouseImage = App.ResourceDefaultMouseImageSetting;
         }
     }
 }

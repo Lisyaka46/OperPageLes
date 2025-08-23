@@ -9,7 +9,7 @@
       d:DesignHeight="270.544" d:DesignWidth="252.115"
       Title="PageActionInlay">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>

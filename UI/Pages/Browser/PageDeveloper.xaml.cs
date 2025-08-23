@@ -2,7 +2,7 @@
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace OperPage_les.Windows.Pages.Browser
+namespace OperPage_les.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml

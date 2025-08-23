@@ -4,7 +4,7 @@ using InterpreterCommand.Classes;
 using OperPage_les.CORE;
 using OperPage_les.CORE.Enums;
 using OperPage_les.Windows.Frames;
-using OperPage_les.Windows.Pages.ActionPanel;
+using OperPage_les.UI.Pages.ActionPanel;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Windows;

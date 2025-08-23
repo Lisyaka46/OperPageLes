@@ -8,7 +8,7 @@
       d:DesignHeight="450"
       Title="PageConsoleSetting" Width="516">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>

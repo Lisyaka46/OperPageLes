@@ -12,11 +12,9 @@ using OperPage_les.CORE;
 using OperPage_les.CORE.Flaging;
 using OperPage_les.CORE.Settings.Struct;
 using OperPage_les.UI.Dialogs;
+using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.Windows;
-using OperPage_les.Windows.Pages.ActionPanel;
-using OperPage_les.Windows.Pages.Browser;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -289,6 +287,17 @@ namespace OperPage_les
         /// </summary>
         private string ActivePathSettingApplication = string.Empty;
 
+        /// <summary>
+        /// Ресурс настроек для отображения клавиш мыши
+        /// </summary>
+        internal static readonly IELMouseImageSetting ResourceDefaultMouseImageSetting = new()
+        {
+            NotEventImageMouse = LoadImage(OperPage_les.Properties.Resources.NotMouseButton),
+            FullEventImageMouse = LoadImage(OperPage_les.Properties.Resources.DoubleMouseButton),
+            OnlyRightEventImageMouse = LoadImage(OperPage_les.Properties.Resources.RightMouseButton),
+            OnlyLeftEventImageMouse = LoadImage(OperPage_les.Properties.Resources.LeftMouseButton),
+        };
+
         #region DIRECTORY RESOURCES
         /// <summary>
         /// Главная директория ресурсов проекта
@@ -310,10 +319,18 @@ namespace OperPage_les
         /// </summary>
         internal static readonly string DirectoryDataLabels = DirectoryResourcesApplication + "Labels.json";
 
+        //
+        internal readonly BitmapImage BitmapLoading;
+
         /// <summary>
         /// Директория файла анимации загрузки
         /// </summary>
-        internal static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.gif";
+        private static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.gif";
+
+        /// <summary>
+        /// Директория файла праздничной анимации
+        /// </summary>
+        internal static readonly string DirectoryImageHappy = DirectoryImagesApplication + "Happy.mp4";
 
         /// <summary>
         /// Директория файла валидного ключа
@@ -333,6 +350,11 @@ namespace OperPage_les
 
         public App()
         {
+            #region Resources
+            //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
+            #endregion
+
+            #region Interpreter
             Interpreter = new([
                 #region alias
                 new ConsoleCommand("alias",
@@ -581,6 +603,8 @@ namespace OperPage_les
                 }),
                 #endregion
                 ]);
+            #endregion
+
             Directory.CreateDirectory(MainDirectoryApplication);
             Directory.CreateDirectory(DirectoryImagesApplication);
             Directory.CreateDirectory(DirectoryResourcesApplication);
@@ -635,6 +659,14 @@ namespace OperPage_les
                 stream.Write(OperPage_les.Properties.Resources.Loading);
                 stream.Close();
             }
+            if (!File.Exists(DirectoryImageHappy))
+            {
+                FileStream stream = File.Create(DirectoryImageHappy);
+                stream.Position = 0;
+                stream.Write(OperPage_les.Properties.Resources.Happy);
+                stream.Close();
+            }
+            BitmapLoading = new BitmapImage(new Uri(DirectoryImageLoading));
             #endregion
         }
 
@@ -657,7 +689,7 @@ namespace OperPage_les
                     string Pack = RegexPackValidKey().Match(MainPackAndValidKey).Value;
                     string Key = MainPackAndValidKey[(Pack.Length + 1)..];
                     InitKeyValid = ConsoleManipulateKey.CORE.Manipulate.CheckKeyValid(Pack, Key) && UUID.Equals(ConsoleManipulateKey.CORE.Manipulate.GetCodeUUID());
-                    IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
+                    //IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
                 }
                 catch
                 {
@@ -670,7 +702,7 @@ namespace OperPage_les
             {
                 OperPage_les.UI.Dialogs.WindowInputProgramKey DialodKey = new();
                 InitKeyValid = DialodKey.SetKeyValid();
-                if (InitKeyValid) IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
+                //if (InitKeyValid) IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
             }
             if (!InitKeyValid)
             {

@@ -12,7 +12,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageConsole">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -38,10 +38,10 @@
                 <GUI:IELTextBox.IELSettingObject>
                     <ObjectSettings:IELObjectSetting>
                         <ObjectSettings:IELObjectSetting.ForegroundSetting>
-                            <Classes:BrushSettingQ/>
+                            <Classes:BrushSettingQ Default="#FF864E4E" NotEnabled="#FF8C4949" Select="#FF754343" Used="#FF693535"/>
                         </ObjectSettings:IELObjectSetting.ForegroundSetting>
                         <ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                            <Classes:BrushSettingQ/>
+                            <Classes:BrushSettingQ Default="#FF6F2F2F" NotEnabled="#FF7F4D4D" Select="#FF794848" Used="#FF6D2020"/>
                         </ObjectSettings:IELObjectSetting.BorderBrushSetting>
                         <ObjectSettings:IELObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FFEC4343" Default="#FF807B55" Select="#FFABA574" Used="#FFE4D779"/>

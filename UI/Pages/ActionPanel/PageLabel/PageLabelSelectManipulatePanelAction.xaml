@@ -1,0 +1,68 @@
+﻿<Page x:Class="OperPage_les.UI.Pages.ActionPanel.PageLabel.PageLabelSelectManipulatePanelAction"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel.PageLabel"
+      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+      xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+      Title="PageLabelSelectManipulatePanelAction" Width="208">
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Page.Resources>
+    <Grid x:Name="GridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" Margin="4,4,4,4"  FontSize="16" PaddingContent="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="1">
+            <GUI:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True">
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FF40BF8E" Select="#FF45F7B2" Used="#FFB5FFE2"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </GUI:IELButtonTextKey.IELSettingObject>
+        </GUI:IELButtonTextKey>
+        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" CharKeyKeyboard="Oem3" Margin="4,4,4,4" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" BorderThicknessBlock="3,3,3,3">
+            <GUI:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FF4093BF" Select="#FF3FB4F1" Used="#FFA7DCF7"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </GUI:IELButtonTextKey.IELSettingObject>
+        </GUI:IELButtonTextKey>
+        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2" Margin="4,4,4,4"  FontSize="16" PaddingContent="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="2">
+            <GUI:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True">
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FFB2BF40" Select="#FFF7E845" Used="#FFFFCDB5"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </GUI:IELButtonTextKey.IELSettingObject>
+        </GUI:IELButtonTextKey>
+    </Grid>
+</Page>

@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace OperPage_les.Windows.Pages.ActionPanel
+namespace OperPage_les.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml

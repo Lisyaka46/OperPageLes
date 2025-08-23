@@ -10,7 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageDescriptionConsole">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid>
         <Grid x:Name="GridMainDescription" Grid.Column="1">

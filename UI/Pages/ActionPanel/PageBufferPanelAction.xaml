@@ -3,15 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.Windows.Pages.ActionPanel"
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel"
       xmlns:GUI="clr-namespace:IEL;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      x:Class="OperPage_les.Windows.Pages.ActionPanel.PageBufferPanelAction"
+      x:Class="OperPage_les.UI.Pages.ActionPanel.PageBufferPanelAction"
       mc:Ignorable="d" 
       Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="259.791">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>

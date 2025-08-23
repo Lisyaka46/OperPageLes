@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Создание ярлыка" WindowStartupLocation="CenterScreen" Background="{x:Null}" ResizeMode="NoResize">
     <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid Background="#FF1FB5B9">
         <Grid.RowDefinitions>

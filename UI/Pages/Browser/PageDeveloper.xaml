@@ -3,14 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.Windows.Pages.Browser"
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
       xmlns:system="clr-namespace:System;assembly=mscorlib"
-      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.Windows.Pages.Browser.PageDeveloper"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageDeveloper"
       mc:Ignorable="d" 
       d:DesignHeight="400"
       Title="PageDeveloper">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>

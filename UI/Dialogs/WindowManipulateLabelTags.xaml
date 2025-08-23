@@ -8,7 +8,7 @@
         xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowManipulateLabelTags"
         mc:Ignorable="d" Height="300" Width="480" Background="#FF838A7B" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Title="Окно манипуляции над тегами">
     <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

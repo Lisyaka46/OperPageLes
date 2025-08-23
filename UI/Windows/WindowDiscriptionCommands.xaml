@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         Title="Описание всех команд" Height="442" Width="850" WindowStartupLocation="CenterOwner" MinWidth="720" MinHeight="430" Background="{x:Null}">
     <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

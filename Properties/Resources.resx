@@ -145,6 +145,9 @@
   <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\Folder.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Happy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Media\Happy.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="IconMainApplication" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\IconMainApplication.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

@@ -18,7 +18,7 @@ namespace OperPage_les.UI.Dialogs
         {
             InitializeComponent();
             UpdateCheckCompleteSave = new((sender, e) => Dispatcher.Invoke(delegate { }));
-            ImageBehavior.SetAnimatedSource(ImageIndicator, new BitmapImage(new Uri(App.DirectoryImageLoading)));
+            ImageBehavior.SetAnimatedSource(ImageIndicator, App.CurrentApp.BitmapLoading);
         }
 
         /// <summary>

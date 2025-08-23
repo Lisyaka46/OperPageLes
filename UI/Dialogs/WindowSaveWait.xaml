@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Сохранение..." Height="150" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="#FF8EC1D6" AllowsTransparency="True" Topmost="True" UseLayoutRounding="True" ShowInTaskbar="False" SnapsToDevicePixels="True">
     <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

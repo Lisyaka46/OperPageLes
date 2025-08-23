@@ -11,7 +11,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="42">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml" />
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>

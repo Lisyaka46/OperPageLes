@@ -41,7 +41,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             InitializeComponent();
-            ImageBehavior.SetAnimatedSource(ImageIndicatorLoadingInternetConnection, new BitmapImage(new Uri(App.DirectoryImageLoading)));
+            ImageBehavior.SetAnimatedSource(ImageIndicatorLoadingInternetConnection, App.CurrentApp.BitmapLoading);
             IELBlockInfoInternetConnection.Imaging = App.LoadImage(Properties.Resources.Wifi);
             //ImageBehavior.SetAnimatedSource(ImageIndicatorLoadingInternetConnection, App.LoadImage(Properties.Resources.Loading));
 

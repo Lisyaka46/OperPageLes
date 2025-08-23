@@ -3,13 +3,13 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel"
-      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.ActionPanel.PageLabelMainActionPanel"
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.ActionPanel.PageLabel"
+      xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.ActionPanel.PageLabel.PageLabelMainActionPanel"
       mc:Ignorable="d" 
       d:DesignWidth="210"
       Title="PageLabelMainActionPanel">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>

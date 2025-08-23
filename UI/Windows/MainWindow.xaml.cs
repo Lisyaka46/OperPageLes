@@ -7,6 +7,7 @@ using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.UI.Pages.PanelButtonInformation.MainWindow;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,7 +87,7 @@ namespace OperPage_les.UI.Windows
             IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
             IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
             IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
-            ImageBehavior.SetAnimatedSource(ImageIndicator, new BitmapImage(new Uri(App.DirectoryImageLoading)));
+            ImageBehavior.SetAnimatedSource(ImageIndicator, App.CurrentApp.BitmapLoading);
             PanelActionPageInlay = new(PageInlay);
             PagesButtonsInformation =
             [
@@ -296,7 +297,7 @@ namespace OperPage_les.UI.Windows
             ImageLogoApplication.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 LicenseWindow License = new();
-                License.ShowDialog();
+                License.Show();
             };
             KeyDown += (sender, e) =>
             {
@@ -483,7 +484,7 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         internal void ActivateLoadingIndicator()
         {
-            ImageBehavior.SetAnimatedSource(ImageIndicator, new BitmapImage(new Uri(App.DirectoryImageLoading)));
+            ImageBehavior.SetAnimatedSource(ImageIndicator, App.CurrentApp.BitmapLoading);
             App.AnimateDoubleEffect(ImageIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
 

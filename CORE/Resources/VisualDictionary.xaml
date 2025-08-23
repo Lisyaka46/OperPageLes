@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:GUI="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL">
     <FontFamily x:Key="Monocraft">/Fonts/#Monocraft</FontFamily>
     <FontFamily x:Key="Tablon">/Fonts/#Tablon</FontFamily>
     <FontFamily x:Key="ShareTechMono">/Fonts/#ShareTechMono</FontFamily>

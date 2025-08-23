@@ -14,7 +14,7 @@
         </LinearGradientBrush>
     </Window.Background>
     <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

@@ -3,12 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.Windows.Pages.Browser" xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Name="MainPageLabel"
-      x:Class="OperPage_les.Windows.Pages.Browser.PageLabels"
+      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser" xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Name="MainPageLabel"
+      x:Class="OperPage_les.UI.Pages.Browser.PageLabels"
       mc:Ignorable="d"
       Title="PageLabels" d:DesignHeight="208.793" d:DesignWidth="313.123">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>

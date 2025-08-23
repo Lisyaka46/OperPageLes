@@ -4,7 +4,6 @@ using Microsoft.Build.Locator;
 using Microsoft.CSharp;
 using OperPage_les.CORE;
 using OperPage_les.UI.Pages.Browser;
-using OperPage_les.Windows.Pages.Browser;
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Windows;

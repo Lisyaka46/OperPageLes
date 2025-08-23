@@ -9,7 +9,7 @@
       d:DesignHeight="626.41"
       Title="PageGeneral">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>

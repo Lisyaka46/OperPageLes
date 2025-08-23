@@ -11,7 +11,7 @@
       mc:Ignorable="d"
       Title="PageMainActionPanel" d:DesignWidth="271.189">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" Text="Очистить текст консоли" Margin="0,4,0,4" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" FontSize="16"  PaddingContent="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}">
             <GUI:IELButtonTextKey.IELSettingObject>
-                <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True">
+                <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True" StateVisualizationButton="Default">
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                         <Classes:BrushSettingQ/>
                     </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
