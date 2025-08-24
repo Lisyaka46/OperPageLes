@@ -8,7 +8,7 @@ using System.Windows.Media;
 using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 
-namespace IEL
+namespace OperPage_les.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLButtonBufferCommand.xaml

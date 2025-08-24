@@ -1,5 +1,6 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Enums;
+using Microsoft.Windows.Themes;
 using OperPage_les.CORE.Enums;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel.PageLabel;
@@ -123,13 +124,10 @@ namespace OperPage_les.UI.Pages.Browser
             get => _SelectLabelsMode;
             private set
             {
-                PageLabel.IELButtonSelectLabel.Text = value ? "Выйти из режима выделения" : "Режим выделения";
-                PageLabel.IELButtonSelectLabel.FontSize = value ? 12d : 16d;
-
                 PageLabelElement.IELButtonExecuteLabel.IsEnabled = !value;
                 PageLabelElement.IELButtonChangeLabel.IsEnabled = !value;
                 PageLabelElement.IELButtonRemoveLabel.Text = value ? "Удалить выделенное" : "Удалить";
-                PageLabelElement.IELButtonCreateLabelTag.IsEnabled = !value;
+                //PageLabelElement.IELButtonCreateLabelTag.IsEnabled = !value;
 
                 PageLabel.IELButtonCreateLabel.IsEnabled = !value;
 
@@ -155,21 +153,10 @@ namespace OperPage_les.UI.Pages.Browser
                     AppendNewOPLLbel(CountOld);
                 }
             };
-            PageLabel.IELButtonSelectLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            PageLabel.IELButtonManipulateTags.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                SelectLabelsMode = !SelectLabelsMode;
-                UpdateTextInfoLabels();
-
-                if (!SelectLabelsMode)
-                {
-                    OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().ToArray().Where((i) => i.Selected)];
-                    for (int i = 0; i < LabelsElements.Length; i++)
-                    {
-                        LabelsElements[i].Selected = false;
-                    }
-                }
-
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                new WindowManipulateLabelTags().ShowDialog();
             };
             #endregion
             #region PageLabelElement
@@ -212,15 +199,15 @@ namespace OperPage_les.UI.Pages.Browser
                 }
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
             };
-            PageLabelElement.IELButtonCreateLabelTag.OnActivateMouseLeft += (sender, e, Key) =>
+            PageLabelElement.IELButtonSetLabelTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                if (SelectLabelInPage != null)
-                {
-                    new WindowManipulateLabelTags(SelectLabelInPage).ShowDialog();
-                    //SelectLabelInPage.AppendTag(new("Tag"));
-                    SelectLabelInPage = null;
-                }
+                //if (SelectLabelInPage != null)
+                //{
+                //    new WindowManipulateLabelTags(SelectLabelInPage).ShowDialog();
+                //    //SelectLabelInPage.AppendTag(new("Tag"));
+                //    SelectLabelInPage = null;
+                //}
             };
             PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -286,7 +273,7 @@ namespace OperPage_les.UI.Pages.Browser
             PanelActionPageLabel.IsKeyboardModeChanged += (Source, NewValue) =>
             {
                 PageLabel.IELButtonCreateLabel.CharKeyboardActivate = NewValue;
-                PageLabel.IELButtonSelectLabel.CharKeyboardActivate = NewValue;
+                PageLabel.IELButtonManipulateTags.CharKeyboardActivate = NewValue;
             };
             PanelActionSettingsLabel = new(this, PanelActionPageLabel, new(210d, 220d));
 
@@ -295,7 +282,7 @@ namespace OperPage_les.UI.Pages.Browser
                 PageLabelElement.IELButtonExecuteLabel.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonChangeLabel.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonRemoveLabel.CharKeyboardActivate = NewValue;
-                PageLabelElement.IELButtonCreateLabelTag.CharKeyboardActivate = NewValue;
+                PageLabelElement.IELButtonSetLabelTag.CharKeyboardActivate = NewValue;
                 PageLabelElement.IELButtonActivateSelectMenu.CharKeyboardActivate = NewValue;
             };
             PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(236d, 323d));
@@ -522,8 +509,9 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 SelectLabelInPage = Label;
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = SelectLabelInPage.Selected && SelectLabelsMode;
+                PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.Tag != null;
+                PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0;
                 App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
-                PageLabelElement.UpdateVisibleTag([.. Label.SourceLabel.Tags]);
                 e.Handled = true;
             };
             Label.OnActivateMouseLeft += (sender, e, Key) =>
@@ -586,15 +574,15 @@ namespace OperPage_les.UI.Pages.Browser
                 case SortingLabelEnum.Tag:
                     SourceLabels.Sort(delegate (LabelAction x, LabelAction y)
                     {
-                        if (x.Tags.Count == 0)
+                        if (x.Tag == null)
                         {
-                            if (y.Tags.Count == 0) return 0;
+                            if (y.Tag == null) return 0;
                             else return -1;
                         }
                         else
                         {
-                            if (y.Tags.Count == 0) return 1;
-                            else return x.Tags[0].ValueTag.CompareTo(y.Tags[0].ValueTag);
+                            if (y.Tag == null) return 1;
+                            else return x.Tag.ValueTag.CompareTo(y.Tag.ValueTag);
                         }
                     });
                     break;

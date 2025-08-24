@@ -5,22 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OperPage_les.UI.Dialogs"
         xmlns:GUI="clr-namespace:OperPage_les.UI.UserElementControl"
-        xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowManipulateLabelTags"
+        xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Dialogs.WindowManipulateLabelTags"
         mc:Ignorable="d" Height="300" Width="480" Background="#FF838A7B" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Title="Окно манипуляции над тегами">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.RowSpan="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="149"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Border x:Name="BorderTags" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Panel.ZIndex="-1" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" Margin="5,5,5,5">
+        <Grid>
+            <Border x:Name="BorderTags" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="5,5,5,5">
                 <Border.Background>
                     <LinearGradientBrush EndPoint="1.2,0" StartPoint="0,-0.14">
                         <GradientStop Color="#FF9DBB61" Offset="0.628"/>
@@ -36,11 +28,12 @@
                         <StackPanel x:Name="StackPanelTags" MinWidth="10" Margin="10,0,10,0"/>
                     </ScrollViewer>
                     <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="#4C000000" Padding="0,3,0,3">
-                        <Grid Grid.RowSpan="1" Grid.Row="1" HorizontalAlignment="Center">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <IEL:IELButtonText x:Name="IELButtonAddTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="2" Text="Добавить"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0">
                                 <IEL:IELButtonText.IELSettingObject>
@@ -87,50 +80,25 @@
                                     </ObjectSettings:IELButtonObjectSetting>
                                 </IEL:IELButtonText.IELSettingObject>
                             </IEL:IELButtonText>
+                            <IEL:IELButtonText x:Name="IELButtonComplete" CornerRadius="5,5,5,5" Grid.Column="3" Text="Готово"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0" Margin="5,2,5,2">
+                                <IEL:IELButtonText.IELSettingObject>
+                                    <ObjectSettings:IELButtonObjectSetting>
+                                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                            <Classes:BrushSettingQ/>
+                                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                            <Classes:BrushSettingQ/>
+                                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                            <Classes:BrushSettingQ Default="#FF89D2C3" NotEnabled="#FFF34A4A" Select="#FF41DA9F" Used="#FF64EA72"/>
+                                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                    </ObjectSettings:IELButtonObjectSetting>
+                                </IEL:IELButtonText.IELSettingObject>
+                            </IEL:IELButtonText>
                         </Grid>
                     </Border>
                 </Grid>
             </Border>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="107*"/>
-                    <RowDefinition Height="18*"/>
-                </Grid.RowDefinitions>
-                <Border x:Name="BorderMainLabel" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" BorderBrush="Black" Grid.ColumnSpan="1" Grid.RowSpan="1" Margin="5,5,5,0">
-                    <Border.Background>
-                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                            <GradientStop Color="#FF3CB7AF" Offset="0.524"/>
-                            <GradientStop Color="#FF9DBB61" Offset="0.952"/>
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image x:Name="ImageElementLabel" Grid.RowSpan="1" Source="/UI/Images/Labels/Link.png" Margin="5,5,5,5"/>
-                        <TextBlock x:Name="TextBlockNameLabel" TextWrapping="Wrap" Text="12345678901234567890" FontSize="16" FontWeight="Bold" TextAlignment="Center" Foreground="Black" Grid.Row="1" VerticalAlignment="Bottom"/>
-                    </Grid>
-                </Border>
-                <Grid Grid.Row="1">
-                    <IEL:IELButtonText x:Name="IELButtonComplete" CornerRadius="5,5,5,5" Text="Готово"  BorderThicknessBlock="2,2,2,2" FontSize="16" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}" VerticalAlignment="Center" Margin="12,0,12,0">
-                        <IEL:IELButtonText.IELSettingObject>
-                            <ObjectSettings:IELButtonObjectSetting>
-                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                    <Classes:BrushSettingQ/>
-                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <Classes:BrushSettingQ/>
-                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                    <Classes:BrushSettingQ Default="#FF5D9AE0" NotEnabled="#FFF34A4A" Select="#FFA0CAF9" Used="#FFD2FFF2"/>
-                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                            </ObjectSettings:IELButtonObjectSetting>
-                        </IEL:IELButtonText.IELSettingObject>
-                    </IEL:IELButtonText>
-                </Grid>
-            </Grid>
         </Grid>
-        <Grid/>
     </Grid>
 </Window>

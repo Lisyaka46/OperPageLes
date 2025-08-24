@@ -1,4 +1,4 @@
-﻿using IEL;
+﻿using IEL.GUI;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using Interpreter.Commands;

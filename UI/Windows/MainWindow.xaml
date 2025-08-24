@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:GUI="clr-namespace:IEL;assembly=IEL"
+        xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"

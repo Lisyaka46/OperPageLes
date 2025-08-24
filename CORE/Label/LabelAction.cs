@@ -8,7 +8,7 @@ namespace IEL.CORE.Classes
         /// <summary>
         /// Событие добавления ярлыка
         /// </summary>
-        internal event ValueChangedHandler<LabelTag>? AddTag;
+        internal event ValueChangedHandler<LabelTag>? SetTag;
 
         /// <summary>
         /// Событие удаления ярлыка
@@ -30,43 +30,28 @@ namespace IEL.CORE.Classes
         /// </summary>
         public string Command { get; set; } = command;
 
-        private readonly List<LabelTag> _Tags = [];
         /// <summary>
-        /// Теги ярлыка
+        /// Тег ярлыка
         /// </summary>
-        public List<LabelTag> Tags
-        {
-            get => _Tags;
-        }
+        public LabelTag? Tag { get; private set; }
 
         /// <summary>
         /// Добавить тег в ярлык
         /// </summary>
-        /// <param name="index">Индекс тега</param>
+        /// <param name="NewTag">Добавляемый объект тега</param>
         internal void AppendTag(LabelTag NewTag)
         {
-            Tags.Add(NewTag);
-            AddTag?.Invoke(null, Tags[^1]);
-        }
-
-        /// <summary>
-        /// Удалить тег по индексу из ярлыка
-        /// </summary>
-        /// <param name="index">Индекс тега</param>
-        internal void RemoveAtTag(int index)
-        {
-            DeleteTag?.Invoke(Tags[index], null);
-            Tags.RemoveAt(index);
+            Tag = NewTag;
+            SetTag?.Invoke(null, NewTag);
         }
 
         /// <summary>
         /// Удалить тег из ярлыка
         /// </summary>
-        /// <param name="tag">Тег</param>
-        internal void RemoveTag(LabelTag tag)
+        internal void RemoveTag()
         {
-            DeleteTag?.Invoke(tag, null);
-            Tags.Remove(tag);
+            DeleteTag?.Invoke(Tag, null);
+            Tag = null;
         }
     }
 }

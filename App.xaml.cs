@@ -1,4 +1,4 @@
-﻿using IEL;
+﻿using IEL.GUI;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Classes.ObjectSettings;
@@ -26,6 +26,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using System.Net.Http;
+using OperPage_les.CORE.Label;
 
 namespace OperPage_les
 {
@@ -237,9 +239,14 @@ namespace OperPage_les
         internal readonly COMInterpreter Interpreter;
 
         /// <summary>
-        /// Массив консольных команд
+        /// Массив ярлыков
         /// </summary>
         internal readonly List<LabelAction> DataLabels = [];
+
+        /// <summary>
+        /// Массив тегов для ярлыков
+        /// </summary>
+        internal readonly List<LabelTag> DataLabelTags = [];
         #endregion
 
         /// <summary>
@@ -315,9 +322,14 @@ namespace OperPage_les
         internal static readonly string DirectoryResourcesApplication = MainDirectoryApplication + @"/Resources/";
 
         /// <summary>
-        /// Главная директория ресурсов
+        /// Директория ресурса ярлыков
         /// </summary>
         internal static readonly string DirectoryDataLabels = DirectoryResourcesApplication + "Labels.json";
+
+        /// <summary>
+        /// Директория ресурса тегов для ярлыков
+        /// </summary>
+        internal static readonly string DirectoryDataLabelTags = DirectoryResourcesApplication + "Label_Tags.json";
 
         //
         internal readonly BitmapImage BitmapLoading;
@@ -347,6 +359,11 @@ namespace OperPage_les
         /// Количество миллисекунд ушедших на подключение
         /// </summary>
         internal static volatile object MillisecondInternetConnection = -1L;
+
+        /// <summary>
+        /// Клиент для манипуляции в сети интернет
+        /// </summary>
+        internal static readonly HttpClient UsedHttpClient = new();
 
         public App()
         {
@@ -627,6 +644,18 @@ namespace OperPage_les
                 ActivePathSettingApplication = PathSettingApplication;
             }
 
+            DataLabelTags = [];
+            if (!File.Exists(DirectoryDataLabelTags))
+            {
+                string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags);
+                File.WriteAllText(DirectoryDataLabelTags, SettingApplicationJSON);
+            }
+            else
+            {
+                LabelTag[]? Tags = JsonConvert.DeserializeObject<LabelTag[]>(File.ReadAllText(DirectoryDataLabelTags));
+                if (Tags != null) DataLabelTags.AddRange(Tags);
+            }
+
             DataLabels = [];
             if (!File.Exists(DirectoryDataLabels))
             {
@@ -639,6 +668,7 @@ namespace OperPage_les
                 if (Labels != null) DataLabels.AddRange(Labels);
             }
 
+            #region SettingRuntimeRealizeSettingChanges
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
             {
                 MainWindowApplication.UpdateImageMenu(New);
@@ -651,6 +681,7 @@ namespace OperPage_les
             {
                 MainWindowApplication.ChangeVisibilityMillisecondInternet(New);
             };
+            #endregion
 
             if (!File.Exists(DirectoryImageLoading))
             {
@@ -734,7 +765,7 @@ namespace OperPage_les
                     UpdateSettingApplication();
                     Thread.Sleep(300);
 
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки"));
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки и теги"));
                     UpdateFileDataLabel();
                     Thread.Sleep(700);
 
@@ -772,6 +803,12 @@ namespace OperPage_les
             Current.Shutdown(0);
         }
 
+        /// <summary>
+        /// Загрузчик изображений через данные байтов
+        /// </summary>
+        /// <param name="imageData">Массив данных картинки</param>
+        /// <returns>Объект изображения</returns>
+        /// <exception cref="Exception">Исключение при повреждённом или пустом изображении</exception>
         internal static BitmapImage LoadImage(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0) throw new Exception("Неожиданное содержание нулевого массива байтов.");
@@ -788,6 +825,28 @@ namespace OperPage_les
             }
             //image.Freeze();
             return image;
+        }
+
+        /// <summary>
+        /// Установка иконки хоста сайта через собственный клиент
+        /// </summary>
+        /// <param name="url">Ссылка хоста: Сама преобразуется в управляемый DNS сервер хоста</param>
+        /// <returns>Картинка которая ссылается на иконку управляемого сайта</returns>
+        internal static BitmapImage DownloadFavicon(Uri url)
+        {
+            try
+            {
+                string faviconurl = "http://" + url.DnsSafeHost + "/favicon.ico";
+                BitmapImage bitmapImage = new();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = UsedHttpClient.GetStreamAsync(faviconurl).Result;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+            catch
+            {
+                return App.LoadImage(OperPage_les.Properties.Resources.Link);
+            }
         }
 
         internal static void Log(string log)
@@ -912,6 +971,15 @@ namespace OperPage_les
         {
             string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabels);
             File.WriteAllText(DirectoryDataLabels, SettingApplicationJSON);
+        }
+
+        /// <summary>
+        /// Обновить файл данных тегов ярлыков
+        /// </summary>
+        internal void UpdateFileDataLabelTag()
+        {
+            string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags);
+            File.WriteAllText(DirectoryDataLabelTags, SettingApplicationJSON);
         }
         #endregion
 

@@ -1,4 +1,4 @@
-﻿using IEL;
+﻿using IEL.GUI;
 using IEL.CORE.Classes.Browser;
 using Microsoft.Build.Locator;
 using Microsoft.CSharp;

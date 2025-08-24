@@ -1,14 +1,20 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
+using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
 using OperPage_les.CORE.Label;
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
-using IEL.CORE.Enums;
 
 namespace OperPage_les.UI.UserElementControl
 {
@@ -215,7 +221,7 @@ namespace OperPage_les.UI.UserElementControl
             _Selected = false;
             BorderSelectElement.Opacity = 0d;
             SourceLabel = Label;
-            SourceLabel.AddTag += (Old, New) =>
+            SourceLabel.SetTag += (Old, New) =>
             {
             };
             SourceLabel.DeleteTag += (Old, New) =>
@@ -302,13 +308,18 @@ namespace OperPage_les.UI.UserElementControl
             int IndexUseStyle;
             switch (name_command)
             {
-                case "open_link":
-                    IndexUseStyle = 2;
-                    ByteLabelImage = Properties.Resources.Link;
-                    break;
                 case "open_file":
                     IndexUseStyle = 1;
                     ByteLabelImage = Properties.Resources.File;
+                    break;
+                case "open_link":
+                    IndexUseStyle = 2;
+                    ByteLabelImage = Properties.Resources.Link;
+                    try
+                    {
+                        ImageFaviconLabel.Source = App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
+                    }
+                    catch { }
                     break;
                 case "open_directory":
                     IndexUseStyle = 3;
@@ -319,7 +330,6 @@ namespace OperPage_les.UI.UserElementControl
                     ByteLabelImage = Properties.Resources.Command;
                     break;
             }
-            ;
             ImageElementLabel.Source = App.LoadImage(ByteLabelImage);
             ImageElementLabel.UpdateLayout();
             IELSettingObject.BackgroundSetting.ColorData = (QData)BackgroundStyles[IndexUseStyle].Clone();

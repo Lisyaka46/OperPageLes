@@ -10,46 +10,38 @@ namespace OperPage_les.UI.Dialogs
     public partial class WindowManipulateLabelTags : Window
     {
         /// <summary>
-        /// Ярлык подлежащий манипуляции
-        /// </summary>
-        private readonly OPLLabelCommand LabelManipulate;
-
-        /// <summary>
         /// Выделенный тег
         /// </summary>
         private OPLLabelTag? SelectedTag;
 
-        public WindowManipulateLabelTags(OPLLabelCommand OPLLabel)
+        public WindowManipulateLabelTags()
         {
             InitializeComponent();
-            LabelManipulate = OPLLabel;
-            for (int i = 0; i < LabelManipulate.SourceLabel.Tags.Count; i++)
-            {
-                AddVisualTag(LabelManipulate.SourceLabel.Tags[i]);
-            }
-            ImageElementLabel.Source = LabelManipulate.ImageElementLabel.Source;
-            TextBlockNameLabel.Text = LabelManipulate.TextBlockNameLabel.Text;
             Icon = App.LoadImage(Properties.Resources.Tag);
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
+            foreach (LabelTag Element in App.CurrentApp.DataLabelTags)
+            {
+                AddVisualTag(Element);
+            }
             IELButtonAddTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 LabelTag? Tag = new WindowGenDataLabelTag().GenereteTag();
                 if (Tag == null) return;
-                LabelManipulate.SourceLabel.AppendTag(Tag);
+                App.CurrentApp.DataLabelTags.Add(Tag);
                 AddVisualTag(Tag);
             };
             IELButtonChangeTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (SelectedTag == null) return;
-                new WindowGenDataLabelTag().ChangeDataTag(SelectedTag.Tag);
-                ClearSelectTag();
+                //if (SelectedTag == null) return;
+                //new WindowGenDataLabelTag().ChangeDataTag(SelectedTag.Tag);
+                //ClearSelectTag();
             };
             IELButtonRemoveTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (SelectedTag == null) return;
-                LabelManipulate.SourceLabel.RemoveTag(SelectedTag.Tag);
                 StackPanelTags.Children.Remove(SelectedTag);
+                App.CurrentApp.DataLabelTags.Remove(SelectedTag.Tag);
                 ClearSelectTag();
             };
             IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>
@@ -69,16 +61,20 @@ namespace OperPage_les.UI.Dialogs
 
             OPLTag.MouseLeftButtonUp += (sender, e) =>
             {
-                SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
-                OPLTag.IELSettingObject.BackgroundSetting.SetUsedState(true);
+                if (SelectedTag != null)
+                {
+                    ClearSelectTag();
+                    if (SelectedTag.GetHashCode().Equals(OPLTag.GetHashCode()))
+                    {
+                        SelectedTag = null;
+                        return;
+                    }
+                }
                 SelectedTag = OPLTag;
-                IELButtonChangeTag.IsEnabled = true;
-                IELButtonRemoveTag.IsEnabled = true;
-            };
-            OPLTag.MouseRightButtonUp += (sender, e) =>
-            {
-                SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
-                ClearSelectTag();
+                bool UsedState = SelectedTag.IELSettingObject.BackgroundSetting.GetUsedState();
+                SelectedTag.IELSettingObject.BackgroundSetting.SetUsedState(!UsedState);
+                IELButtonChangeTag.IsEnabled = !UsedState;
+                IELButtonRemoveTag.IsEnabled = !UsedState;
             };
             OPLTag.Opacity = 0d;
             App.AnimateDoubleEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
@@ -91,7 +87,6 @@ namespace OperPage_les.UI.Dialogs
         private void ClearSelectTag()
         {
             SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
-            SelectedTag = null;
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
         }
