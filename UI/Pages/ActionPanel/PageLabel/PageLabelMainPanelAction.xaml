@@ -16,6 +16,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1"  FontSize="16" Margin="4,4,4,4" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}">
@@ -33,7 +35,7 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </IEL:IELButtonTextKey.IELSettingObject>
         </IEL:IELButtonTextKey>
-        <IEL:IELButtonTextKey x:Name="IELButtonManipulateTags" Text="Управление тегами" CornerRadius="6,6,6,6" CharKeyKeyboard="D2" Margin="4,4,4,4" Grid.Row="4" Grid.RowSpan="1" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
+        <IEL:IELButtonTextKey x:Name="IELButtonManipulateTags" Text="Управление тегами" CornerRadius="6,6,6,6" CharKeyKeyboard="D2" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
             <IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="Default">
                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -43,7 +45,37 @@
                         <Classes:BrushSettingQ/>
                     </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FFF12727" Default="#FF80BB3C" Select="#FFA4ED50" Used="#FFDDF3C3"/>
+                        <Classes:BrushSettingQ NotEnabled="#FFF12727" Default="#FF4EABB7" Select="#FF50EDA9" Used="#FFE0FAFF"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </IEL:IELButtonTextKey.IELSettingObject>
+        </IEL:IELButtonTextKey>
+        <IEL:IELButtonTextKey x:Name="IELButtonSelectAllLabel" Text="Выделить всё" CornerRadius="6,6,6,6" CharKeyKeyboard="D3" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
+            <IEL:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="Default">
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FF45C36F" Select="#FF45F7B2" Used="#FFB5FFE2"/>
+                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELButtonObjectSetting>
+            </IEL:IELButtonTextKey.IELSettingObject>
+        </IEL:IELButtonTextKey>
+        <IEL:IELButtonTextKey x:Name="IELButtonClearAllSelect" Text="Убрать всё выделение" CornerRadius="6,6,6,6" CharKeyKeyboard="D4" Margin="4,4,4,4" Grid.Row="3" Grid.RowSpan="1" PaddingContent="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16">
+            <IEL:IELButtonTextKey.IELSettingObject>
+                <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="Default">
+                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FFB2BF40" Select="#FFF7E845" Used="#FFFFCDB5"/>
                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELButtonObjectSetting>
             </IEL:IELButtonTextKey.IELSettingObject>
