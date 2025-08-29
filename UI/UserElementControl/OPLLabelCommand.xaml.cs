@@ -1,10 +1,13 @@
-﻿using IEL.CORE.Classes;
+﻿using CefSharp.DevTools.DOM;
+using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
 using OperPage_les.CORE.Label;
 using System;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
 
 namespace OperPage_les.UI.UserElementControl
@@ -315,11 +319,44 @@ namespace OperPage_les.UI.UserElementControl
                 case "open_link":
                     IndexUseStyle = 2;
                     ByteLabelImage = Properties.Resources.Link;
-                    try
+
+                    BackgroundWorker worker = new();
+                    BitmapImage DownloadImage = App.LoadImage(Properties.Resources.Reload);
+                    Action action = new(() =>
                     {
-                        ImageFaviconLabel.Source = App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
-                    }
-                    catch { }
+                        ThreadStart start = () =>
+                        {
+                            Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,
+                                new Action(() =>
+                                {
+                                    ImageFaviconLabel.Width = 20;
+                                    ImageFaviconLabel.Height = 20;
+                                    ImageFaviconLabel.Opacity = 0d;
+
+#warning Это работает в однопоточном режиме, нельзя до стучаться до переменной в которую загружается картинка ImageFaviconLabel.Source = DownloadImage;
+                                    ImageFaviconLabel.Source = App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
+
+                                    App.AnimateDoubleEffect(ImageFaviconLabel, OpacityProperty, 1d, TimeSpan.FromMilliseconds(900d));
+                                    App.AnimateDoubleEffect(ImageFaviconLabel, WidthProperty, 40d, TimeSpan.FromMilliseconds(1100d));
+                                    App.AnimateDoubleEffect(ImageFaviconLabel, HeightProperty, 40d, TimeSpan.FromMilliseconds(1100d));
+                                }));
+                        };
+                        Thread nt = new(start)
+                        {
+                            Priority = ThreadPriority.Lowest,
+                        };
+                        nt.SetApartmentState(ApartmentState.STA);
+                        nt.Start();
+                    });
+                    worker.DoWork += (sender, e) =>
+                    {
+                        DownloadImage = App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
+                    };
+                    worker.RunWorkerCompleted += (sender, e) =>
+                    {
+                        action.Invoke();
+                    };
+                    worker.RunWorkerAsync();
                     break;
                 case "open_directory":
                     IndexUseStyle = 3;
