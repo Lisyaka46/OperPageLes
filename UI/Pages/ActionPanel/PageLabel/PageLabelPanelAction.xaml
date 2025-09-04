@@ -89,8 +89,11 @@
             <GUI:IELBlockInfoImage x:Name="IELBlockInfoTagLabel" CornerRadius="6,6,6,6" BorderThicknessBlock="3,3,3,3" Width="40" Height="40" PaddingContent="4,0,4,0" Margin="0,0,3,0">
                 <GUI:IELBlockInfoImage.IELSettingObject>
                     <ObjectSettings:IELUsingObjectSetting IntervalHover="10">
+                        <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FF4C1616" Select="#FF425449" Used="#FF316763"/>
+                        </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                         <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                            <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FFD0BE65" Select="#FF33D83D" Used="#FF49924E"/>
+                            <Classes:BrushSettingQ NotEnabled="#FFDA4444" Default="#FFB1A35F" Select="#FF60F369" Used="#FF49924E"/>
                         </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELUsingObjectSetting>
                 </GUI:IELBlockInfoImage.IELSettingObject>

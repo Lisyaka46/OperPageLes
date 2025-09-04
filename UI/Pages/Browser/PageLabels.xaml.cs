@@ -2,6 +2,7 @@
 using IEL.CORE.Enums;
 using Microsoft.Windows.Themes;
 using OperPage_les.CORE.Enums;
+using OperPage_les.CORE.Label;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel.PageLabel;
 using OperPage_les.UI.UserElementControl;
@@ -143,6 +144,7 @@ namespace OperPage_les.UI.Pages.Browser
             IELButtonSearch.Imaging = App.LoadImage(Properties.Resources.Search);
             BorderScrollBackground.Width = 0d;
             SortingLabelType = SortingLabelEnum.NameAZ;
+            TextBlockEventInfo.Opacity = 0d;
             #region PanelAction
             #region PageLabel
             PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += (sender, e, Key) =>
@@ -157,7 +159,7 @@ namespace OperPage_les.UI.Pages.Browser
             PageLabel.IELButtonManipulateTags.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                new WindowManipulateLabelTags().ShowDialog();
+                new WindowManipulateLabelTags().ShowManipulateTags();
             };
             PageLabel.IELButtonSelectAllLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -227,12 +229,16 @@ namespace OperPage_les.UI.Pages.Browser
             PageLabelElement.IELButtonSetLabelTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                //if (SelectLabelInPage != null)
-                //{
-                //    new WindowManipulateLabelTags(SelectLabelInPage).ShowDialog();
-                //    //SelectLabelInPage.AppendTag(new("Tag"));
-                //    SelectLabelInPage = null;
-                //}
+                if (SelectLabelInPage != null)
+                {
+                    LabelTag? Tag = new WindowManipulateLabelTags().ShowSelectOneTag();
+                    if (Tag != null)
+                    {
+                        SelectLabelInPage.SourceLabel.AppendTag(Tag);
+                        AnimateInfoText("Тег успешно установлен", 7000d);
+                    }
+                    SelectLabelInPage = null;
+                }
             };
             PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -270,6 +276,16 @@ namespace OperPage_les.UI.Pages.Browser
                         UpdateTextInfoLabels();
                     }
                 }
+            };
+            PageLabelElement.IELBlockInfoTagLabel.IELSettingObject.MouseHover += (sender, e) =>
+            {
+                if (SelectLabelInPage == null && SelectLabelInPage?.SourceLabel.Tag == null) return;
+                App.MainWindowApplication.IELMessageMain.UsingBorderInformation(PageLabelElement.IELBlockInfoTagLabel,
+                    SelectLabelInPage.SourceLabel.Tag ?? string.Empty, OrientationBorderPosition.Auto);
+            };
+            PageLabelElement.IELBlockInfoTagLabel.MouseLeave += (sender, e) =>
+            {
+                App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
             };
             #endregion
             #endregion
@@ -382,6 +398,16 @@ namespace OperPage_les.UI.Pages.Browser
         }
 
         /// <summary>
+        /// Анимировать отображение текста
+        /// </summary>
+        /// <param name="Text">Отображаемый текст</param>
+        private void AnimateInfoText(string Text, double Millisecond)
+        {
+            TextBlockEventInfo.Text = Text;
+            App.AnimateDoubleEffect(TextBlockEventInfo, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(Millisecond));
+        }
+
+        /// <summary>
         /// Обновить визуализацию поиска
         /// </summary>
         private void UpdateVisualSearchElements()
@@ -486,6 +512,11 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 OPLLabelCommand Element = CreateVisualLabel(i);
                 Element.Opacity = 1d;
+                if (Element.SourceLabel.Tag != null)
+                {
+                    if (!App.CurrentApp.DataLabelTags.Any(i => i.ValueTag.Equals(Element.SourceLabel.Tag)))
+                        Element.SourceLabel.RemoveTag();
+                }
                 GridMainLabels.Children.Add(Element);
                 //App.AnimateDoubleEffect(GridMainLabels.Children[^1], OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
                 //App.MainWindowApplication.UpdateLayout();
@@ -516,7 +547,8 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 SelectLabelInPage = Label;
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = SelectLabelInPage.Selected && SelectLabelsMode;
-                PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.Tag != null;
+                PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.SourceLabel.Tag != null;
+                PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
                 PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0;
                 App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
                 e.Handled = true;
@@ -562,7 +594,7 @@ namespace OperPage_les.UI.Pages.Browser
         /// <param name="Index">индекс удаляемого ярлыка</param>
         private void RemoveLabel(OPLLabelCommand Source)
         {
-            int UpdateIndex = GridMainLabels.Children.IndexOf(Source);
+            //int UpdateIndex = GridMainLabels.Children.IndexOf(Source);
             GridMainLabels.Children.Remove(Source);
             App.CurrentApp.DataLabels.Remove(Source.SourceLabel);
             UpdatePositionLabels(0);
@@ -589,7 +621,7 @@ namespace OperPage_les.UI.Pages.Browser
                         else
                         {
                             if (y.Tag == null) return 1;
-                            else return x.Tag.ValueTag.CompareTo(y.Tag.ValueTag);
+                            else return x.Tag.CompareTo(y.Tag);
                         }
                     });
                     break;

@@ -1,6 +1,7 @@
 ﻿using OperPage_les.CORE.Label;
 using System.Windows;
 using System.Windows.Media;
+using Key = System.Windows.Input.Key;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -20,16 +21,48 @@ namespace OperPage_les.UI.Dialogs
             };
             IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (IELTextBoxNameTag.Text.Length == 0)
-                {
-                    App.AnimateColorEffect(IELTextBoxNameTag.Background, SolidColorBrush.ColorProperty,
-                        Colors.Red, IELTextBoxNameTag.IELSettingObject.BackgroundSetting.Default,
-                        TimeSpan.FromMilliseconds(IELTextBoxNameTag.IELSettingObject.AnimationMillisecond));
-                    return;
-                }
-                Cancel = false;
-                Close();
+                CompleteEditTag();
             };
+            IELTextBoxNameTag.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        CompleteEditTag();
+                        break;
+                }
+            };
+            Loaded += (sender, e) =>
+            {
+                IELTextBoxNameTag.Focus();
+            };
+        }
+
+        /// <summary>
+        /// Проверить текст на подход для тегов
+        /// </summary>
+        /// <returns>true при успешной проверке</returns>
+        private bool Check()
+        {
+            if (IELTextBoxNameTag.Text.Length == 0) return false;
+            else if (App.CurrentApp.DataLabelTags.Any(i => i.ValueTag.Equals(IELTextBoxNameTag.Text))) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Итоговая функция редактирования и создания тега
+        /// </summary>
+        private void CompleteEditTag()
+        {
+            if (!Check())
+            {
+                App.AnimateColorEffect(IELTextBoxNameTag.Background, SolidColorBrush.ColorProperty,
+                Colors.Red, IELTextBoxNameTag.IELSettingObject.BackgroundSetting.Default,
+                TimeSpan.FromMilliseconds(IELTextBoxNameTag.IELSettingObject.AnimationMillisecond));
+                return;
+            }
+            Cancel = false;
+            Close();
         }
 
         /// <summary>

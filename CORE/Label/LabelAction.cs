@@ -31,9 +31,27 @@ namespace IEL.CORE.Classes
         public string Command { get; set; } = command;
 
         /// <summary>
+        /// Имя тега ярлыка
+        /// </summary>
+        public string? Tag
+        {
+            get => _Tag?.ValueTag;
+            set
+            {
+                if (value == null)
+                {
+                    RemoveTag();
+                    return;
+                }
+                if (_Tag != null) _Tag.ValueTag = value;
+                else _Tag = new(value);
+            }
+        }
+
+        /// <summary>
         /// Тег ярлыка
         /// </summary>
-        public LabelTag? Tag { get; private set; }
+        private LabelTag? _Tag;
 
         /// <summary>
         /// Добавить тег в ярлык
@@ -41,7 +59,7 @@ namespace IEL.CORE.Classes
         /// <param name="NewTag">Добавляемый объект тега</param>
         internal void AppendTag(LabelTag NewTag)
         {
-            Tag = NewTag;
+            _Tag = NewTag;
             SetTag?.Invoke(null, NewTag);
         }
 
@@ -50,8 +68,8 @@ namespace IEL.CORE.Classes
         /// </summary>
         internal void RemoveTag()
         {
-            DeleteTag?.Invoke(Tag, null);
-            Tag = null;
+            DeleteTag?.Invoke(_Tag, null);
+            _Tag = null;
         }
     }
 }
