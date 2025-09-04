@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Color = System.Windows.Media.Color;
 
 namespace OperPage_les.UI.UserElementControl
@@ -320,43 +321,19 @@ namespace OperPage_les.UI.UserElementControl
                     IndexUseStyle = 2;
                     ByteLabelImage = Properties.Resources.Link;
 
-                    BackgroundWorker worker = new();
-                    BitmapImage DownloadImage = App.LoadImage(Properties.Resources.Reload);
-                    Action action = new(() =>
+                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, async () =>
                     {
-                        ThreadStart start = () =>
-                        {
-                            Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,
-                                new Action(() =>
-                                {
-                                    ImageFaviconLabel.Width = 20;
-                                    ImageFaviconLabel.Height = 20;
-                                    ImageFaviconLabel.Opacity = 0d;
+                        ImageFaviconLabel.Source = await App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
+                        ImageFaviconLabel.Width = 20;
+                        ImageFaviconLabel.Height = 20;
+                        ImageFaviconLabel.Opacity = 0d;
 
-#warning Это работает в однопоточном режиме, нельзя до стучаться до переменной в которую загружается картинка ImageFaviconLabel.Source = DownloadImage;
-                                    ImageFaviconLabel.Source = App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
-
-                                    App.AnimateDoubleEffect(ImageFaviconLabel, OpacityProperty, 1d, TimeSpan.FromMilliseconds(900d));
-                                    App.AnimateDoubleEffect(ImageFaviconLabel, WidthProperty, 40d, TimeSpan.FromMilliseconds(1100d));
-                                    App.AnimateDoubleEffect(ImageFaviconLabel, HeightProperty, 40d, TimeSpan.FromMilliseconds(1100d));
-                                }));
-                        };
-                        Thread nt = new(start)
-                        {
-                            Priority = ThreadPriority.Lowest,
-                        };
-                        nt.SetApartmentState(ApartmentState.STA);
-                        nt.Start();
+                        App.AnimateDoubleEffect(ImageFaviconLabel, OpacityProperty, 1d, TimeSpan.FromMilliseconds(900d));
+                        App.AnimateDoubleEffect(ImageFaviconLabel, WidthProperty, 40d, TimeSpan.FromMilliseconds(1100d));
+                        App.AnimateDoubleEffect(ImageFaviconLabel, HeightProperty, 40d, TimeSpan.FromMilliseconds(1100d));
                     });
-                    worker.DoWork += (sender, e) =>
-                    {
-                        DownloadImage = App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
-                    };
-                    worker.RunWorkerCompleted += (sender, e) =>
-                    {
-                        action.Invoke();
-                    };
-                    worker.RunWorkerAsync();
+                    //while (worker.IsBusy) System.Windows.Forms.Application.DoEvents();
+                    //action.Invoke();
                     break;
                 case "open_directory":
                     IndexUseStyle = 3;
@@ -388,7 +365,7 @@ namespace OperPage_les.UI.UserElementControl
                 CornerRadius = new(5),
                 Text = string.Empty,
                 PaddingContent = new(4, 2, 4, 2),
-                FontSize = 14d,
+                FontSize = 16d,
                 Tag = NewTag,
                 IELSettingObject = new()
                 {

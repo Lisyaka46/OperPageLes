@@ -28,6 +28,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Net.Http;
 using OperPage_les.CORE.Label;
+using System.Linq;
 
 namespace OperPage_les
 {
@@ -647,13 +648,13 @@ namespace OperPage_les
             DataLabelTags = [];
             if (!File.Exists(DirectoryDataLabelTags))
             {
-                string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags);
+                string SettingApplicationJSON = JsonConvert.SerializeObject(new string[1]);
                 File.WriteAllText(DirectoryDataLabelTags, SettingApplicationJSON);
             }
             else
             {
-                LabelTag[]? Tags = JsonConvert.DeserializeObject<LabelTag[]>(File.ReadAllText(DirectoryDataLabelTags));
-                if (Tags != null) DataLabelTags.AddRange(Tags);
+                string[]? Tags = JsonConvert.DeserializeObject<string[]>(File.ReadAllText(DirectoryDataLabelTags));
+                if (Tags != null) DataLabelTags.AddRange(Tags.Select(Tag => new LabelTag(Tag)));
             }
 
             DataLabels = [];
@@ -767,6 +768,7 @@ namespace OperPage_les
 
                     Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки и теги"));
                     UpdateFileDataLabel();
+                    UpdateFileDataLabelTag();
                     Thread.Sleep(700);
 
                     Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения..."));
@@ -832,21 +834,14 @@ namespace OperPage_les
         /// </summary>
         /// <param name="url">Ссылка хоста: Сама преобразуется в управляемый DNS сервер хоста</param>
         /// <returns>Картинка которая ссылается на иконку управляемого сайта</returns>
-        internal static BitmapImage DownloadFavicon(Uri url)
+        internal static async Task<BitmapImage> DownloadFavicon(Uri url)
         {
-            try
-            {
-                string faviconurl = "http://" + url.DnsSafeHost + "/favicon.ico";
-                BitmapImage bitmapImage = new();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = UsedHttpClient.GetStreamAsync(faviconurl).Result;
-                bitmapImage.EndInit();
-                return bitmapImage;
-            }
-            catch
-            {
-                return App.LoadImage(OperPage_les.Properties.Resources.Link);
-            }
+            string faviconurl = "http://" + url.DnsSafeHost + "/favicon.ico";
+            BitmapImage bitmapImage = new();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = await UsedHttpClient.GetStreamAsync(faviconurl);
+            bitmapImage.EndInit();
+            return bitmapImage;
         }
 
         internal static void Log(string log)
@@ -978,7 +973,7 @@ namespace OperPage_les
         /// </summary>
         internal void UpdateFileDataLabelTag()
         {
-            string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags);
+            string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags.Select(i => i.ValueTag));
             File.WriteAllText(DirectoryDataLabelTags, SettingApplicationJSON);
         }
         #endregion
