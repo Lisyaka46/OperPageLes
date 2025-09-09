@@ -232,7 +232,7 @@ namespace OperPage_les.Windows
             };
             Closing += (sender, e) =>
             {
-                App.MainWindowApplication?.Activate();
+                App.MainWindow.Activate();
             };
             App.Log("Готово!");
         }

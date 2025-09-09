@@ -223,9 +223,19 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] Loading {
+        internal static byte[] LoadingDefault {
             get {
-                object obj = ResourceManager.GetObject("Loading", resourceCulture);
+                object obj = ResourceManager.GetObject("LoadingDefault", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] LoadingInternet {
+            get {
+                object obj = ResourceManager.GetObject("LoadingInternet", resourceCulture);
                 return ((byte[])(obj));
             }
         }

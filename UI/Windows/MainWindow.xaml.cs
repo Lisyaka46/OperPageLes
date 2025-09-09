@@ -7,7 +7,6 @@ using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
 using OperPage_les.UI.Pages.PanelButtonInformation.MainWindow;
-using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using WpfAnimatedGif;
 #endregion
 
 namespace OperPage_les.UI.Windows
@@ -50,11 +48,6 @@ namespace OperPage_les.UI.Windows
         private readonly UpdateBackgroundData UpdateBackgroundDataThis;
 
         /// <summary>
-        /// Объект управления фоновым обновлением информации в данном окне 1
-        /// </summary>
-        private readonly UpdateBackgroundData UpdateBackgroundDataRunTime;
-
-        /// <summary>
         /// Поток обновляемый совпадающие команды
         /// </summary>
         private readonly ThreadGenericProcess UpdateSearchHintCommand;
@@ -71,12 +64,7 @@ namespace OperPage_les.UI.Windows
         /// <summary>
         /// Страницы информации нижней панели
         /// </summary>
-        private readonly Page[] PagesButtonsInformation;
-
-        /// <summary>
-        /// Активое окно которое является дочерним от основного
-        /// </summary>
-        internal Window? ActiveDialog = null;
+        private Page[] PagesButtonsInformation = [];
 
         public MainWindow()
         {
@@ -87,12 +75,12 @@ namespace OperPage_les.UI.Windows
             IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
             IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
             IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
-            ImageBehavior.SetAnimatedSource(ImageIndicator, App.CurrentApp.BitmapLoading);
+            IndicatorLoading.Source = new Uri(App.DirectoryFileLoadingDefault);
+            IndicatorLoading.MediaEnded += (sender, e) =>
+            {
+                IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
+            };
             PanelActionPageInlay = new(PageInlay);
-            PagesButtonsInformation =
-            [
-                new MainPageButtonInfo(), new Page2()
-            ];
             #region Command
             //#if DEBUG
             //App.DataConsoleCommand.AddRange([
@@ -139,7 +127,6 @@ namespace OperPage_les.UI.Windows
 
             #region BackgroundData
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
-            UpdateBackgroundDataRunTime = new(1d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualDataRunTime));
             UpdateSearchHintCommand = new(() =>
             {
             });
@@ -229,7 +216,6 @@ namespace OperPage_les.UI.Windows
             };
             #region Down Tool Buttons Information
             ActualIndexActivatePageDownToolButtons = 0;
-            IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
             IELImageButtonNextButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons();
             IELImageButtonBackButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons(false);
 
@@ -308,6 +294,12 @@ namespace OperPage_les.UI.Windows
                 if (!HiAnimation)
                 {
                     HiAnimation = true;
+                    UpdateBackgroundDataThis.Start();
+                    PagesButtonsInformation =
+                    [
+                        new MainPageButtonInfo(), new Page2()
+                    ];
+                    IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
 
                     #region Anim Start
                     #region 1
@@ -330,9 +322,9 @@ namespace OperPage_les.UI.Windows
                     #endregion
                     #endregion
                 }
-                if (ActiveDialog != null && HiAnimation)
+                if (App.ActiveDialog != null && HiAnimation)
                 {
-                    ActiveDialog.Activate();
+                    App.ActiveDialog.Activate();
                 }
                 //TextBoxCommandInput.Focus();
                 /*GridMain.RenderTransform = new TransformGroup()
@@ -351,10 +343,49 @@ namespace OperPage_les.UI.Windows
                 ((ScaleTransform)((TransformGroup)GridMain.RenderTransform).Children[1]).BeginAnimation(ScaleTransform.ScaleYProperty, DoubleAnimateObj);
                 DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(300d);*/
             };
-            
+            Closing += (sender, e) =>
+            {
+                Hide();
+                //MainWindow.CloseAllBackgroundThread();
+                //Current.MainWindow.Hide();
+                //App.DiscriptionCommands?.Close();
+                bool WindowSaveClose = false;
+                WindowSaveWait windowSave = new();
+                windowSave.Closed += (sender, e) =>
+                {
+                    WindowSaveClose = true;
+                };
+                windowSave.OpenOnToComplete();
+                windowSave.Focus();
 
-            UpdateBackgroundDataThis.Start();
-            UpdateBackgroundDataRunTime.Start();
+                Thread thread = new(() =>
+                {
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы", 0d));
+                    Dispatcher.Invoke(async () => await CloseAllBackgroundThread());
+                    Thread.Sleep(600);
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 30d));
+                    App.CurrentApp.UpdateSettingApplication();
+                    Thread.Sleep(300);
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки", 60d));
+                    App.CurrentApp.UpdateFileDataLabel();
+                    Thread.Sleep(600);
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все теги", 87d));
+                    App.CurrentApp.UpdateFileDataLabelTag();
+                    Thread.Sleep(700);
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения...", 100d));
+                    windowSave.Complete();
+                });
+                thread.Start();
+
+                Task.Run(() =>
+                {
+                    while (!WindowSaveClose);
+                    thread.Join();
+                });
+            };
         }
 
         //
@@ -376,46 +407,12 @@ namespace OperPage_les.UI.Windows
         }
 
         /// <summary>
-        /// Функция обновления визуальной информации в данном окне 100
+        /// Функция обновления визуальной информации в данном окне
         /// </summary>
         private void BackgroundUpdateVisualData()
         {
             TextBlockTime.Text = App.RealTime.ToShortTimeString();
             TextBlockData.Text = App.RealTime.ToShortDateString();
-        }
-
-        /// <summary>
-        /// Функция обновления визуальной информации в данном окне 60
-        /// </summary>
-        private void BackgroundUpdateVisualDataRunTime()
-        {
-
-            //VisualRectangleDateTimeBackground.Visual.
-            //int Volume = (int)(Device.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).AudioMeterInformation.MasterPeakValue * 1900);
-            //if (Math.Abs(RectangleTest.Width - 50 - Volume) >= 13 && Volume != 0) Volume /= 5;
-            //byte rgbValue = (byte)(2.55d * Volume);
-            //TextBlockTest.Foreground = new SolidColorBrush(Color.FromRgb(rgbValue, rgbValue, rgbValue));
-            //TextBlockTest.Text = $"Volume: {Volume}";
-            //ImageTest.Margin = new(428 - (Volume / 2), 204 - (Volume / 2), 0, 0);
-            //ImageTest.Width = 10 + Volume;
-            //ImageTest.Height = 10 + Volume;
-
-            /*try
-            {
-                Point MousePoint = Mouse.GetPosition(this);
-                Point PointScreen = PointToScreen(new(0, 0));
-                //TextBlockTest.Text = $"Point: {PointScreen.X}:{PointScreen.Y} - {MousePoint.X}:{MousePoint.Y} - {ActualWidth}:{ActualHeight}";
-                if (-MousePoint.X == PointScreen.X && -MousePoint.Y == PointScreen.Y)
-                {
-                    return;
-                }
-                else MousePoint = new(
-                    (MousePoint.X - (ActualWidth / 2)) / 3,
-                    (MousePoint.Y - (ActualHeight / 2)) / 3);
-                ImageMenu.Margin = new(MousePoint.X, MousePoint.Y, 0, 0);
-            }
-            catch { ImageMenu.Margin = new(0); }*/
-
         }
 
         #region ImageMenu
@@ -484,8 +481,7 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         internal void ActivateLoadingIndicator()
         {
-            ImageBehavior.SetAnimatedSource(ImageIndicator, App.CurrentApp.BitmapLoading);
-            App.AnimateDoubleEffect(ImageIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
 
         /// <summary>
@@ -493,9 +489,18 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         internal void DiactivateLoadingIndicator()
         {
-            App.AnimateDoubleEffect(ImageIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
+            App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
         }
         #endregion
+
+        //
+        internal async Task CloseAllBackgroundThread()
+        {
+            await Task.Run(() =>
+            {
+                ((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection.Kill();
+            });
+        }
 
 
         #region BlurBackgroundDataTime

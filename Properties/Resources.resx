@@ -166,8 +166,11 @@
   <data name="Link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\Link.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Loading.gif;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="LoadingDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Media\Loading\LoadingDefault.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LoadingInternet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Media\Loading\LoadingInternet.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Menu.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
