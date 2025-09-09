@@ -1,7 +1,7 @@
-﻿using IEL.GUI;
-using IEL.CORE.Classes;
+﻿using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Classes.ObjectSettings;
+using IEL.GUI;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OperPage_les.CORE;
 using OperPage_les.CORE.Flaging;
+using OperPage_les.CORE.Label;
 using OperPage_les.CORE.Settings.Struct;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
@@ -17,7 +18,7 @@ using OperPage_les.UI.Pages.Browser;
 using OperPage_les.Windows;
 using System.Diagnostics;
 using System.IO;
-using System.Net.NetworkInformation;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -26,9 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Net.Http;
-using OperPage_les.CORE.Label;
-using System.Linq;
+using System.Windows.Threading;
 
 namespace OperPage_les
 {
@@ -37,22 +36,12 @@ namespace OperPage_les
     /// </summary>
     public partial class App : System.Windows.Application
     {
-        /// <summary>
-        /// Окно описания всех команд
-        /// </summary>
-        private WindowDiscriptionCommands? DiscriptionCommands;
-
         #region Application Flags
         /// <summary>
         /// Флаги данной формы
         /// </summary>
         internal readonly struct Flags
         {
-            /// <summary>
-            /// Состояние подключения к интернету
-            /// </summary>
-            internal static readonly Flag InternetPinging = new(false);
-
             /// <summary>
             /// Флаг состояния регистра
             /// </summary>
@@ -250,20 +239,22 @@ namespace OperPage_les
         internal readonly List<LabelTag> DataLabelTags = [];
         #endregion
 
+        #region Windows
         /// <summary>
         /// Главное окно програмы
         /// </summary>
-        internal static UI.Windows.MainWindow MainWindowApplication => (UI.Windows.MainWindow)Current.MainWindow;
-
-        /// <summary>
-        /// Поток обновляемый данные интернета
-        /// </summary>
-        private readonly ThreadGenericProcess ThreadInternetCheckConnection;
+        internal static new UI.Windows.MainWindow MainWindow => (UI.Windows.MainWindow)Current.MainWindow;
 
         /// <summary>
         /// Экземпляр созданного приложения
         /// </summary>
         internal static App CurrentApp => (App)Current;
+
+        /// <summary>
+        /// Активое окно которое является дочерним от основного
+        /// </summary>
+        internal static Window? ActiveDialog = null;
+        #endregion
 
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
@@ -318,6 +309,11 @@ namespace OperPage_les
         internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
 
         /// <summary>
+        /// Главная директория файлов видео
+        /// </summary>
+        internal static readonly string DirectoryMediaApplication = DirectoryImagesApplication + @"/Media/";
+
+        /// <summary>
         /// Главная директория ресурсов
         /// </summary>
         internal static readonly string DirectoryResourcesApplication = MainDirectoryApplication + @"/Resources/";
@@ -332,18 +328,20 @@ namespace OperPage_les
         /// </summary>
         internal static readonly string DirectoryDataLabelTags = DirectoryResourcesApplication + "Label_Tags.json";
 
-        //
-        internal readonly BitmapImage BitmapLoading;
+        /// <summary>
+        /// Директория файла анимации обычной загрузки
+        /// </summary>
+        internal static readonly string DirectoryFileLoadingDefault = DirectoryMediaApplication + "LoadingDefault.mp4";
 
         /// <summary>
-        /// Директория файла анимации загрузки
+        /// Директория файла анимации загрузки для интернета
         /// </summary>
-        private static readonly string DirectoryImageLoading = DirectoryImagesApplication + "Loading.gif";
+        internal static readonly string DirectoryFileLoadingInternet = DirectoryMediaApplication + "LoadingInternet.mp4";
 
         /// <summary>
         /// Директория файла праздничной анимации
         /// </summary>
-        internal static readonly string DirectoryImageHappy = DirectoryImagesApplication + "Happy.mp4";
+        internal static readonly string DirectoryFileHappy = DirectoryMediaApplication + "Happy.mp4";
 
         /// <summary>
         /// Директория файла валидного ключа
@@ -357,14 +355,14 @@ namespace OperPage_les
         internal static DateTime RealTime => DateTime.Now;
 
         /// <summary>
-        /// Количество миллисекунд ушедших на подключение
-        /// </summary>
-        internal static volatile object MillisecondInternetConnection = -1L;
-
-        /// <summary>
         /// Клиент для манипуляции в сети интернет
         /// </summary>
         internal static readonly HttpClient UsedHttpClient = new();
+
+        /// <summary>
+        /// Состояние подключения к интернету
+        /// </summary>
+        internal static readonly ObjectConnect InternetPinging = new();
 
         public App()
         {
@@ -390,7 +388,6 @@ namespace OperPage_les
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите команду: %**alias_replace**//"));
                     }
-                    if (DiscriptionCommands != null) DiscriptionCommands.IELButtonAlias.IsEnabled = Interpreter?.AliasesCount > 0;
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**создан**"));
                 }),
@@ -428,7 +425,7 @@ namespace OperPage_les
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
                 (Command, param) =>
                 {
-                    PageLabels? SourcePage = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                    PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchPageType<PageLabels>();
                     if (SourcePage != null)
                     {
                         if (SourcePage.SelectLabelsMode) return
@@ -446,12 +443,12 @@ namespace OperPage_les
                 (Command, param) =>
                 {
                     WindowGenLabel GenLabel = new();
-                    App.MainWindowApplication.ActiveDialog = GenLabel;
+                    ActiveDialog = GenLabel;
                     LabelAction? label = GenLabel.CreateLabel();
-                    App.MainWindowApplication.ActiveDialog = null;
+                    ActiveDialog = null;
                     if (label != null)
                     {
-                        PageLabels? SourcePage = MainWindowApplication.IELBrowserPageMain.SearchPageType<PageLabels>();
+                        PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchPageType<PageLabels>();
                         if (SourcePage != null)
                         {
                             if (SourcePage.SelectLabelsMode) return
@@ -486,7 +483,7 @@ namespace OperPage_les
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param) =>
                 {
-                    App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>()?.ClearConsoleText();
+                    MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>()?.ClearConsoleText();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -532,7 +529,8 @@ namespace OperPage_les
                         {
                             if (!CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser)
                             {
-                                IELInlay[] AllWebBrowsers = [..MainWindowApplication.IELBrowserPageMain.Inlays.Where(
+                                if (MainWindow == null) return Task.FromResult(CommandStateResult.Failed(Command.Name, $"%**Главное окно не является активным объектом**"));
+                                IELInlay[] AllWebBrowsers = [..MainWindow.IELBrowserPageMain.Inlays.Where(
                                     (i) => i.PageElement?.PageContent.GetType() == typeof(PageWebBrowser))];
                                 if (AllWebBrowsers.Length > 1)
                                 {
@@ -545,7 +543,7 @@ namespace OperPage_les
                                         return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**\n" +
                                             $"%//Произошла критическая ошибка обнаружения браузера.//"));
                                     PageBrowser?.WebViewGoUrl(url);
-                                    MainWindowApplication.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].PageElement);
+                                    MainWindow.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].PageElement);
                                     return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки в странице браузера \"{url}\""));
                                 }
                             }
@@ -554,7 +552,7 @@ namespace OperPage_les
                             {
                                 ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
                             };
-                            MainWindowApplication.IELBrowserPageMain.AddInlayPage(browser_page_element);
+                            MainWindow.IELBrowserPageMain.AddInlayPage(browser_page_element);
                             ((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
                         }
                         else Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
@@ -625,11 +623,9 @@ namespace OperPage_les
 
             Directory.CreateDirectory(MainDirectoryApplication);
             Directory.CreateDirectory(DirectoryImagesApplication);
+            Directory.CreateDirectory(DirectoryMediaApplication);
             Directory.CreateDirectory(DirectoryResourcesApplication);
             Log("Инициализация параметров приложения");
-
-            MillisecondInternetConnection = -1L;
-            ThreadInternetCheckConnection = new(CheckInternetConnection, 5100);
 
             #region Settings
             Log("Инициализация настроек");
@@ -672,34 +668,39 @@ namespace OperPage_les
             #region SettingRuntimeRealizeSettingChanges
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
             {
-                MainWindowApplication.UpdateImageMenu(New);
+                MainWindow.UpdateImageMenu(New);
             };
             SettingMainApplication.BlurBackgroundDataTime.Changed += (Old, New) =>
             {
-                MainWindowApplication.ChangeBlurImageInDataTime(New);
+                MainWindow.ChangeBlurImageInDataTime(New);
             };
             SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
             {
-                MainWindowApplication.ChangeVisibilityMillisecondInternet(New);
+                MainWindow.ChangeVisibilityMillisecondInternet(New);
             };
             #endregion
 
-            if (!File.Exists(DirectoryImageLoading))
-            {
-                FileStream stream = File.Create(DirectoryImageLoading);
-                stream.Position = 0;
-                stream.Write(OperPage_les.Properties.Resources.Loading);
-                stream.Close();
-            }
-            if (!File.Exists(DirectoryImageHappy))
-            {
-                FileStream stream = File.Create(DirectoryImageHappy);
-                stream.Position = 0;
-                stream.Write(OperPage_les.Properties.Resources.Happy);
-                stream.Close();
-            }
-            BitmapLoading = new BitmapImage(new Uri(DirectoryImageLoading));
+            #region MediaFiles
+            CreateResourceMedia(DirectoryFileLoadingDefault, OperPage_les.Properties.Resources.LoadingDefault);
+            CreateResourceMedia(DirectoryFileLoadingInternet, OperPage_les.Properties.Resources.LoadingInternet);
+            CreateResourceMedia(DirectoryFileHappy, OperPage_les.Properties.Resources.Happy);
             #endregion
+
+            #endregion
+        }
+
+        /// <summary>
+        /// Создать файл ресурса медиа-файла
+        /// </summary>
+        /// <param name="Directory">Директория медиа-файла</param>
+        /// <param name="ResourceSource">Данные медиа для записи</param>
+        private static void CreateResourceMedia(string Directory, byte[] ResourceSource)
+        {
+            if (File.Exists(Directory)) return;
+            FileStream stream = File.Create(Directory);
+            stream.Position = 0;
+            stream.Write(ResourceSource);
+            stream.Close();
         }
 
         /// <summary>
@@ -738,49 +739,13 @@ namespace OperPage_les
             }
             if (!InitKeyValid)
             {
-                ThreadInternetCheckConnection.Kill();
                 Current.Shutdown();
                 return;
             }
-            ThreadInternetCheckConnection.Start();
             Current.MainWindow = new UI.Windows.MainWindow();
-            Current.MainWindow.Closing += (sender, e) =>
+            Current.MainWindow.Closed += (sender, e) =>
             {
-                Current.MainWindow.Hide();
-                DiscriptionCommands?.Close();
-                bool WindowSaveClose = false;
-                WindowSaveWait windowSave = new();
-                windowSave.Closed += (sender, e) =>
-                {
-                    WindowSaveClose = true;
-                };
-                windowSave.OpenOnToComplete();
-                windowSave.Focus();
-
-                Thread thread = new(() =>
-                {
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы"));
-                    ThreadInternetCheckConnection.Kill();
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки"));
-                    UpdateSettingApplication();
-                    Thread.Sleep(300);
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки и теги"));
-                    UpdateFileDataLabel();
-                    UpdateFileDataLabelTag();
-                    Thread.Sleep(700);
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения..."));
-                    windowSave.Complete();
-                });
-                thread.Start();
-
-                Task.Run(() =>
-                {
-                    while (!WindowSaveClose);
-                    thread.Join();
-                });
+                
             };
             Current.Exit += (sender, e) =>
             {
@@ -849,28 +814,7 @@ namespace OperPage_les
             StreamWriter stream = File.AppendText(MainDirectoryApplication + @"/Access.log");
             stream.WriteLine($"{DateTime.Now.ToLocalTime()}: " + log);
             stream.Close();
-        }
-
-        /// <summary>
-        /// Проверка подключения интернета
-        /// </summary>
-        private static void CheckInternetConnection()
-        {
-            Ping ObjPing = new();
-            try
-            {
-                Flags.InternetPinging.Wait = true;
-                PingReply reply = ObjPing.SendPingAsync("yandex.ru", 3000).Result;
-                Flags.InternetPinging.Wait = false;
-                Flags.InternetPinging.Value = reply.Status == IPStatus.Success;
-                MillisecondInternetConnection = reply.RoundtripTime;
-            }
-            catch
-            {
-                Flags.InternetPinging.Wait = false;
-                Flags.InternetPinging.Value = false;
-            }
-        }
+        }     
 
         /// <summary>
         /// Анимировать эффект блюра - сигнализируя изменение
@@ -1012,20 +956,20 @@ namespace OperPage_les
         /// </summary>
         internal void UsingDiscriptionCommand()
         {
-            if (DiscriptionCommands == null)
-            {
-                DiscriptionCommands = new();
-                DiscriptionCommands.Closing += (sender, e) =>
-                {
-                    DiscriptionCommands = null;
-                };
-                DiscriptionCommands.Show();
-            }
-            else
-            {
-                DiscriptionCommands.WindowState = WindowState.Normal;
-                DiscriptionCommands.Activate();
-            }
+            //if (DiscriptionCommands == null)
+            //{
+            //    DiscriptionCommands = new();
+            //    DiscriptionCommands.Closing += (sender, e) =>
+            //    {
+            //        DiscriptionCommands = null;
+            //    };
+            //    DiscriptionCommands.Show();
+            //}
+            //else
+            //{
+            //    DiscriptionCommands.WindowState = WindowState.Normal;
+            //    DiscriptionCommands.Activate();
+            //}
         }
 
         #region CommandActivate

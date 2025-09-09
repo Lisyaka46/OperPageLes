@@ -1,11 +1,7 @@
-﻿using IEL.GUI;
-using IEL.CORE.Classes.Browser;
-using Microsoft.Build.Locator;
-using Microsoft.CSharp;
+﻿using IEL.CORE.Classes.Browser;
+using IEL.GUI;
 using OperPage_les.CORE;
 using OperPage_les.UI.Pages.Browser;
-using System.CodeDom.Compiler;
-using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
 
@@ -63,7 +59,7 @@ namespace OperPage_les.UI.Dialogs
             {
                 if (Creating) return;
                 Creating = true;
-                App.MainWindowApplication.ActivateLoadingIndicator();
+                App.MainWindow.ActivateLoadingIndicator();
                 CreatingBackgroundPage.EventElapsed = (sender, e) => Dispatcher.BeginInvoke(() =>
                 {
                     AppendElementPage = new(new PageLabels(), "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
@@ -71,7 +67,7 @@ namespace OperPage_les.UI.Dialogs
                     {
 
                     };
-                    App.MainWindowApplication.DiactivateLoadingIndicator();
+                    App.MainWindow.DiactivateLoadingIndicator();
                     Close();
                 });
                 CreatingBackgroundPage.Start();

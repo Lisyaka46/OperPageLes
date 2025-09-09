@@ -1,10 +1,7 @@
 ﻿using OperPage_les.CORE.Label;
 using OperPage_les.UI.UserElementControl;
-using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml.Linq;
-using Windows.Devices.PointOfService;
 
 namespace OperPage_les.UI.Dialogs
 {
