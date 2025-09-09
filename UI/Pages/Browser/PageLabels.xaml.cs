@@ -158,7 +158,7 @@ namespace OperPage_les.UI.Pages.Browser
             };
             PageLabel.IELButtonManipulateTags.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 new WindowManipulateLabelTags().ShowManipulateTags();
             };
             PageLabel.IELButtonSelectAllLabel.OnActivateMouseLeft += (sender, e, Key) =>
@@ -171,7 +171,7 @@ namespace OperPage_les.UI.Pages.Browser
                 }
                 SelectLabelsMode = true;
                 UpdateTextInfoLabels();
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             PageLabel.IELButtonClearAllSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -183,7 +183,7 @@ namespace OperPage_les.UI.Pages.Browser
                 }
                 SelectLabelsMode = false;
                 UpdateTextInfoLabels();
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             #endregion
             #region PageLabelElement
@@ -191,21 +191,21 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 if (SelectLabelInPage != null)
                 {
-                    PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();
+                    PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>();
                     App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
                     SelectLabelInPage = null;
                 }
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             PageLabelElement.IELButtonChangeLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 if (SelectLabelInPage != null)
                 {
                     WindowGenLabel GenLabel = new();
-                    App.MainWindowApplication.ActiveDialog = GenLabel;
+                    App.ActiveDialog = GenLabel;
                     GenLabel.ChangeLabel(SelectLabelInPage);
-                    App.MainWindowApplication.ActiveDialog = null;
+                    App.ActiveDialog = null;
                     SelectLabelInPage = null;
                 }
             };
@@ -224,30 +224,32 @@ namespace OperPage_les.UI.Pages.Browser
                     else RemoveLabel(SelectLabelInPage);
                     SelectLabelInPage = null;
                 }
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             PageLabelElement.IELButtonSetLabelTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 if (SelectLabelInPage != null)
                 {
+                    SelectLabelInPage.Selected = true;
                     LabelTag? Tag = new WindowManipulateLabelTags().ShowSelectOneTag();
                     if (Tag != null)
                     {
                         SelectLabelInPage.SourceLabel.AppendTag(Tag);
                         AnimateInfoText("Тег успешно установлен", 7000d);
                     }
+                    SelectLabelInPage.Selected = false;
                     SelectLabelInPage = null;
                 }
             };
             PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.NextPage(PageLabelElement.PanelActionPageSelectLabel);
+                App.MainWindow.IELActionPanelMain.NextPage(PageLabelElement.PanelActionPageSelectLabel);
             };
             #region PageLabelSelectManipulate
             PageLabelElement.PageLabelSelectManipulate.IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionSettingsLabelElement.ActiveSource, false);
+                App.MainWindow.IELActionPanelMain.NextPage(PanelActionSettingsLabelElement.ActiveSource, false);
             };
             PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -280,12 +282,12 @@ namespace OperPage_les.UI.Pages.Browser
             PageLabelElement.IELBlockInfoTagLabel.IELSettingObject.MouseHover += (sender, e) =>
             {
                 if (SelectLabelInPage == null && SelectLabelInPage?.SourceLabel.Tag == null) return;
-                App.MainWindowApplication.IELMessageMain.UsingBorderInformation(PageLabelElement.IELBlockInfoTagLabel,
+                App.MainWindow.IELMessageMain.UsingBorderInformation(PageLabelElement.IELBlockInfoTagLabel,
                     SelectLabelInPage.SourceLabel.Tag ?? string.Empty, OrientationBorderPosition.Auto);
             };
             PageLabelElement.IELBlockInfoTagLabel.MouseLeave += (sender, e) =>
             {
-                App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
             #endregion
@@ -380,11 +382,11 @@ namespace OperPage_les.UI.Pages.Browser
             };
             BorderDinamicLabels.MouseRightButtonUp += (sender, e) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabel);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabel);
             };
             BorderDinamicLabels.MouseLeftButtonUp += (sender, e) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             SizeChanged += (sender, e) =>
             {
@@ -542,7 +544,7 @@ namespace OperPage_les.UI.Pages.Browser
             Label.IELSettingObject.AnimationMillisecond = 230;
             Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            Label.MouseRightButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.MouseRightButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             Label.OnActivateMouseRight += (sender, e, Key) =>
             {
                 SelectLabelInPage = Label;
@@ -550,7 +552,7 @@ namespace OperPage_les.UI.Pages.Browser
                 PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.SourceLabel.Tag != null;
                 PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
                 PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0;
-                App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
                 e.Handled = true;
             };
             Label.OnActivateMouseLeft += (sender, e, Key) =>
@@ -566,7 +568,7 @@ namespace OperPage_les.UI.Pages.Browser
                     }
                     return;
                 }
-                PageConsole? Console = App.MainWindowApplication.IELBrowserPageMain.SearchPageType<PageConsole>();
+                PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>();
                 App.CurrentApp.ActivateActionCommand(Console, Label.SourceLabel.Command);
                 e.Handled = true;
             };
@@ -579,11 +581,11 @@ namespace OperPage_les.UI.Pages.Browser
                 if (sender == null) return;
                 string Text = Label.SourceLabel.Description ?? string.Empty;
                 if (Text.Length > 0)
-                    App.MainWindowApplication.IELMessageMain.UsingBorderInformation(Label, Text,
+                    App.MainWindow.IELMessageMain.UsingBorderInformation(Label, Text,
                         IEL.CORE.Enums.OrientationBorderPosition.Auto);
             };
-            Label.MouseLeave += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
-            Label.MouseLeftButtonDown += (sender, e) => App.MainWindowApplication.IELMessageMain.CloseBorderInformation();
+            Label.MouseLeave += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
+            Label.MouseLeftButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             //Label.UpdateVisualStyle();
             return Label;
         }

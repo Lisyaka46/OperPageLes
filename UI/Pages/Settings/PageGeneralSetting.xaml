@@ -45,7 +45,7 @@
                     </TextBlock.Background>
                 </TextBlock>
 
-                <Image x:Name="ImageBackground" Source="/UI/Images/DoubleMouseButton.png" Panel.ZIndex="-1" Opacity="0.6" Grid.RowSpan="2" IsHitTestVisible="False" gif:ImageBehavior.AutoStart="False" Stretch="UniformToFill" VerticalAlignment="Center" >
+                <Image x:Name="ImageBackground" Source="/UI/Images/DoubleMouseButton.png" Panel.ZIndex="-1" Opacity="0.6" Grid.RowSpan="2" IsHitTestVisible="False" Stretch="UniformToFill" VerticalAlignment="Center" >
                     <Image.OpacityMask>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <LinearGradientBrush.RelativeTransform>

@@ -1,24 +1,14 @@
-﻿using CefSharp.DevTools.DOM;
-using IEL.CORE.Classes;
+﻿using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
 using OperPage_les.CORE.Label;
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Security.Policy;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Color = System.Windows.Media.Color;
 
 namespace OperPage_les.UI.UserElementControl
@@ -321,7 +311,7 @@ namespace OperPage_les.UI.UserElementControl
                     IndexUseStyle = 2;
                     ByteLabelImage = Properties.Resources.Link;
 
-                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, async () =>
+                    Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                     {
                         ImageFaviconLabel.Source = await App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
                         ImageFaviconLabel.Width = 20;

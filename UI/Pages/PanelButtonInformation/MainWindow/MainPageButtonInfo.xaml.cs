@@ -5,8 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using WpfAnimatedGif;
+using System.Windows.Threading;
 using static OperPage_les.App;
 
 namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
@@ -20,11 +19,6 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
         private static partial void Keybd_event(byte CodeButton, byte CodeScan, uint CodeState, UIntPtr dwExtralnfo);
 
         /// <summary>
-        /// Сохранённое состояние флага подключения к интернету
-        /// </summary>
-        private bool SaveUpdatingInternetConnect = false;
-
-        /// <summary>
         /// Объект управления фоновым обновлением информации в данном окне 1000
         /// </summary>
         private readonly UpdateBackgroundData UpdateBackgroundDataThis;
@@ -34,38 +28,56 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
         /// </summary>
         /// <param name="NameObject">Имя объекта проверки</param>
         /// <returns>Состояние открыт ли объект или нет</returns>
-        private static bool CheckOpenMessageInObject(string NameObject) => MainWindowApplication.IELMessageMain.FlagMessage &&
-                    MainWindowApplication.IELMessageMain.CodeParentObject.Equals(NameObject);
+        private static bool CheckOpenMessageInObject(string NameObject)
+        {
+            try
+            {
+                if (App.MainWindow == null) return false;
+                return App.MainWindow.IELMessageMain.FlagMessage &&
+                App.MainWindow.IELMessageMain.CodeParentObject.Equals(NameObject);
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Поток обновляемый данные интернета
+        /// </summary>
+        internal ThreadGenericProcess ThreadInternetConnection;
 
         public MainPageButtonInfo()
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             InitializeComponent();
-            ImageBehavior.SetAnimatedSource(ImageIndicatorLoadingInternetConnection, App.CurrentApp.BitmapLoading);
+            IndicatorLoadingInternetConnection.Source = new Uri(App.DirectoryFileLoadingInternet);
+            IndicatorLoadingInternetConnection.MediaEnded += (sender, e) =>
+            {
+                IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
+            };
             IELBlockInfoInternetConnection.Imaging = App.LoadImage(Properties.Resources.Wifi);
             //ImageBehavior.SetAnimatedSource(ImageIndicatorLoadingInternetConnection, App.LoadImage(Properties.Resources.Loading));
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(UpdateInformation));
             IELBlockInfoStateRegister.Text = Flags.FlagRegisterState ? "A" : "a";
-            ImageIndicatorLoadingInternetConnection.Opacity = 0d;
+            IndicatorLoadingInternetConnection.Opacity = 0d;
+            ((BlurEffect)GridInfoInternetConnection.Effect).Radius = 0d;
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
             IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new Thickness(2, 0, 2, 8) : new Thickness(2, 0, 2, 4);
             #region BorderInternetConnection
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
-                MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
-                    Flags.InternetPinging ? "Есть подключение к интернету" : "Нет подключения к интернету",
+                App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
+                    InternetPinging.ConnectInternet ? "Есть подключение к интернету" : "Нет подключения к интернету",
                     OrientationBorderPosition.RightUp);
             };
             IELBlockInfoInternetConnection.MouseLeave += (sender, e) =>
             {
-                MainWindowApplication.IELMessageMain.CloseBorderInformation();
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
             #region BorderStateRegister
             IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
             {
-                MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
+                App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
                     Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
                     OrientationBorderPosition.RightUp);
             };
@@ -76,19 +88,19 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             };
             IELBlockInfoStateRegister.MouseLeave += (sender, e) =>
             {
-                MainWindowApplication.IELMessageMain.CloseBorderInformation();
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
             #region BorderCurrentLanguage
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {
-                MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
+                App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
                     "Текущий язык раскладки клавиатуры",
                     OrientationBorderPosition.RightUp);
             };
             IELBlockInfoCurrentLanguage.MouseLeave += (sender, e) =>
             {
-                MainWindowApplication.IELMessageMain.CloseBorderInformation();
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
 
@@ -98,12 +110,65 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 IELBlockInfoStateRegister.Text = NewValue ? "A" : "a";
                 AnimateBlurEffect((BlurEffect)IELBlockInfoStateRegister.Effect, 10u);
                 if (CheckOpenMessageInObject(IELBlockInfoStateRegister.Name))
-                    MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
+                    App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
                         Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
                         OrientationBorderPosition.RightUp);
             };
             #endregion
+
+            ThreadInternetConnection = new(async () =>
+            {
+                await InternetPinging.UpdateInternetConnection();
+                if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
+                {
+                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                    {
+                        bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
+
+                        App.AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
+
+                        App.AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
+                    });
+                    Thread.Sleep(InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet ? 2500 : InternetPinging.MillisecondUpdateTime);
+                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                    {
+                        bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
+
+                        IELBlockInfoInternetConnection.Imaging = App.LoadImage(InternetPinging.ConnectInternet ?
+                                OperPage_les.Properties.Resources.WifiOn : OperPage_les.Properties.Resources.WifiOff);
+                        if (VisualMillisecondConnectionEnabled)
+                        {
+                            TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
+                        }
+
+                        App.AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
+
+                        App.AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
+
+                        if (CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
+                        {
+                            App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
+                                InternetPinging.ConnectInternet ? "Есть подключение к интернету" : "Нет подключения к интернету",
+                                OrientationBorderPosition.RightUp);
+                        }
+                    });
+                }
+                else
+                {
+                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                    {
+                        IELBlockInfoInternetConnection.Imaging = App.LoadImage(InternetPinging.ConnectInternet ?
+                                OperPage_les.Properties.Resources.WifiOn : OperPage_les.Properties.Resources.WifiOff);
+                        if (VisualMillisecondConnectionEnabled)
+                        {
+                            TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
+                        }
+                    });
+                }
+            }, 4000);
+
             UpdateBackgroundDataThis.Start();
+            ThreadInternetConnection.Start();
         }
 
         /// <summary>
@@ -126,49 +191,6 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 IELBlockInfoCurrentLanguage.Text = LangName;
                 AnimateBlurEffect((BlurEffect)IELBlockInfoCurrentLanguage.Effect, 5u);
             }
-            if (Flags.InternetPinging.Wait)
-            {
-                animation.To = 10d;
-                ((BlurEffect)IELBlockInfoInternetConnection.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
-
-                if (VisualMillisecondConnectionEnabled)
-                {
-                    ((BlurEffect)TextBlockInternetConnectionMillisecond.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
-                }
-
-                animation.To = 1d;
-                ImageIndicatorLoadingInternetConnection.BeginAnimation(OpacityProperty, animation);
-
-                if (VisualMillisecondConnectionEnabled && ImageIndicatorLoadingInternetConnection.Opacity < 1d)
-                {
-                    ImageIndicatorLoadingInternetConnection.BeginAnimation(OpacityProperty, animation);
-                }
-            }
-            else
-            {
-                IELBlockInfoInternetConnection.Imaging = App.LoadImage(Flags.InternetPinging ? Properties.Resources.WifiOn : Properties.Resources.WifiOff);
-                if (VisualMillisecondConnectionEnabled)
-                {
-                    TextBlockInternetConnectionMillisecond.Text = Flags.InternetPinging ? MillisecondInternetConnection.ToString() + "mc" : "???";
-                }
-
-                animation.To = 0d;
-                ((BlurEffect)IELBlockInfoInternetConnection.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
-                if (VisualMillisecondConnectionEnabled)
-                {
-                    ((BlurEffect)TextBlockInternetConnectionMillisecond.Effect).BeginAnimation(BlurEffect.RadiusProperty, animation);
-                }
-
-                ImageIndicatorLoadingInternetConnection.BeginAnimation(OpacityProperty, animation);
-
-                if (Flags.InternetPinging != SaveUpdatingInternetConnect && CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
-                {
-                    MainWindowApplication.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
-                        Flags.InternetPinging ? "Есть подключение к интернету" : "Нет подключения к интернету",
-                        OrientationBorderPosition.RightUp);
-                }
-                SaveUpdatingInternetConnect = Flags.InternetPinging;
-            }
         }
 
         internal void VisibilityInternetMillisecond(bool Value)
@@ -176,6 +198,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             AnimateThicknessEffect(IELBlockInfoInternetConnection.MainFrontImage, System.Windows.Controls.Image.MarginProperty, Value ? new(2, 0, 2, 8) : new Thickness(2, 0, 2, 4),
                 TimeSpan.FromMilliseconds(400d));
             AnimateDoubleEffect(TextBlockInternetConnectionMillisecond, TextBlock.OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
+            TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
         }
     }
 }

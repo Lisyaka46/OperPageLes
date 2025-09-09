@@ -7,7 +7,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Media3D;
-using WpfAnimatedGif;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -59,7 +58,7 @@ namespace OperPage_les.UI.Dialogs
         public LicenseWindow()
         {
             InitializeComponent();
-            MediaHappy.Source = new Uri(App.DirectoryImageHappy);
+            MediaHappy.Source = new Uri(App.DirectoryFileHappy);
             MediaHappy.MediaEnded += (sender, e) =>
             {
                 MediaHappy.Position = TimeSpan.FromMilliseconds(1);

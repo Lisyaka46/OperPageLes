@@ -25,12 +25,12 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
                 {
-                    App.MainWindowApplication.ActivateLoadingIndicator();
+                    App.MainWindow.ActivateLoadingIndicator();
                     WebBrowserElement.Source = new Uri(e.Uri);
                 };
                 WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
                 {
-                    App.MainWindowApplication.DiactivateLoadingIndicator();
+                    App.MainWindow.DiactivateLoadingIndicator();
                 };
                 WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
                 {

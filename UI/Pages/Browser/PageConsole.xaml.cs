@@ -124,25 +124,25 @@ namespace OperPage_les.UI.Pages.Browser
             ConsolePage.IELButtonCrearConsole.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 RichTextBoxMainMessage.Document = new();
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             ConsolePage.IELButtonCrearConsole.OnActivateMouseRight += (sender, e, Key) => RichTextBoxMainMessage.Document = new();
 
             ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionBufferPage);
+                App.MainWindow.IELActionPanelMain.NextPage(PanelActionBufferPage);
             };
 
             ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 App.CurrentApp.UsingDiscriptionCommand();
             };
             #endregion
             #region BufferPage
             BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionConsolePage, false);
+                App.MainWindow.IELActionPanelMain.NextPage(PanelActionConsolePage, false);
             };
             #endregion
             PanelActionConsolePage.IsKeyboardModeChanged += (Source, NewValue) =>
@@ -156,7 +156,7 @@ namespace OperPage_les.UI.Pages.Browser
                 BufferPage.IELButtonBackMainMenu.CharKeyboardActivate = NewValue;
                 BufferPage.IELButtonClearBuffer.CharKeyboardActivate = NewValue;
             };
-            App.MainWindowApplication.IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
             };
@@ -165,9 +165,9 @@ namespace OperPage_les.UI.Pages.Browser
             #region RichTextBoxMainMessage
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && App.MainWindowApplication.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right) App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
+                if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Right) App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
             };
 
             RichTextBoxMainMessage.TextChanged += (sender, e) =>
@@ -242,7 +242,7 @@ namespace OperPage_les.UI.Pages.Browser
                         ActiveIndexBufferInput = -1;
                         break;
                     case Key.Apps:
-                        App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
+                        App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
                         break;
                     case Key.Up:
                         if (BufferPage.BufferCommand.Count == 0) return;

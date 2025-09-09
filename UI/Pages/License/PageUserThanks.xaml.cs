@@ -74,7 +74,7 @@ namespace OperPage_les.UI.Pages.License
             if (assistent.UriImage != null || assistent.MapImage != null)
             {
                 BitmapImage bitmap;
-                if (assistent.UriImage != null && App.Flags.InternetPinging) bitmap = new(assistent.UriImage);
+                if (assistent.UriImage != null && App.InternetPinging.ConnectInternet) bitmap = new(assistent.UriImage);
                 else bitmap = assistent.MapImage ?? new();
                 ImageIconNickName.Source = bitmap;
                 ImageIconNickName.Opacity = 0.4d;

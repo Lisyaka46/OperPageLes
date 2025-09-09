@@ -55,27 +55,32 @@
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
         </GUI:IELBlockInfoText>
-        <!--gif:ImageBehavior.AnimatedSource="/UI/Images/Loading.gif"-->
-        <Image x:Name="ImageIndicatorLoadingInternetConnection" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25" Height="25" IsHitTestVisible="False" Opacity="0"/>
-        <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" PaddingContent="3,0,4,0" ImageMargin="2,0,2,8">
-            <GUI:IELBlockInfoImage.Effect>
-                <BlurEffect Radius="0"/>
-            </GUI:IELBlockInfoImage.Effect>
-            <GUI:IELBlockInfoImage.IELSettingObject>
-                <ObjectSettings:IELUsingObjectSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoImage.IELSettingObject>
-        </GUI:IELBlockInfoImage>
-        <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold"  Margin="5,0,5,5" IsHitTestVisible="False" FontFamily="{DynamicResource RussianRail G Pro}">
-            <TextBlock.Effect>
-                <BlurEffect Radius="0"/>
-            </TextBlock.Effect>
-        </TextBlock>
+        <Grid x:Name="GridInfoInternetConnection">
+            <Grid.Effect>
+                <BlurEffect/>
+            </Grid.Effect>
+            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" PaddingContent="3,0,4,0" ImageMargin="2,0,2,8">
+                <GUI:IELBlockInfoImage.IELSettingObject>
+                    <ObjectSettings:IELUsingObjectSetting>
+                        <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White"/>
+                        </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White"/>
+                        </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELUsingObjectSetting>
+                </GUI:IELBlockInfoImage.IELSettingObject>
+            </GUI:IELBlockInfoImage>
+            <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold"  Margin="5,0,5,5" IsHitTestVisible="False" FontFamily="{DynamicResource RussianRail G Pro}"/>
+        </Grid>
+        <MediaElement x:Name="IndicatorLoadingInternetConnection" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False" Width="28" Height="28" LoadedBehavior="Play" UnloadedBehavior="Pause">
+            <MediaElement.OpacityMask>
+                <RadialGradientBrush>
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#00000000" Offset="1"/>
+                    <GradientStop Color="Black" Offset="0.908"/>
+                </RadialGradientBrush>
+            </MediaElement.OpacityMask>
+        </MediaElement>
     </Grid>
 </Page>
