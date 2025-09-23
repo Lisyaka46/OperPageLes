@@ -136,7 +136,7 @@ namespace OperPage_les.UI.Pages.Browser
             ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
-                App.CurrentApp.UsingDiscriptionCommand();
+                //App.CurrentApp.UsingDiscriptionCommand();
             };
             #endregion
             #region BufferPage
@@ -160,7 +160,7 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
             };
-            PanelActionSettingsConsole = new(RichTextBoxMainMessage, PanelActionConsolePage, new(305d, 240d));
+            PanelActionSettingsConsole = new(RichTextBoxMainMessage, PanelActionConsolePage, new(305d, 260d));
             #endregion
             #region RichTextBoxMainMessage
             RichTextBoxMainMessage.MouseUp += (sender, e) =>

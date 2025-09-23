@@ -44,7 +44,6 @@
     <None Remove="UI\Images\Labels\Folder.png" />
     <None Remove="UI\Images\LeftMouseButton.png" />
     <None Remove="UI\Images\LightBulb.png" />
-    <None Remove="UI\Images\Loading.gif" />
     <None Remove="UI\Images\Loading.wmv" />
     <None Remove="UI\Images\Media\Happy.mp4" />
     <None Remove="UI\Images\Media\Loading\LoadingDefault.mp4" />
@@ -115,7 +114,6 @@
     <Resource Include="UI\Images\Labels\Folder.png" />
     <Resource Include="UI\Images\LeftMouseButton.png" />
     <Resource Include="UI\Images\LightBulb.png" />
-    <Resource Include="UI\Images\Loading.gif" />
     <Resource Include="UI\Images\Media\Happy.mp4" />
     <Resource Include="UI\Images\Media\Loading\LoadingDefault.mp4" />
     <Resource Include="UI\Images\Menu.png" />
@@ -197,7 +195,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CORE\Struct\" />
+    <Folder Include="UI\Pages\ActionPanel\PageConsole\" />
   </ItemGroup>
 
 </Project>

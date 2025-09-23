@@ -13,11 +13,6 @@ namespace OperPage_les.UI.Dialogs
     public partial class WindowBrowserPagesManager : Window
     {
         /// <summary>
-        /// Фоновое создание страницы
-        /// </summary>
-        private readonly UpdateBackgroundData CreatingBackgroundPage;
-
-        /// <summary>
         /// Идёт ли создание объекта страницы
         /// </summary>
         private bool Creating = false;
@@ -42,7 +37,6 @@ namespace OperPage_les.UI.Dialogs
 #if !DEBUG
             IELButtonGenerate.IsEnabled = false;
 #endif
-            CreatingBackgroundPage = new(delegate { });
             KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -59,18 +53,12 @@ namespace OperPage_les.UI.Dialogs
             {
                 if (Creating) return;
                 Creating = true;
-                App.MainWindow.ActivateLoadingIndicator();
-                CreatingBackgroundPage.EventElapsed = (sender, e) => Dispatcher.BeginInvoke(() =>
+                AppendElementPage = new(new PageLabels(), "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
+                AppendElementPage.Disposed += (sender) =>
                 {
-                    AppendElementPage = new(new PageLabels(), "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
-                    AppendElementPage.Disposed += (sender) =>
-                    {
 
-                    };
-                    App.MainWindow.DiactivateLoadingIndicator();
-                    Close();
-                });
-                CreatingBackgroundPage.Start();
+                };
+                Close();
             };
             #endregion
 

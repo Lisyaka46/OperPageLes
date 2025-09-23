@@ -3,6 +3,7 @@ using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
 using OperPage_les.CORE;
+using OperPage_les.Windows;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
@@ -15,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using OperPage_les.UI.UserElementControl;
 #endregion
 
 namespace OperPage_les.UI.Windows
@@ -66,15 +68,31 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private Page[] PagesButtonsInformation = [];
 
+        /// <summary>
+        /// Страница управления загрузочными процессами
+        /// </summary>
+        private PageControllerLoading PageControllerLoadingApplication;
+
+        //
+        private PanelActionSettingVisual SettingVisualPageLoadingController;
+
+        /// <summary>
+        /// Состояние загрузки какого-либо процесса
+        /// </summary>
+        internal bool IsLoadingProcess { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            PageControllerLoadingApplication = new();
+            SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
             Icon = App.LoadImage(Properties.Resources.IconMainApplication);
             ImageLogoApplication.Imaging = App.LoadImage(Properties.Resources.IconMainApplication);
             IELImageButtonHelp.Imaging = App.LoadImage(Properties.Resources.LightBulb);
             IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
             IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
             IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
+            IndicatorLoading.Opacity = 0d;
             IndicatorLoading.Source = new Uri(App.DirectoryFileLoadingDefault);
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
@@ -172,7 +190,12 @@ namespace OperPage_les.UI.Windows
 
             #region UpToolButtons
             #region IELImageButtonHelp
-            IELImageButtonHelp.OnActivateMouseLeft += (sender, e, Key) => App.CurrentApp.UsingDiscriptionCommand();
+            IELImageButtonHelp.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                WindowDiscriptionCommands j = new();
+                App.CurrentApp.OpenedWindowsInApplication.Add(j);
+                j.Show();
+            };
             IELImageButtonHelp.IELSettingObject.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
@@ -224,6 +247,10 @@ namespace OperPage_les.UI.Windows
             IELImageButtonBackButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(3, 0, 0, 0), 400u);
             IELImageButtonBackButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
 
+            BorderIndicator.MouseRightButtonUp += (sender, e) =>
+            {
+                IELActionPanelMain.UsingPanelAction(SettingVisualPageLoadingController, OrientationBorderPosition.RightDown);
+            };
             #region IELBrowserPage
             IELBrowserPageMain.EventCloseBrowser += () =>
             {
@@ -239,7 +266,7 @@ namespace OperPage_les.UI.Windows
             };
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                IELActionPanelMain.ClosePanelAction();
+                //IELActionPanelMain.ClosePanelAction();
                 IELBrowserPageMain.AddInlayPage(new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
             };
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
@@ -261,8 +288,6 @@ namespace OperPage_les.UI.Windows
             };
 #endif
             #endregion
-
-
             #endregion
 
             //ImageLogoApplication.MouseEnter += (sender, e) =>
@@ -304,18 +329,6 @@ namespace OperPage_les.UI.Windows
                     #region Anim Start
                     #region 1
                     App.AnimateThicknessEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
-
-                    TimeDataColumnDefinition.MaxWidth = 0d;
-
-                    DoubleAnimation animation = App.GetDoubleAnimate();
-                    animation.Duration = TimeSpan.FromMilliseconds(1200d);
-                    animation.To = 124d;
-                    Storyboard storyboard = new();
-                    storyboard.Children.Add(animation);
-                    Storyboard.SetTarget(animation, TimeDataColumnDefinition);
-                    Storyboard.SetTargetProperty(animation, new PropertyPath("(ColumnDefinition.MaxWidth)"));
-                    storyboard.Begin();
-                    animation.Duration = TimeSpan.FromMilliseconds(250d);
 
                     App.AnimateThicknessEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, TimeSpan.FromMilliseconds(1400d));
 
@@ -360,11 +373,25 @@ namespace OperPage_les.UI.Windows
 
                 Thread thread = new(() =>
                 {
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы", 0d));
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Закрываются все окна приложения", 0d));
+                    Dispatcher.Invoke(() =>
+                    {
+                        int count = App.CurrentApp.OpenedWindowsInApplication.Count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            App.CurrentApp.OpenedWindowsInApplication[0].Close();
+                            App.CurrentApp.OpenedWindowsInApplication.RemoveAt(0);
+                            Thread.Sleep(10);
+                        }
+                        //App.CurrentApp.OpenedWindowsInApplication.Clear();
+                    });
+                    Thread.Sleep(500);
+
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы", 20d));
                     Dispatcher.Invoke(async () => await CloseAllBackgroundThread());
                     Thread.Sleep(600);
 
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 30d));
+                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 40d));
                     App.CurrentApp.UpdateSettingApplication();
                     Thread.Sleep(300);
 
@@ -406,6 +433,70 @@ namespace OperPage_les.UI.Windows
             IELPageControllerButtons.NextPage(PagesButtonsInformation[ActualIndexActivatePageDownToolButtons], UpIndex);
         }
 
+        #region Loading Manipulate
+        /// <summary>
+        /// Осуществить выполнение процесса через визуализацию асинхронной загрузки
+        /// </summary>
+        /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
+        /// <param name="NameProcess">Название загрузочного процесса</param>
+        /// <param name="Method">Асинхронный процесс получения значения</param>
+        /// <returns>Исполненный асинхронный процесс</returns>
+        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
+        {
+            OPLViewerLoadingProcess ViewLoading = GenerateVisualizateLoadingProcess(NameProcess);
+            ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
+
+            await Method.WaitAsync(new CancellationToken(false));
+
+            ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
+            return await Method;
+        }
+
+        /// <summary>
+        /// Создать объект визуализирующий загрузочный процесс
+        /// </summary>
+        /// <param name="NameProcess">Название загрузочного процесса</param>
+        /// <returns>Объект визуализации загрузочного процесса</returns>
+        internal OPLViewerLoadingProcess GenerateVisualizateLoadingProcess(string NameProcess)
+        {
+            OPLViewerLoadingProcess Result = PageControllerLoadingApplication.SetViewElementLoading();
+            App.CurrentApp.DataViewerLoadingProcess.Add(Result);
+            Result.Text = NameProcess;
+            return Result;
+        }
+
+        /// <summary>
+        /// Начало визуализации загрузки
+        /// </summary>
+        /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
+        internal void StartVisualizateLoadingProcess(OPLViewerLoadingProcess ViewLoading)
+        {
+            if (!IsLoadingProcess)
+            {
+                IsLoadingProcess = true;
+                App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            }
+            ViewLoading.VisualOpenLoading();
+        }
+
+        /// <summary>
+        /// Завершение визуализации загрузки
+        /// </summary>
+        /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
+        internal void CompleteVisualizateLoadingProcess(OPLViewerLoadingProcess ViewLoading)
+        {
+            ViewLoading.VisualCloseLoading();
+            PageControllerLoadingApplication.DeleteViewElementLoading(ViewLoading);
+            App.CurrentApp.DataViewerLoadingProcess.Remove(ViewLoading);
+            if (App.CurrentApp.DataViewerLoadingProcess.Count == 0)
+            {
+                IsLoadingProcess = false;
+                App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
+
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Функция обновления визуальной информации в данном окне
         /// </summary>
@@ -421,7 +512,6 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         internal void UpdateImageMenu(string Path)
         {
-            ActivateLoadingIndicator();
             if (Path.Length > 0)
             {
                 BitmapImage BitmapImageMenu = new(new Uri(Path));
@@ -443,7 +533,6 @@ namespace OperPage_les.UI.Windows
             {
                 App.AnimateDoubleEffect(ImageMenu, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
             }
-            DiactivateLoadingIndicator();
         }
 
         /// <summary>
@@ -454,7 +543,6 @@ namespace OperPage_les.UI.Windows
         {
             ImageMenu.Source = bitmap;
 
-            DiactivateLoadingIndicator();
             App.AnimateDoubleEffect(BlurEffectImageMenu, BlurEffect.RadiusProperty, 10d, 0d, TimeSpan.FromMilliseconds(2300d));
             App.AnimateThicknessEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
             App.AnimateDoubleEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
@@ -465,31 +553,12 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private void FailedInstallImageMenu()
         {
-            DiactivateLoadingIndicator();
             System.Windows.MessageBox.Show("Не удалось загрузить фоновое изображение...", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
 
         internal void ChangeVisibilityMillisecondInternet(bool Value)
         {
             ((MainPageButtonInfo)PagesButtonsInformation[0]).VisibilityInternetMillisecond(Value);
-        }
-        #endregion
-
-        #region Indicator
-        /// <summary>
-        /// Включить индикатор загрузки
-        /// </summary>
-        internal void ActivateLoadingIndicator()
-        {
-            App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
-        }
-
-        /// <summary>
-        /// Выключить индикатор загрузки
-        /// </summary>
-        internal void DiactivateLoadingIndicator()
-        {
-            App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
         }
         #endregion
 

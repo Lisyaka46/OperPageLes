@@ -85,18 +85,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Border Grid.RowSpan="1" BorderBrush="Black" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="5,2,5,2" Padding="0,3,0,3">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Slider x:Name="SliderX" HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" Maximum="20" Minimum="1" Grid.ColumnSpan="1" Margin="3,0,3,0"/>
-                            <TextBlock x:Name="TextBlockX" Grid.Column="1" TextWrapping="Wrap" Text="X" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                    </Border>
                     <Border Grid.RowSpan="1" BorderBrush="Black" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="5,2,5,2" Grid.Row="1" Padding="0,3,0,3">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -104,11 +95,24 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Slider x:Name="SliderY" VerticalAlignment="Center" Maximum="20" Minimum="1" Grid.ColumnSpan="1" Margin="3,0,0,0" Grid.Column="1"/>
-                            <TextBlock x:Name="TextBlockY" Grid.Column="2" TextWrapping="Wrap" Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="6,0,5,0"/>
-                            <TextBlock x:Name="TextBlockY_Копировать" Grid.Column="0" TextWrapping="Wrap" Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="5,0,5,0"/>
+                            <Slider x:Name="SliderY" VerticalAlignment="Center" Maximum="2000" Minimum="1" Grid.ColumnSpan="1" Margin="3,0,0,0" Grid.Column="1"/>
+                            <TextBlock x:Name="TextBlockY_Value" Grid.Column="2" TextWrapping="Wrap" Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="6,0,5,0"/>
+                            <TextBlock x:Name="TextBlockY" Grid.Column="0" TextWrapping="Wrap" Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="5,0,5,0"/>
                         </Grid>
                     </Border>
+                    <Border Grid.RowSpan="1" BorderBrush="Black" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="5,2,5,2" Padding="0,3,0,3">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="SliderX" VerticalAlignment="Center" Maximum="2000" Minimum="1" Grid.ColumnSpan="1" Margin="3,0,0,0" Grid.Column="1"/>
+                            <TextBlock x:Name="TextBlockX_Value" Grid.Column="2" TextWrapping="Wrap" Text="X" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="6,0,5,0"/>
+                            <TextBlock x:Name="TextBlockX" Grid.Column="0" TextWrapping="Wrap" Text="X" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="5,0,5,0"/>
+                        </Grid>
+                    </Border>
+                    <TextBlock x:Name="TextblockInformation" Grid.Row="2" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Padding="2,0,2,0" FontSize="16"/>
                 </Grid>
             </ScrollViewer>
         </Grid>

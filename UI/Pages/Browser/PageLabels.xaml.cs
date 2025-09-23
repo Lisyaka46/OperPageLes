@@ -1,6 +1,7 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using Microsoft.Windows.Themes;
+using Newtonsoft.Json.Linq;
 using OperPage_les.CORE.Enums;
 using OperPage_les.CORE.Label;
 using OperPage_les.UI.Dialogs;
@@ -10,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace OperPage_les.UI.Pages.Browser
 {
@@ -101,20 +103,10 @@ namespace OperPage_les.UI.Pages.Browser
         /// </summary>
         private readonly System.Timers.Timer SearchUpdateTimer;
 
-        private SortingLabelEnum _SortingLabel;
         /// <summary>
         /// Вид сортировки для ярлыков
         /// </summary>
-        internal SortingLabelEnum SortingLabelType
-        {
-            get => _SortingLabel;
-            set
-            {
-                SortLabels(App.CurrentApp.DataLabels, value);
-                _SortingLabel = value;
-                UpdatePositionLabels(0);
-            }
-        }
+        private SortingLabelEnum SortingLabelType;
 
         private bool _SelectLabelsMode = false;
         /// <summary>
@@ -132,6 +124,7 @@ namespace OperPage_les.UI.Pages.Browser
                 //PageLabelElement.IELButtonCreateLabelTag.IsEnabled = !value;
 
                 PageLabel.IELButtonCreateLabel.IsEnabled = !value;
+                PageLabel.IELButtonClearAllSelect.IsEnabled = value;
 
                 _SelectLabelsMode = value;
             }
@@ -142,18 +135,25 @@ namespace OperPage_les.UI.Pages.Browser
             InitializeComponent();
             SearchActivate = false;
             IELButtonSearch.Imaging = App.LoadImage(Properties.Resources.Search);
-            BorderScrollBackground.Width = 0d;
+            IELButtonSorting.Imaging = App.LoadImage(Properties.Resources.Sorting_NameAZ);
+            IELButtonSorting.IsEnabled = false;
+            IELButtonSearch.IsEnabled = false;
+            IELTextBoxSearch.IsEnabled = false;
             SortingLabelType = SortingLabelEnum.NameAZ;
+            BorderScrollBackground.Width = 0d;
             TextBlockEventInfo.Opacity = 0d;
+            TextBlockLabelInfo.Opacity = 0d;
+            GridMainLabels.Opacity = 0d;
+            GridMainLabels.Visibility = Visibility.Hidden;
             #region PanelAction
             #region PageLabel
-            PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 int CountOld = App.CurrentApp.DataLabels.Count;
                 App.CurrentApp.ActivateActionCommand(null, "create_label");
                 if (CountOld != App.CurrentApp.DataLabels.Count)
                 {
-                    AppendNewOPLLbel(CountOld);
+                    await AppendNewOPLLbel(CountOld);
                 }
             };
             PageLabel.IELButtonManipulateTags.OnActivateMouseLeft += (sender, e, Key) =>
@@ -173,6 +173,7 @@ namespace OperPage_les.UI.Pages.Browser
                 UpdateTextInfoLabels();
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
+            PageLabel.IELButtonClearAllSelect.IsEnabled = false;
             PageLabel.IELButtonClearAllSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageLabel.IELButtonClearAllSelect.IsEnabled = false;
@@ -209,7 +210,7 @@ namespace OperPage_les.UI.Pages.Browser
                     SelectLabelInPage = null;
                 }
             };
-            PageLabelElement.IELButtonRemoveLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            PageLabelElement.IELButtonRemoveLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 if (SelectLabelInPage != null)
                 {
@@ -217,11 +218,11 @@ namespace OperPage_les.UI.Pages.Browser
                     {
                         OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().ToArray().Where((i) => i.Selected)];
                         for (int i = 0; i < LabelsElements.Length; i++)
-                            RemoveLabel(LabelsElements[i]);
+                            await RemoveLabel(LabelsElements[i]);
                         SelectLabelsMode = false;
                         UpdateTextInfoLabels();
                     }
-                    else RemoveLabel(SelectLabelInPage);
+                    else await RemoveLabel(SelectLabelInPage);
                     SelectLabelInPage = null;
                 }
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
@@ -317,18 +318,22 @@ namespace OperPage_les.UI.Pages.Browser
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.CharKeyboardActivate = NewValue;
             };
             #endregion
-            IELButtonSorting.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSorting.OnActivateMouseLeft += async (sender, e, Key) =>
             {
+                if (App.MainWindow.IELActionPanelMain.ActualFrameElement?.Equals(PageLabelElement) ?? false)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 SortingLabelEnum[] ArrayValues = Enum.GetValues<SortingLabelEnum>();
-                SortingLabelType = ArrayValues[((int)SortingLabelType + 1) % ArrayValues.Length];
+                await ChangeSortingLabelType(ArrayValues[((int)SortingLabelType + 1) % ArrayValues.Length]);
             };
-            IELButtonSorting.OnActivateMouseRight += (sender, e, Key) =>
+            IELButtonSorting.OnActivateMouseRight += async (sender, e, Key) =>
             {
-                SortingLabelType = SortingLabelEnum.NameAZ;
+                if (App.MainWindow.IELActionPanelMain.ActualFrameElement?.Equals(PageLabelElement) ?? false)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                await ChangeSortingLabelType(SortingLabelEnum.NameAZ);
                 e.Handled = true;
             };
             #region Search Setting
-            IELButtonSearch.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSearch.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 SearchActivate = !SearchActivate;
                 //TextBlockLabelInfo.Text = SearchActivate ? $"Найдено ярлыков: 0 из {App.CurrentApp.DataLabels.Count}" : $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
@@ -340,7 +345,7 @@ namespace OperPage_les.UI.Pages.Browser
                 }
                 SortLabels(App.CurrentApp.DataLabels, SortingLabelType);
                 UpdateVisualSearchElements();
-                UpdatePositionLabels(0);
+                await UpdatePositionLabels(0);
             };
             SearchUpdateTimer = new()
             {
@@ -350,12 +355,12 @@ namespace OperPage_les.UI.Pages.Browser
             };
             SearchUpdateTimer.Elapsed += (sender, e) =>
             {
-                Dispatcher.BeginInvoke(() =>
+                Dispatcher.BeginInvoke(async () =>
                 {
                     SearchUpdateTimer.Enabled = false;
                     SortLabels(App.CurrentApp.DataLabels, SortingLabelType);
                     UpdateVisualSearchElements();
-                    UpdatePositionLabels(0);
+                    await UpdatePositionLabels(0);
                 });
             };
             IELTextBoxSearch.KeyUp += (sender, e) =>
@@ -388,15 +393,24 @@ namespace OperPage_les.UI.Pages.Browser
             {
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
-            SizeChanged += (sender, e) =>
+            SizeChanged += async (sender, e) =>
             {
                 if (SaveCountOneLineLabel == CountOneLineLabel) return;
                 SaveCountOneLineLabel = CountOneLineLabel;
-                UpdatePositionLabels(0);
+                await UpdatePositionLabels(0);
             };
-            CreateAllVisualLabels();
-            //Dispatcher.BeginInvoke(CreateAllVisualLabels);
-            //App.MainWindowApplication.DiactivateLoadingIndicator();
+
+            Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
+            {
+                Grid GridLabels = await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка списка ярлыков",
+                    CreateAllVisualLabels(GridMainLabels));
+                IELButtonSorting.IsEnabled = true;
+                IELButtonSearch.IsEnabled = true;
+                IELTextBoxSearch.IsEnabled = true;
+                GridLabels.Visibility = Visibility.Visible;
+                App.AnimateDoubleEffect(GridLabels, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                App.AnimateDoubleEffect(TextBlockLabelInfo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+            });
         }
 
         /// <summary>
@@ -445,16 +459,25 @@ namespace OperPage_les.UI.Pages.Browser
         }
 
         /// <summary>
+        /// Изменить вид сортировки для ярлыков
+        /// </summary>
+        internal async Task ChangeSortingLabelType(SortingLabelEnum NewValue)
+        {
+            SortLabels(App.CurrentApp.DataLabels, NewValue);
+            SortingLabelType = NewValue;
+            await UpdatePositionLabels(0);
+        }
+
+        /// <summary>
         /// Добавить новый объект интерфейса ярлыка по индексу данных
         /// </summary>
         /// <param name="Index">Индекс данных</param>
-        internal void AppendNewOPLLbel(int Index)
+        internal async Task AppendNewOPLLbel(int Index)
         {
             OPLLabelCommand Label = CreateVisualLabel(Index);
-            //App.CurrentApp.DataLabels.Add(Label.SourceLabel);
             SortLabels(App.CurrentApp.DataLabels, SortingLabelType);
             GridMainLabels.Children.Add(Label);
-            UpdatePositionLabels(0, false);
+            await UpdatePositionLabels(0, false);
             App.AnimateDoubleEffect(Label, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
             UpdateTextInfoLabels();
         }
@@ -462,32 +485,35 @@ namespace OperPage_les.UI.Pages.Browser
         /// <summary>
         /// Обновить визуализацию прокрутки
         /// </summary>
-        private void UpdatePositionLabels(int StartIndex, bool Animatable = true)
+        private async Task UpdatePositionLabels(int StartIndex, bool Animatable = true)
         {
             if (GridMainLabels.Children.Count == 0) return;
             BorderDinamicLabels.UpdateLayout();
-            for (int i = StartIndex; i < GridMainLabels.Children.Count; i++)
+            await Dispatcher.BeginInvoke(() =>
             {
-                OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
-                int indexInData = App.CurrentApp.DataLabels.IndexOf(Element.SourceLabel);
-                int CountOneLine = indexInData % CountOneLineLabel;
-                int CountLine = indexInData / CountOneLineLabel;
-                int Left = CountOneLine == 0 ? MarginLabel : CountOneLine * FULL_WidthLabel;
-                int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
-                if (Element.Margin.Left == Left && Element.Margin.Top == Top) continue;
-                if (Animatable)
+                for (int i = StartIndex; i < GridMainLabels.Children.Count; i++)
                 {
-                    ThicknessAnimation animation = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(Element.IELSettingObject.AnimationMillisecond));
-                    animation.To = new(Left, Top, 0, 0);
-                    animation.FillBehavior = FillBehavior.Stop;
-                    animation.Completed += (sender, e) =>
+                    OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
+                    int indexInData = App.CurrentApp.DataLabels.IndexOf(Element.SourceLabel);
+                    int CountOneLine = indexInData % CountOneLineLabel;
+                    int CountLine = indexInData / CountOneLineLabel;
+                    int Left = CountOneLine == 0 ? MarginLabel : CountOneLine * FULL_WidthLabel;
+                    int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
+                    if (Element.Margin.Left == Left && Element.Margin.Top == Top) continue;
+                    if (Animatable)
                     {
-                        Element.Margin = new(Left, Top, 0, 0);
-                    };
-                    Element.ApplyAnimationClock(MarginProperty, animation.CreateClock());
+                        ThicknessAnimation animation = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(Element.IELSettingObject.AnimationMillisecond));
+                        animation.To = new(Left, Top, 0, 0);
+                        animation.FillBehavior = FillBehavior.Stop;
+                        animation.Completed += (sender, e) =>
+                        {
+                            Element.Margin = new(Left, Top, 0, 0);
+                        };
+                        Element.ApplyAnimationClock(MarginProperty, animation.CreateClock());
+                    }
+                    else Element.Margin = new(Left, Top, 0, 0);
                 }
-                else Element.Margin = new(Left, Top, 0, 0);
-            }
+            });
         }
 
         /// <summary>
@@ -500,7 +526,8 @@ namespace OperPage_les.UI.Pages.Browser
             if (SearchActivate)
             {
                 OPLLabelCommand[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabelCommand>()];
-                TextBlockLabelInfo.Text += $"Найдено ярлыков: {ArrayLabelsElement.Count((i) => i.IELSettingObject.BackgroundSetting.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
+                TextBlockLabelInfo.Text += "Найдено ярлыков: " +
+                    $"{ArrayLabelsElement.Count((i) => i.IELSettingObject.BackgroundSetting.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
             }
             else TextBlockLabelInfo.Text += $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
         }
@@ -508,22 +535,30 @@ namespace OperPage_les.UI.Pages.Browser
         /// <summary>
         /// Сгенерировать все объекты интерфейса ярлыка
         /// </summary>
-        private void CreateAllVisualLabels()
+        /// <param name="GridLabels">Сетка в которую помещаются ярлыки</param>
+        private async Task<Grid> CreateAllVisualLabels(Grid GridLabels)
         {
             for (int i = 0; i < App.CurrentApp.DataLabels.Count; i++)
             {
-                OPLLabelCommand Element = CreateVisualLabel(i);
-                Element.Opacity = 1d;
-                if (Element.SourceLabel.Tag != null)
+                await Task.Run(() =>
                 {
-                    if (!App.CurrentApp.DataLabelTags.Any(i => i.ValueTag.Equals(Element.SourceLabel.Tag)))
-                        Element.SourceLabel.RemoveTag();
-                }
-                GridMainLabels.Children.Add(Element);
-                //App.AnimateDoubleEffect(GridMainLabels.Children[^1], OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
-                //App.MainWindowApplication.UpdateLayout();
+                    Dispatcher.Invoke(() =>
+                    {
+                        OPLLabelCommand Element = CreateVisualLabel(i);
+                        Element.Opacity = 1d;
+                        if (Element.SourceLabel.Tag != null)
+                        {
+                            if (!App.CurrentApp.DataLabelTags.Any(i => i.ValueTag.Equals(Element.SourceLabel.Tag)))
+                                Element.SourceLabel.RemoveTag();
+                        }
+                        GridLabels.Children.Add(Element);
+                    });
+                    Thread.Sleep(20);
+                });
             }
             UpdateTextInfoLabels();
+            await UpdatePositionLabels(0);
+            return GridLabels;
         }
 
         /// <summary>
@@ -551,7 +586,8 @@ namespace OperPage_les.UI.Pages.Browser
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = SelectLabelInPage.Selected && SelectLabelsMode;
                 PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.SourceLabel.Tag != null;
                 PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
-                PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0;
+                PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
+                PageLabelElement.IELButtonSetLabelTag.Text = Label.SourceLabel.Tag != null ? "Изменить тег" : "Добавить тег";
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
                 e.Handled = true;
             };
@@ -594,12 +630,12 @@ namespace OperPage_les.UI.Pages.Browser
         /// Удалить ярлык по индексу
         /// </summary>
         /// <param name="Index">индекс удаляемого ярлыка</param>
-        private void RemoveLabel(OPLLabelCommand Source)
+        private async Task RemoveLabel(OPLLabelCommand Source)
         {
             //int UpdateIndex = GridMainLabels.Children.IndexOf(Source);
             GridMainLabels.Children.Remove(Source);
             App.CurrentApp.DataLabels.Remove(Source.SourceLabel);
-            UpdatePositionLabels(0);
+            await UpdatePositionLabels(0);
             UpdateTextInfoLabels();
         }
 

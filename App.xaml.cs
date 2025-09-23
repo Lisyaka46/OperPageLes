@@ -15,6 +15,7 @@ using OperPage_les.CORE.Settings.Struct;
 using OperPage_les.UI.Dialogs;
 using OperPage_les.UI.Pages.ActionPanel;
 using OperPage_les.UI.Pages.Browser;
+using OperPage_les.UI.UserElementControl;
 using OperPage_les.Windows;
 using System.Diagnostics;
 using System.IO;
@@ -23,6 +24,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -237,6 +239,11 @@ namespace OperPage_les
         /// Массив тегов для ярлыков
         /// </summary>
         internal readonly List<LabelTag> DataLabelTags = [];
+
+        /// <summary>
+        /// Массив всех визуализационных объектов процессов
+        /// </summary>
+        internal readonly List<OPLViewerLoadingProcess> DataViewerLoadingProcess = [];
         #endregion
 
         #region Windows
@@ -254,6 +261,11 @@ namespace OperPage_les
         /// Активое окно которое является дочерним от основного
         /// </summary>
         internal static Window? ActiveDialog = null;
+
+        /// <summary>
+        /// Открытые окна в приложении
+        /// </summary>
+        internal List<Window> OpenedWindowsInApplication;
         #endregion
 
         /// <summary>
@@ -364,9 +376,15 @@ namespace OperPage_les
         /// </summary>
         internal static readonly ObjectConnect InternetPinging = new();
 
+        /// <summary>
+        /// Версия программы
+        /// </summary>
+        internal static readonly string Version = "*";
+
         public App()
         {
             #region Resources
+            OpenedWindowsInApplication = [];
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             #endregion
 
@@ -473,7 +491,7 @@ namespace OperPage_les
                 #region close
                 new ConsoleCommand("close", "Закрывает программу", (Command, param) =>
                 {
-                    Current.Shutdown(0);
+                    MainWindow.Close();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -950,27 +968,6 @@ namespace OperPage_les
             return null;
         }
         #endregion
-
-        /// <summary>
-        /// Взаимодействовать с окном описания команд (Включает/Активирует)
-        /// </summary>
-        internal void UsingDiscriptionCommand()
-        {
-            //if (DiscriptionCommands == null)
-            //{
-            //    DiscriptionCommands = new();
-            //    DiscriptionCommands.Closing += (sender, e) =>
-            //    {
-            //        DiscriptionCommands = null;
-            //    };
-            //    DiscriptionCommands.Show();
-            //}
-            //else
-            //{
-            //    DiscriptionCommands.WindowState = WindowState.Normal;
-            //    DiscriptionCommands.Activate();
-            //}
-        }
 
         #region CommandActivate
         /// <summary>

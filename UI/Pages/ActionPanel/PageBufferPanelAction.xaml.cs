@@ -48,7 +48,7 @@ namespace OperPage_les.UI.Pages.ActionPanel
         {
             InitializeComponent();
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
-            TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
+            TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
             IELButtonClearBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(50d);
@@ -57,7 +57,7 @@ namespace OperPage_les.UI.Pages.ActionPanel
                 ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
                 GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
                 OpacityAnimationBuffer.To = 0d;
-                TextBlockCounterBuffer.Text = $"00 {BufferCommand.Length}";
+                TextBlockCounterBuffer.Text = $"00/{BufferCommand.Length}";
                 for (int i = 0; i < BufferCommand.Count; i++)
                 {
                     OPLButtonBufferCommand Button = (OPLButtonBufferCommand)GridBuffer.Children[i];
@@ -118,8 +118,11 @@ namespace OperPage_les.UI.Pages.ActionPanel
                 Height = 40,
                 Margin = new(0, (40 + 2) * BufferCommand.Count, 0, 0),
                 Index = BufferCommand.Count,
+                IELSettingObject = new()
+                {
+                    BackgroundSetting = (BrushSettingQ)BackgroundSetting.Clone(),
+                }
             };
-            Button.IELSettingObject.BackgroundSetting = BackgroundSetting;
             return Button;
         }
 
@@ -140,7 +143,7 @@ namespace OperPage_les.UI.Pages.ActionPanel
                 {
                     BufferCommand.Delete(Button.Index);
                     TextBlockCounterBuffer.Text =
-                        $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
+                        $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
                     if (BufferCommand.Count == 0) IELButtonClearBuffer.IsEnabled = false;
                 };
                 BufferCommand.Add(Command);
@@ -162,7 +165,7 @@ namespace OperPage_les.UI.Pages.ActionPanel
                 RealButton.TextCommand = Command;
             }
             TextBlockCounterBuffer.Text =
-                $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count} {BufferCommand.Length}";
+                $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
         }
         #endregion
     }

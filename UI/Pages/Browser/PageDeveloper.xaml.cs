@@ -14,14 +14,8 @@ namespace OperPage_les.UI.Pages.Browser
         public PageDeveloper()
         {
             InitializeComponent();
-            IELButtonGenerateImage.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                ImageMap.Source = GenImage();
-            };
             IELButtonDownloadImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                //Bitmap bitmap = GenImage();
-                //bitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gen.png");
             };
             GridScale.MouseWheel += (sender, e) =>
             {
@@ -55,14 +49,31 @@ namespace OperPage_les.UI.Pages.Browser
                 KeyEventActivate = false;
                 e.Handled = true;
             };
+            IELButtonGenerateImage.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                Thread t = new(() =>
+                {
+                    Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, async () =>
+                    {
+                        ImageMap.Source = await App.MainWindow.ExecuteVisualizateLoadingProcess("Генерация изображения",
+                            GenImage((int)SliderX.Value, (int)SliderY.Value));
+                    });
+                })
+                {
+                    IsBackground = true,
+                };
+                t.SetApartmentState(ApartmentState.STA);
+                t.Priority = ThreadPriority.Highest;
+                t.Start();
+            };
             #region Sliders
             SliderX.ValueChanged += (sender, e) =>
             {
-                TextBlockX.Text = $"X:{e.NewValue}";
+                TextBlockX_Value.Text = $"X:{Math.Round(e.NewValue, 2)}";
             };
             SliderY.ValueChanged += (sender, e) =>
             {
-                TextBlockY.Text = $"Y:{e.NewValue}";
+                TextBlockY_Value.Text = $"Y:{Math.Round(e.NewValue, 2)}";
             };
             #endregion
         }
@@ -76,21 +87,35 @@ namespace OperPage_les.UI.Pages.Browser
                 (byte)(Math.Sin(X / SliderY.Value) * 255));
         }
 
-        private BitmapSource GenImage()
+        /// <summary>
+        /// Сгенерировать изображение по формуле
+        /// </summary>
+        /// <param name="Width">Ширина изображения</param>
+        /// <param name="Height">Высота изображения</param>
+        /// <returns>Объект карты цвета изображения</returns>
+        internal async Task<BitmapSource> GenImage(int Width, int Height)
         {
-            int LengthY = 200, LengthX = 200;
-            Bitmap bitmap = new(LengthX, LengthY);
-            for (int Y = 0; Y < LengthY; Y++)
+            int X, Y;
+            Bitmap bitmap = new(Width, Height);
+            for (Y = 0; Y < Height; Y++)
             {
-                for (int X = 0; X < LengthX; X++)
+                for (X = 0; X < Width; X++)
                 {
-                    bitmap.SetPixel(X, Y, System.Drawing.Color.Black);
-                    //ArrayRectangle[Y, X].SetBinding(Rectangle.FillProperty, ColorBinding);
+                    await Task.Run(() =>
+                    {
+                        byte R = (byte)(Math.Cos(X / 5));
+                        byte G = (byte)0;
+                        byte B = (byte)0;
+                        bitmap.SetPixel(X, Y, System.Drawing.Color.FromArgb(R, G, B));
+                        Dispatcher.Invoke(() => TextblockInformation.Text = $"X:{X} || Y:{Y}");
+                    });
                 }
             }
             return Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),
                    IntPtr.Zero, Int32Rect.Empty,
                    BitmapSizeOptions.FromEmptyOptions());
-        }
+        } /* Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),
+                   IntPtr.Zero, Int32Rect.Empty,
+                   BitmapSizeOptions.FromEmptyOptions());*/
     }
 }

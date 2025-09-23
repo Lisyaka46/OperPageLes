@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using OperPage_les.UI.UserElementControl;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -23,14 +24,15 @@ namespace OperPage_les.UI.Pages.Browser
             };
             WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
             {
+                OPLViewerLoadingProcess ViewerLoading = App.MainWindow.GenerateVisualizateLoadingProcess("Test");
                 WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
                 {
-                    App.MainWindow.ActivateLoadingIndicator();
+                    App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
                     WebBrowserElement.Source = new Uri(e.Uri);
                 };
                 WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
                 {
-                    App.MainWindow.DiactivateLoadingIndicator();
+                    App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
                 };
                 WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
                 {

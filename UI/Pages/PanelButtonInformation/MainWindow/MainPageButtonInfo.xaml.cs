@@ -54,14 +54,13 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
             };
             IELBlockInfoInternetConnection.Imaging = App.LoadImage(Properties.Resources.Wifi);
-            //ImageBehavior.SetAnimatedSource(ImageIndicatorLoadingInternetConnection, App.LoadImage(Properties.Resources.Loading));
 
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(UpdateInformation));
             IELBlockInfoStateRegister.Text = Flags.FlagRegisterState ? "A" : "a";
             IndicatorLoadingInternetConnection.Opacity = 0d;
             ((BlurEffect)GridInfoInternetConnection.Effect).Radius = 0d;
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
-            IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new Thickness(2, 0, 2, 8) : new Thickness(2, 0, 2, 4);
+            IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new(2, 0, 2, 8) : new(2, 0, 2, 4);
             #region BorderInternetConnection
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
@@ -125,25 +124,25 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                     {
                         bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
-                        App.AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
+                        AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
 
-                        App.AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
+                        AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
                     });
                     Thread.Sleep(InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet ? 2500 : InternetPinging.MillisecondUpdateTime);
-                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                    await Dispatcher.BeginInvoke(() =>
                     {
                         bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
                         IELBlockInfoInternetConnection.Imaging = App.LoadImage(InternetPinging.ConnectInternet ?
-                                OperPage_les.Properties.Resources.WifiOn : OperPage_les.Properties.Resources.WifiOff);
+                                OperPage_les.Properties.Resources.WifiOn : Properties.Resources.WifiOff);
                         if (VisualMillisecondConnectionEnabled)
                         {
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
                         }
 
-                        App.AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
+                        AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
 
-                        App.AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
+                        AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
 
                         if (CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
                         {
@@ -155,7 +154,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 }
                 else
                 {
-                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                    await Dispatcher.BeginInvoke(() =>
                     {
                         IELBlockInfoInternetConnection.Imaging = App.LoadImage(InternetPinging.ConnectInternet ?
                                 OperPage_les.Properties.Resources.WifiOn : OperPage_les.Properties.Resources.WifiOff);
@@ -176,15 +175,6 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
         /// </summary>
         private void UpdateInformation()
         {
-            bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
-            DoubleAnimation animation = new()
-            {
-                EasingFunction = new CubicEase()
-                {
-                    EasingMode = EasingMode.EaseOut,
-                },
-                Duration = TimeSpan.FromMilliseconds(700),
-            };
             string LangName = InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
             if (!LangName.Equals(IELBlockInfoCurrentLanguage.Text))
             {
@@ -195,9 +185,9 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
 
         internal void VisibilityInternetMillisecond(bool Value)
         {
-            AnimateThicknessEffect(IELBlockInfoInternetConnection.MainFrontImage, System.Windows.Controls.Image.MarginProperty, Value ? new(2, 0, 2, 8) : new Thickness(2, 0, 2, 4),
+            AnimateThicknessEffect(IELBlockInfoInternetConnection.MainFrontImage, MarginProperty, Value ? new(2, 0, 2, 8) : new(2, 0, 2, 4),
                 TimeSpan.FromMilliseconds(400d));
-            AnimateDoubleEffect(TextBlockInternetConnectionMillisecond, TextBlock.OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
+            AnimateDoubleEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
         }
     }

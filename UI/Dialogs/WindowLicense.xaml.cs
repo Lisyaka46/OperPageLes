@@ -1,12 +1,14 @@
 ﻿using OperPage_les.CORE;
-using OperPage_les.UI.Pages.License;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 
 namespace OperPage_les.UI.Dialogs
 {
@@ -16,19 +18,19 @@ namespace OperPage_les.UI.Dialogs
     public partial class LicenseWindow : Window
     {
         /// <summary>
-        /// Объект фонового обновления благодарностей
+        /// Дата начала разработки программы
         /// </summary>
-        private readonly UpdateBackgroundData UpdateInfoThanks;
+        private static readonly DateTime HappyDay = new(2022, 04, 19);
 
         /// <summary>
-        /// Объект страницы благодарностей
+        /// Константа времени изчезновения страницы
         /// </summary>
-        private readonly PageUserThanks PageThanks = new();
+        const double MillisecondsHide = 1250d;
 
         /// <summary>
-        /// Индекс отображения благодарственного сообщения
+        /// Константа времени появления страницы
         /// </summary>
-        private int Value = -1;
+        const double MillisecondsShow = 1200d;
 
         /// <summary>
         /// Отображалась ли программа хотя бы раз
@@ -47,33 +49,93 @@ namespace OperPage_les.UI.Dialogs
         /// </summary>
         private int CountClickImageLogo = 0;
 
-        private readonly DoubleAnimation LogoRotateAnimate = new()
-        {
-            To = 360d,
-            Duration = TimeSpan.FromSeconds(20d),
-            RepeatBehavior = RepeatBehavior.Forever,
-        };
+        /// <summary>
+        /// Загруженные данные о картинках асистентов
+        /// </summary>
+        private static BitmapImage[] BitmapsAssistents = [..Assistents.AllAssistents.Select((i) =>
+                    App.LoadImage(i.ImageSource ?? Properties.Resources.IconMainGray))];
+
+        /// <summary>
+        /// Поток отображаемый данные об асистентах
+        /// </summary>
+        private readonly Thread ThreadUpdateVisualAssistents;
         #endregion
 
         public LicenseWindow()
         {
             InitializeComponent();
+            ThreadUpdateVisualAssistents = new(() =>
+            {
+                Assistents.AssistentElement assistent;
+                int i = -1;
+                ThicknessAnimation animation = Dispatcher.Invoke(() => App.GetThicknessAnimate(TimeSpan.FromSeconds(6d)));
+                Dispatcher.Invoke(() =>
+                {
+                    animation.EasingFunction = new PowerEase()
+                    {
+                        EasingMode = EasingMode.EaseOut,
+                        Power = 6d,
+                    };
+                    animation.From = new(-10);
+                    animation.To = new(-60);
+                });
+                while (true)
+                {
+                    i = ++i % Assistents.AllAssistents.Count;
+                    assistent = Assistents.AllAssistents[i];
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        ((SolidColorBrush)TextBlockNickName.Foreground).Color = assistent.ColorNickName;
+                        ((SolidColorBrush)TextBlockPhrase.Foreground).Color = assistent.ColorPhrase;
+                        TextBlockNickName.Text = assistent.NickName;
+                        TextBlockPhrase.Text = $"\"{assistent.Phrase}\"";
+                        TextBlockMessage.Text = assistent.Message;
+                        ImageIconNickName.Source = BitmapsAssistents[i];
+                        ImageIconNickName.UpdateLayout();
+                        App.AnimateDoubleEffect(ImageIconNickName, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
+                        App.AnimateDoubleEffect(MainGrid, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
+                        App.AnimateThicknessEffect(MainGrid, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
+
+                        ImageIconNickName.BeginAnimation(MarginProperty, animation);
+                    });
+                    Thread.Sleep(13600);
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        App.AnimateDoubleEffect(MainGrid, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
+                        App.AnimateThicknessEffect(MainGrid, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
+                        App.AnimateDoubleEffect(ImageIconNickName, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
+                    });
+                    Thread.Sleep((int)MillisecondsHide + 100);
+                }
+            })
+            {
+                Priority = ThreadPriority.BelowNormal,
+                IsBackground = true,
+            };
+            ThreadUpdateVisualAssistents.SetApartmentState(ApartmentState.STA);
+            TextBlockVersion.Text = "Версия: " +
+#if DEBUG
+                "DEBUG";
+#endif
+#if !DEBUG
+                $"{App.Version}";
+#endif
+            MainGrid.Opacity = 0d;
+            MainGrid.Margin = new(0, 28, 0, 0);
             MediaHappy.Source = new Uri(App.DirectoryFileHappy);
             MediaHappy.MediaEnded += (sender, e) =>
             {
                 MediaHappy.Position = TimeSpan.FromMilliseconds(1);
             };
-
-            UpdateInfoThanks = new(10000d, (sender, e) => Dispatcher.BeginInvoke(UpdateThanks));
             ImageLogo.Margin = new(20);
             ImageLogo.MouseLeftButtonUp += (sender, e) =>
             {
+                if (CountClickImageLogo >= 200) return;
                 ExecuteEventClickImageLogo(++CountClickImageLogo);
             };
             Closed += (sender, e) =>
             {
-                GC.Collect(2, GCCollectionMode.Forced);
-                UpdateInfoThanks.Stop();
+                GC.Collect();
             };
             KeyUp += (sender, e) =>
             {
@@ -95,16 +157,12 @@ namespace OperPage_les.UI.Dialogs
                 {
 
                 }
-                //Opacity = 0d;
-                //MediaHappy.Opacity = 0d;
-                //BorderHappy.Opacity = 0d;
-                //BorderHappy.Margin = new(5);
-                //BlurEffectAllGrid.Radius = 0d;
             };
             BorderHappy.MouseLeftButtonUp += (sender, e) =>
             {
                 HideHappy();
             };
+            ImageIconNickName.Opacity = 0d;
             BlurEffectAllGrid.Radius = 0d;
             MediaHappy.Opacity = 0d;
             BorderHappy.Opacity = 0d;
@@ -113,15 +171,10 @@ namespace OperPage_les.UI.Dialogs
             Opacity = 0d;
             TextBlockNextInfo.Opacity = 0d;
             BorderHappy.Visibility = Visibility.Hidden;
+            ImageIconNickName.Source = null;
 
-            DoubleAnimation anim = new()
-            {
-                To = 360d,
-                Duration = TimeSpan.FromSeconds(4d),
-                RepeatBehavior = RepeatBehavior.Forever,
-            };
-            RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim);
-            RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, LogoRotateAnimate);
+            TextBlockNickName.Foreground = new SolidColorBrush(Colors.Black);
+            TextBlockPhrase.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         /// <summary>
@@ -133,7 +186,6 @@ namespace OperPage_les.UI.Dialogs
             animThickness.BeginTime = TimeSpan.FromMilliseconds(100d);
             DoubleAnimation animDouble = App.GetDoubleAnimate(TimeSpan.FromMilliseconds(1600d));
             animDouble.BeginTime = TimeSpan.FromMilliseconds(400d);
-            DateTime HappyDay = new(2022, 04, 19);
             uint YearRealy = (uint)(DateTime.Now.Year - HappyDay.Year);
             string SyntaxYear = string.Empty;
             if (YearRealy < 5u || (YearRealy % 10 == 1 && YearRealy != 11))
@@ -165,7 +217,7 @@ namespace OperPage_les.UI.Dialogs
         internal void HideHappy()
         {
             TimeSpan span = TimeSpan.FromMilliseconds(800d);
-            Canvas.SetZIndex(BorderHappy, -1);
+            Canvas.SetZIndex(GridHappy, -1);
             App.AnimateDoubleEffect(BorderHappy, OpacityProperty, 0d, span);
             App.AnimateDoubleEffect(MediaHappy, OpacityProperty, 0d, span);
             App.AnimateDoubleEffect(BlurEffectAllGrid, BlurEffect.RadiusProperty, 0d, span);
@@ -180,18 +232,8 @@ namespace OperPage_les.UI.Dialogs
             switch (CountClick)
             {
                 case 10:
-                    LogoRotateAnimate.Duration = TimeSpan.FromSeconds(60d);
-                    RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, LogoRotateAnimate);
-                    break;
                 case 15:
-                    RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, null);
-                    break;
                 case 25:
-                    ImmuneClosing = true;
-                    System.Windows.Forms.MessageBox.Show("Всё, больше ничего не будет.");
-                    System.Windows.Forms.MessageBox.Show("Я правду говорю");
-                    ImmuneClosing = false;
-                    break;
                 case 50:
                 case 60:
                 case 65:
@@ -237,32 +279,44 @@ namespace OperPage_les.UI.Dialogs
             App.AnimateDoubleEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1200d));
             if (!IsActivatedShow)
             {
-                ThicknessAnimation animThickness = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(1200d));
+                IsActivatedShow = true;
+                DoubleAnimation anim = new()
+                {
+                    From = 0d,
+                    To = 360d,
+                    Duration = TimeSpan.FromSeconds(3d),
+                    EasingFunction = new ElasticEase()
+                    {
+                        EasingMode = EasingMode.EaseOut,
+                        Oscillations = 1,
+                        Springiness = 4d,
+                    }
+                };
+                RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, anim);
+                anim.Duration = TimeSpan.FromSeconds(10d);
+                anim.EasingFunction = new PowerEase()
+                {
+                    EasingMode = EasingMode.EaseInOut,
+                    Power = 6d,
+                };
+                anim.RepeatBehavior = RepeatBehavior.Forever;
+                RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim);
+                ThicknessAnimation animThickness = App.GetThicknessAnimate();
                 animThickness.BeginTime = TimeSpan.FromMilliseconds(80d);
-                animThickness.Duration = TimeSpan.FromMilliseconds(1600d);
-                animThickness.To = new(0);
+                animThickness.Duration = TimeSpan.FromSeconds(4d);
+                animThickness.To = new(5);
                 animThickness.EasingFunction = new BackEase()
                 {
                     EasingMode = EasingMode.EaseOut,
-                    Amplitude = 0.78d,
+                    Amplitude = 1d,
                 };
                 ImageLogo.BeginAnimation(MarginProperty, animThickness);
-                FrameThanks.Navigate(PageThanks);
-                UpdateThanks();
-                UpdateInfoThanks.Start();
-            }
-            IsActivatedShow = true;
+            };
+
             base.Show();
             Focus();
-            ShowHappy();
-        }
-
-        /// <summary>
-        /// Обновить панель благодарности
-        /// </summary>
-        private void UpdateThanks()
-        {
-            PageThanks.NextUser(Assistents.AllAssistents[Value = ++Value % Assistents.AllAssistents.Length]);
+            if (DateTime.Now.Month == HappyDay.Month && DateTime.Now.Day == HappyDay.Day) ShowHappy();
+            ThreadUpdateVisualAssistents.Start();
         }
     }
 }

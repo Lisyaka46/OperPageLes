@@ -7,9 +7,7 @@
       xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      x:Class="OperPage_les.UI.Pages.ActionPanel.PageBufferPanelAction"
-      mc:Ignorable="d" 
-      Title="PageBufferActionPanel" d:DesignHeight="138.685" d:DesignWidth="259.791">
+      x:Class="OperPage_les.UI.Pages.ActionPanel.PageBufferPanelAction">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -18,18 +16,39 @@
             <RowDefinition Height="Auto" MinHeight="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Border x:Name="BorderBuffer" BorderBrush="#FF163C26" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True" Background="#B21B2F24">
-            <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Hidden">
-                <Grid x:Name="GridBuffer"/>
-            </ScrollViewer>
+        <Border x:Name="BorderBuffer" BorderBrush="#FF163C26" BorderThickness="3,3,3,3" Grid.Row="1" CornerRadius="3,3,3,3" Margin="4,4,4,4" Panel.ZIndex="0" ClipToBounds="True" Background="#B21B2F24" MinHeight="60">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="TextBlockCounterBuffer" Text="00/00" Foreground="#FF80EAE2" Grid.Column="1" TextAlignment="Right" FontSize="16" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-8,-3,0" Panel.ZIndex="1">
+                    <TextBlock.Background>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#FF163C26" Offset="0.568"/>
+                            <GradientStop Color="#00163C26" Offset="1"/>
+                        </RadialGradientBrush>
+                    </TextBlock.Background>
+                </TextBlock>
+                <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Hidden" Grid.RowSpan="2" Grid.Row="0">
+                    <ScrollViewer.OpacityMask>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#00000000" Offset="0.03"/>
+                            <GradientStop Color="#00000000" Offset="0.97"/>
+                            <GradientStop Color="Black" Offset="0.06"/>
+                            <GradientStop Color="Black" Offset="0.94"/>
+                        </LinearGradientBrush>
+                    </ScrollViewer.OpacityMask>
+                    <Grid x:Name="GridBuffer"/>
+                </ScrollViewer>
+            </Grid>
         </Border>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="37.718"/>
+                <ColumnDefinition Width="98*"/>
+                <ColumnDefinition Width="107*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" CharKeyKeyboard="Oem3" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" >
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" CharKeyKeyboard="Oem3" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0" >
                 <GUI:IELButtonTextKey.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -44,8 +63,7 @@
                     </ObjectSettings:IELButtonObjectSetting>
                 </GUI:IELButtonTextKey.IELSettingObject>
             </GUI:IELButtonTextKey>
-            <TextBlock x:Name="TextBlockCounterBuffer" Text="00 00" Foreground="#FF80EAE2" Grid.Column="2" TextAlignment="Center" FontSize="16" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" FontWeight="Bold" Margin="5,0,5,0"/>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" CharKeyKeyboard="D1" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}">
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" CharKeyKeyboard="D1" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0">
                 <GUI:IELButtonTextKey.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -55,7 +73,7 @@
                             <Classes:BrushSettingQ/>
                         </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FFC13750" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
+                            <Classes:BrushSettingQ NotEnabled="#FFC13750" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
                 </GUI:IELButtonTextKey.IELSettingObject>
