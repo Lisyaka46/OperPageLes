@@ -209,6 +209,6 @@
                 </Grid>
             </Grid>
         </Border>
-        <GUI:IELBlockMessage x:Name="IELMessageInfo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,1,0,0" OffsetLeftRight="4" OffsetUpDown="4" RadiusDefault="18" DefaultBackground="#FF7EACC5" DefaultBorderBrush="#FF091B2F" DefaultForeground="#FF00230C" FontSize="14" Height="31" Grid.Row="1" Width="47" />
+        <GUI:IELBlockMessage x:Name="IELMessageInfo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,1,0,0" OffsetLeftRight="4" OffsetUpDown="4" RadiusDefault="18" DefaultBackground="#FF7EACC5" DefaultBorderBrush="#FF091B2F" DefaultForeground="#FF00230C" FontSize="14" Grid.Row="1" />
     </Grid>
 </Window>

@@ -39,7 +39,7 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         /// <summary>
         /// Поток обновляемый данные интернета
         /// </summary>
-        internal ThreadGenericProcess ThreadInternetConnection;
+        internal Thread ThreadInternetConnection;
 
         public MainPageButtonInfo()
         {

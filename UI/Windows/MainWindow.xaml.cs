@@ -17,6 +17,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using OperPageLes.UI.UserElementControl;
+using System.Media;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -415,15 +416,25 @@ namespace OperPageLes.UI.Windows
         /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
         /// <param name="NameProcess">Название загрузочного процесса</param>
         /// <param name="Method">Асинхронный процесс получения значения</param>
+        /// <param name="IsCanceledManipulate">Можно ли отменить операцию</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
+        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method, bool IsCanceledManipulate = false)
         {
             OPLViewerLoadingProcess ViewLoading = GenerateVisualizateLoadingProcess(NameProcess);
+            ViewLoading.IsCanceledManipulate = IsCanceledManipulate;
             ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
+            CancellationToken token = new(false);
+            ViewLoading.OnActivateMouseRight += (sender, e, Key) =>
+            {
+                token.ThrowIfCancellationRequested();
+                ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
+            };
 
-            await Method.WaitAsync(new CancellationToken(false));
+            await Method.WaitAsync(token);
 
+            if (Method.IsCanceled) throw new OperationCanceledException();
             ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
+
             return await Method;
         }
 
@@ -542,7 +553,7 @@ namespace OperPageLes.UI.Windows
         {
             await Task.Run(() =>
             {
-                ((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection.Kill();
+                //((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection;
             });
         }
 

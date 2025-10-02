@@ -3,9 +3,10 @@ using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
-using OperPageLes.Windows.Frames;
 using OperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.Windows.Frames;
 using System.Diagnostics.Contracts;
+using System.Media;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -83,6 +84,8 @@ namespace OperPageLes.UI.Pages.Browser
         private ConsoleHitStateEnum SaveStateHit;
         #endregion
 
+        private SoundPlayer PlayerKeyboardSound;
+
         /// <summary>
         /// Активный индекс команды в буфере для строки ввода
         /// </summary>
@@ -96,6 +99,7 @@ namespace OperPageLes.UI.Pages.Browser
         public PageConsole()
         {
             InitializeComponent();
+            PlayerKeyboardSound = new("C:/Users/killm/Рабочий стол/Keyboard.wav");
             StateVisibleHit = ConsoleHitStateEnum.Hidden;
             ActiveIndexBufferInput = -1;
             SaveStringPrintBuffer = string.Empty;
@@ -228,6 +232,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             TextBoxCommandInput.KeyUp += (sender, e) =>
             {
+                //PlayerKeyboardSound.Play();
                 switch (e.Key)
                 {
                     case Key.Enter:

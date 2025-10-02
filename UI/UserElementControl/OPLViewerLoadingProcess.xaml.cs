@@ -47,11 +47,13 @@ namespace OperPageLes.UI.UserElementControl
                         ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
                         anim.To = NewValue;
                         BorderMain.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        CancelIndicator.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
                     }
                     else
                     {
                         SolidColorBrush color = new(NewValue);
                         BorderMain.BorderBrush = color;
+                        CancelIndicator.BorderBrush = color;
                     }
                 });
                 value.ForegroundSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
@@ -61,11 +63,13 @@ namespace OperPageLes.UI.UserElementControl
                         ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
                         anim.To = NewValue;
                         TextBlockName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        TextBlockCancel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim);
                     }
                     else
                     {
                         SolidColorBrush color = new(NewValue);
                         TextBlockName.Foreground = color;
+                        TextBlockCancel.Foreground = color;
                     }
                 });
                 _IELSettingObject = value;
@@ -185,9 +189,24 @@ namespace OperPageLes.UI.UserElementControl
             }
         }
 
+        private bool _IsCanceledManipulate;
+        /// <summary>
+        /// Состояние отмены загрузки
+        /// </summary>
+        internal bool IsCanceledManipulate
+        {
+            get => _IsCanceledManipulate;
+            set
+            {
+                CancelIndicator.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+                _IsCanceledManipulate = value;
+            }
+        }
+
         public OPLViewerLoadingProcess()
         {
             InitializeComponent();
+            IsCanceledManipulate = true;
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
                 IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
@@ -231,7 +250,7 @@ namespace OperPageLes.UI.UserElementControl
 
             MouseLeftButtonUp += (sender, e) =>
             {
-                if (IsEnabled && OnActivateMouseLeft != null)
+                if (IsEnabled && IsCanceledManipulate && OnActivateMouseLeft != null)
                 {
                     IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
                     OnActivateMouseLeft?.Invoke(this, e);
@@ -240,7 +259,7 @@ namespace OperPageLes.UI.UserElementControl
 
             MouseRightButtonUp += (sender, e) =>
             {
-                if (IsEnabled && OnActivateMouseRight != null)
+                if (IsEnabled && IsCanceledManipulate && OnActivateMouseRight != null)
                 {
                     IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
                     OnActivateMouseRight?.Invoke(this, e);
