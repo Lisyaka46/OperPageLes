@@ -1,9 +1,9 @@
 ﻿using IEL.CORE.Classes;
-using OperPage_les.UI.Pages.Settings;
+using OperPageLes.UI.Pages.Settings;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace OperPage_les.UI.Dialogs
+namespace OperPageLes.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSetting.xaml

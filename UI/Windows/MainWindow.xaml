@@ -1,5 +1,5 @@
 ﻿<Window
-        xmlns:local="clr-namespace:OperPage_les.UI.Windows"
+        xmlns:local="clr-namespace:OperPageLes.UI.Windows"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,8 +8,8 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-        xmlns:resx="clr-namespace:OperPage_les.Properties"
-        x:Name="window" x:Class="OperPage_les.UI.Windows.MainWindow"
+        xmlns:resx="clr-namespace:OperPageLes.Properties"
+        x:Name="window" x:Class="OperPageLes.UI.Windows.MainWindow"
         mc:Ignorable="d"
         Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FF33615E" MinWidth="770" MinHeight="500" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
     <Window.Resources>

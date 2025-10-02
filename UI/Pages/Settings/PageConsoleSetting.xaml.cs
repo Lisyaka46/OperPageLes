@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace OperPage_les.UI.Pages.Settings
+namespace OperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PageConsoleSetting.xaml

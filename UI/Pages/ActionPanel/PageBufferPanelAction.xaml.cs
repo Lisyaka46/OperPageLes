@@ -1,11 +1,11 @@
-﻿using OperPage_les.UI.UserElementControl;
+﻿using OperPageLes.UI.UserElementControl;
 using IEL.CORE.Classes;
 using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace OperPage_les.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml

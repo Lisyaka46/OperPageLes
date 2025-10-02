@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace OperPage_les.Windows.Frames
+namespace OperPageLes.Windows.Frames
 {
     /// <summary>
     /// Логика взаимодействия для PageMainConsolePanelAction.xaml

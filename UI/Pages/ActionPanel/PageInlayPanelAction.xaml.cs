@@ -1,7 +1,7 @@
 ﻿using IEL.GUI;
 using System.Windows.Controls;
 
-namespace OperPage_les.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageActionInlay.xaml

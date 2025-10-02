@@ -1,9 +1,9 @@
-﻿using OperPage_les.CORE.Label;
+﻿using OperPageLes.CORE.Label;
 using System.Windows;
 using System.Windows.Media;
 using Key = System.Windows.Input.Key;
 
-namespace OperPage_les.UI.Dialogs
+namespace OperPageLes.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenDataLabelTag.xaml

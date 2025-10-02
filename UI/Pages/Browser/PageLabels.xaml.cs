@@ -2,18 +2,18 @@
 using IEL.CORE.Enums;
 using Microsoft.Windows.Themes;
 using Newtonsoft.Json.Linq;
-using OperPage_les.CORE.Enums;
-using OperPage_les.CORE.Label;
-using OperPage_les.UI.Dialogs;
-using OperPage_les.UI.Pages.ActionPanel.PageLabel;
-using OperPage_les.UI.UserElementControl;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Label;
+using OperPageLes.UI.Dialogs;
+using OperPageLes.UI.Pages.ActionPanel.PageLabel;
+using OperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace OperPage_les.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml

@@ -3,9 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
+      xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser"
       xmlns:system="clr-namespace:System;assembly=mscorlib"
-      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageDeveloper"
+      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.Browser.PageDeveloper"
       mc:Ignorable="d" 
       d:DesignHeight="400"
       Title="PageDeveloper">
@@ -27,9 +27,10 @@
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <IEL:IELButtonText x:Name="IELButtonGenerateImage" CornerRadius="5,5,5,5" Text="Сгенерировать" Grid.ColumnSpan="1" PaddingContent="2,5,2,5" FontSize="14" Margin="5,2,5,2">
+                <IEL:IELButtonText x:Name="IELButtonGenerateImage" CornerRadius="5,5,5,5" Text="Сгенерировать" Grid.ColumnSpan="1" PaddingContent="2,3,2,3" FontSize="14" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,3,5,3">
                     <IEL:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
@@ -44,7 +45,22 @@
                         </ObjectSettings:IELButtonObjectSetting>
                     </IEL:IELButtonText.IELSettingObject>
                 </IEL:IELButtonText>
-                <IEL:IELButtonText x:Name="IELButtonDownloadImage" Grid.Column="1" CornerRadius="5,5,5,5" Text="Скачать" PaddingContent="5,2,5,2" Margin="5,2,5,2" HorizontalAlignment="Left" FontSize="14">
+                <IEL:IELButtonText x:Name="IELButtonDownloadImage" Grid.Column="2" CornerRadius="5,5,5,5" Text="Скачать" PaddingContent="2,3,2,3" HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Center" Margin="5,3,5,3">
+                    <IEL:IELButtonText.IELSettingObject>
+                        <ObjectSettings:IELButtonObjectSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                                <Classes:BrushSettingQ Default="#FFDADADA" NotEnabled="#FFE84D4D" Select="#FF4AA0AB" Used="#FF5AC7A6"/>
+                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                                <Classes:BrushSettingQ/>
+                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                                <Classes:BrushSettingQ/>
+                            </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                        </ObjectSettings:IELButtonObjectSetting>
+                    </IEL:IELButtonText.IELSettingObject>
+                </IEL:IELButtonText>
+                <IEL:IELButtonText x:Name="IELButtonKeyDetect" CornerRadius="5,5,5,5" Text="Key" Grid.ColumnSpan="1" PaddingContent="2,3,2,3" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,3,5,3">
                     <IEL:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
@@ -61,28 +77,26 @@
                 </IEL:IELButtonText>
 
             </Grid>
-            <ScrollViewer x:Name="Map" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
-                <Grid x:Name="GridScale">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid x:Name="GridMap">
-                        <Grid.LayoutTransform>
-                            <TransformGroup>
-                                <ScaleTransform x:Name="ScaleTransformBox" ScaleX="1" ScaleY="1"/>
-                            </TransformGroup>
-                        </Grid.LayoutTransform>
-
+            <Border BorderThickness="2,2,2,2" BorderBrush="Black">
+                <ScrollViewer x:Name="Map" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+                    <Grid x:Name="GridScale">
+                        <Grid x:Name="GridMap" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform x:Name="ScaleTransformBox" ScaleX="1" ScaleY="1"/>
+                                </TransformGroup>
+                            </Grid.LayoutTransform>
+                            <Image x:Name="ImageMap" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
                     </Grid>
-                    <Image x:Name="ImageMap" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="100" Margin="58,141,0,0" VerticalAlignment="Top" Width="100"/>
-                </Grid>
-            </ScrollViewer>
+                </ScrollViewer>
+            </Border>
         </Grid>
         <Grid Grid.Row="2">
             <ScrollViewer>
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -96,7 +110,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Slider x:Name="SliderY" VerticalAlignment="Center" Maximum="2000" Minimum="1" Grid.ColumnSpan="1" Margin="3,0,0,0" Grid.Column="1"/>
-                            <TextBlock x:Name="TextBlockY_Value" Grid.Column="2" TextWrapping="Wrap" Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="6,0,5,0"/>
+                            <TextBlock x:Name="TextBlockY_Value" Grid.Column="2" Text="Y" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="6,0,5,0" TextTrimming="CharacterEllipsis" Width="70" TextAlignment="Right"/>
                             <TextBlock x:Name="TextBlockY" Grid.Column="0" TextWrapping="Wrap" Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="5,0,5,0"/>
                         </Grid>
                     </Border>
@@ -108,11 +122,12 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Slider x:Name="SliderX" VerticalAlignment="Center" Maximum="2000" Minimum="1" Grid.ColumnSpan="1" Margin="3,0,0,0" Grid.Column="1"/>
-                            <TextBlock x:Name="TextBlockX_Value" Grid.Column="2" TextWrapping="Wrap" Text="X" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="6,0,5,0"/>
+                            <TextBlock x:Name="TextBlockX_Value" Grid.Column="2" Text="X" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="6,0,5,0" TextTrimming="CharacterEllipsis" Width="70" TextAlignment="Right"/>
                             <TextBlock x:Name="TextBlockX" Grid.Column="0" TextWrapping="Wrap" Text="X" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="50" Padding="5,0,5,0"/>
                         </Grid>
                     </Border>
                     <TextBlock x:Name="TextblockInformation" Grid.Row="2" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Padding="2,0,2,0" FontSize="16"/>
+                    <TextBlock x:Name="TextblockInformationKeyDetect" Grid.Row="3" TextWrapping="Wrap" Text="KeyDetect" VerticalAlignment="Center" Padding="2,0,2,0" FontSize="16"/>
                 </Grid>
             </ScrollViewer>
         </Grid>

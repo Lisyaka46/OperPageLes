@@ -3,7 +3,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
 
-namespace OperPage_les.CORE
+namespace OperPageLes.CORE
 {
     /// <summary>
     /// Класс управления пользователями учавствовавших в разработке

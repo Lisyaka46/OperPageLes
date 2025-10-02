@@ -1,11 +1,11 @@
 ﻿using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
-using OperPage_les.CORE;
+using OperPageLes.CORE;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace OperPage_les.UI.Pages.Description
+namespace OperPageLes.UI.Pages.Description
 {
     /// <summary>
     /// Логика взаимодействия для PageDescriptionAlias.xaml

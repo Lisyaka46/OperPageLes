@@ -2,12 +2,12 @@
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
-using OperPage_les.CORE;
-using OperPage_les.Windows;
-using OperPage_les.UI.Dialogs;
-using OperPage_les.UI.Pages.ActionPanel;
-using OperPage_les.UI.Pages.Browser;
-using OperPage_les.UI.Pages.PanelButtonInformation.MainWindow;
+using OperPageLes.CORE;
+using OperPageLes.Windows;
+using OperPageLes.UI.Dialogs;
+using OperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,10 +16,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using OperPage_les.UI.UserElementControl;
+using OperPageLes.UI.UserElementControl;
 #endregion
 
-namespace OperPage_les.UI.Windows
+namespace OperPageLes.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -49,11 +49,6 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private readonly UpdateBackgroundData UpdateBackgroundDataThis;
 
-        /// <summary>
-        /// Поток обновляемый совпадающие команды
-        /// </summary>
-        private readonly ThreadGenericProcess UpdateSearchHintCommand;
-
         //private MMDeviceEnumerator Device = new();
 
         /// <summary>
@@ -73,7 +68,9 @@ namespace OperPage_les.UI.Windows
         /// </summary>
         private PageControllerLoading PageControllerLoadingApplication;
 
-        //
+        /// <summary>
+        /// Настройка для панели действий страницы управления загрузочными элементами
+        /// </summary>
         private PanelActionSettingVisual SettingVisualPageLoadingController;
 
         /// <summary>
@@ -145,9 +142,6 @@ namespace OperPage_les.UI.Windows
 
             #region BackgroundData
             UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
-            UpdateSearchHintCommand = new(() =>
-            {
-            });
             BackgroundUpdateVisualData();
             #endregion
 
@@ -290,29 +284,10 @@ namespace OperPage_les.UI.Windows
             #endregion
             #endregion
 
-            //ImageLogoApplication.MouseEnter += (sender, e) =>
-            //{
-            //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.6d);
-            //};
-
-            //ImageLogoApplication.MouseLeave += (sender, e) =>
-            //{
-            //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 1d);
-            //};
-
-            //ImageLogoApplication.MouseDown += (sender, e) =>
-            //{
-            //    App.AnimateDoubleEffect(ImageLogoApplication, OpacityProperty, 0.4d);
-            //};
-
             ImageLogoApplication.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 LicenseWindow License = new();
                 License.Show();
-            };
-            KeyDown += (sender, e) =>
-            {
-                if (e.Key == Key.CapsLock) App.Flags.FlagRegisterState.Value = Console.CapsLock;
             };
             Activated += (sender, e) =>
             {

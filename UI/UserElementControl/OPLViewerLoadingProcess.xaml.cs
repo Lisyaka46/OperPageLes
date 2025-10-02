@@ -2,7 +2,7 @@
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using OperPage_les.CORE;
+using OperPageLes.CORE;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace OperPage_les.UI.UserElementControl
+namespace OperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLViewerLoadingProcess.xaml

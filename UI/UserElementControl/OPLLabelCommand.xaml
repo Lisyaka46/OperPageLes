@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
-             xmlns:local="clr-namespace:OperPage_les;assembly=OperPage_les" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.UserElementControl.OPLLabelCommand" 
+             xmlns:local="clr-namespace:OperPageLes;assembly=OperPageLes" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPageLes.UI.UserElementControl.OPLLabelCommand" 
              mc:Ignorable="d" Cursor="Hand" Width="110" Height="110">
     <Grid>
         <Grid.RowDefinitions>

@@ -455,7 +455,7 @@
         <mxCell id="qweDtasVwLAyAX3pPGDp-3" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FFFFFF;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=none;labelBackgroundColor=default;startArrow=none;startFill=0;startSize=20;endArrow=oval;endFill=1;endSize=20;flowAnimation=0;" edge="1" parent="1" source="u5lFk82_YwLumIN3OhG8-1" target="u5lFk82_YwLumIN3OhG8-2">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="u5lFk82_YwLumIN3OhG8-1" value="OperPage_les" style="rounded=1;whiteSpace=wrap;fontSize=20;fontColor=#C3C3C3;fontFamily=Lucida Console;strokeWidth=3;arcSize=0;strokeColor=#009900;" vertex="1" parent="1">
+        <mxCell id="u5lFk82_YwLumIN3OhG8-1" value="OperPageLes" style="rounded=1;whiteSpace=wrap;fontSize=20;fontColor=#C3C3C3;fontFamily=Lucida Console;strokeWidth=3;arcSize=0;strokeColor=#009900;" vertex="1" parent="1">
           <mxGeometry y="-1480" width="280" height="80" as="geometry" />
         </mxCell>
         <mxCell id="u5lFk82_YwLumIN3OhG8-2" value="ConsoleManipulateKey" style="rounded=1;whiteSpace=wrap;fontSize=20;fontColor=#C3C3C3;fontFamily=Lucida Console;strokeWidth=3;arcSize=0;strokeColor=#004400;" vertex="1" parent="1">

@@ -1,9 +1,9 @@
-﻿using OperPage_les.CORE.Label;
-using OperPage_les.UI.UserElementControl;
+﻿using OperPageLes.CORE.Label;
+using OperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Input;
 
-namespace OperPage_les.UI.Dialogs
+namespace OperPageLes.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowManipulateLabelTags.xaml

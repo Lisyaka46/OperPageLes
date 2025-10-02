@@ -3,11 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
+      xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser"
       xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageConsole"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.Browser.PageConsole"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageConsole">

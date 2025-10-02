@@ -1,14 +1,14 @@
 ﻿using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
-using OperPage_les;
+using OperPageLes;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 
-namespace OperPage_les.UI.UserElementControl
+namespace OperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLButtonBufferCommand.xaml

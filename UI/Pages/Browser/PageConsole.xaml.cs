@@ -1,10 +1,10 @@
 ﻿using IEL.CORE.Classes;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
-using OperPage_les.CORE;
-using OperPage_les.CORE.Enums;
-using OperPage_les.Windows.Frames;
-using OperPage_les.UI.Pages.ActionPanel;
+using OperPageLes.CORE;
+using OperPageLes.CORE.Enums;
+using OperPageLes.Windows.Frames;
+using OperPageLes.UI.Pages.ActionPanel;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -16,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Color = System.Windows.Media.Color;
 
-namespace OperPage_les.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml

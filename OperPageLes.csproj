@@ -66,17 +66,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <COMReference Include="MMC20">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>8e80422b-cac4-472b-b272-9635f1dfef3b</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ManagedNativeWifi" Version="2.7.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="4.13.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Selenium.WebDriver.MicrosoftDriver" Version="17.17134.0" />
+    <PackageReference Include="System.Management" Version="9.0.9" />
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleManipulateKey\ConsoleManipulateKey.csproj" />
     <ProjectReference Include="..\IEL\IEL.csproj" />
     <ProjectReference Include="..\InterpreterCommand\InterpreterCommand.csproj" />
   </ItemGroup>
@@ -196,6 +208,12 @@
 
   <ItemGroup>
     <Folder Include="UI\Pages\ActionPanel\PageConsole\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LibraryPackKey">
+      <HintPath>..\PackKey\LibraryPackKey\bin\Debug\net8.0\LibraryPackKey.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

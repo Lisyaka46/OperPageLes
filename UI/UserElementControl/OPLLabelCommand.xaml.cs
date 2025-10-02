@@ -3,7 +3,7 @@ using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
-using OperPage_les.CORE.Label;
+using OperPageLes.CORE.Label;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
 
-namespace OperPage_les.UI.UserElementControl
+namespace OperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLLabelCommand.xaml

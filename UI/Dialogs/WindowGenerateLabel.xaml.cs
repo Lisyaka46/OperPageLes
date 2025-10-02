@@ -1,11 +1,11 @@
 ﻿using IEL.CORE.Classes;
-using OperPage_les.UI.UserElementControl;
+using OperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace OperPage_les.UI.Dialogs
+namespace OperPageLes.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenLabel.xaml

@@ -1,20 +1,26 @@
-﻿using ConsoleManipulateKey.CORE;
+﻿using LibraryPackKey.CORE;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace OperPage_les.UI.Dialogs
+namespace OperPageLes.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowInputProgramKey.xaml
     /// </summary>
     public partial class WindowInputProgramKey : Window
     {
-        bool Cancel = true;
+        private StructPack Pack;
+
+        private PackKey? ResultKey = null;
 
         public WindowInputProgramKey()
         {
             InitializeComponent();
+            Pack = StructPack.NowPack;
             Icon = App.LoadImage(Properties.Resources.ValidKeyIcon);
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
             IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
@@ -27,25 +33,26 @@ namespace OperPage_les.UI.Dialogs
             };
             IELButtonUpdatePack.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                TextBlockPack.Text = Manipulate.GenerateKeyPack();
+                Pack = StructPack.NowPack;
+                TextBlockPack.Text = Pack.StringPack;
             };
             IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                DialogResult Result = System.Windows.Forms.MessageBox.Show("При отмене ввода ключа приложение закроется.\nВы уперены что хотите выйти?", "Подтверждение действия",
+                DialogResult Result = System.Windows.Forms.MessageBox.Show(
+                    "При отмене ввода ключа приложение закроется.\nВы уперены что хотите выйти?", "Подтверждение действия",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                Cancel = true;
                 if (Result == System.Windows.Forms.DialogResult.Yes) Close();
             };
             IELButtonInput.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                Check();
+                CompleteInputKey();
             };
             IELTextBoxKey.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
                 {
                     case Key.Enter:
-                        Check();
+                        CompleteInputKey();
                         break;
                     case Key.Escape:
                         Keyboard.ClearFocus();
@@ -58,34 +65,32 @@ namespace OperPage_les.UI.Dialogs
         /// Открыть окно добавления ключа
         /// </summary>
         /// <returns>Состояние успешности проверки валидности ключа</returns>
-        internal bool SetKeyValid()
+        internal PackKey? SetKeyValid()
         {
-            TextBlockPack.Text = Manipulate.GenerateKeyPack();
+            TextBlockPack.Text = Pack.StringPack;
             ShowDialog();
-            return !Cancel;
+            return ResultKey;
         }
 
         /// <summary>
         /// Произвести попытку проверки валидности ключа
         /// </summary>
-        private void Check()
+        private void CompleteInputKey()
         {
             try
             {
-                Cancel = !Manipulate.CheckKeyValid(TextBlockPack.Text, IELTextBoxKey.Text);
+                ResultKey = PackKey.GenKey(Pack, IELTextBoxKey.Text);
+                //if (File.Exists(App.DirectoryKeyValidFile)) File.Delete(App.DirectoryKeyValidFile);
+                string SaveKeyOPL = $"{App.GetID()} {TextBlockPack.Text} {ResultKey.SourcePack.UnixTimeCode - 1} {IELTextBoxKey.Text}";
+                File.WriteAllText(App.DirectoryKeyValidFile, Convert.ToHexString([..SaveKeyOPL.Select((i) => (byte)i)]));
+                Close();
             }
             catch
             {
-                Cancel = true;
-            }
-            if (!Cancel)
-            {
-                System.IO.File.WriteAllText(App.DirectoryKeyValidFile, $"{Manipulate.GetCodeUUID()} {TextBlockPack.Text} {IELTextBoxKey.Text}");
-                Close();
-            }
-            else App.AnimateColorEffect(IELTextBoxKey.Background, SolidColorBrush.ColorProperty,
+                App.AnimateColorEffect(IELTextBoxKey.Background, SolidColorBrush.ColorProperty,
                 System.Windows.Media.Color.FromArgb(255, 255, 0, 0), System.Windows.Media.Color.FromArgb(0, 255, 0, 0),
                 TimeSpan.FromMilliseconds(1000d));
+            }
         }
     }
 }

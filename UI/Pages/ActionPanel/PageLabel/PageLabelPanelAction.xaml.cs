@@ -1,9 +1,9 @@
 ﻿using IEL.CORE.Classes;
-using OperPage_les.CORE.Label;
-using OperPage_les.UI.UserElementControl;
+using OperPageLes.CORE.Label;
+using OperPageLes.UI.UserElementControl;
 using System.Windows.Controls;
 
-namespace OperPage_les.UI.Pages.ActionPanel.PageLabel
+namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelActionPanel.xaml

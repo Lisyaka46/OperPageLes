@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using OperPageLes.CORE;
+using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace OperPage_les.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml
@@ -66,6 +67,16 @@ namespace OperPage_les.UI.Pages.Browser
                 t.Priority = ThreadPriority.Highest;
                 t.Start();
             };
+            IELButtonKeyDetect.Focusable = true;
+            IELButtonKeyDetect.KeyUp += (sender, e) =>
+            {
+                TextblockInformationKeyDetect.Text = e.SystemKey.ToString();
+            };
+            IELButtonKeyDetect.MouseLeftButtonUp += (sender, e) =>
+            {
+                TextblockInformationKeyDetect.Text = "0";
+                IELButtonKeyDetect.Focus();
+            };
             #region Sliders
             SliderX.ValueChanged += (sender, e) =>
             {
@@ -97,25 +108,25 @@ namespace OperPage_les.UI.Pages.Browser
         {
             int X, Y;
             Bitmap bitmap = new(Width, Height);
+            Func<int, int, Color> d = new((X, Y) =>
+            {
+                byte R = (byte)(Math.Cos(Width / 20d - X) * 255);
+                byte G = (byte)(Math.Cos(Height / 20d - Y) * 255);
+                byte B = (byte)(0);
+                return System.Drawing.Color.FromArgb(R, G, B);
+            });
             for (Y = 0; Y < Height; Y++)
             {
                 for (X = 0; X < Width; X++)
                 {
-                    await Task.Run(() =>
-                    {
-                        byte R = (byte)(Math.Cos(X / 5));
-                        byte G = (byte)0;
-                        byte B = (byte)0;
-                        bitmap.SetPixel(X, Y, System.Drawing.Color.FromArgb(R, G, B));
-                        Dispatcher.Invoke(() => TextblockInformation.Text = $"X:{X} || Y:{Y}");
-                    });
+                    await Task.Run(() => 
+                    bitmap.SetPixel(X, Y, d.Invoke(X, Y)));
+                    Dispatcher.Invoke(() => TextblockInformation.Text = $"X:{X} || Y:{Y}");
                 }
             }
             return Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),
                    IntPtr.Zero, Int32Rect.Empty,
                    BitmapSizeOptions.FromEmptyOptions());
-        } /* Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),
-                   IntPtr.Zero, Int32Rect.Empty,
-                   BitmapSizeOptions.FromEmptyOptions());*/
+        }
     }
 }

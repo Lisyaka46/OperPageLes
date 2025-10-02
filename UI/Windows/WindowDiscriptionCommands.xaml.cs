@@ -2,8 +2,8 @@
 using IEL.CORE.Enums;
 using IEL.GUI;
 using Interpreter.Interfaces;
-using OperPage_les.CORE;
-using OperPage_les.UI.Pages.Description;
+using OperPageLes.CORE;
+using OperPageLes.UI.Pages.Description;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace OperPage_les.Windows
+namespace OperPageLes.Windows
 {
     /// <summary>
     /// Логика взаимодействия для WindowDiscriptionCommands.xaml

@@ -1,14 +1,16 @@
 ﻿using IEL.CORE.Enums;
-using OperPage_les.CORE;
+using IEL.GUI;
+using OperPageLes.CORE;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
-using static OperPage_les.App;
+using static OperPageLes.App;
 
-namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
+namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 {
     /// <summary>
     /// Логика взаимодействия для Page1.xaml
@@ -17,11 +19,6 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
     {
         [LibraryImport("user32.dll", EntryPoint = "keybd_event")]
         private static partial void Keybd_event(byte CodeButton, byte CodeScan, uint CodeState, UIntPtr dwExtralnfo);
-
-        /// <summary>
-        /// Объект управления фоновым обновлением информации в данном окне 1000
-        /// </summary>
-        private readonly UpdateBackgroundData UpdateBackgroundDataThis;
 
         /// <summary>
         /// Узнать открыт ли объект сообщения в данном объекте по имени
@@ -55,8 +52,9 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             };
             IELBlockInfoInternetConnection.Imaging = App.LoadImage(Properties.Resources.Wifi);
 
-            UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(UpdateInformation));
-            IELBlockInfoStateRegister.Text = Flags.FlagRegisterState ? "A" : "a";
+            UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
+            UpdateInformationInObject(IELBlockInfoStateRegister, Console.CapsLock ? "а".ToUpper() : "a".ToLower());
+            IELBlockInfoStateRegister.Focusable = false;
             IndicatorLoadingInternetConnection.Opacity = 0d;
             ((BlurEffect)GridInfoInternetConnection.Effect).Radius = 0d;
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
@@ -77,13 +75,13 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
-                    Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
-                    OrientationBorderPosition.RightUp);
+                    "Установленный регистр клавиатуры", OrientationBorderPosition.RightUp);
             };
             IELBlockInfoStateRegister.MouseUp += (sender, e) =>
             {
                 Keybd_event(0x14, 0x45, 0x1, 0);
                 Keybd_event(0x14, 0x45, 0x1 | 0x2, 0);
+                UpdateInformationInObject(IELBlockInfoStateRegister, !Console.CapsLock ? "а".ToUpper() : "a".ToLower());
             };
             IELBlockInfoStateRegister.MouseLeave += (sender, e) =>
             {
@@ -91,6 +89,12 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             };
             #endregion
             #region BorderCurrentLanguage
+            
+            InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
+            {
+                UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
+            };
+            //InputLanguage.CurrentInputLanguage.
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
@@ -103,21 +107,10 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
             };
             #endregion
 
-            #region Event Flags
-            Flags.FlagRegisterState.ChangeStateFlag += (NewValue) =>
-            {
-                IELBlockInfoStateRegister.Text = NewValue ? "A" : "a";
-                AnimateBlurEffect((BlurEffect)IELBlockInfoStateRegister.Effect, 10u);
-                if (CheckOpenMessageInObject(IELBlockInfoStateRegister.Name))
-                    App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
-                        Flags.FlagRegisterState ? "Установлен большой регистр" : "Установлен малый регистр",
-                        OrientationBorderPosition.RightUp);
-            };
-            #endregion
-
             ThreadInternetConnection = new(async () =>
             {
                 await InternetPinging.UpdateInternetConnection();
+                //Console.Beep(1000, 300);
                 if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
                 {
                     await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
@@ -134,7 +127,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                         bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
                         IELBlockInfoInternetConnection.Imaging = App.LoadImage(InternetPinging.ConnectInternet ?
-                                OperPage_les.Properties.Resources.WifiOn : Properties.Resources.WifiOff);
+                                OperPageLes.Properties.Resources.WifiOn : Properties.Resources.WifiOff);
                         if (VisualMillisecondConnectionEnabled)
                         {
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
@@ -157,7 +150,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                     await Dispatcher.BeginInvoke(() =>
                     {
                         IELBlockInfoInternetConnection.Imaging = App.LoadImage(InternetPinging.ConnectInternet ?
-                                OperPage_les.Properties.Resources.WifiOn : OperPage_les.Properties.Resources.WifiOff);
+                                OperPageLes.Properties.Resources.WifiOn : OperPageLes.Properties.Resources.WifiOff);
                         if (VisualMillisecondConnectionEnabled)
                         {
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
@@ -166,21 +159,7 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 }
             }, 4000);
 
-            UpdateBackgroundDataThis.Start();
             ThreadInternetConnection.Start();
-        }
-
-        /// <summary>
-        /// Обновление информации
-        /// </summary>
-        private void UpdateInformation()
-        {
-            string LangName = InputLanguage.CurrentInputLanguage.Culture.NativeName[0..3].ToUpper();
-            if (!LangName.Equals(IELBlockInfoCurrentLanguage.Text))
-            {
-                IELBlockInfoCurrentLanguage.Text = LangName;
-                AnimateBlurEffect((BlurEffect)IELBlockInfoCurrentLanguage.Effect, 5u);
-            }
         }
 
         internal void VisibilityInternetMillisecond(bool Value)
@@ -189,6 +168,17 @@ namespace OperPage_les.UI.Pages.PanelButtonInformation.MainWindow
                 TimeSpan.FromMilliseconds(400d));
             AnimateDoubleEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
+        }
+
+        /// <summary>
+        /// Обновить текстовую информацию в объекте
+        /// </summary>
+        /// <param name="Element">Обновляемый элемент</param>
+        /// <param name="Text">Обновляемый текст</param>
+        private static void UpdateInformationInObject(IELBlockInfoText Element, string Text)
+        {
+            Element.Text = Text;
+            AnimateBlurEffect((BlurEffect)Element.Effect, 10u);
         }
     }
 }

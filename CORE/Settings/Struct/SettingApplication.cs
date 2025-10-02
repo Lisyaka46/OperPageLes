@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace OperPage_les.CORE.Settings.Struct
+namespace OperPageLes.CORE.Settings.Struct
 {
     /// <summary>
     /// Класс настроек приложения

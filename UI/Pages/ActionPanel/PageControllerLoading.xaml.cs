@@ -1,7 +1,7 @@
-﻿using OperPage_les.UI.UserElementControl;
+﻿using OperPageLes.UI.UserElementControl;
 using System.Windows.Controls;
 
-namespace OperPage_les.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageControllerLoading.xaml

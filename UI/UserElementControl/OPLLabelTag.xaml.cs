@@ -1,8 +1,8 @@
 ﻿using IEL.CORE.Classes.ObjectSettings;
-using OperPage_les.CORE.Label;
+using OperPageLes.CORE.Label;
 using System.Windows;
 
-namespace OperPage_les.UI.UserElementControl
+namespace OperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLLabelTag.xaml

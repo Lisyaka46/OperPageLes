@@ -1,6 +1,4 @@
-﻿using OperPage_les.CORE.Flaging;
-
-namespace OperPage_les.CORE
+﻿namespace OperPageLes.CORE
 {
     public class ThreadGenericProcess
     {
@@ -8,16 +6,6 @@ namespace OperPage_les.CORE
         /// Поток обновляемый данные
         /// </summary>
         private Thread? ThreadUpdating;
-
-        /// <summary>
-        /// Флаг подключённый к потоку данных
-        /// </summary>
-        private readonly Flag FlagElement;
-
-        /// <summary>
-        /// Узнать состояние флага
-        /// </summary>
-        public bool StateFlag => FlagElement;
 
         /// <summary>
         /// Параметр управляемый потоком
@@ -47,7 +35,6 @@ namespace OperPage_les.CORE
         public ThreadGenericProcess(Action ActionProcess, uint MillisecondsSleep)
         {
             ParamManageThread = false;
-            FlagElement = new(false);
             ThreadAction = ActionProcess;
             While = true;
             MillisecondSleep = (int)MillisecondsSleep;
@@ -60,7 +47,6 @@ namespace OperPage_les.CORE
         public ThreadGenericProcess(Action ActionProcess)
         {
             ParamManageThread = false;
-            FlagElement = new(false);
             ThreadAction = ActionProcess;
             While = false;
             MillisecondSleep = 0;
@@ -97,7 +83,6 @@ namespace OperPage_les.CORE
                 };
             }
             ParamManageThread = true;
-            FlagElement.Value = true;
             ThreadUpdating.Start();
         }
 
@@ -107,7 +92,6 @@ namespace OperPage_les.CORE
         public void Kill()
         {
             ParamManageThread = false;
-            FlagElement.Value = false;
             ThreadUpdating?.Join();
         }
 

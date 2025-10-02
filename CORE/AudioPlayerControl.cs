@@ -1,4 +1,4 @@
-﻿namespace OperPage_les.CORE
+﻿namespace OperPageLes.CORE
 {
     internal readonly struct AudioPlayerControl
     {

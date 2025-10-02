@@ -8,49 +8,35 @@ using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OperPage_les.CORE;
-using OperPage_les.CORE.Flaging;
-using OperPage_les.CORE.Label;
-using OperPage_les.CORE.Settings.Struct;
-using OperPage_les.UI.Dialogs;
-using OperPage_les.UI.Pages.ActionPanel;
-using OperPage_les.UI.Pages.Browser;
-using OperPage_les.UI.UserElementControl;
-using OperPage_les.Windows;
+using OperPageLes.CORE;
+using OperPageLes.CORE.Label;
+using OperPageLes.CORE.Settings.Struct;
+using OperPageLes.UI.Dialogs;
+using OperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.UserElementControl;
+using LibraryPackKey.CORE;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
-namespace OperPage_les
+namespace OperPageLes
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : System.Windows.Application
     {
-        #region Application Flags
-        /// <summary>
-        /// Флаги данной формы
-        /// </summary>
-        internal readonly struct Flags
-        {
-            /// <summary>
-            /// Флаг состояния регистра
-            /// </summary>
-            internal static readonly Flag FlagRegisterState = new(Console.CapsLock);
-        };
-        #endregion
-
         #region AnimationObject
 
         #region ThicknessAnimation
@@ -219,12 +205,12 @@ namespace OperPage_les
 
         #endregion
 
-        /// <summary>
-        /// Константа высоты размера кнопки буфера
-        /// </summary>
-        internal const int HeightButtonBuffer = 45;
-
         #region Data
+        /// <summary>
+        /// Установленный ключ валидности для приложения
+        /// </summary>
+        internal PackKey InstallingKey { get; private set; }
+
         /// <summary>
         /// Интерпретатор команд
         /// </summary>
@@ -301,19 +287,19 @@ namespace OperPage_les
         /// <summary>
         /// Ресурс настроек для отображения клавиш мыши
         /// </summary>
-        internal static readonly IELMouseImageSetting ResourceDefaultMouseImageSetting = new()
+        internal static IELMouseImageSetting ResourceDefaultMouseImageSetting { get; } = new()
         {
-            NotEventImageMouse = LoadImage(OperPage_les.Properties.Resources.NotMouseButton),
-            FullEventImageMouse = LoadImage(OperPage_les.Properties.Resources.DoubleMouseButton),
-            OnlyRightEventImageMouse = LoadImage(OperPage_les.Properties.Resources.RightMouseButton),
-            OnlyLeftEventImageMouse = LoadImage(OperPage_les.Properties.Resources.LeftMouseButton),
+            NotEventImageMouse = LoadImage(OperPageLes.Properties.Resources.NotMouseButton),
+            FullEventImageMouse = LoadImage(OperPageLes.Properties.Resources.DoubleMouseButton),
+            OnlyRightEventImageMouse = LoadImage(OperPageLes.Properties.Resources.RightMouseButton),
+            OnlyLeftEventImageMouse = LoadImage(OperPageLes.Properties.Resources.LeftMouseButton),
         };
 
         #region DIRECTORY RESOURCES
         /// <summary>
         /// Главная директория ресурсов проекта
         /// </summary>
-        internal static readonly string MainDirectoryApplication = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"/OperPage_les/";
+        internal static readonly string MainDirectoryApplication = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"/OperPageLes/";
 
         /// <summary>
         /// Главная директория файлов изображений
@@ -369,7 +355,7 @@ namespace OperPage_les
         /// <summary>
         /// Клиент для манипуляции в сети интернет
         /// </summary>
-        internal static readonly HttpClient UsedHttpClient = new();
+        internal static HttpClient UsedHttpClient { get; } = new();
 
         /// <summary>
         /// Состояние подключения к интернету
@@ -385,6 +371,7 @@ namespace OperPage_les
         {
             #region Resources
             OpenedWindowsInApplication = [];
+            InstallingKey = PackKey.StaticKey;
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             #endregion
 
@@ -699,9 +686,9 @@ namespace OperPage_les
             #endregion
 
             #region MediaFiles
-            CreateResourceMedia(DirectoryFileLoadingDefault, OperPage_les.Properties.Resources.LoadingDefault);
-            CreateResourceMedia(DirectoryFileLoadingInternet, OperPage_les.Properties.Resources.LoadingInternet);
-            CreateResourceMedia(DirectoryFileHappy, OperPage_les.Properties.Resources.Happy);
+            CreateResourceMedia(DirectoryFileLoadingDefault, OperPageLes.Properties.Resources.LoadingDefault);
+            CreateResourceMedia(DirectoryFileLoadingInternet, OperPageLes.Properties.Resources.LoadingInternet);
+            CreateResourceMedia(DirectoryFileHappy, OperPageLes.Properties.Resources.Happy);
             #endregion
 
             #endregion
@@ -729,38 +716,39 @@ namespace OperPage_les
         {
             //base.OnStartup(e);
             Log("Подключение программной точки входа");
-            bool InitKeyValid = false;
+            Current.MainWindow = new UI.Windows.MainWindow();
             if (File.Exists(DirectoryKeyValidFile))
             {
                 try
                 {
-                    string MainPackAndValidKey = File.ReadAllText(DirectoryKeyValidFile);
-                    string UUID = RegexPackValidKey().Match(MainPackAndValidKey).Value;
-                    MainPackAndValidKey = MainPackAndValidKey[(UUID.Length + 1)..];
+                    string MainPackAndValidKey = Encoding.UTF8.GetString(Convert.FromHexString(File.ReadAllText(DirectoryKeyValidFile)));
+                    string AppGUID = RegexPackValidKey().Match(MainPackAndValidKey).Value;
+
+                    MainPackAndValidKey = MainPackAndValidKey[(AppGUID.Length + 1)..];
                     string Pack = RegexPackValidKey().Match(MainPackAndValidKey).Value;
-                    string Key = MainPackAndValidKey[(Pack.Length + 1)..];
-                    InitKeyValid = ConsoleManipulateKey.CORE.Manipulate.CheckKeyValid(Pack, Key) && UUID.Equals(ConsoleManipulateKey.CORE.Manipulate.GetCodeUUID());
-                    //IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
-                }
-                catch
-                {
-                    InitKeyValid = false;
-                }
-                if (!InitKeyValid) System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
+
+                    MainPackAndValidKey = MainPackAndValidKey[(Pack.Length + 1)..];
+                    string Code = RegexPackValidKey().Match(MainPackAndValidKey).Value;
+
+                    string Key = MainPackAndValidKey[(Code.Length + 1)..];
+
+                    if (!AppGUID.Equals(GetID())) throw new Exception();
+                    InstallingKey = PackKey.GenKey(StructPack.GenPack(long.Parse(Code) + 1, Pack), Key);
+                } catch { }
+                if (!InstallingKey.IsValid) System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if (!InitKeyValid)
+            if (!InstallingKey.IsValid)
             {
-                OperPage_les.UI.Dialogs.WindowInputProgramKey DialodKey = new();
-                InitKeyValid = DialodKey.SetKeyValid();
-                //if (InitKeyValid) IELObjectSetting.SetFileKey(DirectoryKeyValidFile);
+                PackKey? key = new WindowInputProgramKey().SetKeyValid();
+                if (key != null) InstallingKey = key;
             }
-            if (!InitKeyValid)
+            if (!InstallingKey.IsValid)
             {
                 Current.Shutdown();
                 return;
             }
-            Current.MainWindow = new UI.Windows.MainWindow();
+            //Current.MainWindow = new UI.Windows.MainWindow();
             Current.MainWindow.Closed += (sender, e) =>
             {
                 
@@ -854,6 +842,20 @@ namespace OperPage_les
                 To = EnterToOriginValue ? 0d : Power
             };
             Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
+        }
+
+        /// <summary>
+        /// Получить уникальный идентификатор устройства
+        /// </summary>
+        /// <returns>Строка уникального идентификатора</returns>
+        internal static string GetID()
+        {
+            ManagementObjectSearcher searcher = new("root\\CIMV2",
+                   "SELECT UUID FROM Win32_ComputerSystemProduct");
+            string Result = string.Empty;
+            foreach (ManagementObject queryObj in searcher.Get().Cast<ManagementObject>())
+                Result = queryObj["UUID"].ToString() ?? string.Empty;
+            return Result;
         }
 
         #region Setting Manipulate

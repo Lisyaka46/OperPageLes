@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace OperPage_les.UI.Pages.Settings
+namespace OperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PageGeneral.xaml

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OperPage_les.CORE
+namespace OperPageLes.CORE
 {
     internal interface IDiscriptionPageEventsHandler
     {

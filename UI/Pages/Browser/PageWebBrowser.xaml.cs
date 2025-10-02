@@ -1,9 +1,9 @@
-﻿using OperPage_les.UI.UserElementControl;
+﻿using OperPageLes.UI.UserElementControl;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace OperPage_les.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageWebBrowser.xaml

@@ -1,6 +1,6 @@
 ﻿using System.Timers;
 
-namespace OperPage_les.CORE
+namespace OperPageLes.CORE
 {
     internal sealed class UpdateBackgroundData
     {

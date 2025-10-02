@@ -1,11 +1,11 @@
 ﻿using IEL.CORE.Classes.Browser;
 using IEL.GUI;
-using OperPage_les.CORE;
-using OperPage_les.UI.Pages.Browser;
+using OperPageLes.CORE;
+using OperPageLes.UI.Pages.Browser;
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace OperPage_les.UI.Dialogs
+namespace OperPageLes.UI.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowBrowserPagesManager.xaml
