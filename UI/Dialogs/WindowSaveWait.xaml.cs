@@ -12,10 +12,16 @@ namespace OperPageLes.UI.Dialogs
     /// </summary>
     public partial class WindowSaveWait : Window
     {
-        private UpdateBackgroundData UpdateCheckCompleteSave;
-        private UpdateBackgroundData UpdateBackground;
-        private bool Compliting = false;
+        /// <summary>
+        /// Токен управляемой асинхронной операцией отображения обновления информации управляемая завершением сохранения
+        /// </summary>
+        private CancellationToken TaskTokenComplete;
+
+        /// <summary>
+        /// Количество секунд потраченых на сохранение
+        /// </summary>
         private int Count = 0;
+
         private static readonly PointAnimation Point_Animation = new()
         {
             EasingFunction = new QuadraticEase()
@@ -24,12 +30,12 @@ namespace OperPageLes.UI.Dialogs
             },
             Duration = TimeSpan.FromMilliseconds(2000d),
         };
+
         public WindowSaveWait()
         {
             InitializeComponent();
+            TaskTokenComplete = new(false);
             ProgressBarIndicator.Value = 0d;
-            UpdateCheckCompleteSave = new((sender, e) => { });
-            UpdateBackground = new((sender, e) => { });
             IndicatorLoading.Source = new Uri(App.DirectoryFileLoadingDefault);
 
             IndicatorLoading.MediaEnded += (sender, e) =>
@@ -50,26 +56,31 @@ namespace OperPageLes.UI.Dialogs
         internal void OpenOnToComplete()
         {
             Random random = new(DateTime.Now.Millisecond);
-            UpdateCheckCompleteSave = new(1000d, (sender, e) => Dispatcher.BeginInvoke(() =>
+
+            Task.Run(() =>
             {
-                TextBlockTime.Text = $"{++Count}";
-                double x_y = random.NextDouble();
-                Point_Animation.To = new(x_y, x_y);
-                RadialGradientBackground.BeginAnimation(RadialGradientBrush.CenterProperty, Point_Animation);
-                if (Compliting)
+                while (true)
                 {
-                    Close();
-                    UpdateCheckCompleteSave.Stop();
-                    UpdateBackground.Stop();
+                    Dispatcher.Invoke(() => TextBlockTime.Text = $"{++Count}");
+                    Thread.Sleep(1000);
                 }
-            }));
-            UpdateBackground = new(2000d, (sender, e) => Dispatcher.BeginInvoke(() =>
+            }, TaskTokenComplete);
+
+            Task.Run(() =>
             {
-                double x_y = random.Next(30, 80) / 100d;
-                Point_Animation.To = new(x_y, x_y);
-                RadialGradientBackground.BeginAnimation(RadialGradientBrush.CenterProperty, Point_Animation);
-                RadialGradientBackground.BeginAnimation(RadialGradientBrush.GradientOriginProperty, Point_Animation);
-            }));
+                while (true)
+                {
+                    double x_y = random.Next(30, 80) / 100d;
+                    Dispatcher.Invoke(() =>
+                    {
+                        Point_Animation.To = new(x_y, x_y);
+                        RadialGradientBackground.BeginAnimation(RadialGradientBrush.CenterProperty, Point_Animation);
+                        RadialGradientBackground.BeginAnimation(RadialGradientBrush.GradientOriginProperty, Point_Animation);
+                    });
+                    Thread.Sleep(2000);
+                }
+            }, TaskTokenComplete);
+
             TextBlockTime.Text = "0";
             Opacity = 0d;
             DoubleAnimation animation = App.GetDoubleAnimate();
@@ -78,8 +89,6 @@ namespace OperPageLes.UI.Dialogs
             animation.From = 0d;
             animation.To = 1d;
             BeginAnimation(OpacityProperty, animation);
-            UpdateCheckCompleteSave.Start();
-            UpdateBackground.Start();
             Show();
         }
 
@@ -106,10 +115,10 @@ namespace OperPageLes.UI.Dialogs
                 Opacity = 0.6d,
                 Margin = new(0),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                OpacityMask = new System.Windows.Media.LinearGradientBrush()
+                OpacityMask = new LinearGradientBrush()
                 {
                     GradientStops = [
-                        new GradientStop(System.Windows.Media.Colors.Black, 0.298d),
+                        new GradientStop(Colors.Black, 0.298d),
                         new GradientStop(System.Windows.Media.Color.FromArgb(0, 0, 0, 0), 0.445d),
                         ],
                     StartPoint = new System.Windows.Point(0.5d, 0),
@@ -141,9 +150,14 @@ namespace OperPageLes.UI.Dialogs
         /// <summary>
         /// Завершить загрузку
         /// </summary>
-        internal void Complete()
+        internal async Task Complete()
         {
-            Compliting = true;
+            await Task.Run(() =>
+            {
+                TaskTokenComplete.ThrowIfCancellationRequested();
+                Thread.Sleep(1000);
+                Dispatcher.Invoke(Close);
+            });
         }
     }
 }

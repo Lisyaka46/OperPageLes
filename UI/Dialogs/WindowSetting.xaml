@@ -23,6 +23,23 @@
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <Grid x:Name="GridEventKey" Panel.ZIndex="1" Grid.RowSpan="2" Background="#FF2D2D2D">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Foreground="White" Text="Нажмите клавишу для установки" FontSize="22" FontFamily="{DynamicResource RussianRail G Pro}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,100,0,0"/>
+            <IEL:IELButtonImage x:Name="IELButtonBackEventKey" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Margin="10,10,0,0" CornerRadius="5,5,5,5" Imaging="/UI/Images/Cross.png" ImageMargin="5,0,5,0" BorderThicknessBlock="2,2,2,2">
+                <IEL:IELButtonImage.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ Default="#7F824343" NotEnabled="#E5FF4747" Select="#B2A97777" Used="#E5FFD5D5"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonImage.IELSettingObject>
+            </IEL:IELButtonImage>
+
+        </Grid>
         <Grid x:Name="GridSettingButtons">
             <Grid.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -31,6 +48,7 @@
                 </LinearGradientBrush>
             </Grid.OpacityMask>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -55,6 +73,21 @@
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30BED0" Select="#FF30A8D0" Used="#FF92FFEE"/>
+                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FF310808" Select="#FF0A1310" Used="#FF232323"/>
+                        </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
+                        <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF02161D"/>
+                        </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
+                    </ObjectSettings:IELButtonObjectSetting>
+                </IEL:IELButtonText.IELSettingObject>
+            </IEL:IELButtonText>
+            <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1">
+                <IEL:IELButtonText.IELSettingObject>
+                    <ObjectSettings:IELButtonObjectSetting>
+                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
+                            <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF6CC793" Select="#FF618679" Used="#FF42F7DB"/>
                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                         <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                             <Classes:BrushSettingQ NotEnabled="#FF310808" Select="#FF0A1310" Used="#FF232323"/>

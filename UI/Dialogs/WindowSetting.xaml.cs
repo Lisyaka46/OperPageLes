@@ -2,6 +2,7 @@
 using OperPageLes.UI.Pages.Settings;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace OperPageLes.UI.Dialogs
 {
@@ -21,6 +22,11 @@ namespace OperPageLes.UI.Dialogs
         private readonly PageConsoleSetting ConsoleSetting;
 
         /// <summary>
+        /// Страница настроек панели действий
+        /// </summary>
+        private readonly PagePanelActionSetting PanelActionSetting;
+
+        /// <summary>
         /// Активная настройка
         /// </summary>
         private BrushSettingQ? ActiveBackgroundSetting;
@@ -35,6 +41,10 @@ namespace OperPageLes.UI.Dialogs
             InitializeComponent();
             GeneralSetting = new();
             ConsoleSetting = new();
+            PanelActionSetting = new();
+
+            GridEventKey.Opacity = 0d;
+            Canvas.SetZIndex(GridEventKey, -1);
             #region IELButtonsSetting
             #region IELGeneralButton
             IELGeneralButton.MouseEnter += (sender, e) =>
@@ -57,6 +67,7 @@ namespace OperPageLes.UI.Dialogs
                 ActiveBackgroundSetting.SetUsedState(true);
             };
             #endregion
+
             #region IELConsoleButton
             IELConsoleButton.MouseEnter += (sender, e) =>
             {
@@ -74,6 +85,28 @@ namespace OperPageLes.UI.Dialogs
                 ActiveBackgroundSetting?.SetUsedState(false);
                 ActiveBackgroundSetting = IELConsoleButton.IELSettingObject.BackgroundSetting;
                 MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
+                ActiveIndexColumn = OriginIndex;
+                ActiveBackgroundSetting.SetUsedState(true);
+            };
+            #endregion
+
+            #region IELPanelActionButton
+            IELPanelActionButton.MouseEnter += (sender, e) =>
+            {
+                App.AnimateThicknessEffect(IELPanelActionButton, MarginProperty,
+                    GetMarginAnimatePageButton(IELPanelActionButton.Margin, true), TimeSpan.FromMilliseconds(IELPanelActionButton.IELSettingObject.AnimationMillisecond));
+            };
+            IELPanelActionButton.MouseLeave += (sender, e) =>
+            {
+                App.AnimateThicknessEffect(IELPanelActionButton, MarginProperty,
+                    GetMarginAnimatePageButton(IELPanelActionButton.Margin, false), TimeSpan.FromMilliseconds(IELPanelActionButton.IELSettingObject.AnimationMillisecond));
+            };
+            IELPanelActionButton.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                int OriginIndex = Grid.GetColumn(IELPanelActionButton);
+                ActiveBackgroundSetting?.SetUsedState(false);
+                ActiveBackgroundSetting = IELPanelActionButton.IELSettingObject.BackgroundSetting;
+                MainPageController.NextPage(PanelActionSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);
             };

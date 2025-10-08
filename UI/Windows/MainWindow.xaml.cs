@@ -46,9 +46,9 @@ namespace OperPageLes.UI.Windows
         #endregion
 
         /// <summary>
-        /// Объект управления фоновым обновлением информации в данном окне 1000
+        /// Токен управляемой асинхронной операции обновления информации в главном окне
         /// </summary>
-        private readonly UpdateBackgroundData UpdateBackgroundDataThis;
+        private readonly CancellationToken TokenUpdateBackgroundData;
 
         //private MMDeviceEnumerator Device = new();
 
@@ -82,6 +82,7 @@ namespace OperPageLes.UI.Windows
         public MainWindow()
         {
             InitializeComponent();
+            TokenUpdateBackgroundData = new(false);
             PageControllerLoadingApplication = new();
             SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
             Icon = App.LoadImage(Properties.Resources.IconMainApplication);
@@ -141,11 +142,6 @@ namespace OperPageLes.UI.Windows
             PanelActionSettingsInlay = new(IELBrowserPageMain, PanelActionPageInlay, new(200d, 240d));
             #endregion
 
-            #region BackgroundData
-            UpdateBackgroundDataThis = new(1000d, (sender, e) => Dispatcher.BeginInvoke(BackgroundUpdateVisualData));
-            BackgroundUpdateVisualData();
-            #endregion
-
             #region SetParameteres
             ActualIndexActivatePageDownToolButtons = -1;
             IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
@@ -154,6 +150,7 @@ namespace OperPageLes.UI.Windows
             VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
+            IELActionPanelMain.IsKeyboardModeExit = App.CurrentApp.SettingMainApplication.ExitKeyboardModeInClosePanelAction;
             byte[,] ColorBytes = new byte[4, 4]
             {
                 { 255, 55, 101, 144, },
@@ -181,7 +178,6 @@ namespace OperPageLes.UI.Windows
             UpdateImageMenu(App.CurrentApp.SettingMainApplication.PathMenuImage);
             ChangeBlurImageInDataTime(App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime);
             #endregion
-            //Closing += (sender, e) => App.Current.Shutdown(0);
 
             #region UpToolButtons
             #region IELImageButtonHelp
@@ -295,7 +291,6 @@ namespace OperPageLes.UI.Windows
                 if (!HiAnimation)
                 {
                     HiAnimation = true;
-                    UpdateBackgroundDataThis.Start();
                     PagesButtonsInformation =
                     [
                         new MainPageButtonInfo(), new Page2()
@@ -315,29 +310,11 @@ namespace OperPageLes.UI.Windows
                 {
                     App.ActiveDialog.Activate();
                 }
-                //TextBoxCommandInput.Focus();
-                /*GridMain.RenderTransform = new TransformGroup()
-                {
-                    Children = [
-                        new RotateTransform(9d),
-                        new ScaleTransform(0.3d, 0.3d)
-                        ]
-                };*/
-                /*DoubleAnimateObj.To = 0d;
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1200d);
-                ((RotateTransform)((TransformGroup)GridMain.RenderTransform).Children[0]).BeginAnimation(RotateTransform.AngleProperty, DoubleAnimateObj);
-                DoubleAnimateObj.To = 1d;
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(1200d);
-                ((ScaleTransform)((TransformGroup)GridMain.RenderTransform).Children[1]).BeginAnimation(ScaleTransform.ScaleXProperty, DoubleAnimateObj);
-                ((ScaleTransform)((TransformGroup)GridMain.RenderTransform).Children[1]).BeginAnimation(ScaleTransform.ScaleYProperty, DoubleAnimateObj);
-                DoubleAnimateObj.Duration = TimeSpan.FromMilliseconds(300d);*/
             };
             Closing += (sender, e) =>
             {
                 Hide();
-                //MainWindow.CloseAllBackgroundThread();
-                //Current.MainWindow.Hide();
-                //App.DiscriptionCommands?.Close();
+                TokenUpdateBackgroundData.ThrowIfCancellationRequested();
                 bool WindowSaveClose = false;
                 WindowSaveWait windowSave = new();
                 windowSave.Closed += (sender, e) =>
@@ -347,7 +324,7 @@ namespace OperPageLes.UI.Windows
                 windowSave.OpenOnToComplete();
                 windowSave.Focus();
 
-                Thread thread = new(() =>
+                Thread thread = new(async () =>
                 {
                     Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Закрываются все окна приложения", 0d));
                     Dispatcher.Invoke(() =>
@@ -364,7 +341,7 @@ namespace OperPageLes.UI.Windows
                     Thread.Sleep(500);
 
                     Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы", 20d));
-                    Dispatcher.Invoke(async () => await CloseAllBackgroundThread());
+                    await Dispatcher.Invoke(CloseAllBackgroundThread);
                     Thread.Sleep(600);
 
                     Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 40d));
@@ -379,7 +356,7 @@ namespace OperPageLes.UI.Windows
                     Thread.Sleep(700);
 
                     Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения...", 100d));
-                    windowSave.Complete();
+                    await windowSave.Complete();
                 });
                 thread.Start();
 
@@ -389,6 +366,22 @@ namespace OperPageLes.UI.Windows
                     thread.Join();
                 });
             };
+        }
+
+        /// <summary>
+        /// Собственная функция отображения главного окна
+        /// </summary>
+        public new void Show()
+        {
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await BackgroundUpdateVisualData();
+                    Thread.Sleep(1000);
+                }
+            }, TokenUpdateBackgroundData);
+            base.Show();
         }
 
         //
@@ -486,10 +479,13 @@ namespace OperPageLes.UI.Windows
         /// <summary>
         /// Функция обновления визуальной информации в данном окне
         /// </summary>
-        private void BackgroundUpdateVisualData()
+        private async Task BackgroundUpdateVisualData()
         {
-            TextBlockTime.Text = App.RealTime.ToShortTimeString();
-            TextBlockData.Text = App.RealTime.ToShortDateString();
+            await Dispatcher.BeginInvoke(() =>
+            {
+                TextBlockTime.Text = App.RealTime.ToShortTimeString();
+                TextBlockData.Text = App.RealTime.ToShortDateString();
+            });
         }
 
         #region ImageMenu

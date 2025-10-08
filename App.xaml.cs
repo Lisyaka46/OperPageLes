@@ -683,6 +683,18 @@ namespace OperPageLes
             {
                 MainWindow.ChangeVisibilityMillisecondInternet(New);
             };
+            SettingMainApplication.ExitKeyboardModeInClosePanelAction.Changed += (Old, New) =>
+            {
+                MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
+            };
+            SettingMainApplication.KEY_KeyboardModePanelAction.Changed += (Old, New) =>
+            {
+                MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
+            };
+            SettingMainApplication.KEY_PanelActionRightClick.Changed += (Old, New) =>
+            {
+                MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
+            };
             #endregion
 
             #region MediaFiles
@@ -759,7 +771,7 @@ namespace OperPageLes
             Log("Открытие главного окна");
             try
             {
-                Current.MainWindow.Show();
+                ((UI.Windows.MainWindow)Current.MainWindow).Show();
             }
             catch (Exception ex)
             {

@@ -4,11 +4,12 @@
     <WV2WinRTWrapWebViewTypes>False</WV2WinRTWrapWebViewTypes>
     <Configurations>Debug;Release;Testing</Configurations>
     <WebView2LoaderPreference>Dynamic</WebView2LoaderPreference>
+    <WV2WinRTVerbosity>high</WV2WinRTVerbosity>
   </PropertyGroup>
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>

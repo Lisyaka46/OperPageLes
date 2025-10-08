@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Windows.Input;
 
 namespace OperPageLes.CORE.Settings.Struct
 {
@@ -46,6 +47,21 @@ namespace OperPageLes.CORE.Settings.Struct
         /// Использование открытия ссылки исключительно в новой станице браузера
         /// </summary>
         public ObjSetting<bool> UseOnlyCreatePageWebBrowser { get; internal set; } = false;
+
+        /// <summary>
+        /// Использование отключения режима клавиатуры при закрытии панели дейтсвий
+        /// </summary>
+        public ObjSetting<bool> ExitKeyboardModeInClosePanelAction { get; internal set; } = true;
+
+        /// <summary>
+        /// Клавиша управления режимом клавиатуры в панели дейтсвий
+        /// </summary>
+        public ObjSetting<Key> KEY_KeyboardModePanelAction { get; internal set; } = Key.Z;
+
+        /// <summary>
+        /// Клавиша управления правым режимом нажатия на кнопку в режиме клавиатуры для панели дейтсвий
+        /// </summary>
+        public ObjSetting<Key> KEY_PanelActionRightClick { get; internal set; } = Key.RightCtrl;
 
         /// <summary>
         /// Сколлапсировать пустые значения настроек в значения по умолчанию
