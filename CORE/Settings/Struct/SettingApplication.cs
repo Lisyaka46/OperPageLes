@@ -64,6 +64,11 @@ namespace OperPageLes.CORE.Settings.Struct
         public ObjSetting<Key> KEY_PanelActionRightClick { get; internal set; } = Key.RightCtrl;
 
         /// <summary>
+        /// Клавиша управления закрытием панели дейтсвий
+        /// </summary>
+        public ObjSetting<Key> KEY_PanelActionClose { get; internal set; } = Key.Escape;
+
+        /// <summary>
         /// Сколлапсировать пустые значения настроек в значения по умолчанию
         /// </summary>
         /// <param name="setting">Изменяемая ссылка настроек</param>

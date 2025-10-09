@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
 using System.ComponentModel;
+using OperPageLes.CORE;
 
 namespace OperPageLes.UI.Pages.Settings
 {
@@ -30,11 +31,23 @@ namespace OperPageLes.UI.Pages.Settings
         /// </summary>
         private IELButtonText? SelectSetKey = null;
 
+        /// <summary>
+        /// Клавиши которые являются не присваиваемыми
+        /// </summary>
+        private readonly Key[] KeysNotValid =
+            [
+            Key.PrintScreen, Key.Scroll, Key.Pause,
+            Key.Insert, Key.Home, Key.PageUp,
+            Key.Delete, Key.End, Key.PageDown,
+            Key.Apps, Key.CapsLock, Key.Tab, Key.Back, Key.LWin, Key.System,
+            ];
+
         public PagePanelActionSetting()
         {
             InitializeComponent();
             CheckBoxKeyboardMode.IsChecked = false;
             CheckBoxKeyboardRightClick.IsChecked = false;
+            CheckBoxKeyboardClosePanelAction.IsChecked = false;
             #region CheckBoxExitKeyboardMode
             CheckBoxExitKeyboardMode.IsChecked = App.CurrentApp.SettingMainApplication.ExitKeyboardModeInClosePanelAction;
             CheckBoxExitKeyboardMode.Checked += (sender, e) =>
@@ -47,15 +60,19 @@ namespace OperPageLes.UI.Pages.Settings
             };
             #endregion
             #region CheckBoxKeyboardMode
-            IELButtonSetKeyKeboardMode.Text = App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction.Value.ToString();
+            IELButtonSetKeyKeboardMode.Text = OPLKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction);
             IELButtonSetKeyKeboardMode.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 ActivateSelectButtonKey(IELButtonSetKeyKeboardMode);
             };
-            IELButtonSetKeyKeboardMode.KeyUp += (sender, e) =>
+            IELButtonSetKeyKeboardMode.KeyDown += (sender, e) =>
             {
-                VisualSetKey(e.Key);
-                App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction.Value = e.Key;
+                if (!KeysNotValid.Any((i) => i == e.Key))
+                {
+                    VisualSetKey(e.Key);
+                    App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction.Value = e.Key;
+                }
+                e.Handled = true;
             };
             CheckBoxKeyboardMode.Checked += (sender, e) =>
             {
@@ -75,15 +92,19 @@ namespace OperPageLes.UI.Pages.Settings
             #endregion
             #region CheckBoxKeyboardRightClick
             ViewActivateRightClick.Opacity = 0d;
-            IELButtonSetKeyKeboardRightClick.Text = App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick.Value.ToString();
+            IELButtonSetKeyKeboardRightClick.Text = OPLKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick);
             IELButtonSetKeyKeboardRightClick.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 ActivateSelectButtonKey(IELButtonSetKeyKeboardRightClick);
             };
-            IELButtonSetKeyKeboardRightClick.KeyUp += (sender, e) =>
+            IELButtonSetKeyKeboardRightClick.KeyDown += (sender, e) =>
             {
-                VisualSetKey(e.Key);
-                App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick.Value = e.Key;
+                if (!KeysNotValid.Any((i) => i == e.Key))
+                {
+                    VisualSetKey(e.Key);
+                    App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick.Value = e.Key;
+                }
+                e.Handled = true;
             };
             CheckBoxKeyboardRightClick.Checked += (sender, e) =>
             {
@@ -94,6 +115,32 @@ namespace OperPageLes.UI.Pages.Settings
             {
                 if (CheckBoxKeyboardMode.IsChecked ?? false)
                     App.AnimateDoubleEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+            };
+            #endregion
+            #region CheckBoxKeyboardClosePanelAction
+            IELButtonSetKeyKeboardClosePanelAction.Text = OPLKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionClose);
+            IELButtonSetKeyKeboardClosePanelAction.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                ActivateSelectButtonKey(IELButtonSetKeyKeboardClosePanelAction);
+            };
+            IELButtonSetKeyKeboardClosePanelAction.KeyDown += (sender, e) =>
+            {
+                if (!KeysNotValid.Any((i) => i == e.Key))
+                {
+                    VisualSetKey(e.Key);
+                    App.CurrentApp.SettingMainApplication.KEY_PanelActionClose.Value = e.Key;
+                }
+                e.Handled = true;
+            };
+            CheckBoxKeyboardClosePanelAction.Checked += (sender, e) =>
+            {
+                App.AnimateDoubleEffect(PanelActionDemo, WidthProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.AnimateDoubleEffect(PanelActionDemo, HeightProperty, 0d, TimeSpan.FromMilliseconds(500d));
+            };
+            CheckBoxKeyboardClosePanelAction.Unchecked += (sender, e) =>
+            {
+                App.AnimateDoubleEffect(PanelActionDemo, WidthProperty, 200d, TimeSpan.FromMilliseconds(500d));
+                App.AnimateDoubleEffect(PanelActionDemo, HeightProperty, 150d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
         }
@@ -118,7 +165,7 @@ namespace OperPageLes.UI.Pages.Settings
         private void VisualSetKey(Key key)
         {
             if (SelectSetKey == null) return;
-            SelectSetKey.Text = $"{(char)KeyInterop.VirtualKeyFromKey(key)}";
+            SelectSetKey.Text = OPLKeyConverter.ConvertKeyToString(key);
             SelectSetKey.FontStyle = FontStyles.Normal;
             SelectSetKey?.IELSettingObject.BackgroundSetting.SetUsedState(false);
             SelectSetKey = null;

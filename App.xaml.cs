@@ -695,6 +695,10 @@ namespace OperPageLes
             {
                 MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
             };
+            SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
+            {
+                MainWindow.IELActionPanelMain.KeyCloseElement = New;
+            };
             #endregion
 
             #region MediaFiles

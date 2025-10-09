@@ -151,6 +151,9 @@ namespace OperPageLes.UI.Windows
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             IELActionPanelMain.IsKeyboardModeExit = App.CurrentApp.SettingMainApplication.ExitKeyboardModeInClosePanelAction;
+            IELActionPanelMain.KeyActivateKeyboardMode = App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction;
+            IELActionPanelMain.KeyKeyboardModeActivateRightClick = App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick;
+            IELActionPanelMain.KeyCloseElement = App.CurrentApp.SettingMainApplication.KEY_PanelActionClose;
             byte[,] ColorBytes = new byte[4, 4]
             {
                 { 255, 55, 101, 144, },
