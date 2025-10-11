@@ -7,7 +7,7 @@
       xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      x:Class="OperPageLes.UI.Pages.ActionPanel.PageBufferPanelAction">
+      x:Class="OperPageLes.UI.Pages.ActionPanel.PageConsole.PageBufferPanelAction">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -31,14 +31,6 @@
                     </TextBlock.Background>
                 </TextBlock>
                 <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Hidden" Grid.RowSpan="2" Grid.Row="0">
-                    <ScrollViewer.OpacityMask>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#00000000" Offset="0.03"/>
-                            <GradientStop Color="#00000000" Offset="0.97"/>
-                            <GradientStop Color="Black" Offset="0.06"/>
-                            <GradientStop Color="Black" Offset="0.94"/>
-                        </LinearGradientBrush>
-                    </ScrollViewer.OpacityMask>
                     <Grid x:Name="GridBuffer"/>
                 </ScrollViewer>
             </Grid>

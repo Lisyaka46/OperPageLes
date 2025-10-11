@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
@@ -121,6 +121,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
                 IELSettingObject = new()
                 {
                     BackgroundSetting = (BrushSettingQ)BackgroundSetting.Clone(),
+                    AnimationMillisecond = 200d,
                 }
             };
             return Button;

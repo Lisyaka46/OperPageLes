@@ -208,10 +208,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UI\Pages\ActionPanel\PageConsole\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="LibraryPackKey">
       <HintPath>..\PackKey\LibraryPackKey\bin\Debug\net8.0\LibraryPackKey.dll</HintPath>
     </Reference>

@@ -12,7 +12,7 @@ using OperPageLes.CORE;
 using OperPageLes.CORE.Label;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.UI.Dialogs;
-using OperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.UserElementControl;
 using LibraryPackKey.CORE;
