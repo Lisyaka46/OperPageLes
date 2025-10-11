@@ -30,12 +30,12 @@ namespace OperPageLes.UI.Pages.Browser
         /// <summary>
         /// Страница взаимодействия с ярлыками
         /// </summary>
-        private static readonly PageLabelMainActionPanel PageLabel = new();
+        private readonly PageLabelMainActionPanel PageLabel = new();
 
         /// <summary>
         /// Страница элемента ярлыка в панели действий
         /// </summary>
-        private static readonly PageLabelElementActionPanel PageLabelElement = new();
+        private readonly PageLabelElementActionPanel PageLabelElement = new();
         #endregion
         /// <summary>
         /// Настройки панели действий для страниц во вкладке ярлыков
@@ -50,12 +50,12 @@ namespace OperPageLes.UI.Pages.Browser
         /// <summary>
         /// Страница панели действий взаимодействия с ярлыками
         /// </summary>
-        private readonly PagePanelAction PanelActionPageLabel = new(PageLabel);
+        private readonly PagePanelAction PanelActionPageLabel;
 
         /// <summary>
         /// Страница панели действий взаимодействия с объектом ярлыка
         /// </summary>
-        private readonly PagePanelAction PanelActionPageLabelElement = new(PageLabelElement);
+        private readonly PagePanelAction PanelActionPageLabelElement;
         #endregion
 
         /// <summary>
@@ -133,6 +133,8 @@ namespace OperPageLes.UI.Pages.Browser
         public PageLabels()
         {
             InitializeComponent();
+            PanelActionPageLabel = new(PageLabel);
+            PanelActionPageLabelElement = new(PageLabelElement);
             SearchActivate = false;
             IELButtonSearch.Imaging = App.LoadImage(Properties.Resources.Search);
             IELButtonSorting.Imaging = App.LoadImage(Properties.Resources.Sorting_NameAZ);
@@ -245,12 +247,12 @@ namespace OperPageLes.UI.Pages.Browser
             };
             PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPage(PageLabelElement.PanelActionPageSelectLabel);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement.PanelActionPageSelectLabel);
             };
             #region PageLabelSelectManipulate
             PageLabelElement.PageLabelSelectManipulate.IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPage(PanelActionSettingsLabelElement.ActiveSource, false);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PanelActionPageLabelElement, false);
             };
             PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {

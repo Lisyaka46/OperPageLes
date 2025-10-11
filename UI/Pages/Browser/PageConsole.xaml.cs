@@ -134,7 +134,7 @@ namespace OperPageLes.UI.Pages.Browser
 
             ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPage(PanelActionBufferPage);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PanelActionBufferPage);
             };
 
             ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
@@ -146,7 +146,7 @@ namespace OperPageLes.UI.Pages.Browser
             #region BufferPage
             BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPage(PanelActionConsolePage, false);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PanelActionConsolePage, false);
             };
             #endregion
             PanelActionConsolePage.IsKeyboardModeChanged += (Source, NewValue) =>

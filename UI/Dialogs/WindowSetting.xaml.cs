@@ -43,8 +43,6 @@ namespace OperPageLes.UI.Dialogs
             ConsoleSetting = new();
             PanelActionSetting = new();
 
-            GridEventKey.Opacity = 0d;
-            Canvas.SetZIndex(GridEventKey, -1);
             #region IELButtonsSetting
             #region IELGeneralButton
             IELGeneralButton.MouseEnter += (sender, e) =>

@@ -23,23 +23,6 @@
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid x:Name="GridEventKey" Panel.ZIndex="1" Grid.RowSpan="2" Background="#FF2D2D2D">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Foreground="White" Text="Нажмите клавишу для установки" FontSize="22" FontFamily="{DynamicResource RussianRail G Pro}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,100,0,0"/>
-            <IEL:IELButtonImage x:Name="IELButtonBackEventKey" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Margin="10,10,0,0" CornerRadius="5,5,5,5" Imaging="/UI/Images/Cross.png" ImageMargin="5,0,5,0" BorderThicknessBlock="2,2,2,2">
-                <IEL:IELButtonImage.IELSettingObject>
-                    <ObjectSettings:IELButtonObjectSetting>
-                        <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#7F824343" NotEnabled="#E5FF4747" Select="#B2A97777" Used="#E5FFD5D5"/>
-                        </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                    </ObjectSettings:IELButtonObjectSetting>
-                </IEL:IELButtonImage.IELSettingObject>
-            </IEL:IELButtonImage>
-
-        </Grid>
         <Grid x:Name="GridSettingButtons">
             <Grid.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
