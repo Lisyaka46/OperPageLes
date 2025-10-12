@@ -10,6 +10,7 @@ namespace OperPageLes.UI.Pages.Browser
     /// </summary>
     public partial class PageWebBrowser : Page
     {
+        private OPLViewerLoadingProcess? ViewerLoading;
         public PageWebBrowser()
         {
             App.Log("Инициализация объектов станицы браузера");
@@ -24,14 +25,19 @@ namespace OperPageLes.UI.Pages.Browser
             };
             WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
             {
-                OPLViewerLoadingProcess ViewerLoading = App.MainWindow.GenerateVisualizateLoadingProcess("Test");
                 WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
                 {
-                    App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
+                    if (ViewerLoading != null) ViewerLoading.Text = $"Загрузка {e.Uri}";
+                    else
+                    {
+                        ViewerLoading = App.MainWindow.GenerateVisualizateLoadingProcess($"Загрузка {e.Uri}");
+                        App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
+                    }
                     WebBrowserElement.Source = new Uri(e.Uri);
                 };
                 WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
                 {
+                    if (ViewerLoading == null) return;
                     App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
                 };
                 WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>

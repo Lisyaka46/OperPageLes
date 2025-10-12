@@ -459,7 +459,7 @@ namespace OperPageLes.UI.Windows
                 App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
             ViewLoading.VisualOpenLoading();
-        }
+        } 
 
         /// <summary>
         /// Завершение визуализации загрузки
@@ -470,11 +470,10 @@ namespace OperPageLes.UI.Windows
             ViewLoading.VisualCloseLoading();
             PageControllerLoadingApplication.DeleteViewElementLoading(ViewLoading);
             App.CurrentApp.DataViewerLoadingProcess.Remove(ViewLoading);
-            if (App.CurrentApp.DataViewerLoadingProcess.Count == 0)
+            if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
             {
                 IsLoadingProcess = false;
                 App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
-
             }
         }
         #endregion
