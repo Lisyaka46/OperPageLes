@@ -3,6 +3,7 @@ using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using System.Diagnostics.Contracts;
 using System.Media;
@@ -200,6 +201,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
+                App.MainWindow.Play(StructDirectoryResources.DirectoryFileAudioPopUp);
                 if (e.Key != Key.Up && e.Key != Key.Down && e.Key != Key.Enter && e.Key != Key.Escape)
                 {
                     ActiveIndexBufferInput = -1;

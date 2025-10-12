@@ -73,6 +73,36 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] AudioMove {
+            get {
+                object obj = ResourceManager.GetObject("AudioMove", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] AudioNotification {
+            get {
+                object obj = ResourceManager.GetObject("AudioNotification", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] AudioPopUp {
+            get {
+                object obj = ResourceManager.GetObject("AudioPopUp", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] BlackSquare {
             get {
                 object obj = ResourceManager.GetObject("BlackSquare", resourceCulture);

@@ -6,16 +6,18 @@ using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
+using LibraryPackKey.CORE;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Label;
 using OperPageLes.CORE.Settings.Struct;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Dialogs;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.UserElementControl;
-using LibraryPackKey.CORE;
+using OperPageLes.UI.Windows;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
@@ -29,7 +31,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using OperPageLes.CORE.Struct;
 
 namespace OperPageLes
 {
@@ -237,7 +238,7 @@ namespace OperPageLes
         /// <summary>
         /// Главное окно програмы
         /// </summary>
-        internal static new UI.Windows.MainWindow MainWindow => (UI.Windows.MainWindow)Current.MainWindow;
+        internal static new MainWindow MainWindow => (MainWindow)Current.MainWindow;
 
         /// <summary>
         /// Экземпляр созданного приложения
@@ -650,7 +651,6 @@ namespace OperPageLes
         {
             //base.OnStartup(e);
             LogWriteLine("Подключение программной точки входа");
-            Current.MainWindow = new UI.Windows.MainWindow();
             if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
             {
                 try
@@ -682,20 +682,17 @@ namespace OperPageLes
                 Current.Shutdown();
                 return;
             }
-            //Current.MainWindow = new UI.Windows.MainWindow();
-            Current.MainWindow.Closed += (sender, e) =>
-            {
-                
-            };
             Current.Exit += (sender, e) =>
             {
                 LogWriteLine("---------- Конец текущего экземпляра ----------");
                 LogStreamWriter?.Close();
             };
+            Current.MainWindow = new MainWindow();
             LogWriteLine("Открытие главного окна");
             try
             {
-                ((UI.Windows.MainWindow)Current.MainWindow).Show();
+
+                ((MainWindow)Current.MainWindow).Show();
             }
             catch (Exception ex)
             {
@@ -706,10 +703,17 @@ namespace OperPageLes
         /// <summary>
         /// Перезагрузить программу
         /// </summary>
-        internal static void RebootApplication()
+        internal void RebootApplication()
         {
-            Process.Start(Process.GetCurrentProcess().ProcessName, Environment.GetCommandLineArgs());
-            Current.Shutdown(0);
+            LogWriteLine("/// Перезагрузка ///");
+            MainWindow RebootWindow = (MainWindow)Current.MainWindow;
+            Current.MainWindow = new MainWindow();
+            RebootWindow.Closed += (sender, e) =>
+            {
+                ((MainWindow)Current.MainWindow).Show();
+            };
+            RebootWindow.IsReboot = true;
+            RebootWindow.Close();
         }
 
         /// <summary>
@@ -857,6 +861,7 @@ namespace OperPageLes
         }
 
         #endregion
+
         #region Labels Manipulate
         /// <summary>
         /// Обновить файл данных ярлыков

@@ -121,6 +121,15 @@
   <data name="Arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Arrow.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="AudioMove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\CORE\Audio\Move.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AudioNotification" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\CORE\Audio\Notification.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AudioPopUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\CORE\Audio\Pop-Up.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="BlackSquare" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\BlackSquare.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

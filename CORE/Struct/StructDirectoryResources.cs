@@ -1,4 +1,5 @@
 ﻿using IEL.CORE.Classes;
+using NAudio.Wave;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,28 @@ namespace OperPageLes.CORE.Struct
         internal static readonly string DirectoryFileHappy = DirectoryMediaApplication + "Happy.mp4";
         #endregion
 
+        #region
+        /// <summary>
+        /// Главная директория файлов звука
+        /// </summary>
+        internal static readonly string DirectoryAudioApplication = MainDirectoryApplication + @"/Audio/";
+
+        /// <summary>
+        /// Директория файла звука уведомления
+        /// </summary>
+        internal static readonly string DirectoryFileAudioNotification = DirectoryAudioApplication + "Notification.mp3";
+
+        /// <summary>
+        /// Директория файла звука pop-up
+        /// </summary>
+        internal static readonly string DirectoryFileAudioPopUp = DirectoryAudioApplication + "Pop-up.mp3";
+
+        /// <summary>
+        /// Директория файла звука резкого движения (ветер)
+        /// </summary>
+        internal static readonly string DirectoryFileAudioMove = DirectoryAudioApplication + "Move.mp3";
+        #endregion
+
         #endregion
 
         /// <summary>
@@ -92,9 +115,16 @@ namespace OperPageLes.CORE.Struct
         /// </summary>
         internal static void CheckCreateAllResources()
         {
+            #region Media
             CreateResourceMedia(DirectoryFileLoadingDefault, Properties.Resources.LoadingDefault);
             CreateResourceMedia(DirectoryFileLoadingInternet, Properties.Resources.LoadingInternet);
             CreateResourceMedia(DirectoryFileHappy, Properties.Resources.Happy);
+            #endregion
+            #region Audio
+            CreateResourceMedia(DirectoryFileAudioNotification, Properties.Resources.AudioNotification);
+            CreateResourceMedia(DirectoryFileAudioPopUp, Properties.Resources.AudioPopUp);
+            CreateResourceMedia(DirectoryFileAudioMove, Properties.Resources.AudioMove);
+            #endregion
         }
 
         /// <summary>
@@ -132,6 +162,13 @@ namespace OperPageLes.CORE.Struct
         {
             string DirectoryFolder = Path.GetDirectoryName(path) ?? string.Empty;
             if (!Directory.Exists(DirectoryFolder)) Directory.CreateDirectory(DirectoryFolder);
+        }
+
+        //
+        internal static void Play(WaveOut SourceWaveOut, string Sound) // mp3
+        {
+            SourceWaveOut.Init(new Mp3FileReader(Sound));
+            SourceWaveOut.Play();
         }
     }
 }

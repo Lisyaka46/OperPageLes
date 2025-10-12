@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using OperPageLes.UI.UserElementControl;
 using System.Media;
 using OperPageLes.CORE.Struct;
+using NAudio.Wave;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -79,6 +80,31 @@ namespace OperPageLes.UI.Windows
         /// Состояние загрузки какого-либо процесса
         /// </summary>
         internal bool IsLoadingProcess { get; private set; }
+
+        /// <summary>
+        /// Событие закрытия главного окна перед его удалением
+        /// </summary>
+        public new event FormClosingEventHandler? Closing;
+
+        /// <summary>
+        /// Событие закрытия главного окна после его удаления
+        /// </summary>
+        public new event FormClosedEventHandler? Closed;
+
+        /// <summary>
+        /// Состояние перезагрузки
+        /// </summary>
+        internal bool IsReboot = false;
+
+        /// <summary>
+        /// Состояние закрытия окна
+        /// </summary>
+        private bool IsClosing = false;
+
+        /// <summary>
+        /// Канал воспроизведения звуков
+        /// </summary>
+        private WaveOut SoundChannelWaveOut { get; set; } = new();
 
         public MainWindow()
         {
@@ -155,6 +181,10 @@ namespace OperPageLes.UI.Windows
             IELActionPanelMain.KeyActivateKeyboardMode = App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction;
             IELActionPanelMain.KeyKeyboardModeActivateRightClick = App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick;
             IELActionPanelMain.KeyCloseElement = App.CurrentApp.SettingMainApplication.KEY_PanelActionClose;
+            IELActionPanelMain.EventMovePanelAction += (sender, e) =>
+            {
+                StructDirectoryResources.Play(SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
+            };
             byte[,] ColorBytes = new byte[4, 4]
             {
                 { 255, 55, 101, 144, },
@@ -315,61 +345,69 @@ namespace OperPageLes.UI.Windows
                     App.ActiveDialog.Activate();
                 }
             };
-            Closing += (sender, e) =>
+            base.Closing += (sender, e) =>
             {
-                Hide();
-                TokenUpdateBackgroundData.ThrowIfCancellationRequested();
-                bool WindowSaveClose = false;
-                WindowSaveWait windowSave = new();
-                windowSave.Closed += (sender, e) =>
-                {
-                    WindowSaveClose = true;
-                };
-                windowSave.OpenOnToComplete();
-                windowSave.Focus();
-
-                Thread thread = new(async () =>
-                {
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Закрываются все окна приложения", 0d));
-                    Dispatcher.Invoke(() =>
-                    {
-                        int count = App.CurrentApp.OpenedWindowsInApplication.Count;
-                        for (int i = 0; i < count; i++)
-                        {
-                            App.CurrentApp.OpenedWindowsInApplication[0].Close();
-                            App.CurrentApp.OpenedWindowsInApplication.RemoveAt(0);
-                            Thread.Sleep(10);
-                        }
-                        //App.CurrentApp.OpenedWindowsInApplication.Clear();
-                    });
-                    Thread.Sleep(500);
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Завершаются фоновые процессы", 20d));
-                    await Dispatcher.Invoke(CloseAllBackgroundThread);
-                    Thread.Sleep(600);
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 40d));
-                    App.CurrentApp.UpdateSettingApplication();
-                    Thread.Sleep(300);
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки", 60d));
-                    App.CurrentApp.UpdateFileDataLabel();
-                    Thread.Sleep(600);
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все теги", 87d));
-                    App.CurrentApp.UpdateFileDataLabelTag();
-                    Thread.Sleep(700);
-
-                    Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения...", 100d));
-                    await windowSave.Complete();
-                });
-                thread.Start();
-
-                Task.Run(() =>
-                {
-                    while (!WindowSaveClose);
-                    thread.Join();
-                });
+                if (!IsReboot && !IsClosing) Close();
             };
+        }
+
+        /// <summary>
+        /// Закрыть главное окно приложения без перезагрузки
+        /// </summary>
+        public new void Close()
+        {
+            IsClosing = true;
+            Hide();
+            TokenUpdateBackgroundData.ThrowIfCancellationRequested();
+            Closing?.Invoke(this, new(CloseReason.UserClosing, false));
+            bool WindowSaveClose = false;
+            WindowSaveWait windowSave = new();
+            windowSave.Closed += (sender, e) =>
+            {
+                WindowSaveClose = true;
+                Closed?.Invoke(windowSave, new(CloseReason.WindowsShutDown));
+                base.Close();
+            };
+            windowSave.OpenOnToComplete();
+            windowSave.Focus();
+
+            Thread thread = new(async () =>
+            {
+                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Закрываются все окна приложения", 0d));
+                Dispatcher.Invoke(() =>
+                {
+                    int count = App.CurrentApp.OpenedWindowsInApplication.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        App.CurrentApp.OpenedWindowsInApplication[0].Close();
+                        App.CurrentApp.OpenedWindowsInApplication.RemoveAt(0);
+                        Thread.Sleep(10);
+                    }
+                    //App.CurrentApp.OpenedWindowsInApplication.Clear();
+                });
+                Thread.Sleep(500);
+
+                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 30d));
+                App.CurrentApp.UpdateSettingApplication();
+                Thread.Sleep(300);
+
+                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки", 60d));
+                App.CurrentApp.UpdateFileDataLabel();
+                Thread.Sleep(600);
+                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все теги", 87d));
+                App.CurrentApp.UpdateFileDataLabelTag();
+                Thread.Sleep(700);
+
+                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения...", 100d));
+                await windowSave.Complete();
+            });
+            thread.Start();
+
+            Task.Run(() =>
+            {
+                while (!WindowSaveClose) ;
+                thread.Join();
+            });
         }
 
         /// <summary>
@@ -389,8 +427,15 @@ namespace OperPageLes.UI.Windows
         }
 
         //
+        internal void Play(string Sound)
+        {
+            StructDirectoryResources.Play(SoundChannelWaveOut, Sound);
+        }
+
+        //
         private void NextPageDownToolButtons(bool UpIndex = true)
         {
+            StructDirectoryResources.Play(SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
             if (UpIndex)
             {
                 if (ActualIndexActivatePageDownToolButtons == PagesButtonsInformation.Length - 1)
@@ -546,16 +591,6 @@ namespace OperPageLes.UI.Windows
             ((MainPageButtonInfo)PagesButtonsInformation[0]).VisibilityInternetMillisecond(Value);
         }
         #endregion
-
-        //
-        internal async Task CloseAllBackgroundThread()
-        {
-            await Task.Run(() =>
-            {
-                //((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection;
-            });
-        }
-
 
         #region BlurBackgroundDataTime
         internal void ChangeBlurImageInDataTime(bool State)

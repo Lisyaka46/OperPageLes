@@ -23,6 +23,9 @@
 	</PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CORE\Audio\Move.mp3" />
+    <None Remove="CORE\Audio\Notification.mp3" />
+    <None Remove="CORE\Audio\Pop-Up.mp3" />
     <None Remove="Fonts\Bree CYR var.ttf" />
     <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
     <None Remove="Fonts\Deledda Open Regular.ttf" />
@@ -95,6 +98,9 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <Resource Include="CORE\Audio\Move.mp3" />
+    <Resource Include="CORE\Audio\Notification.mp3" />
+    <Resource Include="CORE\Audio\Pop-Up.mp3" />
     <Resource Include="Fonts\Bree CYR var.ttf" />
     <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
     <Resource Include="Fonts\Deledda Open Regular.ttf">
