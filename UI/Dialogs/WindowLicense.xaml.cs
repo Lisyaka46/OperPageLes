@@ -1,4 +1,5 @@
 ﻿using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -122,7 +123,7 @@ namespace OperPageLes.UI.Dialogs
 #endif
             MainGrid.Opacity = 0d;
             MainGrid.Margin = new(0, 28, 0, 0);
-            MediaHappy.Source = new Uri(App.DirectoryFileHappy);
+            MediaHappy.Source = new Uri(StructDirectoryResources.DirectoryFileHappy);
             MediaHappy.MediaEnded += (sender, e) =>
             {
                 MediaHappy.Position = TimeSpan.FromMilliseconds(1);

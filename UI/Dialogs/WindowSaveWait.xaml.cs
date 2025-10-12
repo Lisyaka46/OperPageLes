@@ -1,4 +1,5 @@
 ﻿using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -36,7 +37,7 @@ namespace OperPageLes.UI.Dialogs
             InitializeComponent();
             TaskTokenComplete = new(false);
             ProgressBarIndicator.Value = 0d;
-            IndicatorLoading.Source = new Uri(App.DirectoryFileLoadingDefault);
+            IndicatorLoading.Source = new Uri(StructDirectoryResources.DirectoryFileLoadingDefault);
 
             IndicatorLoading.MediaEnded += (sender, e) =>
             {

@@ -1,4 +1,5 @@
 ﻿using LibraryPackKey.CORE;
+using OperPageLes.CORE.Struct;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -82,7 +83,7 @@ namespace OperPageLes.UI.Dialogs
                 ResultKey = PackKey.GenKey(Pack, IELTextBoxKey.Text);
                 //if (File.Exists(App.DirectoryKeyValidFile)) File.Delete(App.DirectoryKeyValidFile);
                 string SaveKeyOPL = $"{App.GetID()} {TextBlockPack.Text} {ResultKey.SourcePack.UnixTimeCode - 1} {IELTextBoxKey.Text}";
-                File.WriteAllText(App.DirectoryKeyValidFile, Convert.ToHexString([..SaveKeyOPL.Select((i) => (byte)i)]));
+                File.WriteAllText(StructDirectoryResources.DirectoryKeyValidFile, Convert.ToHexString([..SaveKeyOPL.Select((i) => (byte)i)]));
                 Close();
             }
             catch

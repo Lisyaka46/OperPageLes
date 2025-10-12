@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using OperPageLes.UI.UserElementControl;
 using System.Media;
+using OperPageLes.CORE.Struct;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -92,7 +93,7 @@ namespace OperPageLes.UI.Windows
             IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
             IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
             IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = new Uri(App.DirectoryFileLoadingDefault);
+            IndicatorLoading.Source = new Uri(StructDirectoryResources.DirectoryFileLoadingDefault);
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
                 IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);

@@ -3,6 +3,7 @@ using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -213,7 +214,7 @@ namespace OperPageLes.UI.UserElementControl
             };
             ProgressBarLoading.Value = 0d;
             IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = new(App.DirectoryFileLoadingDefault);
+            IndicatorLoading.Source = new(StructDirectoryResources.DirectoryFileLoadingDefault);
             IsEnabled = false;
 
             MouseEnter += (sender, e) =>

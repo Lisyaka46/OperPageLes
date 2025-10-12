@@ -29,6 +29,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using OperPageLes.CORE.Struct;
 
 namespace OperPageLes
 {
@@ -267,12 +268,12 @@ namespace OperPageLes
         /// <summary>
         /// Файл настроек <b>процесса</b>
         /// </summary>
-        private readonly string PathSettingProcess = MainDirectoryApplication + "/CurrentSettings.json";
+        private readonly string PathSettingProcess = StructDirectoryResources.MainDirectoryApplication + "/CurrentSettings.json";
 
         /// <summary>
         /// Имя файла настроек <b>приложения</b>
         /// </summary>
-        private readonly string PathSettingApplication = MainDirectoryApplication + "/ApplicationSettings.json";
+        private readonly string PathSettingApplication = StructDirectoryResources.MainDirectoryApplication + "/ApplicationSettings.json";
 
         /// <summary>
         /// Строка вывода перед сообщением
@@ -295,58 +296,6 @@ namespace OperPageLes
             OnlyLeftEventImageMouse = LoadImage(OperPageLes.Properties.Resources.LeftMouseButton),
         };
 
-        #region DIRECTORY RESOURCES
-        /// <summary>
-        /// Главная директория ресурсов проекта
-        /// </summary>
-        internal static readonly string MainDirectoryApplication = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"/OperPageLes/";
-
-        /// <summary>
-        /// Главная директория файлов изображений
-        /// </summary>
-        internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
-
-        /// <summary>
-        /// Главная директория файлов видео
-        /// </summary>
-        internal static readonly string DirectoryMediaApplication = DirectoryImagesApplication + @"/Media/";
-
-        /// <summary>
-        /// Главная директория ресурсов
-        /// </summary>
-        internal static readonly string DirectoryResourcesApplication = MainDirectoryApplication + @"/Resources/";
-
-        /// <summary>
-        /// Директория ресурса ярлыков
-        /// </summary>
-        internal static readonly string DirectoryDataLabels = DirectoryResourcesApplication + "Labels.json";
-
-        /// <summary>
-        /// Директория ресурса тегов для ярлыков
-        /// </summary>
-        internal static readonly string DirectoryDataLabelTags = DirectoryResourcesApplication + "Label_Tags.json";
-
-        /// <summary>
-        /// Директория файла анимации обычной загрузки
-        /// </summary>
-        internal static readonly string DirectoryFileLoadingDefault = DirectoryMediaApplication + "LoadingDefault.mp4";
-
-        /// <summary>
-        /// Директория файла анимации загрузки для интернета
-        /// </summary>
-        internal static readonly string DirectoryFileLoadingInternet = DirectoryMediaApplication + "LoadingInternet.mp4";
-
-        /// <summary>
-        /// Директория файла праздничной анимации
-        /// </summary>
-        internal static readonly string DirectoryFileHappy = DirectoryMediaApplication + "Happy.mp4";
-
-        /// <summary>
-        /// Директория файла валидного ключа
-        /// </summary>
-        internal static readonly string DirectoryKeyValidFile = MainDirectoryApplication + "Key";
-        #endregion
-
         /// <summary>
         /// Реальное время
         /// </summary>
@@ -367,15 +316,23 @@ namespace OperPageLes
         /// </summary>
         internal static readonly string Version = "*";
 
+        /// <summary>
+        /// Запись в файл .log
+        /// </summary>
+        private StreamWriter? LogStreamWriter = null;
+
         public App()
         {
             #region Resources
             OpenedWindowsInApplication = [];
             InstallingKey = PackKey.StaticKey;
+            LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
+            LogWriteLine("---------- Старт нового экземпляра ----------");
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             #endregion
 
             #region Interpreter
+            LogWriteLine("Настройка интерпретатора");
             Interpreter = new([
                 #region alias
                 new ConsoleCommand("alias",
@@ -625,15 +582,10 @@ namespace OperPageLes
                 #endregion
                 ]);
             #endregion
-
-            Directory.CreateDirectory(MainDirectoryApplication);
-            Directory.CreateDirectory(DirectoryImagesApplication);
-            Directory.CreateDirectory(DirectoryMediaApplication);
-            Directory.CreateDirectory(DirectoryResourcesApplication);
-            Log("Инициализация параметров приложения");
+            LogWriteLine("Инициализация параметров приложения");
 
             #region Settings
-            Log("Инициализация настроек");
+            LogWriteLine("Инициализация настроек");
             SetSettingProcess();
 
             if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
@@ -646,29 +598,10 @@ namespace OperPageLes
                 ActivePathSettingApplication = PathSettingApplication;
             }
 
-            DataLabelTags = [];
-            if (!File.Exists(DirectoryDataLabelTags))
-            {
-                string SettingApplicationJSON = JsonConvert.SerializeObject(new string[1]);
-                File.WriteAllText(DirectoryDataLabelTags, SettingApplicationJSON);
-            }
-            else
-            {
-                string[]? Tags = JsonConvert.DeserializeObject<string[]>(File.ReadAllText(DirectoryDataLabelTags));
-                if (Tags != null) DataLabelTags.AddRange(Tags.Select(Tag => new LabelTag(Tag)));
-            }
+            DataLabelTags = 
+                [..StructDirectoryResources.DeserializeObjectJson<string>(StructDirectoryResources.DirectoryDataLabelTags).Select(Tag => new LabelTag(Tag))];
 
-            DataLabels = [];
-            if (!File.Exists(DirectoryDataLabels))
-            {
-                string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabels);
-                File.WriteAllText(DirectoryDataLabels, SettingApplicationJSON);
-            }
-            else
-            {
-                LabelAction[]? Labels = JsonConvert.DeserializeObject<LabelAction[]>(File.ReadAllText(DirectoryDataLabels));
-                if (Labels != null) DataLabels.AddRange(Labels);
-            }
+            DataLabels = [..StructDirectoryResources.DeserializeObjectJson<LabelAction>(StructDirectoryResources.DirectoryDataLabels)];
 
             #region SettingRuntimeRealizeSettingChanges
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
@@ -702,26 +635,11 @@ namespace OperPageLes
             #endregion
 
             #region MediaFiles
-            CreateResourceMedia(DirectoryFileLoadingDefault, OperPageLes.Properties.Resources.LoadingDefault);
-            CreateResourceMedia(DirectoryFileLoadingInternet, OperPageLes.Properties.Resources.LoadingInternet);
-            CreateResourceMedia(DirectoryFileHappy, OperPageLes.Properties.Resources.Happy);
+            LogWriteLine("Проверка ресурсов");
+            StructDirectoryResources.CheckCreateAllResources();
             #endregion
 
             #endregion
-        }
-
-        /// <summary>
-        /// Создать файл ресурса медиа-файла
-        /// </summary>
-        /// <param name="Directory">Директория медиа-файла</param>
-        /// <param name="ResourceSource">Данные медиа для записи</param>
-        private static void CreateResourceMedia(string Directory, byte[] ResourceSource)
-        {
-            if (File.Exists(Directory)) return;
-            FileStream stream = File.Create(Directory);
-            stream.Position = 0;
-            stream.Write(ResourceSource);
-            stream.Close();
         }
 
         /// <summary>
@@ -731,13 +649,13 @@ namespace OperPageLes
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
-            Log("Подключение программной точки входа");
+            LogWriteLine("Подключение программной точки входа");
             Current.MainWindow = new UI.Windows.MainWindow();
-            if (File.Exists(DirectoryKeyValidFile))
+            if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
             {
                 try
                 {
-                    string MainPackAndValidKey = Encoding.UTF8.GetString(Convert.FromHexString(File.ReadAllText(DirectoryKeyValidFile)));
+                    string MainPackAndValidKey = Encoding.UTF8.GetString(Convert.FromHexString(File.ReadAllText(StructDirectoryResources.DirectoryKeyValidFile)));
                     string AppGUID = RegexPackValidKey().Match(MainPackAndValidKey).Value;
 
                     MainPackAndValidKey = MainPackAndValidKey[(AppGUID.Length + 1)..];
@@ -771,15 +689,17 @@ namespace OperPageLes
             };
             Current.Exit += (sender, e) =>
             {
+                LogWriteLine("---------- Конец текущего экземпляра ----------");
+                LogStreamWriter?.Close();
             };
-            Log("Открытие главного окна");
+            LogWriteLine("Открытие главного окна");
             try
             {
                 ((UI.Windows.MainWindow)Current.MainWindow).Show();
             }
             catch (Exception ex)
             {
-                Log($"{ex.Message}");
+                LogWriteLine($"{ex.Message}");
             }
         }
 
@@ -831,12 +751,11 @@ namespace OperPageLes
             return bitmapImage;
         }
 
-        internal static void Log(string log)
-        {
-            StreamWriter stream = File.AppendText(MainDirectoryApplication + @"/Access.log");
-            stream.WriteLine($"{DateTime.Now.ToLocalTime()}: " + log);
-            stream.Close();
-        }     
+        /// <summary>
+        /// Записать сообщение в тектовый .log
+        /// </summary>
+        /// <param name="Text">Записываемый текст сообщения</param>
+        internal void LogWriteLine(string Text) => LogStreamWriter?.WriteLine($"{DateTime.Now:HH:mm:ss ff} " + Text);
 
         /// <summary>
         /// Анимировать эффект блюра - сигнализируя изменение
@@ -945,7 +864,7 @@ namespace OperPageLes
         internal void UpdateFileDataLabel()
         {
             string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabels);
-            File.WriteAllText(DirectoryDataLabels, SettingApplicationJSON);
+            File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
         }
 
         /// <summary>
@@ -954,7 +873,7 @@ namespace OperPageLes
         internal void UpdateFileDataLabelTag()
         {
             string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags.Select(i => i.ValueTag));
-            File.WriteAllText(DirectoryDataLabelTags, SettingApplicationJSON);
+            File.WriteAllText(StructDirectoryResources.DirectoryDataLabelTags, SettingApplicationJSON);
         }
         #endregion
 

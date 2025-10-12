@@ -13,11 +13,11 @@ namespace OperPageLes.UI.Pages.Browser
         private OPLViewerLoadingProcess? ViewerLoading;
         public PageWebBrowser()
         {
-            App.Log("Инициализация объектов станицы браузера");
+            App.CurrentApp.LogWriteLine("Инициализация объектов станицы браузера");
             InitializeComponent();
             IELButtonReloadPage.Imaging = App.LoadImage(Properties.Resources.Reload);
             IELButtonUnopenPageSystemBrowser.Imaging = App.LoadImage(Properties.Resources.BrowserChangeSystem);
-            App.Log("Инициализация станицы браузера");
+            App.CurrentApp.LogWriteLine("Инициализация станицы браузера");
             #region WebBrowserElement_Events
             WebBrowserElement.SourceChanged += (sender, e) =>
             {
@@ -75,7 +75,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 WebViewGoUrl(DefaultUrl);
             }
-            App.Log("Инициализация станицы браузера - Готово!");
+            App.CurrentApp.LogWriteLine("Инициализация станицы браузера - Готово!");
         }
 
         internal void WebViewGoUrl(string Url)

@@ -1,4 +1,5 @@
-﻿using OperPageLes.UI.UserElementControl;
+﻿using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementControl;
 using System.Windows.Controls;
 
 namespace OperPageLes.UI.Pages.ActionPanel
@@ -58,7 +59,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
                 Margin = new(4),
                 CornerRadius = new(5),
                 BorderThicknessBlock = new(3),
-                SourceMediaLoading = new(App.DirectoryFileLoadingDefault),
+                SourceMediaLoading = new(StructDirectoryResources.DirectoryFileLoadingDefault),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 FontSize = 11d,

@@ -82,7 +82,7 @@ namespace OperPageLes.Windows
 
         public WindowDiscriptionCommands()
         {
-            App.Log("Создание окна описания элементов");
+            App.CurrentApp.LogWriteLine("Создание окна описания элементов");
             StartAnimation = false;
             InitializeComponent();
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
@@ -242,7 +242,7 @@ namespace OperPageLes.Windows
                         System.Windows.Media.Color.FromRgb(5, 100, 60), System.Windows.Media.Color.FromRgb(57, 158, 151), TimeSpan.FromMilliseconds(2000d));
                 }
             };
-            App.Log("Готово!");
+            App.CurrentApp.LogWriteLine("Готово!");
         }
 
         //

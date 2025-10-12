@@ -1,6 +1,7 @@
 ﻿using IEL.CORE.Enums;
 using IEL.GUI;
 using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,7 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             InitializeComponent();
-            IndicatorLoadingInternetConnection.Source = new Uri(App.DirectoryFileLoadingInternet);
+            IndicatorLoadingInternetConnection.Source = new Uri(StructDirectoryResources.DirectoryFileLoadingInternet);
             IndicatorLoadingInternetConnection.MediaEnded += (sender, e) =>
             {
                 IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
