@@ -133,7 +133,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <param name="Name">Имя команды</param>
         /// <param name="Command">Строка команды</param>
         /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
-        internal void InsertCommandFromBuffer(string Name, string Command, IIELButton.Activate ActionActivateCommand)
+        internal void InsertCommandFromBuffer(string Name, string Command, IIELButton.ActivateHandler ActionActivateCommand)
         {
             IELButtonClearBuffer.IsEnabled = true;
             if (BufferCommand.Count < BufferCommand.Length)

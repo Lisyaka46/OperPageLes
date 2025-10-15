@@ -13,4 +13,5 @@
     <FontFamily x:Key="RussianRail G Pro">/Fonts/#RussianRail G Pro</FontFamily>
     <FontFamily x:Key="Plup">/Fonts/#Plup</FontFamily>
     <FontFamily x:Key="Deledda Open Regular">/Fonts/#Deledda Open Regular</FontFamily>
+    <FontFamily x:Key="October Pro Blk">/Fonts/#October Pro Blk</FontFamily>
 </ResourceDictionary>

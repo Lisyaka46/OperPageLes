@@ -89,12 +89,12 @@ namespace OperPageLes.UI.UserElementControl
         /// <summary>
         /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public IIELButton.Activate? OnActivateMouseLeft { get; set; }
+        public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
 
         /// <summary>
         /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public IIELButton.Activate? OnActivateMouseRight { get; set; }
+        public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
 
         /// <summary>
         /// Параметр указатель на значение загрузки

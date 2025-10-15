@@ -272,25 +272,25 @@ namespace OperPageLes.Windows
             int i = 0;
             foreach (T Element in Elements)
             {
-                await Task.Run(() =>
+                await Task.Run((Action)(() =>
                 {
-                    Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke((Action)(() =>
                     {
                         IELButtonText Button = GenerateCommandButton();
                         Button.Opacity = 0d;
                         Button.Margin = new(3, i > 0 ? 58 * i + 3 : 3, 3, 3);
                         Button.Text = Element.Name;
-                        Button.OnActivateMouseLeft += (sender, e, Key) =>
+                        Button.OnActivateMouseLeft += (object sender, global::System.Windows.Input.MouseButtonEventArgs e, bool Key) =>
                         {
                             ElementDiscriptionPage.UpdateInformation(Element);
                             //App.AnimateDoubleEffect(DescriptionConsole, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                         };
                         GridElements.Children.Add(Button);
                         App.AnimateDoubleEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                    });
+                    }));
                     Thread.Sleep(200);
                     i++;
-                });
+                }));
             }
             return GridElements;
         }

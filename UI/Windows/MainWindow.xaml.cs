@@ -20,6 +20,7 @@ using OperPageLes.UI.UserElementControl;
 using System.Media;
 using OperPageLes.CORE.Struct;
 using NAudio.Wave;
+using IEL.GUI;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -292,7 +293,11 @@ namespace OperPageLes.UI.Windows
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 //IELActionPanelMain.ClosePanelAction();
-                IELBrowserPageMain.AddInlayPage(new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
+                IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
+                if (SourceInlay != null)
+                {
+                    SourceInlay.SourceCloseButtonImage = App.LoadImage(Properties.Resources.Cross);
+                }
             };
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
             {
