@@ -90,7 +90,6 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             };
             #endregion
             #region BorderCurrentLanguage
-            
             InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
             {
                 UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
@@ -103,6 +102,18 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                     OrientationBorderPosition.RightUp);
             };
             IELBlockInfoCurrentLanguage.MouseLeave += (sender, e) =>
+            {
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+            #region BorderVolume
+            IELBlockInfoVolume.MouseEnter += (sender, e) =>
+            {
+                App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
+                    "Громкость звуков приложения",
+                    OrientationBorderPosition.RightUp);
+            };
+            IELBlockInfoVolume.MouseLeave += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };

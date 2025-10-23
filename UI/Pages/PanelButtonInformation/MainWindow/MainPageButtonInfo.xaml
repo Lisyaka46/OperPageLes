@@ -18,6 +18,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="ENG" BorderThicknessBlock="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" PaddingContent="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
             <GUI:IELBlockInfoText.IELSettingObject>
@@ -82,5 +83,24 @@
                 </RadialGradientBrush>
             </MediaElement.OpacityMask>
         </MediaElement>
+        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThicknessBlock="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" PaddingContent="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Imaging="/UI/Images/Volume.png" Width="50" ImageMargin="-4,0,6,0">
+            <GUI:IELBlockInfoImage.IELSettingObject>
+                <ObjectSettings:IELUsingObjectSetting>
+                    <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                        <Classes:BrushSettingQ Default="#FF285177" NotEnabled="#FFF92929" Select="#FF287AC7" Used="White"/>
+                    </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
+                    <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
+                        <Classes:BrushSettingQ/>
+                    </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
+                    <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
+                        <Classes:BrushSettingQ Default="#FF678DB1" NotEnabled="#FFF92929" Select="#FFB4DBFF" Used="White"/>
+                    </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
+                </ObjectSettings:IELUsingObjectSetting>
+            </GUI:IELBlockInfoImage.IELSettingObject>
+            <GUI:IELBlockInfoImage.Effect>
+                <BlurEffect Radius="0"/>
+            </GUI:IELBlockInfoImage.Effect>
+        </GUI:IELBlockInfoImage>
+        <TextBlock x:Name="TextBlockVolumeValue" Grid.Column="3" Text="100" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="22,0,0,0" FontFamily="{DynamicResource October Pro Blk}"/>
     </Grid>
 </Page>

@@ -64,6 +64,7 @@
     <None Remove="UI\Images\Sorting\Sorting-Tag.png" />
     <None Remove="UI\Images\Tag.png" />
     <None Remove="UI\Images\ValidKeyIcon.png" />
+    <None Remove="UI\Images\Volume.png" />
     <None Remove="UI\Images\Warning.png" />
     <None Remove="UI\Images\Wifi.png" />
     <None Remove="UI\Images\WifiOff.png" />
@@ -149,6 +150,7 @@
     <Resource Include="UI\Images\Sorting\Sorting-Tag.png" />
     <Resource Include="UI\Images\Tag.png" />
     <Resource Include="UI\Images\ValidKeyIcon.png" />
+    <Resource Include="UI\Images\Volume.png" />
     <Resource Include="UI\Images\Warning.png" />
     <Resource Include="UI\Images\Wifi.png" />
     <Resource Include="UI\Images\WifiOff.png" />

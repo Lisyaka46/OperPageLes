@@ -69,23 +69,8 @@ namespace OperPageLes.CORE.Settings.Struct
         public ObjSetting<Key> KEY_PanelActionClose { get; internal set; } = Key.Escape;
 
         /// <summary>
-        /// Сколлапсировать пустые значения настроек в значения по умолчанию
+        /// Громкость звуков приложения
         /// </summary>
-        /// <param name="setting">Изменяемая ссылка настроек</param>
-        internal readonly SettingApplication CollapseNullSetting()
-        {
-            SettingApplication Def = new();
-            PropertyInfo[] Info = typeof(SettingApplication).GetProperties();
-            for (int i = 0; i < Info.Length; i++)
-            {
-                if (Info[i].GetValue(this) != null)
-                {
-                    object? Value = Info[i].GetValue(this);
-                    //object? OriginValue = Info[i].GetValue(this);
-                    Info[i].SetValue(Def, Value);
-                }
-            }
-            return Def;
-        }
+        public ObjSetting<float> Volume { get; internal set; } = 0.5f;
     }
 }

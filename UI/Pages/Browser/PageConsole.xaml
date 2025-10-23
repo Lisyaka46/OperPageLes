@@ -59,10 +59,17 @@
             </Grid>
         </Grid>
         <Grid x:Name="GridHit" Margin="6,0,0,-3" HorizontalAlignment="Left">
-            <Border x:Name="BorderHintCommand" Panel.ZIndex="0" Grid.RowSpan="1" BorderThickness="3,3,3,3" BorderBrush="#FF355592" CornerRadius="6,6,0,0" Background="#FF2989B3" VerticalAlignment="Bottom" MaxHeight="200" Width="70" Height="35" Padding="2,2,2,2">
+            <Border x:Name="BorderHintCommand" Panel.ZIndex="0" Grid.RowSpan="1" BorderThickness="3,3,3,3" BorderBrush="#FF355592" CornerRadius="6,6,0,0" Background="#FF2989B3" VerticalAlignment="Bottom" MaxHeight="200" Width="279" Height="80" Padding="2,2,2,2">
                 <Grid>
                     <Grid x:Name="GridHintOneCommand" Panel.ZIndex="1">
-                        <TextBlock x:Name="TextBlockHintCommand" Text="Close" VerticalAlignment="Center" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="16" Padding="4,4,10,4" FontFamily="Cascadia Code" Foreground="#FF0B2B44"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="TextBlockHintCommand" Text="Close" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="16" Padding="4,4,10,4" FontFamily="Cascadia Code" Foreground="Black" Grid.Row="1"/>
+                        <Grid>
+                            <TextBlock x:Name="TextBlockDescriptionHintCommand" Text="Описание команды" FontSize="14" Padding="4,4,0,4" FontFamily="Cascadia Code" Foreground="#FF0C3F67" Grid.Row="0" FontStyle="Italic" VerticalAlignment="Bottom" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                        </Grid>
                     </Grid>
                     <ScrollViewer HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Hidden" VerticalContentAlignment="Stretch" Focusable="False">
                         <StackPanel x:Name="StackPanelAllHit" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>

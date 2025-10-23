@@ -27,6 +27,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -74,10 +75,10 @@ namespace OperPageLes
         /// <param name="Duration">Количество миллисекунд для анимации</param>
         internal static void AnimateThicknessEffect(IAnimatable Element, DependencyProperty Property, Thickness From, Thickness To, TimeSpan? Duration = null)
         {
-            ThicknessAnimation animation = GetThicknessAnimate(Duration);
-            animation.From = From;
-            animation.To = To;
-            Element.BeginAnimation(Property, animation);
+            if (Duration != null) ThicknessAnimate.Duration = Duration.Value;
+            ThicknessAnimate.From = From;
+            ThicknessAnimate.To = To;
+            Element.BeginAnimation(Property, ThicknessAnimate, HandoffBehavior.SnapshotAndReplace);
         }
 
         /// <summary>
@@ -89,9 +90,10 @@ namespace OperPageLes
         /// <param name="Duration">Количество миллисекунд для анимации</param>
         internal static void AnimateThicknessEffect(IAnimatable Element, DependencyProperty Property, Thickness To, TimeSpan? Duration = null)
         {
-            ThicknessAnimation animation = GetThicknessAnimate(Duration);
-            animation.To = To;
-            Element.BeginAnimation(Property, animation);
+            if (Duration != null) ThicknessAnimate.Duration = Duration.Value;
+            ThicknessAnimate.From = null;
+            ThicknessAnimate.To = To;
+            Element.BeginAnimation(Property, ThicknessAnimate, HandoffBehavior.SnapshotAndReplace);
         }
         #endregion
 
@@ -128,11 +130,10 @@ namespace OperPageLes
         /// <param name="Duration">Количество миллисекунд для анимации</param>
         internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double From, double To, TimeSpan? Duration = null)
         {
-
-            DoubleAnimation animation = GetDoubleAnimate(Duration);
-            animation.From = From;
-            animation.To = To;
-            Element.BeginAnimation(Property, animation);
+            if (Duration != null) DoubleAnimate.Duration = Duration.Value;
+            DoubleAnimate.From = From;
+            DoubleAnimate.To = To;
+            Element.BeginAnimation(Property, DoubleAnimate, HandoffBehavior.SnapshotAndReplace);
         }
         /// <summary>
         /// Анимировать числовой эффект объекта
@@ -143,10 +144,10 @@ namespace OperPageLes
         /// <param name="Duration">Количество миллисекунд для анимации</param>
         internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double To, TimeSpan? Duration = null)
         {
-
-            DoubleAnimation animation = GetDoubleAnimate(Duration);
-            animation.To = To;
-            Element.BeginAnimation(Property, animation);
+            if (Duration != null) DoubleAnimate.Duration = Duration.Value;
+            DoubleAnimate.From = null;
+            DoubleAnimate.To = To;
+            Element.BeginAnimation(Property, DoubleAnimate, HandoffBehavior.SnapshotAndReplace);
         }
         #endregion
 
@@ -183,10 +184,10 @@ namespace OperPageLes
         internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property,
             System.Windows.Media.Color From, System.Windows.Media.Color To, TimeSpan? Duration = null)
         {
-            ColorAnimation animation = GetColorAnimate(Duration);
-            animation.From = From;
-            animation.To = To;
-            Element.BeginAnimation(Property, animation);
+            if (Duration != null) ColorAnimate.Duration = Duration.Value;
+            ColorAnimate.From = From;
+            ColorAnimate.To = To;
+            Element.BeginAnimation(Property, ColorAnimate, HandoffBehavior.SnapshotAndReplace);
         }
 
         /// <summary>
@@ -197,11 +198,13 @@ namespace OperPageLes
         /// <param name="From">Значение от которого начинается анимация</param>
         /// <param name="To">Значение к которому стремится анимация</param>
         /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property, System.Windows.Media.Color To, TimeSpan? Duration = null)
+        internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property,
+            System.Windows.Media.Color To, TimeSpan? Duration = null)
         {
-            ColorAnimation animation = GetColorAnimate(Duration);
-            animation.To = To;
-            Element.BeginAnimation(Property, animation);
+            if (Duration != null) ColorAnimate.Duration = Duration.Value;
+            ColorAnimate.From = null;
+            ColorAnimate.To = To;
+            Element.BeginAnimation(Property, ColorAnimate, HandoffBehavior.SnapshotAndReplace);
         }
         #endregion
 
@@ -534,7 +537,7 @@ namespace OperPageLes
                     new Parameter("Directory", typeof(string), string.Empty)
                 ],
                 "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника\n" +
-                "- Вписав \"*\" в параметры, откроет гравную директорию процесса приложения",
+                "- Вписав \"*\" в параметры, откроет главную директорию процесса приложения",
                 (Command, param) =>
                 {
                     string Text = "Открытие директории ";
