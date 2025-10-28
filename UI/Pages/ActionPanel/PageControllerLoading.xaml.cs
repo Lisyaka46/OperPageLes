@@ -36,7 +36,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
         {
             int i = GridElementsLoading.Children.IndexOf(Element);
             GridElementsLoading.Children.Remove(Element);
-            for (; i < GridElementsLoading.Children.Count; i++)
+            for (; i < GridElementsLoading.Children.Count && i > -1; i++)
             {
                 OPLViewerLoadingProcess element = (OPLViewerLoadingProcess)GridElementsLoading.Children[i];
                 App.AnimateThicknessEffect(element, MarginProperty,

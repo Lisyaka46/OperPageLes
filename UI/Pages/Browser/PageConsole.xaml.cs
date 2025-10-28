@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using IEL.CORE.Enums;
 using Color = System.Windows.Media.Color;
 
 namespace OperPageLes.UI.Pages.Browser
@@ -158,7 +159,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
                     App.MainWindow.IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right) App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
+                else if (e.ChangedButton == MouseButton.Right) App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);
             };
 
             RichTextBoxMainMessage.TextChanged += (sender, e) =>
@@ -233,7 +234,7 @@ namespace OperPageLes.UI.Pages.Browser
                             SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
                         break;
                     case Key.Apps:
-                        App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
+                        App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);
                         break;
                     case Key.Up:
                         if (BufferPage.BufferCommand.Count == 0) return;

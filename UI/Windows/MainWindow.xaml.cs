@@ -105,11 +105,19 @@ namespace OperPageLes.UI.Windows
         /// <summary>
         /// Канал воспроизведения звуков
         /// </summary>
-        private WaveOut SoundChannelWaveOut { get; set; } = new();
+        private WaveOut SoundChannelWaveOut { get; }
 
         public MainWindow()
         {
             InitializeComponent();
+            SoundChannelWaveOut = new()
+            {
+                Volume = App.CurrentApp.SettingMainApplication.Volume,
+            };
+            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
+            {
+                SoundChannelWaveOut.Volume = New;
+            };
             TokenUpdateBackgroundData = new(false);
             PageControllerLoadingApplication = new();
             SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
@@ -275,7 +283,7 @@ namespace OperPageLes.UI.Windows
 
             BorderIndicator.MouseRightButtonUp += (sender, e) =>
             {
-                IELActionPanelMain.UsingPanelAction(SettingVisualPageLoadingController, OrientationBorderPosition.RightDown);
+                IELActionPanelMain.UsingPanelAction(SettingVisualPageLoadingController, OrientationPanelActionPosition.LeftDown);
             };
             #region IELBrowserPage
             IELBrowserPageMain.EventCloseBrowser += () =>
@@ -302,7 +310,7 @@ namespace OperPageLes.UI.Windows
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
             {
                 PageInlay.ActivateManipulateInlay = Inlay;
-                IELActionPanelMain.UsingPanelAction(PanelActionSettingsInlay);
+                IELActionPanelMain.UsingPanelAction(PanelActionSettingsInlay, OrientationPanelActionPosition.LeftUp);
                 //DialogManagerPage.ShowDialog();
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>

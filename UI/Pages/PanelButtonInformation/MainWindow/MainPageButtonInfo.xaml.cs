@@ -1,7 +1,9 @@
-﻿using IEL.CORE.Enums;
+﻿using IEL.CORE.Classes;
+using IEL.CORE.Enums;
 using IEL.GUI;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.Other;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,10 +44,22 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         /// </summary>
         internal Thread ThreadInternetConnection;
 
+        /// <summary>
+        /// Настройка отображения страницы настройки громкости в панели действий
+        /// </summary>
+        private readonly PanelActionSettingVisual SettingVisualVolume;
+
         public MainPageButtonInfo()
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             InitializeComponent();
+            SettingVisualVolume = new(GridMain, new(new PageVolumeControl()), new System.Windows.Size(150, 36));
+            TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
+            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
+            {
+                TextBlockVolumeValue.Text = ((int)(New * 100)).ToString();
+            };
+
             IndicatorLoadingInternetConnection.Source = new Uri(StructDirectoryResources.DirectoryFileLoadingInternet);
             IndicatorLoadingInternetConnection.MediaEnded += (sender, e) =>
             {
@@ -94,7 +108,6 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
             };
-            //InputLanguage.CurrentInputLanguage.
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
@@ -107,10 +120,19 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             };
             #endregion
             #region BorderVolume
-            IELBlockInfoVolume.MouseEnter += (sender, e) =>
+            IELBlockInfoVolume.MouseRightButtonUp += (sender, e) =>
+            {
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(SettingVisualVolume, OrientationPanelActionPosition.LeftCenter);
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
+            };
+            IELBlockInfoVolume.MouseLeftButtonUp += (sender, e) =>
+            {
+                App.MainWindow.Play(StructDirectoryResources.DirectoryFileAudioNotification);
+            };
+            IELBlockInfoVolume.IELSettingObject.MouseHover += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
-                    "Громкость звуков приложения",
+                    "Громкость звуков главного окна",
                     OrientationBorderPosition.RightUp);
             };
             IELBlockInfoVolume.MouseLeave += (sender, e) =>

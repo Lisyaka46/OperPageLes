@@ -389,7 +389,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             BorderDinamicLabels.MouseRightButtonUp += (sender, e) =>
             {
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabel);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabel, OrientationPanelActionPosition.LeftUp);
             };
             BorderDinamicLabels.MouseLeftButtonUp += (sender, e) =>
             {
@@ -590,7 +590,7 @@ namespace OperPageLes.UI.Pages.Browser
                 PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
                 PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
                 PageLabelElement.IELButtonSetLabelTag.Text = Label.SourceLabel.Tag != null ? "Изменить тег" : "Добавить тег";
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement, OrientationPanelActionPosition.LeftUp);
                 e.Handled = true;
             };
             Label.OnActivateMouseLeft += (sender, e, Key) =>
