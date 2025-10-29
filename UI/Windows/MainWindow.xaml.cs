@@ -108,6 +108,11 @@ namespace OperPageLes.UI.Windows
         /// </summary>
         private WaveOut SoundChannelWaveOut { get; }
 
+        /// <summary>
+        /// Страница выбора новой страницы браузера
+        /// </summary>
+        private PageManagerBrowser ManagerBrowserNewPage;
+
 #if DEBUG
         private readonly TextBlock DEV_Time;
         private readonly TextBlock DEV_Data;
@@ -116,83 +121,47 @@ namespace OperPageLes.UI.Windows
         public MainWindow()
         {
             InitializeComponent();
+
+            #region DEV
 #if DEBUG
             DEV_Time = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
             DEV_Data = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
             DEV_IsLoadingProcess = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
 #endif
+            #endregion
+
+            #region Audio
             SoundChannelWaveOut = new()
             {
                 Volume = App.CurrentApp.SettingMainApplication.Volume,
             };
+            #endregion
+
+            #region SettingParameters
             App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
             {
                 SoundChannelWaveOut.Volume = New;
             };
-            TokenUpdateBackgroundData = new(false);
-            PageControllerLoadingApplication = new();
-            SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
+            #endregion
+
+            #region SetParameteres
             Icon = App.LoadImage(Properties.Resources.IconMainApplication);
             ImageLogoApplication.Imaging = App.LoadImage(Properties.Resources.IconMainApplication);
             IELImageButtonHelp.Imaging = App.LoadImage(Properties.Resources.LightBulb);
             IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
-            IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
             IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
+
+            TokenUpdateBackgroundData = new(false);
+            ActualIndexActivatePageDownToolButtons = -1;
+            IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
+            IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
+
             IndicatorLoading.Opacity = 0d;
             IndicatorLoading.Source = new Uri(StructDirectoryResources.DirectoryFileLoadingDefault);
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
                 IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
             };
-            PanelActionPageInlay = new(PageInlay);
-            #region Command
-            //#if DEBUG
-            //App.DataConsoleCommand.AddRange([
-            //    #region anim
-            //    new ConsoleCommand("anim", [new Parameter("Value", typeof(bool))],
-            //    "Отключает или включает анимацию у окна ярлыков",
-            //    (Command, param) =>
-            //    {
-            //        PageLabels? Page = IELBrowserPageMain.SearchPageType<PageLabels>();
-            //        if (Page == null)
-            //            return Task.FromResult(CommandStateResult.Failed(Command.Name,
-            //                $"Страница \"{nameof(PageLabels)}\" в браузере не инициализирована!"));
-            //        if ((bool)param[0]) Page.AnimationLoadingStart();
-            //        else Page.AnimationLoadingStop();
-            //        return Task.FromResult(CommandStateResult.Completed(Command.Name));
-            //    }),
-            //    #endregion
-            //]);
-            //#endif
-            #endregion
-
-            #region PanelAction
-
-            #region PageInlay
-            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                if (PageInlay.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.PageElement);
-            };
-            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                IELActionPanelMain.ClosePanelAction();
-                if (PageInlay.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
-            };
-            #endregion
-            PanelActionPageInlay.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                PageInlay.IELButtonPageOpenInlay.CharKeyboardActivate = NewValue;
-                PageInlay.IELButtonPageDeleteInlay.CharKeyboardActivate = NewValue;
-            };
-            PanelActionSettingsInlay = new(IELBrowserPageMain, PanelActionPageInlay, new(200d, 240d));
-            #endregion
-
-            #region SetParameteres
-            ActualIndexActivatePageDownToolButtons = -1;
-            IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
-            IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
 
             VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
@@ -221,12 +190,51 @@ namespace OperPageLes.UI.Windows
             });
             IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
+            IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
             #endregion
 
-            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            #region IELPanelAction
+            IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            {
+                BrowserPage? Page = IELBrowserPageMain.ActualInlay?.PageElement;
+                if (Page == null) return;
+                switch (Page.GetType().Name)
+                {
+                    case "PageConsole":
+                        ((PageConsole)Page.PageContent).TextBoxCommandInput.Focus();
+                        break;
+                    default: return;
+                }
+            };
+
+            #region PageInlay
+            PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                if (PageInlay.ActivateManipulateInlay != null)
+                    IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.PageElement);
+            };
+            PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                IELActionPanelMain.ClosePanelAction();
+                if (PageInlay.ActivateManipulateInlay != null)
+                    IELBrowserPageMain.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
+            };
+            PanelActionPageInlay = new(PageInlay);
+            PanelActionSettingsInlay = new(IELBrowserPageMain, PanelActionPageInlay, new(200d, 240d));
+            PanelActionPageInlay.IsKeyboardModeChanged += (Source, NewValue) =>
+            {
+                PageInlay.IELButtonPageOpenInlay.CharKeyboardActivate = NewValue;
+                PageInlay.IELButtonPageDeleteInlay.CharKeyboardActivate = NewValue;
+            };
+            #endregion
+
+            PageControllerLoadingApplication = new();
+            SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
+
+            #endregion
 
             #region Settings
             UpdateImageMenu(App.CurrentApp.SettingMainApplication.PathMenuImage);
@@ -270,19 +278,7 @@ namespace OperPageLes.UI.Windows
             #endregion
             #endregion
 
-            IELActionPanelMain.EventClosingPanelAction += (Name) =>
-            {
-                BrowserPage? Page = IELBrowserPageMain.ActualInlay?.PageElement;
-                if (Page == null) return;
-                switch (Page.GetType().Name)
-                {
-                    case "PageConsole":
-                        ((PageConsole)Page.PageContent).TextBoxCommandInput.Focus();
-                        break;
-                    default: return;
-                }
-            };
-            #region Down Tool Buttons Information
+            #region DownToolButtons
             ActualIndexActivatePageDownToolButtons = 0;
             IELImageButtonNextButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons();
             IELImageButtonBackButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons(false);
@@ -296,7 +292,32 @@ namespace OperPageLes.UI.Windows
             {
                 IELActionPanelMain.UsingPanelAction(SettingVisualPageLoadingController, OrientationPanelActionPosition.LeftDown);
             };
+            #endregion
+
             #region IELBrowserPage
+            ManagerBrowserNewPage = new();
+            ManagerBrowserNewPage.BrowserPageSelect += (sender, e) =>
+            {
+                App.AnimateDoubleEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.AnimateDoubleEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.AnimateDoubleEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                Canvas.SetZIndex(FrameNewInlayBrowser, -1);
+                FrameNewInlayBrowser.IsHitTestVisible = false;
+                FrameNewInlayBrowser.IsEnabled = false;
+                IELBrowserPageMain.IsEnabled = true;
+                if (e == null) return;
+                IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(e);
+                if (SourceInlay != null)
+                {
+                    SourceInlay.SourceCloseButtonImage = App.LoadImage(Properties.Resources.Cross);
+                }
+            };
+            FrameNewInlayBrowser.IsHitTestVisible = false;
+            FrameNewInlayBrowser.IsEnabled = false;
+            FrameNewInlayBrowser.Content = ManagerBrowserNewPage;
+            FrameNewInlayBrowser.Opacity = 0d;
+            Canvas.SetZIndex(FrameNewInlayBrowser, -1);
+
             IELBrowserPageMain.EventCloseBrowser += () =>
             {
                 if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
@@ -311,18 +332,19 @@ namespace OperPageLes.UI.Windows
             };
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                //IELActionPanelMain.ClosePanelAction();
-                IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(new DialogBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
-                if (SourceInlay != null)
-                {
-                    SourceInlay.SourceCloseButtonImage = App.LoadImage(Properties.Resources.Cross);
-                }
+                FrameNewInlayBrowser.IsEnabled = true;
+                FrameNewInlayBrowser.IsHitTestVisible = true;
+                IELBrowserPageMain.IsEnabled = false;
+                App.AnimateDoubleEffect(FrameNewInlayBrowser, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.AnimateDoubleEffect(IELBrowserPageMain, OpacityProperty, 0.9d, TimeSpan.FromMilliseconds(500d));
+                App.AnimateDoubleEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, TimeSpan.FromMilliseconds(500d));
+                Canvas.SetZIndex(FrameNewInlayBrowser, 1);
+                ManagerBrowserNewPage.Focus();
             };
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
             {
                 PageInlay.ActivateManipulateInlay = Inlay;
                 IELActionPanelMain.UsingPanelAction(PanelActionSettingsInlay, OrientationPanelActionPosition.LeftUp);
-                //DialogManagerPage.ShowDialog();
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
             {
@@ -330,13 +352,15 @@ namespace OperPageLes.UI.Windows
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
-            #endregion
 
             ImageLogoApplication.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 DialogLicenseWindow License = new();
                 License.Show();
             };
+
+            #region EventsWindow
+            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             Activated += (sender, e) =>
             {
                 if (!HiAnimation)
@@ -366,8 +390,10 @@ namespace OperPageLes.UI.Windows
             {
                 if (!IsReboot && !IsClosing) Close();
             };
+            #endregion
         }
 
+        #region ManipulateWindow
         /// <summary>
         /// Закрыть главное окно приложения без перезагрузки
         /// </summary>
@@ -445,13 +471,18 @@ namespace OperPageLes.UI.Windows
             }, TokenUpdateBackgroundData);
             base.Show();
         }
+        #endregion
 
-        //
+        /// <summary>
+        /// Воспроизвести звук по директории звукового файла
+        /// </summary>
+        /// <param name="Sound">Директория звукового файла</param>
         internal void Play(string Sound)
         {
             StructDirectoryResources.Play(SoundChannelWaveOut, Sound);
         }
 
+        #region DownToolButtons
         //
         private void NextPageDownToolButtons(bool UpIndex = true)
         {
@@ -470,6 +501,7 @@ namespace OperPageLes.UI.Windows
             }
             IELPageControllerButtons.NextPage(PagesButtonsInformation[ActualIndexActivatePageDownToolButtons], UpIndex);
         }
+        #endregion
 
         #region Loading Manipulate
         /// <summary>
