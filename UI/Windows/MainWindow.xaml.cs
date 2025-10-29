@@ -2,25 +2,26 @@
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
+using IEL.GUI;
+using NAudio.Wave;
 using OperPageLes.CORE;
-using OperPageLes.Windows;
-using OperPageLes.UI.Dialogs;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
+using OperPageLes.UI.UserElementControl;
+using OperPageLes.UI.Windows.Dialogs;
+using OperPageLes.Windows;
 using System.IO;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using OperPageLes.UI.UserElementControl;
-using System.Media;
-using OperPageLes.CORE.Struct;
-using NAudio.Wave;
-using IEL.GUI;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -107,9 +108,19 @@ namespace OperPageLes.UI.Windows
         /// </summary>
         private WaveOut SoundChannelWaveOut { get; }
 
+#if DEBUG
+        private readonly TextBlock DEV_Time;
+        private readonly TextBlock DEV_Data;
+        private readonly TextBlock DEV_IsLoadingProcess;
+#endif
         public MainWindow()
         {
             InitializeComponent();
+#if DEBUG
+            DEV_Time = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
+            DEV_Data = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
+            DEV_IsLoadingProcess = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
+#endif
             SoundChannelWaveOut = new()
             {
                 Volume = App.CurrentApp.SettingMainApplication.Volume,
@@ -254,7 +265,7 @@ namespace OperPageLes.UI.Windows
             };
             IELButtonSettings.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                new WindowSetting().ShowDialog();
+                new DialogSetting().ShowDialog();
             };
             #endregion
             #endregion
@@ -301,7 +312,7 @@ namespace OperPageLes.UI.Windows
             IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 //IELActionPanelMain.ClosePanelAction();
-                IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(new WindowBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
+                IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(new DialogBrowserPagesManager().AddNewPageInBrowser(IELBrowserPageMain));
                 if (SourceInlay != null)
                 {
                     SourceInlay.SourceCloseButtonImage = App.LoadImage(Properties.Resources.Cross);
@@ -318,19 +329,12 @@ namespace OperPageLes.UI.Windows
                 IELMessageMain.UsingBorderInformation(Element, Text, OrientationBorderPosition.Auto);
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
-
-#if DEBUG
-            IELBrowserPageMain.EventChangeActiveInlay += () =>
-            {
-                //AudioPlayerControl.PlayMP3(Properties.Resources.B5);
-            };
-#endif
             #endregion
             #endregion
 
             ImageLogoApplication.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                LicenseWindow License = new();
+                DialogLicenseWindow License = new();
                 License.Show();
             };
             Activated += (sender, e) =>
@@ -371,10 +375,13 @@ namespace OperPageLes.UI.Windows
         {
             IsClosing = true;
             Hide();
+#if DEBUG
+            App.CurrentApp.Is_WindowDeveloper.Close();
+#endif
             TokenUpdateBackgroundData.ThrowIfCancellationRequested();
             Closing?.Invoke(this, new(CloseReason.UserClosing, false));
             bool WindowSaveClose = false;
-            WindowSaveWait windowSave = new();
+            DialogSaveWait windowSave = new();
             windowSave.Closed += (sender, e) =>
             {
                 WindowSaveClose = true;
@@ -515,6 +522,9 @@ namespace OperPageLes.UI.Windows
             if (!IsLoadingProcess)
             {
                 IsLoadingProcess = true;
+#if DEBUG
+                DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
+#endif
                 App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
             ViewLoading.VisualOpenLoading();
@@ -532,6 +542,9 @@ namespace OperPageLes.UI.Windows
             if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
             {
                 IsLoadingProcess = false;
+#if DEBUG
+                DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
+#endif
                 App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
             }
         }
@@ -546,6 +559,11 @@ namespace OperPageLes.UI.Windows
             {
                 TextBlockTime.Text = App.RealTime.ToShortTimeString();
                 TextBlockData.Text = App.RealTime.ToShortDateString();
+#if DEBUG
+                DEV_Time.Text = $"T: {TextBlockTime.Text}";
+                DEV_Data.Text = $"D: {TextBlockData.Text}";
+                DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
+#endif
             });
         }
 

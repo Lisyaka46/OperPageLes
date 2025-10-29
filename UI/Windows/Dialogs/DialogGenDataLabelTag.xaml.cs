@@ -3,15 +3,15 @@ using System.Windows;
 using System.Windows.Media;
 using Key = System.Windows.Input.Key;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenDataLabelTag.xaml
     /// </summary>
-    public partial class WindowGenDataLabelTag : Window
+    public partial class DialogGenDataLabelTag : Window
     {
         private bool Cancel = true;
-        public WindowGenDataLabelTag()
+        public DialogGenDataLabelTag()
         {
             InitializeComponent();
             Icon = App.LoadImage(Properties.Resources.Tag);

@@ -11,17 +11,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для LicenseWindow.xaml
     /// </summary>
-    public partial class LicenseWindow : Window
+    public partial class DialogLicenseWindow : Window
     {
         /// <summary>
         /// Дата начала разработки программы
         /// </summary>
-        private static readonly DateTime HappyDay = new(2022, 04, 19);
+        private static readonly DateTime HappyDay = new(2022, 04, 19); // 04 19
 
         /// <summary>
         /// Константа времени изчезновения страницы
@@ -62,7 +62,7 @@ namespace OperPageLes.UI.Dialogs
         private readonly Thread ThreadUpdateVisualAssistents;
         #endregion
 
-        public LicenseWindow()
+        public DialogLicenseWindow()
         {
             InitializeComponent();
             ThreadUpdateVisualAssistents = new(() =>
@@ -97,7 +97,7 @@ namespace OperPageLes.UI.Dialogs
                         App.AnimateDoubleEffect(MainGrid, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
                         App.AnimateThicknessEffect(MainGrid, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
 
-                        ImageIconNickName.BeginAnimation(MarginProperty, animation);
+                        ImageIconNickName.BeginAnimation(MarginProperty, animation, HandoffBehavior.SnapshotAndReplace);
                     });
                     Thread.Sleep(13600);
                     Dispatcher.BeginInvoke(() =>
@@ -197,19 +197,20 @@ namespace OperPageLes.UI.Dialogs
             MediaHappy.Play();
 
             animThickness.To = new(0);
-            BorderHappy.BeginAnimation(MarginProperty, animThickness);
+            BorderHappy.BeginAnimation(MarginProperty, animThickness, HandoffBehavior.SnapshotAndReplace);
 
             animDouble.To = 1d;
-            TextBlockNextInfo.BeginAnimation(OpacityProperty, animDouble);
-            MediaHappy.BeginAnimation(OpacityProperty, animDouble);
-            BorderHappy.BeginAnimation(OpacityProperty, animDouble);
+            TextBlockNextInfo.BeginAnimation(OpacityProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
+            MediaHappy.BeginAnimation(OpacityProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
+            BorderHappy.BeginAnimation(OpacityProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
             BorderHappy.Visibility = Visibility.Visible;
+            GridHappy.Visibility = Visibility.Visible;
 
-            ScaleEffectElement.BeginAnimation(ScaleTransform.ScaleXProperty, animDouble);
-            ScaleEffectElement.BeginAnimation(ScaleTransform.ScaleYProperty, animDouble);
+            ScaleEffectElement.BeginAnimation(ScaleTransform.ScaleXProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
+            ScaleEffectElement.BeginAnimation(ScaleTransform.ScaleYProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
 
             animDouble.To = 10d;
-            BlurEffectAllGrid.BeginAnimation(BlurEffect.RadiusProperty, animDouble);
+            BlurEffectAllGrid.BeginAnimation(BlurEffect.RadiusProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
         }
 
         /// <summary>
@@ -260,7 +261,7 @@ namespace OperPageLes.UI.Dialogs
                     ImmuneClosing = false;
                     break;
                 case 200:
-                    ImageLogo.BeginAnimation(OpacityProperty, null);
+                    ImageLogo.BeginAnimation(OpacityProperty, null, HandoffBehavior.SnapshotAndReplace);
                     ImageLogo.Opacity = 1d;
                     ImageLogo.Source = App.LoadImage(Properties.Resources.BlackSquare);
                     ImageLogo.UpdateLayout();
@@ -293,7 +294,7 @@ namespace OperPageLes.UI.Dialogs
                         Springiness = 4d,
                     }
                 };
-                RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, anim);
+                RotateTransformImageIconApplication.BeginAnimation(RotateTransform.AngleProperty, anim, HandoffBehavior.SnapshotAndReplace);
                 anim.Duration = TimeSpan.FromSeconds(10d);
                 anim.EasingFunction = new PowerEase()
                 {
@@ -301,7 +302,7 @@ namespace OperPageLes.UI.Dialogs
                     Power = 6d,
                 };
                 anim.RepeatBehavior = RepeatBehavior.Forever;
-                RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim);
+                RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim, HandoffBehavior.SnapshotAndReplace);
                 ThicknessAnimation animThickness = App.GetThicknessAnimate();
                 animThickness.BeginTime = TimeSpan.FromMilliseconds(80d);
                 animThickness.Duration = TimeSpan.FromSeconds(4d);
@@ -311,7 +312,7 @@ namespace OperPageLes.UI.Dialogs
                     EasingMode = EasingMode.EaseOut,
                     Amplitude = 1d,
                 };
-                ImageLogo.BeginAnimation(MarginProperty, animThickness);
+                ImageLogo.BeginAnimation(MarginProperty, animThickness, HandoffBehavior.SnapshotAndReplace);
             };
 
             base.Show();

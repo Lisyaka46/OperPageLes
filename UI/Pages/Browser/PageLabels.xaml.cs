@@ -4,7 +4,7 @@ using Microsoft.Windows.Themes;
 using Newtonsoft.Json.Linq;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Label;
-using OperPageLes.UI.Dialogs;
+using OperPageLes.UI.Windows.Dialogs;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.UserElementControl;
 using System.Windows;
@@ -161,7 +161,7 @@ namespace OperPageLes.UI.Pages.Browser
             PageLabel.IELButtonManipulateTags.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
-                new WindowManipulateLabelTags().ShowManipulateTags();
+                new DialogManipulateLabelTags().ShowManipulateTags();
             };
             PageLabel.IELButtonSelectAllLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -205,7 +205,7 @@ namespace OperPageLes.UI.Pages.Browser
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 if (SelectLabelInPage != null)
                 {
-                    WindowGenLabel GenLabel = new();
+                    DialogGenLabel GenLabel = new();
                     App.ActiveDialog = GenLabel;
                     GenLabel.ChangeLabel(SelectLabelInPage);
                     App.ActiveDialog = null;
@@ -235,7 +235,7 @@ namespace OperPageLes.UI.Pages.Browser
                 if (SelectLabelInPage != null)
                 {
                     SelectLabelInPage.Selected = true;
-                    LabelTag? Tag = new WindowManipulateLabelTags().ShowSelectOneTag();
+                    LabelTag? Tag = new DialogManipulateLabelTags().ShowSelectOneTag();
                     if (Tag != null)
                     {
                         SelectLabelInPage.SourceLabel.AppendTag(Tag);

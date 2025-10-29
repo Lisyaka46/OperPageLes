@@ -6,12 +6,12 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSaveWait.xaml
     /// </summary>
-    public partial class WindowSaveWait : Window
+    public partial class DialogSaveWait : Window
     {
         /// <summary>
         /// Токен управляемой асинхронной операцией отображения обновления информации управляемая завершением сохранения
@@ -32,7 +32,7 @@ namespace OperPageLes.UI.Dialogs
             Duration = TimeSpan.FromMilliseconds(2000d),
         };
 
-        public WindowSaveWait()
+        public DialogSaveWait()
         {
             InitializeComponent();
             TaskTokenComplete = new(false);

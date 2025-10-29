@@ -40,16 +40,5 @@
             }
             Names = [.. CharMassName.Select((i) => new string(i))];
         }
-
-        /// <summary>
-        /// Отсортировать массив строк
-        /// </summary>
-        /// <param name="Names">Массив строк</param>
-        /// <returns>Отсортированный массив строк</returns>
-        public static string[] SortNames(string[] Names)
-        {
-            SortNames(ref Names);
-            return Names;
-        }
     }
 }

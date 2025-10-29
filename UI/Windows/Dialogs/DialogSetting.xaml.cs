@@ -4,12 +4,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSetting.xaml
     /// </summary>
-    public partial class WindowSetting : Window
+    public partial class DialogSetting : Window
     {
         /// <summary>
         /// Страница общих настроек программы
@@ -36,7 +36,7 @@ namespace OperPageLes.UI.Dialogs
         /// </summary>
         private int ActiveIndexColumn = -1;
 
-        public WindowSetting()
+        public DialogSetting()
         {
             InitializeComponent();
             GeneralSetting = new();

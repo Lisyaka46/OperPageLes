@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OperPageLes.UI.Dialogs"
+        xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
         xmlns:GUI="clr-namespace:OperPageLes.UI.UserElementControl"
-        xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPageLes.UI.Dialogs.WindowManipulateLabelTags"
+        xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
+        xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+        xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+        x:Class="OperPageLes.UI.Windows.Dialogs.DialogManipulateLabelTags"
         mc:Ignorable="d" Height="300" Width="480" Background="#FF838A7B" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Title="Окно манипуляции над тегами">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>

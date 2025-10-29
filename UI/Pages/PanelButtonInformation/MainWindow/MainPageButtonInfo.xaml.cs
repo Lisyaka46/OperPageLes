@@ -1,14 +1,12 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.GUI;
-using OperPageLes.CORE;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.Other;
 using System.Runtime.InteropServices;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
+using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using static OperPageLes.App;
@@ -49,10 +47,17 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         /// </summary>
         private readonly PanelActionSettingVisual SettingVisualVolume;
 
+#if DEBUG
+        private readonly TextBlock DEV_InternetMillisecond;
+#endif
+
         public MainPageButtonInfo()
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             InitializeComponent();
+#if DEBUG
+            DEV_InternetMillisecond = CurrentApp.Is_WindowDeveloper.BlockInlays[1].AddNewTextElement();
+#endif
             SettingVisualVolume = new(GridMain, new(new PageVolumeControl()), new System.Windows.Size(150, 36));
             TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
             App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
@@ -144,6 +149,9 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             ThreadInternetConnection = new(async () =>
             {
                 await InternetPinging.UpdateInternetConnection();
+#if DEBUG
+                await Dispatcher.InvokeAsync(() => DEV_InternetMillisecond.Text = $"IP_E: {InternetPinging.MillisecondUpdateTime}");
+#endif
                 //Console.Beep(1000, 300);
                 if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
                 {

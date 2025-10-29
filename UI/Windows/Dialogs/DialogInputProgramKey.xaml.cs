@@ -7,18 +7,18 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowInputProgramKey.xaml
     /// </summary>
-    public partial class WindowInputProgramKey : Window
+    public partial class DialogInputProgramKey : Window
     {
         private StructPack Pack;
 
         private PackKey? ResultKey = null;
 
-        public WindowInputProgramKey()
+        public DialogInputProgramKey()
         {
             InitializeComponent();
             Pack = StructPack.NowPack;

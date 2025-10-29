@@ -3,12 +3,12 @@ using OperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Input;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowManipulateLabelTags.xaml
     /// </summary>
-    public partial class WindowManipulateLabelTags : Window
+    public partial class DialogManipulateLabelTags : Window
     {
         /// <summary>
         /// Выделенный тег
@@ -20,7 +20,7 @@ namespace OperPageLes.UI.Dialogs
         /// </summary>
         private bool Cancel = true;
 
-        public WindowManipulateLabelTags()
+        public DialogManipulateLabelTags()
         {
             InitializeComponent();
             Icon = App.LoadImage(Properties.Resources.Tag);
@@ -51,7 +51,7 @@ namespace OperPageLes.UI.Dialogs
             IELButtonAddTag.IsEnabled = true;
             IELButtonAddTag.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                LabelTag? Tag = new WindowGenDataLabelTag().GenereteTag();
+                LabelTag? Tag = new DialogGenDataLabelTag().GenereteTag();
                 if (Tag == null) return;
                 App.CurrentApp.DataLabelTags.Add(Tag);
                 OPLLabelTag VisualTag = AddVisualTag(Tag);

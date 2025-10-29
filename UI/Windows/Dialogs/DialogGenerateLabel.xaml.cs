@@ -5,12 +5,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenLabel.xaml
     /// </summary>
-    public partial class WindowGenLabel : Window
+    public partial class DialogGenLabel : Window
     {
         /// <summary>
         /// Состояние отмены создания ярлыка
@@ -26,7 +26,7 @@ namespace OperPageLes.UI.Dialogs
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
         };
 
-        public WindowGenLabel()
+        public DialogGenLabel()
         {
             InitializeComponent();
             Width = 315d;

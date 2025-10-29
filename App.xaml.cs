@@ -13,11 +13,11 @@ using OperPageLes.CORE;
 using OperPageLes.CORE.Label;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Dialogs;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.UserElementControl;
 using OperPageLes.UI.Windows;
+using OperPageLes.UI.Windows.Dialogs;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
@@ -27,7 +27,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -243,10 +242,17 @@ namespace OperPageLes
         /// </summary>
         internal static new MainWindow MainWindow => (MainWindow)Current.MainWindow;
 
+#if DEBUG
+        /// <summary>
+        /// Окно разработчика
+        /// </summary>
+        internal UI.Windows.DEV.WindowDeveloper Is_WindowDeveloper { get; private set; }
+#endif
+
         /// <summary>
         /// Экземпляр созданного приложения
         /// </summary>
-        internal static App CurrentApp => (App)Current;
+        internal static App CurrentApp => Current as App ?? throw new Exception("Непредвиденный перевод объекта приложения в неожидаемый тип.");
 
         /// <summary>
         /// Активое окно которое является дочерним от основного
@@ -332,6 +338,10 @@ namespace OperPageLes
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
             LogWriteLine("---------- Старт нового экземпляра ----------");
+            LogWriteLine("Инициализация свойств экземпляра");
+#if DEBUG
+            Is_WindowDeveloper = new();
+#endif
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             #endregion
 
@@ -408,7 +418,7 @@ namespace OperPageLes
                 new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
                 (Command, param) =>
                 {
-                    WindowGenLabel GenLabel = new();
+                    DialogGenLabel GenLabel = new();
                     ActiveDialog = GenLabel;
                     LabelAction? label = GenLabel.CreateLabel();
                     ActiveDialog = null;
@@ -677,7 +687,7 @@ namespace OperPageLes
             }
             if (!InstallingKey.IsValid)
             {
-                PackKey? key = new WindowInputProgramKey().SetKeyValid();
+                PackKey? key = new DialogInputProgramKey().SetKeyValid();
                 if (key != null) InstallingKey = key;
             }
             if (!InstallingKey.IsValid)
@@ -694,7 +704,9 @@ namespace OperPageLes
             LogWriteLine("Открытие главного окна");
             try
             {
-
+#if DEBUG
+                Is_WindowDeveloper.Show();
+#endif
                 ((MainWindow)Current.MainWindow).Show();
             }
             catch (Exception ex)
@@ -708,12 +720,19 @@ namespace OperPageLes
         /// </summary>
         internal void RebootApplication()
         {
-            LogWriteLine("/// Перезагрузка ///");
+            LogWriteLine("/// Старт процесса перезагрузки! ///");
             MainWindow RebootWindow = (MainWindow)Current.MainWindow;
-            Current.MainWindow = new MainWindow();
             RebootWindow.Closed += (sender, e) =>
             {
+#if DEBUG
+                Is_WindowDeveloper = new();
+#endif
+                Current.MainWindow = new MainWindow();
+#if DEBUG
+                Is_WindowDeveloper.Show();
+#endif
                 ((MainWindow)Current.MainWindow).Show();
+                LogWriteLine("/// Перезагрузка прошла успешно! ///");
             };
             RebootWindow.IsReboot = true;
             RebootWindow.Close();

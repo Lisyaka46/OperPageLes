@@ -5,12 +5,12 @@ using OperPageLes.UI.Pages.Browser;
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.UI.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowBrowserPagesManager.xaml
     /// </summary>
-    public partial class WindowBrowserPagesManager : Window
+    public partial class DialogBrowserPagesManager : Window
     {
         /// <summary>
         /// Идёт ли создание объекта страницы
@@ -31,12 +31,9 @@ namespace OperPageLes.UI.Dialogs
             EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
         };
 
-        public WindowBrowserPagesManager()
+        public DialogBrowserPagesManager()
         {
             InitializeComponent();
-#if !DEBUG
-            IELButtonGenerate.IsEnabled = false;
-#endif
             KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -47,7 +44,11 @@ namespace OperPageLes.UI.Dialogs
                 }
             };
 
-            IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) => Close();
+            IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                Close();
+            };
+
             #region IELButtonAddPageLabel
             IELButtonAddPageLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -105,20 +106,6 @@ namespace OperPageLes.UI.Dialogs
         internal static new void Show() => throw new Exception("Данное окно нельзя открыть не использовав специальный метод перегрузки с объектом привязки браузера");
         internal static new void ShowDialog() => throw new Exception("Данное окно нельзя открыть не использовав специальный метод перегрузки с объектом привязки браузера");
 
-        internal void Show(IELBrowserPage browserPage)
-        {
-            IELButtonAddPageLabel.IsEnabled = browserPage.SearchPageType<PageLabels>() == null;
-            IELButtonPageDeveloper.IsEnabled = browserPage.SearchPageType<PageDeveloper>() == null;
-            base.Show();
-        }
-
-        internal void ShowDialog(IELBrowserPage browserPage)
-        {
-            IELButtonAddPageLabel.IsEnabled = browserPage.SearchPageType<PageLabels>() == null;
-            IELButtonPageDeveloper.IsEnabled = browserPage.SearchPageType<PageDeveloper>() == null;
-            base.ShowDialog();
-        }
-
         /// <summary>
         /// Добавить в браузер страниц новую вкладку и активировать страницу
         /// </summary>
@@ -128,12 +115,16 @@ namespace OperPageLes.UI.Dialogs
         {
             Opacity = 0d;
             DoubleAnimation animation = DoubleAnimate.Clone();
-            animation.BeginTime = TimeSpan.FromMilliseconds(10d);
+            //animation.BeginTime = TimeSpan.FromMilliseconds(10d);
             animation.Duration = TimeSpan.FromMilliseconds(670d);
             animation.From = 0d;
             animation.To = 0.97d;
-            BeginAnimation(OpacityProperty, animation);
-            ShowDialog(browserPage);
+            BeginAnimation(OpacityProperty, animation, HandoffBehavior.SnapshotAndReplace);
+
+            IELButtonAddPageLabel.IsEnabled = browserPage.SearchPageType<PageLabels>() == null;
+            IELButtonPageDeveloper.IsEnabled = browserPage.SearchPageType<PageDeveloper>() == null;
+
+            base.ShowDialog();
             return AppendElementPage;
         }
     }
