@@ -157,7 +157,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             OPLLabelTag OPLTag = OPLLabelCommand.CreateVisualTag(NewTag);
             OPLTag.IELTag.Cursor = System.Windows.Input.Cursors.Hand;
             OPLTag.Opacity = 0d;
-            App.AnimateDoubleEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            App.DoubleAnimationType.AnimateEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             StackPanelTags.Children.Add(OPLTag);
             return OPLTag;
         }

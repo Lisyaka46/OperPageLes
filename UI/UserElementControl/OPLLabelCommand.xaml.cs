@@ -96,9 +96,10 @@ namespace OperPageLes.UI.UserElementControl
                 {
                     if (Animated)
                     {
-                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
+                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                         anim.To = NewValue;
-                        BorderMainLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        BorderMainLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
                     }
                     else
                     {
@@ -110,9 +111,10 @@ namespace OperPageLes.UI.UserElementControl
                 {
                     if (Animated)
                     {
-                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
+                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                         anim.To = NewValue;
-                        BorderMainLabel.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        BorderMainLabel.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
                     }
                     else
                     {
@@ -124,9 +126,10 @@ namespace OperPageLes.UI.UserElementControl
                 {
                     if (Animated)
                     {
-                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
+                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                         anim.To = NewValue;
-                        TextBlockNameLabel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        TextBlockNameLabel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
                     }
                     else
                     {
@@ -204,7 +207,7 @@ namespace OperPageLes.UI.UserElementControl
             get => _Selected;
             set
             {
-                App.AnimateDoubleEffect(BorderSelectElement, OpacityProperty, value ? 1d : 0d, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, value ? 1d : 0d, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
                 _Selected = value;
             }
         }
@@ -235,11 +238,11 @@ namespace OperPageLes.UI.UserElementControl
                     BorderBrush = NewValue ? IELSettingObject.BorderBrushSetting.Default : IELSettingObject.BorderBrushSetting.NotEnabled;
                 TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
 
-                App.AnimateColorEffect(BorderMainLabel.Background, SolidColorBrush.ColorProperty, Background, span);
+                App.ColorAnimationType.AnimateEffect(BorderMainLabel.Background, SolidColorBrush.ColorProperty, Background, span);
 
-                App.AnimateColorEffect(BorderMainLabel.BorderBrush, SolidColorBrush.ColorProperty, BorderBrush, span);
+                App.ColorAnimationType.AnimateEffect(BorderMainLabel.BorderBrush, SolidColorBrush.ColorProperty, BorderBrush, span);
 
-                App.AnimateColorEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
+                App.ColorAnimationType.AnimateEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
             };
 
             MouseEnter += (sender, e) =>
@@ -318,9 +321,9 @@ namespace OperPageLes.UI.UserElementControl
                         ImageFaviconLabel.Height = 20;
                         ImageFaviconLabel.Opacity = 0d;
 
-                        App.AnimateDoubleEffect(ImageFaviconLabel, OpacityProperty, 1d, TimeSpan.FromMilliseconds(900d));
-                        App.AnimateDoubleEffect(ImageFaviconLabel, WidthProperty, 40d, TimeSpan.FromMilliseconds(1100d));
-                        App.AnimateDoubleEffect(ImageFaviconLabel, HeightProperty, 40d, TimeSpan.FromMilliseconds(1100d));
+                        App.DoubleAnimationType.AnimateEffect(ImageFaviconLabel, OpacityProperty, 1d, TimeSpan.FromMilliseconds(900d));
+                        App.DoubleAnimationType.AnimateEffect(ImageFaviconLabel, WidthProperty, 40d, TimeSpan.FromMilliseconds(1100d));
+                        App.DoubleAnimationType.AnimateEffect(ImageFaviconLabel, HeightProperty, 40d, TimeSpan.FromMilliseconds(1100d));
                     });
                     //while (worker.IsBusy) System.Windows.Forms.Application.DoEvents();
                     //action.Invoke();

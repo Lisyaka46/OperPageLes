@@ -60,7 +60,7 @@
                         </ObjectSettings:IELButtonObjectSetting>
                     </IEL:IELButtonText.IELSettingObject>
                 </IEL:IELButtonText>
-                <IEL:IELButtonText x:Name="IELButtonKeyDetect" CornerRadius="5,5,5,5" Text="Key" Grid.ColumnSpan="1" PaddingContent="2,3,2,3" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,3,5,3">
+                <IEL:IELButtonText x:Name="IELButtonTest" CornerRadius="5,5,5,5" Text="Test" Grid.ColumnSpan="1" PaddingContent="2,3,2,3" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,3,5,3">
                     <IEL:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>

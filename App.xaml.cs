@@ -7,9 +7,11 @@ using Interpreter.Commands;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using LibraryPackKey.CORE;
+using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OperPageLes.CORE;
+using OperPageLes.CORE.Animation;
 using OperPageLes.CORE.Label;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
@@ -18,11 +20,15 @@ using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.UserElementControl;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -40,173 +46,49 @@ namespace OperPageLes
     public partial class App : System.Windows.Application
     {
         #region AnimationObject
-
-        #region ThicknessAnimation
         /// <summary>
-        /// Объект анимации для управления позицией
+        /// Объект анимации Thickness
         /// </summary>
-        private static readonly ThicknessAnimation ThicknessAnimate = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
-        {
-            DecelerationRatio = 0.6d,
-            EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
-            From = null
-        };
-
-        /// <summary>
-        /// Дать объект анимации
-        /// </summary>
-        /// <param name="NewDuration">Новое время анимации</param>
-        /// <returns>Объект анимации</returns>
-        internal static ThicknessAnimation GetThicknessAnimate(TimeSpan? NewDuration = null)
-        {
-            ThicknessAnimation Result = ThicknessAnimate.Clone();
-            if (NewDuration.HasValue) Result.Duration = NewDuration.Value;
-            return Result;
-        }
+        internal static OPLThicknessAnimationType<ThicknessAnimation> ThicknessAnimationType =
+            new(new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
+            {
+                DecelerationRatio = 0.6d,
+                EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+                From = null
+            });
 
         /// <summary>
-        /// Анимировать эффект цвета объекта
+        /// Объект анимации Double
         /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="From">Значение от которого начинается анимация</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateThicknessEffect(IAnimatable Element, DependencyProperty Property, Thickness From, Thickness To, TimeSpan? Duration = null)
-        {
-            if (Duration != null) ThicknessAnimate.Duration = Duration.Value;
-            ThicknessAnimate.From = From;
-            ThicknessAnimate.To = To;
-            Element.BeginAnimation(Property, ThicknessAnimate, HandoffBehavior.SnapshotAndReplace);
-        }
+        internal static OPLDoubleAnimationType<DoubleAnimation> DoubleAnimationType =
+            new(new(0, TimeSpan.FromMilliseconds(250d))
+            {
+                DecelerationRatio = 0.2d,
+                EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
+                From = null
+            });
 
         /// <summary>
-        /// Анимировать эффект цвета объекта
+        /// Объект анимации Color
         /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateThicknessEffect(IAnimatable Element, DependencyProperty Property, Thickness To, TimeSpan? Duration = null)
-        {
-            if (Duration != null) ThicknessAnimate.Duration = Duration.Value;
-            ThicknessAnimate.From = null;
-            ThicknessAnimate.To = To;
-            Element.BeginAnimation(Property, ThicknessAnimate, HandoffBehavior.SnapshotAndReplace);
-        }
-        #endregion
-
-        #region DoubleAnimation
-        /// <summary>
-        /// Объект анимации для управления double значением
-        /// </summary>
-        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
-            From = null
-        };
+        internal static OPLColorAnimationType<ColorAnimation> ColorAnimationType =
+            new(new(Colors.Black, TimeSpan.FromMilliseconds(250d))
+            {
+                DecelerationRatio = 0.2d,
+                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
+                From = null
+            });
 
         /// <summary>
-        /// Дать объект анимации
+        /// Объект анимации Rect
         /// </summary>
-        /// <param name="NewDuration">Новое время анимации</param>
-        /// <returns>Объект анимации</returns>
-        internal static DoubleAnimation GetDoubleAnimate(TimeSpan? NewDuration = null)
-        {
-            DoubleAnimation Result = DoubleAnimate.Clone();
-            if (NewDuration.HasValue) Result.Duration = NewDuration.Value;
-            return Result;
-        }
-
-        /// <summary>
-        /// Анимировать числовой эффект объекта
-        /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="From">Значение от которого начинается анимация</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double From, double To, TimeSpan? Duration = null)
-        {
-            if (Duration != null) DoubleAnimate.Duration = Duration.Value;
-            DoubleAnimate.From = From;
-            DoubleAnimate.To = To;
-            Element.BeginAnimation(Property, DoubleAnimate, HandoffBehavior.SnapshotAndReplace);
-        }
-        /// <summary>
-        /// Анимировать числовой эффект объекта
-        /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateDoubleEffect(IAnimatable Element, DependencyProperty Property, double To, TimeSpan? Duration = null)
-        {
-            if (Duration != null) DoubleAnimate.Duration = Duration.Value;
-            DoubleAnimate.From = null;
-            DoubleAnimate.To = To;
-            Element.BeginAnimation(Property, DoubleAnimate, HandoffBehavior.SnapshotAndReplace);
-        }
-        #endregion
-
-        #region ColorAnimation
-        /// <summary>
-        /// Объект анимации для управления Color значением
-        /// </summary>
-        private static readonly ColorAnimation ColorAnimate = new(Colors.Black, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
-            From = null
-        };
-
-        /// <summary>
-        /// Дать объект анимации
-        /// </summary>
-        /// <param name="NewDuration">Новое время анимации</param>
-        /// <returns>Объект анимации</returns>
-        internal static ColorAnimation GetColorAnimate(TimeSpan? NewDuration = null)
-        {
-            ColorAnimation Result = ColorAnimate.Clone();
-            if (NewDuration.HasValue) Result.Duration = NewDuration.Value;
-            return Result;
-        }
-
-        /// <summary>
-        /// Анимировать эффект цвета объекта
-        /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property,
-            System.Windows.Media.Color From, System.Windows.Media.Color To, TimeSpan? Duration = null)
-        {
-            if (Duration != null) ColorAnimate.Duration = Duration.Value;
-            ColorAnimate.From = From;
-            ColorAnimate.To = To;
-            Element.BeginAnimation(Property, ColorAnimate, HandoffBehavior.SnapshotAndReplace);
-        }
-
-        /// <summary>
-        /// Анимировать эффект цвета объекта
-        /// </summary>
-        /// <param name="Element">Объект анимации</param>
-        /// <param name="Property">Анимируемое свойство</param>
-        /// <param name="From">Значение от которого начинается анимация</param>
-        /// <param name="To">Значение к которому стремится анимация</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        internal static void AnimateColorEffect(IAnimatable Element, DependencyProperty Property,
-            System.Windows.Media.Color To, TimeSpan? Duration = null)
-        {
-            if (Duration != null) ColorAnimate.Duration = Duration.Value;
-            ColorAnimate.From = null;
-            ColorAnimate.To = To;
-            Element.BeginAnimation(Property, ColorAnimate, HandoffBehavior.SnapshotAndReplace);
-        }
-        #endregion
-
+        internal static OPLRectAnimationType<RectAnimation> RectAnimationType =
+            new(new(new Rect(), TimeSpan.FromMilliseconds(250d))
+            {
+                DecelerationRatio = 0.8d,
+                EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+                From = null
+            });
         #endregion
 
         #region Data
@@ -331,14 +213,25 @@ namespace OperPageLes
         /// </summary>
         private StreamWriter? LogStreamWriter = null;
 
+        /// <summary>
+        /// Канал воспроизведения звуков
+        /// </summary>
+        internal WaveOut SoundChannelWaveOut { get; }
+
+        Socket? UDPSocketServer;
+        Socket? UDPSocketClient;
+        IPEndPoint? IPServer;
+        IPEndPoint? IPClient;
+
         public App()
         {
+            LogWriteLine("---------- Старт нового экземпляра ----------");
+            LogWriteLine("Инициализация свойств экземпляра");
             #region Resources
+            SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
-            LogWriteLine("---------- Старт нового экземпляра ----------");
-            LogWriteLine("Инициализация свойств экземпляра");
 #if DEBUG
             Is_WindowDeveloper = new();
 #endif
@@ -594,6 +487,74 @@ namespace OperPageLes
                         CommandStateResult.Failed(Command.Name, $"Файл \"{Path.GetFileName(path)}\" по данной директории не найден"));
                 }),
                 #endregion
+
+                #region open_file
+                new ConsoleCommand("udp_init",
+                [
+                    new Parameter("ip_server", typeof(string)),
+                    new Parameter("port_server", typeof(int)),
+                    new Parameter("ip_client", typeof(string)),
+                    new Parameter("port_client", typeof(int))
+                ],
+                "Открывает UDP сервер по его \"port_server\". Подключается к устройству по его \"ip_client\" и \"port_client\"",
+                (Command, param) =>
+                {
+                    try
+                    {
+                        UDPSocketServer = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                        UDPSocketClient = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                        IPServer = new(IPAddress.Parse((string)param[0]), (int)param[1]);
+                        IPClient = new(IPAddress.Parse((string)param[2]), (int)param[3]);
+                        UDPSocketServer.Bind(IPServer);
+                        return Task.FromResult(CommandStateResult.Completed(Command.Name, $"UDP-сервер запущен..."));
+                    }
+                    catch (Exception ex)
+                    {
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name, ex.ToString()));
+                    }
+                }),
+                #endregion
+
+                #region open_file
+                new ConsoleCommand("udp_message_send",
+                [
+                    new Parameter("message", typeof(string)),
+                ],
+                "Отправляет \"message\" через интернет к подключённому устройству",
+                async (Command, param) =>
+                {
+                    try {
+                        if (IPClient == null || UDPSocketClient == null) return CommandStateResult.Failed(Command.Name, "UDP не инициализирован!");
+                        byte[] data = Encoding.UTF8.GetBytes($"{DateTime.Now:HH:mm:ss}: \"{param[0]}\"");
+                        int bytes = await UDPSocketClient.SendToAsync(data, IPClient);
+                        return CommandStateResult.Completed(Command.Name, $"Сообщение отправлено: \"{param[0]}\" \"{bytes} bytes\"");
+                    }
+                    catch (Exception ex)
+                    {
+                        return CommandStateResult.Failed(Command.Name, $"{ex}");
+                    }
+                }),
+                #endregion
+
+                #region open_file
+                new ConsoleCommand("udp_message_receive",
+                "Ожидает сообщение, переданное вашему устройству",
+                async (Command, param) =>
+                {
+                    if (UDPSocketServer == null || IPClient == null) return CommandStateResult.Failed(Command.Name, "UDP не инициализирован!");
+                    PageConsole? PageConsoleElement = (PageConsole?)MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent;
+                    if (PageConsoleElement == null)
+                    {
+                        return CommandStateResult.Failed(Command.Name, $"Страница консоли не найдена!");
+                    }
+                    byte[] data = new byte[256]; // буфер для получаемых данных
+                    PageConsoleElement.AddTextInConsole($"Ожидаю сообщение...");
+
+                    // получаем данные в массив data
+                    SocketReceiveFromResult result = await UDPSocketServer.ReceiveFromAsync(data, IPClient);
+                    return CommandStateResult.Completed(Command.Name, $"\"{Encoding.UTF8.GetString(data, 0, result.ReceivedBytes)}\"\nОтправитель: {result.RemoteEndPoint}");
+                }),
+                #endregion
                 ]);
             #endregion
             LogWriteLine("Инициализация параметров приложения");
@@ -616,6 +577,7 @@ namespace OperPageLes
                 [..StructDirectoryResources.DeserializeObjectJson<string>(StructDirectoryResources.DirectoryDataLabelTags).Select(Tag => new LabelTag(Tag))];
 
             DataLabels = [..StructDirectoryResources.DeserializeObjectJson<LabelAction>(StructDirectoryResources.DirectoryDataLabels)];
+            SoundChannelWaveOut.Volume = SettingMainApplication.Volume;
 
             #region SettingRuntimeRealizeSettingChanges
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
@@ -645,6 +607,10 @@ namespace OperPageLes
             SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
             {
                 MainWindow.IELActionPanelMain.KeyCloseElement = New;
+            };
+            SettingMainApplication.Volume.Changed += (Old, New) =>
+            {
+                SoundChannelWaveOut.Volume = New;
             };
             #endregion
 
@@ -939,7 +905,7 @@ namespace OperPageLes
         /// </summary>
         /// <param name="CommandString">Строка команды</param>
         /// <param name="AppendBufferCommand">Состояние добавления команды в буфер</param>
-        internal void ActivateActionCommand(PageConsole? Console, string CommandString, bool AppendBufferCommand = true)
+        internal async Task ActivateActionCommand(PageConsole? Console, string CommandString, bool AppendBufferCommand = true)
         {
             if (CommandString.Length == 0) return;
             if (Console != null) Console.TextBoxCommandInput.Text = string.Empty;
@@ -950,17 +916,17 @@ namespace OperPageLes
             if (AppendBufferCommand && Console != null)
             {
                 PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString,
-                (sender, e, Key) =>
+                async (sender, e, Key) =>
                 {
-                    ActivateActionCommand(Console, CommandString);
+                    await ActivateActionCommand(Console, CommandString);
                 });
             }
 
-            CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : Command.ExecuteCommand(Parameters);
+            CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : await Command.ExecuteCommand(Parameters);
             if (result.State == ResultState.InvalidCommand)
             {
                 AliasCommand<ICommandOPER>? Alias = Interpreter.ReadAliasCommand(CommandString);
-                result = Alias == null ? CommandStateResult.FaledCommand(Name) : Alias.ExecuteCommand(Parameters);
+                result = Alias == null ? CommandStateResult.FaledCommand(Name) : await Alias.ExecuteCommand(Parameters);
             }
             if (Console != null) SummarizeCommandStateResult(Console, result);
         }
@@ -969,7 +935,7 @@ namespace OperPageLes
         /// Активировать команду не добавляя в буфер
         /// </summary>
         /// <param name="CommandString">Строка команды</param>
-        public void ActivateActionCommand(PageConsole? Console, string CommandString) => ActivateActionCommand(Console, CommandString, false);
+        public async Task ActivateActionCommand(PageConsole? Console, string CommandString) => await ActivateActionCommand(Console, CommandString, false);
 
         /// <summary>
         /// Создать действие над итогом выполнения команды

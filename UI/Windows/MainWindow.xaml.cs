@@ -104,11 +104,6 @@ namespace OperPageLes.UI.Windows
         private bool IsClosing = false;
 
         /// <summary>
-        /// Канал воспроизведения звуков
-        /// </summary>
-        private WaveOut SoundChannelWaveOut { get; }
-
-        /// <summary>
         /// Страница выбора новой страницы браузера
         /// </summary>
         private PageManagerBrowser ManagerBrowserNewPage;
@@ -128,20 +123,6 @@ namespace OperPageLes.UI.Windows
             DEV_Data = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
             DEV_IsLoadingProcess = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
 #endif
-            #endregion
-
-            #region Audio
-            SoundChannelWaveOut = new()
-            {
-                Volume = App.CurrentApp.SettingMainApplication.Volume,
-            };
-            #endregion
-
-            #region SettingParameters
-            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
-            {
-                SoundChannelWaveOut.Volume = New;
-            };
             #endregion
 
             #region SetParameteres
@@ -172,7 +153,7 @@ namespace OperPageLes.UI.Windows
             IELActionPanelMain.KeyCloseElement = App.CurrentApp.SettingMainApplication.KEY_PanelActionClose;
             IELActionPanelMain.EventMovePanelAction += (sender, e) =>
             {
-                StructDirectoryResources.Play(SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
+                StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
             };
             byte[,] ColorBytes = new byte[4, 4]
             {
@@ -298,9 +279,10 @@ namespace OperPageLes.UI.Windows
             ManagerBrowserNewPage = new();
             ManagerBrowserNewPage.BrowserPageSelect += (sender, e) =>
             {
-                App.AnimateDoubleEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
-                App.AnimateDoubleEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.AnimateDoubleEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
                 Canvas.SetZIndex(FrameNewInlayBrowser, -1);
                 FrameNewInlayBrowser.IsHitTestVisible = false;
                 FrameNewInlayBrowser.IsEnabled = false;
@@ -335,9 +317,11 @@ namespace OperPageLes.UI.Windows
                 FrameNewInlayBrowser.IsEnabled = true;
                 FrameNewInlayBrowser.IsHitTestVisible = true;
                 IELBrowserPageMain.IsEnabled = false;
-                App.AnimateDoubleEffect(FrameNewInlayBrowser, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.AnimateDoubleEffect(IELBrowserPageMain, OpacityProperty, 0.9d, TimeSpan.FromMilliseconds(500d));
-                App.AnimateDoubleEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, TimeSpan.FromMilliseconds(500d));
+                IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, TimeSpan.FromMilliseconds(500d));
                 Canvas.SetZIndex(FrameNewInlayBrowser, 1);
                 ManagerBrowserNewPage.Focus();
             };
@@ -374,9 +358,9 @@ namespace OperPageLes.UI.Windows
 
                     #region Anim Start
                     #region 1
-                    App.AnimateThicknessEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
+                    App.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
 
-                    App.AnimateThicknessEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, TimeSpan.FromMilliseconds(1400d));
+                    App.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, TimeSpan.FromMilliseconds(1400d));
 
                     #endregion
                     #endregion
@@ -473,20 +457,11 @@ namespace OperPageLes.UI.Windows
         }
         #endregion
 
-        /// <summary>
-        /// Воспроизвести звук по директории звукового файла
-        /// </summary>
-        /// <param name="Sound">Директория звукового файла</param>
-        internal void Play(string Sound)
-        {
-            StructDirectoryResources.Play(SoundChannelWaveOut, Sound);
-        }
-
         #region DownToolButtons
         //
         private void NextPageDownToolButtons(bool UpIndex = true)
         {
-            StructDirectoryResources.Play(SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
+            StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
             if (UpIndex)
             {
                 if (ActualIndexActivatePageDownToolButtons == PagesButtonsInformation.Length - 1)
@@ -557,7 +532,7 @@ namespace OperPageLes.UI.Windows
 #if DEBUG
                 DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
 #endif
-                App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
             ViewLoading.VisualOpenLoading();
         } 
@@ -577,7 +552,7 @@ namespace OperPageLes.UI.Windows
 #if DEBUG
                 DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
 #endif
-                App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
+                App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
             }
         }
         #endregion
@@ -624,7 +599,7 @@ namespace OperPageLes.UI.Windows
             }
             else
             {
-                App.AnimateDoubleEffect(ImageMenu, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
+                App.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
             }
         }
 
@@ -634,11 +609,13 @@ namespace OperPageLes.UI.Windows
         /// <param name="bitmap">Карта изображения</param>
         private void ComplitedInstallImageMenu(BitmapImage bitmap)
         {
-            ImageMenu.Source = bitmap;
-
-            App.AnimateDoubleEffect(BlurEffectImageMenu, BlurEffect.RadiusProperty, 10d, 0d, TimeSpan.FromMilliseconds(2300d));
-            App.AnimateThicknessEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
-            App.AnimateDoubleEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
+            ImageMenu.ImageSource = bitmap;
+            //ImageMenu.Source = bitmap;
+            // Сделать картинку с ViewBOX IMAGE BRUCH         0.05,-0.05,0.9,1.1      0,0,1,1
+            //App.AnimateDoubleEffect(BlurEffectImageMenu, BlurEffect.RadiusProperty, 10d, 0d, TimeSpan.FromMilliseconds(2300d));
+            App.RectAnimationType.AnimateEffect(ImageMenu, ImageBrush.ViewboxProperty, new(0, 0, 0.9, 0.9), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(2300d));
+            App.ThicknessAnimationType.AnimateEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
+            App.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
         }
 
         /// <summary>
@@ -658,7 +635,7 @@ namespace OperPageLes.UI.Windows
         #region BlurBackgroundDataTime
         internal void ChangeBlurImageInDataTime(bool State)
         {
-            App.AnimateDoubleEffect(VisualRectangleDateTimeBackground, OpacityProperty, State ? 0.5d : 0d, TimeSpan.FromMilliseconds(1300d));
+            App.DoubleAnimationType.AnimateEffect(VisualRectangleDateTimeBackground, OpacityProperty, State ? 0.5d : 0d, TimeSpan.FromMilliseconds(1300d));
         }
         #endregion
     }

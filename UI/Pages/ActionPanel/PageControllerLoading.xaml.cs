@@ -24,7 +24,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             OPLViewerLoadingProcess Result = CreateLoadingView();
             Result.Margin = new(4, GridElementsLoading.Children.Count > 0 ? 55 * GridElementsLoading.Children.Count + 5 : 5, 4, 4);
             GridElementsLoading.Children.Add(Result);
-            App.AnimateDoubleEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            App.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             return Result;
         }
 
@@ -39,7 +39,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             for (; i < GridElementsLoading.Children.Count && i > -1; i++)
             {
                 OPLViewerLoadingProcess element = (OPLViewerLoadingProcess)GridElementsLoading.Children[i];
-                App.AnimateThicknessEffect(element, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(element, MarginProperty,
                     new(4, i > 0 ? 55 * GridElementsLoading.Children.Count + 5 : 5, 4, 4), TimeSpan.FromMilliseconds(300d));
             }
             if (GridElementsLoading.Children.Count == 0)

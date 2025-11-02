@@ -47,12 +47,12 @@ namespace OperPageLes.UI.Windows.Dialogs
             #region IELGeneralButton
             IELGeneralButton.MouseEnter += (sender, e) =>
             {
-                App.AnimateThicknessEffect(IELGeneralButton, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(IELGeneralButton, MarginProperty,
                     GetMarginAnimatePageButton(IELGeneralButton.Margin, true), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
             IELGeneralButton.MouseLeave += (sender, e) =>
             {
-                App.AnimateThicknessEffect(IELGeneralButton, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(IELGeneralButton, MarginProperty,
                     GetMarginAnimatePageButton(IELGeneralButton.Margin, false), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
             IELGeneralButton.OnActivateMouseLeft += (sender, e, Key) =>
@@ -69,12 +69,12 @@ namespace OperPageLes.UI.Windows.Dialogs
             #region IELConsoleButton
             IELConsoleButton.MouseEnter += (sender, e) =>
             {
-                App.AnimateThicknessEffect(IELConsoleButton, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(IELConsoleButton, MarginProperty,
                     GetMarginAnimatePageButton(IELConsoleButton.Margin, true), TimeSpan.FromMilliseconds(IELConsoleButton.IELSettingObject.AnimationMillisecond));
             };
             IELConsoleButton.MouseLeave += (sender, e) =>
             {
-                App.AnimateThicknessEffect(IELConsoleButton, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(IELConsoleButton, MarginProperty,
                     GetMarginAnimatePageButton(IELConsoleButton.Margin, false), TimeSpan.FromMilliseconds(IELConsoleButton.IELSettingObject.AnimationMillisecond));
             };
             IELConsoleButton.OnActivateMouseLeft += (sender, e, Key) =>
@@ -91,12 +91,12 @@ namespace OperPageLes.UI.Windows.Dialogs
             #region IELPanelActionButton
             IELPanelActionButton.MouseEnter += (sender, e) =>
             {
-                App.AnimateThicknessEffect(IELPanelActionButton, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(IELPanelActionButton, MarginProperty,
                     GetMarginAnimatePageButton(IELPanelActionButton.Margin, true), TimeSpan.FromMilliseconds(IELPanelActionButton.IELSettingObject.AnimationMillisecond));
             };
             IELPanelActionButton.MouseLeave += (sender, e) =>
             {
-                App.AnimateThicknessEffect(IELPanelActionButton, MarginProperty,
+                App.ThicknessAnimationType.AnimateEffect(IELPanelActionButton, MarginProperty,
                     GetMarginAnimatePageButton(IELPanelActionButton.Margin, false), TimeSpan.FromMilliseconds(IELPanelActionButton.IELSettingObject.AnimationMillisecond));
             };
             IELPanelActionButton.OnActivateMouseLeft += (sender, e, Key) =>

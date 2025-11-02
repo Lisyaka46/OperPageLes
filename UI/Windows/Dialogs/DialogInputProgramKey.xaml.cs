@@ -28,7 +28,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockPack.Text);
-                App.AnimateColorEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
+                App.ColorAnimationType.AnimateEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
                     System.Windows.Media.Color.FromArgb(255, 0, 255, 0), Colors.Black,
                     TimeSpan.FromMilliseconds(1000d));
             };
@@ -88,7 +88,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             }
             catch
             {
-                App.AnimateColorEffect(IELTextBoxKey.Background, SolidColorBrush.ColorProperty,
+                App.ColorAnimationType.AnimateEffect(IELTextBoxKey.Background, SolidColorBrush.ColorProperty,
                 System.Windows.Media.Color.FromArgb(255, 255, 0, 0), System.Windows.Media.Color.FromArgb(0, 255, 0, 0),
                 TimeSpan.FromMilliseconds(1000d));
             }

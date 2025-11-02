@@ -7,8 +7,6 @@
       xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.Browser.PageWebBrowser"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
       Title="PageWebBrowser">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -71,7 +69,8 @@
             </Grid>
         </Grid>
         <Grid x:Name="GridBrowser" Grid.Row="1">
-            <Wpf:WebView2 x:Name="WebBrowserElement"/>
+            <WebBrowser x:Name="WebBrowserElement" Width="500" Height="500"/>
+            <!--<Wpf:WebView2 x:Name="WebBrowserElement"/>-->
         </Grid>
 
 

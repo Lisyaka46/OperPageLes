@@ -9,7 +9,7 @@
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
         x:Class="OperPageLes.Windows.WindowDiscriptionCommands"
         mc:Ignorable="d"
-        Title="Описание всех команд" Height="442" Width="850" WindowStartupLocation="CenterScreen" MinWidth="720" MinHeight="430" Foreground="Black">
+        Title="Описание всех команд" Height="442" Width="850" WindowStartupLocation="CenterScreen" MinWidth="720" MinHeight="30" Foreground="Black">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
@@ -202,8 +202,6 @@
                             </LinearGradientBrush>
                         </Border.Background>
                         <ScrollViewer x:Name="ScrollViewerElements" Background="#269BA481">
-                            <Grid x:Name="GridMainElements" ClipToBounds="True">
-                            </Grid>
                         </ScrollViewer>
                     </Border>
                 </Grid>

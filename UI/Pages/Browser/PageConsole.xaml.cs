@@ -91,10 +91,10 @@ namespace OperPageLes.UI.Pages.Browser
             GridHintOneCommand.Opacity = 0d;
             Canvas.SetZIndex(GridHintOneCommand, -1);
             RichTextBoxMainMessage.Document = new();
-            ButtonReturnCommand.OnActivateMouseLeft += (sender, e, Key) =>
+            ButtonReturnCommand.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 if (HitUse) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+                await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
             };
             #region Setting
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
@@ -214,7 +214,7 @@ namespace OperPageLes.UI.Pages.Browser
                     }
                 }
             };
-            TextBoxCommandInput.KeyUp += (sender, e) =>
+            TextBoxCommandInput.KeyUp += async (sender, e) =>
             {
                 SaveKeyDown = false;
                 switch (e.Key)
@@ -222,15 +222,15 @@ namespace OperPageLes.UI.Pages.Browser
                     case Key.Enter:
                         ActiveIndexBufferInput = -1;
                         SaveStringPrintBuffer = string.Empty;
-                        App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
-                        App.AnimateColorEffect(TextBoxCommandInput.Background,
+                        await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+                        App.ColorAnimationType.AnimateEffect(TextBoxCommandInput.Background,
                             SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
                         break;
                     case Key.Escape:
                         TextBoxCommandInput.Text = SaveStringPrintBuffer.Length > 0 ? SaveStringPrintBuffer : string.Empty;
                         SaveStringPrintBuffer = string.Empty;
                         ActiveIndexBufferInput = -1;
-                        App.AnimateColorEffect(TextBoxCommandInput.Background,
+                        App.ColorAnimationType.AnimateEffect(TextBoxCommandInput.Background,
                             SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
                         break;
                     case Key.Apps:
@@ -308,12 +308,12 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 TimeSpan span = TimeSpan.FromMilliseconds(300d);
                 Canvas.SetZIndex(GridHintOneCommand, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1 : -1);
-                App.AnimateDoubleEffect(GridHintOneCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1d : 0d, span);
+                App.DoubleAnimationType.AnimateEffect(GridHintOneCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1d : 0d, span);
 
                 Canvas.SetZIndex(StackPanelAllHit, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? -1 : 1);
-                App.AnimateDoubleEffect(StackPanelAllHit, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 0d : 1d, span);
+                App.DoubleAnimationType.AnimateEffect(StackPanelAllHit, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 0d : 1d, span);
 
-                App.AnimateDoubleEffect(BorderHintCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.Hidden ? 0d : 1d, span);
+                App.DoubleAnimationType.AnimateEffect(BorderHintCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.Hidden ? 0d : 1d, span);
                 StateVisibleHit = StateHit;
             }
             AnimateSizeHintPanel(0d, 0d, StateHit != ConsoleHitStateEnum.Hidden);
@@ -339,8 +339,8 @@ namespace OperPageLes.UI.Pages.Browser
                 AnimateHeight += BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom + 8;
                 if (AnimateHeight > BorderHintCommand.MaxHeight) AnimateHeight = BorderHintCommand.MaxHeight;
             }
-            App.AnimateDoubleEffect(BorderHintCommand, WidthProperty, AnimateWidth, span);
-            App.AnimateDoubleEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
+            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, AnimateWidth, span);
+            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
         }
 
         /// <summary>
@@ -365,8 +365,8 @@ namespace OperPageLes.UI.Pages.Browser
 
             ChangeVisualHintCommand(ConsoleHitStateEnum.VisibleOneCommand);
 
-            App.AnimateDoubleEffect(BorderHintCommand, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, span);
-            App.AnimateDoubleEffect(BorderHintCommand, HeightProperty,
+            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, span);
+            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty,
                 TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d, span);
 
         }
@@ -395,12 +395,12 @@ namespace OperPageLes.UI.Pages.Browser
             };
             Result.MouseEnter += (sender, e) =>
             {
-                App.AnimateColorEffect(Result.Foreground, SolidColorBrush.ColorProperty,
+                App.ColorAnimationType.AnimateEffect(Result.Foreground, SolidColorBrush.ColorProperty,
                     Color.FromRgb(168, 217, 255), TimeSpan.FromMilliseconds(120d));
             };
             Result.MouseLeave += (sender, e) =>
             {
-                App.AnimateColorEffect(Result.Foreground, SolidColorBrush.ColorProperty,
+                App.ColorAnimationType.AnimateEffect(Result.Foreground, SolidColorBrush.ColorProperty,
                     Color.FromRgb(11, 43, 68), TimeSpan.FromMilliseconds(120d));
             };
             Result.MouseLeftButtonUp += (sender, e) =>

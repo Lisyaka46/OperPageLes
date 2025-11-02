@@ -84,7 +84,7 @@ namespace OperPageLes.UI.Windows.Dialogs
 
             TextBlockTime.Text = "0";
             Opacity = 0d;
-            DoubleAnimation animation = App.GetDoubleAnimate();
+            DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
             animation.BeginTime = TimeSpan.FromMilliseconds(20d);
             animation.Duration = TimeSpan.FromMilliseconds(1270d);
             animation.From = 0d;
@@ -144,8 +144,8 @@ namespace OperPageLes.UI.Windows.Dialogs
             Thickness StartMargin = Marker.Margin = new(GridProgressBar.ActualWidth / ProgressBarIndicator.Maximum * ValueIndicator, 0, 0, -2);
             GridProgressBar.Children.Add(Marker);
             Marker.UpdateLayout();
-            App.AnimateThicknessEffect(Marker, MarginProperty, new(StartMargin.Left, 0, 0, 0), TimeSpan.FromMilliseconds(700d));
-            App.AnimateDoubleEffect(ProgressBarIndicator, System.Windows.Controls.ProgressBar.ValueProperty, ValueIndicator, TimeSpan.FromMilliseconds(400d));
+            App.ThicknessAnimationType.AnimateEffect(Marker, MarginProperty, new(StartMargin.Left, 0, 0, 0), TimeSpan.FromMilliseconds(700d));
+            App.DoubleAnimationType.AnimateEffect(ProgressBarIndicator, System.Windows.Controls.ProgressBar.ValueProperty, ValueIndicator, TimeSpan.FromMilliseconds(400d));
         }
 
         /// <summary>

@@ -69,7 +69,12 @@ namespace OperPageLes.UI.Windows.Dialogs
             {
                 Assistents.AssistentElement assistent;
                 int i = -1;
-                ThicknessAnimation animation = Dispatcher.Invoke(() => App.GetThicknessAnimate(TimeSpan.FromSeconds(6d)));
+                ThicknessAnimation animation = Dispatcher.Invoke(() =>
+                {
+                    ThicknessAnimation animate = App.ThicknessAnimationType.SourceAnimation.Clone();
+                    animate.Duration = TimeSpan.FromSeconds(6d);
+                    return animate;
+                });
                 Dispatcher.Invoke(() =>
                 {
                     animation.EasingFunction = new PowerEase()
@@ -93,18 +98,18 @@ namespace OperPageLes.UI.Windows.Dialogs
                         TextBlockMessage.Text = assistent.Message;
                         ImageIconNickName.Source = BitmapsAssistents[i];
                         ImageIconNickName.UpdateLayout();
-                        App.AnimateDoubleEffect(ImageIconNickName, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
-                        App.AnimateDoubleEffect(MainGrid, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
-                        App.AnimateThicknessEffect(MainGrid, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
+                        App.DoubleAnimationType.AnimateEffect(ImageIconNickName, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
+                        App.DoubleAnimationType.AnimateEffect(MainGrid, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
+                        App.ThicknessAnimationType.AnimateEffect(MainGrid, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
 
                         ImageIconNickName.BeginAnimation(MarginProperty, animation, HandoffBehavior.SnapshotAndReplace);
                     });
                     Thread.Sleep(13600);
                     Dispatcher.BeginInvoke(() =>
                     {
-                        App.AnimateDoubleEffect(MainGrid, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
-                        App.AnimateThicknessEffect(MainGrid, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
-                        App.AnimateDoubleEffect(ImageIconNickName, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
+                        App.DoubleAnimationType.AnimateEffect(MainGrid, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
+                        App.ThicknessAnimationType.AnimateEffect(MainGrid, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
+                        App.DoubleAnimationType.AnimateEffect(ImageIconNickName, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
                     });
                     Thread.Sleep((int)MillisecondsHide + 100);
                 }
@@ -183,10 +188,14 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         internal void ShowHappy()
         {
-            ThicknessAnimation animThickness = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(2000d));
+            ThicknessAnimation animThickness = App.ThicknessAnimationType.SourceAnimation.Clone();
             animThickness.BeginTime = TimeSpan.FromMilliseconds(100d);
-            DoubleAnimation animDouble = App.GetDoubleAnimate(TimeSpan.FromMilliseconds(1600d));
+            animThickness.Duration = TimeSpan.FromMilliseconds(2000d);
+
+            DoubleAnimation animDouble = App.DoubleAnimationType.SourceAnimation.Clone();
+            animDouble.Duration = TimeSpan.FromMilliseconds(1600d);
             animDouble.BeginTime = TimeSpan.FromMilliseconds(400d);
+
             uint YearRealy = (uint)(DateTime.Now.Year - HappyDay.Year);
             string SyntaxYear = string.Empty;
             if (YearRealy < 5u || (YearRealy % 10 == 1 && YearRealy != 11))
@@ -220,9 +229,9 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             TimeSpan span = TimeSpan.FromMilliseconds(800d);
             Canvas.SetZIndex(GridHappy, -1);
-            App.AnimateDoubleEffect(BorderHappy, OpacityProperty, 0d, span);
-            App.AnimateDoubleEffect(MediaHappy, OpacityProperty, 0d, span);
-            App.AnimateDoubleEffect(BlurEffectAllGrid, BlurEffect.RadiusProperty, 0d, span);
+            App.DoubleAnimationType.AnimateEffect(BorderHappy, OpacityProperty, 0d, span);
+            App.DoubleAnimationType.AnimateEffect(MediaHappy, OpacityProperty, 0d, span);
+            App.DoubleAnimationType.AnimateEffect(BlurEffectAllGrid, BlurEffect.RadiusProperty, 0d, span);
         }
 
         /// <summary>
@@ -242,7 +251,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                 case 75:
                 case 87:
                     int RandomOffset = new Random(CountClick).Next(0, 45);
-                    App.AnimateThicknessEffect(ImageLogo, MarginProperty, new(0, RandomOffset, 0, RandomOffset), TimeSpan.FromMilliseconds(800d));
+                    App.ThicknessAnimationType.AnimateEffect(ImageLogo, MarginProperty, new(0, RandomOffset, 0, RandomOffset), TimeSpan.FromMilliseconds(800d));
                     break;
                 case 99:
                     ImmuneClosing = true;
@@ -255,7 +264,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                     ImmuneClosing = false;
                     break;
                 case 150:
-                    App.AnimateDoubleEffect(ImageLogo, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                    App.DoubleAnimationType.AnimateEffect(ImageLogo, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
                     ImmuneClosing = true;
                     System.Windows.Forms.MessageBox.Show("АХАХАХ АХАХАХАА ХАХАХАХ");
                     ImmuneClosing = false;
@@ -277,8 +286,8 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         public new void Show()
         {      
-            App.AnimateDoubleEffect(ImageLogo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
-            App.AnimateDoubleEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1200d));
+            App.DoubleAnimationType.AnimateEffect(ImageLogo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+            App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1200d));
             if (!IsActivatedShow)
             {
                 IsActivatedShow = true;
@@ -303,7 +312,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                 };
                 anim.RepeatBehavior = RepeatBehavior.Forever;
                 RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                ThicknessAnimation animThickness = App.GetThicknessAnimate();
+                ThicknessAnimation animThickness = App.ThicknessAnimationType.SourceAnimation.Clone();
                 animThickness.BeginTime = TimeSpan.FromMilliseconds(80d);
                 animThickness.Duration = TimeSpan.FromSeconds(4d);
                 animThickness.To = new(5);

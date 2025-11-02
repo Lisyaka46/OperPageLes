@@ -7,7 +7,16 @@
       Title="PageVolumeControl">
 
     <Grid>
-        <Slider x:Name="SliderVolume" Maximum="100" Value="20" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Focusable="False" Panel.ZIndex="1"/>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <ComboBox x:Name="ComboBoxAudioDevices" Margin="0,0,0,2">
+                
+            </ComboBox>
+        </Grid>
+        <Slider x:Name="SliderVolume" Maximum="100" Value="20" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Focusable="False" Panel.ZIndex="1" Grid.RowSpan="1" Grid.Row="1"/>
+
     </Grid>
 </Page>

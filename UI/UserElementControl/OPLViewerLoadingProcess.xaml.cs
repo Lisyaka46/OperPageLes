@@ -31,9 +31,10 @@ namespace OperPageLes.UI.UserElementControl
                 {
                     if (Animated)
                     {
-                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
+                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                         anim.To = NewValue;
-                        BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
                     }
                     else
                     {
@@ -45,10 +46,11 @@ namespace OperPageLes.UI.UserElementControl
                 {
                     if (Animated)
                     {
-                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
+                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                         anim.To = NewValue;
-                        BorderMain.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
-                        CancelIndicator.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        BorderMain.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
+                        CancelIndicator.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
                     }
                     else
                     {
@@ -61,10 +63,11 @@ namespace OperPageLes.UI.UserElementControl
                 {
                     if (Animated)
                     {
-                        ColorAnimation anim = App.GetColorAnimate(TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
+                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                         anim.To = NewValue;
-                        TextBlockName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim);
-                        TextBlockCancel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                        TextBlockName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
+                        TextBlockCancel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
                     }
                     else
                     {
@@ -281,8 +284,8 @@ namespace OperPageLes.UI.UserElementControl
         {
             IsEnabled = false;
             if (ProgressBarLoading.Visibility == Visibility.Visible)
-                App.AnimateDoubleEffect(ProgressBarLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
-            App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
+                App.DoubleAnimationType.AnimateEffect(ProgressBarLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
+            App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
         }
 
         /// <summary>
@@ -293,8 +296,8 @@ namespace OperPageLes.UI.UserElementControl
             ProgressBarLoading.Value = 0d;
             IsEnabled = true;
             if (ProgressBarLoading.Visibility == Visibility.Visible)
-                App.AnimateDoubleEffect(ProgressBarLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-            App.AnimateDoubleEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                App.DoubleAnimationType.AnimateEffect(ProgressBarLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+            App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
     }
 }

@@ -152,7 +152,7 @@ namespace OperPageLes.UI.Pages.Browser
             PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 int CountOld = App.CurrentApp.DataLabels.Count;
-                App.CurrentApp.ActivateActionCommand(null, "create_label");
+                await App.CurrentApp.ActivateActionCommand(null, "create_label");
                 if (CountOld != App.CurrentApp.DataLabels.Count)
                 {
                     await AppendNewOPLLbel(CountOld);
@@ -190,12 +190,12 @@ namespace OperPageLes.UI.Pages.Browser
             };
             #endregion
             #region PageLabelElement
-            PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 if (SelectLabelInPage != null)
                 {
                     PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>();
-                    App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
+                    await App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
                     SelectLabelInPage = null;
                 }
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
@@ -410,8 +410,8 @@ namespace OperPageLes.UI.Pages.Browser
                 IELButtonSearch.IsEnabled = true;
                 IELTextBoxSearch.IsEnabled = true;
                 GridLabels.Visibility = Visibility.Visible;
-                App.AnimateDoubleEffect(GridLabels, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
-                App.AnimateDoubleEffect(TextBlockLabelInfo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+                App.DoubleAnimationType.AnimateEffect(GridLabels, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                App.DoubleAnimationType.AnimateEffect(TextBlockLabelInfo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
             });
         }
 
@@ -422,7 +422,7 @@ namespace OperPageLes.UI.Pages.Browser
         private void AnimateInfoText(string Text, double Millisecond)
         {
             TextBlockEventInfo.Text = Text;
-            App.AnimateDoubleEffect(TextBlockEventInfo, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(Millisecond));
+            App.DoubleAnimationType.AnimateEffect(TextBlockEventInfo, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(Millisecond));
         }
 
         /// <summary>
@@ -457,7 +457,7 @@ namespace OperPageLes.UI.Pages.Browser
                 double One = BorderNamingLabel.ActualWidth / ScrollLabels.ScrollableHeight;
                 Offset = One * ScrollLabels.VerticalOffset;
             }
-            App.AnimateDoubleEffect(BorderScrollBackground, WidthProperty, Offset, TimeSpan.FromMilliseconds(300d));
+            App.DoubleAnimationType.AnimateEffect(BorderScrollBackground, WidthProperty, Offset, TimeSpan.FromMilliseconds(300d));
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace OperPageLes.UI.Pages.Browser
             SortLabels(App.CurrentApp.DataLabels, SortingLabelType);
             GridMainLabels.Children.Add(Label);
             await UpdatePositionLabels(0, false);
-            App.AnimateDoubleEffect(Label, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
+            App.DoubleAnimationType.AnimateEffect(Label, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
             UpdateTextInfoLabels();
         }
 
@@ -504,7 +504,8 @@ namespace OperPageLes.UI.Pages.Browser
                     if (Element.Margin.Left == Left && Element.Margin.Top == Top) continue;
                     if (Animatable)
                     {
-                        ThicknessAnimation animation = App.GetThicknessAnimate(TimeSpan.FromMilliseconds(Element.IELSettingObject.AnimationMillisecond));
+                        ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
+                        animation.Duration = TimeSpan.FromMilliseconds(Element.IELSettingObject.AnimationMillisecond);
                         animation.To = new(Left, Top, 0, 0);
                         animation.FillBehavior = FillBehavior.Stop;
                         animation.Completed += (sender, e) =>
@@ -593,7 +594,7 @@ namespace OperPageLes.UI.Pages.Browser
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement, OrientationPanelActionPosition.LeftUp);
                 e.Handled = true;
             };
-            Label.OnActivateMouseLeft += (sender, e, Key) =>
+            Label.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 if (SelectLabelsMode)
                 {
@@ -607,7 +608,7 @@ namespace OperPageLes.UI.Pages.Browser
                     return;
                 }
                 PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>();
-                App.CurrentApp.ActivateActionCommand(Console, Label.SourceLabel.Command);
+                await App.CurrentApp.ActivateActionCommand(Console, Label.SourceLabel.Command);
                 e.Handled = true;
             };
             Label.MouseEnter += (sender, e) =>

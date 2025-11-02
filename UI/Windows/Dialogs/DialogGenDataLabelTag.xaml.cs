@@ -56,7 +56,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             if (!Check())
             {
-                App.AnimateColorEffect(IELTextBoxNameTag.Background, SolidColorBrush.ColorProperty,
+                App.ColorAnimationType.AnimateEffect(IELTextBoxNameTag.Background, SolidColorBrush.ColorProperty,
                 Colors.Red, IELTextBoxNameTag.IELSettingObject.BackgroundSetting.Default,
                 TimeSpan.FromMilliseconds(IELTextBoxNameTag.IELSettingObject.AnimationMillisecond));
                 return;

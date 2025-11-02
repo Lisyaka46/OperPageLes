@@ -27,7 +27,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.Other
             SliderVolume.MouseWheel += (sender, e) =>
             {
                 if (SliderVolume.Value < SliderVolume.Maximum && SliderVolume.Value > SliderVolume.Minimum)
-                    SliderVolume.Value += e.Delta > 0 ? -1f : 1f;
+                    SliderVolume.Value += e.Delta < 0 ? -1f : 1f;
             };
             SliderVolume.ValueChanged += (sender, e) =>
             {

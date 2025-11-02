@@ -37,11 +37,11 @@ namespace OperPageLes.UI.Windows.DEV
             ];
             Activated += (sender, e) =>
             {
-                App.AnimateDoubleEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
             };
             Deactivated += (sender, e) =>
             {
-                App.AnimateDoubleEffect(this, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
             };
             BorderMain.MouseLeftButtonDown += (sender, e) =>
             {
@@ -77,10 +77,10 @@ namespace OperPageLes.UI.Windows.DEV
             TextBlockInlay BlockInlay = new(NameInlay);
             BlockInlay.Inlay.MouseUp += (sender, e) =>
             {
-                App.AnimateDoubleEffect(BlockInlay.Inlay, FontSizeProperty, 20d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(BlockInlay.Inlay, FontSizeProperty, 20d, TimeSpan.FromMilliseconds(500d));
                 if (FocusInlay != null)
                 {
-                    App.AnimateDoubleEffect(FocusInlay.Inlay, FontSizeProperty, 15d, TimeSpan.FromMilliseconds(500d));
+                    App.DoubleAnimationType.AnimateEffect(FocusInlay.Inlay, FontSizeProperty, 15d, TimeSpan.FromMilliseconds(500d));
                     GridVisual.Children.Remove(FocusInlay.StackPanelInformation);
                 }
                 if (BlockInlay.Inlay.Equals(FocusInlay))

@@ -66,7 +66,7 @@ namespace OperPageLes.UI.Pages.Settings
             };
             IELButtonClearImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
+                App.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
                 App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
@@ -84,7 +84,7 @@ namespace OperPageLes.UI.Pages.Settings
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
                 if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
-                    DoubleAnimation animation = App.GetDoubleAnimate();
+                    DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
                     animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
                     animation.Duration = TimeSpan.FromMilliseconds(1200d);
                     animation.To = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
@@ -188,12 +188,12 @@ namespace OperPageLes.UI.Pages.Settings
                     IELButtonClearImage.IsEnabled = true;
                     App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 
-                    App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
+                    App.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
                 }
             }
             catch
             {
-                App.AnimateDoubleEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
+                App.DoubleAnimationType.AnimateEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
             }
         }
     }

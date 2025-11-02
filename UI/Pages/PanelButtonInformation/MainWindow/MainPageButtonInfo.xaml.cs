@@ -132,7 +132,7 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             };
             IELBlockInfoVolume.MouseLeftButtonUp += (sender, e) =>
             {
-                App.MainWindow.Play(StructDirectoryResources.DirectoryFileAudioNotification);
+                StructDirectoryResources.Play(CurrentApp.SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioNotification);
             };
             IELBlockInfoVolume.IELSettingObject.MouseHover += (sender, e) =>
             {
@@ -159,9 +159,9 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                     {
                         bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
-                        AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
+                        DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
 
-                        AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
+                        DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
                     });
                     Thread.Sleep(InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet ? 2500 : InternetPinging.MillisecondUpdateTime);
                     await Dispatcher.BeginInvoke(() =>
@@ -175,9 +175,9 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
                         }
 
-                        AnimateDoubleEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
+                        DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
 
-                        AnimateDoubleEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
+                        DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
 
                         if (CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
                         {
@@ -206,9 +206,9 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 
         internal void VisibilityInternetMillisecond(bool Value)
         {
-            AnimateThicknessEffect(IELBlockInfoInternetConnection.MainFrontImage, MarginProperty, Value ? new(2, 0, 2, 8) : new(2, 0, 2, 4),
+            ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection.MainFrontImage, MarginProperty, Value ? new(2, 0, 2, 8) : new(2, 0, 2, 4),
                 TimeSpan.FromMilliseconds(400d));
-            AnimateDoubleEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
+            DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
         }
 

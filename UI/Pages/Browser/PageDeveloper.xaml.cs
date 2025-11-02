@@ -1,6 +1,8 @@
 ﻿using OperPageLes.CORE;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace OperPageLes.UI.Pages.Browser
@@ -67,15 +69,22 @@ namespace OperPageLes.UI.Pages.Browser
                 t.Priority = ThreadPriority.Highest;
                 t.Start();
             };
-            IELButtonKeyDetect.Focusable = true;
-            IELButtonKeyDetect.KeyUp += (sender, e) =>
+            IELButtonTest.Focusable = true;
+            IELButtonTest.MouseLeftButtonUp += (sender, e) =>
             {
-                TextblockInformationKeyDetect.Text = e.SystemKey.ToString();
-            };
-            IELButtonKeyDetect.MouseLeftButtonUp += (sender, e) =>
-            {
-                TextblockInformationKeyDetect.Text = "0";
-                IELButtonKeyDetect.Focus();
+
+                // Create a storyboard to apply the animation.
+                ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
+                animation.Duration = TimeSpan.FromMilliseconds(1000d);
+                animation.From = new(3);
+                animation.To = new(10);
+                animation.AutoReverse = true;
+                Storyboard.SetTargetName(animation, "BorderWindowMain");
+                Storyboard.SetTargetProperty(
+                    animation, new PropertyPath(Border.BorderThicknessProperty));
+                Storyboard ellipseStoryboard = new();
+                ellipseStoryboard.Children.Add(animation);
+                ellipseStoryboard.Begin(App.MainWindow);
             };
             #region Sliders
             SliderX.ValueChanged += (sender, e) =>
