@@ -10,6 +10,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Windows.Dialogs
 {
@@ -38,87 +39,15 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         private bool IsActivatedShow = false;
 
-        /// <summary>
-        /// Имуннитет к закрытию окна при смещении фокуса на другое окно
-        /// </summary>
-        private bool ImmuneClosing = false;
-
-
-        #region Other
-        /// <summary>
-        /// Количество нажатий на изображение иконки
-        /// </summary>
-        private int CountClickImageLogo = 0;
-
-        /// <summary>
-        /// Загруженные данные о картинках асистентов
-        /// </summary>
-        private static BitmapImage[] BitmapsAssistents = [..Assistents.AllAssistents.Select((i) =>
-                    App.LoadImage(i.ImageSource ?? Properties.Resources.IconMainGray))];
-
-        /// <summary>
-        /// Поток отображаемый данные об асистентах
-        /// </summary>
-        private readonly Thread ThreadUpdateVisualAssistents;
-        #endregion
-
         public DialogLicenseWindow()
         {
             InitializeComponent();
-            ThreadUpdateVisualAssistents = new(() =>
-            {
-                Assistents.AssistentElement assistent;
-                int i = -1;
-                ThicknessAnimation animation = Dispatcher.Invoke(() =>
-                {
-                    ThicknessAnimation animate = App.ThicknessAnimationType.SourceAnimation.Clone();
-                    animate.Duration = TimeSpan.FromSeconds(6d);
-                    return animate;
-                });
-                Dispatcher.Invoke(() =>
-                {
-                    animation.EasingFunction = new PowerEase()
-                    {
-                        EasingMode = EasingMode.EaseOut,
-                        Power = 6d,
-                    };
-                    animation.From = new(-10);
-                    animation.To = new(-60);
-                });
-                while (true)
-                {
-                    i = ++i % Assistents.AllAssistents.Count;
-                    assistent = Assistents.AllAssistents[i];
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        ((SolidColorBrush)TextBlockNickName.Foreground).Color = assistent.ColorNickName;
-                        ((SolidColorBrush)TextBlockPhrase.Foreground).Color = assistent.ColorPhrase;
-                        TextBlockNickName.Text = assistent.NickName;
-                        TextBlockPhrase.Text = $"\"{assistent.Phrase}\"";
-                        TextBlockMessage.Text = assistent.Message;
-                        ImageIconNickName.Source = BitmapsAssistents[i];
-                        ImageIconNickName.UpdateLayout();
-                        App.DoubleAnimationType.AnimateEffect(ImageIconNickName, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
-                        App.DoubleAnimationType.AnimateEffect(MainGrid, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
-                        App.ThicknessAnimationType.AnimateEffect(MainGrid, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
-
-                        ImageIconNickName.BeginAnimation(MarginProperty, animation, HandoffBehavior.SnapshotAndReplace);
-                    });
-                    Thread.Sleep(13600);
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        App.DoubleAnimationType.AnimateEffect(MainGrid, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
-                        App.ThicknessAnimationType.AnimateEffect(MainGrid, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
-                        App.DoubleAnimationType.AnimateEffect(ImageIconNickName, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
-                    });
-                    Thread.Sleep((int)MillisecondsHide + 100);
-                }
-            })
-            {
-                Priority = ThreadPriority.BelowNormal,
-                IsBackground = true,
-            };
-            ThreadUpdateVisualAssistents.SetApartmentState(ApartmentState.STA);
+            
+            //{
+            //    Priority = ThreadPriority.BelowNormal,
+            //    IsBackground = true,
+            //};
+            //ThreadUpdateVisualAssistents.SetApartmentState(ApartmentState.STA);
             TextBlockVersion.Text = "Версия: " +
 #if DEBUG
                 "DEBUG";
@@ -126,19 +55,14 @@ namespace OperPageLes.UI.Windows.Dialogs
 #if !DEBUG
                 $"{App.Version}";
 #endif
-            MainGrid.Opacity = 0d;
-            MainGrid.Margin = new(0, 28, 0, 0);
-            MediaHappy.Source = new Uri(StructDirectoryResources.DirectoryFileHappy);
+            BorderMainAssistentVisual.Opacity = 0d;
+            BorderMainAssistentVisual.Margin = new(0, 28, 0, 0);
+            MediaHappy.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaHappy)));
             MediaHappy.MediaEnded += (sender, e) =>
             {
                 MediaHappy.Position = TimeSpan.FromMilliseconds(1);
             };
             ImageLogo.Margin = new(20);
-            ImageLogo.MouseLeftButtonUp += (sender, e) =>
-            {
-                if (CountClickImageLogo >= 200) return;
-                ExecuteEventClickImageLogo(++CountClickImageLogo);
-            };
             Closed += (sender, e) =>
             {
                 GC.Collect();
@@ -156,13 +80,61 @@ namespace OperPageLes.UI.Windows.Dialogs
             {
                 try
                 {
-                    if (ImmuneClosing) return;
                     Close();
                 }
                 catch
                 {
 
                 }
+            };
+            Activated += (sender, e) =>
+            {
+                Task.Run(() =>
+                {
+                    Assistents.AssistentElement assistent;
+                    int i = -1;
+                    ThicknessAnimation animation = Dispatcher.Invoke(() =>
+                    {
+                        ThicknessAnimation animate = App.ThicknessAnimationType.SourceAnimation.Clone();
+                        animate.Duration = TimeSpan.FromSeconds(6d);
+                        return animate;
+                    });
+                    Dispatcher.Invoke(() =>
+                    {
+                        animation.EasingFunction = new PowerEase()
+                        {
+                            EasingMode = EasingMode.EaseOut,
+                            Power = 6d,
+                        };
+                        animation.From = new(-10);
+                        animation.To = new(-60);
+                    });
+                    while (true)
+                    {
+                        i = ++i % Assistents.AllAssistents.Count;
+                        assistent = Assistents.AllAssistents[i];
+                        Dispatcher.BeginInvoke(() =>
+                        {
+                            ((SolidColorBrush)TextBlockNickName.Foreground).Color = assistent.ColorNickName;
+                            TextBlockNickName.Text = assistent.NickName;
+                            TextBlockMessage.Text = assistent.Message;
+                            ImageIconNickName.ImageSource = StructDirectoryResources.GetResourceBitmap(assistent.NameImageSource ?? nameof(OPRES.IconMainApplication));
+                            App.DoubleAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
+                            App.DoubleAnimationType.AnimateEffect(BorderMainAssistentVisual, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
+                            App.ThicknessAnimationType.AnimateEffect(BorderMainAssistentVisual, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
+
+                            App.RectAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.ViewboxProperty, new(0.025, 0.025, 0.95, 0.95), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(MillisecondsShow));
+                        });
+                        Thread.Sleep(13600);
+                        Dispatcher.BeginInvoke(() =>
+                        {
+                            App.DoubleAnimationType.AnimateEffect(BorderMainAssistentVisual, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
+                            App.ThicknessAnimationType.AnimateEffect(BorderMainAssistentVisual, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
+                            App.DoubleAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
+                        });
+                        Thread.Sleep((int)MillisecondsHide + 100);
+                    }
+                });
             };
             BorderHappy.MouseLeftButtonUp += (sender, e) =>
             {
@@ -177,10 +149,9 @@ namespace OperPageLes.UI.Windows.Dialogs
             Opacity = 0d;
             TextBlockNextInfo.Opacity = 0d;
             BorderHappy.Visibility = Visibility.Hidden;
-            ImageIconNickName.Source = null;
+            ImageIconNickName.ImageSource = null;
 
             TextBlockNickName.Foreground = new SolidColorBrush(Colors.Black);
-            TextBlockPhrase.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         /// <summary>
@@ -235,53 +206,6 @@ namespace OperPageLes.UI.Windows.Dialogs
         }
 
         /// <summary>
-        /// Совершить событие нажатия по изображению иконки
-        /// </summary>
-        /// <param name="CountClick">количество нажатий</param>
-        private void ExecuteEventClickImageLogo(int CountClick)
-        {
-            switch (CountClick)
-            {
-                case 10:
-                case 15:
-                case 25:
-                case 50:
-                case 60:
-                case 65:
-                case 75:
-                case 87:
-                    int RandomOffset = new Random(CountClick).Next(0, 45);
-                    App.ThicknessAnimationType.AnimateEffect(ImageLogo, MarginProperty, new(0, RandomOffset, 0, RandomOffset), TimeSpan.FromMilliseconds(800d));
-                    break;
-                case 99:
-                    ImmuneClosing = true;
-                    System.Windows.Forms.MessageBox.Show("Прекрати!");
-                    ImmuneClosing = false;
-                    break;
-                case 101:
-                    ImmuneClosing = true;
-                    System.Windows.Forms.MessageBox.Show("Как хочешь...");
-                    ImmuneClosing = false;
-                    break;
-                case 150:
-                    App.DoubleAnimationType.AnimateEffect(ImageLogo, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
-                    ImmuneClosing = true;
-                    System.Windows.Forms.MessageBox.Show("АХАХАХ АХАХАХАА ХАХАХАХ");
-                    ImmuneClosing = false;
-                    break;
-                case 200:
-                    ImageLogo.BeginAnimation(OpacityProperty, null, HandoffBehavior.SnapshotAndReplace);
-                    ImageLogo.Opacity = 1d;
-                    ImageLogo.Source = App.LoadImage(Properties.Resources.BlackSquare);
-                    ImageLogo.UpdateLayout();
-                    ImmuneClosing = true;
-                    for (int i = 0; i < 7; i++) System.Windows.Forms.MessageBox.Show(string.Empty);
-                    ImmuneClosing = false;
-                    break;
-            }
-        }
-
-        /// <summary>
         /// Отобразить окно лицензии
         /// </summary>
         public new void Show()
@@ -327,7 +251,6 @@ namespace OperPageLes.UI.Windows.Dialogs
             base.Show();
             Focus();
             if (DateTime.Now.Month == HappyDay.Month && DateTime.Now.Day == HappyDay.Day) ShowHappy();
-            ThreadUpdateVisualAssistents.Start();
         }
     }
 }

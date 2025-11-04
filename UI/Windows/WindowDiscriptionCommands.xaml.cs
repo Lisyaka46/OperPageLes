@@ -3,6 +3,7 @@ using IEL.CORE.Enums;
 using IEL.GUI;
 using Interpreter.Interfaces;
 using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.Description;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.Windows
 {
@@ -87,7 +89,7 @@ namespace OperPageLes.Windows
             SearchActivate = false;
             InitializeComponent();
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
-            IELButtonSearchCommand.Imaging = App.LoadImage(Properties.Resources.Search);
+            IELButtonSearchCommand.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
             IELButtonCloneTextCommand.Foreground = new SolidColorBrush(Colors.Black);
 
             IELMessageInfo.Opacity = 0d;

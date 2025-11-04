@@ -38,9 +38,6 @@
                 <Border.Background>
                     <ImageBrush x:Name="ImageMenu" Opacity="1" Stretch="UniformToFill"/>
                 </Border.Background>
-                <Border.Effect>
-                    <DropShadowEffect x:Name="ShadowMainBorderEffect" Direction="-90" ShadowDepth="20" BlurRadius="40" RenderingBias="Performance" />
-                </Border.Effect>
                 <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
                     <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
                     <Grid Panel.ZIndex="1">

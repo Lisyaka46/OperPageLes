@@ -15,19 +15,23 @@ using OperPageLes.CORE.Animation;
 using OperPageLes.CORE.Label;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
+using OperPageLes.Properties;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.UserElementControl;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
 using System;
+using System.Collections;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Management;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -180,13 +184,14 @@ namespace OperPageLes
         /// <summary>
         /// Ресурс настроек для отображения клавиш мыши
         /// </summary>
-        internal static IELMouseImageSetting ResourceDefaultMouseImageSetting { get; } = new()
-        {
-            NotEventImageMouse = LoadImage(OperPageLes.Properties.Resources.NotMouseButton),
-            FullEventImageMouse = LoadImage(OperPageLes.Properties.Resources.DoubleMouseButton),
-            OnlyRightEventImageMouse = LoadImage(OperPageLes.Properties.Resources.RightMouseButton),
-            OnlyLeftEventImageMouse = LoadImage(OperPageLes.Properties.Resources.LeftMouseButton),
-        };
+        internal IELMouseImageSetting ResourceDefaultMouseImageSetting { get; }
+        //new ()
+        //{
+        //    NotEventImageMouse = LoadImage(OperPageLes.Properties.Resources.NotMouseButton),
+        //    FullEventImageMouse = LoadImage(OperPageLes.Properties.Resources.DoubleMouseButton),
+        //    OnlyRightEventImageMouse = LoadImage(OperPageLes.Properties.Resources.RightMouseButton),
+        //    OnlyLeftEventImageMouse = LoadImage(OperPageLes.Properties.Resources.LeftMouseButton),
+        //};
 
         /// <summary>
         /// Реальное время
@@ -228,6 +233,7 @@ namespace OperPageLes
             LogWriteLine("---------- Старт нового экземпляра ----------");
             LogWriteLine("Инициализация свойств экземпляра");
             #region Resources
+            ResourceDefaultMouseImageSetting = new();
             SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
             InstallingKey = PackKey.StaticKey;
@@ -629,7 +635,7 @@ namespace OperPageLes
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
-            LogWriteLine("Подключение программной точки входа");
+            LogWriteLine("Проверка ключа входа");
             if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
             {
                 try
@@ -704,29 +710,29 @@ namespace OperPageLes
             RebootWindow.Close();
         }
 
-        /// <summary>
-        /// Загрузчик изображений через данные байтов
-        /// </summary>
-        /// <param name="imageData">Массив данных картинки</param>
-        /// <returns>Объект изображения</returns>
-        /// <exception cref="Exception">Исключение при повреждённом или пустом изображении</exception>
-        internal static BitmapImage LoadImage(byte[] imageData)
-        {
-            if (imageData == null || imageData.Length == 0) throw new Exception("Неожиданное содержание нулевого массива байтов.");
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
-            }
-            //image.Freeze();
-            return image;
-        }
+        ///// <summary>
+        ///// Загрузчик изображений через данные байтов
+        ///// </summary>
+        ///// <param name="imageData">Массив данных картинки</param>
+        ///// <returns>Объект изображения</returns>
+        ///// <exception cref="Exception">Исключение при повреждённом или пустом изображении</exception>
+        //internal static BitmapImage LoadImage(byte[] imageData)
+        //{
+        //    if (imageData == null || imageData.Length == 0) throw new Exception("Неожиданное содержание нулевого массива байтов.");
+        //    var image = new BitmapImage();
+        //    using (var mem = new MemoryStream(imageData))
+        //    {
+        //        mem.Position = 0;
+        //        image.BeginInit();
+        //        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+        //        image.CacheOption = BitmapCacheOption.OnLoad;
+        //        image.UriSource = null;
+        //        image.StreamSource = mem;
+        //        image.EndInit();
+        //    }
+        //    //image.Freeze();
+        //    return image;
+        //}
 
         /// <summary>
         /// Установка иконки хоста сайта через собственный клиент

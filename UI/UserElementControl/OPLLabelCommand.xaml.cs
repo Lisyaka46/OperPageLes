@@ -4,12 +4,14 @@ using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
 using OperPageLes.CORE.Label;
+using OperPageLes.CORE.Struct;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.UserElementControl
 {
@@ -302,17 +304,17 @@ namespace OperPageLes.UI.UserElementControl
         internal void UpdateVisualStyle()
         {
             string name_command = COMInterpreter.ReadNameCommand(SourceLabel.Command);
-            byte[] ByteLabelImage;
+            string NameLabelImage;
             int IndexUseStyle;
             switch (name_command)
             {
                 case "open_file":
                     IndexUseStyle = 1;
-                    ByteLabelImage = Properties.Resources.File;
+                    NameLabelImage = nameof(OPRES.File);
                     break;
                 case "open_link":
                     IndexUseStyle = 2;
-                    ByteLabelImage = Properties.Resources.Link;
+                    NameLabelImage = nameof(OPRES.Link);
 
                     Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                     {
@@ -330,14 +332,14 @@ namespace OperPageLes.UI.UserElementControl
                     break;
                 case "open_directory":
                     IndexUseStyle = 3;
-                    ByteLabelImage = Properties.Resources.Folder;
+                    NameLabelImage = nameof(OPRES.Folder);
                     break;
                 default:
                     IndexUseStyle = 0;
-                    ByteLabelImage = Properties.Resources.Command;
+                    NameLabelImage = nameof(OPRES.Command);
                     break;
             }
-            ImageElementLabel.Source = App.LoadImage(ByteLabelImage);
+            ImageElementLabel.Source = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
             ImageElementLabel.UpdateLayout();
             IELSettingObject.BackgroundSetting.ColorData = (QData)BackgroundStyles[IndexUseStyle].Clone();
             IELSettingObject.BorderBrushSetting.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();

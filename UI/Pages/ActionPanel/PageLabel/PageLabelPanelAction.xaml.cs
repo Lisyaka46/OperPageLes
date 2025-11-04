@@ -1,7 +1,9 @@
 ﻿using IEL.CORE.Classes;
 using OperPageLes.CORE.Label;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementControl;
 using System.Windows.Controls;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
 {
@@ -23,7 +25,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
         public PageLabelElementActionPanel()
         {
             InitializeComponent();
-            IELBlockInfoTagLabel.Imaging = App.LoadImage(Properties.Resources.Tag);
+            IELBlockInfoTagLabel.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             PageLabelSelectManipulate = new();
             PanelActionPageSelectLabel = new(PageLabelSelectManipulate);
         }

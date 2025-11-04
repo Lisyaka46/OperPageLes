@@ -23,6 +23,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WmColor = System.Windows.Media.Color;
+using OPRES = OperPageLes.Properties.Resources;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -127,20 +128,21 @@ namespace OperPageLes.UI.Windows
             #endregion
 
             #region SetParameteres
-            Icon = App.LoadImage(Properties.Resources.IconMainApplication);
-            ImageLogoApplication.Imaging = App.LoadImage(Properties.Resources.IconMainApplication);
-            IELImageButtonClose.Imaging = App.LoadImage(Properties.Resources.Cross);
-            IELImageButtonHelp.Imaging = App.LoadImage(Properties.Resources.LightBulb);
-            IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
-            IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
+            ImageLogoApplication.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
+            IELImageButtonClose.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            IELImageButtonHelp.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            IELButtonSettings.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
+            IELImageButtonMenu.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
 
             TokenUpdateBackgroundData = new(false);
             ActualIndexActivatePageDownToolButtons = -1;
             IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
             IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
+            BorderWindowMain.Background = new SolidColorBrush(Colors.Black);
 
             IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = new Uri(StructDirectoryResources.DirectoryFileLoadingDefault);
+            IndicatorLoading.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
                 IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
@@ -156,7 +158,7 @@ namespace OperPageLes.UI.Windows
             IELActionPanelMain.KeyCloseElement = App.CurrentApp.SettingMainApplication.KEY_PanelActionClose;
             IELActionPanelMain.EventMovePanelAction += (sender, e) =>
             {
-                StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
+                StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
             };
             byte[,] ColorBytes = new byte[4, 4]
             {
@@ -174,7 +176,7 @@ namespace OperPageLes.UI.Windows
             });
             IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
-            IELBrowserPageMain.IELButtonAddInlay.Imaging = App.LoadImage(Properties.Resources.Plus);
+            IELBrowserPageMain.IELButtonAddInlay.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
@@ -304,7 +306,7 @@ namespace OperPageLes.UI.Windows
                 IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(e);
                 if (SourceInlay != null)
                 {
-                    SourceInlay.SourceCloseButtonImage = App.LoadImage(Properties.Resources.Cross);
+                    SourceInlay.SourceCloseButtonImage = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
                 }
             };
             FrameNewInlayBrowser.IsHitTestVisible = false;
@@ -491,7 +493,7 @@ namespace OperPageLes.UI.Windows
         //
         private void NextPageDownToolButtons(bool UpIndex = true)
         {
-            StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, StructDirectoryResources.DirectoryFileAudioMove);
+            StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
             if (UpIndex)
             {
                 if (ActualIndexActivatePageDownToolButtons == PagesButtonsInformation.Length - 1)
@@ -673,8 +675,8 @@ namespace OperPageLes.UI.Windows
         /// <param name="Color">Цвет который будет отображён как сигнальный</param>
         internal void BlurMainAnimateColor(WmColor Color)
         {
-            App.ColorAnimationType.AnimateEffect(ShadowMainBorderEffect,
-                DropShadowEffect.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));
+            App.ColorAnimationType.AnimateEffect(BorderWindowMain.Background,
+                SolidColorBrush.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));
         }
         #endregion
     }

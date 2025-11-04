@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Windows.Dialogs
 {
@@ -22,7 +23,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             InitializeComponent();
             Pack = StructPack.NowPack;
-            Icon = App.LoadImage(Properties.Resources.ValidKeyIcon);
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
             IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e, Key) =>

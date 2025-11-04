@@ -10,8 +10,8 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
         public PageMainConsolePanelAction()
         {
             InitializeComponent();
-            IELButtonCrearConsole.IELSettingObject.SettingMouseImage = App.ResourceDefaultMouseImageSetting;
-            IELButtonCommandBuffer.IELSettingObject.SettingMouseImage = App.ResourceDefaultMouseImageSetting;
+            IELButtonCrearConsole.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
+            IELButtonCommandBuffer.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
         }
     }
 }

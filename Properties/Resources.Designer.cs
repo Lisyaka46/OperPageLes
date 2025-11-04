@@ -183,16 +183,6 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] Happy {
-            get {
-                object obj = ResourceManager.GetObject("Happy", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
         internal static byte[] IconMainApplication {
             get {
                 object obj = ResourceManager.GetObject("IconMainApplication", resourceCulture);
@@ -253,9 +243,9 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] LoadingDefault {
+        internal static byte[] MediaHappy {
             get {
-                object obj = ResourceManager.GetObject("LoadingDefault", resourceCulture);
+                object obj = ResourceManager.GetObject("MediaHappy", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -263,9 +253,19 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] LoadingInternet {
+        internal static byte[] MediaLoadingDefault {
             get {
-                object obj = ResourceManager.GetObject("LoadingInternet", resourceCulture);
+                object obj = ResourceManager.GetObject("MediaLoadingDefault", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] MediaLoadingInternet {
+            get {
+                object obj = ResourceManager.GetObject("MediaLoadingInternet", resourceCulture);
                 return ((byte[])(obj));
             }
         }

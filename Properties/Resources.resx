@@ -154,7 +154,7 @@
   <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\Folder.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Happy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="MediaHappy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Media\Happy.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="IconMainApplication" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -175,10 +175,10 @@
   <data name="Link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\Link.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="LoadingDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="MediaLoadingDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Media\Loading\LoadingDefault.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="LoadingInternet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="MediaLoadingInternet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Media\Loading\LoadingInternet.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">

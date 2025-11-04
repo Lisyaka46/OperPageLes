@@ -23,8 +23,8 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
         public PageLabelSelectManipulatePanelAction()
         {
             InitializeComponent();
-            IELButtonExecuteSelect.IELSettingObject.SettingMouseImage = App.ResourceDefaultMouseImageSetting;
-            IELButtonClearSelect.IELSettingObject.SettingMouseImage = App.ResourceDefaultMouseImageSetting;
+            IELButtonExecuteSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
+            IELButtonClearSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
         }
     }
 }

@@ -1,15 +1,12 @@
 ﻿using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using OperPageLes.CORE;
 using OperPageLes.CORE.Struct;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Threading;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.UserElementControl
 {
@@ -217,7 +214,7 @@ namespace OperPageLes.UI.UserElementControl
             };
             ProgressBarLoading.Value = 0d;
             IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = new(StructDirectoryResources.DirectoryFileLoadingDefault);
+            IndicatorLoading.Source = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
             IsEnabled = false;
 
             MouseEnter += (sender, e) =>

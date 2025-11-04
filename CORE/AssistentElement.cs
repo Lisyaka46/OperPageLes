@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.CORE
 {
@@ -16,25 +17,15 @@ namespace OperPageLes.CORE
         private static readonly Color DefaultColorNick = Color.FromRgb(245, 225, 101);
 
         /// <summary>
-        /// Цвет текста фразы
-        /// </summary>
-        private static readonly Color DefaultColorPhrase = Color.FromRgb(219, 177, 205);
-
-        /// <summary>
         /// Структура пользователя
         /// </summary>
-        internal class AssistentElement(string nickName, string phrase, string message,
-                Color? colorNickName = null, Color? colorPhrase = null, byte[]? DataImageAssistent = null)
+        internal class AssistentElement(string nickName, string message,
+                Color? colorNickName = null, string? NameImageAssistent = null)
         {
             /// <summary>
             /// Ник помошника
             /// </summary>
             public readonly string NickName = nickName;
-
-            /// <summary>
-            /// Отображаемая фраза пользователя
-            /// </summary>
-            public readonly string Phrase = phrase;
 
             /// <summary>
             /// Отображаемое сообщение благодарности
@@ -47,14 +38,9 @@ namespace OperPageLes.CORE
             public readonly Color ColorNickName = colorNickName ?? DefaultColorNick;
 
             /// <summary>
-            /// Цвет текста фразы
-            /// </summary>
-            public readonly Color ColorPhrase = colorPhrase ?? DefaultColorPhrase;
-
-            /// <summary>
             /// Карта изоражения
             /// </summary>
-            internal readonly byte[]? ImageSource = DataImageAssistent;
+            internal readonly string? NameImageSource = NameImageAssistent;
         }
 
         /// <summary>
@@ -62,21 +48,21 @@ namespace OperPageLes.CORE
         /// </summary>
         internal static readonly ReadOnlyCollection<AssistentElement> AllAssistents = new(
         [
-            new("Lisyaka", "Не знаю...",
+            new("Lisyaka",
                 "- За всю разработку.",
-                DataImageAssistent: null),
-            new("Minsi", "Спасибо что живая.",
+                NameImageAssistent: nameof(OPRES.IconMainGray)),
+            new("Minsi",
                 "- За помощь в разработке." +
                 "\n- За проектирование программы." +
                 "\n- За оценку качества программы.",
-                Color.FromRgb(86, 255, 120), Color.FromRgb(195, 189, 222),
-                DataImageAssistent: Properties.Resources.MINSI),
-            new("Vector", "Разработчик это художник, а дизайнер это кисть.",
+                Color.FromRgb(86, 255, 120),
+                nameof(OPRES.MINSI)),
+            new("Vector",
                 "- За работу в дизайне." +
                 "\n- За проектирование стиля." +
                 "\n- За планировку вида.",
-                Color.FromRgb(62, 180, 137), Color.FromRgb(80, 200, 120),
-                DataImageAssistent: Properties.Resources.VECTOR),
+                Color.FromRgb(62, 180, 137),
+                nameof(OPRES.VECTOR)),
         ]);
     }
 }

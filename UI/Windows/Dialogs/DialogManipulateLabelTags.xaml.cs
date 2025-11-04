@@ -1,7 +1,9 @@
 ﻿using OperPageLes.CORE.Label;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Input;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Windows.Dialogs
 {
@@ -23,7 +25,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogManipulateLabelTags()
         {
             InitializeComponent();
-            Icon = App.LoadImage(Properties.Resources.Tag);
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
             IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>

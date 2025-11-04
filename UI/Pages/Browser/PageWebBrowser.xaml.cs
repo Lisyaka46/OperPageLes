@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementControl;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.Browser
 {
@@ -36,8 +38,8 @@ namespace OperPageLes.UI.Pages.Browser
             //    if (Key.GetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe") == null)
             //        Key.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe", RegVal, RegistryValueKind.DWord);
 
-            IELButtonReloadPage.Imaging = App.LoadImage(Properties.Resources.Reload);
-            IELButtonUnopenPageSystemBrowser.Imaging = App.LoadImage(Properties.Resources.BrowserChangeSystem);
+            IELButtonReloadPage.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
+            IELButtonUnopenPageSystemBrowser.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
             App.CurrentApp.LogWriteLine("Инициализация станицы браузера");
             #region WebBrowserElement_Events
             WebBrowserElement.Navigated += (sender, e) =>

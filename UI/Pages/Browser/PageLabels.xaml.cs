@@ -4,14 +4,16 @@ using Microsoft.Windows.Themes;
 using Newtonsoft.Json.Linq;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Label;
-using OperPageLes.UI.Windows.Dialogs;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.UserElementControl;
+using OperPageLes.UI.Windows.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.Browser
 {
@@ -136,8 +138,8 @@ namespace OperPageLes.UI.Pages.Browser
             PanelActionPageLabel = new(PageLabel);
             PanelActionPageLabelElement = new(PageLabelElement);
             SearchActivate = false;
-            IELButtonSearch.Imaging = App.LoadImage(Properties.Resources.Search);
-            IELButtonSorting.Imaging = App.LoadImage(Properties.Resources.Sorting_NameAZ);
+            IELButtonSearch.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
+            IELButtonSorting.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameAZ));
             IELButtonSorting.IsEnabled = false;
             IELButtonSearch.IsEnabled = false;
             IELTextBoxSearch.IsEnabled = false;
@@ -577,7 +579,7 @@ namespace OperPageLes.UI.Pages.Browser
                 Width = WidthLabel,
                 Height = HeightLabel,
             };
-            Label.ImageSelect.Source = App.LoadImage(Properties.Resources.Check);
+            Label.ImageSelect.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
             Label.IELSettingObject.IntervalHover = 800d;
             Label.IELSettingObject.AnimationMillisecond = 230;
             Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
@@ -703,10 +705,10 @@ namespace OperPageLes.UI.Pages.Browser
             IELButtonSorting.Imaging = StyleSort switch
             {
                 //SortingLabelEnum.Not => App.LoadImage(Properties.Resources.Sorting_Not),
-                SortingLabelEnum.Tag => App.LoadImage(Properties.Resources.Sorting_Tag),
-                SortingLabelEnum.NameAZ => App.LoadImage(Properties.Resources.Sorting_NameAZ),
-                SortingLabelEnum.NameZA => App.LoadImage(Properties.Resources.Sorting_NameZA),
-                _ => App.LoadImage(Properties.Resources.Sorting_Not)
+                SortingLabelEnum.Tag => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_Tag)),
+                SortingLabelEnum.NameAZ => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameAZ)),
+                SortingLabelEnum.NameZA => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameZA)),
+                _ => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_Not))
             };
         }
     }

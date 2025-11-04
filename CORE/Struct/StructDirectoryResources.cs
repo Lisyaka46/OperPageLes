@@ -1,34 +1,36 @@
-﻿using IEL.CORE.Classes;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+using System.Reflection;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace OperPageLes.CORE.Struct
 {
     internal readonly struct StructDirectoryResources
     {
+        /// <summary>
+        /// Массив всех директорий ресурсов по их именам
+        /// </summary>
+        private static readonly Dictionary<string, string> PathesFromNameResource = [];
+
+        /// <summary>
+        /// Массив всех ресурсных картинок по их именам
+        /// </summary>
+        private static readonly Dictionary<string, BitmapImage> ResourcesImages = [];
+
+        /// <summary>
+        /// Объект исключения при использовании не инициализированного массива ресурсов
+        /// </summary>
+        private static readonly Exception ExceptionResourceNullDictionary =
+            new("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");
+
         #region MainDirectoryApplication
         /// <summary>
         /// Главная директория ресурсов OperPageLes
         /// </summary>
         internal static readonly string MainDirectoryApplication = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"/OperPageLes/";
-
-        /// <summary>
-        /// Главная директория файлов изображений
-        /// </summary>
-        internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
-
-        /// <summary>
-        /// Директория файла валидного ключа
-        /// </summary>
-        internal static readonly string DirectoryKeyValidFile = MainDirectoryApplication + "Key";
-
+        
         #region DirectoryResourcesApplication
         /// <summary>
         /// Главная директория ресурсов пользователя
@@ -46,49 +48,25 @@ namespace OperPageLes.CORE.Struct
         internal static readonly string DirectoryDataLabelTags = DirectoryResourcesApplication + "Label_Tags.json";
         #endregion
 
-        #region DirectoryMediaApplication
+        /// <summary>
+        /// Директория файла валидного ключа
+        /// </summary>
+        internal static readonly string DirectoryKeyValidFile = MainDirectoryApplication + "Key";
+
+        /// <summary>
+        /// Главная директория файлов изображений
+        /// </summary>
+        internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
+
         /// <summary>
         /// Главная директория файлов видео
         /// </summary>
         internal static readonly string DirectoryMediaApplication = DirectoryImagesApplication + @"/Media/";
 
         /// <summary>
-        /// Директория файла анимации обычной загрузки
-        /// </summary>
-        internal static readonly string DirectoryFileLoadingDefault = DirectoryMediaApplication + "LoadingDefault.mp4";
-
-        /// <summary>
-        /// Директория файла анимации загрузки для интернета
-        /// </summary>
-        internal static readonly string DirectoryFileLoadingInternet = DirectoryMediaApplication + "LoadingInternet.mp4";
-
-        /// <summary>
-        /// Директория файла праздничной анимации
-        /// </summary>
-        internal static readonly string DirectoryFileHappy = DirectoryMediaApplication + "Happy.mp4";
-        #endregion
-
-        #region
-        /// <summary>
         /// Главная директория файлов звука
         /// </summary>
         internal static readonly string DirectoryAudioApplication = MainDirectoryApplication + @"/Audio/";
-
-        /// <summary>
-        /// Директория файла звука уведомления
-        /// </summary>
-        internal static readonly string DirectoryFileAudioNotification = DirectoryAudioApplication + "Notification.mp3";
-
-        /// <summary>
-        /// Директория файла звука pop-up
-        /// </summary>
-        internal static readonly string DirectoryFileAudioPopUp = DirectoryAudioApplication + "Pop-up.mp3";
-
-        /// <summary>
-        /// Директория файла звука резкого движения (ветер)
-        /// </summary>
-        internal static readonly string DirectoryFileAudioMove = DirectoryAudioApplication + "Move.mp3";
-        #endregion
 
         #endregion
 
@@ -115,16 +93,22 @@ namespace OperPageLes.CORE.Struct
         /// </summary>
         internal static void CheckCreateAllResources()
         {
-            #region Media
-            CreateResourceMedia(DirectoryFileLoadingDefault, Properties.Resources.LoadingDefault);
-            CreateResourceMedia(DirectoryFileLoadingInternet, Properties.Resources.LoadingInternet);
-            CreateResourceMedia(DirectoryFileHappy, Properties.Resources.Happy);
-            #endregion
-            #region Audio
-            CreateResourceMedia(DirectoryFileAudioNotification, Properties.Resources.AudioNotification);
-            CreateResourceMedia(DirectoryFileAudioPopUp, Properties.Resources.AudioPopUp);
-            CreateResourceMedia(DirectoryFileAudioMove, Properties.Resources.AudioMove);
-            #endregion
+            App.CurrentApp.LogWriteLine("Проверка ресурсных файлов");
+            string Prefics;
+            bool SetBitmapImages = ResourcesImages.Count == 0;
+            PathesFromNameResource.Clear();
+            foreach (PropertyInfo prop in typeof(Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic))
+            {
+                if (prop.PropertyType == typeof(byte[]))
+                {
+                    if (prop.Name.Contains("Audio")) Prefics = DirectoryAudioApplication + $"{prop.Name}.mp3";
+                    else if (prop.Name.Contains("Media")) Prefics = DirectoryMediaApplication + $"{prop.Name}.mp4";
+                    else Prefics = DirectoryImagesApplication + $"{prop.Name}.png";
+                    if (!File.Exists(Prefics)) CreateResourceMedia(Prefics, (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым."));
+                    PathesFromNameResource.Add(prop.Name, Prefics);
+                    if (Prefics.Contains(".png") && SetBitmapImages) ResourcesImages.Add(prop.Name, new(new Uri(Prefics)));
+                }
+            }
         }
 
         /// <summary>
@@ -165,10 +149,24 @@ namespace OperPageLes.CORE.Struct
         }
 
         //
-        internal static void Play(WaveOut SourceWaveOut, string Sound) // mp3
+        internal static void Play(WaveOut SourceWaveOut, string NameResourceSound) // mp3
         {
-            SourceWaveOut.Init(new Mp3FileReader(Sound));
+            if (PathesFromNameResource.Count == 0) throw new Exception("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");
+            SourceWaveOut.Init(new Mp3FileReader(PathesFromNameResource[NameResourceSound]));
             SourceWaveOut.Play();
         }
+
+        /// <summary>
+        /// Узнать директорию нахождения ресурса по его имени
+        /// </summary>
+        /// <param name="NameResource">Имя ресурса</param>
+        /// <returns>Директория файла ресурса</returns>
+        internal static string GetResourcePath(string NameResource) => PathesFromNameResource[NameResource];
+
+        /// <summary>
+        /// Получить картинку ресурса по его имени
+        /// </summary>
+        /// <param name="NameResource">Имя ресурса</param>
+        internal static BitmapImage GetResourceBitmap(string NameResource) => ResourcesImages[NameResource];
     }
 }
