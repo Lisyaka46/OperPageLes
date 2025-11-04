@@ -129,6 +129,7 @@ namespace OperPageLes.UI.Windows
             #region SetParameteres
             Icon = App.LoadImage(Properties.Resources.IconMainApplication);
             ImageLogoApplication.Imaging = App.LoadImage(Properties.Resources.IconMainApplication);
+            IELImageButtonClose.Imaging = App.LoadImage(Properties.Resources.Cross);
             IELImageButtonHelp.Imaging = App.LoadImage(Properties.Resources.LightBulb);
             IELButtonSettings.Imaging = App.LoadImage(Properties.Resources.IconMainSettings);
             IELImageButtonMenu.Imaging = App.LoadImage(Properties.Resources.Menu);
@@ -225,6 +226,13 @@ namespace OperPageLes.UI.Windows
             #endregion
 
             #region UpToolButtons
+            #region IELImageButtonClose
+            IELImageButtonClose.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                Close();
+            };
+            #endregion
+
             #region IELImageButtonHelp
             IELImageButtonHelp.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -243,6 +251,7 @@ namespace OperPageLes.UI.Windows
                 IELMessageMain.CloseBorderInformation();
             };
             #endregion
+
             #region IELButtonSettings
             IELButtonSettings.IELSettingObject.MouseHover += (sender, e) =>
             {
@@ -259,6 +268,7 @@ namespace OperPageLes.UI.Windows
                 new DialogSetting().ShowDialog();
             };
             #endregion
+
             #endregion
 
             #region DownToolButtons
@@ -320,12 +330,13 @@ namespace OperPageLes.UI.Windows
                 FrameNewInlayBrowser.IsEnabled = true;
                 FrameNewInlayBrowser.IsHitTestVisible = true;
                 IELBrowserPageMain.IsEnabled = false;
+                TimeSpan t = TimeSpan.FromMilliseconds(500d);
                 IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, TimeSpan.FromMilliseconds(500d));
+                App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, t);
+                App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, t);
                 if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
-                    App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, TimeSpan.FromMilliseconds(500d));
+                    App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, t);
+                App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, t);
                 Canvas.SetZIndex(FrameNewInlayBrowser, 1);
                 ManagerBrowserNewPage.Focus();
             };
@@ -348,6 +359,15 @@ namespace OperPageLes.UI.Windows
             };
 
             #region EventsWindow
+            BorderWindowMain.MouseLeftButtonDown += (sender, e) =>
+            {
+                TimeSpan t = TimeSpan.FromMilliseconds(900d);
+                App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(45), t);
+                App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 0.4d, t);
+                DragMove();
+                App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(20), t);
+                App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 1d, t);
+            };
             SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             Activated += (sender, e) =>
             {
@@ -362,9 +382,15 @@ namespace OperPageLes.UI.Windows
 
                     #region Anim Start
                     #region 1
-                    App.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
+                    TimeSpan t1400 = TimeSpan.FromMilliseconds(1400d);
+                    TimeSpan t2000 = TimeSpan.FromMilliseconds(2000d);
+                    App.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, t1400);
 
-                    App.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, TimeSpan.FromMilliseconds(1400d));
+                    App.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, t1400);
+
+                    App.ThicknessAnimationType.AnimateEffect(BorderWindowMain, MarginProperty, new(20), new(0), t2000);
+
+                    App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
 
                     #endregion
                     #endregion
