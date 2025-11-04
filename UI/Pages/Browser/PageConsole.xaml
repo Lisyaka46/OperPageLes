@@ -72,7 +72,14 @@
                         </Grid>
                     </Grid>
                     <ScrollViewer HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Hidden" VerticalContentAlignment="Stretch" Focusable="False">
-                        <StackPanel x:Name="StackPanelAllHit" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle x:Name="RectangleSelect" Fill="#FF96B0FF" Width="3" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <StackPanel x:Name="StackPanelAllHit" ScrollViewer.VerticalScrollBarVisibility="Hidden" Grid.ColumnSpan="1" Grid.Column="1"/>
+                        </Grid>
                     </ScrollViewer>
                 </Grid>
             </Border>

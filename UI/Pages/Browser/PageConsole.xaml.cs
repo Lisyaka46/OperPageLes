@@ -71,6 +71,11 @@ namespace OperPageLes.UI.Pages.Browser
         private int ActiveIndexBufferInput;
 
         /// <summary>
+        /// Активный индекс команды в подсказках к командам для строки ввода
+        /// </summary>
+        private int ActiveIndexHitCommandInput;
+
+        /// <summary>
         /// Сохранённая строка для обозначения введённого текста перед перечислением элементов (Вверх/Вниз)
         /// </summary>
         private string SaveStringPrintBuffer;
@@ -80,15 +85,31 @@ namespace OperPageLes.UI.Pages.Browser
         /// </summary>
         private bool SaveKeyDown;
 
+        /// <summary>
+        /// Текущая навигация в текущей странице
+        /// </summary>
+        private SelectNavigationPageConsoleEnum SelectNavigation;
+
+#if DEBUG
+        TextBlock DEVTextBlockSelectNavigation;
+#endif
+
         public PageConsole()
         {
             InitializeComponent();
+#if DEBUG
+            DEVTextBlockSelectNavigation = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
+            DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
+#endif
+            SelectNavigation = SelectNavigationPageConsoleEnum.None;
             SaveKeyDown = false;
             StateVisibleHit = ConsoleHitStateEnum.Hidden;
             ActiveIndexBufferInput = -1;
+            ActiveIndexHitCommandInput = -1;
             SaveStringPrintBuffer = string.Empty;
             BorderHintCommand.Height = 0d;
             GridHintOneCommand.Opacity = 0d;
+            RectangleSelect.Width = 0d;
             Canvas.SetZIndex(GridHintOneCommand, -1);
             RichTextBoxMainMessage.Document = new();
             ButtonReturnCommand.OnActivateMouseLeft += async (sender, e, Key) =>
@@ -192,9 +213,13 @@ namespace OperPageLes.UI.Pages.Browser
                 if (!SaveKeyDown)
                 {
                     SaveKeyDown = true;
+                    if (SelectNavigation == SelectNavigationPageConsoleEnum.BufferCommandTextBox)
+                        SelectNavigation = SelectNavigationPageConsoleEnum.None;
+#if DEBUG
+                    DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
+#endif
                     if (e.Key != Key.Up && e.Key != Key.Down && e.Key != Key.Enter && e.Key != Key.Escape)
                     {
-                        ActiveIndexBufferInput = -1;
                         SaveStringPrintBuffer = string.Empty;
                     }
                     switch (e.Key)
@@ -202,14 +227,13 @@ namespace OperPageLes.UI.Pages.Browser
                         case Key.Escape:
                         case Key.Enter:
                             TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
-                                new ColorAnimation(Color.FromRgb(160, 245, 200),
+                                new ColorAnimation(TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used,
                                 e.Key switch
                                 {
-                                    Key.Escape => Color.FromRgb(160, 245, 200),
-                                    Key.Enter => Color.FromRgb(255, 122, 84),
+                                    Key.Enter => Color.FromRgb(160, 245, 200),
+                                    Key.Escape => Color.FromRgb(255, 122, 84),
                                     _ => throw new NotImplementedException(),
-                                }, TimeSpan.FromMilliseconds(90d)));
-                            if (HitUse) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
+                                }, TimeSpan.FromMilliseconds(80d)));
                             break;
                     }
                 }
@@ -220,44 +244,47 @@ namespace OperPageLes.UI.Pages.Browser
                 switch (e.Key)
                 {
                     case Key.Enter:
-                        ActiveIndexBufferInput = -1;
                         SaveStringPrintBuffer = string.Empty;
-                        await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
                         App.ColorAnimationType.AnimateEffect(TextBoxCommandInput.Background,
                             SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
+                        if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
+                        {
+                            SelectNavigation = SelectNavigationPageConsoleEnum.None;
+                            TextBoxCommandInput.Text += '*';
+#if DEBUG
+                            DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
+#endif
+                        }
+                        else
+                        {
+                            if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
+                            await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+                        }
                         break;
                     case Key.Escape:
                         TextBoxCommandInput.Text = SaveStringPrintBuffer.Length > 0 ? SaveStringPrintBuffer : string.Empty;
                         SaveStringPrintBuffer = string.Empty;
-                        ActiveIndexBufferInput = -1;
+                        if (TextBoxCommandInput.Text.Length > 0)
+                        {
+                            SelectNavigation = SelectNavigationPageConsoleEnum.None;
+                        }
+                        else if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
                         App.ColorAnimationType.AnimateEffect(TextBoxCommandInput.Background,
                             SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
                         break;
                     case Key.Apps:
                         App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);
                         break;
-                    case Key.Up:
-                        if (BufferPage.BufferCommand.Count == 0) return;
-                        if (ActiveIndexBufferInput == -1)
-                        {
-                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
-                            ActiveIndexBufferInput = BufferPage.BufferCommand.Count - 1;
-                        }
-                        else ActiveIndexBufferInput = ActiveIndexBufferInput > 0 ? ActiveIndexBufferInput - 1 : BufferPage.BufferCommand.Count - 1;
-                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
-                        break;
                     case Key.Down:
-                        if (BufferPage.BufferCommand.Count == 0) return;
-                        if (ActiveIndexBufferInput == -1)
-                        {
-                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
-                            ActiveIndexBufferInput = 0;
-                        }
-                        else ActiveIndexBufferInput = ActiveIndexBufferInput < BufferPage.BufferCommand.Count - 1 ? ActiveIndexBufferInput + 1 : 0;
-                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                    case Key.Up:
+                        ProcessingActialSelectNavigating(e.Key);
+                        break;
+                    default:
+                        if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
+                            SelectNavigation = SelectNavigationPageConsoleEnum.None;
                         break;
                 }
-                if (HitUse)
+                if (HitUse && SelectNavigation != SelectNavigationPageConsoleEnum.HitCommands)
                 {
                     if (TextBoxCommandInput.Text.Length > 0 && TextBoxCommandInput.Text.Contains('*'))
                     {
@@ -265,7 +292,10 @@ namespace OperPageLes.UI.Pages.Browser
                         return;
                     }
                     else if (TextBoxCommandInput.Text.Length == 0 && StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                    else if (!TextBoxCommandInput.Text.Contains('*') && TextBoxCommandInput.Text.Length > 0) UsingAllHintCommand();
+                    else if (!TextBoxCommandInput.Text.Contains('*') && TextBoxCommandInput.Text.Length > 0)
+                    {
+                        UsingAllHintCommand();
+                    }
                 }
             };
             #endregion
@@ -301,11 +331,18 @@ namespace OperPageLes.UI.Pages.Browser
             ChangeVisualHintCommand(ConsoleHitStateEnum.VisibleMainCommands);
         }
 
-        //
+        /// <summary>
+        /// Изменить визуализацию подсказок к командам
+        /// </summary>
+        /// <param name="StateHit">Изменяемое состояние</param>
         private void ChangeVisualHintCommand(ConsoleHitStateEnum StateHit)
         {
             if (StateVisibleHit != StateHit)
             {
+                if (StateHit == ConsoleHitStateEnum.Hidden) SelectNavigation = SelectNavigationPageConsoleEnum.None;
+#if DEBUG
+                DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
+#endif
                 TimeSpan span = TimeSpan.FromMilliseconds(300d);
                 Canvas.SetZIndex(GridHintOneCommand, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1 : -1);
                 App.DoubleAnimationType.AnimateEffect(GridHintOneCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1d : 0d, span);
@@ -409,6 +446,84 @@ namespace OperPageLes.UI.Pages.Browser
                 UsingOneHitCommand(TextBoxCommandInput.Text);
             };
             return Result;
+        }
+        #endregion
+
+        #region Navigation
+        /// <summary>
+        /// Обработать клавишу по текущей навигации страницы
+        /// </summary>
+        /// <param name="key">Обрабатываемая клавиша</param>
+        private void ProcessingActialSelectNavigating(Key key)
+        {
+            if (SelectNavigation == SelectNavigationPageConsoleEnum.None)
+            {
+                if (StateVisibleHit == ConsoleHitStateEnum.VisibleMainCommands)
+                {
+                    SelectNavigation = SelectNavigationPageConsoleEnum.HitCommands;
+                    ActiveIndexHitCommandInput = -1;
+                }
+                else
+                {
+                    SelectNavigation = SelectNavigationPageConsoleEnum.BufferCommandTextBox;
+                    ActiveIndexBufferInput = -1;
+                }
+#if DEBUG
+            DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
+#endif
+            }
+
+            switch (SelectNavigation)
+            {
+                case SelectNavigationPageConsoleEnum.BufferCommandTextBox:
+                    if (key == Key.Up)
+                    {
+                        if (BufferPage.BufferCommand.Count == 0) return;
+                        if (ActiveIndexBufferInput == -1)
+                        {
+                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                            ActiveIndexBufferInput = BufferPage.BufferCommand.Count - 1;
+                        }
+                        else ActiveIndexBufferInput = ActiveIndexBufferInput > 0 ? ActiveIndexBufferInput - 1 : BufferPage.BufferCommand.Count - 1;
+                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                    }
+                    else if (key == Key.Down)
+                    {
+                        if (BufferPage.BufferCommand.Count == 0) return;
+                        if (ActiveIndexBufferInput == -1)
+                        {
+                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                            ActiveIndexBufferInput = 0;
+                        }
+                        else ActiveIndexBufferInput = ActiveIndexBufferInput < BufferPage.BufferCommand.Count - 1 ? ActiveIndexBufferInput + 1 : 0;
+                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                    }
+                    break;
+                case SelectNavigationPageConsoleEnum.HitCommands:
+                    if (key == Key.Up)
+                    {
+                        if (StackPanelAllHit.Children.Count == 0) return;
+                        if (ActiveIndexHitCommandInput == -1)
+                        {
+                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                            ActiveIndexHitCommandInput = StackPanelAllHit.Children.Count - 1;
+                        }
+                        else ActiveIndexHitCommandInput = ActiveIndexHitCommandInput > 0 ? ActiveIndexHitCommandInput - 1 : StackPanelAllHit.Children.Count - 1;
+                        TextBoxCommandInput.Text = ((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).Text;
+                    }
+                    else if (key == Key.Down)
+                    {
+                        if (StackPanelAllHit.Children.Count == 0) return;
+                        if (ActiveIndexHitCommandInput == -1)
+                        {
+                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                            ActiveIndexHitCommandInput = 0;
+                        }
+                        else ActiveIndexHitCommandInput = ActiveIndexHitCommandInput < StackPanelAllHit.Children.Count - 1 ? ActiveIndexHitCommandInput + 1 : 0;
+                        TextBoxCommandInput.Text = ((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).Text;
+                    }
+                    break;
+            }
         }
         #endregion
 

@@ -22,6 +22,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using WmColor = System.Windows.Media.Color;
 #endregion
 
 namespace OperPageLes.UI.Windows
@@ -147,6 +148,7 @@ namespace OperPageLes.UI.Windows
             VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
+            ImageMenu.Opacity = 0d;
             IELActionPanelMain.IsKeyboardModeExit = App.CurrentApp.SettingMainApplication.ExitKeyboardModeInClosePanelAction;
             IELActionPanelMain.KeyActivateKeyboardMode = App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction;
             IELActionPanelMain.KeyKeyboardModeActivateRightClick = App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick;
@@ -281,7 +283,8 @@ namespace OperPageLes.UI.Windows
             {
                 App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
                 App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
+                    App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
                 App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
                 Canvas.SetZIndex(FrameNewInlayBrowser, -1);
                 FrameNewInlayBrowser.IsHitTestVisible = false;
@@ -320,7 +323,8 @@ namespace OperPageLes.UI.Windows
                 IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
                 App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, TimeSpan.FromMilliseconds(500d));
+                if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
+                    App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, TimeSpan.FromMilliseconds(500d));
                 App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, TimeSpan.FromMilliseconds(500d));
                 Canvas.SetZIndex(FrameNewInlayBrowser, 1);
                 ManagerBrowserNewPage.Focus();
@@ -599,7 +603,7 @@ namespace OperPageLes.UI.Windows
             }
             else
             {
-                App.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
+                App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
             }
         }
 
@@ -610,11 +614,10 @@ namespace OperPageLes.UI.Windows
         private void ComplitedInstallImageMenu(BitmapImage bitmap)
         {
             ImageMenu.ImageSource = bitmap;
-            //ImageMenu.Source = bitmap;
-            // Сделать картинку с ViewBOX IMAGE BRUCH         0.05,-0.05,0.9,1.1      0,0,1,1
-            //App.AnimateDoubleEffect(BlurEffectImageMenu, BlurEffect.RadiusProperty, 10d, 0d, TimeSpan.FromMilliseconds(2300d));
-            App.RectAnimationType.AnimateEffect(ImageMenu, ImageBrush.ViewboxProperty, new(0, 0, 0.9, 0.9), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(2300d));
+
+            App.RectAnimationType.AnimateEffect(ImageMenu, ImageBrush.ViewboxProperty, new(0.025, 0.025, 0.95, 0.95), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(2300d));
             App.ThicknessAnimationType.AnimateEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
+            App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1500d));
             App.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
         }
 
@@ -632,10 +635,20 @@ namespace OperPageLes.UI.Windows
         }
         #endregion
 
-        #region BlurBackgroundDataTime
+        #region BlurBackground
         internal void ChangeBlurImageInDataTime(bool State)
         {
             App.DoubleAnimationType.AnimateEffect(VisualRectangleDateTimeBackground, OpacityProperty, State ? 0.5d : 0d, TimeSpan.FromMilliseconds(1300d));
+        }
+
+        /// <summary>
+        /// Анимировать цвет сигнала в главном Border окна
+        /// </summary>
+        /// <param name="Color">Цвет который будет отображён как сигнальный</param>
+        internal void BlurMainAnimateColor(WmColor Color)
+        {
+            App.ColorAnimationType.AnimateEffect(ShadowMainBorderEffect,
+                DropShadowEffect.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));
         }
         #endregion
     }

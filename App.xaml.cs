@@ -294,7 +294,7 @@ namespace OperPageLes
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
                 (Command, param) =>
                 {
-                    PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchPageType<PageLabels>();
+                    PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchAnyPageType<PageLabels>();
                     if (SourcePage != null)
                     {
                         if (SourcePage.SelectLabelsMode) return
@@ -317,7 +317,7 @@ namespace OperPageLes
                     ActiveDialog = null;
                     if (label != null)
                     {
-                        PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchPageType<PageLabels>();
+                        PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchAnyPageType<PageLabels>();
                         if (SourcePage != null)
                         {
                             if (SourcePage.SelectLabelsMode) return
@@ -352,7 +352,7 @@ namespace OperPageLes
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param) =>
                 {
-                    MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>()?.ClearConsoleText();
+                    MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>()?.ClearConsoleText();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -582,7 +582,7 @@ namespace OperPageLes
             #region SettingRuntimeRealizeSettingChanges
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
             {
-                MainWindow.UpdateImageMenu(New);
+                if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
             };
             SettingMainApplication.BlurBackgroundDataTime.Changed += (Old, New) =>
             {
@@ -944,6 +944,10 @@ namespace OperPageLes
         [MTAThread()]
         internal static void SummarizeCommandStateResult(PageConsole Console, CommandStateResult Result)
         {
+            if (Result.State != ResultState.Complete)
+            {
+                App.MainWindow.BlurMainAnimateColor(Colors.Red);
+            }
             Console.AddTextInConsole(Result.Message);
         }
 

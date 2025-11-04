@@ -50,6 +50,11 @@ namespace OperPageLes.Windows
         private bool StartAnimation;
 
         /// <summary>
+        /// Активен ли поиск элементов
+        /// </summary>
+        private bool SearchActivate;
+
+        /// <summary>
         /// Страница описания поведения консольной команды
         /// </summary>
         private readonly PageDescriptionConsole DescriptionConsole;
@@ -79,6 +84,7 @@ namespace OperPageLes.Windows
         {
             App.CurrentApp.LogWriteLine("Создание окна описания элементов");
             StartAnimation = false;
+            SearchActivate = false;
             InitializeComponent();
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
             IELButtonSearchCommand.Imaging = App.LoadImage(Properties.Resources.Search);
@@ -165,8 +171,9 @@ namespace OperPageLes.Windows
             #region IELButtonSearchCommand
             IELButtonSearchCommand.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (ScrollViewerElements.Content == null) return;
+                if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0) return;
                 if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
+                SearchActivate = true;
                 IELButtonSearchCommand.IELSettingObject.BackgroundSetting.SetUsedState(true);
                 IELButtonText Button;
                 //if (IndexSearch.Length > 0)
@@ -200,8 +207,7 @@ namespace OperPageLes.Windows
             };
             IELButtonSearchCommand.OnActivateMouseRight += (sender, e, Key) =>
             {
-                if (ScrollViewerElements.Content == null) return;
-                if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
+                if (!SearchActivate) return;
                 Keyboard.ClearFocus();
                 IELButtonSearchCommand.IELSettingObject.BackgroundSetting.SetUsedState(false);
                 IELButtonText Button;

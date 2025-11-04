@@ -194,7 +194,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 if (SelectLabelInPage != null)
                 {
-                    PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>();
+                    PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
                     await App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
                     SelectLabelInPage = null;
                 }
@@ -607,7 +607,7 @@ namespace OperPageLes.UI.Pages.Browser
                     }
                     return;
                 }
-                PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchPageType<PageConsole>();
+                PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
                 await App.CurrentApp.ActivateActionCommand(Console, Label.SourceLabel.Command);
                 e.Handled = true;
             };

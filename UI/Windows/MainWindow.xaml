@@ -10,15 +10,18 @@
         xmlns:resx="clr-namespace:OperPageLes.Properties"
         x:Name="window" x:Class="OperPageLes.UI.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="Главное меню" WindowStartupLocation="CenterScreen" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="#FFF0F0F0" MinWidth="770" MinHeight="500" Width="800" Height="600" RenderTransformOrigin="0.5,0.5">
+        Title="Главное меню" WindowStartupLocation="CenterScreen" Background="#FFF0F0F0" MinWidth="770" MinHeight="500">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
-    <Border x:Name="BorderWindowMain" BorderBrush="#FFF0F0F0" Background="#FF071C27" CornerRadius="10,10,10,10" BorderThickness="3,3,3,3">
-        <Border x:Name="BorderColorMain" CornerRadius="10,10,10,10">
+    <Border x:Name="BorderWindowMain" BorderBrush="#FFF0F0F0" Background="#FF21888A" CornerRadius="20,20,20,20" BorderThickness="15,15,15,15">
+        <Border x:Name="BorderColorMain" CornerRadius="13,13,13,13">
             <Border.Background>
-                <ImageBrush x:Name="ImageMenu" Stretch="UniformToFill" AlignmentX="Center" Viewbox="0,0,1,1" AlignmentY="Center" Viewport="0,0,1,1"/>
+                <ImageBrush x:Name="ImageMenu" Opacity="1" Stretch="UniformToFill"/>
             </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect x:Name="ShadowMainBorderEffect" Direction="-90" ShadowDepth="10" BlurRadius="30" RenderingBias="Performance" />
+            </Border.Effect>
             <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
                 <GUI:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
                 <Grid Panel.ZIndex="1">
@@ -28,7 +31,7 @@
                         <RowDefinition Height="56"/>
                     </Grid.RowDefinitions>
                     <Border BorderThickness="0,0,0,2" BorderBrush="Black">
-                        <Border x:Name="BorderButtonsUp" BorderBrush="#FF35755F" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="2,2,2,2" Grid.RowSpan="1" Focusable="True">
+                        <Border x:Name="BorderButtonsUp" BorderBrush="#FF35755F" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,2,4,2" Grid.RowSpan="1" Focusable="True">
                             <Border.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.47,-2.5">
                                     <GradientStop Color="#CC78A08C" Offset="0.99"/>
@@ -93,7 +96,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="53"/>
                             </Grid.ColumnDefinitions>
-                            <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#D8C2DFD4" Grid.ColumnSpan="1">
+                            <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#D8C2DFD4" Grid.ColumnSpan="1">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -142,7 +145,7 @@
                                     </GUI:IELButtonText>
                                 </Grid>
                             </Border>
-                            <Border x:Name="BorderDateTime" BorderBrush="#FF528A86" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Right">
+                            <Border x:Name="BorderDateTime" BorderBrush="#FF528A86" BorderThickness="2,2,2,2" Margin="4,4,4,4" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Right">
                                 <Border.Background>
                                     <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.3,-2">
                                         <GradientStop Color="#FFCDFFEC" Offset="0.22"/>
@@ -167,7 +170,7 @@
                                     <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontSize="14" FontFamily="{DynamicResource RussianRail G Pro}" Grid.Row="1" Padding="3,0,3,0" VerticalAlignment="Bottom" Margin="0,0,0,3" />
                                 </Grid>
                             </Border>
-                            <Border x:Name="BorderIndicator" BorderBrush="#FF007D9E" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="3,3,3,3" Background="#FFC37EBD" Grid.Column="2">
+                            <Border x:Name="BorderIndicator" BorderBrush="#FF007D9E" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#FFC37EBD" Grid.Column="2">
                                 <MediaElement x:Name="IndicatorLoading" Grid.Column="5" Stretch="UniformToFill" Margin="2,2,2,2">
                                     <MediaElement.OpacityMask>
                                         <RadialGradientBrush>
@@ -186,7 +189,7 @@
                         <Grid.Effect>
                             <BlurEffect x:Name="IELBrowserPageBlurEffect" Radius="0"/>
                         </Grid.Effect>
-                        <GUI:IELBrowserPage x:Name="IELBrowserPageMain" Margin="0,1,0,0" Grid.Row="1">
+                        <GUI:IELBrowserPage x:Name="IELBrowserPageMain" Margin="0,1,0,0" Grid.Row="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="16" FontStyle="Italic">
                             <GUI:IELBrowserPage.IELSettingObject>
                                 <ObjectSettings:IELObjectSetting>
                                     <ObjectSettings:IELObjectSetting.BackgroundSetting>

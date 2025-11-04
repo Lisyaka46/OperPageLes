@@ -2,8 +2,12 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using Color = System.Windows.Media.Color;
+using DrColor = System.Drawing.Color;
 
 namespace OperPageLes.UI.Pages.Browser
 {
@@ -72,19 +76,25 @@ namespace OperPageLes.UI.Pages.Browser
             IELButtonTest.Focusable = true;
             IELButtonTest.MouseLeftButtonUp += (sender, e) =>
             {
-
-                // Create a storyboard to apply the animation.
-                ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
-                animation.Duration = TimeSpan.FromMilliseconds(1000d);
-                animation.From = new(3);
-                animation.To = new(10);
-                animation.AutoReverse = true;
-                Storyboard.SetTargetName(animation, "BorderWindowMain");
-                Storyboard.SetTargetProperty(
-                    animation, new PropertyPath(Border.BorderThicknessProperty));
-                Storyboard ellipseStoryboard = new();
-                ellipseStoryboard.Children.Add(animation);
-                ellipseStoryboard.Begin(App.MainWindow);
+                App.MainWindow.BlurMainAnimateColor(Colors.Blue);
+            };
+            IELButtonTest.MouseRightButtonUp += (sender, e) =>
+            {
+                //App.ColorAnimationType.AnimateEffect(App.MainWindow.ShadowMainBorderEffect,
+                //    DropShadowEffect.ColorProperty, Colors.Black, TimeSpan.FromMilliseconds(300d));
+                //App.DoubleAnimationType.AnimateEffect(App.MainWindow.ShadowMainBorderEffect,
+                //    DropShadowEffect.BlurRadiusProperty, 28, 18, TimeSpan.FromMilliseconds(300d));
+                //// Create a storyboard to apply the animation.
+                //ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
+                //animation.Duration = TimeSpan.FromMilliseconds(300d);
+                //animation.From = new(25);
+                //animation.To = new(15);
+                //Storyboard.SetTargetName(animation, "BorderWindowMain");
+                //Storyboard.SetTargetProperty(
+                //    animation, new PropertyPath(Border.BorderThicknessProperty));
+                //Storyboard ellipseStoryboard = new();
+                //ellipseStoryboard.Children.Add(animation);
+                //ellipseStoryboard.Begin(App.MainWindow);
             };
             #region Sliders
             SliderX.ValueChanged += (sender, e) =>
@@ -117,12 +127,12 @@ namespace OperPageLes.UI.Pages.Browser
         {
             int X, Y;
             Bitmap bitmap = new(Width, Height);
-            Func<int, int, Color> d = new((X, Y) =>
+            Func<int, int, DrColor> d = new((X, Y) =>
             {
                 byte R = (byte)(Math.Cos(Width / 20d - X) * 255);
                 byte G = (byte)(Math.Cos(Height / 20d - Y) * 255);
                 byte B = (byte)(0);
-                return System.Drawing.Color.FromArgb(R, G, B);
+                return DrColor.FromArgb(R, G, B);
             });
             for (Y = 0; Y < Height; Y++)
             {
