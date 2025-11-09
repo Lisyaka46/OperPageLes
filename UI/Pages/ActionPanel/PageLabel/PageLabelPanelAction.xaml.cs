@@ -1,11 +1,11 @@
 ﻿using IEL.CORE.Classes;
-using OperPageLes.CORE.Label;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementControl;
 using System.Windows.Controls;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
+namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelActionPanel.xaml
@@ -25,7 +25,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
         public PageLabelElementActionPanel()
         {
             InitializeComponent();
-            IELBlockInfoTagLabel.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
+            //IELBlockInfoTagLabel.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             PageLabelSelectManipulate = new();
             PanelActionPageSelectLabel = new(PageLabelSelectManipulate);
         }

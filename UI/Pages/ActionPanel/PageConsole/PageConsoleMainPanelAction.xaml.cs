@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
+namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
 {
     /// <summary>
     /// Логика взаимодействия для PageMainConsolePanelAction.xaml

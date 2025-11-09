@@ -1,19 +1,18 @@
-﻿using IEL.CORE.Classes;
+﻿using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Struct;
+using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
 using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
-using OperPageLes.CORE.Label;
-using OperPageLes.CORE.Struct;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.UserElementControl
+namespace ApplicationOperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLLabelCommand.xaml
@@ -85,6 +84,47 @@ namespace OperPageLes.UI.UserElementControl
         ];
         #endregion
 
+        #region Color Setting
+        /// <summary>
+        /// Ресурсный объект настройки состояний фона
+        /// </summary>
+        public BrushSettingQ _Background;
+        /// <summary>
+        /// Объект настройки состояний фона
+        /// </summary>
+        public new BrushSettingQ Background
+        {
+            get => _Foreground;
+            set => _Foreground.ColorData = value.ColorData;
+        }
+
+        /// <summary>
+        /// Ресурсный объект настройки состояний границы
+        /// </summary>
+        public BrushSettingQ _BorderBrush;
+        /// <summary>
+        /// Объект настройки состояний границы
+        /// </summary>
+        public new BrushSettingQ BorderBrush
+        {
+            get => _Foreground;
+            set => _Foreground.ColorData = value.ColorData;
+        }
+
+        /// <summary>
+        /// Ресурсный объект настройки состояний текста
+        /// </summary>
+        public BrushSettingQ _Foreground;
+        /// <summary>
+        /// Объект настройки состояний текста
+        /// </summary>
+        public new BrushSettingQ Foreground
+        {
+            get => _Foreground;
+            set => _Foreground.ColorData = value.ColorData;
+        }
+        #endregion
+
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
         /// Настройка использования объекта
@@ -94,51 +134,6 @@ namespace OperPageLes.UI.UserElementControl
             get => _IELSettingObject;
             set
             {
-                value.BackgroundSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
-                {
-                    if (Animated)
-                    {
-                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
-                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                        anim.To = NewValue;
-                        BorderMainLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                    }
-                    else
-                    {
-                        SolidColorBrush color = new(NewValue);
-                        BorderMainLabel.Background = color;
-                    }
-                });
-                value.BorderBrushSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
-                {
-                    if (Animated)
-                    {
-                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
-                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                        anim.To = NewValue;
-                        BorderMainLabel.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                    }
-                    else
-                    {
-                        SolidColorBrush color = new(NewValue);
-                        BorderMainLabel.BorderBrush = color;
-                    }
-                });
-                value.ForegroundSetting.SetActionColorChanged((Spectrum, NewValue, Animated) =>
-                {
-                    if (Animated)
-                    {
-                        ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
-                        anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                        anim.To = NewValue;
-                        TextBlockNameLabel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                    }
-                    else
-                    {
-                        SolidColorBrush color = new(NewValue);
-                        TextBlockNameLabel.Foreground = color;
-                    }
-                });
                 _IELSettingObject = value;
             }
         }
@@ -217,6 +212,56 @@ namespace OperPageLes.UI.UserElementControl
         public OPLLabelCommand(LabelAction Label)
         {
             InitializeComponent();
+            #region Background
+            _Background = new();
+            BorderMainLabel.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
+            Background.SetSpectrumAction((Args) =>
+            {
+                if (Args.AnimatedEvent)
+                {
+                    App.ColorAnimationType.AnimateEffect(BorderMainLabel.Background,
+                        SolidColorBrush.ColorProperty, Args.Value, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                }
+                else
+                {
+                    ((SolidColorBrush)BorderMainLabel.Background).Color = Args.Value;
+                }
+            });
+            #endregion
+
+            #region BorderBrush
+            _BorderBrush = new();
+            BorderMainLabel.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
+            BorderBrush.SetSpectrumAction((Args) =>
+            {
+                if (Args.AnimatedEvent)
+                {
+                    App.ColorAnimationType.AnimateEffect(BorderMainLabel.BorderBrush,
+                        SolidColorBrush.ColorProperty, Args.Value, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                }
+                else
+                {
+                    ((SolidColorBrush)BorderMainLabel.BorderBrush).Color = Args.Value;
+                }
+            });
+            #endregion
+
+            #region Foreground
+            _Foreground = new();
+            TextBlockNameLabel.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
+            Foreground.SetSpectrumAction((Args) =>
+            {
+                if (Args.AnimatedEvent)
+                {
+                    App.ColorAnimationType.AnimateEffect(TextBlockNameLabel.Foreground,
+                        SolidColorBrush.ColorProperty, Args.Value, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                }
+                else
+                {
+                    ((SolidColorBrush)TextBlockNameLabel.Foreground).Color = Args.Value;
+                }
+            });
+            #endregion
             IELSettingObject = new();
             _Selected = false;
             BorderSelectElement.Opacity = 0d;
@@ -233,25 +278,20 @@ namespace OperPageLes.UI.UserElementControl
 
             IsEnabledChanged += (sender, e) =>
             {
-                bool NewValue = (bool)e.NewValue;
-                Color
-                    Foreground = NewValue ? IELSettingObject.ForegroundSetting.Default : IELSettingObject.ForegroundSetting.NotEnabled,
-                    Background = NewValue ? IELSettingObject.BackgroundSetting.Default : IELSettingObject.BackgroundSetting.NotEnabled,
-                    BorderBrush = NewValue ? IELSettingObject.BorderBrushSetting.Default : IELSettingObject.BorderBrushSetting.NotEnabled;
                 TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-
-                App.ColorAnimationType.AnimateEffect(BorderMainLabel.Background, SolidColorBrush.ColorProperty, Background, span);
-
-                App.ColorAnimationType.AnimateEffect(BorderMainLabel.BorderBrush, SolidColorBrush.ColorProperty, BorderBrush, span);
-
-                App.ColorAnimationType.AnimateEffect(TextBlockNameLabel.Foreground, SolidColorBrush.ColorProperty, Foreground, span);
+                StateSpectrum NewValue = (bool)e.NewValue ? StateSpectrum.Default : StateSpectrum.NotEnabled;
+                Background.SetActiveSpecrum(NewValue, true);
+                BorderBrush.SetActiveSpecrum(NewValue, true);
+                Foreground.SetActiveSpecrum(NewValue, true);
             };
 
             MouseEnter += (sender, e) =>
             {
                 if (IsEnabled)
                 {
-                    IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
+                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
+                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
+                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
                     IELSettingObject.StartHover();
                 }
             };
@@ -260,7 +300,9 @@ namespace OperPageLes.UI.UserElementControl
             {
                 if (IsEnabled)
                 {
-                    IELSettingObject.UseActiveQSetting(StateSpectrum.Default);
+                    Background.SetActiveSpecrum(StateSpectrum.Default, true);
+                    BorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
+                    Foreground.SetActiveSpecrum(StateSpectrum.Default, true);
                     IELSettingObject.StopHover();
                 }
             };
@@ -273,7 +315,9 @@ namespace OperPageLes.UI.UserElementControl
                     (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ||
                     (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null))
                     {
-                        IELSettingObject.UseActiveQSetting(StateSpectrum.Used);
+                        Background.SetActiveSpecrum(StateSpectrum.Used, false);
+                        BorderBrush.SetActiveSpecrum(StateSpectrum.Used, false);
+                        Foreground.SetActiveSpecrum(StateSpectrum.Used, false);
                         IELSettingObject.StopHover();
                     }
                 }
@@ -283,7 +327,9 @@ namespace OperPageLes.UI.UserElementControl
             {
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
-                    IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
+                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
+                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
+                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
                     OnActivateMouseLeft?.Invoke(this, e);
                 }
             };
@@ -292,7 +338,9 @@ namespace OperPageLes.UI.UserElementControl
             {
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
-                    IELSettingObject.UseActiveQSetting(StateSpectrum.Select);
+                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
+                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
+                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
                     OnActivateMouseRight?.Invoke(this, e);
                 }
             };
@@ -341,10 +389,9 @@ namespace OperPageLes.UI.UserElementControl
             }
             ImageElementLabel.Source = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
             ImageElementLabel.UpdateLayout();
-            IELSettingObject.BackgroundSetting.ColorData = (QData)BackgroundStyles[IndexUseStyle].Clone();
-            IELSettingObject.BorderBrushSetting.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
-            IELSettingObject.ForegroundSetting.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
-            IELSettingObject.UseActiveQSetting(StateSpectrum.Default);
+            Background.ColorData = (QData)BackgroundStyles[IndexUseStyle].Clone();
+            BorderBrush.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
+            Foreground.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
         }
 
         /// <summary>
@@ -364,27 +411,7 @@ namespace OperPageLes.UI.UserElementControl
                 Tag = NewTag,
                 IELSettingObject = new()
                 {
-                    BackgroundSetting = new(new byte[,]
-                        {
-                        { 255, 116, 220, 80 },
-                        { 255, 180, 255, 154 },
-                        { 255, 196, 239, 201 },
-                        { 255, 222, 87, 87 },
-                        }),
-                    BorderBrushSetting = new(new byte[,]
-                        {
-                        { 255, 0, 0, 0 },
-                        { 255, 19, 35, 12 },
-                        { 255, 47, 44, 9 },
-                        { 255, 58, 8, 8 },
-                        }),
-                    ForegroundSetting = new(new byte[,]
-                        {
-                        { 255, 0, 0, 0 },
-                        { 255, 19, 35, 12 },
-                        { 255, 47, 44, 9 },
-                        { 255, 58, 8, 8 },
-                        }),
+                    AnimationMillisecond = 200d,
                 },
             };
         }

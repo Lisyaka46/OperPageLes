@@ -3,11 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel"
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
       xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      x:Class="OperPageLes.UI.Pages.ActionPanel.PageConsole.PageBufferPanelAction">
+      x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole.PageBufferPanelAction">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -41,7 +41,7 @@
                 <ColumnDefinition Width="107*"/>
             </Grid.ColumnDefinitions>
             <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" CharKeyKeyboard="Oem3" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0" >
-                <GUI:IELButtonTextKey.IELSettingObject>
+                <!--<GUI:IELButtonTextKey.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                             <Classes:BrushSettingQ/>
@@ -53,10 +53,10 @@
                             <Classes:BrushSettingQ Default="#FF4DA6B7" NotEnabled="#FFC13750" Select="#FF4DD7F1" Used="White"/>
                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </GUI:IELButtonTextKey.IELSettingObject>
+                </GUI:IELButtonTextKey.IELSettingObject>-->
             </GUI:IELButtonTextKey>
             <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" CharKeyKeyboard="D1" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0">
-                <GUI:IELButtonTextKey.IELSettingObject>
+                <!--<GUI:IELButtonTextKey.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                             <Classes:BrushSettingQ/>
@@ -68,7 +68,7 @@
                             <Classes:BrushSettingQ NotEnabled="#FFC13750" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </GUI:IELButtonTextKey.IELSettingObject>
+                </GUI:IELButtonTextKey.IELSettingObject>-->
             </GUI:IELButtonTextKey>
         </Grid>
     </Grid>

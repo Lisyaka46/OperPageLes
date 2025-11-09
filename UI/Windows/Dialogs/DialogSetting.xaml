@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
+        xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
         xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-        x:Class="OperPageLes.UI.Windows.Dialogs.DialogSetting"
+        x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogSetting"
         Title="Настройки программы" Height="450" Width="800" MinWidth="650" MinHeight="400" Background="{x:Null}" Icon="/UI/Images/IconMainSettings.png" Topmost="True">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -39,7 +39,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" FontFamily="{DynamicResource Vollda}">
-                <IEL:IELButtonText.IELSettingObject>
+                <!--<IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30D0B7" Select="#FF30D083" Used="#FF92FFEE"/>
@@ -51,10 +51,10 @@
                             <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF021D10"/>
                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </IEL:IELButtonText.IELSettingObject>
+                </IEL:IELButtonText.IELSettingObject>-->
             </IEL:IELButtonText>
             <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}">
-                <IEL:IELButtonText.IELSettingObject>
+                <!--<IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30BED0" Select="#FF30A8D0" Used="#FF92FFEE"/>
@@ -66,10 +66,10 @@
                             <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF02161D"/>
                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </IEL:IELButtonText.IELSettingObject>
+                </IEL:IELButtonText.IELSettingObject>-->
             </IEL:IELButtonText>
             <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1">
-                <IEL:IELButtonText.IELSettingObject>
+                <!--<IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF6CC793" Select="#FF618679" Used="#FF42F7DB"/>
@@ -81,7 +81,7 @@
                             <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF02161D"/>
                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </IEL:IELButtonText.IELSettingObject>
+                </IEL:IELButtonText.IELSettingObject>-->
             </IEL:IELButtonText>
         </Grid>
         <Grid Grid.Row="1">

@@ -1,6 +1,6 @@
 ﻿using IEL.GUI;
-using OperPageLes.CORE.Settings;
-using OperPageLes.UI.Pages.ActionPanel;
+using ApplicationOperPageLes.CORE.Settings;
+using ApplicationOperPageLes.UI.Pages.ActionPanel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
 using System.ComponentModel;
-using OperPageLes.CORE;
+using ApplicationOperPageLes.CORE;
 
-namespace OperPageLes.UI.Pages.Settings
+namespace ApplicationOperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PagePanelActionSetting.xaml
@@ -152,7 +152,7 @@ namespace OperPageLes.UI.Pages.Settings
         private void ActivateSelectButtonKey(IELButtonText? button)
         {
             if (button == null) return;
-            SelectSetKey?.IELSettingObject.BackgroundSetting.SetUsedState(false);
+            SelectSetKey?.Background.SetUsedState(false);
             SelectSetKey = button;
             SelectSetKey.Focus();
             SelectSetKey.FontStyle = FontStyles.Italic;
@@ -167,7 +167,7 @@ namespace OperPageLes.UI.Pages.Settings
             if (SelectSetKey == null) return;
             SelectSetKey.Text = OPLKeyConverter.ConvertKeyToString(key);
             SelectSetKey.FontStyle = FontStyles.Normal;
-            SelectSetKey?.IELSettingObject.BackgroundSetting.SetUsedState(false);
+            SelectSetKey?.Background.SetUsedState(false);
             SelectSetKey = null;
         }
     }

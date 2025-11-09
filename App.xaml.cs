@@ -10,17 +10,17 @@ using LibraryPackKey.CORE;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OperPageLes.CORE;
-using OperPageLes.CORE.Animation;
-using OperPageLes.CORE.Label;
-using OperPageLes.CORE.Settings.Struct;
-using OperPageLes.CORE.Struct;
-using OperPageLes.Properties;
-using OperPageLes.UI.Pages.ActionPanel.PageConsole;
-using OperPageLes.UI.Pages.Browser;
-using OperPageLes.UI.UserElementControl;
-using OperPageLes.UI.Windows;
-using OperPageLes.UI.Windows.Dialogs;
+using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Animation;
+using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Settings.Struct;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.Properties;
+using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
+using ApplicationOperPageLes.UI.Pages.Browser;
+using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.Windows;
+using ApplicationOperPageLes.UI.Windows.Dialogs;
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -42,7 +42,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 
-namespace OperPageLes
+namespace ApplicationOperPageLes
 {
     /// <summary>
     /// Interaction logic for App.xaml

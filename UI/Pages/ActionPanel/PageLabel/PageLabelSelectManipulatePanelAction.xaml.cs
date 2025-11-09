@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
+namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelSelectManipulatePanelAction.xaml

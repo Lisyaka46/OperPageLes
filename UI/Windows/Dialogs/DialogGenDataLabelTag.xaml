@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
+        xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
         xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-        x:Class="OperPageLes.UI.Windows.Dialogs.DialogGenDataLabelTag"
+        x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogGenDataLabelTag"
         Height="450" Width="450" WindowStartupLocation="CenterScreen" Background="#FF5BBFAF"  ResizeMode="NoResize">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -30,7 +30,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <IEL:IELTextBox x:Name="IELTextBoxNameTag" Grid.Column="1" FontSizeText="16" TextBoxVerticalAlignment="Stretch" TextBoxHorizontalAlignment="Stretch" CornerRadius="4,4,4,4"  Text="" FontFamily="{DynamicResource Deledda Open Regular}">
-                    <IEL:IELTextBox.IELSettingObject>
+                    <!--<IEL:IELTextBox.IELSettingObject>
                         <ObjectSettings:IELObjectSetting>
                             <ObjectSettings:IELObjectSetting.ForegroundSetting>
                                 <Classes:BrushSettingQ/>
@@ -42,7 +42,7 @@
                                 <Classes:BrushSettingQ Default="#FF41ECB1" Select="#FF68B399" Used="#FF5DF174" NotEnabled="#FFF55757"/>
                             </ObjectSettings:IELObjectSetting.BackgroundSetting>
                         </ObjectSettings:IELObjectSetting>
-                    </IEL:IELTextBox.IELSettingObject>
+                    </IEL:IELTextBox.IELSettingObject>-->
                 </IEL:IELTextBox>
                 <TextBlock TextWrapping="Wrap" Text="Имя тега:" VerticalAlignment="Center" Padding="5,5,5,5" FontSize="18" FontFamily="Comic Sans MS"/>
             </Grid>
@@ -52,7 +52,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <IEL:IELButtonText x:Name="IELButtonComplete" Grid.Column="1" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Text="Создать" FontSize="18"  PaddingContent="30,4,30,4" FontFamily="{DynamicResource Bree CYR var}" VerticalAlignment="Center" Margin="5,0,5,0">
-                    <IEL:IELButtonText.IELSettingObject>
+                    <!--<IEL:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="Default">
                             <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                 <Classes:BrushSettingQ/>
@@ -64,10 +64,10 @@
                                 <Classes:BrushSettingQ Default="#FF1ECDDA" NotEnabled="#FFEC4A4A" Select="#FFF895F9" Used="#FFBEF2FF"/>
                             </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                         </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonText.IELSettingObject>
+                    </IEL:IELButtonText.IELSettingObject>-->
                 </IEL:IELButtonText>
                 <IEL:IELButtonText x:Name="IELButtonClose" Grid.Column="0" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Text="Отмена" FontSize="18"  PaddingContent="30,4,30,4" FontFamily="{DynamicResource Bree CYR var}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,5,0">
-                    <IEL:IELButtonText.IELSettingObject>
+                    <!--<IEL:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                 <Classes:BrushSettingQ Default="#FFFF7BBD" Select="#FF946E96" Used="#FFFFC4E2" NotEnabled="#FFF94C4C"/>
@@ -79,7 +79,7 @@
                                 <Classes:BrushSettingQ/>
                             </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                         </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonText.IELSettingObject>
+                    </IEL:IELButtonText.IELSettingObject>-->
                 </IEL:IELButtonText>
             </Grid>
         </Grid>

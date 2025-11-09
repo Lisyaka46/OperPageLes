@@ -1,4 +1,4 @@
-﻿namespace OperPageLes.CORE.Enums
+﻿namespace ApplicationOperPageLes.CORE.Enums
 {
     internal enum ConsoleHitStateEnum
     {

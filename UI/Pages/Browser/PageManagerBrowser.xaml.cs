@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace ApplicationOperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageManagerBrowser.xaml

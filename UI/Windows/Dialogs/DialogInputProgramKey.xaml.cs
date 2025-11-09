@@ -1,14 +1,14 @@
 ﻿using LibraryPackKey.CORE;
-using OperPageLes.CORE.Struct;
+using ApplicationOperPageLes.CORE.Struct;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Windows.Dialogs
+namespace ApplicationOperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowInputProgramKey.xaml
@@ -25,7 +25,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             Pack = StructPack.NowPack;
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
-            IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
+            //IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockPack.Text);
@@ -89,9 +89,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             }
             catch
             {
-                App.ColorAnimationType.AnimateEffect(IELTextBoxKey.Background, SolidColorBrush.ColorProperty,
-                System.Windows.Media.Color.FromArgb(255, 255, 0, 0), System.Windows.Media.Color.FromArgb(0, 255, 0, 0),
-                TimeSpan.FromMilliseconds(1000d));
+                IELTextBoxKey.Background.SetActiveSpecrum(Colors.Red);
             }
         }
     }

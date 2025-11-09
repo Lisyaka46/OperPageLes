@@ -3,11 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser"
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
       xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.Browser.PageConsole"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageConsole"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageConsole">
@@ -35,17 +35,17 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="" FontSizeText="17" FontFamily="Bahnschrift">
-                <GUI:IELTextBox.IELSettingObject>
+                <!--<GUI:IELTextBox.IELSettingObject>
                     <ObjectSettings:IELObjectSetting>
                         <ObjectSettings:IELObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FFEC4343" Default="#FF807B55" Select="#FFABA574" Used="#FFE4D779"/>
                         </ObjectSettings:IELObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELObjectSetting>
-                </GUI:IELTextBox.IELSettingObject>
+                </GUI:IELTextBox.IELSettingObject>-->
             </GUI:IELTextBox>
             <Grid Grid.Column="2" Grid.Row="2">
                 <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThicknessBlock="3,3,3,3"  FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" PaddingContent="5,0,5,0">
-                    <GUI:IELButtonText.IELSettingObject>
+                    <!--<GUI:IELButtonText.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="RightArrow">
                             <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                 <Classes:BrushSettingQ/>
@@ -54,7 +54,7 @@
                                 <Classes:BrushSettingQ Default="#FF6A9FC8" NotEnabled="#FFD66767" Select="#FF99D3FF" Used="#FFDAE9F5"/>
                             </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                         </ObjectSettings:IELButtonObjectSetting>
-                    </GUI:IELButtonText.IELSettingObject>
+                    </GUI:IELButtonText.IELSettingObject>-->
                 </GUI:IELButtonText>
             </Grid>
         </Grid>

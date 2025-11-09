@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OperPageLes.UI.Pages.Settings
+namespace ApplicationOperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PageOtherSetting.xaml

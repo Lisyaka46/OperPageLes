@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace OperPageLes.CORE.Struct
+namespace ApplicationOperPageLes.CORE.Struct
 {
     internal readonly struct StructDirectoryResources
     {
@@ -97,7 +97,7 @@ namespace OperPageLes.CORE.Struct
             string Prefics;
             bool SetBitmapImages = ResourcesImages.Count == 0;
             PathesFromNameResource.Clear();
-            foreach (PropertyInfo prop in typeof(Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic))
+            foreach (PropertyInfo prop in typeof(ApplicationOperPageLes.Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic))
             {
                 if (prop.PropertyType == typeof(byte[]))
                 {

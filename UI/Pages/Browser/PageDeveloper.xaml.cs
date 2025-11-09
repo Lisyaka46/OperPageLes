@@ -1,15 +1,16 @@
-﻿using OperPageLes.CORE;
+﻿using GLGraphs.CartesianGraph;
+using GLGraphs.Wpf;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
 using DrColor = System.Drawing.Color;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace ApplicationOperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml
@@ -18,9 +19,52 @@ namespace OperPageLes.UI.Pages.Browser
     {
         private bool ScaleMode = false;
         private bool KeyEventActivate = false;
+        private GraphSeries<string>? SeriesSource;
         public PageDeveloper()
         {
             InitializeComponent();
+            var GLGraphControl = new GLCartesianGraphControl<string>();
+            GLGraphControl.Height = 270;
+            GLGraphControl.Loaded += (sender, e) =>
+            {
+                CartesianGraphSettings Settings = new()
+                {
+                    PointSize = 60f,
+                    TextScale = 1.6f,
+                    BackgroundColor = new(20, 20, 20, 255),
+                    SelectionMode = GraphSelectionMode.Click,
+                    LineSize = 10f,
+                    ForceSquareGrid = false,
+                    SelectedCol = new(230, 200, 130, 200),
+
+                };
+                GLGraphControl.Graph = new(Settings);
+                //GLGraphControl.Graph.State.AddRegion(new(-1.5f, -1.5f, 1.5f, 1.5f), new(230, 130, 30, 200));
+                GLGraphControl.Graph.State.XGridSpacing.Major = 0.4f;
+                GLGraphControl.Graph.State.XGridSpacing.Minor = 0.2f;
+                GLGraphControl.Graph.State.XGridSpacing.Automatic = false;
+                GLGraphControl.Graph.State.YGridSpacing.Major = 0.4f;
+                GLGraphControl.Graph.State.YGridSpacing.Minor = 0.2f;
+                GLGraphControl.Graph.State.YGridSpacing.Automatic = false;
+                GLGraphControl.Graph.State.IsCameraAutoControlled = false;
+                //GLGraphControl.Graph.State.
+
+                GLGraphControl.UseLayoutRounding = false;
+                GLGraphControl.Graph.State.Camera.VerticalSizeDampeningFactor = 0.1f;
+                GLGraphControl.Graph.State.Camera.PositionDampeningFactor = 0.16f;
+                //GLGraphControl.Graph.State.AutoMajorGridDivisions = 1;
+                //GLGraphControl.Graph.State.AutoMinorGridDivisions = 1;
+                //GLGraphControl.
+                //GLGraphControl.Graph.State.Bounds = new(-2, -2, 2, 2);
+                SeriesSource = GLGraphControl.Graph.State.AddSeries(SeriesType.Point, "x^2");
+
+                SeriesSource.PointShape = SeriesPointShape.Triangle;
+                SeriesSource.IsVisible = true;
+                SeriesSource.Color = new(230, 100, 30, 200);
+            };
+            GridMain.Children.Add(GLGraphControl);
+            Grid.SetRow(GLGraphControl, 1);
+
             IELButtonDownloadImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
             };
@@ -76,6 +120,7 @@ namespace OperPageLes.UI.Pages.Browser
             IELButtonTest.Focusable = true;
             IELButtonTest.MouseLeftButtonUp += (sender, e) =>
             {
+                SeriesSource?.Add("Point", SeriesSource.Points.Count, (float)Math.Cos(SeriesSource.Points.Count));
                 App.MainWindow.BlurMainAnimateColor(Colors.Blue);
             };
             IELButtonTest.MouseRightButtonUp += (sender, e) =>

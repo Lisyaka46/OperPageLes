@@ -1,4 +1,4 @@
-﻿namespace OperPageLes.CORE.Settings
+﻿namespace ApplicationOperPageLes.CORE.Settings
 {
     internal interface ISetting
     {

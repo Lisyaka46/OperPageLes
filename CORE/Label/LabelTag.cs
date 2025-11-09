@@ -1,4 +1,4 @@
-﻿namespace OperPageLes.CORE.Label
+﻿namespace ApplicationOperPageLes.CORE.Label
 {
     public class LabelTag
     {

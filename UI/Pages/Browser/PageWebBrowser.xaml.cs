@@ -1,12 +1,12 @@
 ﻿using Microsoft.Win32;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementControl;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace ApplicationOperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageWebBrowser.xaml

@@ -3,10 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser"
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
       xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.Browser.PageWebBrowser"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageWebBrowser"
       Title="PageWebBrowser">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -23,7 +23,7 @@
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
             <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="18"  Text="" Grid.ColumnSpan="1" Margin="5,8,5,8" BorderThicknessBlock="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}">
-                <IEL:IELTextBox.IELSettingObject>
+                <!--<IEL:IELTextBox.IELSettingObject>
                     <ObjectSettings:IELObjectSetting>
                         <ObjectSettings:IELObjectSetting.ForegroundSetting>
                             <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
@@ -35,7 +35,7 @@
                             <Classes:BrushSettingQ Default="#FFB8E4C7" Select="#FF5E9470" Used="#FFDBF5E4" NotEnabled="#FFAD6363"/>
                         </ObjectSettings:IELObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELObjectSetting>
-                </IEL:IELTextBox.IELSettingObject>
+                </IEL:IELTextBox.IELSettingObject>-->
             </IEL:IELTextBox>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
@@ -43,7 +43,7 @@
                     <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <IEL:IELButtonImage x:Name="IELButtonReloadPage" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="8,8,8,8" PaddingContent="2,2,2,2">
-                    <IEL:IELButtonImage.IELSettingObject>
+                    <!--<IEL:IELButtonImage.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                                 <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF1E2512" Used="#FF282B20"/>
@@ -52,10 +52,10 @@
                                 <Classes:BrushSettingQ Default="#FF85967F" NotEnabled="#FFEF4949" Select="#FF91C77E" Used="#FFA6FF87"/>
                             </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                         </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonImage.IELSettingObject>
+                    </IEL:IELButtonImage.IELSettingObject>-->
                 </IEL:IELButtonImage>
                 <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="8,8,8,8" PaddingContent="2,2,2,2" Grid.Column="1">
-                    <IEL:IELButtonImage.IELSettingObject>
+                    <!--<IEL:IELButtonImage.IELSettingObject>
                         <ObjectSettings:IELButtonObjectSetting>
                             <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                                 <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF122325" Used="#FF352D3C"/>
@@ -64,7 +64,7 @@
                                 <Classes:BrushSettingQ Default="#FF7F8E96" NotEnabled="#FFEF4949" Select="#FF7EB1C7" Used="#FFFFEF87"/>
                             </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                         </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonImage.IELSettingObject>
+                    </IEL:IELButtonImage.IELSettingObject>-->
                 </IEL:IELButtonImage>
             </Grid>
         </Grid>

@@ -1,9 +1,9 @@
-﻿using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementControl;
+﻿using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementControl;
 using System.Windows.Controls;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Pages.ActionPanel
+namespace ApplicationOperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageControllerLoading.xaml
@@ -68,15 +68,16 @@ namespace OperPageLes.UI.Pages.ActionPanel
                 Focusable = false,
                 IELSettingObject = new()
                 {
-                    BackgroundSetting = new(new byte[,]
+                    AnimationMillisecond = 200d,
+                },
+            };
+            Result.Background.ColorData = new(new byte[,]
                         {
                         { 255, 107, 187, 189 },
                         { 255, 43, 194, 245 },
                         { 255, 145, 128, 185 },
                         { 255, 189, 78, 78 },
-                        })
-                },
-            };
+                        });
             return Result;
         }
     }

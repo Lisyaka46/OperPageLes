@@ -1,4 +1,4 @@
-﻿namespace OperPageLes.CORE.Settings.Struct
+﻿namespace ApplicationOperPageLes.CORE.Settings.Struct
 {
     /// <summary>
     /// Настройки процесса приложения

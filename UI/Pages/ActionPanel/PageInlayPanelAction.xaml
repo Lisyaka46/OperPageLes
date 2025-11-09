@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel"
-      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction">
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
+      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1"  FontSize="16" BorderThicknessBlock="3,3,3,3" Margin="0,4,0,4" PaddingContent="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}">
-            <IEL:IELButtonTextKey.IELSettingObject>
+            <!--<IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                         <Classes:BrushSettingQ NotEnabled="#FF2F0404" Select="#FF0D1F12" Used="#FF232323"/>
@@ -29,10 +29,10 @@
                         <Classes:BrushSettingQ NotEnabled="#FFE63F3F" Default="#FF2E9E6D" Select="#FF48C38D" Used="#FFAAF1D2"/>
                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELButtonObjectSetting>
-            </IEL:IELButtonTextKey.IELSettingObject>
+            </IEL:IELButtonTextKey.IELSettingObject>-->
         </IEL:IELButtonTextKey>
         <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2"  FontSize="16" BorderThicknessBlock="3,3,3,3" Grid.Row="1" PaddingContent="5,10,5,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}">
-            <IEL:IELButtonTextKey.IELSettingObject>
+            <!--<IEL:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting>
                     <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
                         <Classes:BrushSettingQ NotEnabled="#FF2F0404" Select="#FF1F0D0D" Used="#FF232323"/>
@@ -44,7 +44,7 @@
                         <Classes:BrushSettingQ Default="#FFA97474" NotEnabled="#FFD04747" Select="#FFEF9696" Used="#FFF7D4D4"/>
                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELButtonObjectSetting>
-            </IEL:IELButtonTextKey.IELSettingObject>
+            </IEL:IELButtonTextKey.IELSettingObject>-->
         </IEL:IELButtonTextKey>
 
     </Grid>

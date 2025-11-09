@@ -1,9 +1,9 @@
 ﻿using IEL.CORE.Classes;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
-using OperPageLes.CORE;
-using OperPageLes.CORE.Enums;
-using OperPageLes.UI.Pages.ActionPanel.PageConsole;
+using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -16,7 +16,7 @@ using System.Windows.Media.Animation;
 using IEL.CORE.Enums;
 using Color = System.Windows.Media.Color;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace ApplicationOperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
@@ -226,14 +226,14 @@ namespace OperPageLes.UI.Pages.Browser
                     {
                         case Key.Escape:
                         case Key.Enter:
-                            TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
-                                new ColorAnimation(TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used,
-                                e.Key switch
-                                {
-                                    Key.Enter => Color.FromRgb(160, 245, 200),
-                                    Key.Escape => Color.FromRgb(255, 122, 84),
-                                    _ => throw new NotImplementedException(),
-                                }, TimeSpan.FromMilliseconds(80d)));
+                            //TextBoxCommandInput.Background..BeginAnimation(SolidColorBrush.ColorProperty,
+                            //    new ColorAnimation(TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used,
+                            //    e.Key switch
+                            //    {
+                            //        Key.Enter => Color.FromRgb(160, 245, 200),
+                            //        Key.Escape => Color.FromRgb(255, 122, 84),
+                            //        _ => throw new NotImplementedException(),
+                            //    }, TimeSpan.FromMilliseconds(80d)));
                             break;
                     }
                 }
@@ -245,8 +245,7 @@ namespace OperPageLes.UI.Pages.Browser
                 {
                     case Key.Enter:
                         SaveStringPrintBuffer = string.Empty;
-                        App.ColorAnimationType.AnimateEffect(TextBoxCommandInput.Background,
-                            SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
+                        TextBoxCommandInput.Background.SetActiveSpecrum(StateSpectrum.Used, true);
                         if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
                         {
                             SelectNavigation = SelectNavigationPageConsoleEnum.None;
@@ -269,8 +268,7 @@ namespace OperPageLes.UI.Pages.Browser
                             SelectNavigation = SelectNavigationPageConsoleEnum.None;
                         }
                         else if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                        App.ColorAnimationType.AnimateEffect(TextBoxCommandInput.Background,
-                            SolidColorBrush.ColorProperty, TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d));
+                        TextBoxCommandInput.Background.SetActiveSpecrum(StateSpectrum.Used, true);
                         break;
                     case Key.Apps:
                         App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);

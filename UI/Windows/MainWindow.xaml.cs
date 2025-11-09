@@ -4,14 +4,14 @@ using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
 using IEL.GUI;
 using NAudio.Wave;
-using OperPageLes.CORE;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.ActionPanel;
-using OperPageLes.UI.Pages.Browser;
-using OperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
-using OperPageLes.UI.UserElementControl;
-using OperPageLes.UI.Windows.Dialogs;
-using OperPageLes.Windows;
+using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.Pages.ActionPanel;
+using ApplicationOperPageLes.UI.Pages.Browser;
+using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
+using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.Windows.Dialogs;
+using ApplicationOperPageLes.Windows;
 using System.IO;
 using System.Media;
 using System.Windows;
@@ -23,10 +23,12 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WmColor = System.Windows.Media.Color;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 #endregion
 
-namespace OperPageLes.UI.Windows
+namespace ApplicationOperPageLes.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -88,12 +90,12 @@ namespace OperPageLes.UI.Windows
         /// <summary>
         /// Событие закрытия главного окна перед его удалением
         /// </summary>
-        public new event FormClosingEventHandler? Closing;
+        //public new event FormClosingEventHandler? Closing;
 
         /// <summary>
         /// Событие закрытия главного окна после его удаления
         /// </summary>
-        public new event FormClosedEventHandler? Closed;
+        //public new event FormClosedEventHandler? Closed;
 
         /// <summary>
         /// Состояние перезагрузки
@@ -104,6 +106,15 @@ namespace OperPageLes.UI.Windows
         /// Состояние закрытия окна
         /// </summary>
         private bool IsClosing = false;
+
+        /// <summary>
+        /// Состояние манипуляции с изменением размера окна
+        /// </summary>
+        private bool SizeAcivate = false;
+
+        private Point PointMouseStart;
+
+        private Size SizeWindowStart;
 
         /// <summary>
         /// Страница выбора новой страницы браузера
@@ -407,6 +418,27 @@ namespace OperPageLes.UI.Windows
                 if (!IsReboot && !IsClosing) Close();
             };
             #endregion
+
+            #region Sizebale
+            BorderLeftWidth.MouseDown += (sender, e) =>
+            {
+                SizeAcivate = true;
+                PointMouseStart = Mouse.GetPosition(this);
+                SizeWindowStart = new(Width, Height);
+            };
+            BorderLeftWidth.MouseMove += (sender, e) =>
+            {
+                if (!SizeAcivate) return;
+                var point = Mouse.GetPosition(this);
+                Width -= PointMouseStart.X - point.X;
+                Left -= PointMouseStart.X - point.X;
+            };
+            BorderLeftWidth.MouseUp += (sender, e) =>
+            {
+                SizeAcivate = false;
+            };
+            #endregion
+
         }
 
         #region ManipulateWindow
@@ -421,13 +453,13 @@ namespace OperPageLes.UI.Windows
             App.CurrentApp.Is_WindowDeveloper.Close();
 #endif
             TokenUpdateBackgroundData.ThrowIfCancellationRequested();
-            Closing?.Invoke(this, new(CloseReason.UserClosing, false));
+            //Closing?.Invoke(this, new(CloseReason.UserClosing, false));
             bool WindowSaveClose = false;
             DialogSaveWait windowSave = new();
             windowSave.Closed += (sender, e) =>
             {
                 WindowSaveClose = true;
-                Closed?.Invoke(windowSave, new(CloseReason.WindowsShutDown));
+                //Closed?.Invoke(windowSave, new(CloseReason.WindowsShutDown));
                 base.Close();
             };
             windowSave.OpenOnToComplete();

@@ -1,11 +1,11 @@
-﻿using OperPageLes.CORE.Label;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementControl;
+﻿using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Input;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Windows.Dialogs
+namespace ApplicationOperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowManipulateLabelTags.xaml
@@ -124,8 +124,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                 }
             }
             SelectedTag = OPLTag;
-            bool UsedState = SelectedTag.IELSettingObject.BackgroundSetting.GetUsedState();
-            SelectedTag.IELSettingObject.BackgroundSetting.SetUsedState(!UsedState);
+            //bool UsedState = SelectedTag.Background.GetUsedState();
+            //SelectedTag.IELSettingObject.Background.SetUsedState(!UsedState);
         }
 
         /// <summary>
@@ -144,10 +144,10 @@ namespace OperPageLes.UI.Windows.Dialogs
                 }
             }
             SelectedTag = OPLTag;
-            bool UsedState = SelectedTag.IELSettingObject.BackgroundSetting.GetUsedState();
-            SelectedTag.IELSettingObject.BackgroundSetting.SetUsedState(!UsedState);
-            IELButtonChangeTag.IsEnabled = !UsedState;
-            IELButtonRemoveTag.IsEnabled = !UsedState;
+            //bool UsedState = SelectedTag.IELSettingObject.BackgroundSetting.GetUsedState();
+            //SelectedTag.IELSettingObject.BackgroundSetting.SetUsedState(!UsedState);
+            //IELButtonChangeTag.IsEnabled = !UsedState;
+            //IELButtonRemoveTag.IsEnabled = !UsedState;
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         private void ClearSelectTag()
         {
-            SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
+            //SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
         }

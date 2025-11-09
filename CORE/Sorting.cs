@@ -1,4 +1,4 @@
-﻿namespace OperPageLes.CORE
+﻿namespace ApplicationOperPageLes.CORE
 {
     /// <summary>
     /// Класс сортировки элементов

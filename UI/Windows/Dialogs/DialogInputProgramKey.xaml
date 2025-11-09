@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
+        xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
         xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-        x:Class="OperPageLes.UI.Windows.Dialogs.DialogInputProgramKey"
+        x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogInputProgramKey"
         mc:Ignorable="d"
         Title="Ввод ключа доступа" Height="300" Width="561" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -30,7 +30,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <IEL:IELButtonText x:Name="IELButtonInput" Grid.Column="1" BorderThicknessBlock="2,2,2,2" Text="Ввод" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="20,2,20,2" Margin="5,0,5,0">
-                <IEL:IELButtonText.IELSettingObject>
+                <!--<IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ Default="#FF61B8CE" NotEnabled="#FFDC5252" Select="#FFAFCDFF" Used="White"/>
@@ -42,10 +42,10 @@
                             <Classes:BrushSettingQ/>
                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </IEL:IELButtonText.IELSettingObject>
+                </IEL:IELButtonText.IELSettingObject>-->
             </IEL:IELButtonText>
             <IEL:IELButtonText x:Name="IELButtonCancel" Grid.Column="0" BorderThicknessBlock="2,2,2,2" Text="Отмена" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="20,2,20,2" Margin="5,0,5,0">
-                <IEL:IELButtonText.IELSettingObject>
+                <!--<IEL:IELButtonText.IELSettingObject>
                     <ObjectSettings:IELButtonObjectSetting>
                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                             <Classes:BrushSettingQ Default="#FF61B8CE" NotEnabled="#FFDC5252" Select="#FFAFCDFF" Used="White"/>
@@ -57,7 +57,7 @@
                             <Classes:BrushSettingQ/>
                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                     </ObjectSettings:IELButtonObjectSetting>
-                </IEL:IELButtonText.IELSettingObject>
+                </IEL:IELButtonText.IELSettingObject>-->
             </IEL:IELButtonText>
         </Grid>
         <Grid>
@@ -86,7 +86,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <IEL:IELButtonText x:Name="IELButtonUpdatePack" Grid.Column="1" BorderThicknessBlock="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,3,3,3" Text="Обновить" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="10,0,10,0">
-                                <IEL:IELButtonText.IELSettingObject>
+                                <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                             <Classes:BrushSettingQ Default="#FF61C5AB" NotEnabled="#FFC84F4F" Select="#FFA3F3CD" Used="#FFFFF8F8"/>
@@ -98,10 +98,10 @@
                                             <Classes:BrushSettingQ/>
                                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                     </ObjectSettings:IELButtonObjectSetting>
-                                </IEL:IELButtonText.IELSettingObject>
+                                </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
                             <IEL:IELButtonText x:Name="IELButtonCopyPack" Grid.Column="0" BorderThicknessBlock="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,3,3,3" Text="Скопировать" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="10,0,10,0">
-                                <IEL:IELButtonText.IELSettingObject>
+                                <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                             <Classes:BrushSettingQ Default="#FF61C5AB" NotEnabled="#FFC84F4F" Select="#FFA3F3CD" Used="#FFFFF8F8"/>
@@ -113,13 +113,13 @@
                                             <Classes:BrushSettingQ/>
                                         </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                     </ObjectSettings:IELButtonObjectSetting>
-                                </IEL:IELButtonText.IELSettingObject>
+                                </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
                         </Grid>
                         <TextBlock x:Name="TextBlockPack" Text="SUNHSkhBR0lJQklGSEVIQ0lDQkFISEFHSElER0ZHQkdC" FontSize="12" FontFamily="{DynamicResource Vollda}" Foreground="#FF0D3254" TextTrimming="CharacterEllipsis" Padding="10,0,10,0" TextWrapping="Wrap" MaxHeight="36"/>
                     </Grid>
                     <IEL:IELTextBox x:Name="IELTextBoxKey" Grid.Row="2" BorderThicknessBlock="2,2,2,2" FontSizeText="20" FontFamily="{DynamicResource RussianRail G Pro}" Margin="10,5,10,5" Text="">
-                        <IEL:IELTextBox.IELSettingObject>
+                        <!--<IEL:IELTextBox.IELSettingObject>
                             <ObjectSettings:IELObjectSetting>
                                 <ObjectSettings:IELObjectSetting.BackgroundSetting>
                                     <Classes:BrushSettingQ Default="#FFCDE0DB" NotEnabled="#FFF35151" Select="#FF38D6E2" Used="#FF99F5D2"/>
@@ -131,7 +131,7 @@
                                     <Classes:BrushSettingQ/>
                                 </ObjectSettings:IELObjectSetting.ForegroundSetting>
                             </ObjectSettings:IELObjectSetting>
-                        </IEL:IELTextBox.IELSettingObject>
+                        </IEL:IELTextBox.IELSettingObject>-->
                     </IEL:IELTextBox>
                 </Grid>
             </Border>

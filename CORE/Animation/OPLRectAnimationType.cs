@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.CORE.Animation
+namespace ApplicationOperPageLes.CORE.Animation
 {
     internal class OPLRectAnimationType<T> : OPLAnimationTypeBase<T> where T : RectAnimation
     {

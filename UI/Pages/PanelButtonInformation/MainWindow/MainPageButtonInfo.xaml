@@ -5,9 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-      xmlns:local="clr-namespace:OperPageLes.UI.Pages.PanelButtonInformation.MainWindow"
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPageLes.UI.Pages.PanelButtonInformation.MainWindow.MainPageButtonInfo"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow.MainPageButtonInfo"
       mc:Ignorable="d" 
       d:DesignHeight="42">
     <Page.Resources>
@@ -21,7 +21,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="ENG" BorderThicknessBlock="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" PaddingContent="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
-            <GUI:IELBlockInfoText.IELSettingObject>
+            <!--<GUI:IELBlockInfoText.IELSettingObject>
                 <ObjectSettings:IELUsingObjectSetting>
                     <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                         <Classes:BrushSettingQ Default="#FF2D563E" NotEnabled="#FFF92929" Select="#FF4F5F56" Used="White"/>
@@ -33,13 +33,13 @@
                         <Classes:BrushSettingQ Default="#FF65A081" NotEnabled="#FFF92929" Select="#FF86E4B2" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoText.IELSettingObject>
+            </GUI:IELBlockInfoText.IELSettingObject>-->
             <GUI:IELBlockInfoText.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
         </GUI:IELBlockInfoText>
         <GUI:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" PaddingContent="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
-            <GUI:IELBlockInfoText.IELSettingObject>
+            <!--<GUI:IELBlockInfoText.IELSettingObject>
                 <ObjectSettings:IELUsingObjectSetting>
                     <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
                         <Classes:BrushSettingQ/>
@@ -51,7 +51,7 @@
                         <Classes:BrushSettingQ Default="#FF5C9FBB" NotEnabled="#FFF92929" Select="#FF56A6E4" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoText.IELSettingObject>
+            </GUI:IELBlockInfoText.IELSettingObject>-->
             <GUI:IELBlockInfoText.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
@@ -60,8 +60,8 @@
             <Grid.Effect>
                 <BlurEffect/>
             </Grid.Effect>
-            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" PaddingContent="3,0,4,0" ImageMargin="2,0,2,8">
-                <GUI:IELBlockInfoImage.IELSettingObject>
+            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" PaddingContent="3,0,4,0">
+                <!--<GUI:IELBlockInfoImage.IELSettingObject>
                     <ObjectSettings:IELUsingObjectSetting>
                         <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                             <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White"/>
@@ -70,7 +70,7 @@
                             <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White"/>
                         </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                     </ObjectSettings:IELUsingObjectSetting>
-                </GUI:IELBlockInfoImage.IELSettingObject>
+                </GUI:IELBlockInfoImage.IELSettingObject>-->
             </GUI:IELBlockInfoImage>
             <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold"  Margin="5,0,5,5" IsHitTestVisible="False" FontFamily="{DynamicResource RussianRail G Pro}"/>
         </Grid>
@@ -83,8 +83,8 @@
                 </RadialGradientBrush>
             </MediaElement.OpacityMask>
         </MediaElement>
-        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThicknessBlock="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" PaddingContent="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Imaging="/UI/Images/Volume.png" Width="50" ImageMargin="-4,0,6,0" Cursor="Hand">
-            <GUI:IELBlockInfoImage.IELSettingObject>
+        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThicknessBlock="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" PaddingContent="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand">
+            <!--<GUI:IELBlockInfoImage.IELSettingObject>
                 <ObjectSettings:IELUsingObjectSetting IntervalHover="900">
                     <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
                         <Classes:BrushSettingQ Default="#FF285177" NotEnabled="#FFF92929" Select="#FF287AC7" Used="White"/>
@@ -96,7 +96,7 @@
                         <Classes:BrushSettingQ Default="#FF678DB1" NotEnabled="#FFF92929" Select="#FFB4DBFF" Used="White"/>
                     </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
                 </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoImage.IELSettingObject>
+            </GUI:IELBlockInfoImage.IELSettingObject>-->
             <GUI:IELBlockInfoImage.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoImage.Effect>

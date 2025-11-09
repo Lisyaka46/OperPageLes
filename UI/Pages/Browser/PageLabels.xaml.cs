@@ -2,20 +2,20 @@
 using IEL.CORE.Enums;
 using Microsoft.Windows.Themes;
 using Newtonsoft.Json.Linq;
-using OperPageLes.CORE.Enums;
-using OperPageLes.CORE.Label;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.ActionPanel.PageLabel;
-using OperPageLes.UI.UserElementControl;
-using OperPageLes.UI.Windows.Dialogs;
+using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel;
+using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.Windows.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace ApplicationOperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml
@@ -341,7 +341,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 SearchActivate = !SearchActivate;
                 //TextBlockLabelInfo.Text = SearchActivate ? $"Найдено ярлыков: 0 из {App.CurrentApp.DataLabels.Count}" : $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
-                IELButtonSearch.IELSettingObject.BackgroundSetting.SetUsedState(SearchActivate);
+                //IELButtonSearch.Background.SetUsedState(SearchActivate);
                 if (IELTextBoxSearch.Text.Length == 0)
                 {
                     UpdateTextInfoLabels();
@@ -437,13 +437,12 @@ namespace OperPageLes.UI.Pages.Browser
                 OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
                 if (!SearchActivate || IELTextBoxSearch.Text.Length == 0)
                 {
-                    Element.IELSettingObject.BackgroundSetting.SetUsedState(false);
+                    Element.Background.SetUsedState(false);
                     continue;
                 }
                 else if (Element.SourceLabel.Name.Contains(IELTextBoxSearch.Text, StringComparison.CurrentCultureIgnoreCase))
-                    Element.IELSettingObject.BackgroundSetting.SetUsedState(true);
-                else Element.IELSettingObject.BackgroundSetting.SetUsedState(false);
-                Element.IELSettingObject.BackgroundSetting.InvokeObjectUsedStateColor(StateSpectrum.Default);
+                    Element.Background.SetUsedState(true);
+                else Element.Background.SetUsedState(false);
             }
             UpdateTextInfoLabels();
         }
@@ -532,7 +531,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 OPLLabelCommand[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabelCommand>()];
                 TextBlockLabelInfo.Text += "Найдено ярлыков: " +
-                    $"{ArrayLabelsElement.Count((i) => i.IELSettingObject.BackgroundSetting.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
+                    $"{ArrayLabelsElement.Count((i) => i.Background.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
             }
             else TextBlockLabelInfo.Text += $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
         }
@@ -590,7 +589,7 @@ namespace OperPageLes.UI.Pages.Browser
                 SelectLabelInPage = Label;
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = SelectLabelInPage.Selected && SelectLabelsMode;
                 PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.SourceLabel.Tag != null;
-                PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
+                //PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
                 PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
                 PageLabelElement.IELButtonSetLabelTag.Text = Label.SourceLabel.Tag != null ? "Изменить тег" : "Добавить тег";
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement, OrientationPanelActionPosition.LeftUp);

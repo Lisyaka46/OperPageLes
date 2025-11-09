@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPageLes.UI.Pages.Settings"
-      xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPageLes.UI.Pages.Settings.PagePanelActionSetting"
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Settings"
+      xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.Settings.PagePanelActionSetting"
       mc:Ignorable="d" d:DesignWidth="600" MaxWidth="600"
       Title="PagePanelActionSetting">
     <Page.Resources>
@@ -70,31 +70,31 @@
                                         </Grid.RowDefinitions>
                                         <TextBlock x:Name="ViewActivateRightClick" Text="RIGHT" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Grid.RowSpan="4" Panel.ZIndex="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="14" FontWeight="Bold" Padding="2,2,2,2"/>
                                         <GUI:IELButtonTextKey x:Name="IELButtonDemo1" Margin="10,5,10,5" BorderThicknessBlock="2,2,2,2" CornerRadius="4,4,4,4" CharKeyKeyboard="D1" Text="Кнопка 1" VerticalAlignment="Center" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" PaddingContent="15,2,15,2">
-                                            <GUI:IELButtonTextKey.IELSettingObject>
+                                            <!--<GUI:IELButtonTextKey.IELSettingObject>
                                                 <ObjectSettings:IELButtonObjectSetting>
                                                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                         <Classes:BrushSettingQ Default="#FF74B1A4" NotEnabled="#FFFF6565" Select="#FF45CC98" Used="#FFB7FFE9"/>
                                                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                 </ObjectSettings:IELButtonObjectSetting>
-                                            </GUI:IELButtonTextKey.IELSettingObject>
+                                            </GUI:IELButtonTextKey.IELSettingObject>-->
                                         </GUI:IELButtonTextKey>
                                         <GUI:IELButtonTextKey x:Name="IELButtonDemo2" BorderThicknessBlock="2,2,2,2" CornerRadius="4,4,4,4" CharKeyKeyboard="D2" Text="Кнопка 2" VerticalAlignment="Center" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="1" FontSize="16" PaddingContent="15,2,15,2" Margin="10,5,10,5">
-                                            <GUI:IELButtonTextKey.IELSettingObject>
+                                            <!--<GUI:IELButtonTextKey.IELSettingObject>
                                                 <ObjectSettings:IELButtonObjectSetting>
                                                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                         <Classes:BrushSettingQ Default="#FF74B1A4" NotEnabled="#FFFF6565" Select="#FF45CC98" Used="#FFB7FFE9"/>
                                                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                 </ObjectSettings:IELButtonObjectSetting>
-                                            </GUI:IELButtonTextKey.IELSettingObject>
+                                            </GUI:IELButtonTextKey.IELSettingObject>-->
                                         </GUI:IELButtonTextKey>
                                         <GUI:IELButtonTextKey x:Name="IELButtonDemo3" Margin="10,5,10,5" BorderThicknessBlock="2,2,2,2" CornerRadius="4,4,4,4" CharKeyKeyboard="D3" Text="Кнопка 3" VerticalAlignment="Center" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="2" FontSize="16" PaddingContent="15,2,15,2">
-                                            <GUI:IELButtonTextKey.IELSettingObject>
+                                            <!--<GUI:IELButtonTextKey.IELSettingObject>
                                                 <ObjectSettings:IELButtonObjectSetting>
                                                     <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                         <Classes:BrushSettingQ Default="#FF74B1A4" NotEnabled="#FFFF6565" Select="#FF45CC98" Used="#FFB7FFE9"/>
                                                     </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                 </ObjectSettings:IELButtonObjectSetting>
-                                            </GUI:IELButtonTextKey.IELSettingObject>
+                                            </GUI:IELButtonTextKey.IELSettingObject>-->
                                         </GUI:IELButtonTextKey>
                                     </Grid>
                                 </Border>
@@ -123,13 +123,13 @@
                                             </Grid.ColumnDefinitions>
                                             <CheckBox x:Name="CheckBoxKeyboardMode" Content="Режим клавиатуры" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="13" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
                                             <GUI:IELButtonText x:Name="IELButtonSetKeyKeboardMode" Grid.Column="1" Margin="2,2,2,2" CornerRadius="5,5,5,5" BorderThicknessBlock="1,1,1,1" Text="-" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="3,0,3,0" Focusable="True">
-                                                <GUI:IELButtonText.IELSettingObject>
+                                                <!--<GUI:IELButtonText.IELSettingObject>
                                                     <ObjectSettings:IELButtonObjectSetting>
                                                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                             <Classes:BrushSettingQ Default="#FF6FD08D" Select="#FF5C9C7B" Used="#FFFFEBEB" NotEnabled="#FFFF5E5E"/>
                                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                     </ObjectSettings:IELButtonObjectSetting>
-                                                </GUI:IELButtonText.IELSettingObject>
+                                                </GUI:IELButtonText.IELSettingObject>-->
                                             </GUI:IELButtonText>
                                         </Grid>
                                     </Border>
@@ -141,13 +141,13 @@
                                             </Grid.ColumnDefinitions>
                                             <CheckBox x:Name="CheckBoxKeyboardRightClick" Content="Правая ориентация нажатия" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="13" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
                                             <GUI:IELButtonText x:Name="IELButtonSetKeyKeboardRightClick" Grid.Column="1" Margin="2,2,2,2" CornerRadius="5,5,5,5" BorderThicknessBlock="1,1,1,1" Text="-" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="3,0,3,0" Focusable="True">
-                                                <GUI:IELButtonText.IELSettingObject>
+                                                <!--<GUI:IELButtonText.IELSettingObject>
                                                     <ObjectSettings:IELButtonObjectSetting>
                                                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                             <Classes:BrushSettingQ Default="#FF6FD08D" Select="#FF5C9C7B" Used="#FFFFEBEB" NotEnabled="#FFFF5E5E"/>
                                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                     </ObjectSettings:IELButtonObjectSetting>
-                                                </GUI:IELButtonText.IELSettingObject>
+                                                </GUI:IELButtonText.IELSettingObject>-->
                                             </GUI:IELButtonText>
                                         </Grid>
                                     </Border>
@@ -159,13 +159,13 @@
                                             </Grid.ColumnDefinitions>
                                             <CheckBox x:Name="CheckBoxKeyboardClosePanelAction" Content="Закрыть панель действий" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="13" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
                                             <GUI:IELButtonText x:Name="IELButtonSetKeyKeboardClosePanelAction" Grid.Column="1" Margin="2,2,2,2" CornerRadius="5,5,5,5" BorderThicknessBlock="1,1,1,1" Text="-" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="3,0,3,0" Focusable="True">
-                                                <GUI:IELButtonText.IELSettingObject>
+                                                <!--<GUI:IELButtonText.IELSettingObject>
                                                     <ObjectSettings:IELButtonObjectSetting>
                                                         <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                             <Classes:BrushSettingQ Default="#FF6FD08D" Select="#FF5C9C7B" Used="#FFFFEBEB" NotEnabled="#FFFF5E5E"/>
                                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                                     </ObjectSettings:IELButtonObjectSetting>
-                                                </GUI:IELButtonText.IELSettingObject>
+                                                </GUI:IELButtonText.IELSettingObject>-->
                                             </GUI:IELButtonText>
                                         </Grid>
                                     </Border>

@@ -1,18 +1,18 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.GUI;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.ActionPanel.Other;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.Pages.ActionPanel.Other;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
-using static OperPageLes.App;
-using OPRES = OperPageLes.Properties.Resources;
+using static ApplicationOperPageLes.App;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
+namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 {
     /// <summary>
     /// Логика взаимодействия для Page1.xaml
@@ -71,15 +71,15 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
             };
-            IELBlockInfoInternetConnection.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
+            //IELBlockInfoInternetConnection.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
 
-            UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
+            //UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
             UpdateInformationInObject(IELBlockInfoStateRegister, Console.CapsLock ? "а".ToUpper() : "a".ToLower());
             IELBlockInfoStateRegister.Focusable = false;
             IndicatorLoadingInternetConnection.Opacity = 0d;
             ((BlurEffect)GridInfoInternetConnection.Effect).Radius = 0d;
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
-            IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new(2, 0, 2, 8) : new(2, 0, 2, 4);
+            //IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new(2, 0, 2, 8) : new(2, 0, 2, 4);
             #region BorderInternetConnection
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
@@ -112,7 +112,7 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             #region BorderCurrentLanguage
             InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
             {
-                UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
+                //UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
             };
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {
@@ -169,8 +169,8 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                     {
                         bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
-                        IELBlockInfoInternetConnection.Imaging =
-                            StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                        //IELBlockInfoInternetConnection.Imaging =
+                        //    StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
                         if (VisualMillisecondConnectionEnabled)
                         {
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
@@ -192,8 +192,8 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 {
                     await Dispatcher.BeginInvoke(() =>
                     {
-                        IELBlockInfoInternetConnection.Imaging =
-                            StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                        //IELBlockInfoInternetConnection.Imaging =
+                        //    StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
                         if (VisualMillisecondConnectionEnabled)
                         {
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
@@ -207,8 +207,8 @@ namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 
         internal void VisibilityInternetMillisecond(bool Value)
         {
-            ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection.MainFrontImage, MarginProperty, Value ? new(2, 0, 2, 8) : new(2, 0, 2, 4),
-                TimeSpan.FromMilliseconds(400d));
+            //ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection.MainFrontImage, MarginProperty, Value ? new(2, 0, 2, 8) : new(2, 0, 2, 4),
+            //    TimeSpan.FromMilliseconds(400d));
             DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
         }

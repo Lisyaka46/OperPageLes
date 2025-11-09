@@ -1,11 +1,11 @@
 ﻿using IEL.CORE.Classes;
-using OperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.UserElementControl;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.UI.Windows.Dialogs
+namespace ApplicationOperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenLabel.xaml
@@ -97,16 +97,12 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             if (IELTextBoxNameLabel.Text.Length == 0)
             {
-                ButtonAnimationColor.From = Colors.Red;
-                ButtonAnimationColor.To = IELTextBoxNameLabel.IELSettingObject.BackgroundSetting.Default;
-                IELTextBoxNameLabel.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                IELTextBoxNameLabel.Background.SetActiveSpecrum(Colors.Red);
                 return;
             }
             if (IELTextBoxCommand.Text.Length == 0)
             {
-                ButtonAnimationColor.From = Colors.Red;
-                ButtonAnimationColor.To = IELTextBoxCommand.IELSettingObject.BackgroundSetting.Default;
-                IELTextBoxCommand.Background.BeginAnimation(SolidColorBrush.ColorProperty, ButtonAnimationColor);
+                IELTextBoxCommand.Background.SetActiveSpecrum(Colors.Red);
                 return;
             }
             Cancel = false;

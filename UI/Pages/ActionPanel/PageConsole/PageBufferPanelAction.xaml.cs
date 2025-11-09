@@ -1,11 +1,11 @@
-﻿using OperPageLes.UI.UserElementControl;
+﻿using ApplicationOperPageLes.UI.UserElementControl;
 using IEL.CORE.Classes;
 using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
+namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
@@ -15,7 +15,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <summary>
         /// Стиль отображения элементов в буфере
         /// </summary>
-        private readonly BrushSettingQ BackgroundSetting = new(new byte[,]
+        private readonly QData QDataBackground = new(new byte[,]
                         {
                         { 255, 243, 164, 207 },
                         { 255, 173, 97, 138 },
@@ -120,10 +120,10 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
                 Index = BufferCommand.Count,
                 IELSettingObject = new()
                 {
-                    BackgroundSetting = (BrushSettingQ)BackgroundSetting.Clone(),
                     AnimationMillisecond = 200d,
                 }
             };
+            Button.Background.ColorData = (QData)QDataBackground.Clone();
             return Button;
         }
 

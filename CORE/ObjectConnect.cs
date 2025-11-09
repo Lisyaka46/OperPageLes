@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
-using static OperPageLes.App;
+using static ApplicationOperPageLes.App;
 
-namespace OperPageLes.CORE
+namespace ApplicationOperPageLes.CORE
 {
     internal class ObjectConnect
     {

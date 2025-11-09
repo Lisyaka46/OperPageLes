@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
+namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelMainActionPanel.xaml

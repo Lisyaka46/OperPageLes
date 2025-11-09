@@ -1,11 +1,12 @@
-﻿using OperPageLes.CORE.Label;
-using OperPageLes.CORE.Struct;
+﻿using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Struct;
 using System.Windows;
 using System.Windows.Media;
+using IEL.CORE.Enums;
 using Key = System.Windows.Input.Key;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Windows.Dialogs
+namespace ApplicationOperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenDataLabelTag.xaml
@@ -58,9 +59,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             if (!Check())
             {
-                App.ColorAnimationType.AnimateEffect(IELTextBoxNameTag.Background, SolidColorBrush.ColorProperty,
-                Colors.Red, IELTextBoxNameTag.IELSettingObject.BackgroundSetting.Default,
-                TimeSpan.FromMilliseconds(IELTextBoxNameTag.IELSettingObject.AnimationMillisecond));
+                IELTextBoxNameTag.Background.SetActiveSpecrum(StateSpectrum.Default, true);
                 return;
             }
             Cancel = false;

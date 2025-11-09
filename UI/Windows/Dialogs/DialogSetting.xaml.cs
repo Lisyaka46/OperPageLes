@@ -1,10 +1,10 @@
 ﻿using IEL.CORE.Classes;
-using OperPageLes.UI.Pages.Settings;
+using ApplicationOperPageLes.UI.Pages.Settings;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace OperPageLes.UI.Windows.Dialogs
+namespace ApplicationOperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSetting.xaml
@@ -59,7 +59,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             {
                 int OriginIndex = Grid.GetColumn(IELGeneralButton);
                 ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELGeneralButton.IELSettingObject.BackgroundSetting;
+                ActiveBackgroundSetting = IELGeneralButton.Background;
                 MainPageController.NextPage(GeneralSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);
@@ -81,7 +81,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             {
                 int OriginIndex = Grid.GetColumn(IELConsoleButton);
                 ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELConsoleButton.IELSettingObject.BackgroundSetting;
+                ActiveBackgroundSetting = IELConsoleButton.Background;
                 MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);
@@ -103,7 +103,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             {
                 int OriginIndex = Grid.GetColumn(IELPanelActionButton);
                 ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELPanelActionButton.IELSettingObject.BackgroundSetting;
+                ActiveBackgroundSetting = IELPanelActionButton.Background;
                 MainPageController.NextPage(PanelActionSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);

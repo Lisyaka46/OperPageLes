@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows.Input;
 
-namespace OperPageLes.CORE.Settings.Struct
+namespace ApplicationOperPageLes.CORE.Settings.Struct
 {
     /// <summary>
     /// Класс настроек приложения

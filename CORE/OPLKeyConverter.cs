@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Key = System.Windows.Input.Key;
 
-namespace OperPageLes.CORE
+namespace ApplicationOperPageLes.CORE
 {
     internal class OPLKeyConverter
     {

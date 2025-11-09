@@ -2,18 +2,18 @@
 using IEL.CORE.Enums;
 using IEL.GUI;
 using Interpreter.Interfaces;
-using OperPageLes.CORE;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.Description;
+using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.Pages.Description;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using OPRES = OperPageLes.Properties.Resources;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
-namespace OperPageLes.Windows
+namespace ApplicationOperPageLes.Windows
 {
     /// <summary>
     /// Логика взаимодействия для WindowDiscriptionCommands.xaml
@@ -74,7 +74,7 @@ namespace OperPageLes.Windows
         /// <summary>
         /// Настройка отображения элементов списка описания
         /// </summary>
-        private readonly static BrushSettingQ BorderForegroundSetting = new(new byte[,]
+        private readonly static QData BorderForegroundSetting = new(new byte[,]
                         {
                         { 255, 20, 64, 106 },
                         { 255, 131, 184, 202 },
@@ -90,7 +90,7 @@ namespace OperPageLes.Windows
             InitializeComponent();
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
             IELButtonSearchCommand.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
-            IELButtonCloneTextCommand.Foreground = new SolidColorBrush(Colors.Black);
+            //IELButtonCloneTextCommand.Foreground = new SolidColorBrush(Colors.Black);
 
             IELMessageInfo.Opacity = 0d;
             DescriptionConsole = new();
@@ -176,7 +176,7 @@ namespace OperPageLes.Windows
                 if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0) return;
                 if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
                 SearchActivate = true;
-                IELButtonSearchCommand.IELSettingObject.BackgroundSetting.SetUsedState(true);
+                //IELButtonSearchCommand.Background.SetUsedState(true);
                 IELButtonText Button;
                 //if (IndexSearch.Length > 0)
                 //{
@@ -211,7 +211,7 @@ namespace OperPageLes.Windows
             {
                 if (!SearchActivate) return;
                 Keyboard.ClearFocus();
-                IELButtonSearchCommand.IELSettingObject.BackgroundSetting.SetUsedState(false);
+                //IELButtonSearchCommand.Background.SetUsedState(false);
                 IELButtonText Button;
                 Grid MainElementsContainer = (Grid)ScrollViewerElements.Content;
                 for (int Index = 0; Index < MainElementsContainer.Children.Count; Index++)
@@ -344,18 +344,18 @@ namespace OperPageLes.Windows
                 IELSettingObject = new()
                 {
                     VisibleMouseImaging = false,
-                    BackgroundSetting = new(new byte[,]
+                },
+                Margin = new(3),
+            };
+            Element.Background.ColorData = new(new byte[,]
                         {
                         { 255, 161, 204, 232 },
                         { 255, 92, 131, 157 },
                         { 255, 122, 172, 205 },
                         { 255, 166, 181, 190 },
-                        }),
-                    BorderBrushSetting = (BrushSettingQ)BorderForegroundSetting.Clone(),
-                    ForegroundSetting = (BrushSettingQ)BorderForegroundSetting.Clone()
-                },
-                Margin = new(3),
-            };
+                        });
+            Element.BorderBrush.ColorData = (QData)BorderForegroundSetting.Clone();
+            Element.Foreground.ColorData = (QData)BorderForegroundSetting.Clone();
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,

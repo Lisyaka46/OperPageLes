@@ -1,6 +1,6 @@
-﻿using static OperPageLes.CORE.Settings.ISetting;
+﻿using static ApplicationOperPageLes.CORE.Settings.ISetting;
 
-namespace OperPageLes.CORE.Settings
+namespace ApplicationOperPageLes.CORE.Settings
 {
     internal class ObjSetting<T>(T DefaultValue) : ISetting
     {

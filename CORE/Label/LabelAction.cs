@@ -1,5 +1,5 @@
-﻿using OperPageLes.CORE.Label;
-using static OperPageLes.CORE.Label.LabelTag;
+﻿using ApplicationOperPageLes.CORE.Label;
+using static ApplicationOperPageLes.CORE.Label.LabelTag;
 
 namespace IEL.CORE.Classes
 {

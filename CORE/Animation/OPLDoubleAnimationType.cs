@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
 
-namespace OperPageLes.CORE.Animation
+namespace ApplicationOperPageLes.CORE.Animation
 {
     internal class OPLDoubleAnimationType<T> : OPLAnimationTypeBase<T> where T : DoubleAnimation
     {

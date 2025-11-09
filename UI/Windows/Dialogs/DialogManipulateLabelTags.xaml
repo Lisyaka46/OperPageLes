@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
-        xmlns:GUI="clr-namespace:OperPageLes.UI.UserElementControl"
+        xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
+        xmlns:GUI="clr-namespace:ApplicationOperPageLes.UI.UserElementControl"
         xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-        x:Class="OperPageLes.UI.Windows.Dialogs.DialogManipulateLabelTags"
+        x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogManipulateLabelTags"
         mc:Ignorable="d" Height="300" Width="480" Background="#FF838A7B" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Title="Окно манипуляции над тегами">
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -39,7 +39,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <IEL:IELButtonText x:Name="IELButtonAddTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="2" Text="Добавить"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0">
-                                <IEL:IELButtonText.IELSettingObject>
+                                <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                             <Classes:BrushSettingQ/>
@@ -51,10 +51,10 @@
                                             <Classes:BrushSettingQ Default="#FF82B187" NotEnabled="#FFF34A4A" Select="#FF72DC7D" Used="#FFC7C015"/>
                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                     </ObjectSettings:IELButtonObjectSetting>
-                                </IEL:IELButtonText.IELSettingObject>
+                                </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
                             <IEL:IELButtonText x:Name="IELButtonRemoveTag" CornerRadius="5,5,5,5" Text="Удалить" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}" Margin="5,2,5,2">
-                                <IEL:IELButtonText.IELSettingObject>
+                                <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                             <Classes:BrushSettingQ/>
@@ -66,10 +66,10 @@
                                             <Classes:BrushSettingQ Default="#FFB1828D" NotEnabled="#FFF34A4A" Select="#FFFF86A2" Used="#FFFFD2E7"/>
                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                     </ObjectSettings:IELButtonObjectSetting>
-                                </IEL:IELButtonText.IELSettingObject>
+                                </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
                             <IEL:IELButtonText x:Name="IELButtonChangeTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="1" Text="Изменить" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}">
-                                <IEL:IELButtonText.IELSettingObject>
+                                <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                             <Classes:BrushSettingQ/>
@@ -81,10 +81,10 @@
                                             <Classes:BrushSettingQ Default="#FF82A7B1" NotEnabled="#FFF34A4A" Select="#FF72A9DC" Used="#FF6ADC90"/>
                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                     </ObjectSettings:IELButtonObjectSetting>
-                                </IEL:IELButtonText.IELSettingObject>
+                                </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
                             <IEL:IELButtonText x:Name="IELButtonComplete" CornerRadius="5,5,5,5" Grid.Column="3" Text="Готово"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0" Margin="5,2,5,2">
-                                <IEL:IELButtonText.IELSettingObject>
+                                <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
                                             <Classes:BrushSettingQ/>
@@ -96,7 +96,7 @@
                                             <Classes:BrushSettingQ Default="#FF89D2C3" NotEnabled="#FFF34A4A" Select="#FF41DA9F" Used="#FF64EA72"/>
                                         </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
                                     </ObjectSettings:IELButtonObjectSetting>
-                                </IEL:IELButtonText.IELSettingObject>
+                                </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
                         </Grid>
                     </Border>

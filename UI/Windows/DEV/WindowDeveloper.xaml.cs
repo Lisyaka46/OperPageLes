@@ -1,4 +1,4 @@
-﻿using OperPageLes.CORE.DEV;
+﻿using ApplicationOperPageLes.CORE.DEV;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace OperPageLes.UI.Windows.DEV
+namespace ApplicationOperPageLes.UI.Windows.DEV
 {
 #if DEBUG
     /// <summary>

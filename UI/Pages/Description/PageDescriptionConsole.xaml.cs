@@ -1,11 +1,11 @@
 ﻿using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
-using OperPageLes.CORE;
+using ApplicationOperPageLes.CORE;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace OperPageLes.UI.Pages.Description
+namespace ApplicationOperPageLes.UI.Pages.Description
 {
     /// <summary>
     /// Логика взаимодействия для PageDescriptionConsole.xaml
