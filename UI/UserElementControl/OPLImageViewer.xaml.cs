@@ -1,4 +1,5 @@
-﻿using ApplicationOperPageLes;
+﻿using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
@@ -6,15 +7,15 @@ using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Color = System.Windows.Media.Color;
-using FontFamily = System.Windows.Media.FontFamily;
+using System.Windows.Media.Animation;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.UserElementControl
 {
     /// <summary>
-    /// Логика взаимодействия для OPLButtonBufferCommand.xaml
+    /// Логика взаимодействия для OPLViewerLoadingProcess.xaml
     /// </summary>
-    public partial class OPLButtonBufferCommand : System.Windows.Controls.UserControl, IIELButton
+    public partial class OPLImageViewer : System.Windows.Controls.UserControl, IIELButton, IOPLObjectViewer<ImageSource>
     {
         #region Color Setting
         /// <summary>
@@ -84,67 +85,39 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         /// </summary>
         public Thickness PaddingContent
         {
-            get => BorderButton.Padding;
-            set => BorderButton.Padding = value;
+            get => Padding;
+            set => Padding = value;
         }
 
         /// <summary>
-        /// Текст кнопки
+        /// Объект события активации кнопки левым щелчком мыши
         /// </summary>
-        public string Text
-        {
-            get => TextBlockButtonName.Text;
-            set => TextBlockButtonName.Text = value;
-        }
+        public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
 
         /// <summary>
-        /// Текст команды
+        /// Объект события активации кнопки правым щелчком мыши
         /// </summary>
-        public string TextCommand
-        {
-            get => TextBlockButtonCommand.Text;
-            set => TextBlockButtonCommand.Text = value;
-        }
+        public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
 
-        private int _Index;
         /// <summary>
-        /// Индекс элемента 
+        /// Данные пути к медиа загрузки объекта
         /// </summary>
-        public int Index
+        public ImageSource SourceView
         {
-            get => _Index;
-            set
-            {
-                TextBlockNumberCommand.Text = $"#{value + 1}";
-                _Index = value;
-            }
+            get => IndicatorImage.Source;
+            set => IndicatorImage.Source = value;
         }
 
         /// <summary>
-        /// Скругление границ кнопки (по умолчанию 10, 10, 10, 10)
+        /// Скругление границ
         /// </summary>
         public CornerRadius CornerRadius
         {
-            get => BorderButton.CornerRadius;
-            set => BorderButton.CornerRadius = value;
-        }
-
-        /// <summary>
-        /// Шрифт текста в кнопке
-        /// </summary>
-        public FontFamily TextFontFamily
-        {
-            get => TextBlockButtonName.FontFamily;
-            set => TextBlockButtonName.FontFamily = value;
-        }
-
-        /// <summary>
-        /// Размер текста в кнопке
-        /// </summary>
-        public double TextFontSize
-        {
-            get => TextBlockButtonName.FontSize;
-            set => TextBlockButtonName.FontSize = value;
+            get => BorderMain.CornerRadius;
+            set
+            {
+                BorderMain.CornerRadius = value;
+            }
         }
 
         /// <summary>
@@ -152,60 +125,80 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         /// </summary>
         public Thickness BorderThicknessBlock
         {
-            get => BorderButton.BorderThickness;
-            set => BorderButton.BorderThickness = value;
+            get => BorderMain.BorderThickness;
+            set
+            {
+                BorderMain.BorderThickness = value;
+            }
         }
 
         /// <summary>
-        /// Объект события активации левым щелчком мыши
+        /// Размер текста
         /// </summary>
-        public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
+        public new double FontSize
+        {
+            get => base.FontSize;
+            set
+            {
+                base.FontSize = value;
+                TextBlockName.FontSize = value;
+            }
+        }
 
         /// <summary>
-        /// Объект события активации правым щелчком мыши
+        /// Шрифт текста в элементе
         /// </summary>
-        public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
+        public new System.Windows.Media.FontFamily FontFamily
+        {
+            get => base.FontFamily;
+            set
+            {
+                base.FontFamily = value;
+                TextBlockName.FontFamily = value;
+            }
+        }
 
-        public OPLButtonBufferCommand(string Name, string FullTextCommand, int indexBuffer)
+        /// <summary>
+        /// Тект наименование процесса загрузки
+        /// </summary>
+        public string Text
+        {
+            get => TextBlockName.Text;
+            set
+            {
+                TextBlockName.Text = value;
+            }
+        }
+
+        public OPLImageViewer()
         {
             InitializeComponent();
             #region Background
             Background = new();
-            BorderButton.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
-           
-            Background.ConnectSolidColorBrush((SolidColorBrush)BorderButton.Background);
+            BorderMain.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
+
+            Background.ConnectSolidColorBrush((SolidColorBrush)BorderMain.Background);
             #endregion
 
             #region BorderBrush
             BorderBrush = new();
-            BorderButton.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
+            BorderMain.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
+            CancelIndicator.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
 
-            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)BorderButton.BorderBrush);
+            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)BorderMain.BorderBrush);
+            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)CancelIndicator.BorderBrush);
             #endregion
 
             #region Foreground
             Foreground = new();
-            TextBlockButtonName.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-            TextBlockButtonCommand.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-            TextBlockNumberCommand.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
+            TextBlockName.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
+            TextBlockCancel.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
 
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockButtonName.Foreground);
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockButtonCommand.Foreground);
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockNumberCommand.Foreground);
+            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockName.Foreground);
+            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockCancel.Foreground);
             #endregion
-            IELSettingObject = new();
-            TextFontFamily = new FontFamily("Arial");
-            TextFontSize = 14;
-            TextBlockButtonName.FontWeight = FontWeights.Bold;
-            Text = Name;
-            TextBlockButtonCommand.Text = FullTextCommand;
-            CornerRadius = new CornerRadius(10);
-            HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            VerticalAlignment = VerticalAlignment.Top;
-            Height = 27;
-            Width = 230;
-            BorderButton.CornerRadius = new CornerRadius(4);
-            Index = indexBuffer;
+            IndicatorImage.Opacity = 0d;
+            IsEnabled = true;
 
             MouseEnter += (sender, e) =>
             {
@@ -247,23 +240,23 @@ namespace ApplicationOperPageLes.UI.UserElementControl
 
             MouseLeftButtonUp += (sender, e) =>
             {
-                if (OnActivateMouseLeft != null)
+                if (IsEnabled && OnActivateMouseLeft != null)
                 {
                     Background.SetActiveSpecrum(StateSpectrum.Select, true);
                     BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
                     Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
-                    OnActivateMouseLeft.Invoke(this, e);
+                    OnActivateMouseLeft?.Invoke(this, e);
                 }
             };
 
             MouseRightButtonUp += (sender, e) =>
             {
-                if (OnActivateMouseRight != null)
+                if (IsEnabled && OnActivateMouseRight != null)
                 {
                     Background.SetActiveSpecrum(StateSpectrum.Select, true);
                     BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
                     Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
-                    OnActivateMouseRight.Invoke(this, e);
+                    OnActivateMouseRight?.Invoke(this, e);
                 }
             };
 
@@ -274,6 +267,24 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                 BorderBrush.SetActiveSpecrum(NewValue, true);
                 Foreground.SetActiveSpecrum(NewValue, true);
             };
+        }
+
+        /// <summary>
+        /// Визуализировать выключение элемента
+        /// </summary>
+        internal void VisualClose()
+        {
+            IsEnabled = false;
+            App.DoubleAnimationType.AnimateEffect(IndicatorImage, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
+        }
+
+        /// <summary>
+        /// Визуализировать включение элемента
+        /// </summary>
+        internal void VisualOpen()
+        {
+            IsEnabled = true;
+            App.DoubleAnimationType.AnimateEffect(IndicatorImage, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
     }
 }

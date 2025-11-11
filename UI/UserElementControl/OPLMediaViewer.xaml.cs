@@ -1,4 +1,5 @@
 ﻿using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
@@ -14,46 +15,55 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLViewerLoadingProcess.xaml
     /// </summary>
-    public partial class OPLViewerLoadingProcess : System.Windows.Controls.UserControl, IIELButton
+    public partial class OPLMediaViewer : System.Windows.Controls.UserControl, IIELButton, IOPLObjectViewer<Uri>
     {
         #region Color Setting
         /// <summary>
         /// Ресурсный объект настройки состояний фона
         /// </summary>
-        public BrushSettingQ _Background;
+        private readonly new BrushSettingQ Background;
         /// <summary>
         /// Объект настройки состояний фона
         /// </summary>
-        public new BrushSettingQ Background
+        public BrushSettingQ QBackground
         {
-            get => _Foreground;
-            set => _Foreground.ColorData = value.ColorData;
+            get => Background;
+            set
+            {
+                Background.ColorData = value.ColorData;
+            }
         }
 
         /// <summary>
         /// Ресурсный объект настройки состояний границы
         /// </summary>
-        public BrushSettingQ _BorderBrush;
+        private readonly new BrushSettingQ BorderBrush;
         /// <summary>
         /// Объект настройки состояний границы
         /// </summary>
-        public new BrushSettingQ BorderBrush
+        public BrushSettingQ QBorderBrush
         {
-            get => _Foreground;
-            set => _Foreground.ColorData = value.ColorData;
+            get => BorderBrush;
+            set
+            {
+                BorderBrush.ColorData = value.ColorData;
+            }
         }
 
         /// <summary>
         /// Ресурсный объект настройки состояний текста
         /// </summary>
-        public BrushSettingQ _Foreground;
+        private readonly new BrushSettingQ Foreground;
         /// <summary>
         /// Объект настройки состояний текста
         /// </summary>
-        public new BrushSettingQ Foreground
+        public BrushSettingQ QForeground
         {
-            get => _Foreground;
-            set => _Foreground.ColorData = value.ColorData;
+            get => Foreground;
+            set
+            {
+                Foreground.ColorData = value.ColorData;
+            }
         }
         #endregion
 
@@ -90,35 +100,12 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
 
         /// <summary>
-        /// Параметр указатель на значение загрузки
-        /// </summary>
-        public static readonly DependencyProperty ValueLoadingProperty = DependencyProperty.Register("ValueLoading", typeof(double), typeof(OPLViewerLoadingProcess));
-
-        /// <summary>
-        /// Данные изображения в кнопке закрытия объекта
-        /// </summary>
-        public double ValueLoading
-        {
-            get => ProgressBarLoading.Value;
-            set => ProgressBarLoading.Value = value;
-        }
-
-        /// <summary>
-        /// Видимость загрузки
-        /// </summary>
-        public Visibility VisibilityLoading
-        {
-            get => ProgressBarLoading.Visibility;
-            set => ProgressBarLoading.Visibility = value;
-        }
-
-        /// <summary>
         /// Данные пути к медиа загрузки объекта
         /// </summary>
-        public Uri SourceMediaLoading
+        public Uri SourceView
         {
-            get => IndicatorLoading.Source;
-            set => IndicatorLoading.Source = value;
+            get => IndicatorMedia.Source;
+            set => IndicatorMedia.Source = value;
         }
 
         /// <summary>
@@ -197,79 +184,40 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
         }
 
-        public OPLViewerLoadingProcess()
+        public OPLMediaViewer()
         {
             InitializeComponent();
             #region Background
-            _Background = new();
+            Background = new();
             BorderMain.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
-            Background.SetSpectrumAction((Args) =>
-            {
-                if (Args.AnimatedEvent)
-                {
-                    ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
-                    anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                    anim.To = Args.Value;
-                    BorderMain.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                }
-                else
-                {
-                    ((SolidColorBrush)BorderMain.Background).Color = Args.Value;
-                }
-            });
+
+            Background.ConnectSolidColorBrush((SolidColorBrush)BorderMain.Background);
             #endregion
 
             #region BorderBrush
-            _BorderBrush = new();
+            BorderBrush = new();
             BorderMain.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
             CancelIndicator.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
-            BorderBrush.SetSpectrumAction((Args) =>
-            {
-                if (Args.AnimatedEvent)
-                {
-                    ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
-                    anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                    anim.To = Args.Value;
-                    BorderMain.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                    CancelIndicator.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                }
-                else
-                {
-                    ((SolidColorBrush)BorderMain.BorderBrush).Color = Args.Value;
-                    ((SolidColorBrush)CancelIndicator.BorderBrush).Color = Args.Value;
-                }
-            });
+
+            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)BorderMain.BorderBrush);
+            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)CancelIndicator.BorderBrush);
             #endregion
 
             #region Foreground
-            _Foreground = new();
+            Foreground = new();
             TextBlockName.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
             TextBlockCancel.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-            Foreground.SetSpectrumAction((Args) =>
-            {
-                if (Args.AnimatedEvent)
-                {
-                    ColorAnimation anim = App.ColorAnimationType.SourceAnimation.Clone();
-                    anim.Duration = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                    anim.To = Args.Value;
-                    TextBlockName.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                    TextBlockCancel.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                }
-                else
-                {
-                    ((SolidColorBrush)TextBlockName.Foreground).Color = Args.Value;
-                    ((SolidColorBrush)TextBlockCancel.Foreground).Color = Args.Value;
-                }
-            });
+
+            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockName.Foreground);
+            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockCancel.Foreground);
             #endregion
             IsCanceledManipulate = true;
-            IndicatorLoading.MediaEnded += (sender, e) =>
+            IndicatorMedia.MediaEnded += (sender, e) =>
             {
-                IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
+                IndicatorMedia.Position = TimeSpan.FromMilliseconds(1);
             };
-            ProgressBarLoading.Value = 0d;
-            IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
+            IndicatorMedia.Opacity = 0d;
+            IndicatorMedia.Source = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
             IsEnabled = false;
 
             MouseEnter += (sender, e) =>
@@ -342,26 +290,21 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         }
 
         /// <summary>
-        /// Визуализировать выключение или завершение процесса загрузки
+        /// Визуализировать выключение элемента
         /// </summary>
-        internal void VisualCloseLoading()
+        internal void VisualClose()
         {
             IsEnabled = false;
-            if (ProgressBarLoading.Visibility == Visibility.Visible)
-                App.DoubleAnimationType.AnimateEffect(ProgressBarLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
-            App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
+            App.DoubleAnimationType.AnimateEffect(IndicatorMedia, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1300d));
         }
 
         /// <summary>
-        /// Визуализировать включение процесса загрузки
+        /// Визуализировать включение элемента
         /// </summary>
-        internal void VisualOpenLoading()
+        internal void VisualOpen()
         {
-            ProgressBarLoading.Value = 0d;
             IsEnabled = true;
-            if (ProgressBarLoading.Visibility == Visibility.Visible)
-                App.DoubleAnimationType.AnimateEffect(ProgressBarLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-            App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            App.DoubleAnimationType.AnimateEffect(IndicatorMedia, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
         }
     }
 }

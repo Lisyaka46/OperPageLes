@@ -1,0 +1,40 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ApplicationOperPageLes.UI.UserElementControl"
+             xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="ApplicationOperPageLes.UI.UserElementControl.OPLImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Border x:Name="BorderMain" BorderBrush="Black" BorderThickness="3,3,3,3" CornerRadius="5,5,5,5" Background="White" MaxHeight="52">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="CancelIndicator" HorizontalAlignment="Right" VerticalAlignment="Top" Width="14" Height="14" Grid.ColumnSpan="2" BorderThickness="2,2,2,2" CornerRadius="20,20,20,20" BorderBrush="Black" Panel.ZIndex="1" Margin="0,-6,-6,0">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="-0.5,0">
+                        <GradientStop Color="#FFFF3030" Offset="0.297"/>
+                        <GradientStop Color="#FFD00000" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TextBlock x:Name="TextBlockCancel" Text="-" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,5"/>
+            </Border>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Height="2" Width="15" Fill="#FF00544E" Margin="0,3,0,0"/>
+                    <TextBlock x:Name="TextBlockName" Text="Text" Padding="5,3,5,3" FontSize="16" TextTrimming="CharacterEllipsis" MaxWidth="110" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1"/>
+                    <Rectangle Height="2" Width="15" Fill="#FF00544E" Grid.Row="2" Margin="0,0,0,3"/>
+                </Grid>
+            </ScrollViewer>
+            <Border x:Name="BorderIndicator" BorderBrush="#FF007D9E" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Background="#FFC37EBD" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Width="40" Height="40" Margin="3,3,3,3" Opacity="0.8">
+                <Image x:Name="IndicatorImage" Margin="2,2,2,2"/>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>
