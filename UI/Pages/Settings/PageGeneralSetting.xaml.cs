@@ -21,11 +21,21 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             #region PathMenuImage
             string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;
             TextBlockFailedImageSetup.Opacity = 0d;
+            ImageErrorBitmapBackground.Opacity = 0d;
             if (PathBackgroundImage.Length > 0)
             {
                 IELTextBoxDirectoryBackground.Text = PathBackgroundImage;
-                ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
-                IELButtonClearImage.IsEnabled = true;
+                try
+                {
+                    ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
+                    IELButtonClearImage.IsEnabled = true;
+                }
+                catch
+                {
+                    ImageErrorBitmapBackground.Opacity = 1d;
+                    ImageBackground.Opacity = 0d;
+                    IELButtonClearImage.IsEnabled = false;
+                }
             }
             else
             {
@@ -109,17 +119,6 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                     App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
             };
             #endregion
-            #region BlurBackgroundDataTime
-            CheckBoxBlurDataTimeImage.IsChecked = App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime;
-            CheckBoxBlurDataTimeImage.Checked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime.Value = true;
-            };
-            CheckBoxBlurDataTimeImage.Unchecked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime.Value = false;
-            };
-            #endregion
             #region MillisecondInternetConnection
             CheckBoxInternetConnectionMillisecond.IsChecked = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             CheckBoxInternetConnectionMillisecond.Checked += (sender, e) =>
@@ -180,6 +179,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             try
             {
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
+                App.DoubleAnimationType.AnimateEffect(ImageErrorBitmapBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
                 if (image.PixelWidth > 0 && image.PixelHeight > 0)
                 {
                     IELTextBoxDirectoryBackground.Text = Uri;

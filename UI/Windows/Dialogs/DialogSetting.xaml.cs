@@ -59,7 +59,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             {
                 int OriginIndex = Grid.GetColumn(IELGeneralButton);
                 ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELGeneralButton.Background;
+                ActiveBackgroundSetting = IELGeneralButton.QBackground;
                 MainPageController.NextPage(GeneralSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);
@@ -81,7 +81,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             {
                 int OriginIndex = Grid.GetColumn(IELConsoleButton);
                 ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELConsoleButton.Background;
+                ActiveBackgroundSetting = IELConsoleButton.QBackground;
                 MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);
@@ -103,7 +103,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             {
                 int OriginIndex = Grid.GetColumn(IELPanelActionButton);
                 ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELPanelActionButton.Background;
+                ActiveBackgroundSetting = IELPanelActionButton.QBackground;
                 MainPageController.NextPage(PanelActionSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 ActiveBackgroundSetting.SetUsedState(true);

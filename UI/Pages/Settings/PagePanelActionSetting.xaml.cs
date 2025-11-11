@@ -152,7 +152,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
         private void ActivateSelectButtonKey(IELButtonText? button)
         {
             if (button == null) return;
-            SelectSetKey?.Background.SetUsedState(false);
+            SelectSetKey?.QBackground.SetUsedState(false);
             SelectSetKey = button;
             SelectSetKey.Focus();
             SelectSetKey.FontStyle = FontStyles.Italic;
@@ -167,7 +167,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             if (SelectSetKey == null) return;
             SelectSetKey.Text = OPLKeyConverter.ConvertKeyToString(key);
             SelectSetKey.FontStyle = FontStyles.Normal;
-            SelectSetKey?.Background.SetUsedState(false);
+            SelectSetKey?.QBackground.SetUsedState(false);
             SelectSetKey = null;
         }
     }

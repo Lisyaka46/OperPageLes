@@ -19,11 +19,6 @@ namespace ApplicationOperPageLes.CORE.Settings.Struct
         public ObjSetting<int> BufferSize { get; internal set; } = 50;
 
         /// <summary>
-        /// Размытие изображения на панели даты и времени
-        /// </summary>
-        public ObjSetting<bool> BlurBackgroundDataTime { get; internal set; } = false;
-
-        /// <summary>
         /// Отображение потраченного времени на ответ интернета
         /// </summary>
         public ObjSetting<bool> MillisecondInternetConnection { get; internal set; } = false;
