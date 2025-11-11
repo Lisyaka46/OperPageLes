@@ -119,7 +119,7 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Массив всех визуализационных объектов процессов
         /// </summary>
-        internal readonly List<OPLViewerLoadingProcess> DataViewerLoadingProcess = [];
+        internal readonly List<OPLMediaViewer> DataViewerLoadingProcess = [];
         #endregion
 
         #region Windows
@@ -589,10 +589,6 @@ namespace ApplicationOperPageLes
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
             {
                 if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
-            };
-            SettingMainApplication.BlurBackgroundDataTime.Changed += (Old, New) =>
-            {
-                MainWindow.ChangeBlurImageInDataTime(New);
             };
             SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
             {

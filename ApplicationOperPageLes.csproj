@@ -92,12 +92,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IEL\IEL.csproj" />
     <ProjectReference Include="..\..\InterpreterCommand\InterpreterCommand.csproj" />
-    <ProjectReference Include="..\GLGraphs\src\GLGraphs.Wpf\GLGraphs.Wpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="IEL">
+      <HintPath>..\..\IEL\bin\Debug\net8.0-windows\IEL.dll</HintPath>
+    </Reference>
     <Reference Include="LibraryPackKey">
       <HintPath>..\..\PackKey\LibraryPackKey\bin\Debug\net8.0\LibraryPackKey.dll</HintPath>
     </Reference>
