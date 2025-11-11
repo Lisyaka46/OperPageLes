@@ -123,7 +123,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                     AnimationMillisecond = 200d,
                 }
             };
-            Button.Background.ColorData = (QData)QDataBackground.Clone();
+            Button.QBackground.ColorData = (QData)QDataBackground.Clone();
             return Button;
         }
 

@@ -1,18 +1,19 @@
-﻿using IEL.CORE.Classes;
-using IEL.CORE.Enums;
-using Microsoft.Windows.Themes;
-using Newtonsoft.Json.Linq;
-using ApplicationOperPageLes.CORE.Enums;
+﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel;
 using ApplicationOperPageLes.UI.UserElementControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
+using IEL.CORE.Classes;
+using IEL.CORE.Enums;
+using Microsoft.Windows.Themes;
+using Newtonsoft.Json.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
@@ -145,7 +146,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             IELTextBoxSearch.IsEnabled = false;
             SortingLabelType = SortingLabelEnum.NameAZ;
             BorderScrollBackground.Width = 0d;
-            TextBlockEventInfo.Opacity = 0d;
+            TextBlockEventInfo.Text = String.Empty;
             TextBlockLabelInfo.Opacity = 0d;
             GridMainLabels.Opacity = 0d;
             GridMainLabels.Visibility = Visibility.Hidden;
@@ -241,7 +242,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     if (Tag != null)
                     {
                         SelectLabelInPage.SourceLabel.AppendTag(Tag);
-                        AnimateInfoText("Тег успешно установлен", 7000d);
+                        TextBlockEventInfo.Text = "Тег успешно установлен";
                     }
                     SelectLabelInPage.Selected = false;
                     SelectLabelInPage = null;
@@ -408,6 +409,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 Grid GridLabels = await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка списка ярлыков",
                     CreateAllVisualLabels(GridMainLabels));
+                TextBlockEventInfo.Text = "Готово";
                 IELButtonSorting.IsEnabled = true;
                 IELButtonSearch.IsEnabled = true;
                 IELTextBoxSearch.IsEnabled = true;
@@ -415,16 +417,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 App.DoubleAnimationType.AnimateEffect(GridLabels, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 App.DoubleAnimationType.AnimateEffect(TextBlockLabelInfo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
             });
-        }
-
-        /// <summary>
-        /// Анимировать отображение текста
-        /// </summary>
-        /// <param name="Text">Отображаемый текст</param>
-        private void AnimateInfoText(string Text, double Millisecond)
-        {
-            TextBlockEventInfo.Text = Text;
-            App.DoubleAnimationType.AnimateEffect(TextBlockEventInfo, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(Millisecond));
         }
 
         /// <summary>
@@ -437,12 +429,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
                 if (!SearchActivate || IELTextBoxSearch.Text.Length == 0)
                 {
-                    Element.Background.SetUsedState(false);
+                    Element.QBackground.SetUsedState(false);
                     continue;
                 }
                 else if (Element.SourceLabel.Name.Contains(IELTextBoxSearch.Text, StringComparison.CurrentCultureIgnoreCase))
-                    Element.Background.SetUsedState(true);
-                else Element.Background.SetUsedState(false);
+                    Element.QBackground.SetUsedState(true);
+                else Element.QBackground.SetUsedState(false);
             }
             UpdateTextInfoLabels();
         }
@@ -531,7 +523,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 OPLLabelCommand[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabelCommand>()];
                 TextBlockLabelInfo.Text += "Найдено ярлыков: " +
-                    $"{ArrayLabelsElement.Count((i) => i.Background.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
+                    $"{ArrayLabelsElement.Count((i) => i.QBackground.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
             }
             else TextBlockLabelInfo.Text += $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
         }
@@ -548,6 +540,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     Dispatcher.Invoke(() =>
                     {
+                        TextBlockEventInfo.Text = $"Идёт загрузка всех ярлыков ({i}/{App.CurrentApp.DataLabels.Count})";
                         OPLLabelCommand Element = CreateVisualLabel(i);
                         Element.Opacity = 1d;
                         if (Element.SourceLabel.Tag != null)

@@ -26,6 +26,7 @@ using WmColor = System.Windows.Media.Color;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
+using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
 #endregion
 
 namespace ApplicationOperPageLes.UI.Windows
@@ -75,7 +76,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <summary>
         /// Страница управления загрузочными процессами
         /// </summary>
-        private PageControllerLoading PageControllerLoadingApplication;
+        private PageNotificationManager PageControllerLoadingApplication;
 
         /// <summary>
         /// Настройка для панели действий страницы управления загрузочными элементами
@@ -90,12 +91,12 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <summary>
         /// Событие закрытия главного окна перед его удалением
         /// </summary>
-        //public new event FormClosingEventHandler? Closing;
+        public new event FormClosingEventHandler? Closing;
 
         /// <summary>
         /// Событие закрытия главного окна после его удаления
         /// </summary>
-        //public new event FormClosedEventHandler? Closed;
+        public new event FormClosedEventHandler? Closed;
 
         /// <summary>
         /// Состояние перезагрузки
@@ -152,6 +153,7 @@ namespace ApplicationOperPageLes.UI.Windows
             IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
             BorderWindowMain.Background = new SolidColorBrush(Colors.Black);
 
+            BorderNotificationIndicator.Opacity = 0d;
             IndicatorLoading.Opacity = 0d;
             IndicatorLoading.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
             IndicatorLoading.MediaEnded += (sender, e) =>
@@ -159,7 +161,6 @@ namespace ApplicationOperPageLes.UI.Windows
                 IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
             };
 
-            VisualRectangleDateTimeBackground.Opacity = 0d;
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
             ImageMenu.Opacity = 0d;
@@ -230,12 +231,19 @@ namespace ApplicationOperPageLes.UI.Windows
 
             PageControllerLoadingApplication = new();
             SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
+            PageControllerLoadingApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
+            {
+                App.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
+            };
+            PageControllerLoadingApplication.ClearedAllViewersImage += (sender, e) =>
+            {
+                App.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+            };
 
             #endregion
 
             #region Settings
             UpdateImageMenu(App.CurrentApp.SettingMainApplication.PathMenuImage);
-            ChangeBlurImageInDataTime(App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime);
             #endregion
 
             #region UpToolButtons
@@ -453,13 +461,13 @@ namespace ApplicationOperPageLes.UI.Windows
             App.CurrentApp.Is_WindowDeveloper.Close();
 #endif
             TokenUpdateBackgroundData.ThrowIfCancellationRequested();
-            //Closing?.Invoke(this, new(CloseReason.UserClosing, false));
+            Closing?.Invoke(this, new(CloseReason.UserClosing, false));
             bool WindowSaveClose = false;
             DialogSaveWait windowSave = new();
             windowSave.Closed += (sender, e) =>
             {
                 WindowSaveClose = true;
-                //Closed?.Invoke(windowSave, new(CloseReason.WindowsShutDown));
+                Closed?.Invoke(windowSave, new(CloseReason.WindowsShutDown));
                 base.Close();
             };
             windowSave.OpenOnToComplete();
@@ -553,7 +561,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <returns>Исполненный асинхронный процесс</returns>
         internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method, bool IsCanceledManipulate = false)
         {
-            OPLViewerLoadingProcess ViewLoading = GenerateVisualizateLoadingProcess(NameProcess);
+            OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
             ViewLoading.IsCanceledManipulate = IsCanceledManipulate;
             ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
             CancellationToken token = new(false);
@@ -572,15 +580,50 @@ namespace ApplicationOperPageLes.UI.Windows
         }
 
         /// <summary>
-        /// Создать объект визуализирующий загрузочный процесс
+        /// Создать объект визуализирующий изображение
         /// </summary>
         /// <param name="NameProcess">Название загрузочного процесса</param>
         /// <returns>Объект визуализации загрузочного процесса</returns>
-        internal OPLViewerLoadingProcess GenerateVisualizateLoadingProcess(string NameProcess)
+        public OPLImageViewer GenerateVisualizateImage(string Name)
         {
-            OPLViewerLoadingProcess Result = PageControllerLoadingApplication.SetViewElementLoading();
+            OPLImageViewer Result = PageControllerLoadingApplication.SetViewImageElement();
+            Result.Text = Name;
+            Result.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                Result.VisualClose();
+                PageControllerLoadingApplication.DeleteViewMediaElement(Result);
+            };
+            Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
+            return Result;
+        }
+
+        /// <summary>
+        /// Создать объект визуализирующий медиа
+        /// </summary>
+        /// <param name="Name">Название загрузочного процесса</param>
+        /// <returns>Объект визуализации загрузочного процесса</returns>
+        public OPLMediaViewer GenerateVisualizateMedia(string Name)
+        {
+            OPLMediaViewer Result = PageControllerLoadingApplication.SetViewMediaElement();
+            Result.Text = Name;
+            Result.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                Result.VisualClose();
+                PageControllerLoadingApplication.DeleteViewMediaElement(Result);
+            };
+            Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
+            return Result;
+        }
+
+        /// <summary>
+        /// Создать объект визуализирующий медиа (Спецификация на загрузочный процесс)
+        /// </summary>
+        /// <param name="Name">Название загрузочного процесса</param>
+        /// <returns>Объект визуализации загрузочного процесса</returns>
+        internal OPLMediaViewer GenerateVisualizateMediaLoadingProcess(string Name)
+        {
+            OPLMediaViewer Result = GenerateVisualizateMedia(Name);
             App.CurrentApp.DataViewerLoadingProcess.Add(Result);
-            Result.Text = NameProcess;
             return Result;
         }
 
@@ -588,7 +631,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// Начало визуализации загрузки
         /// </summary>
         /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
-        internal void StartVisualizateLoadingProcess(OPLViewerLoadingProcess ViewLoading)
+        internal void StartVisualizateLoadingProcess(OPLMediaViewer ViewLoading)
         {
             if (!IsLoadingProcess)
             {
@@ -598,17 +641,17 @@ namespace ApplicationOperPageLes.UI.Windows
 #endif
                 App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
-            ViewLoading.VisualOpenLoading();
+            ViewLoading.VisualOpen();
         } 
 
         /// <summary>
         /// Завершение визуализации загрузки
         /// </summary>
         /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
-        internal void CompleteVisualizateLoadingProcess(OPLViewerLoadingProcess ViewLoading)
+        internal void CompleteVisualizateLoadingProcess(OPLMediaViewer ViewLoading)
         {
-            ViewLoading.VisualCloseLoading();
-            PageControllerLoadingApplication.DeleteViewElementLoading(ViewLoading);
+            ViewLoading.VisualClose();
+            PageControllerLoadingApplication.DeleteViewMediaElement(ViewLoading);
             App.CurrentApp.DataViewerLoadingProcess.Remove(ViewLoading);
             if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
             {
@@ -646,19 +689,34 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             if (Path.Length > 0)
             {
-                BitmapImage BitmapImageMenu = new(new Uri(Path));
-                if (File.Exists(Path))
+                try
                 {
-                    ComplitedInstallImageMenu(BitmapImageMenu);
-                }
-                else
-                {
-                    BitmapImageMenu.DownloadCompleted += (sender, e) =>
+                    BitmapImage BitmapImageMenu = new(new Uri(Path));
+                    if (File.Exists(Path))
                     {
                         ComplitedInstallImageMenu(BitmapImageMenu);
+                    }
+                    else
+                    {
+                        BitmapImageMenu.DownloadCompleted += (sender, e) =>
+                        {
+                            ComplitedInstallImageMenu(BitmapImageMenu);
+                        };
+                        BitmapImageMenu.DownloadFailed += (sender, e) => FailedInstallImageMenu();
+                        BitmapImageMenu.DecodeFailed += (sender, e) => FailedInstallImageMenu();
+                    }
+                }
+                catch (FileNotFoundException ex)
+                {
+                    OPLImageViewer Element = GenerateVisualizateImage($"Файл картинки фонового изображения не был найден...");
+                    Element.IELSettingObject.MouseHover += (sender, e) =>
+                    {
+                        IELMessageMain.UsingBorderInformation(Element, ex.Message, OrientationBorderPosition.LeftUp);
                     };
-                    BitmapImageMenu.DownloadFailed += (sender, e) => FailedInstallImageMenu();
-                    BitmapImageMenu.DecodeFailed += (sender, e) => FailedInstallImageMenu();
+                    Element.MouseLeave += (sender, e) =>
+                    {
+                        IELMessageMain.CloseBorderInformation();
+                    };
                 }
             }
             else
@@ -696,11 +754,6 @@ namespace ApplicationOperPageLes.UI.Windows
         #endregion
 
         #region BlurBackground
-        internal void ChangeBlurImageInDataTime(bool State)
-        {
-            App.DoubleAnimationType.AnimateEffect(VisualRectangleDateTimeBackground, OpacityProperty, State ? 0.5d : 0d, TimeSpan.FromMilliseconds(1300d));
-        }
-
         /// <summary>
         /// Анимировать цвет сигнала в главном Border окна
         /// </summary>

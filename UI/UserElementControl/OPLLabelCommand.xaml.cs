@@ -88,40 +88,49 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         /// <summary>
         /// Ресурсный объект настройки состояний фона
         /// </summary>
-        public BrushSettingQ _Background;
+        private readonly new BrushSettingQ Background;
         /// <summary>
         /// Объект настройки состояний фона
         /// </summary>
-        public new BrushSettingQ Background
+        public BrushSettingQ QBackground
         {
-            get => _Foreground;
-            set => _Foreground.ColorData = value.ColorData;
+            get => Background;
+            set
+            {
+                Background.ColorData = value.ColorData;
+            }
         }
 
         /// <summary>
         /// Ресурсный объект настройки состояний границы
         /// </summary>
-        public BrushSettingQ _BorderBrush;
+        private readonly new BrushSettingQ BorderBrush;
         /// <summary>
         /// Объект настройки состояний границы
         /// </summary>
-        public new BrushSettingQ BorderBrush
+        public BrushSettingQ QBorderBrush
         {
-            get => _Foreground;
-            set => _Foreground.ColorData = value.ColorData;
+            get => BorderBrush;
+            set
+            {
+                BorderBrush.ColorData = value.ColorData;
+            }
         }
 
         /// <summary>
         /// Ресурсный объект настройки состояний текста
         /// </summary>
-        public BrushSettingQ _Foreground;
+        private readonly new BrushSettingQ Foreground;
         /// <summary>
         /// Объект настройки состояний текста
         /// </summary>
-        public new BrushSettingQ Foreground
+        public BrushSettingQ QForeground
         {
-            get => _Foreground;
-            set => _Foreground.ColorData = value.ColorData;
+            get => Foreground;
+            set
+            {
+                Foreground.ColorData = value.ColorData;
+            }
         }
         #endregion
 
@@ -213,54 +222,24 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Background
-            _Background = new();
+            Background = new();
             BorderMainLabel.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
-            Background.SetSpectrumAction((Args) =>
-            {
-                if (Args.AnimatedEvent)
-                {
-                    App.ColorAnimationType.AnimateEffect(BorderMainLabel.Background,
-                        SolidColorBrush.ColorProperty, Args.Value, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
-                }
-                else
-                {
-                    ((SolidColorBrush)BorderMainLabel.Background).Color = Args.Value;
-                }
-            });
+
+            Background.ConnectSolidColorBrush((SolidColorBrush)BorderMainLabel.Background);
             #endregion
 
             #region BorderBrush
-            _BorderBrush = new();
+            BorderBrush = new();
             BorderMainLabel.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
-            BorderBrush.SetSpectrumAction((Args) =>
-            {
-                if (Args.AnimatedEvent)
-                {
-                    App.ColorAnimationType.AnimateEffect(BorderMainLabel.BorderBrush,
-                        SolidColorBrush.ColorProperty, Args.Value, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
-                }
-                else
-                {
-                    ((SolidColorBrush)BorderMainLabel.BorderBrush).Color = Args.Value;
-                }
-            });
+
+            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)BorderMainLabel.BorderBrush);
             #endregion
 
             #region Foreground
-            _Foreground = new();
+            Foreground = new();
             TextBlockNameLabel.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-            Foreground.SetSpectrumAction((Args) =>
-            {
-                if (Args.AnimatedEvent)
-                {
-                    App.ColorAnimationType.AnimateEffect(TextBlockNameLabel.Foreground,
-                        SolidColorBrush.ColorProperty, Args.Value, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
-                }
-                else
-                {
-                    ((SolidColorBrush)TextBlockNameLabel.Foreground).Color = Args.Value;
-                }
-            });
+
+            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockNameLabel.Foreground);
             #endregion
             IELSettingObject = new();
             _Selected = false;

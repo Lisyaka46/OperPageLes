@@ -176,7 +176,7 @@ namespace ApplicationOperPageLes.Windows
                 if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0) return;
                 if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
                 SearchActivate = true;
-                //IELButtonSearchCommand.Background.SetUsedState(true);
+                IELButtonSearchCommand.QBackground.SetUsedState(true);
                 IELButtonText Button;
                 //if (IndexSearch.Length > 0)
                 //{
@@ -211,7 +211,7 @@ namespace ApplicationOperPageLes.Windows
             {
                 if (!SearchActivate) return;
                 Keyboard.ClearFocus();
-                //IELButtonSearchCommand.Background.SetUsedState(false);
+                IELButtonSearchCommand.QBackground.SetUsedState(false);
                 IELButtonText Button;
                 Grid MainElementsContainer = (Grid)ScrollViewerElements.Content;
                 for (int Index = 0; Index < MainElementsContainer.Children.Count; Index++)
@@ -347,15 +347,15 @@ namespace ApplicationOperPageLes.Windows
                 },
                 Margin = new(3),
             };
-            Element.Background.ColorData = new(new byte[,]
+            Element.QBackground.ColorData = new(new byte[,]
                         {
                         { 255, 161, 204, 232 },
                         { 255, 92, 131, 157 },
                         { 255, 122, 172, 205 },
                         { 255, 166, 181, 190 },
                         });
-            Element.BorderBrush.ColorData = (QData)BorderForegroundSetting.Clone();
-            Element.Foreground.ColorData = (QData)BorderForegroundSetting.Clone();
+            Element.QBorderBrush.ColorData = (QData)BorderForegroundSetting.Clone();
+            Element.QForeground.ColorData = (QData)BorderForegroundSetting.Clone();
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,

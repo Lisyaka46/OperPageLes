@@ -245,7 +245,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     case Key.Enter:
                         SaveStringPrintBuffer = string.Empty;
-                        TextBoxCommandInput.Background.SetActiveSpecrum(StateSpectrum.Used, true);
+                        TextBoxCommandInput.QBackground.SetActiveSpecrum(StateSpectrum.Used, true);
                         if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
                         {
                             SelectNavigation = SelectNavigationPageConsoleEnum.None;
@@ -268,7 +268,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                             SelectNavigation = SelectNavigationPageConsoleEnum.None;
                         }
                         else if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                        TextBoxCommandInput.Background.SetActiveSpecrum(StateSpectrum.Used, true);
+                        TextBoxCommandInput.QBackground.SetActiveSpecrum(StateSpectrum.Used, true);
                         break;
                     case Key.Apps:
                         App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);

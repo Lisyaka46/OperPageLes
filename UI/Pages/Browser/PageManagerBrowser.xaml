@@ -43,82 +43,62 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <GUI:IELButtonText x:Name="IELButtonAddPageLabel" BorderThicknessBlock="3,3,3,3" Text="Страница ярлыков" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.RowSpan="1" PaddingContent="0,10,0,10">
-                        <!--<GUI:IELButtonText.IELSettingObject>
-                            <ObjectSettings:IELButtonObjectSetting>
-                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                    <Classes:BrushSettingQ/>
-                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                    <Classes:BrushSettingQ Default="#FF69819C" Select="#FF86AEDA" Used="#FF0CCCB6" NotEnabled="#FFAD354B"/>
-                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                            </ObjectSettings:IELButtonObjectSetting>
-                        </GUI:IELButtonText.IELSettingObject>-->
+                        <GUI:IELButtonText.QBackground>
+                            <Classes:BrushSettingQ Default="#FF69819C" Select="#FF86AEDA" Used="#FF0CCCB6" NotEnabled="#FFAD354B"/>
+                        </GUI:IELButtonText.QBackground>
+                        <GUI:IELButtonText.QBorderBrush>
+                            <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
+                        </GUI:IELButtonText.QBorderBrush>
+                        <GUI:IELButtonText.QForeground>
+                            <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
+                        </GUI:IELButtonText.QForeground>
                     </GUI:IELButtonText>
                     <GUI:IELButtonText x:Name="IELButtonPageDeveloper" BorderThicknessBlock="3,3,3,3" Text="Страница разработчика" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.Row="1" PaddingContent="0,10,0,10">
-                        <!--<GUI:IELButtonText.IELSettingObject>
-                            <ObjectSettings:IELButtonObjectSetting>
-                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                    <Classes:BrushSettingQ/>
-                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                    <Classes:BrushSettingQ Default="#FFCE6BBD" Select="#FFD592E0" Used="#FFFBE5FF" NotEnabled="#FFAD354B"/>
-                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                            </ObjectSettings:IELButtonObjectSetting>
-                        </GUI:IELButtonText.IELSettingObject>-->
+                        <GUI:IELButtonText.QBackground>
+                            <Classes:BrushSettingQ Default="#FFCE6BBD" Select="#FFD592E0" Used="#FFFBE5FF" NotEnabled="#FFAD354B"/>
+                        </GUI:IELButtonText.QBackground>
+                        <GUI:IELButtonText.QBorderBrush>
+                            <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
+                        </GUI:IELButtonText.QBorderBrush>
+                        <GUI:IELButtonText.QForeground>
+                            <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
+                        </GUI:IELButtonText.QForeground>
                     </GUI:IELButtonText>
                     <GUI:IELButtonText x:Name="IELButtonPageConsole" BorderThicknessBlock="3,3,3,3" Text="Страница консоли" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.Row="2" PaddingContent="0,10,0,10">
-                        <!--<GUI:IELButtonText.IELSettingObject>
-                            <ObjectSettings:IELButtonObjectSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                    <Classes:BrushSettingQ Default="#FF969671" NotEnabled="#FFAD354B" Select="#FFC3C37F" Used="#FFE0E0BD"/>
-                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                    <Classes:BrushSettingQ/>
-                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                            </ObjectSettings:IELButtonObjectSetting>
-                        </GUI:IELButtonText.IELSettingObject>-->
+                        <GUI:IELButtonText.QBackground>
+                            <Classes:BrushSettingQ Default="#FF969671" NotEnabled="#FFAD354B" Select="#FFC3C37F" Used="#FFE0E0BD"/>
+                        </GUI:IELButtonText.QBackground>
+                        <GUI:IELButtonText.QBorderBrush>
+                            <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
+                        </GUI:IELButtonText.QBorderBrush>
+                        <GUI:IELButtonText.QForeground>
+                            <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
+                        </GUI:IELButtonText.QForeground>
                     </GUI:IELButtonText>
                     <GUI:IELButtonText x:Name="IELButtonPageBrowser" BorderThicknessBlock="3,3,3,3" Text="Страница веб-браузера" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.Row="3" PaddingContent="0,10,0,10">
-                        <!--<GUI:IELButtonText.IELSettingObject>
-                            <ObjectSettings:IELButtonObjectSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                    <Classes:BrushSettingQ Default="#FF5EACC7" NotEnabled="#FFAD354B" Select="#FF59D4FF" Used="#FFD6E2E6"/>
-                                </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                    <Classes:BrushSettingQ/>
-                                </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                            </ObjectSettings:IELButtonObjectSetting>
-                        </GUI:IELButtonText.IELSettingObject>-->
+                        <GUI:IELButtonText.QBackground>
+                            <Classes:BrushSettingQ Default="#FF5EACC7" NotEnabled="#FFAD354B" Select="#FF59D4FF" Used="#FFD6E2E6"/>
+                        </GUI:IELButtonText.QBackground>
+                        <GUI:IELButtonText.QBorderBrush>
+                            <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
+                        </GUI:IELButtonText.QBorderBrush>
+                        <GUI:IELButtonText.QForeground>
+                            <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
+                        </GUI:IELButtonText.QForeground>
                     </GUI:IELButtonText>
                 </Grid>
             </Border>
         </Grid>
         <GUI:IELButtonText x:Name="IELButtonCancel" BorderThicknessBlock="3,3,3,3" Text="Отмена добавления" CornerRadius="6,6,6,6"  Grid.Row="1" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" PaddingContent="0,10,0,10">
-            <!--<GUI:IELButtonText.IELSettingObject>
-                <ObjectSettings:IELButtonObjectSetting>
-                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FFC86C40" NotEnabled="#FFAD354B" Select="#FFF19569" Used="#FFECDDAB"/>
-                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ/>
-                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                </ObjectSettings:IELButtonObjectSetting>
-            </GUI:IELButtonText.IELSettingObject>-->
+            <GUI:IELButtonText.QBackground>
+                <Classes:BrushSettingQ Default="#FFC86C40" NotEnabled="#FFAD354B" Select="#FFF19569" Used="#FFECDDAB"/>
+            </GUI:IELButtonText.QBackground>
+            <GUI:IELButtonText.QBorderBrush>
+                <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
+            </GUI:IELButtonText.QBorderBrush>
+            <GUI:IELButtonText.QForeground>
+                <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
+            </GUI:IELButtonText.QForeground>
         </GUI:IELButtonText>
     </Grid>
 </Page>
