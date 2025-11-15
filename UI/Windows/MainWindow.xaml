@@ -48,10 +48,10 @@
                 <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
                     <IEL:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2">
                         <IEL:IELPanelAction.QBackground>
-                            <Classes:BrushSettingQ Default="#D8239084" NotEnabled="#D8FF4646" Select="#E548B787" Used="#E5E6E6E6"/>
+                            <Classes:BrushSettingQ Default="#FF169C86" NotEnabled="#FFD04747" Select="#FF27A580" Used="#FF4FD89C"/>
                         </IEL:IELPanelAction.QBackground>
                         <IEL:IELPanelAction.QBorderBrush>
-                            <Classes:BrushSettingQ Default="Black" NotEnabled="#FF691919" Select="#FF3A3A3A" Used="#FF616161"/>
+                            <Classes:BrushSettingQ Default="#FF2D2D2D" Used="#FF2A7364" Select="#FF635E5E" NotEnabled="#FF8C2525"/>
                         </IEL:IELPanelAction.QBorderBrush>
                     </IEL:IELPanelAction>
                     <Grid Panel.ZIndex="1">
@@ -106,12 +106,12 @@
                                         </IEL:IELButtonImage.QBorderBrush>
                                     </IEL:IELButtonImage>
                                     <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3" Grid.ColumnSpan="1">
-                                        <IEL:IELButtonImage.QBackground>
+                                        <!--<IEL:IELButtonImage.QBackground>
                                             <Classes:BrushSettingQ Default="#FFB97624" NotEnabled="#FFC15555" Select="#FFB7973F" Used="#FFCEDC91"/>
                                         </IEL:IELButtonImage.QBackground>
                                         <IEL:IELButtonImage.QBorderBrush>
                                             <Classes:BrushSettingQ Default="#FFBD6600" NotEnabled="#FFC15E5E" Select="#FFEABF81" Used="#FFB6BFB5"/>
-                                        </IEL:IELButtonImage.QBorderBrush>
+                                        </IEL:IELButtonImage.QBorderBrush>-->
                                     </IEL:IELButtonImage>
                                 </Grid>
                             </Border>

@@ -3,11 +3,17 @@
 //using OpenTK.Graphics.OpenGL;
 //using OpenTK.Graphics.OpenGL4;
 //using OpenTK.Mathematics;
+using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.UI.Windows;
+using IEL.GUI;
+using Newtonsoft.Json;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using DrColor = System.Drawing.Color;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
@@ -20,6 +26,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         private bool ScaleMode = false;
         private bool KeyEventActivate = false;
         //private GraphSeries<string>? SeriesSource;
+
         public PageDeveloper()
         {
             InitializeComponent();
@@ -107,7 +114,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, async () =>
                     {
                         ImageMap.Source = await App.MainWindow.ExecuteVisualizateLoadingProcess("Генерация изображения",
-                            GenImage((int)SliderX.Value, (int)SliderY.Value));
+                            GenImage(100, 100));
                     });
                 })
                 {
@@ -120,7 +127,46 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             IELButtonTest.Focusable = true;
             IELButtonTest.MouseLeftButtonUp += (sender, e) =>
             {
-                //SeriesSource?.Add("Point", SeriesSource.Points.Count, (float)Math.Cos(SeriesSource.Points.Count));
+                WindowPaletteController y = new();
+                y.Show();
+                //App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
+                //    IEL.CORE.Classes.QData.EnumDataSpectrum.Default, 255, 255, 255, 255);
+                //IEL.CORE.Classes.QData[] Data =
+                //    [
+                //        new(
+                //        [
+                //            [255, 255, 255, 255],
+                //            [0, 10, 10, 0],
+                //            [10, 10, 100, 100],
+                //            [100, 100, 10, 10]
+                //        ]),
+                //        new(
+                //        [
+                //            [90, 90, 90, 90],
+                //            [4, 3, 2, 1],
+                //            [10, 20, 100, 100],
+                //            [200, 100, 20, 10]
+                //        ]),
+                //    ];
+                ////byte[] A = Data.Data[0];
+                ////byte[] R = Data.Data[1];
+                ////byte[] G = Data.Data[2];
+                ////byte[] B = Data.Data[3];
+                ////IList<byte> d = [.. Data.Data[0]];
+                //IEnumerable<IEnumerable<IList<byte>>> d = Enumerable.Range(0, Data.Length).Select(
+                //    (i) => Enumerable.Range(0, 4).Select(
+                //        (j) => (IList<byte>)Data[i].Data[j]));
+                //string SettingProcessJSON = JsonConvert.SerializeObject(d, Formatting.Indented);
+                //File.WriteAllText($"C:/Users/killm/Рабочий стол/0/QData_{++c}.json", SettingProcessJSON);
+                ////SeriesSource?.Add("Point", SeriesSource.Points.Count, (float)Math.Cos(SeriesSource.Points.Count));
+
+                //IEnumerable<byte[][]> t = JsonConvert.DeserializeObject<IEnumerable<byte[][]>>(SettingProcessJSON) ??
+                //    throw new Exception("Не удалось преобразовать JSON в управляемый объект QData");
+                //foreach (byte[][] data in t)
+                //{
+                //    IEL.CORE.Classes.QData JsonData = new(data);
+                //    _ = t;
+                //}
                 App.MainWindow.BlurMainAnimateColor(Colors.Blue);
             };
             IELButtonTest.MouseRightButtonUp += (sender, e) =>
@@ -141,25 +187,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 //ellipseStoryboard.Children.Add(animation);
                 //ellipseStoryboard.Begin(App.MainWindow);
             };
-            #region Sliders
-            SliderX.ValueChanged += (sender, e) =>
-            {
-                TextBlockX_Value.Text = $"X:{Math.Round(e.NewValue, 2)}";
-            };
-            SliderY.ValueChanged += (sender, e) =>
-            {
-                TextBlockY_Value.Text = $"Y:{Math.Round(e.NewValue, 2)}";
-            };
-            #endregion
-        }
-
-        //
-        internal System.Drawing.Color SetColorFunction(int X, int Y)
-        {
-            return System.Drawing.Color.FromArgb(
-                (byte)(Math.Cos(X / SliderX.Value) * 255),
-                (byte)(Math.Cos(Y / SliderY.Value) * 255),
-                (byte)(Math.Sin(X / SliderY.Value) * 255));
         }
 
         /// <summary>
@@ -185,7 +212,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     await Task.Run(() => 
                     bitmap.SetPixel(X, Y, d.Invoke(X, Y)));
-                    Dispatcher.Invoke(() => TextblockInformation.Text = $"X:{X} || Y:{Y}");
+                    //Dispatcher.Invoke(() => TextblockInformation.Text = $"X:{X} || Y:{Y}");
                 }
             }
             return Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),

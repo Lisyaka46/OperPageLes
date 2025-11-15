@@ -4,6 +4,7 @@ using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using ApplicationOperPageLes.CORE.Enums;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
 {
@@ -15,13 +16,13 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <summary>
         /// Стиль отображения элементов в буфере
         /// </summary>
-        private readonly QData QDataBackground = new(new byte[,]
-                        {
-                        { 255, 243, 164, 207 },
-                        { 255, 173, 97, 138 },
-                        { 255, 243, 136, 194 },
-                        { 255, 190, 166, 181 },
-                        });
+        private readonly QData QDataBackground = new(
+                        [
+                        [255, 243, 164, 207],
+                        [255, 173, 97, 138],
+                        [255, 243, 136, 194],
+                        [255, 190, 166, 181],
+                        ]);
 
         /// <summary>
         /// Объект анимации позиции сколла буфера
@@ -49,6 +50,11 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             InitializeComponent();
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
+
+            IELButtonBackMainMenu.QBackground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue));
+            IELButtonBackMainMenu.QBorderBrush.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue));
+            IELButtonBackMainMenu.QForeground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue));
+
             IELButtonClearBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(50d);
@@ -123,7 +129,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                     AnimationMillisecond = 200d,
                 }
             };
-            Button.QBackground.ColorData = (QData)QDataBackground.Clone();
+            Button.QBackground.SetQData(QDataBackground);
             return Button;
         }
 

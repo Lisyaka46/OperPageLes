@@ -29,35 +29,35 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         /// <summary>
         /// Настройка отображения фонового цвета объекта
         /// </summary>
-        private readonly QData QDtataBackground = new(new byte[,]
-                        {
-                        { 255, 107, 187, 189 },
-                        { 255, 43, 194, 245 },
-                        { 255, 145, 128, 185 },
-                        { 255, 189, 78, 78 },
-                        });
+        private readonly QData QDtataBackground = new(
+                        [
+                        [255, 107, 187, 189],
+                        [255, 43, 194, 245],
+                        [255, 145, 128, 185],
+                        [255, 189, 78, 78],
+                        ]);
 
         /// <summary>
         /// Настройка отображения цвета границ объекта
         /// </summary>
-        private readonly QData QDtataBorderBrush = new(new byte[,]
-                        {
-                        { 255, 0, 0, 0 },
-                        { 255, 13, 0, 55 },
-                        { 255, 20, 43, 95 },
-                        { 255, 90, 10, 15 },
-                        });
+        private readonly QData QDtataBorderBrush = new(
+                        [
+                        [255, 0, 0, 0],
+                        [255, 13, 0, 55],
+                        [255, 20, 43, 95],
+                        [255, 90, 10, 15],
+                        ]);
 
         /// <summary>
         /// Настройка отображнения цвета текста объекта
         /// </summary>
-        private readonly QData QDtataForeground = new(new byte[,]
-                        {
-                        { 255, 27, 67, 69 },
-                        { 255, 13, 84, 155 },
-                        { 255, 12, 68, 85 },
-                        { 255, 189, 78, 78 },
-                        });
+        private readonly QData QDtataForeground = new(
+                        [
+                        [255, 27, 67, 69],
+                        [255, 13, 84, 155],
+                        [255, 12, 68, 85],
+                        [255, 189, 78, 78],
+                        ]);
 
         public PageNotificationManager()
         {
@@ -70,7 +70,6 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         /// <returns>Визуализационный объект</returns>
         internal OPLMediaViewer SetViewMediaElement(Uri? uri = null)
         {
-            TextBlockNotInfo.Visibility = System.Windows.Visibility.Hidden;
             OPLMediaViewer Result = CreateMediaView(uri ?? new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))));
             Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
             GridElementsLoading.Children.Add(Result);
@@ -86,7 +85,6 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         {
             if (CountImageViewers == 0) CreatedNewOneOnlyViewerImage?.Invoke(this, EventArgs.Empty);
             CountImageViewers++;
-            TextBlockNotInfo.Visibility = System.Windows.Visibility.Hidden;
             OPLImageViewer Result = CreateImageView(source ?? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)));
             Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
             GridElementsLoading.Children.Add(Result);
@@ -146,9 +144,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                     AnimationMillisecond = 200d,
                 },
             };
-            Result.QBackground.ColorData = QDtataBackground;
-            Result.QBorderBrush.ColorData = QDtataBorderBrush;
-            Result.QForeground.ColorData = QDtataForeground;
+            Result.QBackground.SetQData(QDtataBackground);
+            Result.QBorderBrush.SetQData(QDtataBorderBrush);
+            Result.QForeground.SetQData(QDtataForeground);
             return Result;
         }
 
@@ -174,9 +172,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                     AnimationMillisecond = 200d,
                 },
             };
-            Result.QBackground.ColorData = QDtataBackground;
-            Result.QBorderBrush.ColorData = QDtataBorderBrush;
-            Result.QForeground.ColorData = QDtataForeground;
+            Result.QBackground.SetQData(QDtataBackground);
+            Result.QBorderBrush.SetQData(QDtataBorderBrush);
+            Result.QForeground.SetQData(QDtataForeground);
             return Result;
         }
     }

@@ -74,13 +74,13 @@ namespace ApplicationOperPageLes.Windows
         /// <summary>
         /// Настройка отображения элементов списка описания
         /// </summary>
-        private readonly static QData BorderForegroundSetting = new(new byte[,]
-                        {
-                        { 255, 20, 64, 106 },
-                        { 255, 131, 184, 202 },
-                        { 255, 131, 184, 202 },
-                        { 255, 188, 208, 218 },
-                        });
+        private readonly static QData BorderForegroundSetting = new(
+                        [
+                        [255, 20, 64, 106],
+                        [255, 131, 184, 202],
+                        [255, 131, 184, 202],
+                        [255, 188, 208, 218],
+                        ]);
 
         public WindowDiscriptionCommands()
         {
@@ -347,15 +347,15 @@ namespace ApplicationOperPageLes.Windows
                 },
                 Margin = new(3),
             };
-            Element.QBackground.ColorData = new(new byte[,]
-                        {
-                        { 255, 161, 204, 232 },
-                        { 255, 92, 131, 157 },
-                        { 255, 122, 172, 205 },
-                        { 255, 166, 181, 190 },
-                        });
-            Element.QBorderBrush.ColorData = (QData)BorderForegroundSetting.Clone();
-            Element.QForeground.ColorData = (QData)BorderForegroundSetting.Clone();
+            Element.QBackground = new(
+                        [
+                        [255, 161, 204, 232],
+                        [255, 92, 131, 157],
+                        [255, 122, 172, 205],
+                        [255, 166, 181, 190],
+                        ]);
+            Element.QBorderBrush.SetQData(BorderForegroundSetting);
+            Element.QForeground.SetQData(BorderForegroundSetting);
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,

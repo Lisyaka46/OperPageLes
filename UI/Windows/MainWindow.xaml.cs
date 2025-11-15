@@ -27,6 +27,7 @@ using OPRES = ApplicationOperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
+using ApplicationOperPageLes.CORE.Enums;
 #endregion
 
 namespace ApplicationOperPageLes.UI.Windows
@@ -172,23 +173,29 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
             };
-            byte[,] ColorBytes = new byte[4, 4]
-            {
-                { 255, 55, 101, 144, },
-                { 255, 103, 120, 121, },
-                { 255, 45, 113, 95, },
-                { 255, 41, 91, 122, }
-            };
-            IELBrowserPageMain.QDataDefaultInlayBackground = new(new byte[4, 4]
-            {
-                { 255, 141, 195, 223, },
-                { 255, 199, 223, 224, },
-                { 255, 130, 224, 199, },
-                { 255, 230, 188, 224, }
-            });
+            byte[][] ColorBytes =
+            [
+                [255, 55, 101, 144],
+                [255, 103, 120, 121],
+                [255, 45, 113, 95],
+                [255, 41, 91, 122]
+            ];
+            IELBrowserPageMain.QDataDefaultInlayBackground = new(
+            [
+                [255, 141, 195, 223],
+                [255, 199, 223, 224],
+                [255, 130, 224, 199],
+                [255, 230, 188, 224]
+            ]);
             IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
             IELBrowserPageMain.IELButtonAddInlay.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
+
+            #region IELImageButtonClose
+            IELImageButtonClose.QBackground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red));
+            IELImageButtonClose.QBorderBrush.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_Red));
+            IELImageButtonClose.QForeground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_Red));
+            #endregion
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);

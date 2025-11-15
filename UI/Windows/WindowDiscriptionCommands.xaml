@@ -49,7 +49,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <IEL:IELButtonText x:Name="IELButtonConsole" Text="Консольные команды" CornerRadius="6,6,6,6" FontWeight="Bold" Margin="3,3,3,3"  BorderThicknessBlock="2,2,2,2" FontFamily="{DynamicResource RussianRail G Pro}" Grid.Column="0" PaddingContent="5,0,5,0" MinWidth="175" Grid.RowSpan="2">
-                                    <IEL:IELButtonText.QBackground>
+                                    <!--<IEL:IELButtonText.QBackground>
                                         <Classes:BrushSettingQ Default="#FFA1AF85" NotEnabled="#FFAD354B" Select="#FFD3F58E" Used="#FFF9FFED"/>
                                     </IEL:IELButtonText.QBackground>
                                     <IEL:IELButtonText.QBorderBrush>
@@ -57,10 +57,10 @@
                                     </IEL:IELButtonText.QBorderBrush>
                                     <IEL:IELButtonText.QForeground>
                                         <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
-                                    </IEL:IELButtonText.QForeground>
+                                    </IEL:IELButtonText.QForeground>-->
                                 </IEL:IELButtonText>
                                 <IEL:IELButtonText x:Name="IELButtonAlias" Text="Алиасы" CornerRadius="6,6,6,6" FontWeight="Bold" Grid.Column="1" Margin="3,3,3,3"  BorderThicknessBlock="2,2,2,2" FontFamily="{DynamicResource RussianRail G Pro}" PaddingContent="5,0,5,0" MinWidth="175" Grid.RowSpan="2">
-                                    <IEL:IELButtonText.QBackground>
+                                    <!--<IEL:IELButtonText.QBackground>
                                         <Classes:BrushSettingQ Default="#FF5EC0C7" NotEnabled="#FFAD354B" Select="#FF3497C1" Used="#FF5EC7A8"/>
                                     </IEL:IELButtonText.QBackground>
                                     <IEL:IELButtonText.QBorderBrush>
@@ -68,7 +68,7 @@
                                     </IEL:IELButtonText.QBorderBrush>
                                     <IEL:IELButtonText.QForeground>
                                         <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
-                                    </IEL:IELButtonText.QForeground>
+                                    </IEL:IELButtonText.QForeground>-->
                                 </IEL:IELButtonText>
                             </Grid>
                             <Image x:Name="ImageSelectIndicator" Grid.Row="1" Source="/UI/Images/Arrow.png" Width="22" Height="22" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-4,-9,0,-7">
@@ -105,7 +105,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <IEL:IELButtonText x:Name="IELButtonBack" Text="Назад" CornerRadius="5,5,5,5" BorderThicknessBlock="2,2,2,2" PaddingContent="10,2,10,2" FontFamily="{DynamicResource Bree CYR var}" FontSize="14" Margin="3,3,3,3" MinWidth="100">
-                                        <IEL:IELButtonText.QBackground>
+                                        <!--<IEL:IELButtonText.QBackground>
                                             <Classes:BrushSettingQ Default="#FF9DA1C8" NotEnabled="#FFF74141" Select="#FF93DAFF" Used="#FFFBFBFF"/>
                                         </IEL:IELButtonText.QBackground>
                                         <IEL:IELButtonText.QBorderBrush>
@@ -113,13 +113,13 @@
                                         </IEL:IELButtonText.QBorderBrush>
                                         <IEL:IELButtonText.QForeground>
                                             <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
-                                        </IEL:IELButtonText.QForeground>
+                                        </IEL:IELButtonText.QForeground>-->
                                         <IEL:IELButtonText.IELSettingObject>
                                             <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow"/>
                                         </IEL:IELButtonText.IELSettingObject>
                                     </IEL:IELButtonText>
                                     <IEL:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="1" Text="Копировать" CornerRadius="5,5,5,5" Margin="3,3,3,3"  FontSize="16" BorderThicknessBlock="2,2,2,2" PaddingContent="10,2,10,2" FontFamily="{DynamicResource Bree CYR var}">
-                                        <IEL:IELButtonText.QBackground>
+                                        <!--<IEL:IELButtonText.QBackground>
                                             <Classes:BrushSettingQ Default="#FF5996CE" Select="#FF49D0FD" Used="#FF29DAB5" NotEnabled="#FFF74141"/>
                                         </IEL:IELButtonText.QBackground>
                                         <IEL:IELButtonText.QBorderBrush>
@@ -127,12 +127,12 @@
                                         </IEL:IELButtonText.QBorderBrush>
                                         <IEL:IELButtonText.QForeground>
                                             <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
-                                        </IEL:IELButtonText.QForeground>
+                                        </IEL:IELButtonText.QForeground>-->
                                     </IEL:IELButtonText>
                                     <IEL:IELButtonImage x:Name="IELButtonInfoParameter" Grid.Column="2" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,3,3,3" Imaging="/UI/Images/LightBulb.png" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
-                                        <IEL:IELButtonImage.QBackground>
+                                        <!--<IEL:IELButtonImage.QBackground>
                                             <Classes:BrushSettingQ NotEnabled="#FFDC8A8A" Select="#FF9ABAD8" Used="#FFEFF7FF" Default="#FF8595A4"/>
-                                        </IEL:IELButtonImage.QBackground>
+                                        </IEL:IELButtonImage.QBackground>-->
                                     </IEL:IELButtonImage>
                                 </Grid>
                             </Border>
@@ -150,7 +150,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <IEL:IELTextBox x:Name="IELInputSearchCommand" BorderThicknessBlock="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,8,3,8" Text="" Grid.ColumnSpan="1" FontSizeText="16" FontFamily="{DynamicResource Bree CYR var}">
-                                <IEL:IELTextBox.QBackground>
+                                <!--<IEL:IELTextBox.QBackground>
                                     <Classes:BrushSettingQ Default="#FF5AB394" NotEnabled="#FFAD354B" Select="#FF6DD4A2" Used="#FFC1EDE2"/>
                                 </IEL:IELTextBox.QBackground>
                                 <IEL:IELTextBox.QBorderBrush>
@@ -158,15 +158,15 @@
                                 </IEL:IELTextBox.QBorderBrush>
                                 <IEL:IELTextBox.QForeground>
                                     <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
-                                </IEL:IELTextBox.QForeground>
+                                </IEL:IELTextBox.QForeground>-->
                             </IEL:IELTextBox>
                             <IEL:IELButtonImage x:Name="IELButtonSearchCommand" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" MinWidth="40" MinHeight="40" HorizontalAlignment="Center" Margin="4,0,4,0" Padding="1,1,1,1" Width="45" Height="45" ImageMargin="4,4,4,4">
-                                <IEL:IELButtonImage.QBackground>
+                                <!--<IEL:IELButtonImage.QBackground>
                                     <Classes:BrushSettingQ Default="#FF5EACC7" NotEnabled="#FFAD354B" Select="#FF59D4FF" Used="#FFD6E2E6"/>
                                 </IEL:IELButtonImage.QBackground>
                                 <IEL:IELButtonImage.QBorderBrush>
                                     <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </IEL:IELButtonImage.QBorderBrush>
+                                </IEL:IELButtonImage.QBorderBrush>-->
                             </IEL:IELButtonImage>
                         </Grid>
                     </Border>
