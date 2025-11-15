@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=IEL">
+    
+    <IEL:BrushSettingQ x:Key="BG_Red" DurationBrushSettingQ="00:00:00.2000000"
+                       Default="#FFE63244" Select="#FFF98893" Used="#FFFFC7B2" NotEnabled="#FFBF0013"/>
+    <IEL:BrushSettingQ x:Key="BB_Red" DurationBrushSettingQ="00:00:00.2000000"
+                   Default="#FF4A080F" Select="#FF4E2227" Used="#FF7C2931" NotEnabled="#FF92000F"/>
+    <IEL:BrushSettingQ x:Key="FG_Red" DurationBrushSettingQ="00:00:00.2000000"
+                   Default="#FFF28F99" Select="#FF8B6D70" Used="#FFA9906F" NotEnabled="#FFFA5A6A"/>
+
+    <IEL:BrushSettingQ x:Key="BG_PastelBlue" DurationBrushSettingQ="00:00:00.2000000"
+                   Default="#FF65AFAD" Select="#FF00A0B5" Used="#FF24C8DC" NotEnabled="#FFE25770"/>
+    <IEL:BrushSettingQ x:Key="BB_PastelBlue" DurationBrushSettingQ="00:00:00.2000000"
+               Default="#FF07403F" Select="#FF708D8E" Used="#FF7FC3D0" NotEnabled="#FF80223B"/>
+    <IEL:BrushSettingQ x:Key="FG_PastelBlue" DurationBrushSettingQ="00:00:00.2000000"
+               Default="Black" Select="Black" Used="Black" NotEnabled="Black"/>
+</ResourceDictionary>
