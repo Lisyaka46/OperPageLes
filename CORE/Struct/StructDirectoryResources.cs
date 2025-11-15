@@ -38,6 +38,11 @@ namespace ApplicationOperPageLes.CORE.Struct
         internal static readonly string DirectoryResourcesApplication = MainDirectoryApplication + @"/Resources/";
 
         /// <summary>
+        /// Главная директория ресурсов палитры
+        /// </summary>
+        internal static readonly string DirectoryPaletteApplication = DirectoryResourcesApplication + @"/Palette/";
+
+        /// <summary>
         /// Директория ресурса ярлыков
         /// </summary>
         internal static readonly string DirectoryDataLabels = DirectoryResourcesApplication + "Labels.json";
@@ -103,8 +108,10 @@ namespace ApplicationOperPageLes.CORE.Struct
                 {
                     if (prop.Name.Contains("Audio")) Prefics = DirectoryAudioApplication + $"{prop.Name}.mp3";
                     else if (prop.Name.Contains("Media")) Prefics = DirectoryMediaApplication + $"{prop.Name}.mp4";
+                    else if (prop.Name.Contains("Palette")) Prefics = DirectoryPaletteApplication + $"{prop.Name}.xaml";
                     else Prefics = DirectoryImagesApplication + $"{prop.Name}.png";
-                    if (!File.Exists(Prefics)) CreateResourceMedia(Prefics, (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым."));
+                    if (!File.Exists(Prefics) || Prefics.Contains(".xaml"))
+                        CreateResourceMedia(Prefics, (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым."));
                     PathesFromNameResource.Add(prop.Name, Prefics);
                     if (Prefics.Contains(".png") && SetBitmapImages) ResourcesImages.Add(prop.Name, new(new Uri(Prefics)));
                 }
