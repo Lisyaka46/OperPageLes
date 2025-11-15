@@ -30,7 +30,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => Background;
             set
             {
-                Background.ColorData = value.ColorData;
+                Background.SetQData(value);
             }
         }
 
@@ -46,7 +46,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => BorderBrush;
             set
             {
-                BorderBrush.ColorData = value.ColorData;
+                BorderBrush.SetQData(value);
             }
         }
 
@@ -62,7 +62,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => Foreground;
             set
             {
-                Foreground.ColorData = value.ColorData;
+                Foreground.SetQData(value);
             }
         }
         #endregion

@@ -22,65 +22,65 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         #region Styles
         internal static readonly QData[] BackgroundStyles =
         [
-            new(new byte[,]
-                        {
-                        { 255, 116, 220, 80 },
-                        { 255, 180, 255, 154 },
-                        { 255, 196, 239, 201 },
-                        { 255, 222, 87, 87 },
-                        }),
-            new(new byte[,]
-                        {
-                        { 255, 155, 179, 169 },
-                        { 255, 160, 200, 175 },
-                        { 255, 221, 254, 241 },
-                        { 255, 111, 127, 121 },
-                        }),
-            new(new byte[,]
-                        {
-                        { 255, 239, 250, 195 },
-                        { 255, 240, 246, 210 },
-                        { 255, 195, 218, 250 },
-                        { 255, 250, 201, 195 },
-                        }),
-            new(new byte[,]
-                        {
-                        { 255, 85, 150, 181 },
-                        { 255, 90, 140, 185 },
-                        { 255, 181, 137, 85 },
-                        { 255, 84, 107, 117 },
-                        }),
+            new(
+                        [
+                        [255, 116, 220, 80],
+                        [255, 180, 255, 154],
+                        [255, 196, 239, 201],
+                        [255, 222, 87, 87],
+                        ]),
+            new(
+                        [
+                        [255, 155, 179, 169],
+                        [255, 160, 200, 175],
+                        [255, 221, 254, 241],
+                        [255, 111, 127, 121],
+                        ]),
+            new(
+                        [
+                        [255, 239, 250, 195],
+                        [255, 240, 246, 210],
+                        [255, 195, 218, 250],
+                        [255, 250, 201, 195],
+                        ]),
+            new(
+                        [
+                        [255, 85, 150, 181],
+                        [255, 90, 140, 185],
+                        [255, 181, 137, 85],
+                        [255, 84, 107, 117],
+                        ]),
         ];
         internal static readonly QData[] Borderbrush_Foreground_Styles =
         [
-            new(new byte[,]
-                        {
-                        { 255, 0, 0, 0 },
-                        { 255, 19, 35, 12 },
-                        { 255, 47, 44, 9 },
-                        { 255, 58, 8, 8 },
-                        }),
-            new(new byte[,]
-                        {
-                        { 255, 62, 96, 82 },
-                        { 255, 65, 100, 85 },
-                        { 255, 100, 154, 133 },
-                        { 255, 38, 68, 57 },
-                        }),
-            new(new byte[,]
-                        {
-                        { 255, 126, 139, 73 },
-                        { 255, 130, 150, 69 },
-                        { 255, 79, 110, 152 },
-                        { 255, 153, 100, 94 },
-                        }),
-            new(new byte[,]
-                        {
-                        { 255, 24, 86, 116 },
-                        { 255, 30, 83, 107 },
-                        { 255, 109, 72, 28 },
-                        { 255, 24, 47, 56 },
-                        }),
+            new(
+                        [
+                        [255, 0, 0, 0],
+                        [255, 19, 35, 12],
+                        [255, 47, 44, 9],
+                        [255, 58, 8, 8],
+                        ]),
+            new(
+                        [
+                        [255, 62, 96, 82],
+                        [255, 65, 100, 85],
+                        [255, 100, 154, 133],
+                        [255, 38, 68, 57],
+                        ]),
+            new(
+                        [
+                        [255, 126, 139, 73],
+                        [255, 130, 150, 69],
+                        [255, 79, 110, 152],
+                        [255, 153, 100, 94],
+                        ]),
+            new(
+                        [
+                        [255, 24, 86, 116],
+                        [255, 30, 83, 107],
+                        [255, 109, 72, 28],
+                        [255, 24, 47, 56],
+                        ]),
         ];
         #endregion
 
@@ -97,7 +97,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => Background;
             set
             {
-                Background.ColorData = value.ColorData;
+                Background.SetQData(value);
             }
         }
 
@@ -113,7 +113,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => BorderBrush;
             set
             {
-                BorderBrush.ColorData = value.ColorData;
+                BorderBrush.SetQData(value);
             }
         }
 
@@ -129,7 +129,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => Foreground;
             set
             {
-                Foreground.ColorData = value.ColorData;
+                Foreground.SetQData(value);
             }
         }
         #endregion
@@ -368,9 +368,9 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
             ImageElementLabel.Source = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
             ImageElementLabel.UpdateLayout();
-            Background.ColorData = (QData)BackgroundStyles[IndexUseStyle].Clone();
-            BorderBrush.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
-            Foreground.ColorData = (QData)Borderbrush_Foreground_Styles[IndexUseStyle].Clone();
+            Background.SetQData(BackgroundStyles[IndexUseStyle]);
+            BorderBrush.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
+            Foreground.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
         }
 
         /// <summary>
