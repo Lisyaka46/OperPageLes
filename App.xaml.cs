@@ -1,4 +1,15 @@
-﻿using IEL.CORE.Classes;
+﻿using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Animation;
+using ApplicationOperPageLes.CORE.Label;
+using ApplicationOperPageLes.CORE.Settings;
+using ApplicationOperPageLes.CORE.Settings.Struct;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
+using ApplicationOperPageLes.UI.Pages.Browser;
+using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.Windows;
+using ApplicationOperPageLes.UI.Windows.Dialogs;
+using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.GUI;
@@ -10,29 +21,13 @@ using LibraryPackKey.CORE;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Animation;
-using ApplicationOperPageLes.CORE.Label;
-using ApplicationOperPageLes.CORE.Settings.Struct;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.Properties;
-using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
-using ApplicationOperPageLes.UI.Pages.Browser;
-using ApplicationOperPageLes.UI.UserElementControl;
-using ApplicationOperPageLes.UI.Windows;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
-using System;
-using System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Management;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Resources;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -160,6 +155,11 @@ namespace ApplicationOperPageLes
         /// Массив ключей настроек <b>приложения</b>
         /// </summary>
         internal SettingApplication SettingMainApplication { get; private set; }
+
+        /// <summary>
+        /// Настройка объекта палитры Q-логики
+        /// </summary>
+        internal PaletteQDataSetting SettingPaletteApplication { get; private set; }
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -620,6 +620,8 @@ namespace ApplicationOperPageLes
             LogWriteLine("Проверка ресурсов");
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
+            LogWriteLine("Инициализация палитры");
+            SettingPaletteApplication = new();
 
             #endregion
         }
