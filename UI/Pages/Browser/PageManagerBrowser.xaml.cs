@@ -1,4 +1,5 @@
-﻿using IEL.CORE.Classes.Browser;
+﻿using ApplicationOperPageLes.CORE.Enums;
+using IEL.CORE.Classes.Browser;
 using IEL.GUI;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,19 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         public PageManagerBrowser()
         {
             InitializeComponent();
+
+            #region Palette
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCancel, PaletteSpectrumEnum.Red);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageBrowser, PaletteSpectrumEnum.Violet);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageConsole, PaletteSpectrumEnum.Olive);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonAddPageLabel, PaletteSpectrumEnum.Lime);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageDeveloper, PaletteSpectrumEnum.PastelBlue);
+            #endregion
+
             KeyUp += (sender, e) =>
             {
                 switch (e.Key)

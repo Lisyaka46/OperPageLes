@@ -1,5 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
+using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
@@ -17,7 +18,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLLabelCommand.xaml
     /// </summary>
-    public partial class OPLLabelCommand : System.Windows.Controls.UserControl, IIELButton
+    public partial class OPLLabelCommand : IELButton
     {
         #region Styles
         internal static readonly QData[] BackgroundStyles =
@@ -84,56 +85,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         ];
         #endregion
 
-        #region Color Setting
-        /// <summary>
-        /// Ресурсный объект настройки состояний фона
-        /// </summary>
-        private readonly new BrushSettingQ Background;
-        /// <summary>
-        /// Объект настройки состояний фона
-        /// </summary>
-        public BrushSettingQ QBackground
-        {
-            get => Background;
-            set
-            {
-                Background.SetQData(value);
-            }
-        }
-
-        /// <summary>
-        /// Ресурсный объект настройки состояний границы
-        /// </summary>
-        private readonly new BrushSettingQ BorderBrush;
-        /// <summary>
-        /// Объект настройки состояний границы
-        /// </summary>
-        public BrushSettingQ QBorderBrush
-        {
-            get => BorderBrush;
-            set
-            {
-                BorderBrush.SetQData(value);
-            }
-        }
-
-        /// <summary>
-        /// Ресурсный объект настройки состояний текста
-        /// </summary>
-        private readonly new BrushSettingQ Foreground;
-        /// <summary>
-        /// Объект настройки состояний текста
-        /// </summary>
-        public BrushSettingQ QForeground
-        {
-            get => Foreground;
-            set
-            {
-                Foreground.SetQData(value);
-            }
-        }
-        #endregion
-
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
         /// Настройка использования объекта
@@ -147,24 +98,15 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
         }
 
-        /// <summary>
-        /// Смещение контента в объекте
-        /// </summary>
-        public Thickness PaddingContent
-        {
-            get => Padding;
-            set => Padding = value;
-        }
+        ///// <summary>
+        ///// Объект события активации кнопки левым щелчком мыши
+        ///// </summary>
+        //public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
 
-        /// <summary>
-        /// Объект события активации кнопки левым щелчком мыши
-        /// </summary>
-        public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
-
-        /// <summary>
-        /// Объект события активации кнопки правым щелчком мыши
-        /// </summary>
-        public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
+        ///// <summary>
+        ///// Объект события активации кнопки правым щелчком мыши
+        ///// </summary>
+        //public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
 
         /// <summary>
         /// Данные изображения объекта
@@ -173,30 +115,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             get => ImageElementLabel.Source;
             set => ImageElementLabel.Source = value;
-        }
-
-        /// <summary>
-        /// Скругление границ
-        /// </summary>
-        public CornerRadius CornerRadius
-        {
-            get => BorderMainLabel.CornerRadius;
-            set
-            {
-                BorderMainLabel.CornerRadius = value;
-            }
-        }
-
-        /// <summary>
-        /// Толщина границ
-        /// </summary>
-        public Thickness BorderThicknessBlock
-        {
-            get => BorderMainLabel.BorderThickness;
-            set
-            {
-                BorderMainLabel.BorderThickness = value;
-            }
         }
 
         /// <summary>
@@ -222,24 +140,15 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Background
-            Background = new();
-            BorderMainLabel.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
-
-            Background.ConnectSolidColorBrush((SolidColorBrush)BorderMainLabel.Background);
+            BorderMainLabel.Background = QBackground.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region BorderBrush
-            BorderBrush = new();
-            BorderMainLabel.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
-
-            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)BorderMainLabel.BorderBrush);
+            BorderMainLabel.BorderBrush = QBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region Foreground
-            Foreground = new();
-            TextBlockNameLabel.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockNameLabel.Foreground);
+            TextBlockNameLabel.Foreground = QForeground.InicializeConnectedSolidColorBrush();
             #endregion
             IELSettingObject = new();
             _Selected = false;
@@ -259,18 +168,14 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
                 StateSpectrum NewValue = (bool)e.NewValue ? StateSpectrum.Default : StateSpectrum.NotEnabled;
-                Background.SetActiveSpecrum(NewValue, true);
-                BorderBrush.SetActiveSpecrum(NewValue, true);
-                Foreground.SetActiveSpecrum(NewValue, true);
+                SetActiveSpecrum(NewValue, true);
             };
 
             MouseEnter += (sender, e) =>
             {
                 if (IsEnabled)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
+                    SetActiveSpecrum(StateSpectrum.Select, true);
                     IELSettingObject.StartHover();
                 }
             };
@@ -279,9 +184,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (IsEnabled)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Default, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Default, true);
+                    SetActiveSpecrum(StateSpectrum.Default, true);
                     IELSettingObject.StopHover();
                 }
             };
@@ -294,9 +197,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                     (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ||
                     (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null))
                     {
-                        Background.SetActiveSpecrum(StateSpectrum.Used, false);
-                        BorderBrush.SetActiveSpecrum(StateSpectrum.Used, false);
-                        Foreground.SetActiveSpecrum(StateSpectrum.Used, false);
+                        SetActiveSpecrum(StateSpectrum.Used, false);
                         IELSettingObject.StopHover();
                     }
                 }
@@ -306,9 +207,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (IsEnabled && OnActivateMouseLeft != null)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
+                    SetActiveSpecrum(StateSpectrum.Select, true);
                     OnActivateMouseLeft?.Invoke(this, e);
                 }
             };
@@ -317,9 +216,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (IsEnabled && OnActivateMouseRight != null)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
+                    SetActiveSpecrum(StateSpectrum.Select, true);
                     OnActivateMouseRight?.Invoke(this, e);
                 }
             };
@@ -368,9 +265,9 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
             ImageElementLabel.Source = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
             ImageElementLabel.UpdateLayout();
-            Background.SetQData(BackgroundStyles[IndexUseStyle]);
-            BorderBrush.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
-            Foreground.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
+            QBackground.SetQData(BackgroundStyles[IndexUseStyle]);
+            QBorderBrush.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
+            QForeground.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
         }
 
         /// <summary>

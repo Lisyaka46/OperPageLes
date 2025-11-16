@@ -1,11 +1,11 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
+﻿#define if
+using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Struct;
+using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IEL.Interfaces.Front;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
@@ -16,7 +16,11 @@ namespace ApplicationOperPageLes.CORE.Settings
         public PaletteQDataSetting()
         {
             Resource = new() { Source = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary))) };
-            DictionaryQData = Resource.Keys.Cast<string>().ToDictionary(i => i, i => (QData)Resource[i]);
+            DictionaryQData = Resource.Keys.Cast<string>().ToDictionary(i => i, i => ((BrushSettingQ)Resource[i]).Clone());
+#if DEBUG
+            if (Enum.GetValues<PaletteSpectrumEnum>().Length * 3u != Enum.GetValues<PaletteValuesEnum>().Length)
+                throw new Exception("Типы не являются индентичными в палитре");
+#endif
         }
 
         /// <summary>
@@ -37,5 +41,20 @@ namespace ApplicationOperPageLes.CORE.Settings
         /// <exception cref="Exception">Исключение при отсутствующем ресурсе в словаре</exception>
         public QData GetQdataFromEnum(PaletteValuesEnum PaletteValue) => DictionaryQData[Enum.GetName(PaletteValue) ??
             throw new Exception("Ресурс под заданным именем не содержится в палитре Q-логики")];
+
+
+        /// <summary>
+        /// Соеденить объект IEL с спектром палитры
+        /// </summary>
+        /// <param name="IelObj">Объект который присоеденяется к палитре</param>
+        /// <param name="PaletteSpectrum">Спектр палитры</param>
+        [EnumDataType(typeof(PaletteSpectrumEnum))]
+        public void ConnectPalleteFromIELElement([DisallowNull] IELObject IelObj, PaletteSpectrumEnum PaletteSpectrum)
+        {
+            uint ValueSpectrum = ((uint)PaletteSpectrum) * 3u;
+            IelObj.QBackground.SetQData(GetQdataFromEnum((PaletteValuesEnum)ValueSpectrum));
+            IelObj.QBorderBrush.SetQData(GetQdataFromEnum((PaletteValuesEnum)(ValueSpectrum + 1u)));
+            IelObj.QForeground.SetQData(GetQdataFromEnum((PaletteValuesEnum)(ValueSpectrum + 2u)));
+        }
     }
 }

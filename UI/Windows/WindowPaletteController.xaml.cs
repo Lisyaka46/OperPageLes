@@ -48,6 +48,10 @@ namespace ApplicationOperPageLes.UI.Windows
                 {
                     button = await Dispatcher.InvokeAsync(CreateButtonPalette);
                     button.Text = Enum.GetName(ElementPalette) ?? "Имя не инициализировано";
+                    button.OnActivateMouseLeft += (sender, e, Key) => {
+                        //App.CurrentApp.SettingPaletteApplication.Ge(ElementPalette).
+                        //SetFromSpectrumColor(QData.EnumDataSpectrum.Default, Colors.White);
+                    };
                     ResultGrid.Children.Add(button);
                     Grid.SetRow(button, ResultGrid.RowDefinitions.Count);
                     ResultGrid.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
@@ -77,14 +81,6 @@ namespace ApplicationOperPageLes.UI.Windows
                 PaddingContent = new(5),
                 FontSize = 15d,
                 BorderThicknessBlock = new(2),
-            };
-            Button.OnActivateMouseLeft += (sender, e, Key) => {
-                App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red).
-                SetFromSpectrumColor(QData.EnumDataSpectrum.Default, Colors.White);
-            };
-            Button.OnActivateMouseRight += (sender, e, Key) => {
-                App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue).
-                    SetFromSpectrumColor(QData.EnumDataSpectrum.Default, Colors.White);
             };
             return Button;
         }

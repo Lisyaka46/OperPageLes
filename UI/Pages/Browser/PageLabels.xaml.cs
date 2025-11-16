@@ -136,6 +136,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         public PageLabels()
         {
             InitializeComponent();
+
+            #region Palette
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSorting, PaletteSpectrumEnum.Lime);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSearch, PaletteSpectrumEnum.Lime);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxSearch, PaletteSpectrumEnum.Tangerine);
+            #endregion
+
             PanelActionPageLabel = new(PageLabel);
             PanelActionPageLabelElement = new(PageLabelElement);
             SearchActivate = false;

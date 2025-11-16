@@ -1,4 +1,5 @@
 ﻿using ApplicationOperPageLes;
+using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
@@ -14,58 +15,8 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLButtonBufferCommand.xaml
     /// </summary>
-    public partial class OPLButtonBufferCommand : System.Windows.Controls.UserControl, IIELButton
+    public partial class OPLButtonBufferCommand : IELButton
     {
-        #region Color Setting
-        /// <summary>
-        /// Ресурсный объект настройки состояний фона
-        /// </summary>
-        private readonly new BrushSettingQ Background;
-        /// <summary>
-        /// Объект настройки состояний фона
-        /// </summary>
-        public BrushSettingQ QBackground
-        {
-            get => Background;
-            set
-            {
-                Background.SetQData(value);
-            }
-        }
-
-        /// <summary>
-        /// Ресурсный объект настройки состояний границы
-        /// </summary>
-        private readonly new BrushSettingQ BorderBrush;
-        /// <summary>
-        /// Объект настройки состояний границы
-        /// </summary>
-        public BrushSettingQ QBorderBrush
-        {
-            get => BorderBrush;
-            set
-            {
-                BorderBrush.SetQData(value);
-            }
-        }
-
-        /// <summary>
-        /// Ресурсный объект настройки состояний текста
-        /// </summary>
-        private readonly new BrushSettingQ Foreground;
-        /// <summary>
-        /// Объект настройки состояний текста
-        /// </summary>
-        public BrushSettingQ QForeground
-        {
-            get => Foreground;
-            set
-            {
-                Foreground.SetQData(value);
-            }
-        }
-        #endregion
-
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
         /// Настройка использования объекта
@@ -77,15 +28,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 _IELSettingObject = value;
             }
-        }
-
-        /// <summary>
-        /// Смещение контента в объекте
-        /// </summary>
-        public Thickness PaddingContent
-        {
-            get => BorderButton.Padding;
-            set => BorderButton.Padding = value;
         }
 
         /// <summary>
@@ -121,15 +63,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         }
 
         /// <summary>
-        /// Скругление границ кнопки (по умолчанию 10, 10, 10, 10)
-        /// </summary>
-        public CornerRadius CornerRadius
-        {
-            get => BorderButton.CornerRadius;
-            set => BorderButton.CornerRadius = value;
-        }
-
-        /// <summary>
         /// Шрифт текста в кнопке
         /// </summary>
         public FontFamily TextFontFamily
@@ -147,51 +80,31 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             set => TextBlockButtonName.FontSize = value;
         }
 
-        /// <summary>
-        /// Толщина границ
-        /// </summary>
-        public Thickness BorderThicknessBlock
-        {
-            get => BorderButton.BorderThickness;
-            set => BorderButton.BorderThickness = value;
-        }
+        ///// <summary>
+        ///// Объект события активации левым щелчком мыши
+        ///// </summary>
+        //public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
 
-        /// <summary>
-        /// Объект события активации левым щелчком мыши
-        /// </summary>
-        public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
-
-        /// <summary>
-        /// Объект события активации правым щелчком мыши
-        /// </summary>
-        public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
+        ///// <summary>
+        ///// Объект события активации правым щелчком мыши
+        ///// </summary>
+        //public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
 
         public OPLButtonBufferCommand(string Name, string FullTextCommand, int indexBuffer)
         {
             InitializeComponent();
             #region Background
-            Background = new();
-            BorderButton.Background = new SolidColorBrush(Background.ActiveSpectrumColor);
-           
-            Background.ConnectSolidColorBrush((SolidColorBrush)BorderButton.Background);
+            BorderButton.Background = QBackground.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region BorderBrush
-            BorderBrush = new();
-            BorderButton.BorderBrush = new SolidColorBrush(BorderBrush.ActiveSpectrumColor);
-
-            BorderBrush.ConnectSolidColorBrush((SolidColorBrush)BorderButton.BorderBrush);
+            BorderButton.BorderBrush = QBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region Foreground
-            Foreground = new();
-            TextBlockButtonName.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-            TextBlockButtonCommand.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-            TextBlockNumberCommand.Foreground = new SolidColorBrush(Foreground.ActiveSpectrumColor);
-
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockButtonName.Foreground);
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockButtonCommand.Foreground);
-            Foreground.ConnectSolidColorBrush((SolidColorBrush)TextBlockNumberCommand.Foreground);
+            TextBlockButtonName.Foreground = QForeground.InicializeConnectedSolidColorBrush();
+            TextBlockButtonCommand.Foreground = QForeground.InicializeConnectedSolidColorBrush();
+            TextBlockNumberCommand.Foreground = QForeground.InicializeConnectedSolidColorBrush();
             #endregion
             IELSettingObject = new();
             TextFontFamily = new FontFamily("Arial");
@@ -211,9 +124,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (IsEnabled)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
+                    SetActiveSpecrum(StateSpectrum.Select, true);
                     IELSettingObject.StartHover();
                 }
             };
@@ -222,9 +133,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (IsEnabled)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Default, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Default, true);
+                    SetActiveSpecrum(StateSpectrum.Default, true);
                     IELSettingObject.StopHover();
                 }
             };
@@ -237,9 +146,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                     (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ||
                     (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null))
                     {
-                        Background.SetActiveSpecrum(StateSpectrum.Used, false);
-                        BorderBrush.SetActiveSpecrum(StateSpectrum.Used, false);
-                        Foreground.SetActiveSpecrum(StateSpectrum.Used, false);
+                        SetActiveSpecrum(StateSpectrum.Used, false);
                         IELSettingObject.StopHover();
                     }
                 }
@@ -249,9 +156,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (OnActivateMouseLeft != null)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
+                    SetActiveSpecrum(StateSpectrum.Select, true);
                     OnActivateMouseLeft.Invoke(this, e);
                 }
             };
@@ -260,9 +165,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             {
                 if (OnActivateMouseRight != null)
                 {
-                    Background.SetActiveSpecrum(StateSpectrum.Select, true);
-                    BorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
-                    Foreground.SetActiveSpecrum(StateSpectrum.Select, true);
+                    SetActiveSpecrum(StateSpectrum.Select, true);
                     OnActivateMouseRight.Invoke(this, e);
                 }
             };
@@ -270,9 +173,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             IsEnabledChanged += (sender, e) =>
             {
                 StateSpectrum NewValue = (bool)e.NewValue ? StateSpectrum.Default : StateSpectrum.NotEnabled;
-                Background.SetActiveSpecrum(NewValue, true);
-                BorderBrush.SetActiveSpecrum(NewValue, true);
-                Foreground.SetActiveSpecrum(NewValue, true);
+                SetActiveSpecrum(NewValue, true);
             };
         }
     }

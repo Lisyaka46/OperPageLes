@@ -72,6 +72,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="CORE\Resources\PaletteDictionary.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="MMC20">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -106,6 +110,7 @@
     <Resource Include="CORE\Audio\Move.mp3" />
     <Resource Include="CORE\Audio\Notification.mp3" />
     <Resource Include="CORE\Audio\Pop-Up.mp3" />
+    <Resource Include="CORE\Resources\PaletteDictionary.xaml" />
     <Resource Include="Fonts\Bree CYR var.ttf" />
     <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
     <Resource Include="Fonts\Deledda Open Regular.ttf">

@@ -5,6 +5,7 @@
 //using OpenTK.Mathematics;
 using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.UI.Windows;
+using ApplicationOperPageLes.UI.Windows.DEV;
 using IEL.GUI;
 using Newtonsoft.Json;
 using System.IO;
@@ -125,9 +126,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 t.Start();
             };
             IELButtonTest.Focusable = true;
-            IELButtonTest.MouseLeftButtonUp += (sender, e) =>
+            IELButtonTest.MouseRightButtonUp += (sender, e) =>
             {
                 WindowPaletteController y = new();
+                y.Show();
+            };
+            IELButtonTest.MouseLeftButtonUp += (sender, e) =>
+            {
+                WindowQDataViewer y = new();
                 y.Show();
                 //App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
                 //    IEL.CORE.Classes.QData.EnumDataSpectrum.Default, 255, 255, 255, 255);

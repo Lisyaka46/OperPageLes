@@ -191,10 +191,15 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
             IELBrowserPageMain.IELButtonAddInlay.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
 
-            #region IELImageButtonClose
-            IELImageButtonClose.QBackground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red));
-            IELImageButtonClose.QBorderBrush.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_Red));
-            IELImageButtonClose.QForeground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_Red));
+            #region Palette
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonClose, PaletteSpectrumEnum.Red);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonBackButtons, PaletteSpectrumEnum.Tangerine);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonNextButtons, PaletteSpectrumEnum.Tangerine);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonHelp, PaletteSpectrumEnum.Olive);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonMenu, PaletteSpectrumEnum.PastelBlue);
             #endregion
 
             Canvas.SetZIndex(IELMessageMain, -2);

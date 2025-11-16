@@ -14,6 +14,9 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
         <Border x:Name="BorderLeftWidth" Width="7" HorizontalAlignment="Left" Background="White" Cursor="SizeWE" Panel.ZIndex="1"></Border>
         <Border x:Name="BorderTopHeight" Height="3" VerticalAlignment="Top" Background="White" Panel.ZIndex="1"></Border>
         <Border x:Name="BorderRightWidth" Width="3" HorizontalAlignment="Right" Background="White" Cursor="SizeWE" Panel.ZIndex="1"/>
@@ -81,14 +84,7 @@
                                         <ColumnDefinition Width="Auto" MinWidth="50"/>
                                         <ColumnDefinition Width="Auto" MinWidth="50"/>
                                     </Grid.ColumnDefinitions>
-                                    <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="3" Margin="3,3,3,3" Grid.ColumnSpan="1">
-                                        <IEL:IELButtonImage.QBackground>
-                                            <Classes:BrushSettingQ Default="#FF9EAD84" NotEnabled="#FFC15E5E" Select="#FFA6C179" Used="#FFD4F797"/>
-                                        </IEL:IELButtonImage.QBackground>
-                                        <IEL:IELButtonImage.QBorderBrush>
-                                            <Classes:BrushSettingQ Default="#FF697535" NotEnabled="#FFC15555" Select="#FF879451" Used="#FF99A954"/>
-                                        </IEL:IELButtonImage.QBorderBrush>
-                                    </IEL:IELButtonImage>
+                                    <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="3" Margin="3,3,3,3" Grid.ColumnSpan="1" QBackground="{StaticResource BG_Olive}" QBorderBrush="{StaticResource BB_Olive}" QForeground="{StaticResource FG_Olive}"/>
                                     <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="4" CornerRadius="6,6,6,6" PaddingContent="2,2,2,2" Margin="3,3,3,3">
                                         <IEL:IELButtonImage.QBackground>
                                             <Classes:BrushSettingQ Default="#00000000" Select="#99266FA7" NotEnabled="#CCC13750" Used="#A52891E2"/>
@@ -105,14 +101,7 @@
                                             <Classes:BrushSettingQ Default="#00000000" NotEnabled="#00000000" Select="#00000000" Used="#00000000"/>
                                         </IEL:IELButtonImage.QBorderBrush>
                                     </IEL:IELButtonImage>
-                                    <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3" Grid.ColumnSpan="1">
-                                        <!--<IEL:IELButtonImage.QBackground>
-                                            <Classes:BrushSettingQ Default="#FFB97624" NotEnabled="#FFC15555" Select="#FFB7973F" Used="#FFCEDC91"/>
-                                        </IEL:IELButtonImage.QBackground>
-                                        <IEL:IELButtonImage.QBorderBrush>
-                                            <Classes:BrushSettingQ Default="#FFBD6600" NotEnabled="#FFC15E5E" Select="#FFEABF81" Used="#FFB6BFB5"/>
-                                        </IEL:IELButtonImage.QBorderBrush>-->
-                                    </IEL:IELButtonImage>
+                                    <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" ImageMargin="1,1,1,1" BorderThicknessBlock="2,2,2,2" Grid.Column="2" Margin="3,3,3,3" Grid.ColumnSpan="1" QBackground="{StaticResource BG_Red}" QBorderBrush="{StaticResource BB_Red}" QForeground="{StaticResource FG_Red}"/>
                                 </Grid>
                             </Border>
                         </Border>
@@ -131,33 +120,12 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <IEL:IELButtonImage x:Name="IELImageButtonMenu" CornerRadius="5,5,5,5" ImageMargin="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3">
-                                            <IEL:IELButtonImage.QBorderBrush>
-                                                <Classes:BrushSettingQ Default="#FF25546D" NotEnabled="#FFC15555" Select="#FF446B80" Used="#FF4B768C"/>
-                                            </IEL:IELButtonImage.QBorderBrush>
-                                            <IEL:IELButtonImage.QBackground>
-                                                <Classes:BrushSettingQ Default="#FF0AA5C3" NotEnabled="#FFC15E5E" Select="#FF44BFF3" Used="#FF83E6F9"/>
-                                            </IEL:IELButtonImage.QBackground>
-                                        </IEL:IELButtonImage>
-                                        <IEL:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30"  FontWeight="Bold" BorderThicknessBlock="2,2,2,2" PaddingContent="4,0,5,6" FontFamily="{DynamicResource RussianRail G Pro}">
-                                            <IEL:IELButtonText.QBackground>
-                                                <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
-                                            </IEL:IELButtonText.QBackground>
-                                            <IEL:IELButtonText.QForeground>
-                                                <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black" Default="Black"/>
-                                            </IEL:IELButtonText.QForeground>
-                                        </IEL:IELButtonText>
+                                        <IEL:IELButtonImage x:Name="IELImageButtonMenu" CornerRadius="5,5,5,5" ImageMargin="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="3,3,3,3" QBackground="{StaticResource BG_PastelBlue}" QBorderBrush="{StaticResource BB_PastelBlue}" QForeground="{StaticResource FG_PastelBlue}"/>
+                                        <IEL:IELButtonText x:Name="IELImageButtonBackButtons" Grid.Column="1" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&lt;" FontSize="30"  FontWeight="Bold" BorderThicknessBlock="2,2,2,2" PaddingContent="4,0,5,6" FontFamily="{DynamicResource RussianRail G Pro}" QBackground="{StaticResource BG_Tangerine}" QBorderBrush="{StaticResource BB_Tangerine}" QForeground="{StaticResource FG_Tangerine}"/>
                                         <Grid Grid.Column="2">
                                             <IEL:IELPageController x:Name="IELPageControllerButtons" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                         </Grid>
-                                        <IEL:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30"  FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2" FontFamily="{DynamicResource RussianRail G Pro}">
-                                            <IEL:IELButtonText.QBackground>
-                                                <Classes:BrushSettingQ Default="#00000000" NotEnabled="#66FF0101" Select="#33000000" Used="#66005B38"/>
-                                            </IEL:IELButtonText.QBackground>
-                                            <IEL:IELButtonText.QForeground>
-                                                <Classes:BrushSettingQ NotEnabled="#FFFF4354" Select="Black" Used="Black" Default="Black"/>
-                                            </IEL:IELButtonText.QForeground>
-                                        </IEL:IELButtonText>
+                                        <IEL:IELButtonText x:Name="IELImageButtonNextButtons" Grid.Column="3" Margin="3,3,3,3" CornerRadius="5,5,5,5" Text="&gt;" FontSize="30"  FontWeight="Bold" PaddingContent="5,0,4,6" BorderThicknessBlock="2,2,2,2" FontFamily="{DynamicResource RussianRail G Pro}" QBackground="{StaticResource BG_Tangerine}" QBorderBrush="{StaticResource BB_Tangerine}" QForeground="{StaticResource FG_Tangerine}"/>
                                     </Grid>
                                 </Border>
                                 <Border x:Name="BorderDateTime" BorderBrush="#FF528A86" BorderThickness="2,2,2,2" Margin="4,4,4,4" CornerRadius="10,10,10,10" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Right">
@@ -194,7 +162,7 @@
                             <Grid.Effect>
                                 <BlurEffect x:Name="IELBrowserPageBlurEffect" Radius="0"/>
                             </Grid.Effect>
-                            <IEL:IELBrowserPage x:Name="IELBrowserPageMain" Margin="0,1,0,0" Grid.Row="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="16" FontStyle="Italic">
+                            <IEL:IELBrowserPage x:Name="IELBrowserPageMain" Grid.Row="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="16" FontStyle="Italic">
                                 <IEL:IELBrowserPage.QBackground>
                                     <Classes:BrushSettingQ Default="#9969AFAE" NotEnabled="#99960000" Select="#992FD6D4" Used="#9931C887"/>
                                 </IEL:IELBrowserPage.QBackground>

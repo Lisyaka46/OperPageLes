@@ -89,7 +89,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             }
             catch
             {
-                IELTextBoxKey.QBackground.SetActiveSpecrum(Colors.Red);
+                //IELTextBoxKey.QSetActiveSpecrum(Colors.Red);
             }
         }
     }

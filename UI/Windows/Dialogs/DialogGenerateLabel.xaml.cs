@@ -97,12 +97,12 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         {
             if (IELTextBoxNameLabel.Text.Length == 0)
             {
-                IELTextBoxNameLabel.QBackground.SetActiveSpecrum(Colors.Red);
+                //IELTextBoxNameLabel.SetActiveSpecrum(Colors.Red, false);
                 return;
             }
             if (IELTextBoxCommand.Text.Length == 0)
             {
-                IELTextBoxCommand.QBackground.SetActiveSpecrum(Colors.Red);
+                //IELTextBoxCommand.SetActiveSpecrum(Colors.Red, false);
                 return;
             }
             Cancel = false;

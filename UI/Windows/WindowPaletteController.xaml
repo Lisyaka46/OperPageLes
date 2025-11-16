@@ -7,14 +7,30 @@
         mc:Ignorable="d"
         Title="WindowPaletteController" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="25*"/>
-        </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="1">
-            <Grid x:Name="GridMainPaletteButtons">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border BorderThickness="0,0,2,0" BorderBrush="Black" Width="200">
+            <Grid>
 
             </Grid>
-        </ScrollViewer>
+        </Border>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="25*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <TextBlock Text="Name Palette"/>
+            </Grid>
+            <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black">
+                <ScrollViewer>
+                    <Grid x:Name="GridMainPaletteButtons">
+
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

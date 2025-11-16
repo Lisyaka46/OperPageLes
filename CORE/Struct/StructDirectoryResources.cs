@@ -125,7 +125,6 @@ namespace ApplicationOperPageLes.CORE.Struct
         /// <param name="ResourceSource">Данные медиа для записи</param>
         private static void CreateResourceMedia(string DirectoryMedia, byte[] ResourceSource)
         {
-            if (File.Exists(DirectoryMedia)) return;
             CheckCreateDirectoryInFile(DirectoryMedia);
             FileStream stream = File.Create(DirectoryMedia);
             stream.Position = 0;

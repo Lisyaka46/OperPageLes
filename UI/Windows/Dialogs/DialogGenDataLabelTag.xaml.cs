@@ -59,7 +59,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         {
             if (!Check())
             {
-                IELTextBoxNameTag.QBackground.SetActiveSpecrum(StateSpectrum.Default, true);
+                IELTextBoxNameTag.SetActiveSpecrum(StateSpectrum.Default, true);
                 return;
             }
             Cancel = false;
