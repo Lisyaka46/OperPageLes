@@ -1,54 +1,14 @@
-﻿using IEL.CORE.Classes.ObjectSettings;
-using ApplicationOperPageLes.CORE.Label;
-using System.Windows;
+﻿using ApplicationOperPageLes.CORE.Label;
 using IEL.CORE.BaseUserControls;
-using IEL.CORE.BaseUserControls.Interfaces;
 
 namespace ApplicationOperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLLabelTag.xaml
     /// </summary>
-    public partial class OPLLabelTag : IELObject, IVisualIELButton
+    public partial class OPLLabelTag : IELContainerBase
     {
         internal delegate void ChangedValueHandler<T>(T OldValue, T NewValue);
-        /// <summary>
-        /// Настройка использования объекта
-        /// </summary>
-        public IELUsingObjectSetting IELSettingObject
-        {
-            get => IELTag.IELSettingObject;
-            set => IELTag.IELSettingObject = value;
-        }
-
-        #region IVisualIELButton
-        /// <summary>
-        /// Скругление границ
-        /// </summary>
-        public CornerRadius CornerRadius
-        {
-            get => IELTag.CornerRadius;
-            set => IELTag.CornerRadius = value;
-        }
-
-        /// <summary>
-        /// Толщина границ
-        /// </summary>
-        public new Thickness BorderThickness
-        {
-            get => IELTag.BorderThickness;
-            set => IELTag.BorderThickness = value;
-        }
-
-        /// <summary>
-        /// Смещение контента в объекте
-        /// </summary>
-        public Thickness PaddingContent
-        {
-            get => IELTag.Padding;
-            set => IELTag.Padding = value;
-        }
-        #endregion
 
         /// <summary>
         /// Шрифт текста

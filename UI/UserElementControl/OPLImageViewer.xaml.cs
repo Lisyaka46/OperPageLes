@@ -1,10 +1,6 @@
 ﻿using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
 using IEL.CORE.BaseUserControls;
-using IEL.CORE.BaseUserControls.Interfaces;
 using IEL.CORE.Classes.ObjectSettings;
-using IEL.CORE.Enums;
-using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ApplicationOperPageLes.UI.UserElementControl
@@ -12,7 +8,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLViewerLoadingProcess.xaml
     /// </summary>
-    public partial class OPLImageViewer : IELButton, IOPLObjectViewer<ImageSource>, IVisualIELButton
+    public partial class OPLImageViewer : IELButton, IOPLObjectViewer<ImageSource>
     {
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
@@ -26,35 +22,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                 _IELSettingObject = value;
             }
         }
-
-        #region IVisualIELButton
-        /// <summary>
-        /// Скругление границ
-        /// </summary>
-        public CornerRadius CornerRadius
-        {
-            get => BorderMain.CornerRadius;
-            set => BorderMain.CornerRadius = value;
-        }
-
-        /// <summary>
-        /// Толщина границ
-        /// </summary>
-        public new Thickness BorderThickness
-        {
-            get => BorderMain.BorderThickness;
-            set => BorderMain.BorderThickness = value;
-        }
-
-        /// <summary>
-        /// Смещение контента в объекте
-        /// </summary>
-        public Thickness PaddingContent
-        {
-            get => BorderMain.Padding;
-            set => BorderMain.Padding = value;
-        }
-        #endregion
 
         /// <summary>
         /// Данные пути к медиа загрузки объекта
@@ -121,62 +88,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             #endregion
             IndicatorImage.Opacity = 0d;
             IsEnabled = true;
-
-            MouseEnter += (sender, e) =>
-            {
-                if (IsEnabled)
-                {
-                    SetActiveSpecrum(StateSpectrum.Select, true);
-                    IELSettingObject.StartHover();
-                }
-            };
-
-            MouseLeave += (sender, e) =>
-            {
-                if (IsEnabled)
-                {
-                    SetActiveSpecrum(StateSpectrum.Default, true);
-                    IELSettingObject.StopHover();
-                }
-            };
-
-            MouseDown += (sender, e) =>
-            {
-                if (IsEnabled)
-                {
-                    if (
-                    (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ||
-                    (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null))
-                    {
-                        SetActiveSpecrum(StateSpectrum.Used, false);
-                        IELSettingObject.StopHover();
-                    }
-                }
-            };
-
-            MouseLeftButtonUp += (sender, e) =>
-            {
-                if (IsEnabled && OnActivateMouseLeft != null)
-                {
-                    SetActiveSpecrum(StateSpectrum.Select, true);
-                    OnActivateMouseLeft?.Invoke(this, e);
-                }
-            };
-
-            MouseRightButtonUp += (sender, e) =>
-            {
-                if (IsEnabled && OnActivateMouseRight != null)
-                {
-                    SetActiveSpecrum(StateSpectrum.Select, true);
-                    OnActivateMouseRight?.Invoke(this, e);
-                }
-            };
-
-            IsEnabledChanged += (sender, e) =>
-            {
-                StateSpectrum NewValue = (bool)e.NewValue ? StateSpectrum.Default : StateSpectrum.NotEnabled;
-                SetActiveSpecrum(NewValue, true);
-            };
         }
 
         /// <summary>

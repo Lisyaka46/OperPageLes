@@ -160,63 +160,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             UpdateVisualStyle();
 
             TextBlockNameLabel.Text = Label.Name;
-
-            IsEnabledChanged += (sender, e) =>
-            {
-                TimeSpan span = TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond);
-                StateSpectrum NewValue = (bool)e.NewValue ? StateSpectrum.Default : StateSpectrum.NotEnabled;
-                SetActiveSpecrum(NewValue, true);
-            };
-
-            MouseEnter += (sender, e) =>
-            {
-                if (IsEnabled)
-                {
-                    SetActiveSpecrum(StateSpectrum.Select, true);
-                    IELSettingObject.StartHover();
-                }
-            };
-
-            MouseLeave += (sender, e) =>
-            {
-                if (IsEnabled)
-                {
-                    SetActiveSpecrum(StateSpectrum.Default, true);
-                    IELSettingObject.StopHover();
-                }
-            };
-
-            MouseDown += (sender, e) =>
-            {
-                if (IsEnabled)
-                {
-                    if (
-                    (e.LeftButton == MouseButtonState.Pressed && OnActivateMouseLeft != null) ||
-                    (e.RightButton == MouseButtonState.Pressed && OnActivateMouseRight != null))
-                    {
-                        SetActiveSpecrum(StateSpectrum.Used, false);
-                        IELSettingObject.StopHover();
-                    }
-                }
-            };
-
-            MouseLeftButtonUp += (sender, e) =>
-            {
-                if (IsEnabled && OnActivateMouseLeft != null)
-                {
-                    SetActiveSpecrum(StateSpectrum.Select, true);
-                    OnActivateMouseLeft?.Invoke(this, e);
-                }
-            };
-
-            MouseRightButtonUp += (sender, e) =>
-            {
-                if (IsEnabled && OnActivateMouseRight != null)
-                {
-                    SetActiveSpecrum(StateSpectrum.Select, true);
-                    OnActivateMouseRight?.Invoke(this, e);
-                }
-            };
         }
 
         /// <summary>
@@ -279,13 +222,9 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                 BorderThickness = new(1),
                 CornerRadius = new(5),
                 Text = string.Empty,
-                PaddingContent = new(4, 2, 4, 2),
+                Padding = new(4, 2, 4, 2),
                 FontSize = 16d,
                 Tag = NewTag,
-                IELSettingObject = new()
-                {
-                    AnimationMillisecond = 200d,
-                },
             };
         }
     }
