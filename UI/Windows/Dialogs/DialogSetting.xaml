@@ -38,7 +38,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" FontFamily="{DynamicResource Vollda}">
+            <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" FontFamily="{DynamicResource Vollda}">
                 <!--<IEL:IELButtonText.QBackground>
                     <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30D0B7" Select="#FF30D083" Used="#FF92FFEE"/>
                 </IEL:IELButtonText.QBackground>
@@ -49,7 +49,7 @@
                     <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF021D10"/>
                 </IEL:IELButtonText.QForeground>-->
             </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}">
+            <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}">
                 <!--<IEL:IELButtonText.QBackground>
                     <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30BED0" Select="#FF30A8D0" Used="#FF92FFEE"/>
                 </IEL:IELButtonText.QBackground>
@@ -60,7 +60,7 @@
                     <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF02161D"/>
                 </IEL:IELButtonText.QForeground>-->
             </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThicknessBlock="3,0,3,3"  FontSize="16" PaddingContent="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1">
+            <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1">
                 <!--<IEL:IELButtonText.QBackground>
                     <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF6CC793" Select="#FF618679" Used="#FF42F7DB"/>
                 </IEL:IELButtonText.QBackground>

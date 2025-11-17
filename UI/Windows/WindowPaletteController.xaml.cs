@@ -78,9 +78,9 @@ namespace ApplicationOperPageLes.UI.Windows
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Stretch,
                 Margin = new(5),
-                PaddingContent = new(5),
+                Padding = new(5),
                 FontSize = 15d,
-                BorderThicknessBlock = new(2),
+                BorderThickness = new(2),
             };
             return Button;
         }

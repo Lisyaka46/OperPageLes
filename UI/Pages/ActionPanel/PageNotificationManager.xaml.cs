@@ -132,7 +132,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
             {
                 Margin = new(4),
                 CornerRadius = new(5),
-                BorderThicknessBlock = new(3),
+                BorderThickness = new(3),
                 SourceView = uri,//new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
@@ -160,7 +160,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
             {
                 Margin = new(4),
                 CornerRadius = new(5),
-                BorderThicknessBlock = new(3),
+                BorderThickness = new(3),
                 SourceView = source,//new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,

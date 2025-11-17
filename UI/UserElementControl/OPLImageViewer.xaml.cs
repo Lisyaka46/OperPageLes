@@ -1,22 +1,18 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
+﻿using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
 using IEL.CORE.BaseUserControls;
-using IEL.CORE.Classes;
+using IEL.CORE.BaseUserControls.Interfaces;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
-using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.UserElementControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLViewerLoadingProcess.xaml
     /// </summary>
-    public partial class OPLImageViewer : IELButton, IOPLObjectViewer<ImageSource>
+    public partial class OPLImageViewer : IELButton, IOPLObjectViewer<ImageSource>, IVisualIELButton
     {
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
@@ -30,6 +26,35 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                 _IELSettingObject = value;
             }
         }
+
+        #region IVisualIELButton
+        /// <summary>
+        /// Скругление границ
+        /// </summary>
+        public CornerRadius CornerRadius
+        {
+            get => BorderMain.CornerRadius;
+            set => BorderMain.CornerRadius = value;
+        }
+
+        /// <summary>
+        /// Толщина границ
+        /// </summary>
+        public new Thickness BorderThickness
+        {
+            get => BorderMain.BorderThickness;
+            set => BorderMain.BorderThickness = value;
+        }
+
+        /// <summary>
+        /// Смещение контента в объекте
+        /// </summary>
+        public Thickness PaddingContent
+        {
+            get => BorderMain.Padding;
+            set => BorderMain.Padding = value;
+        }
+        #endregion
 
         /// <summary>
         /// Данные пути к медиа загрузки объекта

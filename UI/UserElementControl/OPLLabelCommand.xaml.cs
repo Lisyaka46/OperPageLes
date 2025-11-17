@@ -4,13 +4,10 @@ using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
-using IEL.Interfaces.Front;
 using InterpreterCommand.Classes;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Color = System.Windows.Media.Color;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.UserElementControl
@@ -279,7 +276,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             return new()
             {
-                BorderThicknessBlock = new(1),
+                BorderThickness = new(1),
                 CornerRadius = new(5),
                 Text = string.Empty,
                 PaddingContent = new(4, 2, 4, 2),

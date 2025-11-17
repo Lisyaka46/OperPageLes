@@ -1,13 +1,9 @@
-﻿using ApplicationOperPageLes;
-using IEL.CORE.BaseUserControls;
-using IEL.CORE.Classes;
+﻿using IEL.CORE.BaseUserControls;
+using IEL.CORE.BaseUserControls.Interfaces;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
-using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 
 namespace ApplicationOperPageLes.UI.UserElementControl
@@ -15,7 +11,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLButtonBufferCommand.xaml
     /// </summary>
-    public partial class OPLButtonBufferCommand : IELButton
+    public partial class OPLButtonBufferCommand : IELButton, IVisualIELButton
     {
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
@@ -80,15 +76,34 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             set => TextBlockButtonName.FontSize = value;
         }
 
-        ///// <summary>
-        ///// Объект события активации левым щелчком мыши
-        ///// </summary>
-        //public IIELButton.ActivateHandler? OnActivateMouseLeft { get; set; }
+        #region IVisualIELButton
+        /// <summary>
+        /// Скругление границ
+        /// </summary>
+        public CornerRadius CornerRadius
+        {
+            get => BorderButton.CornerRadius;
+            set => BorderButton.CornerRadius = value;
+        }
 
-        ///// <summary>
-        ///// Объект события активации правым щелчком мыши
-        ///// </summary>
-        //public IIELButton.ActivateHandler? OnActivateMouseRight { get; set; }
+        /// <summary>
+        /// Толщина границ
+        /// </summary>
+        public new Thickness BorderThickness
+        {
+            get => BorderButton.BorderThickness;
+            set => BorderButton.BorderThickness = value;
+        }
+
+        /// <summary>
+        /// Смещение контента в объекте
+        /// </summary>
+        public Thickness PaddingContent
+        {
+            get => BorderButton.Padding;
+            set => BorderButton.Padding = value;
+        }
+        #endregion
 
         public OPLButtonBufferCommand(string Name, string FullTextCommand, int indexBuffer)
         {

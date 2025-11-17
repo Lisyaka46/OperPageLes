@@ -340,7 +340,7 @@ namespace ApplicationOperPageLes.Windows
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = HeightElement,
                 FontSize = 16d,
-                BorderThicknessBlock = new(2),
+                BorderThickness = new(2),
                 IELSettingObject = new()
                 {
                     VisibleMouseImaging = false,

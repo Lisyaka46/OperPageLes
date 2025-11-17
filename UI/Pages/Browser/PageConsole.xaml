@@ -42,7 +42,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThicknessBlock="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="" FontSizeText="17" FontFamily="Bahnschrift">
+            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="" FontSizeText="17" FontFamily="Bahnschrift">
                 <!--<GUI:IELTextBox.QBackground>
                     <Classes:BrushSettingQ Default="#FF2FABA3" NotEnabled="#FFDC6969" Select="#FF4FA272" Used="#FF43E2ED"/>
                 </GUI:IELTextBox.QBackground>
@@ -54,7 +54,7 @@
                 </GUI:IELTextBox.QForeground>-->
             </GUI:IELTextBox>
             <Grid Grid.Column="2" Grid.Row="2">
-                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThicknessBlock="3,3,3,3"  FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" PaddingContent="5,0,5,0">
+                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3"  FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Padding="5,0,5,0">
                     <!--<GUI:IELButtonText.QBackground>
                         <Classes:BrushSettingQ Default="#FF2DB989" Select="#FF318254" Used="#FF4ADE89" NotEnabled="#FFAF3E3E"/>
                     </GUI:IELButtonText.QBackground>

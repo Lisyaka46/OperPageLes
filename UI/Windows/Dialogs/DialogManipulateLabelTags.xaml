@@ -38,7 +38,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <IEL:IELButtonText x:Name="IELButtonAddTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="2" Text="Добавить"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0">
+                            <IEL:IELButtonText x:Name="IELButtonAddTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="2" Text="Добавить"  BorderThickness="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0">
                                 <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -53,7 +53,7 @@
                                     </ObjectSettings:IELButtonObjectSetting>
                                 </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
-                            <IEL:IELButtonText x:Name="IELButtonRemoveTag" CornerRadius="5,5,5,5" Text="Удалить" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}" Margin="5,2,5,2">
+                            <IEL:IELButtonText x:Name="IELButtonRemoveTag" CornerRadius="5,5,5,5" Text="Удалить" Padding="5,0,5,0"  BorderThickness="2,2,2,2" FontSize="16" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}" Margin="5,2,5,2">
                                 <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -68,7 +68,7 @@
                                     </ObjectSettings:IELButtonObjectSetting>
                                 </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
-                            <IEL:IELButtonText x:Name="IELButtonChangeTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="1" Text="Изменить" PaddingContent="5,0,5,0"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}">
+                            <IEL:IELButtonText x:Name="IELButtonChangeTag" CornerRadius="5,5,5,5" Margin="5,2,5,2" Grid.Column="1" Text="Изменить" Padding="5,0,5,0"  BorderThickness="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}">
                                 <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -83,7 +83,7 @@
                                     </ObjectSettings:IELButtonObjectSetting>
                                 </IEL:IELButtonText.IELSettingObject>-->
                             </IEL:IELButtonText>
-                            <IEL:IELButtonText x:Name="IELButtonComplete" CornerRadius="5,5,5,5" Grid.Column="3" Text="Готово"  BorderThicknessBlock="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaddingContent="5,0,5,0" Margin="5,2,5,2">
+                            <IEL:IELButtonText x:Name="IELButtonComplete" CornerRadius="5,5,5,5" Grid.Column="3" Text="Готово"  BorderThickness="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0" Margin="5,2,5,2">
                                 <!--<IEL:IELButtonText.IELSettingObject>
                                     <ObjectSettings:IELButtonObjectSetting>
                                         <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>

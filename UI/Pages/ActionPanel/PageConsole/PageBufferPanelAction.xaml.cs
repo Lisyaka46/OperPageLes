@@ -1,10 +1,9 @@
-﻿using ApplicationOperPageLes.UI.UserElementControl;
+﻿using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.UI.UserElementControl;
 using IEL.CORE.Classes;
-using IEL.Interfaces.Front;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using ApplicationOperPageLes.CORE.Enums;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
 {
