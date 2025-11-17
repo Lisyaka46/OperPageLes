@@ -3,10 +3,10 @@ using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Struct;
 using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
-using IEL.Interfaces.Front;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
+using Windows.ApplicationModel.Background;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.CORE.Settings
@@ -21,6 +21,7 @@ namespace ApplicationOperPageLes.CORE.Settings
             if (Enum.GetValues<PaletteSpectrumEnum>().Length * 3u != Enum.GetValues<PaletteValuesEnum>().Length)
                 throw new Exception("Типы не являются индентичными в палитре");
 #endif
+             
         }
 
         /// <summary>
