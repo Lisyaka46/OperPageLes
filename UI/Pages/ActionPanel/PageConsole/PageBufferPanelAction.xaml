@@ -40,7 +40,7 @@
                 <ColumnDefinition Width="98*"/>
                 <ColumnDefinition Width="107*"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" CharKeyKeyboard="Oem3" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0" >
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0" >
                 <GUI:IELButtonTextKey.QBackground>
                     <Classes:BrushSettingQ Default="#FF4DA6B7" NotEnabled="#FFC13750" Select="#FF4DD7F1" Used="White"/>
                 </GUI:IELButtonTextKey.QBackground>
@@ -51,7 +51,7 @@
                     <Classes:BrushSettingQ/>
                 </GUI:IELButtonTextKey.QForeground>
             </GUI:IELButtonTextKey>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" CharKeyKeyboard="D1" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0">
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0">
                 <GUI:IELButtonTextKey.QBackground>
                     <Classes:BrushSettingQ NotEnabled="#FFAF223B" Default="#FF988068" Select="#FFD2AD88" Used="White"/>
                 </GUI:IELButtonTextKey.QBackground>

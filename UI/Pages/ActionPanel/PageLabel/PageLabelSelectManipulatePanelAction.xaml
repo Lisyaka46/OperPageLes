@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D1" Margin="4,4,4,4"  FontSize="16" Padding="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="1">
+        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" Padding="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="1">
             <!--<GUI:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True">
                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -34,7 +34,7 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </GUI:IELButtonTextKey.IELSettingObject>-->
         </GUI:IELButtonTextKey>
-        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" CharKeyKeyboard="Oem3" Margin="4,4,4,4" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" BorderThickness="3,3,3,3">
+        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" BorderThickness="3,3,3,3">
             <!--<GUI:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
@@ -49,7 +49,7 @@
                 </ObjectSettings:IELButtonObjectSetting>
             </GUI:IELButtonTextKey.IELSettingObject>-->
         </GUI:IELButtonTextKey>
-        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" CharKeyKeyboard="D2" Margin="4,4,4,4"  FontSize="16" Padding="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="2">
+        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" Padding="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="2">
             <!--<GUI:IELButtonTextKey.IELSettingObject>
                 <ObjectSettings:IELButtonObjectSetting VisibleMouseImaging="True">
                     <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>

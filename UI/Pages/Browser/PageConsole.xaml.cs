@@ -160,14 +160,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
             PanelActionConsolePage.IsKeyboardModeChanged += (Source, NewValue) =>
             {
-                ConsolePage.IELButtonCrearConsole.CharKeyboardActivate = NewValue;
-                ConsolePage.IELButtonCommandBuffer.CharKeyboardActivate = NewValue;
-                ConsolePage.IELButtonDiscriptionCommand.CharKeyboardActivate = NewValue;
+                //ConsolePage.IELButtonCrearConsole.CharKeyboardActivate = NewValue;
+                //ConsolePage.IELButtonCommandBuffer.CharKeyboardActivate = NewValue;
+                //ConsolePage.IELButtonDiscriptionCommand.CharKeyboardActivate = NewValue;
             };
             PanelActionBufferPage.IsKeyboardModeChanged += (Source, NewValue) =>
             {
-                BufferPage.IELButtonBackMainMenu.CharKeyboardActivate = NewValue;
-                BufferPage.IELButtonClearBuffer.CharKeyboardActivate = NewValue;
+                //BufferPage.IELButtonBackMainMenu.CharKeyboardActivate = NewValue;
+                //BufferPage.IELButtonClearBuffer.CharKeyboardActivate = NewValue;
             };
             App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {

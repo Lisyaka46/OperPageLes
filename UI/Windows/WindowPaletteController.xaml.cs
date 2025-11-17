@@ -80,7 +80,6 @@ namespace ApplicationOperPageLes.UI.Windows
                 Margin = new(5),
                 Padding = new(5),
                 FontSize = 15d,
-                BorderThickness = new(2),
             };
             return Button;
         }

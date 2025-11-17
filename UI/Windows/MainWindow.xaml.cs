@@ -236,8 +236,8 @@ namespace ApplicationOperPageLes.UI.Windows
             PanelActionSettingsInlay = new(IELBrowserPageMain, PanelActionPageInlay, new(200d, 240d));
             PanelActionPageInlay.IsKeyboardModeChanged += (Source, NewValue) =>
             {
-                PageInlay.IELButtonPageOpenInlay.CharKeyboardActivate = NewValue;
-                PageInlay.IELButtonPageDeleteInlay.CharKeyboardActivate = NewValue;
+                //PageInlay.IELButtonPageOpenInlay.CharKeyboardActivate = NewValue;
+                //PageInlay.IELButtonPageDeleteInlay.CharKeyboardActivate = NewValue;
             };
             #endregion
 
@@ -273,7 +273,7 @@ namespace ApplicationOperPageLes.UI.Windows
                 App.CurrentApp.OpenedWindowsInApplication.Add(j);
                 j.Show();
             };
-            IELImageButtonHelp.IELSettingObject.MouseHover += (sender, e) =>
+            IELImageButtonHelp.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
                     "Быстрое открытие описания команд",
@@ -286,7 +286,7 @@ namespace ApplicationOperPageLes.UI.Windows
             #endregion
 
             #region IELButtonSettings
-            IELButtonSettings.IELSettingObject.MouseHover += (sender, e) =>
+            IELButtonSettings.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELButtonSettings,
                     "Настройки программы",

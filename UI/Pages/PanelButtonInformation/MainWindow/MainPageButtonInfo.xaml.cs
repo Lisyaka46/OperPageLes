@@ -135,7 +135,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 StructDirectoryResources.Play(CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioNotification));
             };
-            IELBlockInfoVolume.IELSettingObject.MouseHover += (sender, e) =>
+            IELBlockInfoVolume.MouseHover += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
                     "Громкость звуков главного окна",

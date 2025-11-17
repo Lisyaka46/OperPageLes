@@ -340,11 +340,7 @@ namespace ApplicationOperPageLes.Windows
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = HeightElement,
                 FontSize = 16d,
-                BorderThickness = new(2),
-                IELSettingObject = new()
-                {
-                    VisibleMouseImaging = false,
-                },
+                IsVisibleGuide = false,
                 Margin = new(3),
             };
             Element.QBackground = new(

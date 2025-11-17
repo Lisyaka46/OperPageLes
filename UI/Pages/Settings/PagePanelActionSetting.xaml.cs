@@ -76,17 +76,17 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             };
             CheckBoxKeyboardMode.Checked += (sender, e) =>
             {
-                IELButtonDemo1.CharKeyboardActivate = true;
-                IELButtonDemo2.CharKeyboardActivate = true;
-                IELButtonDemo3.CharKeyboardActivate = true;
+                //IELButtonDemo1.CharKeyboardActivate = true;
+                //IELButtonDemo2.CharKeyboardActivate = true;
+                //IELButtonDemo3.CharKeyboardActivate = true;
                 if (CheckBoxKeyboardRightClick.IsChecked ?? false)
                     App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardMode.Unchecked += (sender, e) =>
             {
-                IELButtonDemo1.CharKeyboardActivate = false;
-                IELButtonDemo2.CharKeyboardActivate = false;
-                IELButtonDemo3.CharKeyboardActivate = false;
+                //IELButtonDemo1.CharKeyboardActivate = false;
+                //IELButtonDemo2.CharKeyboardActivate = false;
+                //IELButtonDemo3.CharKeyboardActivate = false;
                 App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion

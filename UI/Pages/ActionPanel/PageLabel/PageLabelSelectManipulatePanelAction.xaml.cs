@@ -23,8 +23,8 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
         public PageLabelSelectManipulatePanelAction()
         {
             InitializeComponent();
-            IELButtonExecuteSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
-            IELButtonClearSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
+            //IELButtonExecuteSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
+            //IELButtonClearSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
         }
     }
 }

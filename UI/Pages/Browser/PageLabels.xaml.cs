@@ -294,7 +294,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     }
                 }
             };
-            PageLabelElement.IELBlockInfoTagLabel.IELSettingObject.MouseHover += (sender, e) =>
+            PageLabelElement.IELBlockInfoTagLabel.MouseHover += (sender, e) =>
             {
                 if (SelectLabelInPage == null && SelectLabelInPage?.SourceLabel.Tag == null) return;
                 App.MainWindow.IELMessageMain.UsingBorderInformation(PageLabelElement.IELBlockInfoTagLabel,
@@ -308,28 +308,28 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
             PanelActionPageLabel.IsKeyboardModeChanged += (Source, NewValue) =>
             {
-                PageLabel.IELButtonCreateLabel.CharKeyboardActivate = NewValue;
-                PageLabel.IELButtonManipulateTags.CharKeyboardActivate = NewValue;
-                PageLabel.IELButtonSelectAllLabel.CharKeyboardActivate = NewValue;
-                PageLabel.IELButtonClearAllSelect.CharKeyboardActivate = NewValue;
+                //PageLabel.IELButtonCreateLabel.CharKeyboardActivate = NewValue;
+                //PageLabel.IELButtonManipulateTags.CharKeyboardActivate = NewValue;
+                //PageLabel.IELButtonSelectAllLabel.CharKeyboardActivate = NewValue;
+                //PageLabel.IELButtonClearAllSelect.CharKeyboardActivate = NewValue;
             };
             PanelActionSettingsLabel = new(this, PanelActionPageLabel, new(210d, 235d));
 
             PanelActionPageLabelElement.IsKeyboardModeChanged += (Source, NewValue) =>
             {
-                PageLabelElement.IELButtonExecuteLabel.CharKeyboardActivate = NewValue;
-                PageLabelElement.IELButtonChangeLabel.CharKeyboardActivate = NewValue;
-                PageLabelElement.IELButtonRemoveLabel.CharKeyboardActivate = NewValue;
-                PageLabelElement.IELButtonSetLabelTag.CharKeyboardActivate = NewValue;
-                PageLabelElement.IELButtonActivateSelectMenu.CharKeyboardActivate = NewValue;
+                //PageLabelElement.IELButtonExecuteLabel.CharKeyboardActivate = NewValue;
+                //PageLabelElement.IELButtonChangeLabel.CharKeyboardActivate = NewValue;
+                //PageLabelElement.IELButtonRemoveLabel.CharKeyboardActivate = NewValue;
+                //PageLabelElement.IELButtonSetLabelTag.CharKeyboardActivate = NewValue;
+                //PageLabelElement.IELButtonActivateSelectMenu.CharKeyboardActivate = NewValue;
             };
             PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(236d, 290d));
 
             PageLabelElement.PanelActionPageSelectLabel.IsKeyboardModeChanged += (Source, NewValue) =>
             {
-                PageLabelElement.PageLabelSelectManipulate.IELButtonBack.CharKeyboardActivate = NewValue;
-                PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.CharKeyboardActivate = NewValue;
-                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.CharKeyboardActivate = NewValue;
+                //PageLabelElement.PageLabelSelectManipulate.IELButtonBack.CharKeyboardActivate = NewValue;
+                //PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.CharKeyboardActivate = NewValue;
+                //PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.CharKeyboardActivate = NewValue;
             };
             #endregion
             IELButtonSorting.OnActivateMouseLeft += async (sender, e, Key) =>

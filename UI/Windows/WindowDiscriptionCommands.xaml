@@ -114,9 +114,6 @@
                                         <IEL:IELButtonText.QForeground>
                                             <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
                                         </IEL:IELButtonText.QForeground>-->
-                                        <IEL:IELButtonText.IELSettingObject>
-                                            <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow"/>
-                                        </IEL:IELButtonText.IELSettingObject>
                                     </IEL:IELButtonText>
                                     <IEL:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="1" Text="Копировать" CornerRadius="5,5,5,5" Margin="3,3,3,3"  FontSize="16" BorderThickness="2,2,2,2" Padding="10,2,10,2" FontFamily="{DynamicResource Bree CYR var}">
                                         <!--<IEL:IELButtonText.QBackground>
