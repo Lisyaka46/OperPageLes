@@ -144,9 +144,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                     AnimationMillisecond = 200d,
                 },
             };
-            Result.QBackground.SetQData(QDtataBackground);
-            Result.QBorderBrush.SetQData(QDtataBorderBrush);
-            Result.QForeground.SetQData(QDtataForeground);
+            Result.Background = QDtataBackground;
+            Result.BorderBrush = QDtataBorderBrush;
+            Result.Foreground = QDtataForeground;
             return Result;
         }
 
@@ -172,9 +172,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                     AnimationMillisecond = 200d,
                 },
             };
-            Result.QBackground.SetQData(QDtataBackground);
-            Result.QBorderBrush.SetQData(QDtataBorderBrush);
-            Result.QForeground.SetQData(QDtataForeground);
+            Result.Background = QDtataBackground;
+            Result.BorderBrush = QDtataBorderBrush;
+            Result.Foreground = QDtataForeground;
             return Result;
         }
     }

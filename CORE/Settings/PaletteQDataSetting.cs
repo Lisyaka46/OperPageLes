@@ -16,7 +16,7 @@ namespace ApplicationOperPageLes.CORE.Settings
         public PaletteQDataSetting()
         {
             Resource = new() { Source = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary))) };
-            DictionaryQData = Resource.Keys.Cast<string>().ToDictionary(i => i, i => ((BrushSettingQ)Resource[i]).Clone());
+            DictionaryQData = Resource.Keys.Cast<string>().ToDictionary(i => i, i => (QData)Resource[i]);
 #if DEBUG
             if (Enum.GetValues<PaletteSpectrumEnum>().Length * 3u != Enum.GetValues<PaletteValuesEnum>().Length)
                 throw new Exception("Типы не являются индентичными в палитре");
@@ -53,9 +53,9 @@ namespace ApplicationOperPageLes.CORE.Settings
         public void ConnectPalleteFromIELElement([DisallowNull] IELObject IelObj, PaletteSpectrumEnum PaletteSpectrum)
         {
             uint ValueSpectrum = ((uint)PaletteSpectrum) * 3u;
-            IelObj.QBackground.SetQData(GetQdataFromEnum((PaletteValuesEnum)ValueSpectrum));
-            IelObj.QBorderBrush.SetQData(GetQdataFromEnum((PaletteValuesEnum)(ValueSpectrum + 1u)));
-            IelObj.QForeground.SetQData(GetQdataFromEnum((PaletteValuesEnum)(ValueSpectrum + 2u)));
+            IelObj.Background = GetQdataFromEnum((PaletteValuesEnum)ValueSpectrum);
+            IelObj.BorderBrush = GetQdataFromEnum((PaletteValuesEnum)(ValueSpectrum + 1u));
+            IelObj.Foreground = GetQdataFromEnum((PaletteValuesEnum)(ValueSpectrum + 2u));
         }
     }
 }

@@ -89,7 +89,7 @@ namespace ApplicationOperPageLes.Windows
             SearchActivate = false;
             InitializeComponent();
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
-            IELButtonSearchCommand.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
+            IELButtonSearchCommand.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
             //IELButtonCloneTextCommand.Foreground = new SolidColorBrush(Colors.Black);
 
             IELMessageInfo.Opacity = 0d;
@@ -176,7 +176,7 @@ namespace ApplicationOperPageLes.Windows
                 if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0) return;
                 if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
                 SearchActivate = true;
-                IELButtonSearchCommand.QBackground.SetUsedState(true);
+                IELButtonSearchCommand.SourceBackground.SetUsedState(true);
                 IELButtonText Button;
                 //if (IndexSearch.Length > 0)
                 //{
@@ -211,7 +211,7 @@ namespace ApplicationOperPageLes.Windows
             {
                 if (!SearchActivate) return;
                 Keyboard.ClearFocus();
-                IELButtonSearchCommand.QBackground.SetUsedState(false);
+                IELButtonSearchCommand.SourceBackground.SetUsedState(false);
                 IELButtonText Button;
                 Grid MainElementsContainer = (Grid)ScrollViewerElements.Content;
                 for (int Index = 0; Index < MainElementsContainer.Children.Count; Index++)
@@ -343,15 +343,15 @@ namespace ApplicationOperPageLes.Windows
                 IsVisibleGuide = false,
                 Margin = new(3),
             };
-            Element.QBackground = new(
+            Element.Background = new(
                         [
                         [255, 161, 204, 232],
                         [255, 92, 131, 157],
                         [255, 122, 172, 205],
                         [255, 166, 181, 190],
                         ]);
-            Element.QBorderBrush.SetQData(BorderForegroundSetting);
-            Element.QForeground.SetQData(BorderForegroundSetting);
+            Element.BorderBrush = BorderForegroundSetting;
+            Element.Foreground = BorderForegroundSetting;
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,

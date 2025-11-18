@@ -29,7 +29,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// <summary>
         /// Активная настройка
         /// </summary>
-        private BrushSettingQ? ActiveBackgroundSetting;
+        private QData? ActiveBackgroundSetting;
 
         /// <summary>
         /// Активный индекс столбца позиции складки настроек
@@ -58,11 +58,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             IELGeneralButton.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 int OriginIndex = Grid.GetColumn(IELGeneralButton);
-                ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELGeneralButton.QBackground;
+                //ActiveBackgroundSetting?.SetUsedState(false);
+                ActiveBackgroundSetting = IELGeneralButton.Background;
                 MainPageController.NextPage(GeneralSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
-                ActiveBackgroundSetting.SetUsedState(true);
+                //ActiveBackgroundSetting.SetUsedState(true);
             };
             #endregion
 
@@ -80,11 +80,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             IELConsoleButton.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 int OriginIndex = Grid.GetColumn(IELConsoleButton);
-                ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELConsoleButton.QBackground;
+                //ActiveBackgroundSetting?.SetUsedState(false);
+                ActiveBackgroundSetting = IELConsoleButton.Background;
                 MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
-                ActiveBackgroundSetting.SetUsedState(true);
+                //ActiveBackgroundSetting.SetUsedState(true);
             };
             #endregion
 
@@ -102,11 +102,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             IELPanelActionButton.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 int OriginIndex = Grid.GetColumn(IELPanelActionButton);
-                ActiveBackgroundSetting?.SetUsedState(false);
-                ActiveBackgroundSetting = IELPanelActionButton.QBackground;
+                //ActiveBackgroundSetting?.SetUsedState(false);
+                ActiveBackgroundSetting = IELPanelActionButton.Background;
                 MainPageController.NextPage(PanelActionSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
-                ActiveBackgroundSetting.SetUsedState(true);
+                //ActiveBackgroundSetting.SetUsedState(true);
             };
             #endregion
             #endregion

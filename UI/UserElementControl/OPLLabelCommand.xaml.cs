@@ -137,15 +137,15 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Background
-            BorderMainLabel.Background = QBackground.InicializeConnectedSolidColorBrush();
+            BorderMainLabel.Background = SourceBackground.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region BorderBrush
-            BorderMainLabel.BorderBrush = QBorderBrush.InicializeConnectedSolidColorBrush();
+            BorderMainLabel.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region Foreground
-            TextBlockNameLabel.Foreground = QForeground.InicializeConnectedSolidColorBrush();
+            TextBlockNameLabel.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             #endregion
             IELSettingObject = new();
             _Selected = false;
@@ -205,9 +205,9 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
             ImageElementLabel.Source = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
             ImageElementLabel.UpdateLayout();
-            QBackground.SetQData(BackgroundStyles[IndexUseStyle]);
-            QBorderBrush.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
-            QForeground.SetQData(Borderbrush_Foreground_Styles[IndexUseStyle]);
+            Background = BackgroundStyles[IndexUseStyle];
+            BorderBrush = Borderbrush_Foreground_Styles[IndexUseStyle];
+            Foreground = Borderbrush_Foreground_Styles[IndexUseStyle];
         }
 
         /// <summary>

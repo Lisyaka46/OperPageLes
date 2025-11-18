@@ -26,9 +26,9 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
             InitializeComponent();
             TextBlockCodeView.Text = String.Empty;
             CheckBoxIsEnabledController.IsChecked = IELSourceButton.IsEnabled;
-            IELSourceButton.QBackground.SetQData(ArrayQDataSource[0]);
-            IELSourceButton.QBorderBrush.SetQData(ArrayQDataSource[1]);
-            IELSourceButton.QForeground.SetQData(ArrayQDataSource[2]);
+            IELSourceButton.Background = ArrayQDataSource[0];
+            IELSourceButton.BorderBrush = ArrayQDataSource[1];
+            IELSourceButton.Foreground = ArrayQDataSource[2];
             CheckBoxIsEnabledController.Checked += (sender, e) =>
             {
                 IELSourceButton.IsEnabled = true;
@@ -55,8 +55,7 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
             {
                 TextBlockCodeView.Text = String.Empty;
                 for (int i = 0; i < 3; i++)
-                    TextBlockCodeView.Text += $"<IEL:BrushSettingQ x:Key=\"{i switch { 0 => "BG", 1 => "BB", 2 => "FG", _ => "???"}}\" " +
-                        $"DurationBrushSettingQ=\"00:00:00.2000000\"" +
+                    TextBlockCodeView.Text += $"<IEL:QData x:Key=\"{i switch { 0 => "BG", 1 => "BB", 2 => "FG", _ => "???"}}\" " +
                         $"Default=\"{ArrayQDataSource[i].GetFromSpectrumColor(QData.EnumDataSpectrum.Default)}\" " +
                         $"Select=\"{ArrayQDataSource[i].GetFromSpectrumColor(QData.EnumDataSpectrum.Select)}\" " +
                         $"Used=\"{ArrayQDataSource[i].GetFromSpectrumColor(QData.EnumDataSpectrum.Used)}\" " +

@@ -47,6 +47,10 @@ namespace ApplicationOperPageLes.UI.Windows
                 if (SpectrumCoeff == 0)
                 {
                     button = await Dispatcher.InvokeAsync(CreateButtonPalette);
+                    button.OnActivateMouseLeft += (sender, e, Key) =>
+                    {
+                        App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Tangerine).Default = Colors.White;
+                    };
                     button.Text = Enum.GetName(ElementPalette) ?? "Имя не инициализировано";
                     button.OnActivateMouseLeft += (sender, e, Key) => {
                         //App.CurrentApp.SettingPaletteApplication.Ge(ElementPalette).
@@ -58,13 +62,19 @@ namespace ApplicationOperPageLes.UI.Windows
                 }
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    (SpectrumCoeff switch
+                    switch (SpectrumCoeff)
                     {
-                        0 => button.QBackground,
-                        1 => button.QBorderBrush,
-                        2 => button.QForeground,
-                        _ => throw new ArgumentException("Текущий логический аргумент принял недопустимое значение"),
-                    }).SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette));
+                        case 0:
+                            button.Background = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
+                            break;
+                        case 1:
+                            button.BorderBrush = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
+                            break;
+                        case 2:
+                            button.Foreground = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
+                            break;
+                        default: throw new ArgumentException("Текущий логический аргумент принял недопустимое значение");
+                    }
                 });
                 SpectrumCoeff = ++SpectrumCoeff % 3;
             }

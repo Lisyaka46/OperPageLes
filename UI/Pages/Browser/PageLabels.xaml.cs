@@ -148,8 +148,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             PanelActionPageLabel = new(PageLabel);
             PanelActionPageLabelElement = new(PageLabelElement);
             SearchActivate = false;
-            IELButtonSearch.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
-            IELButtonSorting.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameAZ));
+            IELButtonSearch.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
+            IELButtonSorting.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameAZ));
             IELButtonSorting.IsEnabled = false;
             IELButtonSearch.IsEnabled = false;
             IELTextBoxSearch.IsEnabled = false;
@@ -438,12 +438,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
                 if (!SearchActivate || IELTextBoxSearch.Text.Length == 0)
                 {
-                    Element.QBackground.SetUsedState(false);
+                    Element.SourceBackground.SetUsedState(false);
                     continue;
                 }
                 else if (Element.SourceLabel.Name.Contains(IELTextBoxSearch.Text, StringComparison.CurrentCultureIgnoreCase))
-                    Element.QBackground.SetUsedState(true);
-                else Element.QBackground.SetUsedState(false);
+                    Element.SourceBackground.SetUsedState(true);
+                else Element.SourceBackground.SetUsedState(false);
             }
             UpdateTextInfoLabels();
         }
@@ -532,7 +532,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 OPLLabelCommand[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabelCommand>()];
                 TextBlockLabelInfo.Text += "Найдено ярлыков: " +
-                    $"{ArrayLabelsElement.Count((i) => i.QBackground.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
+                    $"{ArrayLabelsElement.Count((i) => i.SourceBackground.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
             }
             else TextBlockLabelInfo.Text += $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
         }
@@ -703,7 +703,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     catch { return 1; }
                 });
             }
-            IELButtonSorting.Imaging = StyleSort switch
+            IELButtonSorting.Source = StyleSort switch
             {
                 //SortingLabelEnum.Not => App.LoadImage(Properties.Resources.Sorting_Not),
                 SortingLabelEnum.Tag => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_Tag)),

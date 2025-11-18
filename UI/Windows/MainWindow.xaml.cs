@@ -142,11 +142,11 @@ namespace ApplicationOperPageLes.UI.Windows
 
             #region SetParameteres
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            ImageLogoApplication.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            IELImageButtonClose.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
-            IELImageButtonHelp.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
-            IELButtonSettings.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
-            IELImageButtonMenu.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
+            ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
+            IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
+            IELImageButtonMenu.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
 
             TokenUpdateBackgroundData = new(false);
             ActualIndexActivatePageDownToolButtons = -1;
@@ -189,7 +189,7 @@ namespace ApplicationOperPageLes.UI.Windows
             ]);
             IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
-            IELBrowserPageMain.IELButtonAddInlay.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
+            IELBrowserPageMain.IELButtonAddInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
 
             #region Palette
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonClose, PaletteSpectrumEnum.Red);

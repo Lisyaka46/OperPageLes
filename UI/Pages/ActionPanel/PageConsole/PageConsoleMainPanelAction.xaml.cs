@@ -14,9 +14,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             //IELButtonCrearConsole.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
             //IELButtonCommandBuffer.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
 
-            IELButtonCommandBuffer.QBackground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue));
-            IELButtonCommandBuffer.QBorderBrush.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue));
-            IELButtonCommandBuffer.QForeground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue));
+            IELButtonCommandBuffer.Background = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue);
+            IELButtonCommandBuffer.BorderBrush = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue);
+            IELButtonCommandBuffer.Foreground = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue);
         }
     }
 }

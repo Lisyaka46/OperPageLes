@@ -50,9 +50,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
 
-            IELButtonBackMainMenu.QBackground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue));
-            IELButtonBackMainMenu.QBorderBrush.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue));
-            IELButtonBackMainMenu.QForeground.SetQData(App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue));
+            IELButtonBackMainMenu.Background = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue);
+            IELButtonBackMainMenu.BorderBrush = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue);
+            IELButtonBackMainMenu.Foreground = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue);
 
             IELButtonClearBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -128,7 +128,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                     AnimationMillisecond = 200d,
                 }
             };
-            Button.QBackground.SetQData(QDataBackground);
+            Button.Background = QDataBackground;
             return Button;
         }
 

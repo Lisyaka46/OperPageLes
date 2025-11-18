@@ -38,8 +38,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             //    if (Key.GetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe") == null)
             //        Key.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe", RegVal, RegistryValueKind.DWord);
 
-            IELButtonReloadPage.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
-            IELButtonUnopenPageSystemBrowser.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
+            IELButtonReloadPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
+            IELButtonUnopenPageSystemBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
             App.CurrentApp.LogWriteLine("Инициализация станицы браузера");
             #region WebBrowserElement_Events
             WebBrowserElement.Navigated += (sender, e) =>

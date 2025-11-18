@@ -2,59 +2,35 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=IEL">
     
-    <IEL:BrushSettingQ x:Key="BG_Red" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFE63244" Select="#FFF98893" Used="#FFFFC7B2" NotEnabled="#FFBF0013"/>
-    <IEL:BrushSettingQ x:Key="BB_Red" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF4A080F" Select="#FF4E2227" Used="#FF7C2931" NotEnabled="#FF92000F"/>
-    <IEL:BrushSettingQ x:Key="FG_Red" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFF28F99" Select="#FF8B6D70" Used="#FFA9906F" NotEnabled="#FFFA5A6A"/>
+    <IEL:QData x:Key="BG_Red" Default="#FFE63244" Select="#FFF98893" Used="#FFFFC7B2" NotEnabled="#FFBF0013"/>
+    <IEL:QData x:Key="BB_Red" Default="#FF4A080F" Select="#FF4E2227" Used="#FF7C2931" NotEnabled="#FF92000F"/>
+    <IEL:QData x:Key="FG_Red" Default="#FFF28F99" Select="#FF8B6D70" Used="#FFA9906F" NotEnabled="#FFFA5A6A"/>
 
-    <IEL:BrushSettingQ x:Key="BG_PastelBlue" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF65AFAD" Select="#FF00A0B5" Used="#FF24C8DC" NotEnabled="#FFE25770"/>
-    <IEL:BrushSettingQ x:Key="BB_PastelBlue" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF07403F" Select="#FF708D8E" Used="#FF7FC3D0" NotEnabled="#FF80223B"/>
-    <IEL:BrushSettingQ x:Key="FG_PastelBlue" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="Black" Select="Black" Used="Black" NotEnabled="Black"/>
+    <IEL:QData x:Key="BG_PastelBlue" Default="#FF65AFAD" Select="#FF00A0B5" Used="#FF24C8DC" NotEnabled="#FFE25770"/>
+    <IEL:QData x:Key="BB_PastelBlue" Default="#FF07403F" Select="#FF708D8E" Used="#FF7FC3D0" NotEnabled="#FF80223B"/>
+    <IEL:QData x:Key="FG_PastelBlue" Default="Black" Select="Black" Used="Black" NotEnabled="Black"/>
 
-    <IEL:BrushSettingQ x:Key="BG_Lime" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFFDE910" Select="#FFFEF36B" Used="#FFFAF8A7" NotEnabled="#FFF07C1E"/>
-    <IEL:BrushSettingQ x:Key="BB_Lime" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF000000" Select="#FF928701" Used="#FFD8C801" NotEnabled="#FFD20000"/>
-    <IEL:BrushSettingQ x:Key="FG_Lime" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF000000" Select="#FF8F8C0C" Used="#FFCACA55" NotEnabled="#FF932828"/>
+    <IEL:QData x:Key="BG_Lime" Default="#FFFDE910" Select="#FFFEF36B" Used="#FFFAF8A7" NotEnabled="#FFF07C1E"/>
+    <IEL:QData x:Key="BB_Lime" Default="#FF000000" Select="#FF928701" Used="#FFD8C801" NotEnabled="#FFD20000"/>
+    <IEL:QData x:Key="FG_Lime" Default="#FF000000" Select="#FF8F8C0C" Used="#FFCACA55" NotEnabled="#FF932828"/>
 
-    <IEL:BrushSettingQ x:Key="BG_Purple" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF800080" Select="#FFA600A6" Used="#FF660066" NotEnabled="#FFC80265"/>
-    <IEL:BrushSettingQ x:Key="BB_Purple" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF000000" Select="#FFB47EB3" Used="#FF392238" NotEnabled="#FF930000"/>
-    <IEL:BrushSettingQ x:Key="FG_Purple" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFFEC2F8" Select="#FFBF7DBD" Used="#FFCACA55" NotEnabled="#FFFFB0B0"/>
+    <IEL:QData x:Key="BG_Purple" Default="#FF800080" Select="#FFA600A6" Used="#FF660066" NotEnabled="#FFC80265"/>
+    <IEL:QData x:Key="BB_Purple" Default="#FF000000" Select="#FFB47EB3" Used="#FF392238" NotEnabled="#FF930000"/>
+    <IEL:QData x:Key="FG_Purple" Default="#FFFEC2F8" Select="#FFBF7DBD" Used="#FFCACA55" NotEnabled="#FFFFB0B0"/>
 
-    <IEL:BrushSettingQ x:Key="BG_Tangerine" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFFFA474" Select="#FFFFBB97" Used="#FFFFCDB3" NotEnabled="#FFFD5800"/>
-    <IEL:BrushSettingQ x:Key="BB_Tangerine" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFB03E00" Select="#FFFF965E" Used="#FFFCC08F" NotEnabled="#FF6F3700"/>
-    <IEL:BrushSettingQ x:Key="FG_Tangerine" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF000000" Select="#FF9C320A" Used="#FFF8B674" NotEnabled="#FF840000"/>
+    <IEL:QData x:Key="BG_Tangerine" Default="#FFFFA474" Select="#FFFFBB97" Used="#FFFFCDB3" NotEnabled="#FFFD5800"/>
+    <IEL:QData x:Key="BB_Tangerine" Default="#FFB03E00" Select="#FFFF965E" Used="#FFFCC08F" NotEnabled="#FF6F3700"/>
+    <IEL:QData x:Key="FG_Tangerine" Default="#FF000000" Select="#FF9C320A" Used="#FFF8B674" NotEnabled="#FF840000"/>
 
-    <IEL:BrushSettingQ x:Key="BG_PastelRed" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFCE2029" Select="#FFE35158" Used="#FFEC9193" NotEnabled="#FF5B0F13"/>
-    <IEL:BrushSettingQ x:Key="BB_PastelRed" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF6F1115" Select="#FFCF838C" Used="#FFD3B4C4" NotEnabled="#FFCE0F14"/>
-    <IEL:BrushSettingQ x:Key="FG_PastelRed" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFEC93A3" Select="#FFFBCDBB" Used="#FFFEEFE0" NotEnabled="#FFDE2E36"/>
+    <IEL:QData x:Key="BG_PastelRed" Default="#FFCE2029" Select="#FFE35158" Used="#FFEC9193" NotEnabled="#FF5B0F13"/>
+    <IEL:QData x:Key="BB_PastelRed" Default="#FF6F1115" Select="#FFCF838C" Used="#FFD3B4C4" NotEnabled="#FFCE0F14"/>
+    <IEL:QData x:Key="FG_PastelRed" Default="#FFEC93A3" Select="#FFFBCDBB" Used="#FFFEEFE0" NotEnabled="#FFDE2E36"/>
 
-    <IEL:BrushSettingQ x:Key="BG_Violet" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF53377A" Select="#FF754EAB" Used="#FF8762B9" NotEnabled="#FF822F47"/>
-    <IEL:BrushSettingQ x:Key="BB_Violet" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF412B60" Select="#FF634192" Used="#FFA88CCC" NotEnabled="#FFB12E4F"/>
-    <IEL:BrushSettingQ x:Key="FG_Violet" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FFD3C2EF" Select="#FF4A8EBB" Used="#FFDFC9E7" NotEnabled="#FFF1A3A7"/>
+    <IEL:QData x:Key="BG_Violet" Default="#FF53377A" Select="#FF754EAB" Used="#FF8762B9" NotEnabled="#FF822F47"/>
+    <IEL:QData x:Key="BB_Violet" Default="#FF412B60" Select="#FF634192" Used="#FFA88CCC" NotEnabled="#FFB12E4F"/>
+    <IEL:QData x:Key="FG_Violet" Default="#FFD3C2EF" Select="#FF4A8EBB" Used="#FFDFC9E7" NotEnabled="#FFF1A3A7"/>
 
-    <IEL:BrushSettingQ x:Key="BG_Olive" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF31452C" Select="#FF527249" Used="#FF428885" NotEnabled="#FFAF5454"/>
-    <IEL:BrushSettingQ x:Key="BB_Olive" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF5E8554" Select="#FF648C59" Used="#FF8FBAA6" NotEnabled="#FF7B5033"/>
-    <IEL:BrushSettingQ x:Key="FG_Olive" DurationBrushSettingQ="00:00:00.2000000"
-                       Default="#FF86C283" Select="#FFACD793" Used="#FFB8E2BF" NotEnabled="#FFFFC4C5"/>
+    <IEL:QData x:Key="BG_Olive" Default="#FF31452C" Select="#FF527249" Used="#FF428885" NotEnabled="#FFAF5454"/>
+    <IEL:QData x:Key="BB_Olive" Default="#FF5E8554" Select="#FF648C59" Used="#FF8FBAA6" NotEnabled="#FF7B5033"/>
+    <IEL:QData x:Key="FG_Olive" Default="#FF86C283" Select="#FFACD793" Used="#FFB8E2BF" NotEnabled="#FFFFC4C5"/>
 </ResourceDictionary>

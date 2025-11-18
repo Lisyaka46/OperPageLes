@@ -89,17 +89,17 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Background
-            BorderMain.Background = QBackground.InicializeConnectedSolidColorBrush();
+            BorderMain.Background = SourceBackground.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region BorderBrush
-            BorderMain.BorderBrush = QBorderBrush.InicializeConnectedSolidColorBrush();
-            CancelIndicator.BorderBrush = QBorderBrush.InicializeConnectedSolidColorBrush();
+            BorderMain.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
+            CancelIndicator.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region Foreground
-            TextBlockName.Foreground = QForeground.InicializeConnectedSolidColorBrush();
-            TextBlockCancel.Foreground = QForeground.InicializeConnectedSolidColorBrush();
+            TextBlockName.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockCancel.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             #endregion
             IsCanceledManipulate = true;
             IndicatorMedia.MediaEnded += (sender, e) =>

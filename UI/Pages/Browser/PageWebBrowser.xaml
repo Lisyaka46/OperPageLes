@@ -42,30 +42,8 @@
                     <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
-                <IEL:IELButtonImage x:Name="IELButtonReloadPage" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="8,8,8,8" Padding="2,2,2,2">
-                    <!--<IEL:IELButtonImage.IELSettingObject>
-                        <ObjectSettings:IELButtonObjectSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF1E2512" Used="#FF282B20"/>
-                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF85967F" NotEnabled="#FFEF4949" Select="#FF91C77E" Used="#FFA6FF87"/>
-                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonImage.IELSettingObject>-->
-                </IEL:IELButtonImage>
-                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="8,8,8,8" Padding="2,2,2,2" Grid.Column="1">
-                    <!--<IEL:IELButtonImage.IELSettingObject>
-                        <ObjectSettings:IELButtonObjectSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF122325" Used="#FF352D3C"/>
-                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF7F8E96" NotEnabled="#FFEF4949" Select="#FF7EB1C7" Used="#FFFFEF87"/>
-                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonImage.IELSettingObject>-->
-                </IEL:IELButtonImage>
+                <IEL:IELButtonImage x:Name="IELButtonReloadPage" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="8,8,8,8" Padding="2,2,2,2"/>
+                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="8,8,8,8" Padding="2,2,2,2" Grid.Column="1"/>
             </Grid>
         </Grid>
         <Grid x:Name="GridBrowser" Grid.Row="1">

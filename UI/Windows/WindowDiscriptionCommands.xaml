@@ -126,7 +126,7 @@
                                             <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
                                         </IEL:IELButtonText.QForeground>-->
                                     </IEL:IELButtonText>
-                                    <IEL:IELButtonImage x:Name="IELButtonInfoParameter" Grid.Column="2" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,3,3,3" Imaging="/UI/Images/LightBulb.png" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                                    <IEL:IELButtonImage x:Name="IELButtonInfoParameter" Grid.Column="2" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,3,3,3" Source="/UI/Images/LightBulb.png" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
                                         <!--<IEL:IELButtonImage.QBackground>
                                             <Classes:BrushSettingQ NotEnabled="#FFDC8A8A" Select="#FF9ABAD8" Used="#FFEFF7FF" Default="#FF8595A4"/>
                                         </IEL:IELButtonImage.QBackground>-->
@@ -157,7 +157,7 @@
                                     <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
                                 </IEL:IELTextBox.QForeground>-->
                             </IEL:IELTextBox>
-                            <IEL:IELButtonImage x:Name="IELButtonSearchCommand" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" MinWidth="40" MinHeight="40" HorizontalAlignment="Center" Margin="4,0,4,0" Padding="1,1,1,1" Width="45" Height="45" ImageMargin="4,4,4,4">
+                            <IEL:IELButtonImage x:Name="IELButtonSearchCommand" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" MinWidth="40" MinHeight="40" HorizontalAlignment="Center" Margin="4,0,4,0" Padding="1,1,1,1" Width="45" Height="45">
                                 <!--<IEL:IELButtonImage.QBackground>
                                     <Classes:BrushSettingQ Default="#FF5EACC7" NotEnabled="#FFAD354B" Select="#FF59D4FF" Used="#FFD6E2E6"/>
                                 </IEL:IELButtonImage.QBackground>

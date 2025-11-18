@@ -77,17 +77,17 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Background
-            BorderButton.Background = QBackground.InicializeConnectedSolidColorBrush();
+            BorderButton.Background = SourceBackground.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region BorderBrush
-            BorderButton.BorderBrush = QBorderBrush.InicializeConnectedSolidColorBrush();
+            BorderButton.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region Foreground
-            TextBlockButtonName.Foreground = QForeground.InicializeConnectedSolidColorBrush();
-            TextBlockButtonCommand.Foreground = QForeground.InicializeConnectedSolidColorBrush();
-            TextBlockNumberCommand.Foreground = QForeground.InicializeConnectedSolidColorBrush();
+            TextBlockButtonName.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockButtonCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockNumberCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             #endregion
             IELSettingObject = new();
             TextFontFamily = new FontFamily("Arial");
