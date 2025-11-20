@@ -50,7 +50,7 @@ namespace ApplicationOperPageLes.CORE.Settings
         /// <param name="IelObj">Объект который присоеденяется к палитре</param>
         /// <param name="PaletteSpectrum">Спектр палитры</param>
         [EnumDataType(typeof(PaletteSpectrumEnum))]
-        public void ConnectPalleteFromIELElement([DisallowNull] IELObject IelObj, PaletteSpectrumEnum PaletteSpectrum)
+        public void ConnectPalleteFromIELElement([DisallowNull] IELObjectBase IelObj, PaletteSpectrumEnum PaletteSpectrum)
         {
             uint ValueSpectrum = ((uint)PaletteSpectrum) * 3u;
             IelObj.Background = GetQdataFromEnum((PaletteValuesEnum)ValueSpectrum);

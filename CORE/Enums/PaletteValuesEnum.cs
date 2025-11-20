@@ -127,5 +127,50 @@ namespace ApplicationOperPageLes.CORE.Enums
         /// </summary>
         FG_Olive = 23u,
         #endregion
+
+        #region Jade
+        /// <summary>
+        /// Нефритовый
+        /// </summary>
+        BG_Jade = 24u,
+        /// <summary>
+        /// Нефритовый
+        /// </summary>
+        BB_Jade = 25u,
+        /// <summary>
+        /// Нефритовый
+        /// </summary>
+        FG_Jade = 26u,
+        #endregion
+
+        #region Cocoa
+        /// <summary>
+        /// Какао
+        /// </summary>
+        BG_Cocoa = 27u,
+        /// <summary>
+        /// Какао
+        /// </summary>
+        BB_Cocoa = 28u,
+        /// <summary>
+        /// Какао
+        /// </summary>
+        FG_Cocoa = 29u,
+        #endregion
+
+        #region Cocoa
+        /// <summary>
+        /// Зелёный
+        /// </summary>
+        BG_Green = 30u,
+        /// <summary>
+        /// Зелёный
+        /// </summary>
+        BB_Green = 31u,
+        /// <summary>
+        /// Зелёный
+        /// </summary>
+        FG_Green = 32u,
+        #endregion
     }
 }

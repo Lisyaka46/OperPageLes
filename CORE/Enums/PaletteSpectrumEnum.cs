@@ -47,5 +47,20 @@ namespace ApplicationOperPageLes.CORE.Enums
         /// Оливковый
         /// </summary>
         Olive = 7u,
+
+        /// <summary>
+        /// Нефритовый
+        /// </summary>
+        Jade = 8u,
+
+        /// <summary>
+        /// Какао
+        /// </summary>
+        Cocoa = 9u,
+
+        /// <summary>
+        /// Зелёный
+        /// </summary>
+        Green = 10u,
     }
 }

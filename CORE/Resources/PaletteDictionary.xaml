@@ -1,26 +1,26 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=IEL">
-    
+
     <IEL:QData x:Key="BG_Red" Default="#FFE63244" Select="#FFF98893" Used="#FFFFC7B2" NotEnabled="#FFBF0013"/>
     <IEL:QData x:Key="BB_Red" Default="#FF4A080F" Select="#FF4E2227" Used="#FF7C2931" NotEnabled="#FF92000F"/>
-    <IEL:QData x:Key="FG_Red" Default="#FFF28F99" Select="#FF8B6D70" Used="#FFA9906F" NotEnabled="#FFFA5A6A"/>
+    <IEL:QData x:Key="FG_Red" Default="#FFF8BEC4" Select="#FF4E3D3F" Used="#FF846D4F" NotEnabled="#FFFA5A6A"/>
 
     <IEL:QData x:Key="BG_PastelBlue" Default="#FF65AFAD" Select="#FF00A0B5" Used="#FF24C8DC" NotEnabled="#FFE25770"/>
     <IEL:QData x:Key="BB_PastelBlue" Default="#FF07403F" Select="#FF708D8E" Used="#FF7FC3D0" NotEnabled="#FF80223B"/>
-    <IEL:QData x:Key="FG_PastelBlue" Default="Black" Select="Black" Used="Black" NotEnabled="Black"/>
+    <IEL:QData x:Key="FG_PastelBlue" Default="#FF000000" Select="#FF000000" Used="#FF000000" NotEnabled="#FF000000"/>
 
     <IEL:QData x:Key="BG_Lime" Default="#FFFDE910" Select="#FFFEF36B" Used="#FFFAF8A7" NotEnabled="#FFF07C1E"/>
     <IEL:QData x:Key="BB_Lime" Default="#FF000000" Select="#FF928701" Used="#FFD8C801" NotEnabled="#FFD20000"/>
-    <IEL:QData x:Key="FG_Lime" Default="#FF000000" Select="#FF8F8C0C" Used="#FFCACA55" NotEnabled="#FF932828"/>
+    <IEL:QData x:Key="FG_Lime" Default="#FF000000" Select="#FF74720A" Used="#FFAFB342" NotEnabled="#FF932828"/>
 
     <IEL:QData x:Key="BG_Purple" Default="#FF800080" Select="#FFA600A6" Used="#FF660066" NotEnabled="#FFC80265"/>
     <IEL:QData x:Key="BB_Purple" Default="#FF000000" Select="#FFB47EB3" Used="#FF392238" NotEnabled="#FF930000"/>
-    <IEL:QData x:Key="FG_Purple" Default="#FFFEC2F8" Select="#FFBF7DBD" Used="#FFCACA55" NotEnabled="#FFFFB0B0"/>
+    <IEL:QData x:Key="FG_Purple" Default="#FFFEC2F8" Select="#FFBF7DBD" Used="#FF38AF62" NotEnabled="#FFFFB0B0"/>
 
-    <IEL:QData x:Key="BG_Tangerine" Default="#FFFFA474" Select="#FFFFBB97" Used="#FFFFCDB3" NotEnabled="#FFFD5800"/>
-    <IEL:QData x:Key="BB_Tangerine" Default="#FFB03E00" Select="#FFFF965E" Used="#FFFCC08F" NotEnabled="#FF6F3700"/>
-    <IEL:QData x:Key="FG_Tangerine" Default="#FF000000" Select="#FF9C320A" Used="#FFF8B674" NotEnabled="#FF840000"/>
+    <IEL:QData x:Key="BG_Tangerine" Default="#FFFFA474" Select="#FFFFBB97" Used="#FFFFCDB3" NotEnabled="#FF845F46"/>
+    <IEL:QData x:Key="BB_Tangerine" Default="#FFB03E00" Select="#FFFF965E" Used="#FFFCC08F" NotEnabled="#FFC66300"/>
+    <IEL:QData x:Key="FG_Tangerine" Default="#FF000000" Select="#FF9C320A" Used="#FF945E43" NotEnabled="#FFFF8484"/>
 
     <IEL:QData x:Key="BG_PastelRed" Default="#FFCE2029" Select="#FFE35158" Used="#FFEC9193" NotEnabled="#FF5B0F13"/>
     <IEL:QData x:Key="BB_PastelRed" Default="#FF6F1115" Select="#FFCF838C" Used="#FFD3B4C4" NotEnabled="#FFCE0F14"/>
@@ -33,4 +33,16 @@
     <IEL:QData x:Key="BG_Olive" Default="#FF31452C" Select="#FF527249" Used="#FF428885" NotEnabled="#FFAF5454"/>
     <IEL:QData x:Key="BB_Olive" Default="#FF5E8554" Select="#FF648C59" Used="#FF8FBAA6" NotEnabled="#FF7B5033"/>
     <IEL:QData x:Key="FG_Olive" Default="#FF86C283" Select="#FFACD793" Used="#FFB8E2BF" NotEnabled="#FFFFC4C5"/>
+
+    <IEL:QData x:Key="BG_Jade" Default="#FFA0E0AF" Select="#FF8EC4A7" Used="#FFC9EDD1" NotEnabled="#FF605344"/>
+    <IEL:QData x:Key="BB_Jade" Default="#FF0F2F16" Select="#FF525252" Used="#FF828282" NotEnabled="#FFFF2222"/>
+    <IEL:QData x:Key="FG_Jade" Default="#FF000000" Select="#FF165A3F" Used="#FF2E8940" NotEnabled="#FFFF9595"/>
+
+    <IEL:QData x:Key="BG_Cocoa" Default="#FF9F6B40" Select="#FFCDA685" Used="#FFE2BEA9" NotEnabled="#FFBB2424"/>
+    <IEL:QData x:Key="BB_Cocoa" Default="#FF553922" Select="#FF916139" Used="#FFAE7546" NotEnabled="#FF914D2F"/>
+    <IEL:QData x:Key="FG_Cocoa" Default="#FF000000" Select="#FF644328" Used="#FF92623A" NotEnabled="#FFEFC2A5"/>
+
+    <IEL:QData x:Key="BG_Green" Default="#FF65AF61" Select="#FF87AB8D" Used="#FFA8C4AA" NotEnabled="#FF9C6B43"/>
+    <IEL:QData x:Key="BB_Green" Default="#FF3C6048" Select="#FF618392" Used="#FFC8C8C8" NotEnabled="#FFFF1A1A"/>
+    <IEL:QData x:Key="FG_Green" Default="#FF1D3812" Select="#FF595E71" Used="#FFEBEBEB" NotEnabled="#FFFF8484"/>
 </ResourceDictionary>

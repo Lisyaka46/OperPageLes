@@ -126,7 +126,7 @@ namespace ApplicationOperPageLes.CORE.Struct
         private static void CreateResourceMedia(string DirectoryMedia, byte[] ResourceSource)
         {
             CheckCreateDirectoryInFile(DirectoryMedia);
-            FileStream stream = File.Create(DirectoryMedia);
+            FileStream stream = File.OpenWrite(DirectoryMedia);
             stream.Position = 0;
             stream.Write(ResourceSource);
             stream.Close();
