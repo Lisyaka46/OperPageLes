@@ -15,7 +15,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLLabelCommand.xaml
     /// </summary>
-    public partial class OPLLabelCommand : IELButton
+    public partial class OPLLabelCommand : IELButtonBase
     {
         #region Styles
         internal static readonly QData[] BackgroundStyles =
@@ -137,11 +137,10 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Background
-            BorderMainLabel.Background = SourceBackground.InicializeConnectedSolidColorBrush();
+            BorderSelectElement.Background = SourceBackground.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region BorderBrush
-            BorderMainLabel.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 
             #region Foreground

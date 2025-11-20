@@ -1,4 +1,4 @@
-﻿<Base:IELButton
+﻿<Base:IELButtonBase
     x:Class="ApplicationOperPageLes.UI.UserElementControl.OPLButtonBufferCommand"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:Base="clr-namespace:IEL.CORE.BaseUserControls;assembly=IEL"
@@ -19,4 +19,4 @@
             <TextBlock x:Name="TextBlockNumberCommand" HorizontalAlignment="Right" TextWrapping="Wrap" Text="#00" VerticalAlignment="Center" FontSize="8" FontWeight="Bold" TextAlignment="Right"/>
         </Grid>
     </Border>
-</Base:IELButton>
+</Base:IELButtonBase>

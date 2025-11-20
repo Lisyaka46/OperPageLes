@@ -8,7 +8,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLButtonBufferCommand.xaml
     /// </summary>
-    public partial class OPLButtonBufferCommand : IELButton
+    public partial class OPLButtonBufferCommand : IELButtonBase
     {
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>

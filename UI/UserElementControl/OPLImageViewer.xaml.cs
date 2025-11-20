@@ -8,7 +8,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLViewerLoadingProcess.xaml
     /// </summary>
-    public partial class OPLImageViewer : IELButton, IOPLObjectViewer<ImageSource>
+    public partial class OPLImageViewer : IELButtonBase, IOPLObjectViewer<ImageSource>
     {
         private IELUsingObjectSetting _IELSettingObject = new();
         /// <summary>
