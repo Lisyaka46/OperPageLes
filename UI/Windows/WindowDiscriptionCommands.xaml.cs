@@ -340,18 +340,17 @@ namespace ApplicationOperPageLes.Windows
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = HeightElement,
                 FontSize = 16d,
-                IsVisibleGuide = false,
                 Margin = new(3),
+                Background = new(
+                            [
+                            [255, 161, 204, 232],
+                            [255, 92, 131, 157],
+                            [255, 122, 172, 205],
+                            [255, 166, 181, 190],
+                            ]),
+                BorderBrush = BorderForegroundSetting,
+                Foreground = BorderForegroundSetting
             };
-            Element.Background = new(
-                        [
-                        [255, 161, 204, 232],
-                        [255, 92, 131, 157],
-                        [255, 122, 172, 205],
-                        [255, 166, 181, 190],
-                        ]);
-            Element.BorderBrush = BorderForegroundSetting;
-            Element.Foreground = BorderForegroundSetting;
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,

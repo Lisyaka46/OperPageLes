@@ -11,14 +11,17 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain">
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" Text="Очистить текст консоли" Margin="0,4,0,4" Grid.ColumnSpan="1" FontSize="16" FontFamily="{DynamicResource Bree CYR var}"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" Text="Командный буфер" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="1" FontSize="16" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" Text="Описание команд" Margin="0,4,0,4" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="1" FontSize="16" FontFamily="{DynamicResource Bree CYR var}"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" FontFamily="{DynamicResource Bree CYR var}" Text="Очистить текст консоли" Margin="5,5,5,5" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" Padding="0,5,0,5"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" FontFamily="{DynamicResource Bree CYR var}" Text="Командный буфер" Grid.Row="1" Margin="5,5,5,5" CornerRadius="5,5,5,5" Background="{DynamicResource BG_PastelBlue}" BorderBrush="{DynamicResource BB_PastelBlue}" Foreground="{DynamicResource FG_PastelBlue}" CornerRadiusKey="8,8,8,8" VisualGuide="RightArrow" CornerRadiusGuides="8,8,8,8" FontSize="16" Padding="0,5,0,5"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" FontFamily="{DynamicResource Bree CYR var}" Text="Описание команд" Grid.Row="2" Margin="5,5,5,5" Background="{DynamicResource BG_Jade}" BorderBrush="{DynamicResource BB_Cocoa}" Foreground="{DynamicResource FG_Cocoa}" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" Padding="0,5,0,5"/>
 
     </Grid>
 </Page>

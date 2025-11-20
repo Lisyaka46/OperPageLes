@@ -22,21 +22,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="18"  Text="" Grid.ColumnSpan="1" Margin="5,8,5,8" BorderThickness="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}">
-                <!--<IEL:IELTextBox.IELSettingObject>
-                    <ObjectSettings:IELObjectSetting>
-                        <ObjectSettings:IELObjectSetting.ForegroundSetting>
-                            <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
-                        </ObjectSettings:IELObjectSetting.ForegroundSetting>
-                        <ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                            <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
-                        </ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                        <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#FFB8E4C7" Select="#FF5E9470" Used="#FFDBF5E4" NotEnabled="#FFAD6363"/>
-                        </ObjectSettings:IELObjectSetting.BackgroundSetting>
-                    </ObjectSettings:IELObjectSetting>
-                </IEL:IELTextBox.IELSettingObject>-->
-            </IEL:IELTextBox>
+            <IEL:IELTextBox x:Name="TextBoxLink" FontSize="18" Text="" Grid.ColumnSpan="1" Margin="5,8,5,8" BorderThickness="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}"/>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60"/>
@@ -50,8 +36,5 @@
             <WebBrowser x:Name="WebBrowserElement" Width="500" Height="500"/>
             <!--<Wpf:WebView2 x:Name="WebBrowserElement"/>-->
         </Grid>
-
-
-
     </Grid>
 </Page>

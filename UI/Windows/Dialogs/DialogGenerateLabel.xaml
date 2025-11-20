@@ -30,21 +30,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <IEL:IELTextBox x:Name="IELTextBoxNameLabel" Text="" TextBoxVerticalAlignment="Center" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1.7,1.7,1.7,1.7">
-                            <!--<IEL:IELTextBox.IELSettingObject>
-                                <ObjectSettings:IELObjectSetting>
-                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
-                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
-                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
-                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#FFA7BB94" Select="#FF72F7AB" Used="#FFD6FFDA" NotEnabled="#FFC85353"/>
-                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                </ObjectSettings:IELObjectSetting>
-                            </IEL:IELTextBox.IELSettingObject>-->
-                        </IEL:IELTextBox>
+                        <IEL:IELTextBox x:Name="IELTextBoxNameLabel" Text="" TextBoxVerticalAlignment="Center" FontSize="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1.7,1.7,1.7,1.7"/>
                         <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Название ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0"  FontSize="14" Padding="0,0,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -53,42 +39,14 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Команда ярлыка*" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="14"  Padding="0,8,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
-                        <IEL:IELTextBox x:Name="IELTextBoxCommand" Text="" TextBoxVerticalAlignment="Center" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1.7,1.7,1.7,1.7">
-                            <!--<IEL:IELTextBox.IELSettingObject>
-                                <ObjectSettings:IELObjectSetting>
-                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
-                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
-                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
-                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#FFA7BB94" Select="#FF72F7AB" Used="#FFD6FFDA" NotEnabled="#FFC85353"/>
-                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                </ObjectSettings:IELObjectSetting>
-                            </IEL:IELTextBox.IELSettingObject>-->
-                        </IEL:IELTextBox>
+                        <IEL:IELTextBox x:Name="IELTextBoxCommand" Text="" TextBoxVerticalAlignment="Center" FontSize="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1.7,1.7,1.7,1.7"/>
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,0,0,2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12*"/>
                             <RowDefinition Height="37*"/>
                         </Grid.RowDefinitions>
-                        <IEL:IELTextBox x:Name="IELTextBoxDescription" Text="" TextBoxVerticalAlignment="Center" MaxLines="5" FontSize="16" FontSizeText="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1.7,1.7,1.7,1.7">
-                            <!--<IEL:IELTextBox.IELSettingObject>
-                                <ObjectSettings:IELObjectSetting>
-                                    <ObjectSettings:IELObjectSetting.ForegroundSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
-                                    </ObjectSettings:IELObjectSetting.ForegroundSetting>
-                                    <ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF250606" Select="#FF0A181B" Used="#FF122633" Default="Black"/>
-                                    </ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                                    <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#FF94A1BB" Select="#FF729EF7" Used="#FFD6E4FF" NotEnabled="#FFC85353"/>
-                                    </ObjectSettings:IELObjectSetting.BackgroundSetting>
-                                </ObjectSettings:IELObjectSetting>
-                            </IEL:IELTextBox.IELSettingObject>-->
-                        </IEL:IELTextBox>
+                        <IEL:IELTextBox x:Name="IELTextBoxDescription" Text="" TextBoxVerticalAlignment="Center" FontSize="16" Grid.RowSpan="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1.7,1.7,1.7,1.7"/>
                         <TextBlock TextWrapping="Wrap" Text="Описание ярлыка" VerticalAlignment="Top" Margin="5,0,5,0" Padding="0,8,0,2" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" />
                     </Grid>
                 </Grid>

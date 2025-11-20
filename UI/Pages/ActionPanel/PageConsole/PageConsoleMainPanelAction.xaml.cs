@@ -11,12 +11,10 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         public PageMainConsolePanelAction()
         {
             InitializeComponent();
-            //IELButtonCrearConsole.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
-            //IELButtonCommandBuffer.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
 
-            IELButtonCommandBuffer.Background = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue);
-            IELButtonCommandBuffer.BorderBrush = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue);
-            IELButtonCommandBuffer.Foreground = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCrearConsole, PaletteSpectrumEnum.PastelRed);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCommandBuffer, PaletteSpectrumEnum.Purple);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonDiscriptionCommand, PaletteSpectrumEnum.Jade);
         }
     }
 }

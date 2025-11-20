@@ -146,25 +146,8 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <IEL:IELTextBox x:Name="IELInputSearchCommand" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,8,3,8" Text="" Grid.ColumnSpan="1" FontSizeText="16" FontFamily="{DynamicResource Bree CYR var}">
-                                <!--<IEL:IELTextBox.QBackground>
-                                    <Classes:BrushSettingQ Default="#FF5AB394" NotEnabled="#FFAD354B" Select="#FF6DD4A2" Used="#FFC1EDE2"/>
-                                </IEL:IELTextBox.QBackground>
-                                <IEL:IELTextBox.QBorderBrush>
-                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </IEL:IELTextBox.QBorderBrush>
-                                <IEL:IELTextBox.QForeground>
-                                    <Classes:BrushSettingQ Default="Black" NotEnabled="Black" Select="Black" Used="Black"/>
-                                </IEL:IELTextBox.QForeground>-->
-                            </IEL:IELTextBox>
-                            <IEL:IELButtonImage x:Name="IELButtonSearchCommand" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" MinWidth="40" MinHeight="40" HorizontalAlignment="Center" Margin="4,0,4,0" Padding="1,1,1,1" Width="45" Height="45">
-                                <!--<IEL:IELButtonImage.QBackground>
-                                    <Classes:BrushSettingQ Default="#FF5EACC7" NotEnabled="#FFAD354B" Select="#FF59D4FF" Used="#FFD6E2E6"/>
-                                </IEL:IELButtonImage.QBackground>
-                                <IEL:IELButtonImage.QBorderBrush>
-                                    <Classes:BrushSettingQ NotEnabled="#FF480000" Used="#FF3E3E3E" Select="#FF1F1F1F"/>
-                                </IEL:IELButtonImage.QBorderBrush>-->
-                            </IEL:IELButtonImage>
+                            <IEL:IELTextBox x:Name="IELInputSearchCommand" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,8,3,8" Text="" Grid.ColumnSpan="1" FontSize="16" FontFamily="{DynamicResource Bree CYR var}"/>
+                            <IEL:IELButtonImage x:Name="IELButtonSearchCommand" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="1" VerticalAlignment="Center" MinWidth="40" MinHeight="40" HorizontalAlignment="Center" Margin="4,0,4,0" Padding="1,1,1,1" Width="45" Height="45"/>
                         </Grid>
                     </Border>
                 </Grid>

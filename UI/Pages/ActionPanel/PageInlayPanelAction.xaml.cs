@@ -21,7 +21,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
             set
             {
                 bool ActivateManipulate = value != null;
-                IELButtonPageOpenInlay.IsEnabled = ActivateManipulate && (!value?.UsedState ?? false);
+                IELButtonPageOpenInlay.IsEnabled = ActivateManipulate && (!value?.SourceBackground.GetUsedState() ?? false);
                 IELButtonPageDeleteInlay.IsEnabled = ActivateManipulate;
                 _ActivateManipulateInlay = value;
             }

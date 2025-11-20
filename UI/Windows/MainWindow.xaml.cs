@@ -192,7 +192,13 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.IELButtonAddInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
 
             #region Palette
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(ImageLogoApplication, PaletteSpectrumEnum.Lime);
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonClose, PaletteSpectrumEnum.Red);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonHelp, PaletteSpectrumEnum.Jade);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSettings, PaletteSpectrumEnum.Purple);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBrowserPageMain, PaletteSpectrumEnum.Olive);
+            //App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonAddInlay, PaletteSpectrumEnum.PastelBlue);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELActionPanelMain, PaletteSpectrumEnum.Cocoa);
 
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonBackButtons, PaletteSpectrumEnum.Tangerine);
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonNextButtons, PaletteSpectrumEnum.Tangerine);
@@ -335,10 +341,7 @@ namespace ApplicationOperPageLes.UI.Windows
                 IELBrowserPageMain.IsEnabled = true;
                 if (e == null) return;
                 IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(e);
-                if (SourceInlay != null)
-                {
-                    SourceInlay.SourceCloseButtonImage = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
-                }
+                SourceInlay?.SetImageButtonCloseInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)));
             };
             FrameNewInlayBrowser.IsHitTestVisible = false;
             FrameNewInlayBrowser.IsEnabled = false;

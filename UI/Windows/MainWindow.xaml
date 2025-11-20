@@ -49,7 +49,7 @@
                     <ImageBrush x:Name="ImageMenu" Opacity="1" Stretch="UniformToFill"/>
                 </Border.Background>
                 <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
-                    <IEL:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2"/>
+                    <IEL:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2" Background="{DynamicResource BG_Cocoa}" BorderBrush="{DynamicResource BB_Cocoa}" Foreground="{DynamicResource FG_Cocoa}" CornerRadius="3,3,3,3"/>
                     <Grid Panel.ZIndex="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="53"/>
@@ -77,9 +77,9 @@
                                         <ColumnDefinition Width="Auto" MinWidth="50"/>
                                         <ColumnDefinition Width="Auto" MinWidth="50"/>
                                     </Grid.ColumnDefinitions>
-                                    <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="3" Margin="3,3,3,3" Grid.ColumnSpan="1" Background="{StaticResource BG_Olive}" BorderBrush="{StaticResource BB_Olive}" Foreground="{StaticResource FG_Olive}"/>
-                                    <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="4" CornerRadius="6,6,6,6" Padding="2,2,2,2" Margin="3,3,3,3"/>
-                                    <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6"/>
+                                    <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="3" Margin="3,3,3,3" Grid.ColumnSpan="1" Background="{StaticResource BG_Jade}" BorderBrush="{StaticResource BB_Jade}" Foreground="{StaticResource FG_Jade}"/>
+                                    <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="4" CornerRadius="6,6,6,6" Padding="2,2,2,2" Margin="3,3,3,3" Background="{DynamicResource BG_Purple}" BorderBrush="{DynamicResource BB_Purple}" Foreground="{DynamicResource FG_Purple}"/>
+                                    <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" Background="{DynamicResource BG_Lime}" BorderBrush="{DynamicResource BB_Lime}" Foreground="{DynamicResource FG_Red}"/>
                                     <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="2" Margin="3,3,3,3" Grid.ColumnSpan="1" Background="{StaticResource BG_Red}" BorderBrush="{StaticResource BB_Red}" Foreground="{StaticResource FG_Red}"/>
                                 </Grid>
                             </Border>
@@ -141,9 +141,9 @@
                             <Grid.Effect>
                                 <BlurEffect x:Name="IELBrowserPageBlurEffect" Radius="0"/>
                             </Grid.Effect>
-                            <IEL:IELBrowserPage x:Name="IELBrowserPageMain" Grid.Row="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="16" FontStyle="Italic" Background="{DynamicResource BG_PastelBlue}" BorderBrush="{DynamicResource BB_PastelBlue}" Foreground="{DynamicResource FG_PastelBlue}">
+                            <IEL:IELBrowserPage x:Name="IELBrowserPageMain" Grid.Row="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="16" FontStyle="Italic" Background="{DynamicResource BG_Olive}" BorderBrush="{DynamicResource BB_Olive}" Foreground="{DynamicResource FG_Olive}">
                                 <IEL:IELBrowserPage.IELButtonAddInlay>
-                                    <IEL:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5"/>
+                                    <IEL:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Background="{DynamicResource BG_PastelBlue}" BorderBrush="{DynamicResource BB_PastelBlue}" Foreground="{DynamicResource FG_PastelBlue}"/>
                                 </IEL:IELBrowserPage.IELButtonAddInlay>
                             </IEL:IELBrowserPage>
                         </Grid>
