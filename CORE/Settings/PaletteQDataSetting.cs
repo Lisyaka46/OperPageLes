@@ -1,5 +1,4 @@
-﻿#define if
-using ApplicationOperPageLes.CORE.Enums;
+﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Struct;
 using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;

@@ -44,22 +44,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Настройки панели действий для страниц во вкладке ярлыков
         /// </summary>
-        private readonly PanelActionSettingVisual PanelActionSettingsLabel;
+        private readonly PageSettingVisual PanelActionSettingsLabel;
 
         /// <summary>
         /// Настройки панели действий для страниц объекта ярлыка
         /// </summary>
-        private readonly PanelActionSettingVisual PanelActionSettingsLabelElement;
-
-        /// <summary>
-        /// Страница панели действий взаимодействия с ярлыками
-        /// </summary>
-        private readonly PagePanelAction PanelActionPageLabel;
-
-        /// <summary>
-        /// Страница панели действий взаимодействия с объектом ярлыка
-        /// </summary>
-        private readonly PagePanelAction PanelActionPageLabelElement;
+        private readonly PageSettingVisual PanelActionSettingsLabelElement;
         #endregion
 
         /// <summary>
@@ -145,8 +135,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxSearch, PaletteSpectrumEnum.Tangerine);
             #endregion
 
-            PanelActionPageLabel = new(PageLabel);
-            PanelActionPageLabelElement = new(PageLabelElement);
             SearchActivate = false;
             IELButtonSearch.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
             IELButtonSorting.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameAZ));
@@ -259,12 +247,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement.PanelActionPageSelectLabel);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement);
             };
             #region PageLabelSelectManipulate
             PageLabelElement.PageLabelSelectManipulate.IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(PanelActionPageLabelElement, false);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement, false);
             };
             PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -306,31 +294,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             #endregion
             #endregion
-            PanelActionPageLabel.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                //PageLabel.IELButtonCreateLabel.CharKeyboardActivate = NewValue;
-                //PageLabel.IELButtonManipulateTags.CharKeyboardActivate = NewValue;
-                //PageLabel.IELButtonSelectAllLabel.CharKeyboardActivate = NewValue;
-                //PageLabel.IELButtonClearAllSelect.CharKeyboardActivate = NewValue;
-            };
-            PanelActionSettingsLabel = new(this, PanelActionPageLabel, new(210d, 235d));
-
-            PanelActionPageLabelElement.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                //PageLabelElement.IELButtonExecuteLabel.CharKeyboardActivate = NewValue;
-                //PageLabelElement.IELButtonChangeLabel.CharKeyboardActivate = NewValue;
-                //PageLabelElement.IELButtonRemoveLabel.CharKeyboardActivate = NewValue;
-                //PageLabelElement.IELButtonSetLabelTag.CharKeyboardActivate = NewValue;
-                //PageLabelElement.IELButtonActivateSelectMenu.CharKeyboardActivate = NewValue;
-            };
-            PanelActionSettingsLabelElement = new(GridMain, PanelActionPageLabelElement, new(236d, 290d));
-
-            PageLabelElement.PanelActionPageSelectLabel.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                //PageLabelElement.PageLabelSelectManipulate.IELButtonBack.CharKeyboardActivate = NewValue;
-                //PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.CharKeyboardActivate = NewValue;
-                //PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.CharKeyboardActivate = NewValue;
-            };
+            PanelActionSettingsLabel = new(this, PageLabel, new(210d, 235d));
+            PanelActionSettingsLabelElement = new(GridMain, PageLabelElement, new(236d, 290d));
             #endregion
             IELButtonSorting.OnActivateMouseLeft += async (sender, e, Key) =>
             {

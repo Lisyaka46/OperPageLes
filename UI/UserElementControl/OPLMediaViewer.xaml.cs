@@ -88,12 +88,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         public OPLMediaViewer()
         {
             InitializeComponent();
-            #region Background
-            BorderMain.Background = SourceBackground.InicializeConnectedSolidColorBrush();
-            #endregion
-
             #region BorderBrush
-            BorderMain.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
             CancelIndicator.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
             #endregion
 

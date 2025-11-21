@@ -47,12 +47,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <summary>
         /// Настройки панели действий для браузера страниц
         /// </summary>
-        private readonly PanelActionSettingVisual PanelActionSettingsInlay;
-
-        /// <summary>
-        /// Страница панели действий взаимодействия с вкладками браузера страниц
-        /// </summary>
-        private readonly PagePanelAction PanelActionPageInlay;
+        private readonly PageSettingVisual PanelActionSettingsInlay;
         #endregion
 
         /// <summary>
@@ -82,7 +77,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <summary>
         /// Настройка для панели действий страницы управления загрузочными элементами
         /// </summary>
-        private PanelActionSettingVisual SettingVisualPageLoadingController;
+        private PageSettingVisual SettingVisualPageLoadingController;
 
         /// <summary>
         /// Состояние загрузки какого-либо процесса
@@ -110,15 +105,6 @@ namespace ApplicationOperPageLes.UI.Windows
         private bool IsClosing = false;
 
         /// <summary>
-        /// Состояние манипуляции с изменением размера окна
-        /// </summary>
-        private bool SizeAcivate = false;
-
-        private Point PointMouseStart;
-
-        private Size SizeWindowStart;
-
-        /// <summary>
         /// Страница выбора новой страницы браузера
         /// </summary>
         private PageManagerBrowser ManagerBrowserNewPage;
@@ -128,6 +114,17 @@ namespace ApplicationOperPageLes.UI.Windows
         private readonly TextBlock DEV_Data;
         private readonly TextBlock DEV_IsLoadingProcess;
 #endif
+
+        /// <summary>
+        /// Объект манипуляции вращением фона главного окна
+        /// </summary>
+        private static RotateTransform RotateMainWindowBackground = new()
+        {
+            Angle = 0d,
+            CenterX = 0.5d,
+            CenterY = 0.5d,
+        };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -152,7 +149,6 @@ namespace ApplicationOperPageLes.UI.Windows
             ActualIndexActivatePageDownToolButtons = -1;
             IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
             IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
-            BorderWindowMain.Background = new SolidColorBrush(Colors.Black);
 
             BorderNotificationIndicator.Opacity = 0d;
             IndicatorLoading.Opacity = 0d;
@@ -189,15 +185,14 @@ namespace ApplicationOperPageLes.UI.Windows
             ]);
             IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
             IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
-            IELBrowserPageMain.IELButtonAddInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
+            IELBrowserPageMain.SetSourceImageButtonAddInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus)));
 
             #region Palette
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(ImageLogoApplication, PaletteSpectrumEnum.Lime);
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonClose, PaletteSpectrumEnum.Red);
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonHelp, PaletteSpectrumEnum.Jade);
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSettings, PaletteSpectrumEnum.Purple);
-            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBrowserPageMain, PaletteSpectrumEnum.Olive);
-            //App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonAddInlay, PaletteSpectrumEnum.PastelBlue);
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay(), PaletteSpectrumEnum.PastelBlue);
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELActionPanelMain, PaletteSpectrumEnum.Cocoa);
 
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonBackButtons, PaletteSpectrumEnum.Tangerine);
@@ -207,6 +202,22 @@ namespace ApplicationOperPageLes.UI.Windows
 
             App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonMenu, PaletteSpectrumEnum.PastelBlue);
             #endregion
+
+            LinearGradientBrush LinearGradientMainWindowBackground = new()
+            {
+                GradientStops = new(
+                    [
+                    new GradientStop(WmColor.FromRgb(23, 43, 32), 0d),
+                    new GradientStop(WmColor.FromRgb(43, 56, 49), 0.168d),
+                    new GradientStop(WmColor.FromRgb(48, 58, 66), 0.257d),
+                    new GradientStop(WmColor.FromRgb(60, 70, 82), 0.432d),
+                    new GradientStop(WmColor.FromRgb(86, 116, 140), 0.582d),
+                    new GradientStop(WmColor.FromRgb(115, 109, 94), 0.764d),
+                    new GradientStop(WmColor.FromRgb(72, 64, 41), 1d),
+                    ]),
+                RelativeTransform = RotateMainWindowBackground,
+            };
+            BorderWindowMain.Background = LinearGradientMainWindowBackground;
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
@@ -238,17 +249,11 @@ namespace ApplicationOperPageLes.UI.Windows
                 if (PageInlay.ActivateManipulateInlay != null)
                     IELBrowserPageMain.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
             };
-            PanelActionPageInlay = new(PageInlay);
-            PanelActionSettingsInlay = new(IELBrowserPageMain, PanelActionPageInlay, new(200d, 240d));
-            PanelActionPageInlay.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                //PageInlay.IELButtonPageOpenInlay.CharKeyboardActivate = NewValue;
-                //PageInlay.IELButtonPageDeleteInlay.CharKeyboardActivate = NewValue;
-            };
+            PanelActionSettingsInlay = new(IELBrowserPageMain, PageInlay, new(200d, 240d));
             #endregion
 
             PageControllerLoadingApplication = new();
-            SettingVisualPageLoadingController = new(GridMain, new(PageControllerLoadingApplication), new(210, 255));
+            SettingVisualPageLoadingController = new(GridMain, PageControllerLoadingApplication, new(210, 255));
             PageControllerLoadingApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
             {
                 App.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
@@ -361,7 +366,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
             };
-            IELBrowserPageMain.IELButtonAddInlay.OnActivateMouseLeft += (sender, e, Key) =>
+            IELBrowserPageMain.EventAddInlay += () =>
             {
                 FrameNewInlayBrowser.IsEnabled = true;
                 FrameNewInlayBrowser.IsHitTestVisible = true;
@@ -397,6 +402,8 @@ namespace ApplicationOperPageLes.UI.Windows
             #region EventsWindow
             BorderWindowMain.MouseLeftButtonDown += (sender, e) =>
             {
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 TimeSpan t = TimeSpan.FromMilliseconds(900d);
                 App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(45), t);
                 App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 0.4d, t);
@@ -428,6 +435,8 @@ namespace ApplicationOperPageLes.UI.Windows
 
                     App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
 
+                    App.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty, 0d, 360d, TimeSpan.FromMilliseconds(3200d));
+
                     #endregion
                     #endregion
                 }
@@ -441,27 +450,6 @@ namespace ApplicationOperPageLes.UI.Windows
                 if (!IsReboot && !IsClosing) Close();
             };
             #endregion
-
-            #region Sizebale
-            BorderLeftWidth.MouseDown += (sender, e) =>
-            {
-                SizeAcivate = true;
-                PointMouseStart = Mouse.GetPosition(this);
-                SizeWindowStart = new(Width, Height);
-            };
-            BorderLeftWidth.MouseMove += (sender, e) =>
-            {
-                if (!SizeAcivate) return;
-                var point = Mouse.GetPosition(this);
-                Width -= PointMouseStart.X - point.X;
-                Left -= PointMouseStart.X - point.X;
-            };
-            BorderLeftWidth.MouseUp += (sender, e) =>
-            {
-                SizeAcivate = false;
-            };
-            #endregion
-
         }
 
         #region ManipulateWindow
@@ -651,6 +639,13 @@ namespace ApplicationOperPageLes.UI.Windows
             if (!IsLoadingProcess)
             {
                 IsLoadingProcess = true;
+                DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+                animation.From = 0d;
+                animation.To = 3600d;
+                animation.RepeatBehavior = RepeatBehavior.Forever;
+                animation.EasingFunction = null;
+                animation.Duration = TimeSpan.FromMilliseconds(30000d);
+                RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
 #if DEBUG
                 DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
 #endif
@@ -671,6 +666,11 @@ namespace ApplicationOperPageLes.UI.Windows
             if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
             {
                 IsLoadingProcess = false;
+                DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+                animation.From = RotateMainWindowBackground.Angle % 360;
+                animation.To = 360d;
+                animation.Duration = TimeSpan.FromMilliseconds(3200d);
+                RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
 #if DEBUG
                 DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
 #endif

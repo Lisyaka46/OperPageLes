@@ -46,7 +46,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         /// <summary>
         /// Настройка отображения страницы настройки громкости в панели действий
         /// </summary>
-        private readonly PanelActionSettingVisual SettingVisualVolume;
+        private readonly PageSettingVisual SettingVisualVolume;
 
 #if DEBUG
         private readonly TextBlock DEV_InternetMillisecond;
@@ -59,7 +59,18 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 #if DEBUG
             DEV_InternetMillisecond = CurrentApp.Is_WindowDeveloper.BlockInlays[1].AddNewTextElement();
 #endif
-            SettingVisualVolume = new(GridMain, new(new PageVolumeControl()), new System.Windows.Size(150, 36));
+            #region Palette
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoInternetConnection, CORE.Enums.PaletteSpectrumEnum.Green);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoStateRegister, CORE.Enums.PaletteSpectrumEnum.Tangerine);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage, CORE.Enums.PaletteSpectrumEnum.Violet);
+
+            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoVolume, CORE.Enums.PaletteSpectrumEnum.Jade);
+            TextBlockVolumeValue.Foreground = IELBlockInfoVolume.SourceForeground.InicializeConnectedSolidColorBrush();
+            #endregion
+
+            SettingVisualVolume = new(GridMain, new PageVolumeControl(), new System.Windows.Size(150, 36));
             TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
             App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
             {
@@ -71,7 +82,6 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
             };
-            //IELBlockInfoInternetConnection.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
 
             //UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
             UpdateInformationInObject(IELBlockInfoStateRegister, Console.CapsLock ? "а".ToUpper() : "a".ToLower());
@@ -79,7 +89,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             IndicatorLoadingInternetConnection.Opacity = 0d;
             ((BlurEffect)GridInfoInternetConnection.Effect).Radius = 0d;
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
-            //IELBlockInfoInternetConnection.ImageMargin = VisualMillisecondConnectionEnabled ? new(2, 0, 2, 8) : new(2, 0, 2, 4);
+
             #region BorderInternetConnection
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
@@ -92,6 +102,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
+
             #region BorderStateRegister
             IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
             {
@@ -109,6 +120,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
+
             #region BorderCurrentLanguage
             InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
             {
@@ -125,6 +137,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
+
             #region BorderVolume
             IELBlockInfoVolume.MouseRightButtonUp += (sender, e) =>
             {
@@ -153,7 +166,6 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 #if DEBUG
                 await Dispatcher.InvokeAsync(() => DEV_InternetMillisecond.Text = $"IP_E: {InternetPinging.MillisecondUpdateTime}");
 #endif
-                //Console.Beep(1000, 300);
                 if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
                 {
                     await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
@@ -169,8 +181,8 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                     {
                         bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
-                        //IELBlockInfoInternetConnection.Imaging =
-                        //    StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                        IELBlockInfoInternetConnection.Source =
+                            StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
                         if (VisualMillisecondConnectionEnabled)
                         {
                             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";

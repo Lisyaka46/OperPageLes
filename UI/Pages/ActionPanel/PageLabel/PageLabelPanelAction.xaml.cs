@@ -17,17 +17,11 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
         /// </summary>
         internal readonly PageLabelSelectManipulatePanelAction PageLabelSelectManipulate;
 
-        /// <summary>
-        /// Страница панели действий взаимодействия с ярлыком в разделе выделения элемента
-        /// </summary>
-        internal readonly PagePanelAction PanelActionPageSelectLabel;
-
         public PageLabelElementActionPanel()
         {
             InitializeComponent();
             //IELBlockInfoTagLabel.Imaging = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             PageLabelSelectManipulate = new();
-            PanelActionPageSelectLabel = new(PageLabelSelectManipulate);
         }
     }
 }

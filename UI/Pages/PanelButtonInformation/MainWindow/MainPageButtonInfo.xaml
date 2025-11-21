@@ -14,67 +14,33 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml" />
     </Page.Resources>
     <Grid x:Name="GridMain">
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="ENG" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
-            <!--<GUI:IELBlockInfoText.IELSettingObject>
-                <ObjectSettings:IELUsingObjectSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF2D563E" NotEnabled="#FFF92929" Select="#FF4F5F56" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                    <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ/>
-                    </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF65A081" NotEnabled="#FFF92929" Select="#FF86E4B2" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoText.IELSettingObject>-->
+        <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="???" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Background="{DynamicResource BG_Violet}" Foreground="{DynamicResource FG_Violet}" BorderBrush="{DynamicResource BB_Violet}" Width="55">
             <GUI:IELBlockInfoText.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
         </GUI:IELBlockInfoText>
-        <GUI:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}">
-            <!--<GUI:IELBlockInfoText.IELSettingObject>
-                <ObjectSettings:IELUsingObjectSetting>
-                    <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ/>
-                    </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF314E58" NotEnabled="#FFF92929" Select="#FF505E63" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF5C9FBB" NotEnabled="#FFF92929" Select="#FF56A6E4" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoText.IELSettingObject>-->
+        <GUI:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Background="{DynamicResource BG_Tangerine}" BorderBrush="{DynamicResource BB_Tangerine}" Foreground="{DynamicResource FG_Tangerine}" Width="40">
             <GUI:IELBlockInfoText.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
         </GUI:IELBlockInfoText>
         <Grid x:Name="GridInfoInternetConnection">
             <Grid.Effect>
-                <BlurEffect/>
+                <BlurEffect Radius="5"/>
             </Grid.Effect>
-            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThickness="2,2,2,2" Margin="3,3,3,3" Padding="3,0,4,0">
-                <!--<GUI:IELBlockInfoImage.IELSettingObject>
-                    <ObjectSettings:IELUsingObjectSetting>
-                        <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                            <Classes:BrushSettingQ Default="#FF277B4B" NotEnabled="#FFF92929" Select="#FF60C88D" Used="White"/>
-                        </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#FF01A78D" NotEnabled="#FFF92929" Select="#FF49E4CB" Used="White"/>
-                        </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                    </ObjectSettings:IELUsingObjectSetting>
-                </GUI:IELBlockInfoImage.IELSettingObject>-->
-            </GUI:IELBlockInfoImage>
-            <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold"  Margin="5,0,5,5" IsHitTestVisible="False" FontFamily="{DynamicResource RussianRail G Pro}"/>
+            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="5,5,5,5" Source="/UI/Images/WifiOn.png" Background="{DynamicResource BG_Green}" BorderBrush="{DynamicResource BB_Green}" Foreground="{DynamicResource FG_Green}" Padding="0,0,0,5" Width="39"/>
+            <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold"  Margin="5,0,5,4" IsHitTestVisible="False" FontFamily="{DynamicResource RussianRail G Pro}"/>
         </Grid>
-        <MediaElement x:Name="IndicatorLoadingInternetConnection" Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False" Width="28" Height="28" LoadedBehavior="Play" UnloadedBehavior="Pause">
+        <MediaElement x:Name="IndicatorLoadingInternetConnection" Panel.ZIndex="1" IsHitTestVisible="False" Width="28" Height="28" LoadedBehavior="Play" UnloadedBehavior="Pause">
             <MediaElement.OpacityMask>
                 <RadialGradientBrush>
                     <GradientStop Color="Black"/>
@@ -83,20 +49,7 @@
                 </RadialGradientBrush>
             </MediaElement.OpacityMask>
         </MediaElement>
-        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand">
-            <!--<GUI:IELBlockInfoImage.IELSettingObject>
-                <ObjectSettings:IELUsingObjectSetting IntervalHover="900">
-                    <ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ Default="#FF285177" NotEnabled="#FFF92929" Select="#FF287AC7" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BorderBrushSetting>
-                    <ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ/>
-                    </ObjectSettings:IELUsingObjectSetting.ForegroundSetting>
-                    <ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FF678DB1" NotEnabled="#FFF92929" Select="#FFB4DBFF" Used="White"/>
-                    </ObjectSettings:IELUsingObjectSetting.BackgroundSetting>
-                </ObjectSettings:IELUsingObjectSetting>
-            </GUI:IELBlockInfoImage.IELSettingObject>-->
+        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand" Background="{DynamicResource BG_Jade}" BorderBrush="{DynamicResource BB_Jade}" Foreground="{DynamicResource FG_Jade}" Source="/UI/Images/Volume.png" Padding="0,0,10,0">
             <GUI:IELBlockInfoImage.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoImage.Effect>

@@ -6,7 +6,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// <summary>
     /// Логика взаимодействия для OPLLabelTag.xaml
     /// </summary>
-    public partial class OPLLabelTag : IELContainerBase
+    public partial class OPLLabelTag : System.Windows.Controls.UserControl
     {
         internal delegate void ChangedValueHandler<T>(T OldValue, T NewValue);
 

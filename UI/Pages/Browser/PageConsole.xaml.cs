@@ -35,17 +35,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Настройки панели действий для страниц во вкладке консоли
         /// </summary>
-        private readonly PanelActionSettingVisual PanelActionSettingsConsole;
-
-        /// <summary>
-        /// Главная страница панели действий во вкладке консоли
-        /// </summary>
-        private readonly PagePanelAction PanelActionConsolePage = new(ConsolePage);
-
-        /// <summary>
-        /// Страница буфера панели действий во вкладке консоли
-        /// </summary>
-        private readonly PagePanelAction PanelActionBufferPage = new(BufferPage);
+        private readonly PageSettingVisual PanelActionSettingsConsole;
         #endregion
 
         #region Hit
@@ -143,7 +133,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
             ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(PanelActionBufferPage);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(BufferPage);
             };
 
             ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
@@ -155,26 +145,16 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region BufferPage
             BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(PanelActionConsolePage, false);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(ConsolePage, false);
             };
             #endregion
-            PanelActionConsolePage.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                //ConsolePage.IELButtonCrearConsole.CharKeyboardActivate = NewValue;
-                //ConsolePage.IELButtonCommandBuffer.CharKeyboardActivate = NewValue;
-                //ConsolePage.IELButtonDiscriptionCommand.CharKeyboardActivate = NewValue;
-            };
-            PanelActionBufferPage.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                //BufferPage.IELButtonBackMainMenu.CharKeyboardActivate = NewValue;
-                //BufferPage.IELButtonClearBuffer.CharKeyboardActivate = NewValue;
-            };
             App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
             };
-            PanelActionSettingsConsole = new(RichTextBoxMainMessage, PanelActionConsolePage, new(305d, 260d));
+            PanelActionSettingsConsole = new(RichTextBoxMainMessage, ConsolePage, new(305d, 260d));
             #endregion
+
             #region RichTextBoxMainMessage
             RichTextBoxMainMessage.MouseUp += (sender, e) =>
             {
@@ -188,6 +168,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 RichTextBoxMainMessage.ScrollToEnd();
             };
             #endregion
+
             #region TextBoxCommandInput
             TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
             {

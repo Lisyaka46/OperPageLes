@@ -219,7 +219,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             return new()
             {
                 BorderThickness = new(1),
-                CornerRadius = new(5),
                 Text = string.Empty,
                 Padding = new(4, 2, 4, 2),
                 FontSize = 16d,
