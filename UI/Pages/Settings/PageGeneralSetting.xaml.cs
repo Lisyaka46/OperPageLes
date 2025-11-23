@@ -18,6 +18,16 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
         internal PageGeneralSetting()
         {
             InitializeComponent();
+
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground, CORE.Enums.PaletteSpectrumEnum.Olive);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonClearImage, CORE.Enums.PaletteSpectrumEnum.Red);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSetTextClipboard, CORE.Enums.PaletteSpectrumEnum.Green);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile, CORE.Enums.PaletteSpectrumEnum.Purple);
+
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonTextClearValue, CORE.Enums.PaletteSpectrumEnum.PastelRed);
+
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxDefaultUrl, CORE.Enums.PaletteSpectrumEnum.Violet);
+
             #region PathMenuImage
             string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;
             TextBlockFailedImageSetup.Opacity = 0d;

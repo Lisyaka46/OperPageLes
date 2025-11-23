@@ -10,7 +10,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
     /// </summary>
-    public partial class PageBufferPanelAction : Page
+    public partial class BufferPagePanelAction : Page
     {
         /// <summary>
         /// Стиль отображения элементов в буфере
@@ -24,75 +24,47 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                         ]);
 
         /// <summary>
-        /// Объект анимации позиции сколла буфера
-        /// </summary>
-        private readonly ThicknessAnimation ThicknessAnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
-        {
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
-        /// Объект анимации прозрачности элементов буфера
-        /// </summary>
-        private readonly DoubleAnimation OpacityAnimationBuffer = new(0, TimeSpan.FromMilliseconds(90d))
-        {
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
         /// Буфер объектов команд
         /// </summary>
         internal Interpreter.Classes.Buffer BufferCommand;
 
-        public PageBufferPanelAction()
+        /// <summary>
+        /// Объект анимации позиции при удалении одного элемента
+        /// </summary>
+        private static readonly ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
+        {
+            EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
+        };
+
+        public BufferPagePanelAction()
         {
             InitializeComponent();
+            GridBuffer.Opacity = 0d;
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
 
-            IELButtonBackMainMenu.Background = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue);
-            IELButtonBackMainMenu.BorderBrush = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue);
-            IELButtonBackMainMenu.Foreground = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonBackMainMenu, PaletteSpectrumEnum.PastelBlue);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonClearBuffer, PaletteSpectrumEnum.PastelRed);
 
-            IELButtonClearBuffer.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonClearBuffer.OnActivateMouseLeft += async (sender, e, Key) =>
             {
-                TimeSpan BeginTimeOffset = TimeSpan.FromMilliseconds(50d);
                 IELButtonClearBuffer.IsEnabled = false;
-                ThicknessAnimationBuffer.To = new(0);
-                ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(160d);
-                GridBuffer.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
-                OpacityAnimationBuffer.To = 0d;
                 TextBlockCounterBuffer.Text = $"00/{BufferCommand.Length}";
-                for (int i = 0; i < BufferCommand.Count; i++)
+
+                DoubleAnimation OpacityAnimationBuffer = new()
                 {
-                    OPLButtonBufferCommand Button = (OPLButtonBufferCommand)GridBuffer.Children[i];
-                    if (i == BufferCommand.Count - 1)
-                    {
-                        OpacityAnimationBuffer.FillBehavior = FillBehavior.Stop;
-                        OpacityAnimationBuffer.Completed += (sender, e) => BufferCommand.DeleteAll();
-                    }
-                    ThicknessAnimationBuffer.To = new(-11, Button.Margin.Top + 11, 0, 0);
-                    BeginTimeOffset.Add(TimeSpan.FromMilliseconds(60d));
-                    OpacityAnimationBuffer.BeginTime = BeginTimeOffset;
-                    ThicknessAnimationBuffer.BeginTime = BeginTimeOffset;
-                    Button.BeginAnimation(OpacityProperty, OpacityAnimationBuffer);
-                    Button.BeginAnimation(MarginProperty, ThicknessAnimationBuffer);
-                }
-                OpacityAnimationBuffer.FillBehavior = FillBehavior.HoldEnd;
-                OpacityAnimationBuffer.Completed -= (sender, e) => BufferCommand.DeleteAll();
-                OpacityAnimationBuffer.BeginTime = TimeSpan.Zero;
-                ThicknessAnimationBuffer.BeginTime = TimeSpan.Zero;
-                ThicknessAnimationBuffer.Duration = TimeSpan.FromMilliseconds(300d);
+                    From = null,
+                    To = 0d,
+                    EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+                    Duration = TimeSpan.FromMilliseconds(300d),
+                    FillBehavior = FillBehavior.Stop
+                };
+                OpacityAnimationBuffer.Completed += (sender, e) => BufferCommand.DeleteAll();
+                GridBuffer.BeginAnimation(OpacityProperty, OpacityAnimationBuffer, HandoffBehavior.SnapshotAndReplace);
             };
             BufferCommand.DelElement += (index) =>
             {
                 GridBuffer.Children.RemoveAt(index);
-
-                ThicknessAnimation AnimationBuffer = new(new Thickness(0), TimeSpan.FromMilliseconds(160d))
-                {
-                    EasingFunction = new BackEase() { EasingMode = EasingMode.EaseOut, Amplitude = 0.6d }
-                };
-                Thickness ThicknessIndex = new(0);
                 for (int i = index; i < BufferCommand.Count; i++)
                 {
                     OPLButtonBufferCommand Button = (OPLButtonBufferCommand)GridBuffer.Children[i];
@@ -134,13 +106,20 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <param name="Name">Имя команды</param>
         /// <param name="Command">Строка команды</param>
         /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
-        internal void InsertCommandFromBuffer(string Name, string Command, IEL.CORE.BaseUserControls.IELButtonBase.ActivateHandler ActionActivateCommand)
+        internal void InsertCommandFromBuffer(string Name, string Command, Browser.PageConsole? SourcePage)
         {
-            IELButtonClearBuffer.IsEnabled = true;
+            if (!IELButtonClearBuffer.IsEnabled)
+            {
+                IELButtonClearBuffer.IsEnabled = true;
+                App.DoubleAnimationType.AnimateEffect(GridBuffer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+            }
             if (BufferCommand.Count < BufferCommand.Length)
             {
                 OPLButtonBufferCommand Button = CreateBufferButton(Name, Command);
-                Button.OnActivateMouseLeft += ActionActivateCommand;
+                Button.OnActivateMouseLeft += async (sender, e, Key) =>
+                {
+                    await App.CurrentApp.ActivateActionCommand(SourcePage, ((OPLButtonBufferCommand)sender).TextBlockButtonCommand.Text);
+                };
                 Button.OnActivateMouseRight += (sender, e, Key) =>
                 {
                     BufferCommand.Delete(Button.Index);

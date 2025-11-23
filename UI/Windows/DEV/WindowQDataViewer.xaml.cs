@@ -76,13 +76,13 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
             InicializeQData.Click += (sender, e) =>
             {
                 IELSourceButton.Background =
-                    App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum((PaletteValuesEnum)(ComboBoxSelectInitQData.SelectedIndex * 3));
+                    App.SettingPaletteApplication.GetQdataFromEnum((PaletteValuesEnum)(ComboBoxSelectInitQData.SelectedIndex * 3));
 
                 IELSourceButton.BorderBrush =
-                    App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum((PaletteValuesEnum)(ComboBoxSelectInitQData.SelectedIndex * 3 + 1));
+                    App.SettingPaletteApplication.GetQdataFromEnum((PaletteValuesEnum)(ComboBoxSelectInitQData.SelectedIndex * 3 + 1));
 
                 IELSourceButton.Foreground =
-                    App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum((PaletteValuesEnum)(ComboBoxSelectInitQData.SelectedIndex * 3 + 2));
+                    App.SettingPaletteApplication.GetQdataFromEnum((PaletteValuesEnum)(ComboBoxSelectInitQData.SelectedIndex * 3 + 2));
 
                 ControlUpdateModeSetBrushQ([IELSourceButton.Background, IELSourceButton.BorderBrush, IELSourceButton.Foreground]);
                 UpdateCode();

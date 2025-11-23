@@ -58,6 +58,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         public OPLLabelTag()
         {
             InitializeComponent();
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTag, CORE.Enums.PaletteSpectrumEnum.Lime);
             _Tag = new(string.Empty);
             TagChanged += (Old, New) =>
             {

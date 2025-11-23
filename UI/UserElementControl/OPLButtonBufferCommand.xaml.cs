@@ -63,14 +63,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         public OPLButtonBufferCommand(string Name, string FullTextCommand, int indexBuffer)
         {
             InitializeComponent();
-            #region Background
-            BorderButton.Background = SourceBackground.InicializeConnectedSolidColorBrush();
-            #endregion
-
-            #region BorderBrush
-            BorderButton.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
-            #endregion
-
             #region Foreground
             TextBlockButtonName.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             TextBlockButtonCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
@@ -86,7 +78,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             VerticalAlignment = VerticalAlignment.Top;
             Height = 27;
             Width = 230;
-            BorderButton.CornerRadius = new CornerRadius(4);
             Index = indexBuffer;
         }
     }

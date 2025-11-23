@@ -9,43 +9,16 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
-        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,4,0,4" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}">
-            <!--<IEL:IELButtonTextKey.IELSettingObject>
-                <ObjectSettings:IELButtonObjectSetting>
-                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FF2F0404" Select="#FF0D1F12" Used="#FF232323"/>
-                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FF310000" Select="#FF0B1F18" Used="#FF171717"/>
-                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FFE63F3F" Default="#FF2E9E6D" Select="#FF48C38D" Used="#FFAAF1D2"/>
-                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                </ObjectSettings:IELButtonObjectSetting>
-            </IEL:IELButtonTextKey.IELSettingObject>-->
-        </IEL:IELButtonTextKey>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Padding="5,10,5,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}">
-            <!--<IEL:IELButtonTextKey.IELSettingObject>
-                <ObjectSettings:IELButtonObjectSetting>
-                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FF2F0404" Select="#FF1F0D0D" Used="#FF232323"/>
-                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                        <Classes:BrushSettingQ NotEnabled="#FF310000" Select="#FF1F0B0B" Used="#FF171717"/>
-                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        <Classes:BrushSettingQ Default="#FFA97474" NotEnabled="#FFD04747" Select="#FFEF9696" Used="#FFF7D4D4"/>
-                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                </ObjectSettings:IELButtonObjectSetting>
-            </IEL:IELButtonTextKey.IELSettingObject>-->
-        </IEL:IELButtonTextKey>
-
+        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,4,0,4" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_Jade}" BorderBrush="{DynamicResource BB_Jade}" Foreground="{DynamicResource FG_Jade}"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Padding="5,10,5,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}"/>
     </Grid>
 </Page>

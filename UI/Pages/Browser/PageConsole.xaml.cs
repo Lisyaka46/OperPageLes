@@ -25,11 +25,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     {
         #region PanelActionConsole
         #region Source
-        private static readonly PageMainConsolePanelAction ConsolePage = new();
+        private static readonly MainPagePanelAction ConsolePage = new();
         /// <summary>
         /// Страница буфера в панели действий
         /// </summary>
-        internal static readonly PageBufferPanelAction BufferPage = new();
+        internal static readonly BufferPagePanelAction BufferPage = new();
         #endregion
 
         /// <summary>

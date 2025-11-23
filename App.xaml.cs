@@ -36,6 +36,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes
 {
@@ -159,7 +160,7 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Настройка объекта палитры Q-логики
         /// </summary>
-        internal PaletteQDataSetting SettingPaletteApplication { get; private set; }
+        internal static readonly PaletteQDataSetting SettingPaletteApplication = new();
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -377,7 +378,7 @@ namespace ApplicationOperPageLes
                 "Отображает содержание буфера команд в консоль главного меню программы",
                 (Command, param) =>
                 {
-                    PageBufferPanelAction PageBuffer = PageConsole.BufferPage;
+                    BufferPagePanelAction PageBuffer = PageConsole.BufferPage;
                     return Task.FromResult(CommandStateResult.Completed(Command.Name,
                         $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
                         $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
@@ -621,7 +622,7 @@ namespace ApplicationOperPageLes
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
             LogWriteLine("Инициализация палитры");
-            SettingPaletteApplication = new();
+            SettingPaletteApplication.Inicialize(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
 
             #endregion
         }
@@ -919,11 +920,7 @@ namespace ApplicationOperPageLes
 
             if (AppendBufferCommand && Console != null)
             {
-                PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString,
-                async (sender, e, Key) =>
-                {
-                    await ActivateActionCommand(Console, CommandString);
-                });
+                PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString, Console);
             }
 
             CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : await Command.ExecuteCommand(Parameters);

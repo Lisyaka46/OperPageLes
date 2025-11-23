@@ -33,15 +33,15 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             InitializeComponent();
 
             #region Palette
-            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCancel, PaletteSpectrumEnum.Red);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCancel, PaletteSpectrumEnum.Red);
 
-            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageBrowser, PaletteSpectrumEnum.Violet);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageBrowser, PaletteSpectrumEnum.Violet);
 
-            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageConsole, PaletteSpectrumEnum.Olive);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageConsole, PaletteSpectrumEnum.Olive);
 
-            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonAddPageLabel, PaletteSpectrumEnum.Lime);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonAddPageLabel, PaletteSpectrumEnum.Lime);
 
-            App.CurrentApp.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageDeveloper, PaletteSpectrumEnum.PastelBlue);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageDeveloper, PaletteSpectrumEnum.PastelBlue);
             #endregion
 
             KeyUp += (sender, e) =>

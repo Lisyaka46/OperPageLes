@@ -49,11 +49,11 @@ namespace ApplicationOperPageLes.UI.Windows
                     button = await Dispatcher.InvokeAsync(CreateButtonPalette);
                     button.OnActivateMouseLeft += (sender, e, Key) =>
                     {
-                        App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Tangerine).Default = Colors.White;
+                        App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Tangerine).Default = Colors.White;
                     };
                     button.Text = Enum.GetName(ElementPalette) ?? "Имя не инициализировано";
                     button.OnActivateMouseLeft += (sender, e, Key) => {
-                        //App.CurrentApp.SettingPaletteApplication.Ge(ElementPalette).
+                        //App.SettingPaletteApplication.Ge(ElementPalette).
                         //SetFromSpectrumColor(QData.EnumDataSpectrum.Default, Colors.White);
                     };
                     ResultGrid.Children.Add(button);
@@ -65,13 +65,13 @@ namespace ApplicationOperPageLes.UI.Windows
                     switch (SpectrumCoeff)
                     {
                         case 0:
-                            button.Background = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
+                            button.Background = App.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
                             break;
                         case 1:
-                            button.BorderBrush = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
+                            button.BorderBrush = App.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
                             break;
                         case 2:
-                            button.Foreground = App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
+                            button.Foreground = App.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
                             break;
                         default: throw new ArgumentException("Текущий логический аргумент принял недопустимое значение");
                     }

@@ -135,7 +135,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 WindowQDataViewer y = new();
                 y.Show();
-                //App.CurrentApp.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
+                //App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
                 //    IEL.CORE.Classes.QData.EnumDataSpectrum.Default, 255, 255, 255, 255);
                 //IEL.CORE.Classes.QData[] Data =
                 //    [

@@ -31,6 +31,8 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         {
             InitializeComponent();
             ActivateManipulateInlay = null;
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageOpenInlay, CORE.Enums.PaletteSpectrumEnum.Jade);
+            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonPageDeleteInlay, CORE.Enums.PaletteSpectrumEnum.PastelRed);
         }
     }
 }
