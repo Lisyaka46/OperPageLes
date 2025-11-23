@@ -139,14 +139,10 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                 FontSize = 11d,
                 Opacity = 0d,
                 Focusable = false,
-                IELSettingObject = new()
-                {
-                    AnimationMillisecond = 200d,
-                },
+                Background = QDtataBackground,
+                BorderBrush = QDtataBorderBrush,
+                Foreground = QDtataForeground
             };
-            Result.Background = QDtataBackground;
-            Result.BorderBrush = QDtataBorderBrush;
-            Result.Foreground = QDtataForeground;
             return Result;
         }
 
@@ -167,14 +163,10 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                 FontSize = 11d,
                 Opacity = 0d,
                 Focusable = false,
-                IELSettingObject = new()
-                {
-                    AnimationMillisecond = 200d,
-                },
+                Background = QDtataBackground,
+                BorderBrush = QDtataBorderBrush,
+                Foreground = QDtataForeground
             };
-            Result.Background = QDtataBackground;
-            Result.BorderBrush = QDtataBorderBrush;
-            Result.Foreground = QDtataForeground;
             return Result;
         }
     }

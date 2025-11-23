@@ -717,14 +717,15 @@ namespace ApplicationOperPageLes.UI.Windows
                         {
                             ComplitedInstallImageMenu(BitmapImageMenu);
                         };
-                        BitmapImageMenu.DownloadFailed += (sender, e) => FailedInstallImageMenu();
-                        BitmapImageMenu.DecodeFailed += (sender, e) => FailedInstallImageMenu();
+                        BitmapImageMenu.DownloadFailed += (sender, e) => 
+                            System.Windows.MessageBox.Show("Не удалось загрузить фоновое изображение...", "Информация",
+                                MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
                     }
                 }
                 catch (FileNotFoundException ex)
                 {
                     OPLImageViewer Element = GenerateVisualizateImage($"Файл картинки фонового изображения не был найден...");
-                    Element.IELSettingObject.MouseHover += (sender, e) =>
+                    Element.MouseHover += (sender, e) =>
                     {
                         IELMessageMain.UsingBorderInformation(Element, ex.Message, OrientationBorderPosition.LeftUp);
                     };
@@ -752,14 +753,6 @@ namespace ApplicationOperPageLes.UI.Windows
             App.ThicknessAnimationType.AnimateEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
             App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1500d));
             App.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
-        }
-
-        /// <summary>
-        /// Неудачное завершение установки картинки фона
-        /// </summary>
-        private void FailedInstallImageMenu()
-        {
-            System.Windows.MessageBox.Show("Не удалось загрузить фоновое изображение...", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
 
         internal void ChangeVisibilityMillisecondInternet(bool Value)

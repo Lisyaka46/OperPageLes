@@ -82,19 +82,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         ];
         #endregion
 
-        private IELUsingObjectSetting _IELSettingObject = new();
-        /// <summary>
-        /// Настройка использования объекта
-        /// </summary>
-        public IELUsingObjectSetting IELSettingObject
-        {
-            get => _IELSettingObject;
-            set
-            {
-                _IELSettingObject = value;
-            }
-        }
-
         ///// <summary>
         ///// Объект события активации кнопки левым щелчком мыши
         ///// </summary>
@@ -128,7 +115,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             get => _Selected;
             set
             {
-                App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, value ? 1d : 0d, TimeSpan.FromMilliseconds(IELSettingObject.AnimationMillisecond));
+                App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, value ? 1d : 0d, TimeSpan.FromMilliseconds(200d));
                 _Selected = value;
             }
         }
@@ -146,7 +133,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             #region Foreground
             TextBlockNameLabel.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             #endregion
-            IELSettingObject = new();
             _Selected = false;
             BorderSelectElement.Opacity = 0d;
             SourceLabel = Label;

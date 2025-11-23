@@ -10,19 +10,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// </summary>
     public partial class OPLButtonBufferCommand : IELButtonBase
     {
-        private IELUsingObjectSetting _IELSettingObject = new();
-        /// <summary>
-        /// Настройка использования объекта
-        /// </summary>
-        public IELUsingObjectSetting IELSettingObject
-        {
-            get => _IELSettingObject;
-            set
-            {
-                _IELSettingObject = value;
-            }
-        }
-
         /// <summary>
         /// Текст кнопки
         /// </summary>
@@ -89,7 +76,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             TextBlockButtonCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             TextBlockNumberCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
             #endregion
-            IELSettingObject = new();
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 14;
             TextBlockButtonName.FontWeight = FontWeights.Bold;

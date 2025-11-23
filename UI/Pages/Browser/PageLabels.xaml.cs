@@ -472,7 +472,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     if (Animatable)
                     {
                         ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
-                        animation.Duration = TimeSpan.FromMilliseconds(Element.IELSettingObject.AnimationMillisecond);
+                        animation.Duration = TimeSpan.FromMilliseconds(600d);
                         animation.To = new(Left, Top, 0, 0);
                         animation.FillBehavior = FillBehavior.Stop;
                         animation.Completed += (sender, e) =>
@@ -546,8 +546,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 Height = HeightLabel,
             };
             Label.ImageSelect.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
-            Label.IELSettingObject.IntervalHover = 800d;
-            Label.IELSettingObject.AnimationMillisecond = 230;
+            Label.IntervalHover = TimeSpan.FromMilliseconds(800d);
             Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Label.MouseRightButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
@@ -583,7 +582,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 //SelectLabelInMouse = Label;
             };
-            Label.IELSettingObject.MouseHover += (sender, e) =>
+            Label.MouseHover += (sender, e) =>
             {
                 if (sender == null) return;
                 string Text = Label.SourceLabel.Description ?? string.Empty;

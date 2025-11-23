@@ -10,19 +10,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// </summary>
     public partial class OPLImageViewer : IELButtonBase, IOPLObjectViewer<ImageSource>
     {
-        private IELUsingObjectSetting _IELSettingObject = new();
-        /// <summary>
-        /// Настройка использования объекта
-        /// </summary>
-        public IELUsingObjectSetting IELSettingObject
-        {
-            get => _IELSettingObject;
-            set
-            {
-                _IELSettingObject = value;
-            }
-        }
-
         /// <summary>
         /// Данные пути к медиа загрузки объекта
         /// </summary>

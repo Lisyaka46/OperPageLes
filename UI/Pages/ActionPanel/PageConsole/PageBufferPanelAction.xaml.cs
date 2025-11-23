@@ -123,12 +123,8 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                 Height = 40,
                 Margin = new(0, (40 + 2) * BufferCommand.Count, 0, 0),
                 Index = BufferCommand.Count,
-                IELSettingObject = new()
-                {
-                    AnimationMillisecond = 200d,
-                }
+                Background = QDataBackground
             };
-            Button.Background = QDataBackground;
             return Button;
         }
 
