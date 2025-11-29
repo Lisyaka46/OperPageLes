@@ -43,8 +43,8 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonBackMainMenu, PaletteSpectrumEnum.PastelBlue);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonClearBuffer, PaletteSpectrumEnum.PastelRed);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBackMainMenu);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearBuffer);
 
             IELButtonClearBuffer.OnActivateMouseLeft += async (sender, e, Key) =>
             {

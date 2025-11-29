@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationOperPageLes.CORE.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,8 +24,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
         public PageLabelSelectManipulatePanelAction()
         {
             InitializeComponent();
-            //IELButtonExecuteSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
-            //IELButtonClearSelect.IELSettingObject.SettingMouseImage = App.CurrentApp.ResourceDefaultMouseImageSetting;
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBack);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELButtonExecuteSelect);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELButtonClearSelect);
         }
     }
 }

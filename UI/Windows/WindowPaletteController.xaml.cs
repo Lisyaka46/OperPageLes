@@ -1,4 +1,8 @@
-﻿using System;
+﻿using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.UI.UserElementControl;
+using IEL.CORE.Classes;
+using IEL.GUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using ApplicationOperPageLes.CORE.Enums;
-using IEL.CORE.Classes;
-using IEL.GUI;
 
 namespace ApplicationOperPageLes.UI.Windows
 {
@@ -40,56 +41,39 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             ResultGrid.Children.Clear();
             ResultGrid.RowDefinitions.Clear();
-            int SpectrumCoeff = 0;
-            IELButtonText button = new();
-            foreach (PaletteValuesEnum ElementPalette in Enum.GetValues<PaletteValuesEnum>())
+            OPLButtonQData button = new();
+            foreach (PaletteSpectrumEnum ElementPalette in Enum.GetValues<PaletteSpectrumEnum>())
             {
-                if (SpectrumCoeff == 0)
-                {
-                    button = await Dispatcher.InvokeAsync(CreateButtonPalette);
-                    button.OnActivateMouseLeft += (sender, e, Key) =>
-                    {
-                        App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Tangerine).Default = Colors.White;
-                    };
-                    button.Text = Enum.GetName(ElementPalette) ?? "Имя не инициализировано";
-                    button.OnActivateMouseLeft += (sender, e, Key) => {
-                        //App.SettingPaletteApplication.Ge(ElementPalette).
-                        //SetFromSpectrumColor(QData.EnumDataSpectrum.Default, Colors.White);
-                    };
-                    ResultGrid.Children.Add(button);
-                    Grid.SetRow(button, ResultGrid.RowDefinitions.Count);
-                    ResultGrid.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
-                }
-                await Dispatcher.InvokeAsync(() =>
-                {
-                    switch (SpectrumCoeff)
-                    {
-                        case 0:
-                            button.Background = App.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
-                            break;
-                        case 1:
-                            button.BorderBrush = App.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
-                            break;
-                        case 2:
-                            button.Foreground = App.SettingPaletteApplication.GetQdataFromEnum(ElementPalette);
-                            break;
-                        default: throw new ArgumentException("Текущий логический аргумент принял недопустимое значение");
-                    }
-                });
-                SpectrumCoeff = ++SpectrumCoeff % 3;
-            }
+				button = await Dispatcher.InvokeAsync(CreateButtonPalette);
+				//button.OnActivateMouseLeft += (sender, e, Key) =>
+				//{
+				//    App.CurrentApp.SettingPaletteApplication.SourcePalette.GetQdataFromEnum(PaletteValuesEnum.BG_Tangerine).Default = Colors.White;
+				//};
+				button.Text = Enum.GetName(ElementPalette) ?? "Имя не инициализировано";
+				button.OnActivateMouseLeft += (sender, e, Key) => {
+					//App.CurrentApp.SettingPaletteApplication.SourcePalette.Ge(ElementPalette).
+					//SetFromSpectrumColor(QData.EnumDataSpectrum.Default, Colors.White);
+				};
+				await Dispatcher.InvokeAsync(() =>
+				{ button.PaletteElement = App.CurrentApp.SettingPaletteApplication.SourcePalette[ElementPalette]; });
+				ResultGrid.Children.Add(button);
+				Grid.SetRow(button, ResultGrid.RowDefinitions.Count);
+				ResultGrid.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
+			}
             return ResultGrid;
         }
 
-        private static IELButtonText CreateButtonPalette()
+        private static OPLButtonQData CreateButtonPalette()
         {
-            IELButtonText Button = new()
+            OPLButtonQData Button = new()
             {
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Stretch,
                 Margin = new(5),
                 Padding = new(5),
                 FontSize = 15d,
+                CornerRadius = new(5),
+                BorderThickness = new(2),
             };
             return Button;
         }

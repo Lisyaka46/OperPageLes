@@ -63,6 +63,7 @@
     <None Remove="UI\Images\Sorting\Sorting-Not.png" />
     <None Remove="UI\Images\Sorting\Sorting-Tag.png" />
     <None Remove="UI\Images\Tag.png" />
+    <None Remove="UI\Images\Tilda.png" />
     <None Remove="UI\Images\ValidKeyIcon.png" />
     <None Remove="UI\Images\Volume.png" />
     <None Remove="UI\Images\Warning.png" />
@@ -91,6 +92,7 @@
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3595.46" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2" />
     <PackageReference Include="Selenium.WebDriver.MicrosoftDriver" Version="17.17134.0" />
     <PackageReference Include="System.Management" Version="9.0.9" />
   </ItemGroup>
@@ -159,6 +161,7 @@
     <Resource Include="UI\Images\Sorting\Sorting-Not.png" />
     <Resource Include="UI\Images\Sorting\Sorting-Tag.png" />
     <Resource Include="UI\Images\Tag.png" />
+    <Resource Include="UI\Images\Tilda.png" />
     <Resource Include="UI\Images\ValidKeyIcon.png" />
     <Resource Include="UI\Images\Volume.png" />
     <Resource Include="UI\Images\Warning.png" />

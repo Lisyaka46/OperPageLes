@@ -12,9 +12,10 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
         {
             InitializeComponent();
 
-            IELButtonManipulateTags.Background = App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_PastelBlue);
-            IELButtonManipulateTags.BorderBrush = App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BB_PastelBlue);
-            IELButtonManipulateTags.Foreground = App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.FG_PastelBlue);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonCreateLabel);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSelectAllLabel);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearAllSelect);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonManipulateTags);
         }
     }
 }

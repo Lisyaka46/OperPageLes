@@ -2,6 +2,7 @@
 using ApplicationOperPageLes.CORE.Animation;
 using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Settings;
+using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Settings.Struct;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
@@ -160,7 +161,7 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Настройка объекта палитры Q-логики
         /// </summary>
-        internal static readonly PaletteQDataSetting SettingPaletteApplication = new();
+        internal Palette SettingPaletteApplication { get; private set; }
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -622,7 +623,7 @@ namespace ApplicationOperPageLes
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
             LogWriteLine("Инициализация палитры");
-            SettingPaletteApplication.Inicialize(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
+            SettingPaletteApplication = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
 
             #endregion
         }

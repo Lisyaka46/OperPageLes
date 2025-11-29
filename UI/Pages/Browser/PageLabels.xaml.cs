@@ -129,10 +129,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             InitializeComponent();
 
             #region Palette
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSorting, PaletteSpectrumEnum.Lime);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSearch, PaletteSpectrumEnum.Lime);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSorting);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSearch);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxSearch, PaletteSpectrumEnum.Tangerine);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELTextBoxSearch);
             #endregion
 
             SearchActivate = false;

@@ -60,13 +60,13 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             DEV_InternetMillisecond = CurrentApp.Is_WindowDeveloper.BlockInlays[1].AddNewTextElement();
 #endif
             #region Palette
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoInternetConnection, CORE.Enums.PaletteSpectrumEnum.Green);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoStateRegister, CORE.Enums.PaletteSpectrumEnum.Tangerine);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage, CORE.Enums.PaletteSpectrumEnum.Violet);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBlockInfoVolume, CORE.Enums.PaletteSpectrumEnum.Jade);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
             TextBlockVolumeValue.Foreground = IELBlockInfoVolume.SourceForeground.InicializeConnectedSolidColorBrush();
             #endregion
 

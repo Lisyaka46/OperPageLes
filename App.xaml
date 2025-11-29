@@ -4,7 +4,4 @@
              xmlns:local="clr-namespace:ApplicationOperPageLes"
              xmlns:GUI="clr-namespace:IEL.CORE.Classes;assembly=IEL"
              x:Class="ApplicationOperPageLes.App">
-    <Application.Resources>
-        <DrawingImage x:Key="EmptyImage"/>
-    </Application.Resources>
 </Application>

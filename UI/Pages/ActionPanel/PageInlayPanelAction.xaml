@@ -18,7 +18,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,4,0,4" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_Jade}" BorderBrush="{DynamicResource BB_Jade}" Foreground="{DynamicResource FG_Jade}"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,4,0,4" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Jade}"/>
         <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Padding="5,10,5,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}"/>
     </Grid>
 </Page>

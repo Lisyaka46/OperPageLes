@@ -6,16 +6,21 @@
 using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.DEV;
+using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.GUI;
 using Newtonsoft.Json;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Xml.Linq;
 using DrColor = System.Drawing.Color;
+using Point = System.Windows.Point;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {
@@ -28,9 +33,13 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         private bool KeyEventActivate = false;
         //private GraphSeries<string>? SeriesSource;
 
+        private Point StartPositionMouse;
+        private bool Activate = false;
+
         public PageDeveloper()
         {
             InitializeComponent();
+
             //var GLGraphControl = new GLCartesianGraphControl<string>();
             //GLGraphControl.Height = 270;
             //GLGraphControl.Loaded += (sender, e) =>
@@ -72,6 +81,48 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             //};
             //GridMain.Children.Add(GLGraphControl);
             //Grid.SetRow(GLGraphControl, 1);
+
+            //BorderImage.RenderTransform = new TransformGroup() { Children = [ScaleBorderTransform, SkewBorderTransform] };
+            //App.DoubleAnimationType.AnimateEffect(ScaleBorderTransform, ScaleTransform.ScaleXProperty, 0.5d, 1d, TimeSpan.FromMilliseconds(500d));
+            //App.DoubleAnimationType.AnimateEffect(ScaleBorderTransform, ScaleTransform.ScaleYProperty, 0.9d, 1d, TimeSpan.FromMilliseconds(500d));
+
+            //App.DoubleAnimationType.AnimateEffect(SkewBorderTransform, SkewTransform.AngleXProperty, 20d, 0d, TimeSpan.FromMilliseconds(500d));
+            //App.DoubleAnimationType.AnimateEffect(SkewBorderTransform, SkewTransform.AngleYProperty, -12, 0d, TimeSpan.FromMilliseconds(500d));
+
+            MyAnimatedObject.MouseDown += (sender, e) =>
+            {
+                myAngleRotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, null);
+                StartPositionMouse = Mouse.GetPosition(App.Current.MainWindow);
+                Activate = true;
+                myAngleRotation.Angle = 0d;
+            };
+            MyAnimatedObject.MouseLeave += (sender, e) =>
+            {
+                if (!Activate) return;
+                Activate = false;
+                App.DoubleAnimationType.AnimateEffect(myAngleRotation, AxisAngleRotation3D.AngleProperty, 0d, TimeSpan.FromMilliseconds(500d));
+            };
+            MyAnimatedObject.MouseMove += (sender, e) =>
+            {
+                if (!Activate) return;
+                const double d = 1.6d;
+                Point CurrentPos = Mouse.GetPosition(App.Current.MainWindow);
+                double X = StartPositionMouse.X - CurrentPos.X, Y = StartPositionMouse.Y - CurrentPos.Y;
+                X /= d; Y /= d;
+                double XY = Math.Abs(X) + Math.Abs(Y);
+                XY /= d;
+                if (Math.Abs(X) < 500)
+                {
+                    myAngleRotation.Axis = new(myAngleRotation.Axis.X, -X, 0);
+                }
+                if (Math.Abs(Y) < 500)
+                {
+                    myAngleRotation.Axis = new(-Y, myAngleRotation.Axis.Y, 0);
+                }
+                myAngleRotation.Angle = XY < 25 ? XY : 25;
+            };
+
+
 
             IELButtonDownloadImage.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -135,7 +186,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 WindowQDataViewer y = new();
                 y.Show();
-                //App.SettingPaletteApplication.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
+                //App.CurrentApp.SettingPaletteApplication.SourcePalette.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
                 //    IEL.CORE.Classes.QData.EnumDataSpectrum.Default, 255, 255, 255, 255);
                 //IEL.CORE.Classes.QData[] Data =
                 //    [

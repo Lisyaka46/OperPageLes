@@ -188,19 +188,19 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.SetSourceImageButtonAddInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus)));
 
             #region Palette
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(ImageLogoApplication, PaletteSpectrumEnum.Lime);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonClose, PaletteSpectrumEnum.Red);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonHelp, PaletteSpectrumEnum.Jade);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSettings, PaletteSpectrumEnum.Purple);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay(), PaletteSpectrumEnum.PastelBlue);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELActionPanelMain, PaletteSpectrumEnum.Cocoa);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay());
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonBackButtons, PaletteSpectrumEnum.Tangerine);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonNextButtons, PaletteSpectrumEnum.Tangerine);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonBackButtons);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonNextButtons);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonHelp, PaletteSpectrumEnum.Olive);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELImageButtonHelp);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELImageButtonMenu, PaletteSpectrumEnum.PastelBlue);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELImageButtonMenu);
             #endregion
 
             LinearGradientBrush LinearGradientMainWindowBackground = new()

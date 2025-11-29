@@ -71,11 +71,15 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <ComboBox x:Name="ComboBoxSelectInitQData" Grid.Row="0"/>
                         <Button x:Name="InicializeQData" Content="Уканать созданную QData" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="1"/>
-                        <Grid Grid.Row="2">
+                        <Button x:Name="ReadFileQData" Content="Прочитать QData" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="2"/>
+                        <Button x:Name="WriteFileQData" Content="Записать QData" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="3"/>
+                        <Grid Grid.Row="4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>

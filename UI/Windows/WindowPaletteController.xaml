@@ -18,12 +18,10 @@
         </Border>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="25*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid>
-                <TextBlock Text="Name Palette"/>
-            </Grid>
+            <TextBlock Text="Name Palette" VerticalAlignment="Center" Padding="5,5,5,5" FontSize="20"/>
             <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black">
                 <ScrollViewer>
                     <Grid x:Name="GridMainPaletteButtons">

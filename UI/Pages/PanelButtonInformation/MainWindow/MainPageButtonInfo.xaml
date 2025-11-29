@@ -49,7 +49,7 @@
                 </RadialGradientBrush>
             </MediaElement.OpacityMask>
         </MediaElement>
-        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand" Background="{DynamicResource BG_Jade}" BorderBrush="{DynamicResource BB_Jade}" Foreground="{DynamicResource FG_Jade}" Source="/UI/Images/Volume.png" Padding="0,0,10,0">
+        <GUI:IELBlockInfoImage x:Name="IELBlockInfoVolume" Grid.Column="3" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand" PaletteElement="{DynamicResource Jade}" Source="/UI/Images/Volume.png" Padding="0,0,10,0">
             <GUI:IELBlockInfoImage.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoImage.Effect>

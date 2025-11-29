@@ -19,14 +19,14 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
         {
             InitializeComponent();
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground, CORE.Enums.PaletteSpectrumEnum.Olive);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonClearImage, CORE.Enums.PaletteSpectrumEnum.Red);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonSetTextClipboard, CORE.Enums.PaletteSpectrumEnum.Green);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile, CORE.Enums.PaletteSpectrumEnum.Purple);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClearImage);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSetTextClipboard);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonTextClearValue, CORE.Enums.PaletteSpectrumEnum.PastelRed);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonTextClearValue);
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELTextBoxDefaultUrl, CORE.Enums.PaletteSpectrumEnum.Violet);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
 
             #region PathMenuImage
             string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;

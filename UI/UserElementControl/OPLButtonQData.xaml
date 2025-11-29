@@ -5,12 +5,27 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.UserElementControl"
-    mc:Ignorable="d" 
-    d:DesignHeight="450" d:DesignWidth="800">
+    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.UserElementControl">
     <Grid>
-        <Border Width="30" Height="35" Background="Red">
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="TextBlockName" Text="Red" VerticalAlignment="Center" Margin="2,0,2,0" Padding="2,0,2,0" FontFamily="{DynamicResource Bree CYR var}" IsHitTestVisible="False"/>
+        <Border x:Name="BorderColorDefault" Width="50" Height="50" Background="Red" Grid.Column="1" Margin="2,2,2,2">
+            <TextBlock x:Name="TextBlockDefault" HorizontalAlignment="Left" VerticalAlignment="Top" Text="default" FontSize="11" Padding="2,0,2,0" FontStyle="Italic" TextWrapping="Wrap" IsHitTestVisible="False"/>
+        </Border>
+        <Border x:Name="BorderColorSelect" Width="50" Height="50" Background="Red" Grid.Column="2" Margin="2,2,2,2">
+            <TextBlock x:Name="TextBlockSelect" HorizontalAlignment="Left" VerticalAlignment="Top" Text="select" FontSize="11" Padding="2,0,2,0" FontStyle="Italic" TextWrapping="Wrap" IsHitTestVisible="False"/>
+        </Border>
+        <Border x:Name="BorderColorUsed" Width="50" Height="50" Background="Red" Grid.Column="3" Margin="2,2,2,2">
+            <TextBlock x:Name="TextBlockUsed" HorizontalAlignment="Left" VerticalAlignment="Top" Text="used" FontSize="11" Padding="2,0,2,0" FontStyle="Italic" TextWrapping="Wrap" IsHitTestVisible="False"/>
+        </Border>
+        <Border x:Name="BorderColorNotEnabled" Width="50" Height="50" Background="Red" Grid.Column="4" Margin="2,2,2,2">
+            <TextBlock x:Name="TextBlockNotEnabled" HorizontalAlignment="Left" VerticalAlignment="Top" Text="not enabled" FontSize="11" Padding="2,0,2,0" FontStyle="Italic" TextWrapping="Wrap" IsHitTestVisible="False"/>
         </Border>
     </Grid>
 </Base:IELButtonBase>

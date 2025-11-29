@@ -12,9 +12,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         {
             InitializeComponent();
 
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCrearConsole, PaletteSpectrumEnum.PastelRed);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonCommandBuffer, PaletteSpectrumEnum.Purple);
-            App.SettingPaletteApplication.ConnectPalleteFromIELElement(IELButtonDiscriptionCommand, PaletteSpectrumEnum.Jade);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonCrearConsole);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonCommandBuffer);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonDiscriptionCommand);
         }
     }
 }

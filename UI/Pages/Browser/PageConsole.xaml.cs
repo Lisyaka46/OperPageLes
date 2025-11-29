@@ -1,9 +1,11 @@
-﻿using IEL.CORE.Classes;
-using Interpreter.Interfaces;
-using InterpreterCommand.Classes;
-using ApplicationOperPageLes.CORE;
+﻿using ApplicationOperPageLes.CORE;
 using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
+using IEL.CORE.BaseUserControls;
+using IEL.CORE.Classes;
+using IEL.CORE.Enums;
+using Interpreter.Interfaces;
+using InterpreterCommand.Classes;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -13,7 +15,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using IEL.CORE.Enums;
+using System.Xml.Linq;
 using Color = System.Windows.Media.Color;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
@@ -87,6 +89,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         public PageConsole()
         {
             InitializeComponent();
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
+            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
 #if DEBUG
             DEVTextBlockSelectNavigation = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
             DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
@@ -195,27 +199,13 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     SaveKeyDown = true;
                     if (SelectNavigation == SelectNavigationPageConsoleEnum.BufferCommandTextBox)
-                        SelectNavigation = SelectNavigationPageConsoleEnum.None;
+                        SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
 #if DEBUG
                     DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
 #endif
                     if (e.Key != Key.Up && e.Key != Key.Down && e.Key != Key.Enter && e.Key != Key.Escape)
                     {
                         SaveStringPrintBuffer = string.Empty;
-                    }
-                    switch (e.Key)
-                    {
-                        case Key.Escape:
-                        case Key.Enter:
-                            //TextBoxCommandInput.Background..BeginAnimation(SolidColorBrush.ColorProperty,
-                            //    new ColorAnimation(TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used,
-                            //    e.Key switch
-                            //    {
-                            //        Key.Enter => Color.FromRgb(160, 245, 200),
-                            //        Key.Escape => Color.FromRgb(255, 122, 84),
-                            //        _ => throw new NotImplementedException(),
-                            //    }, TimeSpan.FromMilliseconds(80d)));
-                            break;
                     }
                 }
             };
@@ -229,8 +219,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         TextBoxCommandInput.SetActiveSpecrum(StateSpectrum.Used, true);
                         if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
                         {
-                            SelectNavigation = SelectNavigationPageConsoleEnum.None;
-                            TextBoxCommandInput.Text += '*';
+                            SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
+                            TextBoxCommandInput.Text += "* ";
 #if DEBUG
                             DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
 #endif
@@ -246,10 +236,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         SaveStringPrintBuffer = string.Empty;
                         if (TextBoxCommandInput.Text.Length > 0)
                         {
-                            SelectNavigation = SelectNavigationPageConsoleEnum.None;
+                            SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
                         }
                         else if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                        TextBoxCommandInput.SetActiveSpecrum(StateSpectrum.Used, true);
                         break;
                     case Key.Apps:
                         App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);
@@ -260,7 +249,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         break;
                     default:
                         if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
-                            SelectNavigation = SelectNavigationPageConsoleEnum.None;
+                            SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
                         break;
                 }
                 if (HitUse && SelectNavigation != SelectNavigationPageConsoleEnum.HitCommands)
@@ -342,6 +331,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 TextBlock block = CreateHintBlock(Name);
                 StackPanelAllHit.Children.Add(block);
                 block.UpdateLayout();
+                RectangleSelect.Height = block.ActualHeight;
             }
             ChangeVisualHintCommand(ConsoleHitStateEnum.VisibleMainCommands);
         }
@@ -354,7 +344,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             if (StateVisibleHit != StateHit)
             {
-                if (StateHit == ConsoleHitStateEnum.Hidden) SelectNavigation = SelectNavigationPageConsoleEnum.None;
+                if (StateHit == ConsoleHitStateEnum.Hidden) SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
 #if DEBUG
                 DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
 #endif
@@ -457,10 +447,27 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             Result.MouseLeftButtonUp += (sender, e) =>
             {
-                TextBoxCommandInput.Text = $"{Result.Text}*";
+                TextBoxCommandInput.Text = $"{Result.Text}* ";
                 UsingOneHitCommand(TextBoxCommandInput.Text);
+                if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
+                    SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
             };
             return Result;
+        }
+
+        private void SetSelectNavigation(SelectNavigationPageConsoleEnum Value)
+        {
+            switch (Value)
+            {
+                case SelectNavigationPageConsoleEnum.None:
+                    if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
+                        App.DoubleAnimationType.AnimateEffect(RectangleSelect, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                    break;
+                case SelectNavigationPageConsoleEnum.HitCommands:
+                    App.DoubleAnimationType.AnimateEffect(RectangleSelect, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+                    break;
+            }
+            SelectNavigation = Value;
         }
         #endregion
 
@@ -475,7 +482,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 if (StateVisibleHit == ConsoleHitStateEnum.VisibleMainCommands)
                 {
-                    SelectNavigation = SelectNavigationPageConsoleEnum.HitCommands;
+                    SetSelectNavigation(SelectNavigationPageConsoleEnum.HitCommands);
                     ActiveIndexHitCommandInput = -1;
                 }
                 else
@@ -537,6 +544,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         else ActiveIndexHitCommandInput = ActiveIndexHitCommandInput < StackPanelAllHit.Children.Count - 1 ? ActiveIndexHitCommandInput + 1 : 0;
                         TextBoxCommandInput.Text = ((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).Text;
                     }
+
+                    // Смещение позиции области относительно внешнего элемента
+                    System.Windows.Point OffsetPosElement = StackPanelAllHit.Children[ActiveIndexHitCommandInput].TransformToAncestor(
+                        BorderHintCommand).Transform(new System.Windows.Point(0, 0));
+
+                    App.DoubleAnimationType.AnimateEffect(RectangleSelect, WidthProperty,
+                            ((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).ActualWidth, TimeSpan.FromMilliseconds(400d));
+                    App.ThicknessAnimationType.AnimateEffect(RectangleSelect, MarginProperty, new(0, OffsetPosElement.Y - 5, 0, 0), TimeSpan.FromMilliseconds(400d));
                     break;
             }
         }
