@@ -33,15 +33,15 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             InitializeComponent();
 
             #region Palette
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonCancel);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonCancel);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELButtonPageBrowser);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELButtonPageBrowser);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELButtonPageConsole);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELButtonPageConsole);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonAddPageLabel);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonAddPageLabel);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonPageDeveloper);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonPageDeveloper);
             #endregion
 
             KeyUp += (sender, e) =>
@@ -54,13 +54,13 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
             };
 
-            IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
             {
                 BrowserPageSelect?.Invoke(this, null);
             };
 
             #region IELButtonAddPageLabel
-            IELButtonAddPageLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonAddPageLabel.OnActivateMouseLeft += (sender, e) =>
             {
                 PageLabels page = new();
                 BrowserPage AppendElementPage = new(page, "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
@@ -73,7 +73,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
 
             #region IELButtonPageDeveloper
-            IELButtonPageDeveloper.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonPageDeveloper.OnActivateMouseLeft += (sender, e) =>
             {
                 PageDeveloper page = new();
                 BrowserPage AppendElementPage = new(page, "Страница разработчика", null);
@@ -86,7 +86,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
 
             #region IELButtonPageConsole
-            IELButtonPageConsole.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonPageConsole.OnActivateMouseLeft += (sender, e) =>
             {
                 PageConsole page = new();
                 BrowserPage AppendElementPage = new(page, "Консоль", "Гибкий инструмент управления программой с помощью вводимых команд");
@@ -99,7 +99,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
 
             #region IELButtonPageBrowser
-            IELButtonPageBrowser.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonPageBrowser.OnActivateMouseLeft += (sender, e) =>
             {
                 PageWebBrowser page = new();
                 BrowserPage AppendElementPage = new(page, "Веб-браузер", null);

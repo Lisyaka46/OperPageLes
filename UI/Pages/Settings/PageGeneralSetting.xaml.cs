@@ -19,14 +19,14 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
         {
             InitializeComponent();
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClearImage);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSetTextClipboard);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClearImage);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSetTextClipboard);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonTextClearValue);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonTextClearValue);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
 
             #region PathMenuImage
             string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;
@@ -62,7 +62,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                         break;
                 }
             };
-            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, e) =>
             {
                 System.Windows.Forms.OpenFileDialog dialog = new()
                 {
@@ -80,11 +80,11 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                 };
                 dialog.ShowDialog();
             };
-            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, e) =>
             {
                 SetImageUriValue(System.Windows.Clipboard.GetText());
             };
-            IELButtonClearImage.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonClearImage.OnActivateMouseLeft += (sender, e) =>
             {
                 App.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
@@ -118,7 +118,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                     BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
                 }
             };
-            IELButtonTextClearValue.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonTextClearValue.OnActivateMouseLeft += (sender, e) =>
             {
                 SliderBufferSize.Value = OriginalSizeBuffer;
                 App.CurrentApp.SettingMainApplication.BufferSize.Value = OriginalSizeBuffer;
@@ -176,6 +176,17 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             CheckBoxUseOnlyCreatePageBrowser.Unchecked += (sender, e) =>
             {
                 App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = false;
+            };
+            #endregion
+            #region LoadingBorderVisualizate
+            CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
+            CheckBoxLoadingBorderVisualizate.Checked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = true;
+            };
+            CheckBoxLoadingBorderVisualizate.Unchecked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = false;
             };
             #endregion
         }

@@ -12,10 +12,10 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
         {
             InitializeComponent();
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonCreateLabel);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSelectAllLabel);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearAllSelect);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonManipulateTags);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonCreateLabel);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSelectAllLabel);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearAllSelect);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonManipulateTags);
         }
     }
 }

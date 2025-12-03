@@ -18,11 +18,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         {
             InitializeComponent();
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
-            IELButtonClose.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
                 Close();
             };
-            IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonComplete.OnActivateMouseLeft += (sender, e) =>
             {
                 CompleteEditTag();
             };

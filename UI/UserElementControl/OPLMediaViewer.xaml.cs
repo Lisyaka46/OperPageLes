@@ -2,6 +2,7 @@
 using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
 using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes.ObjectSettings;
+using Newtonsoft.Json.Linq;
 using System.Windows;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
@@ -12,15 +13,6 @@ namespace ApplicationOperPageLes.UI.UserElementControl
     /// </summary>
     public partial class OPLMediaViewer : IELButtonBase, IOPLObjectViewer<Uri>
     {
-        /// <summary>
-        /// Данные пути к медиа загрузки объекта
-        /// </summary>
-        public Uri SourceView
-        {
-            get => IndicatorMedia.Source;
-            set => IndicatorMedia.Source = value;
-        }
-
         /// <summary>
         /// Размер текста
         /// </summary>
@@ -34,57 +26,110 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
         }
 
+        #region Source
         /// <summary>
-        /// Шрифт текста в элементе
+        /// Данные конкретного свойства
         /// </summary>
-        public new System.Windows.Media.FontFamily FontFamily
-        {
-            get => base.FontFamily;
-            set
-            {
-                base.FontFamily = value;
-                TextBlockName.FontFamily = value;
-            }
-        }
+        public static readonly DependencyProperty SourceProperty =
+            DependencyProperty.Register("Source", typeof(Uri), typeof(OPLMediaViewer),
+                new(
+                    (sender, e) =>
+                    {
+                        ((OPLMediaViewer)sender).IndicatorMedia.Source = (Uri)e.NewValue;
+                    }));
 
         /// <summary>
-        /// Тект наименование процесса загрузки
+        /// Данные пути к медиа загрузки объекта
+        /// </summary>
+        public Uri Source
+        {
+            get => (Uri)GetValue(SourceProperty);
+            set => SetValue(SourceProperty, value);
+        }
+        #endregion
+
+        #region Text
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register("Text", typeof(string), typeof(OPLMediaViewer),
+                new("Text",
+                    (sender, e) =>
+                    {
+                        ((OPLMediaViewer)sender).TextBlockName.Text = (string)e.NewValue;
+                    }));
+
+        /// <summary>
+        /// Текст отображаемый в элементе
         /// </summary>
         public string Text
         {
-            get => TextBlockName.Text;
-            set
-            {
-                TextBlockName.Text = value;
-            }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
+        #endregion
 
-        private bool _IsCanceledManipulate;
+        #region ViewClose
         /// <summary>
-        /// Состояние отмены загрузки
+        /// Данные конкретного свойства
         /// </summary>
-        internal bool IsCanceledManipulate
+        public static readonly DependencyProperty ViewCloseProperty =
+            DependencyProperty.Register("ViewClose", typeof(bool), typeof(OPLMediaViewer),
+                new(true,
+                    (sender, e) =>
+                    {
+                        ((OPLMediaViewer)sender).CancelIndicator.Visibility = (bool)e.NewValue ? Visibility.Visible : Visibility.Hidden;
+                    }));
+
+        /// <summary>
+        /// Состояние возможности отключения элемента
+        /// </summary>
+        public bool ViewClose
         {
-            get => _IsCanceledManipulate;
-            set
-            {
-                CancelIndicator.Visibility = value ? Visibility.Visible : Visibility.Hidden;
-                _IsCanceledManipulate = value;
-            }
+            get => (bool)GetValue(ViewCloseProperty);
+            set => SetValue(ViewCloseProperty, value);
         }
+        #endregion
+
+        #region ViewClose
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty ConnectedTokenProperty =
+            DependencyProperty.Register("ConnectedToken", typeof(CancellationToken), typeof(OPLMediaViewer),
+                new(
+                    (sender, e) =>
+                    {
+                        ((OPLMediaViewer)sender).CancelIndicator.Visibility = (bool)e.NewValue ? Visibility.Visible : Visibility.Hidden;
+                    }));
+
+        /// <summary>
+        /// Состояние возможности отключения элемента
+        /// </summary>
+        public CancellationToken ConnectedToken
+        {
+            get => (CancellationToken)GetValue(ViewCloseProperty);
+            set => SetValue(ViewCloseProperty, value);
+        }
+        #endregion
 
         public OPLMediaViewer()
         {
             InitializeComponent();
             #region BorderBrush
-            CancelIndicator.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
+            CancelIndicator.BorderBrush = SourceBorderBrush.SourceBrush;
+            BorderIndicator.BorderBrush = SourceBorderBrush.SourceBrush;
             #endregion
 
             #region Foreground
-            TextBlockName.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
-            TextBlockCancel.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockName.Foreground = SourceForeground.SourceBrush;
+            TextBlockCancel.Foreground = SourceForeground.SourceBrush;
             #endregion
-            IsCanceledManipulate = true;
+
+            TextBlockName.Text = "Text";
+            CancelIndicator.Visibility = Visibility.Visible;
+
             IndicatorMedia.MediaEnded += (sender, e) =>
             {
                 IndicatorMedia.Position = TimeSpan.FromMilliseconds(1);

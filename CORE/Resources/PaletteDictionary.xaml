@@ -134,4 +134,64 @@
             <IEL:QData Default="#FF1D3812" Select="#FF595E71" Used="#FFEBEBEB" NotEnabled="#FFFF8484"/>
         </IEL:PaletteSpectrum.FG>
     </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="Gray">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FF606060" Select="#FF7F7F7F" Used="#FFB4BBC0" NotEnabled="#FFDF0000"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF000000" Select="#FF494949" Used="#FF9B9B9B" NotEnabled="#FFBB0000"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FFB9B9B9" Select="#FFE0E0E0" Used="#FF6F6F6F" NotEnabled="#FFFF7575"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="VioletRed">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FFF41770" Select="#FFF2669B" Used="#FFC186BD" NotEnabled="#FFAD1827"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF430E21" Select="#FF714A5C" Used="#FFE65BAB" NotEnabled="#FFF90233"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FFB4BEBA" Select="#FFDAE7E7" Used="#FF87EFDD" NotEnabled="#FFF99B7B"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="LightBlue">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FF3DB0F5" Select="#FF0992C6" Used="#FF6478D7" NotEnabled="#FF8A3C5F"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF052E70" Select="#FF2472A6" Used="#FF33409B" NotEnabled="#FF7A1D6A"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FF13242B" Select="#FF152439" Used="#FFA5CDDE" NotEnabled="#FFF99B7B"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="SpruceColor">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FF2A5C03" Select="#FF749C0A" Used="#FF50CB3A" NotEnabled="#FF894021"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF0C1801" Select="#FF125F12" Used="#FF339B6C" NotEnabled="#FF544E29"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FF31B978" Select="#FF112F23" Used="#FF1A5326" NotEnabled="#FFFF9595"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="Chocolate">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FFD2691E" Select="#FFD58D17" Used="#FFDEAC83" NotEnabled="#FF793F13"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF783A12" Select="#FF6F681A" Used="#FF737C3D" NotEnabled="#FF5A4023"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FFD1B883" Select="#FF55471A" Used="#FF393115" NotEnabled="#FFEEBC9D"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
 </ResourceDictionary>

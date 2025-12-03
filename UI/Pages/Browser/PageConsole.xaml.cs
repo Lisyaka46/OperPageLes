@@ -89,8 +89,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         public PageConsole()
         {
             InitializeComponent();
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
 #if DEBUG
             DEVTextBlockSelectNavigation = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
             DEVTextBlockSelectNavigation.Text = $"SN: {SelectNavigation}";
@@ -106,7 +106,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             RectangleSelect.Width = 0d;
             Canvas.SetZIndex(GridHintOneCommand, -1);
             RichTextBoxMainMessage.Document = new();
-            ButtonReturnCommand.OnActivateMouseLeft += async (sender, e, Key) =>
+            ButtonReturnCommand.OnActivateMouseLeft += async (sender, e) =>
             {
                 if (HitUse) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
                 await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);

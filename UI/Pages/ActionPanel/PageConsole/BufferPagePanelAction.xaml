@@ -40,11 +40,11 @@
                 <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="98*"/>
-                <ColumnDefinition Width="107*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0" Background="{DynamicResource BG_PastelBlue}" BorderBrush="{DynamicResource BB_Lime}" Foreground="{DynamicResource FG_PastelBlue}" />
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" Padding="5,0,5,0" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" Padding="0,7,0,7" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" Padding="0,7,0,7" PaletteElement="{DynamicResource PastelRed}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1"/>
         </Grid>
     </Grid>
 </Page>

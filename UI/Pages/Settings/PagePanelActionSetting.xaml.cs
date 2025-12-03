@@ -62,7 +62,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             #endregion
             #region CheckBoxKeyboardMode
             IELButtonSetKeyKeboardMode.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction);
-            IELButtonSetKeyKeboardMode.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSetKeyKeboardMode.OnActivateMouseLeft += (sender, e) =>
             {
                 ActivateSelectButtonKey(IELButtonSetKeyKeboardMode);
             };
@@ -94,7 +94,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             #region CheckBoxKeyboardRightClick
             ViewActivateRightClick.Opacity = 0d;
             IELButtonSetKeyKeboardRightClick.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick);
-            IELButtonSetKeyKeboardRightClick.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSetKeyKeboardRightClick.OnActivateMouseLeft += (sender, e) =>
             {
                 ActivateSelectButtonKey(IELButtonSetKeyKeboardRightClick);
             };
@@ -120,7 +120,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             #endregion
             #region CheckBoxKeyboardClosePanelAction
             IELButtonSetKeyKeboardClosePanelAction.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionClose);
-            IELButtonSetKeyKeboardClosePanelAction.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSetKeyKeboardClosePanelAction.OnActivateMouseLeft += (sender, e) =>
             {
                 ActivateSelectButtonKey(IELButtonSetKeyKeboardClosePanelAction);
             };

@@ -62,5 +62,30 @@ namespace ApplicationOperPageLes.CORE.Enums
         /// Зелёный
         /// </summary>
         Green = 10u,
+
+        /// <summary>
+        /// Серый
+        /// </summary>
+        Gray = 11u,
+
+        /// <summary>
+        /// Фиолетово-красный
+        /// </summary>
+        VioletRed = 12u,
+
+        /// <summary>
+        /// Голубой
+        /// </summary>
+        LightBlue = 13u,
+
+        /// <summary>
+        /// Цвет ели
+        /// </summary>
+        SpruceColor = 14u,
+
+        /// <summary>
+        /// Шоколадный
+        /// </summary>
+        Chocolate = 15u,
     }
 }

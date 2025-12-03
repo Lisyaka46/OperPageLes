@@ -27,7 +27,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Выделенный элемент панелью действий
         /// </summary>
-        private OPLLabelCommand? SelectLabelInPage;
+        private OPLLabel? SelectLabelInPage;
 
         #region PanelAction
         #region Source
@@ -112,10 +112,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             private set
             {
                 PageLabel.IELButtonClearAllSelect.IsEnabled = value;
-                PageLabelElement.IELButtonExecuteLabel.IsEnabled = !value;
+                PageLabelElement.IELButtonExecuteLabel.Text = value ? "Выполнить последовательно" : "Выполнить";
                 PageLabelElement.IELButtonChangeLabel.IsEnabled = !value;
                 PageLabelElement.IELButtonRemoveLabel.Text = value ? "Удалить выделенное" : "Удалить";
-                //PageLabelElement.IELButtonCreateLabelTag.IsEnabled = !value;
+                PageLabelElement.IELButtonSetLabelTag.IsEnabled = !value;
 
                 PageLabel.IELButtonCreateLabel.IsEnabled = !value;
                 PageLabel.IELButtonClearAllSelect.IsEnabled = value;
@@ -124,15 +124,25 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             }
         }
 
+        /// <summary>
+        /// Массив ярлыков которые были выделены
+        /// </summary>
+        private List<OPLLabel> ListSelectLabel = [];
+
+        /// <summary>
+        /// Состояние запуска последовательного выполнения выделенных ярлыков
+        /// </summary>
+        private bool ActivateConsistentExecuteSelectLabels = false;
+
         public PageLabels()
         {
             InitializeComponent();
 
             #region Palette
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSorting);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSearch);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSorting);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSearch);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELTextBoxSearch);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELTextBoxSearch);
             #endregion
 
             SearchActivate = false;
@@ -147,6 +157,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             TextBlockLabelInfo.Opacity = 0d;
             GridMainLabels.Opacity = 0d;
             GridMainLabels.Visibility = Visibility.Hidden;
+
             #region PanelAction
             #region PageLabel
             PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += async (sender, e, Key) =>
@@ -166,7 +177,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             PageLabel.IELButtonSelectAllLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageLabel.IELButtonClearAllSelect.IsEnabled = true;
-                OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>()];
+                OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>()];
                 for (int i = 0; i < LabelsElements.Length; i++)
                 {
                     LabelsElements[i].Selected = true;
@@ -179,7 +190,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             PageLabel.IELButtonClearAllSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageLabel.IELButtonClearAllSelect.IsEnabled = false;
-                OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().Where((i) => i.Selected)];
+                OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>().Where((i) => i.Selected)];
                 for (int i = 0; i < LabelsElements.Length; i++)
                 {
                     LabelsElements[i].Selected = false;
@@ -189,16 +200,38 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             #endregion
+
             #region PageLabelElement
             PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
-                if (SelectLabelInPage != null)
-                {
-                    PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
-                    await App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
-                    SelectLabelInPage = null;
-                }
+                PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                if (SelectLabelsMode)
+                {
+                    PageLabelElement.IELButtonExecuteLabel.IsEnabled = false;
+                    ActivateConsistentExecuteSelectLabels = true;
+                    SelectLabelsMode = false;
+                    UpdateTextInfoLabels();
+                    for (int i = 0; i < ListSelectLabel.Count; i++)
+                    {
+                        TextBlockEventInfo.Text = $"Последовательное выполнение ярлыков {i + 1}/{ListSelectLabel.Count}";
+                        ListSelectLabel[i].SourceBorderBrush.SetActiveSpecrum(Colors.White);
+                        await Task.Delay(700);
+                        await App.CurrentApp.ActivateActionCommand(Console, ListSelectLabel[i].SourceLabel.Command);
+                        ListSelectLabel[i].SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
+                        ListSelectLabel[i].Selected = false;
+                    }
+                    ListSelectLabel.Clear();
+                    ActivateConsistentExecuteSelectLabels = false;
+                    UpdateTextInfoLabels();
+                    PageLabelElement.IELButtonExecuteLabel.IsEnabled = true;
+                    TextBlockEventInfo.Text = "Готово";
+                }
+                else if (SelectLabelInPage != null)
+                {
+                    await App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
+                }
+                SelectLabelInPage = null;
             };
             PageLabelElement.IELButtonChangeLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -218,7 +251,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     if (SelectLabelsMode)
                     {
-                        OPLLabelCommand[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelCommand>().ToArray().Where((i) => i.Selected)];
+                        OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>().ToArray().Where((i) => i.Selected)];
                         for (int i = 0; i < LabelsElements.Length; i++)
                             await RemoveLabel(LabelsElements[i]);
                         SelectLabelsMode = false;
@@ -247,8 +280,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             PageLabelElement.IELButtonActivateSelectMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement.PageLabelSelectManipulate);
             };
+
             #region PageLabelSelectManipulate
             PageLabelElement.PageLabelSelectManipulate.IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -257,30 +291,26 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (SelectLabelInPage == null) return;
-                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = true;
-                if (SelectLabelsMode)
+                else if (ListSelectLabel.Count == 0)
                 {
-                    SelectLabelInPage.Selected = true;
-                    return;
+                    SelectLabelsMode = true;
+                    UpdateTextInfoLabels();
                 }
-
-                SelectLabelsMode = true;
-                UpdateTextInfoLabels();
-                SelectLabelInPage.Selected = true;
+                ChangeSelectLabel(SelectLabelInPage);
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = true;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = false;
             };
             PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (SelectLabelInPage == null) return;
-                if (SelectLabelsMode)
+                else if (ListSelectLabel.Count == 0)
                 {
-                    SelectLabelInPage.Selected = false;
-                    PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = false;
-                    if (!GridMainLabels.Children.OfType<OPLLabelCommand>().Any((i) => i.Selected))
-                    {
-                        SelectLabelsMode = false;
-                        UpdateTextInfoLabels();
-                    }
+                    SelectLabelsMode = false;
+                    UpdateTextInfoLabels();
                 }
+                ChangeSelectLabel(SelectLabelInPage);
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = false;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = true;
             };
             PageLabelElement.IELBlockInfoTagLabel.MouseHover += (sender, e) =>
             {
@@ -293,30 +323,31 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
+
             #endregion
+
             PanelActionSettingsLabel = new(this, PageLabel, new(210d, 235d));
-            PanelActionSettingsLabelElement = new(GridMain, PageLabelElement, new(236d, 290d));
+            PanelActionSettingsLabelElement = new(GridMain, PageLabelElement, new(236d, 310d));
             #endregion
-            IELButtonSorting.OnActivateMouseLeft += async (sender, e, Key) =>
+
+            IELButtonSorting.OnActivateMouseLeft += async (sender, e) =>
             {
-                if (App.MainWindow.IELActionPanelMain.ActualFrameElement?.Equals(PageLabelElement) ?? false)
+                if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
                     App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 SortingLabelEnum[] ArrayValues = Enum.GetValues<SortingLabelEnum>();
                 await ChangeSortingLabelType(ArrayValues[((int)SortingLabelType + 1) % ArrayValues.Length]);
             };
-            IELButtonSorting.OnActivateMouseRight += async (sender, e, Key) =>
+            IELButtonSorting.OnActivateMouseRight += async (sender, e) =>
             {
-                if (App.MainWindow.IELActionPanelMain.ActualFrameElement?.Equals(PageLabelElement) ?? false)
+                if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
                     App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 await ChangeSortingLabelType(SortingLabelEnum.NameAZ);
                 e.Handled = true;
             };
             #region Search Setting
-            IELButtonSearch.OnActivateMouseLeft += async (sender, e, Key) =>
+            IELButtonSearch.OnActivateMouseLeft += async (sender, e) =>
             {
                 SearchActivate = !SearchActivate;
-                //TextBlockLabelInfo.Text = SearchActivate ? $"Найдено ярлыков: 0 из {App.CurrentApp.DataLabels.Count}" : $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
-                //IELButtonSearch.Background.SetUsedState(SearchActivate);
                 if (IELTextBoxSearch.Text.Length == 0)
                 {
                     UpdateTextInfoLabels();
@@ -400,7 +431,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             for (int i = 0; i < GridMainLabels.Children.Count; i++)
             {
-                OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
+                OPLLabel Element = (OPLLabel)GridMainLabels.Children[i];
                 if (!SearchActivate || IELTextBoxSearch.Text.Length == 0)
                 {
                     Element.SourceBackground.SetUsedState(false);
@@ -411,6 +442,28 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 else Element.SourceBackground.SetUsedState(false);
             }
             UpdateTextInfoLabels();
+        }
+
+        /// <summary>
+        /// Изменить выделение ярлыка
+        /// </summary>
+        /// <param name="ElementSelected">Ярлык над которым производится взаимодействие</param>
+        private void ChangeSelectLabel(OPLLabel ElementSelected)
+        {
+            ElementSelected.Selected = !ElementSelected.Selected;
+            if (ElementSelected.Selected)
+            {
+                ListSelectLabel.Add(ElementSelected);
+                ElementSelected.TextBlockNumberSelect.Text = $"{ListSelectLabel.Count.ToString($"D{(int)Math.Log10(GridMainLabels.Children.Count) + 1}")}";
+            }
+            else
+            {
+                for (int i = ListSelectLabel.IndexOf(ElementSelected) + 1; i < ListSelectLabel.Count; i++)
+                {
+                    ListSelectLabel[i].TextBlockNumberSelect.Text = $"{i.ToString($"D{(int)Math.Log10(GridMainLabels.Children.Count) + 1}")}";
+                }
+                ListSelectLabel.Remove(ElementSelected);
+            }
         }
 
         /// <summary>
@@ -443,7 +496,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <param name="Index">Индекс данных</param>
         internal async Task AppendNewOPLLbel(int Index)
         {
-            OPLLabelCommand Label = CreateVisualLabel(Index);
+            OPLLabel Label = CreateVisualLabel(Index);
             SortLabels(App.CurrentApp.DataLabels, SortingLabelType);
             GridMainLabels.Children.Add(Label);
             await UpdatePositionLabels(0, false);
@@ -462,25 +515,15 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 for (int i = StartIndex; i < GridMainLabels.Children.Count; i++)
                 {
-                    OPLLabelCommand Element = (OPLLabelCommand)GridMainLabels.Children[i];
+                    OPLLabel Element = (OPLLabel)GridMainLabels.Children[i];
                     int indexInData = App.CurrentApp.DataLabels.IndexOf(Element.SourceLabel);
                     int CountOneLine = indexInData % CountOneLineLabel;
                     int CountLine = indexInData / CountOneLineLabel;
                     int Left = CountOneLine == 0 ? MarginLabel : CountOneLine * FULL_WidthLabel;
                     int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
                     if (Element.Margin.Left == Left && Element.Margin.Top == Top) continue;
-                    if (Animatable)
-                    {
-                        ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
-                        animation.Duration = TimeSpan.FromMilliseconds(600d);
-                        animation.To = new(Left, Top, 0, 0);
-                        animation.FillBehavior = FillBehavior.Stop;
-                        animation.Completed += (sender, e) =>
-                        {
-                            Element.Margin = new(Left, Top, 0, 0);
-                        };
-                        Element.ApplyAnimationClock(MarginProperty, animation.CreateClock());
-                    }
+                    if (Animatable) 
+                        App.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(Left, Top, 0, 0), TimeSpan.FromMilliseconds(360d));
                     else Element.Margin = new(Left, Top, 0, 0);
                 }
             });
@@ -491,15 +534,22 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// </summary>
         private void UpdateTextInfoLabels()
         {
-            if (SelectLabelsMode) TextBlockLabelInfo.Text = "(Режим выделения) ";
+            if (ActivateConsistentExecuteSelectLabels) TextBlockLabelInfo.Text = "(Последовательное выполнение) ";
+            else if (SelectLabelsMode) TextBlockLabelInfo.Text = "(Режим выделения) ";
             else TextBlockLabelInfo.Text = string.Empty;
             if (SearchActivate)
             {
-                OPLLabelCommand[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabelCommand>()];
+                OPLLabel[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabel>()];
                 TextBlockLabelInfo.Text += "Найдено ярлыков: " +
                     $"{ArrayLabelsElement.Count((i) => i.SourceBackground.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
             }
-            else TextBlockLabelInfo.Text += $"Ярлыков: {App.CurrentApp.DataLabels.Count}";
+            else
+            {
+                TextBlockLabelInfo.Text += $"Ярлыков: ";
+                if (ActivateConsistentExecuteSelectLabels)
+                    TextBlockLabelInfo.Text += $"{ListSelectLabel.Count} <<< {App.CurrentApp.DataLabels.Count}";
+                else TextBlockLabelInfo.Text += $"{App.CurrentApp.DataLabels.Count}";
+            }
         }
 
         /// <summary>
@@ -515,7 +565,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     Dispatcher.Invoke(() =>
                     {
                         TextBlockEventInfo.Text = $"Идёт загрузка всех ярлыков ({i}/{App.CurrentApp.DataLabels.Count})";
-                        OPLLabelCommand Element = CreateVisualLabel(i);
+                        OPLLabel Element = CreateVisualLabel(i);
                         Element.Opacity = 1d;
                         if (Element.SourceLabel.Tag != null)
                         {
@@ -535,9 +585,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Сгенерировать объект интерфейса ярлыка
         /// </summary>
-        private OPLLabelCommand CreateVisualLabel(int IndexData)
+        private OPLLabel CreateVisualLabel(int IndexData)
         {
-            OPLLabelCommand Label = new(App.CurrentApp.DataLabels[IndexData])
+            OPLLabel Label = new(App.CurrentApp.DataLabels[IndexData])
             {
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
@@ -550,10 +600,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Label.MouseRightButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
-            Label.OnActivateMouseRight += (sender, e, Key) =>
+            Label.OnActivateMouseRight += (sender, e) =>
             {
                 SelectLabelInPage = Label;
-                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = SelectLabelInPage.Selected && SelectLabelsMode;
+                PageLabelElement.IELButtonExecuteLabel.IsEnabled = !ActivateConsistentExecuteSelectLabels;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = !ActivateConsistentExecuteSelectLabels && !SelectLabelInPage.Selected;
+                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = !ActivateConsistentExecuteSelectLabels && SelectLabelInPage.Selected;
                 PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.SourceLabel.Tag != null;
                 //PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
                 PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
@@ -561,15 +613,20 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement, OrientationPanelActionPosition.LeftUp);
                 e.Handled = true;
             };
-            Label.OnActivateMouseLeft += async (sender, e, Key) =>
+            Label.OnActivateMouseLeft += async (sender, e) =>
             {
-                if (SelectLabelsMode)
+                if (ActivateConsistentExecuteSelectLabels)
                 {
-                    Label.Selected = !Label.Selected;
-                    if (Label.Selected) return;
-                    if (!GridMainLabels.Children.OfType<OPLLabelCommand>().Any((i) => i.Selected))
+                    App.MainWindow.GenerateVisualizateImage("Невозможно запустить ярлык при последовательном исполнении.");
+                    return;
+                }
+                else if (SelectLabelsMode)
+                {
+                    ChangeSelectLabel(Label);
+                    if (ListSelectLabel.Count == 0)
                     {
                         SelectLabelsMode = false;
+                        ListSelectLabel.Clear();
                         UpdateTextInfoLabels();
                     }
                     return;
@@ -600,7 +657,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// Удалить ярлык по индексу
         /// </summary>
         /// <param name="Index">индекс удаляемого ярлыка</param>
-        private async Task RemoveLabel(OPLLabelCommand Source)
+        private async Task RemoveLabel(OPLLabel Source)
         {
             //int UpdateIndex = GridMainLabels.Children.IndexOf(Source);
             GridMainLabels.Children.Remove(Source);

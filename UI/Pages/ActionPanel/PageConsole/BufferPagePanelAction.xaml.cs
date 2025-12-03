@@ -43,8 +43,8 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
             TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBackMainMenu);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearBuffer);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBackMainMenu);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearBuffer);
 
             IELButtonClearBuffer.OnActivateMouseLeft += async (sender, e, Key) =>
             {
@@ -116,11 +116,11 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             if (BufferCommand.Count < BufferCommand.Length)
             {
                 OPLButtonBufferCommand Button = CreateBufferButton(Name, Command);
-                Button.OnActivateMouseLeft += async (sender, e, Key) =>
+                Button.OnActivateMouseLeft += async (sender, e) =>
                 {
                     await App.CurrentApp.ActivateActionCommand(SourcePage, ((OPLButtonBufferCommand)sender).TextBlockButtonCommand.Text);
                 };
-                Button.OnActivateMouseRight += (sender, e, Key) =>
+                Button.OnActivateMouseRight += (sender, e) =>
                 {
                     BufferCommand.Delete(Button.Index);
                     TextBlockCounterBuffer.Text =

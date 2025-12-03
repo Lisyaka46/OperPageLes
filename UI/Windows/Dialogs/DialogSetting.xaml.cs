@@ -55,7 +55,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 //App.ThicknessAnimationType.AnimateEffect(IELGeneralButton, MarginProperty,
                 //    GetMarginAnimatePageButton(IELGeneralButton.Margin, false), TimeSpan.FromMilliseconds(IELGeneralButton.IELSettingObject.AnimationMillisecond));
             };
-            IELGeneralButton.OnActivateMouseLeft += (sender, e, Key) =>
+            IELGeneralButton.OnActivateMouseLeft += (sender, e) =>
             {
                 int OriginIndex = Grid.GetColumn(IELGeneralButton);
                 //ActiveBackgroundSetting?.SetUsedState(false);
@@ -77,7 +77,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 //App.ThicknessAnimationType.AnimateEffect(IELConsoleButton, MarginProperty,
                 //    GetMarginAnimatePageButton(IELConsoleButton.Margin, false), TimeSpan.FromMilliseconds(IELConsoleButton.IELSettingObject.AnimationMillisecond));
             };
-            IELConsoleButton.OnActivateMouseLeft += (sender, e, Key) =>
+            IELConsoleButton.OnActivateMouseLeft += (sender, e) =>
             {
                 int OriginIndex = Grid.GetColumn(IELConsoleButton);
                 //ActiveBackgroundSetting?.SetUsedState(false);
@@ -99,7 +99,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 //App.ThicknessAnimationType.AnimateEffect(IELPanelActionButton, MarginProperty,
                 //    GetMarginAnimatePageButton(IELPanelActionButton.Margin, false), TimeSpan.FromMilliseconds(IELPanelActionButton.IELSettingObject.AnimationMillisecond));
             };
-            IELPanelActionButton.OnActivateMouseLeft += (sender, e, Key) =>
+            IELPanelActionButton.OnActivateMouseLeft += (sender, e) =>
             {
                 int OriginIndex = Grid.GetColumn(IELPanelActionButton);
                 //ActiveBackgroundSetting?.SetUsedState(false);

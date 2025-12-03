@@ -19,6 +19,7 @@
             <RowDefinition Height="170"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" MaxHeight="60"/>
+            <RowDefinition Height="Auto" MaxHeight="60"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Border x:Name="BorderPathImageBackground" BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="6,6,6,6" MaxWidth="600" ClipToBounds="True" Focusable="True">
@@ -131,7 +132,10 @@
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="2" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#FF485A44" MaxWidth="600">
             <CheckBox x:Name="CheckBoxInternetConnectionMillisecond" Content="Отображать скорость отклика интернета в миллисекундах" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
         </Border>
-        <Grid Grid.Row="3" MaxWidth="650">
+        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="3" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#FF57A7A2" MaxWidth="600">
+            <CheckBox x:Name="CheckBoxLoadingBorderVisualizate" Content="Визуализировать загрузку в границе окна" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
+        </Border>
+        <Grid Grid.Row="4" MaxWidth="650">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>

@@ -80,6 +80,11 @@ namespace ApplicationOperPageLes.UI.Windows
         private PageSettingVisual SettingVisualPageLoadingController;
 
         /// <summary>
+        /// Текущее состояние отображения загрузки процесса
+        /// </summary>
+        private bool IsVisualLoagingProcessInBorder;
+
+        /// <summary>
         /// Состояние загрузки какого-либо процесса
         /// </summary>
         internal bool IsLoadingProcess { get; private set; }
@@ -114,6 +119,11 @@ namespace ApplicationOperPageLes.UI.Windows
         private readonly TextBlock DEV_Data;
         private readonly TextBlock DEV_IsLoadingProcess;
 #endif
+        #region BorderMainWindowLoading
+        /// <summary>
+        /// 
+        /// </summary>
+        private LinearGradientBrush LinearGradientMainWindowBackground;
 
         /// <summary>
         /// Объект манипуляции вращением фона главного окна
@@ -124,6 +134,7 @@ namespace ApplicationOperPageLes.UI.Windows
             CenterX = 0.5d,
             CenterY = 0.5d,
         };
+        #endregion
 
         public MainWindow()
         {
@@ -188,22 +199,22 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.SetSourceImageButtonAddInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus)));
 
             #region Palette
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay());
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay());
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonBackButtons);
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonNextButtons);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonBackButtons);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonNextButtons);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELImageButtonHelp);
 
-            App.CurrentApp.SettingPaletteApplication.SourcePalette[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELImageButtonMenu);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELImageButtonMenu);
             #endregion
 
-            LinearGradientBrush LinearGradientMainWindowBackground = new()
+            LinearGradientMainWindowBackground = new()
             {
                 GradientStops = new(
                     [
@@ -267,18 +278,23 @@ namespace ApplicationOperPageLes.UI.Windows
 
             #region Settings
             UpdateImageMenu(App.CurrentApp.SettingMainApplication.PathMenuImage);
+
+            App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Changed += (Old, New) =>
+            {
+                if (!IsVisualLoagingProcessInBorder) EndRotateBorder(New ? 1 : -1);
+            };
             #endregion
 
             #region UpToolButtons
             #region IELImageButtonClose
-            IELImageButtonClose.OnActivateMouseLeft += (sender, e, Key) =>
+            IELImageButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
                 Close();
             };
             #endregion
 
             #region IELImageButtonHelp
-            IELImageButtonHelp.OnActivateMouseLeft += (sender, e, Key) =>
+            IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
             {
                 WindowDiscriptionCommands j = new();
                 App.CurrentApp.OpenedWindowsInApplication.Add(j);
@@ -307,7 +323,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 IELMessageMain.CloseBorderInformation();
             };
-            IELButtonSettings.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSettings.OnActivateMouseLeft += (sender, e) =>
             {
                 new DialogSetting().ShowDialog();
             };
@@ -317,8 +333,8 @@ namespace ApplicationOperPageLes.UI.Windows
 
             #region DownToolButtons
             ActualIndexActivatePageDownToolButtons = 0;
-            IELImageButtonNextButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons();
-            IELImageButtonBackButtons.OnActivateMouseLeft += (sender, e, Key) => NextPageDownToolButtons(false);
+            IELImageButtonNextButtons.OnActivateMouseLeft += (sender, e) => NextPageDownToolButtons();
+            IELImageButtonBackButtons.OnActivateMouseLeft += (sender, e) => NextPageDownToolButtons(false);
 
             IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
             IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
@@ -346,7 +362,11 @@ namespace ApplicationOperPageLes.UI.Windows
                 IELBrowserPageMain.IsEnabled = true;
                 if (e == null) return;
                 IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(e);
-                SourceInlay?.SetImageButtonCloseInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)));
+                if (SourceInlay == null) return;
+                IELButtonImage ButtonCloseInlay = SourceInlay.GetButtonCloseInlay();
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(SourceInlay);
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.VioletRed].ConnectPalleteFromIELElement(ButtonCloseInlay);
+                ButtonCloseInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
             };
             FrameNewInlayBrowser.IsHitTestVisible = false;
             FrameNewInlayBrowser.IsEnabled = false;
@@ -393,7 +413,7 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
 
-            ImageLogoApplication.OnActivateMouseLeft += (sender, e, Key) =>
+            ImageLogoApplication.OnActivateMouseLeft += (sender, e) =>
             {
                 DialogLicenseWindow License = new();
                 License.Show();
@@ -565,10 +585,10 @@ namespace ApplicationOperPageLes.UI.Windows
         internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method, bool IsCanceledManipulate = false)
         {
             OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
-            ViewLoading.IsCanceledManipulate = IsCanceledManipulate;
+            ViewLoading.ViewClose = IsCanceledManipulate;
             ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
             CancellationToken token = new(false);
-            ViewLoading.OnActivateMouseRight += (sender, e, Key) =>
+            ViewLoading.OnActivateMouseRight += (sender, e) =>
             {
                 token.ThrowIfCancellationRequested();
                 ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
@@ -583,15 +603,15 @@ namespace ApplicationOperPageLes.UI.Windows
         }
 
         /// <summary>
-        /// Создать объект визуализирующий изображение
+        /// Создать объект визуализирующий изображение (уведомление)
         /// </summary>
-        /// <param name="NameProcess">Название загрузочного процесса</param>
-        /// <returns>Объект визуализации загрузочного процесса</returns>
+        /// <param name="NameProcess">Название сообщения</param>
+        /// <returns>Объект визуализации картинки</returns>
         public OPLImageViewer GenerateVisualizateImage(string Name)
         {
             OPLImageViewer Result = PageControllerLoadingApplication.SetViewImageElement();
             Result.Text = Name;
-            Result.OnActivateMouseLeft += (sender, e, Key) =>
+            Result.OnActivateMouseLeft += (sender, e) =>
             {
                 Result.VisualClose();
                 PageControllerLoadingApplication.DeleteViewMediaElement(Result);
@@ -609,7 +629,7 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             OPLMediaViewer Result = PageControllerLoadingApplication.SetViewMediaElement();
             Result.Text = Name;
-            Result.OnActivateMouseLeft += (sender, e, Key) =>
+            Result.OnActivateMouseLeft += (sender, e) =>
             {
                 Result.VisualClose();
                 PageControllerLoadingApplication.DeleteViewMediaElement(Result);
@@ -639,13 +659,11 @@ namespace ApplicationOperPageLes.UI.Windows
             if (!IsLoadingProcess)
             {
                 IsLoadingProcess = true;
-                DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
-                animation.From = 0d;
-                animation.To = 3600d;
-                animation.RepeatBehavior = RepeatBehavior.Forever;
-                animation.EasingFunction = null;
-                animation.Duration = TimeSpan.FromMilliseconds(30000d);
-                RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
+                if (App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate)
+                {
+                    BeginRotateBorder();
+                    IsVisualLoagingProcessInBorder = true;
+                }
 #if DEBUG
                 DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
 #endif
@@ -666,17 +684,46 @@ namespace ApplicationOperPageLes.UI.Windows
             if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
             {
                 IsLoadingProcess = false;
-                DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
-                animation.From = RotateMainWindowBackground.Angle % 360;
-                animation.To = 360d;
-                animation.Duration = TimeSpan.FromMilliseconds(3200d);
-                RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
+                if (IsVisualLoagingProcessInBorder)
+                {
+                    EndRotateBorder();
+                    IsVisualLoagingProcessInBorder = false;
+                }
 #if DEBUG
                 DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
 #endif
                 App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
             }
         }
+
+        #region VisualBorderLoading
+        /// <summary>
+        /// Начать анимацию поворота барьера
+        /// </summary>
+        private static void BeginRotateBorder()
+        {
+            DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+            animation.From = 0d;
+            animation.To = 3600d;
+            animation.RepeatBehavior = RepeatBehavior.Forever;
+            animation.EasingFunction = null;
+            animation.Duration = TimeSpan.FromMilliseconds(30000d);
+            RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
+        }
+
+        /// <summary>
+        /// Закончить анимацию барьера
+        /// </summary>
+        /// <param name="FromValue">Стартовое значение анимирования</param>
+        private static void EndRotateBorder(int FullCountRotate = 1)
+        {
+            DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+            animation.From = RotateMainWindowBackground.Angle % 360;
+            animation.To = 361d * FullCountRotate;
+            animation.Duration = TimeSpan.FromMilliseconds(3200d);
+            RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
+        }
+        #endregion
         #endregion
 
         /// <summary>

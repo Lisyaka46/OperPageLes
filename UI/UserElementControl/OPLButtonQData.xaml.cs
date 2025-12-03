@@ -214,7 +214,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             };
         }
 
-        private void UpdateVisualQDataSpectrum()
+        internal void UpdateVisualQDataSpectrum()
         {
             ((SolidColorBrush)BorderColorDefault.Background).Color = SourceBackground.Source.Default;
             ((SolidColorBrush)BorderColorSelect.Background).Color = SourceBackground.Source.Select;

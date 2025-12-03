@@ -45,9 +45,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" Text="Command* t" FontSize="20" FontFamily="{DynamicResource Deledda Open Regular}" Background="{DynamicResource BB_Violet}" BorderBrush="{DynamicResource BB_Violet}" Foreground="{DynamicResource FG_Violet}" Padding="0,5,0,0"/>
+            <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" FontSize="20" FontFamily="{DynamicResource Deledda Open Regular}" Padding="0,5,0,0" PaletteElement="{DynamicResource Violet}" Text=""/>
             <Grid Grid.Column="2" Grid.Row="2">
-                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3"  FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Padding="5,0,5,0" Background="{DynamicResource BG_Green}" BorderBrush="{DynamicResource BB_Green}" Foreground="{DynamicResource FG_Green}" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6"/>
+                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3"  FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Padding="5,0,5,0" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}"/>
             </Grid>
         </Grid>
         <Grid x:Name="GridHit" Margin="6,0,0,-3" HorizontalAlignment="Left">

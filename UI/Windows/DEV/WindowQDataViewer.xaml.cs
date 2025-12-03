@@ -24,6 +24,7 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
         private ColorDialog Dialog;
         private readonly PaletteSpectrum PaletteSpectrumSource;
         private readonly System.Windows.Media.Brush[][] ArrayBrushSource;
+        private string SaveNamePalette = string.Empty;
         public WindowQDataViewer()
         {
             /*
@@ -41,6 +42,9 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
                 ButtonBack.IsEnabled = false;
                 ControlUpdateModeSetBrushQ(PaletteSpectrumSource);
                 IELSourceButton.PaletteElement = PaletteSpectrumSource;
+
+                TextGeneratePalette.Text = SaveNamePalette;
+                TextGeneratePalette.IsEnabled = true;
                 UpdateCode();
             };
             CheckBoxIsEnabledController.Checked += (sender, e) =>
@@ -62,8 +66,8 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
 
             ComboBoxSelectQData.SelectedIndex = 0;
 
-            IELSourceButton.OnActivateMouseLeft += (sender, e, Key) => { };
-            IELSourceButton.OnActivateMouseRight += (sender, e, Key) => { };
+            IELSourceButton.OnActivateMouseLeft += (sender, e) => { };
+            IELSourceButton.OnActivateMouseRight += (sender, e) => { };
 
             ButtonCreateCode.Click += (sender, e) =>
             {
@@ -78,8 +82,10 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
             InicializeQData.Click += (sender, e) =>
             {
                 IELSourceButton.PaletteElement =
-                    App.CurrentApp.SettingPaletteApplication.SourcePalette[(PaletteSpectrumEnum)ComboBoxSelectInitQData.SelectedIndex];
-
+                    App.CurrentApp.ActiveThemeApplication[(PaletteSpectrumEnum)ComboBoxSelectInitQData.SelectedIndex];
+                SaveNamePalette = TextGeneratePalette.Text;
+                TextGeneratePalette.Text = ((PaletteSpectrumEnum)ComboBoxSelectInitQData.SelectedIndex).ToString();
+                TextGeneratePalette.IsEnabled = false;
                 ControlUpdateModeSetBrushQ(IELSourceButton.PaletteElement);
                 UpdateCode();
                 ButtonBack.IsEnabled = true;
@@ -87,7 +93,7 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
 
             ReadFileQData.Click += async (sender, e) =>
             {
-                await App.CurrentApp.SettingPaletteApplication.ChangeSourcePalette(
+                await App.CurrentApp.ActiveThemeApplication.ChangeSourceTheme(
                     new(File.ReadAllBytes("C:/Users/killm/Рабочий стол/Новая папка/QData.qd")));
             };
 
@@ -97,10 +103,10 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
                 stream.Position = 0;
                 foreach (PaletteSpectrumEnum Element in Enum.GetValues<PaletteSpectrumEnum>())
                 {
-                    PaletteSpectrum spectrum = App.CurrentApp.SettingPaletteApplication.SourcePalette[Element];
-                    await WriteQdata(stream, spectrum.BG);
-                    await WriteQdata(stream, spectrum.BB);
-                    await WriteQdata(stream, spectrum.FG);
+                    PaletteSpectrum spectrum = App.CurrentApp.ActiveThemeApplication[Element];
+                    await spectrum.BG.WriteQdata(stream);
+                    await spectrum.BB.WriteQdata(stream);
+                    await spectrum.FG.WriteQdata(stream);
                 }
                 stream.Close();
                 stream.Dispose();
@@ -163,60 +169,21 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
 
         private void UpdateCode()
         {
-            TextBlockCodeView.Text = String.Empty;
-            QData source;
-            for (int i = 0; i < 3; i++)
-            {
-                source = i switch
-                {
-                    0 => IELSourceButton.Background,
-                    1 => IELSourceButton.BorderBrush,
-                    2 => IELSourceButton.Foreground,
-                    _ => throw new Exception("Недоступное значение выделенного индекса.")
-                };
-                TextBlockCodeView.Text +=
-                    $"{source.Default.A} {source.Default.R} {source.Default.G} {source.Default.B}\n" +
-                    $"{source.Select.A} {source.Select.R} {source.Select.G} {source.Select.B}\n" +
-                    $"{source.Used.A} {source.Used.R} {source.Used.G} {source.Used.B}\n" +
-                    $"{source.NotEnabled.A} {source.NotEnabled.R} {source.NotEnabled.G} {source.NotEnabled.B}";
-                if (i < 2) TextBlockCodeView.Text += "\n";
-            }
-        }
-
-        /// <summary>
-        /// Прочитать из потока данных файла данные QData
-        /// </summary>
-        /// <param name="Stream">Поток файла</param>
-        /// <returns></returns>
-        /// <exception cref="Exception">Исключение несоответствия режима открытия файла</exception>
-        private async Task<QData> ReadQdata(FileStream Stream)
-        {
-            if (!Stream.CanRead) throw new Exception("Поток работы с файлом не открыт для чтения!");
-            byte[][] bytes = new byte[QData.CountSpectrumColor][];
-            for (int i = 0; i < QData.CountSpectrumColor; i++)
-            {
-                bytes[i] = new byte[QData.CountBytesFromColor];
-                IAsyncResult result = Stream.BeginRead(bytes[i], 0, QData.CountBytesFromColor, null, null);
-                await Task.Run(() => { while (!result.IsCompleted); });
-                Stream.EndRead(result);
-            }
-            return new QData(bytes);
-        }
-
-        /// <summary>
-        /// Записать в поток данных файла данные QData
-        /// </summary>
-        /// <param name="Stream">Поток файла</param>
-        /// <param name="Source">Данные спектров</param>
-        /// <returns></returns>
-        /// <exception cref="Exception">Исключение несоответствия режима открытия файла</exception>
-        private async Task WriteQdata(FileStream Stream, QData Source)
-        {
-            if (!Stream.CanWrite) throw new Exception("Поток работы с файлом не открыт для записи!");
-            var bytes = Source.GetSourceBytes();
-            IAsyncResult result = Stream.BeginWrite(bytes, 0, bytes.Length, null, null);
-            await Task.Run(() => { while (!result.IsCompleted); });
-            Stream.EndWrite(result);
+            TextBlockCodeView.Text =
+                $"<IEL:PaletteSpectrum x:Key=\"{TextGeneratePalette.Text}\">\r\n" +
+                "\t<IEL:PaletteSpectrum.BG>\r\n" +
+                $"\t\t<IEL:QData Default=\"{IELSourceButton.Background.Default}\" Select=\"{IELSourceButton.Background.Select}\" " +
+                    $"Used=\"{IELSourceButton.Background.Used}\" NotEnabled=\"{IELSourceButton.Background.NotEnabled}\"/>\r\n" +
+                "\t</IEL:PaletteSpectrum.BG>\r\n" +
+                "\t<IEL:PaletteSpectrum.BB>\r\n" +
+                $"\t\t<IEL:QData Default=\"{IELSourceButton.BorderBrush.Default}\" Select=\"{IELSourceButton.BorderBrush.Select}\" " +
+                    $"Used=\"{IELSourceButton.BorderBrush.Used}\" NotEnabled=\"{IELSourceButton.BorderBrush.NotEnabled}\"/>\r\n" +
+                "\t</IEL:PaletteSpectrum.BB>\r\n" +
+                "\t<IEL:PaletteSpectrum.FG>\r\n" +
+                $"\t\t<IEL:QData Default=\"{IELSourceButton.Foreground.Default}\" Select=\"{IELSourceButton.Foreground.Select}\" " +
+                    $"Used=\"{IELSourceButton.Foreground.Used}\" NotEnabled=\"{IELSourceButton.Foreground.NotEnabled}\"/>\r\n" +
+                "\t</IEL:PaletteSpectrum.FG>\r\n" +
+                "</IEL:PaletteSpectrum>";
         }
     }
 #endif

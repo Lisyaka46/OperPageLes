@@ -1,15 +1,9 @@
-﻿//using GLGraphs.CartesianGraph;
-//using GLGraphs.Wpf;
-//using OpenTK.Graphics.OpenGL;
-//using OpenTK.Graphics.OpenGL4;
-//using OpenTK.Mathematics;
-using ApplicationOperPageLes.CORE.Enums;
+﻿using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.DEV;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
+using IEL.CORE.BaseUserControls;
 using IEL.GUI;
-using Newtonsoft.Json;
-using System.IO;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,9 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using System.Xml.Linq;
+using System.Windows.Shapes;
+using Windows.Media.Audio;
+using WinRT;
+using static System.Windows.Forms.AxHost;
 using DrColor = System.Drawing.Color;
 using Point = System.Windows.Point;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {
@@ -31,7 +29,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     {
         private bool ScaleMode = false;
         private bool KeyEventActivate = false;
-        //private GraphSeries<string>? SeriesSource;
 
         private Point StartPositionMouse;
         private bool Activate = false;
@@ -40,54 +37,97 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             InitializeComponent();
 
-            //var GLGraphControl = new GLCartesianGraphControl<string>();
-            //GLGraphControl.Height = 270;
-            //GLGraphControl.Loaded += (sender, e) =>
-            //{
-            //    CartesianGraphSettings Settings = new()
-            //    {
-            //        PointSize = 60f,
-            //        TextScale = 1.6f,
-            //        BackgroundColor = new(20, 20, 20, 255),
-            //        SelectionMode = GraphSelectionMode.Click,
-            //        LineSize = 10f,
-            //        ForceSquareGrid = false,
-            //        SelectedCol = new(230, 200, 130, 200),
+            Loaded += async (sender, e) =>
+            {
+                const int CountParticles = 30, DelayOneParticle = 100;
+                TimeSpan TimeParticle = TimeSpan.FromMilliseconds(DelayOneParticle * 8);
+                Random randomColor = new();
+                //IELObjectBase Particle;
+                FrameworkElement Particle;
+                int i = 0;
+                for (int K = 0; K < CountParticles; K++)
+                {
+                    DoubleAnimation animationD = new()
+                    {
+                        Duration = TimeParticle,
+                        From = 1d,
+                        To = 0d
+                    };
+                    DoubleAnimation animationW = new()
+                    {
+                        Duration = TimeParticle,
+                        From = 15d,
+                        To = 60d
+                    };
+                    DoubleAnimation animationH = new()
+                    {
+                        Duration = TimeParticle,
+                        From = 15d,
+                        To = 60d
+                    };
+                    //Particle = new System.Windows.Shapes.Rectangle()
+                    //{
+                    //    Height = 3,
+                    //    Width = 3,
+                    //    Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
+                    //        (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
+                    //    Opacity = 0d
+                    //};
+                    //Particle = new IELBlockInfoText()
+                    //{
+                    //    Width = 20,
+                    //    Height = 20,
+                    //    Opacity = 0d,
+                    //    CornerRadius = new(3),
+                    //    Text = "F",
+                    //};
+                    Particle = new System.Windows.Controls.Image()
+                    {
+                        Height = 15,
+                        Width = 15,
+                        //Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
+                        //    (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
+                        Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)),
+                        Opacity = 0d
+                    };
+                    //App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray].ConnectPalleteFromIELElement(Particle);
+                    Thickness Start = new(
+                        Particles.ActualWidth / 2 - Particle.Width / 2,
+                        Particles.ActualHeight / 2 - Particle.Height / 2, 0, 0);
 
-            //    };
-            //    GLGraphControl.Graph = new(Settings);
-            //    //GLGraphControl.Graph.State.AddRegion(new(-1.5f, -1.5f, 1.5f, 1.5f), new(230, 130, 30, 200));
-            //    GLGraphControl.Graph.State.XGridSpacing.Major = 0.4f;
-            //    GLGraphControl.Graph.State.XGridSpacing.Minor = 0.2f;
-            //    GLGraphControl.Graph.State.XGridSpacing.Automatic = false;
-            //    GLGraphControl.Graph.State.YGridSpacing.Major = 0.4f;
-            //    GLGraphControl.Graph.State.YGridSpacing.Minor = 0.2f;
-            //    GLGraphControl.Graph.State.YGridSpacing.Automatic = false;
-            //    GLGraphControl.Graph.State.IsCameraAutoControlled = false;
-            //    //GLGraphControl.Graph.State.
+                    Particle.Margin = Start;
+                    Particles.Children.Add(Particle);
 
-            //    GLGraphControl.UseLayoutRounding = false;
-            //    GLGraphControl.Graph.State.Camera.VerticalSizeDampeningFactor = 0.1f;
-            //    GLGraphControl.Graph.State.Camera.PositionDampeningFactor = 0.16f;
-            //    //GLGraphControl.Graph.State.AutoMajorGridDivisions = 1;
-            //    //GLGraphControl.Graph.State.AutoMinorGridDivisions = 1;
-            //    //GLGraphControl.
-            //    //GLGraphControl.Graph.State.Bounds = new(-2, -2, 2, 2);
-            //    SeriesSource = GLGraphControl.Graph.State.AddSeries(SeriesType.Point, "x^2");
+                    ThicknessAnimation animationT = App.ThicknessAnimationType.SourceAnimation.Clone();
+                    animationT.Duration = TimeParticle;
+                    animationT.From = Start;
+                    RepeatBoard(animationT, randomColor, Start);
 
-            //    SeriesSource.PointShape = SeriesPointShape.Triangle;
-            //    SeriesSource.IsVisible = true;
-            //    SeriesSource.Color = new(230, 100, 30, 200);
-            //};
-            //GridMain.Children.Add(GLGraphControl);
-            //Grid.SetRow(GLGraphControl, 1);
+                    animationT.FillBehavior = FillBehavior.Stop;
+                    animationT.Completed += (sender, e) =>
+                    {
+                        Particles.Children[i].BeginAnimation(MarginProperty, null);
+                        Particles.Children[i].BeginAnimation(OpacityProperty, null);
+                        Particles.Children[i].BeginAnimation(WidthProperty, null);
+                        Particles.Children[i].BeginAnimation(HeightProperty, null);
 
-            //BorderImage.RenderTransform = new TransformGroup() { Children = [ScaleBorderTransform, SkewBorderTransform] };
-            //App.DoubleAnimationType.AnimateEffect(ScaleBorderTransform, ScaleTransform.ScaleXProperty, 0.5d, 1d, TimeSpan.FromMilliseconds(500d));
-            //App.DoubleAnimationType.AnimateEffect(ScaleBorderTransform, ScaleTransform.ScaleYProperty, 0.9d, 1d, TimeSpan.FromMilliseconds(500d));
+                        RepeatBoard(animationT, randomColor, Start);
 
-            //App.DoubleAnimationType.AnimateEffect(SkewBorderTransform, SkewTransform.AngleXProperty, 20d, 0d, TimeSpan.FromMilliseconds(500d));
-            //App.DoubleAnimationType.AnimateEffect(SkewBorderTransform, SkewTransform.AngleYProperty, -12, 0d, TimeSpan.FromMilliseconds(500d));
+                        Particles.Children[i].BeginAnimation(MarginProperty, animationT);
+                        Particles.Children[i].BeginAnimation(OpacityProperty, animationD);
+                        Particles.Children[i].BeginAnimation(WidthProperty, animationW);
+                        Particles.Children[i].BeginAnimation(HeightProperty, animationH);
+                        i = ++i % Particles.Children.Count;
+                    };
+
+                    Particle.BeginAnimation(MarginProperty, animationT);
+                    Particle.BeginAnimation(OpacityProperty, animationD);
+                    Particle.BeginAnimation(WidthProperty, animationW);
+                    Particle.BeginAnimation(HeightProperty, animationH);
+                    await Task.Delay(DelayOneParticle);
+                }
+                i = 0;
+            };
 
             MyAnimatedObject.MouseDown += (sender, e) =>
             {
@@ -124,7 +164,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
 
 
-            IELButtonDownloadImage.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonDownloadImage.OnActivateMouseLeft += (sender, e) =>
             {
             };
             GridScale.MouseWheel += (sender, e) =>
@@ -159,7 +199,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 KeyEventActivate = false;
                 e.Handled = true;
             };
-            IELButtonGenerateImage.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonGenerateImage.OnActivateMouseLeft += (sender, e) =>
             {
                 Thread t = new(() =>
                 {
@@ -186,64 +226,20 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 WindowQDataViewer y = new();
                 y.Show();
-                //App.CurrentApp.SettingPaletteApplication.SourcePalette.GetQdataFromEnum(PaletteValuesEnum.BG_Red).SetFromSpectrumData(
-                //    IEL.CORE.Classes.QData.EnumDataSpectrum.Default, 255, 255, 255, 255);
-                //IEL.CORE.Classes.QData[] Data =
-                //    [
-                //        new(
-                //        [
-                //            [255, 255, 255, 255],
-                //            [0, 10, 10, 0],
-                //            [10, 10, 100, 100],
-                //            [100, 100, 10, 10]
-                //        ]),
-                //        new(
-                //        [
-                //            [90, 90, 90, 90],
-                //            [4, 3, 2, 1],
-                //            [10, 20, 100, 100],
-                //            [200, 100, 20, 10]
-                //        ]),
-                //    ];
-                ////byte[] A = Data.Data[0];
-                ////byte[] R = Data.Data[1];
-                ////byte[] G = Data.Data[2];
-                ////byte[] B = Data.Data[3];
-                ////IList<byte> d = [.. Data.Data[0]];
-                //IEnumerable<IEnumerable<IList<byte>>> d = Enumerable.Range(0, Data.Length).Select(
-                //    (i) => Enumerable.Range(0, 4).Select(
-                //        (j) => (IList<byte>)Data[i].Data[j]));
-                //string SettingProcessJSON = JsonConvert.SerializeObject(d, Formatting.Indented);
-                //File.WriteAllText($"C:/Users/killm/Рабочий стол/0/QData_{++c}.json", SettingProcessJSON);
-                ////SeriesSource?.Add("Point", SeriesSource.Points.Count, (float)Math.Cos(SeriesSource.Points.Count));
-
-                //IEnumerable<byte[][]> t = JsonConvert.DeserializeObject<IEnumerable<byte[][]>>(SettingProcessJSON) ??
-                //    throw new Exception("Не удалось преобразовать JSON в управляемый объект QData");
-                //foreach (byte[][] data in t)
-                //{
-                //    IEL.CORE.Classes.QData JsonData = new(data);
-                //    _ = t;
-                //}
                 App.MainWindow.BlurMainAnimateColor(Colors.Blue);
             };
             IELButtonTest.MouseRightButtonUp += (sender, e) =>
             {
-                //App.ColorAnimationType.AnimateEffect(App.MainWindow.ShadowMainBorderEffect,
-                //    DropShadowEffect.ColorProperty, Colors.Black, TimeSpan.FromMilliseconds(300d));
-                //App.DoubleAnimationType.AnimateEffect(App.MainWindow.ShadowMainBorderEffect,
-                //    DropShadowEffect.BlurRadiusProperty, 28, 18, TimeSpan.FromMilliseconds(300d));
-                //// Create a storyboard to apply the animation.
-                //ThicknessAnimation animation = App.ThicknessAnimationType.SourceAnimation.Clone();
-                //animation.Duration = TimeSpan.FromMilliseconds(300d);
-                //animation.From = new(25);
-                //animation.To = new(15);
-                //Storyboard.SetTargetName(animation, "BorderWindowMain");
-                //Storyboard.SetTargetProperty(
-                //    animation, new PropertyPath(Border.BorderThicknessProperty));
-                //Storyboard ellipseStoryboard = new();
-                //ellipseStoryboard.Children.Add(animation);
-                //ellipseStoryboard.Begin(App.MainWindow);
             };
+        }
+
+        //
+        private void RepeatBoard(ThicknessAnimation Board, Random random, Thickness Start)
+        {
+            int W, H;
+            W = random.Next(-((int)Particles.ActualWidth / 3), (int)Particles.ActualWidth / 3);
+            H = random.Next(-Math.Abs(W), Math.Abs(W));
+            Board.To = new(Start.Left + W, Start.Top + H, 0, 0);
         }
 
         /// <summary>

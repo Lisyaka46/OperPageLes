@@ -23,9 +23,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" Margin="4,4,4,4" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Background="{DynamicResource BG_Tangerine}" BorderBrush="{DynamicResource BB_Tangerine}" Foreground="{DynamicResource FG_Tangerine}"/>
-        <IEL:IELButtonTextKey x:Name="IELButtonManipulateTags" Text="Управление тегами" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" PaletteElement="{DynamicResource Jade}"/>
-        <IEL:IELButtonTextKey x:Name="IELButtonSelectAllLabel" Text="Выделить всё" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Background="{DynamicResource BG_Green}" BorderBrush="{DynamicResource BB_Green}" Foreground="{DynamicResource FG_Green}"/>
-        <IEL:IELButtonTextKey x:Name="IELButtonClearAllSelect" Text="Убрать всё выделение" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="3" Grid.RowSpan="1" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonCreateLabel" Text="Создать ярлык" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" Margin="4,4,4,4" Padding="0,7,0,7" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Tangerine}" KeyActivateButton="D1"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonManipulateTags" Text="Управление тегами" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1" Padding="0,7,0,7" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" PaletteElement="{DynamicResource Jade}" KeyActivateButton="D2"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonSelectAllLabel" Text="Выделить всё" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1" Padding="0,7,0,7" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" PaletteElement="{DynamicResource Green}" KeyActivateButton="D3"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonClearAllSelect" Text="Убрать всё выделение" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="3" Grid.RowSpan="1" Padding="0,7,0,7" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" PaletteElement="{DynamicResource PastelRed}" KeyActivateButton="D4"/>
     </Grid>
 </Page>

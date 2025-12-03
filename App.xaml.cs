@@ -159,9 +159,14 @@ namespace ApplicationOperPageLes
         internal SettingApplication SettingMainApplication { get; private set; }
 
         /// <summary>
-        /// Настройка объекта палитры Q-логики
+        /// Палитра приложения по умолчанию
         /// </summary>
-        internal Palette SettingPaletteApplication { get; private set; }
+        internal Palette DefaultPalette { get; }
+
+        /// <summary>
+        /// Активная тема приложения
+        /// </summary>
+        internal Theme ActiveThemeApplication { get; private set; }
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -623,7 +628,8 @@ namespace ApplicationOperPageLes
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
             LogWriteLine("Инициализация палитры");
-            SettingPaletteApplication = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
+            DefaultPalette = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
+            ActiveThemeApplication = new();
 
             #endregion
         }

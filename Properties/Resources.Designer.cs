@@ -303,6 +303,16 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Palette {
+            get {
+                object obj = ResourceManager.GetObject("Palette", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] PaletteDictionary {
             get {
                 object obj = ResourceManager.GetObject("PaletteDictionary", resourceCulture);
@@ -336,6 +346,16 @@ namespace ApplicationOperPageLes.Properties {
         internal static byte[] RightMouseButton {
             get {
                 object obj = ResourceManager.GetObject("RightMouseButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Save {
+            get {
+                object obj = ResourceManager.GetObject("Save", resourceCulture);
                 return ((byte[])(obj));
             }
         }

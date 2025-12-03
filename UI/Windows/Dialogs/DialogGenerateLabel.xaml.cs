@@ -31,12 +31,12 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             InitializeComponent();
             Width = 315d;
             Height = 336d;
-            IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
             {
                 Cancel = true;
                 Close();
             };
-            IELButtonCreateLabel.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonCreateLabel.OnActivateMouseLeft += (sender, e) =>
             {
                 Create();
             };
@@ -131,7 +131,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// </summary>
         /// <param name="Source">Изменяемый объект ярлыка</param>
         /// <returns>Изменённый объект ярлыка</returns>
-        internal void ChangeLabel(OPLLabelCommand Source)
+        internal void ChangeLabel(OPLLabel Source)
         {
             LabelAction Label = Source.SourceLabel;
             IELTextBoxNameLabel.Text = Label.Name;

@@ -13,9 +13,14 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
         private Dictionary<PaletteSpectrumEnum, PaletteSpectrum> _SourcePalette;
 
         /// <summary>
-        /// Словарь доступный только для чтения
+        /// 
         /// </summary>
-        public ReadOnlyDictionary<PaletteSpectrumEnum, PaletteSpectrum> SourcePalette => _SourcePalette.AsReadOnly();
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public PaletteSpectrum this[PaletteSpectrumEnum index]
+        {
+            get => _SourcePalette[index];
+        }
 
         /// <summary>
         /// Инициализировать объект палитры по настройке ресурса
@@ -36,20 +41,24 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
         /// <summary>
         /// Инициализировать объект палитры
         /// </summary>
+        /// <param name="SourceDefault">Палитра значений по умолчанию</param>
         /// <param name="SourceData">Данные байтов цветов ARGB по всем значениям состояний палитры</param>
         internal Palette(byte[] SourceData)
         {
             PaletteSpectrumEnum[] t = Enum.GetValues<PaletteSpectrumEnum>();
-            int CountBytesValuesInPalette =
-                t.Length * PaletteSpectrum.CountQDataSpectrum * QData.CountSpectrumColor * QData.CountBytesFromColor;
-            if (SourceData.Length != CountBytesValuesInPalette) // 16 значений DSUN -> 3 спектра BG BB FG
-                throw new Exception($"Размер массива байтов не соответствует ожидаемому размеру {CountBytesValuesInPalette} байт");
+            //int CountBytesValuesInPalette =
+            //    t.Length * PaletteSpectrum.CountQDataSpectrum * QData.CountSpectrumColor * QData.CountBytesFromColor;
+            if (SourceData.Length % QData.CountSpectrumColor * QData.CountBytesFromColor != 0) // 16 значений DSUN -> 3 спектра BG BB FG
+                throw new Exception("Размер массива байтов не эквивалентен ожидаемому размеру " +
+                    $"{SourceData.Length}%{QData.CountSpectrumColor * QData.CountBytesFromColor} байт");
             _SourcePalette = [];
             PaletteSpectrum spectrum;
             for (int IndexPaletteElement = 0; IndexPaletteElement < t.Length; IndexPaletteElement++)
             {
-                spectrum = new();
-                for (int IndexQDataSpectrum = 0; IndexQDataSpectrum < PaletteSpectrum.CountQDataSpectrum; IndexQDataSpectrum++)
+                spectrum = App.CurrentApp.DefaultPalette[t[IndexPaletteElement]];
+                for (int IndexQDataSpectrum = 0; IndexQDataSpectrum < PaletteSpectrum.CountQDataSpectrum &&
+                    SourceData.Length > IndexPaletteElement * (QData.CountSpectrumColor * QData.CountBytesFromColor * PaletteSpectrum.CountQDataSpectrum);
+                    IndexQDataSpectrum++)
                 {
                     byte[][] BytesFromQdata = new byte[QData.CountSpectrumColor][];
                     for (int IndexSpectrumQData = 0; IndexSpectrumQData < QData.CountSpectrumColor; IndexSpectrumQData++)

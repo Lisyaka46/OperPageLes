@@ -99,7 +99,7 @@ namespace ApplicationOperPageLes.Windows
             DescriptionAlias.ChangeStateSelectCommand += SetStateManipulateInformation;
             SetStateManipulateInformation(false);
 
-            IELButtonCloneTextCommand.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonCloneTextCommand.OnActivateMouseLeft += (sender, e) =>
             {
                 string? Text;
                 if (StateDiscription == ActivateStateDiscription.ConsoleCommand) Text = DescriptionConsole.GetCommandText();
@@ -107,7 +107,7 @@ namespace ApplicationOperPageLes.Windows
                 else return;
                 System.Windows.Clipboard.SetText(Text);
             };
-            IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonBack.OnActivateMouseLeft += (sender, e) =>
             {
                 if (StateDiscription == ActivateStateDiscription.ConsoleCommand) DescriptionConsole.ClearInformationOnCommand();
                 else if (StateDiscription == ActivateStateDiscription.AliasCommand) DescriptionAlias.ClearInformationOnCommand();
@@ -127,7 +127,7 @@ namespace ApplicationOperPageLes.Windows
             #endregion
 
             #region IELButtonConsole
-            IELButtonConsole.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonConsole.OnActivateMouseLeft += (sender, e) =>
             {
                 StateDiscription = ActivateStateDiscription.ConsoleCommand;
                 SetStateManipulateInformation(DescriptionConsole.SelectCommand);
@@ -145,7 +145,7 @@ namespace ApplicationOperPageLes.Windows
             };
             #endregion
             #region IELButtonAlias
-            IELButtonAlias.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonAlias.OnActivateMouseLeft += (sender, e) =>
             {
                 StateDiscription = ActivateStateDiscription.AliasCommand;
                 SetStateManipulateInformation(DescriptionAlias.SelectCommand);
@@ -171,7 +171,7 @@ namespace ApplicationOperPageLes.Windows
             };
             #endregion
             #region IELButtonSearchCommand
-            IELButtonSearchCommand.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSearchCommand.OnActivateMouseLeft += (sender, e) =>
             {
                 if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0) return;
                 if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
@@ -207,7 +207,7 @@ namespace ApplicationOperPageLes.Windows
                 }
                 else return;
             };
-            IELButtonSearchCommand.OnActivateMouseRight += (sender, e, Key) =>
+            IELButtonSearchCommand.OnActivateMouseRight += (sender, e) =>
             {
                 if (!SearchActivate) return;
                 Keyboard.ClearFocus();
@@ -283,7 +283,7 @@ namespace ApplicationOperPageLes.Windows
                         Button.Opacity = 0d;
                         Button.Margin = GetElementMarginFromPositionIndex(i);
                         Button.Text = Element.Name;
-                        Button.OnActivateMouseLeft += (sender, e, Key) =>
+                        Button.OnActivateMouseLeft += (sender, e) =>
                         {
                             ElementDiscriptionPage.UpdateInformation(Element);
                             //App.AnimateDoubleEffect(DescriptionConsole, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));

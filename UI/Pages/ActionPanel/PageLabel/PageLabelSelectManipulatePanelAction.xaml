@@ -22,8 +22,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" Padding="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="1" Background="{DynamicResource BG_Olive}" BorderBrush="{DynamicResource BB_Olive}" Foreground="{DynamicResource FG_Olive}"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" Padding="0,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" BorderThickness="3,3,3,3" Background="{DynamicResource BG_PastelBlue}" BorderBrush="{DynamicResource BB_PastelBlue}" Foreground="{DynamicResource FG_PastelBlue}"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" Padding="8,10,0,10" FontFamily="{DynamicResource Deledda Open Regular}" Grid.Row="2" Background="{DynamicResource BG_Cocoa}" BorderBrush="{DynamicResource BB_Cocoa}" Foreground="{DynamicResource FG_Cocoa}"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" Padding="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}" BorderThickness="3,3,3,3" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" Padding="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="1" PaletteElement="{DynamicResource Olive}" KeyActivateButton="D1"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="2" PaletteElement="{DynamicResource Cocoa}" KeyActivateButton="D2" Padding="0,10,0,10"/>
     </Grid>
 </Page>

@@ -64,9 +64,9 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             InitializeComponent();
             #region Foreground
-            TextBlockButtonName.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
-            TextBlockButtonCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
-            TextBlockNumberCommand.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockButtonName.Foreground = SourceForeground.SourceBrush;
+            TextBlockButtonCommand.Foreground = SourceForeground.SourceBrush;
+            TextBlockNumberCommand.Foreground = SourceForeground.SourceBrush;
             #endregion
             TextFontFamily = new FontFamily("Arial");
             TextFontSize = 14;

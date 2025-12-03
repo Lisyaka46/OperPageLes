@@ -84,11 +84,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
                 ;
             };
-            IELButtonReloadPage.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonReloadPage.OnActivateMouseLeft += (sender, e) =>
             {
                 WebBrowserElement.Refresh();
             };
-            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e) =>
             {
                 Process.Start(new ProcessStartInfo(TextBoxLink.Text) { UseShellExecute = true });
                 //WebBrowserElement.Stop();

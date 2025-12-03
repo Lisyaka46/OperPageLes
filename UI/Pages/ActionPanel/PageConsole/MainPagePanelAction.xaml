@@ -19,9 +19,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" KeyActivateButton="1" FontFamily="{DynamicResource Bree CYR var}" Text="Очистить текст консоли" Margin="5,5,5,5" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" Padding="0,5,0,5" IsVisibleKeyActivate="False"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" KeyActivateButton="2" FontFamily="{DynamicResource Bree CYR var}" Text="Командный буфер" Grid.Row="1" Margin="5,5,5,5" CornerRadius="5,5,5,5" Background="{DynamicResource BG_PastelBlue}" BorderBrush="{DynamicResource BB_PastelBlue}" Foreground="{DynamicResource FG_PastelBlue}" CornerRadiusKey="8,8,8,8" VisualGuide="RightArrow" CornerRadiusGuides="8,8,8,8" FontSize="16" Padding="0,5,0,5" IsVisibleKeyActivate="False"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" KeyActivateButton="3" FontFamily="{DynamicResource Bree CYR var}" Text="Описание команд" Grid.Row="2" Margin="5,5,5,5" Background="{DynamicResource BG_Jade}" BorderBrush="{DynamicResource BB_Cocoa}" Foreground="{DynamicResource FG_Cocoa}" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" Padding="0,5,0,5"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonCrearConsole" KeyActivateButton="1" FontFamily="{DynamicResource Bree CYR var}" Text="Очистить текст консоли" Margin="5,5,5,5"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" Padding="0,7,0,7" IsVisibleKeyActivate="False" PaletteElement="{DynamicResource PastelRed}"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" KeyActivateButton="2" FontFamily="{DynamicResource Bree CYR var}" Text="Командный буфер" Grid.Row="1" Margin="5,5,5,5" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" VisualGuide="RightArrow" FontSize="16" Padding="0,7,0,7" PaletteElement="{DynamicResource Purple}" CornerRadiusGuides="7.6,7.6,7.6,7.6" IsVisibleKeyActivate="False"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" KeyActivateButton="3" FontFamily="{DynamicResource Bree CYR var}" Text="Описание команд" Grid.Row="2" Margin="5,5,5,5"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" Padding="0,7,0,7" PaletteElement="{DynamicResource Jade}"/>
 
     </Grid>
 </Page>

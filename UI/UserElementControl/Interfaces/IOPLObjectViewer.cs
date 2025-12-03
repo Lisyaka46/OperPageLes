@@ -11,7 +11,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl.Interfaces
         /// <summary>
         /// Объект данных отображаючий отображаемое содержимое
         /// </summary>
-        public T SourceView { get; }
+        public T Source { get; }
 
     }
 }

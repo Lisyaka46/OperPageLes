@@ -13,75 +13,10 @@ using OPRES = ApplicationOperPageLes.Properties.Resources;
 namespace ApplicationOperPageLes.UI.UserElementControl
 {
     /// <summary>
-    /// Логика взаимодействия для OPLLabelCommand.xaml
+    /// Логика взаимодействия для OPLLabel.xaml
     /// </summary>
-    public partial class OPLLabelCommand : IELButtonBase
+    public partial class OPLLabel : IELButtonBase
     {
-        #region Styles
-        internal static readonly QData[] BackgroundStyles =
-        [
-            new(
-                        [
-                        [255, 116, 220, 80],
-                        [255, 180, 255, 154],
-                        [255, 196, 239, 201],
-                        [255, 222, 87, 87],
-                        ]),
-            new(
-                        [
-                        [255, 155, 179, 169],
-                        [255, 160, 200, 175],
-                        [255, 221, 254, 241],
-                        [255, 111, 127, 121],
-                        ]),
-            new(
-                        [
-                        [255, 239, 250, 195],
-                        [255, 240, 246, 210],
-                        [255, 195, 218, 250],
-                        [255, 250, 201, 195],
-                        ]),
-            new(
-                        [
-                        [255, 85, 150, 181],
-                        [255, 90, 140, 185],
-                        [255, 181, 137, 85],
-                        [255, 84, 107, 117],
-                        ]),
-        ];
-        internal static readonly QData[] Borderbrush_Foreground_Styles =
-        [
-            new(
-                        [
-                        [255, 0, 0, 0],
-                        [255, 19, 35, 12],
-                        [255, 47, 44, 9],
-                        [255, 58, 8, 8],
-                        ]),
-            new(
-                        [
-                        [255, 62, 96, 82],
-                        [255, 65, 100, 85],
-                        [255, 100, 154, 133],
-                        [255, 38, 68, 57],
-                        ]),
-            new(
-                        [
-                        [255, 126, 139, 73],
-                        [255, 130, 150, 69],
-                        [255, 79, 110, 152],
-                        [255, 153, 100, 94],
-                        ]),
-            new(
-                        [
-                        [255, 24, 86, 116],
-                        [255, 30, 83, 107],
-                        [255, 109, 72, 28],
-                        [255, 24, 47, 56],
-                        ]),
-        ];
-        #endregion
-
         ///// <summary>
         ///// Объект события активации кнопки левым щелчком мыши
         ///// </summary>
@@ -120,18 +55,19 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             }
         }
 
-        public OPLLabelCommand(LabelAction Label)
+        public OPLLabel(LabelAction Label)
         {
             InitializeComponent();
             #region Background
-            BorderSelectElement.Background = SourceBackground.InicializeConnectedSolidColorBrush();
+            BorderSelectElement.Background = SourceBackground.SourceBrush;
             #endregion
 
             #region BorderBrush
             #endregion
 
             #region Foreground
-            TextBlockNameLabel.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockNameLabel.Foreground = SourceForeground.SourceBrush;
+            TextBlockNumberSelect.Foreground = SourceForeground.SourceBrush;
             #endregion
             _Selected = false;
             BorderSelectElement.Opacity = 0d;
@@ -154,15 +90,14 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         {
             string name_command = COMInterpreter.ReadNameCommand(SourceLabel.Command);
             string NameLabelImage;
-            int IndexUseStyle;
             switch (name_command)
             {
                 case "open_file":
-                    IndexUseStyle = 1;
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray].ConnectPalleteFromIELElement(this);
                     NameLabelImage = nameof(OPRES.File);
                     break;
                 case "open_link":
-                    IndexUseStyle = 2;
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(this);
                     NameLabelImage = nameof(OPRES.Link);
 
                     Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
@@ -180,19 +115,16 @@ namespace ApplicationOperPageLes.UI.UserElementControl
                     //action.Invoke();
                     break;
                 case "open_directory":
-                    IndexUseStyle = 3;
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(this);
                     NameLabelImage = nameof(OPRES.Folder);
                     break;
                 default:
-                    IndexUseStyle = 0;
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(this);
                     NameLabelImage = nameof(OPRES.Command);
                     break;
             }
             ImageElementLabel.Source = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
             ImageElementLabel.UpdateLayout();
-            Background = BackgroundStyles[IndexUseStyle];
-            BorderBrush = Borderbrush_Foreground_Styles[IndexUseStyle];
-            Foreground = Borderbrush_Foreground_Styles[IndexUseStyle];
         }
 
         /// <summary>

@@ -1,0 +1,19 @@
+﻿<Page x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow.PageMainPalettePanelAction"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow"
+      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL">
+
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <IEL:IELButtonTextKey Grid.RowSpan="1" Margin="5,5,5,5" PaletteElement="{DynamicResource Purple}" Text="Создать тему"/>
+    </Grid>
+</Page>

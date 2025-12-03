@@ -26,26 +26,26 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
             //IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
-            IELButtonCopyPack.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonCopyPack.OnActivateMouseLeft += (sender, e) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockPack.Text);
                 App.ColorAnimationType.AnimateEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
                     System.Windows.Media.Color.FromArgb(255, 0, 255, 0), Colors.Black,
                     TimeSpan.FromMilliseconds(1000d));
             };
-            IELButtonUpdatePack.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonUpdatePack.OnActivateMouseLeft += (sender, e) =>
             {
                 Pack = StructPack.NowPack;
                 TextBlockPack.Text = Pack.StringPack;
             };
-            IELButtonCancel.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
             {
                 DialogResult Result = System.Windows.Forms.MessageBox.Show(
                     "При отмене ввода ключа приложение закроется.\nВы уперены что хотите выйти?", "Подтверждение действия",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (Result == System.Windows.Forms.DialogResult.Yes) Close();
             };
-            IELButtonInput.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonInput.OnActivateMouseLeft += (sender, e) =>
             {
                 CompleteInputKey();
             };

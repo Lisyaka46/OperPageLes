@@ -28,7 +28,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
-            IELButtonComplete.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonComplete.OnActivateMouseLeft += (sender, e) =>
             {
                 Cancel = false;
                 Close();
@@ -51,7 +51,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         {
             Title = "Окно манипуляции над тегами";
             IELButtonAddTag.IsEnabled = true;
-            IELButtonAddTag.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonAddTag.OnActivateMouseLeft += (sender, e) =>
             {
                 LabelTag? Tag = new DialogGenDataLabelTag().GenereteTag();
                 if (Tag == null) return;
@@ -62,13 +62,13 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                     MouseLeftButtonUpOnManipulate(VisualTag);
                 };
             };
-            IELButtonChangeTag.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonChangeTag.OnActivateMouseLeft += (sender, e) =>
             {
                 //if (SelectedTag == null) return;
                 //new WindowGenDataLabelTag().ChangeDataTag(SelectedTag.Tag);
                 //ClearSelectTag();
             };
-            IELButtonRemoveTag.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonRemoveTag.OnActivateMouseLeft += (sender, e) =>
             {
                 if (SelectedTag == null) return;
                 StackPanelTags.Children.Remove(SelectedTag);
@@ -156,7 +156,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// <param name="NewTag">Отображаемый объект тега</param>
         private OPLLabelTag AddVisualTag(LabelTag NewTag)
         {
-            OPLLabelTag OPLTag = OPLLabelCommand.CreateVisualTag(NewTag);
+            OPLLabelTag OPLTag = OPLLabel.CreateVisualTag(NewTag);
             OPLTag.IELTag.Cursor = System.Windows.Input.Cursors.Hand;
             OPLTag.Opacity = 0d;
             App.DoubleAnimationType.AnimateEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));

@@ -13,7 +13,7 @@ namespace ApplicationOperPageLes.UI.UserElementControl
         /// <summary>
         /// Данные пути к медиа загрузки объекта
         /// </summary>
-        public ImageSource SourceView
+        public ImageSource Source
         {
             get => IndicatorImage.Source;
             set => IndicatorImage.Source = value;
@@ -62,14 +62,16 @@ namespace ApplicationOperPageLes.UI.UserElementControl
             InitializeComponent();
 
             #region BorderBrush
-            CancelIndicator.BorderBrush = SourceBorderBrush.InicializeConnectedSolidColorBrush();
+            CancelIndicator.BorderBrush = SourceBorderBrush.SourceBrush;
+            BorderIndicator.BorderBrush = SourceBorderBrush.SourceBrush;
+            RectangleUp.Fill = SourceBorderBrush.SourceBrush;
+            RectangleDown.Fill = SourceBorderBrush.SourceBrush;
             #endregion
 
             #region Foreground
-            TextBlockName.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
-            TextBlockCancel.Foreground = SourceForeground.InicializeConnectedSolidColorBrush();
+            TextBlockName.Foreground = SourceForeground.SourceBrush;
+            TextBlockCancel.Foreground = SourceForeground.SourceBrush;
             #endregion
-            IndicatorImage.Opacity = 0d;
             IsEnabled = true;
         }
 

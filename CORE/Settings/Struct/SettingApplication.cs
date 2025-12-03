@@ -67,5 +67,10 @@ namespace ApplicationOperPageLes.CORE.Settings.Struct
         /// Громкость звуков приложения
         /// </summary>
         public ObjSetting<float> Volume { get; internal set; } = 0.5f;
+
+        /// <summary>
+        /// Состояние использования границы окна для визуализации загрузки процесса
+        /// </summary>
+        public ObjSetting<bool> LoadingBorderVisualizate { get; internal set; } = true;
     }
 }
