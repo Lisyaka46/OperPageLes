@@ -219,7 +219,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             IELButtonTest.Focusable = true;
             IELButtonTest.MouseRightButtonUp += (sender, e) =>
             {
-                WindowPaletteController y = new();
+                WindowThemeController y = new();
                 y.Show();
             };
             IELButtonTest.MouseLeftButtonUp += (sender, e) =>

@@ -25,6 +25,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     /// </summary>
     public partial class PageConsole : Page
     {
+        /// <summary>
+        /// Строка вывода перед сообщением
+        /// </summary>
+        public const string ConsolePreMessage = "%**>>>**";
+
         #region PanelActionConsole
         #region Source
         private static readonly MainPagePanelAction ConsolePage = new();
@@ -566,7 +571,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         internal void AddTextInConsole(string Text, bool Formatted = true)
         {
             if (Text.Length == 0) return;
-            Text = $"{App.ConsolePreMessage} {Text}";
+            Text = $"{ConsolePreMessage} {Text}";
             Paragraph Message;
             if (Formatted) FormattedAllTextDetect(out Message, Text);
             else Message = new(new Run(Text));
