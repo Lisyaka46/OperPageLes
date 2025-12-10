@@ -31,45 +31,45 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         private QData.EnumDataSpectrum ChangeSpectrum;
 
         //
-        private int SelectIndex = -1;
-
-        //
         private Border? BorderSelect;
 
         //
-        private readonly QData[] QDataArray;
+        private PaletteSpectrum PaletteSpectrumManipulate;
+
+        //
+        private QData? QdataActiveChange;
 
         public DialogQDataSpectrum()
         {
-            QDataArray = [new(), new(), new()];
+            PaletteSpectrumManipulate = new();
             InitializeComponent();
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tilda));
 
             ColorPicker.ColorChanged += (sender, e) =>
             {
-                if (SelectIndex == -1) return;
+                if (QdataActiveChange == null) return;
                 WnColor color = ((ColorRoutedEventArgs)e).Color;
-                QDataArray[SelectIndex].SetFromSpectrumColor(ChangeSpectrum, color);
+                QdataActiveChange.SetFromSpectrumColor(ChangeSpectrum, color);
                 if (BorderSelect == null) return;
                 ((SolidColorBrush)BorderSelect.Background).Color = color;
                 ((SolidColorBrush)((TextBlock)BorderSelect.Child).Foreground).Color =
                     WnColor.FromRgb((byte)(255 - color.R), (byte)(255 - color.G), (byte)(255 - color.B));
             };
 
-            BorderColorBackground.MouseLeftButtonUp += (sender, e) =>
-            {
-                ActivateColorPicker(BorderColorBackground, 0);
-            };
+            //BorderColorBackground.MouseLeftButtonUp += (sender, e) =>
+            //{
+            //    ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);
+            //};
 
-            BorderColorBorderBrush.MouseLeftButtonUp += (sender, e) =>
-            {
-                ActivateColorPicker(BorderColorBorderBrush, 1);
-            };
+            //BorderColorBorderBrush.MouseLeftButtonUp += (sender, e) =>
+            //{
+            //    ActivateColorPicker(BorderColorBorderBrush, PaletteSpectrumManipulate.BB);
+            //};
 
-            BorderColorForeground.MouseLeftButtonUp += (sender, e) =>
-            {
-                ActivateColorPicker(BorderColorForeground, 2);
-            };
+            //BorderColorForeground.MouseLeftButtonUp += (sender, e) =>
+            //{
+            //    ActivateColorPicker(BorderColorForeground, PaletteSpectrumManipulate.FG);
+            //};
         }
 
         /// <summary>
@@ -79,63 +79,53 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// <param name="qdBB">Данные границ</param>
         /// <param name="qdFG">Данные текста</param>
         /// <param name="spectrum">Изменяемый спектр</param>
-        internal void ShowDialogChangeQData(QData qdBG, QData qdBB, QData qdFG, QData.EnumDataSpectrum spectrum)
+        internal void ShowDialogChangeQData(PaletteSpectrum SourceSpectrum, QData.EnumDataSpectrum spectrum)
         {
-            QDataArray[0] = qdBG;
-            QDataArray[1] = qdBB;
-            QDataArray[2] = qdFG;
+            PaletteSpectrumManipulate = SourceSpectrum;
             ChangeSpectrum = spectrum;
             Title = $"Изменение спектра \"{spectrum}\"";
             NameSpectrum.Text = $"Спектр {spectrum}";
 
-            BorderColorBackground.Background = new SolidColorBrush(QDataArray[0].GetFromSpectrumColor(spectrum));
-            BorderColorBorderBrush.Background = new SolidColorBrush(QDataArray[1].GetFromSpectrumColor(spectrum));
-            BorderColorForeground.Background = new SolidColorBrush(QDataArray[2].GetFromSpectrumColor(spectrum));
+            BorderColorBackground.Background = new SolidColorBrush(PaletteSpectrumManipulate.BG.GetFromSpectrumColor(spectrum));
+            BorderColorBorderBrush.Background = new SolidColorBrush(PaletteSpectrumManipulate.BB.GetFromSpectrumColor(spectrum));
+            BorderColorForeground.Background = new SolidColorBrush(PaletteSpectrumManipulate.FG.GetFromSpectrumColor(spectrum));
 
-            WnColor SourceColor = QDataArray[0].GetFromSpectrumColor(spectrum);
+            WnColor SourceColor = PaletteSpectrumManipulate.BG.GetFromSpectrumColor(spectrum);
             TextBlockBackgroundNaming.Foreground = new SolidColorBrush(
                 WnColor.FromRgb((byte)(255 - SourceColor.R), (byte)(255 - SourceColor.G), (byte)(255 - SourceColor.B)));
 
-            SourceColor = QDataArray[1].GetFromSpectrumColor(spectrum);
+            SourceColor = PaletteSpectrumManipulate.BB.GetFromSpectrumColor(spectrum);
             TextBlockBorderBrushNaming.Foreground = new SolidColorBrush(
                 WnColor.FromRgb((byte)(255 - SourceColor.R), (byte)(255 - SourceColor.G), (byte)(255 - SourceColor.B)));
 
-            SourceColor = QDataArray[2].GetFromSpectrumColor(spectrum);
+            SourceColor = PaletteSpectrumManipulate.FG.GetFromSpectrumColor(spectrum);
             TextBlockForegroundNaming.Foreground = new SolidColorBrush(
                 WnColor.FromRgb((byte)(255 - SourceColor.R), (byte)(255 - SourceColor.G), (byte)(255 - SourceColor.B)));
 
-            IELBlockExample50.SourceBackground.SetQData(QDataArray[0]);
-            IELBlockExample50.SourceBorderBrush.SetQData(QDataArray[1]);
-            IELBlockExample50.SourceForeground.SetQData(QDataArray[2]);
+            IELBlockExample50.PaletteElement = PaletteSpectrumManipulate;
             IELBlockExample50.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
 
-            IELBlockExampleB50.SourceBackground.SetQData(QDataArray[0]);
-            IELBlockExampleB50.SourceBorderBrush.SetQData(QDataArray[1]);
-            IELBlockExampleB50.SourceForeground.SetQData(QDataArray[2]);
+            IELBlockExampleB50.PaletteElement = PaletteSpectrumManipulate;
             IELBlockExampleB50.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
 
-            IELBlockExample80.SourceBackground.SetQData(QDataArray[0]);
-            IELBlockExample80.SourceBorderBrush.SetQData(QDataArray[1]);
-            IELBlockExample80.SourceForeground.SetQData(QDataArray[2]);
+            IELBlockExample80.PaletteElement = PaletteSpectrumManipulate;
             IELBlockExample80.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
 
-            IELBlockExampleB80.SourceBackground.SetQData(QDataArray[0]);
-            IELBlockExampleB80.SourceBorderBrush.SetQData(QDataArray[1]);
-            IELBlockExampleB80.SourceForeground.SetQData(QDataArray[2]);
+            IELBlockExampleB80.PaletteElement = PaletteSpectrumManipulate;
             IELBlockExampleB80.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
 
 
-            ActivateColorPicker(BorderColorBackground, 0);
+            ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);
 
             ShowDialog();
         }
 
         //
-        private void ActivateColorPicker(Border border, int Index)
+        private void ActivateColorPicker(Border border, QData Source)
         {
-            SelectIndex = Index;
+            QdataActiveChange = Source;
             BorderSelect = border;
-            WnColor color = QDataArray[Index].GetFromSpectrumColor(ChangeSpectrum);
+            WnColor color = Source.GetFromSpectrumColor(ChangeSpectrum);
             ColorPicker.Color.RGB_R = color.R;
             ColorPicker.Color.RGB_G = color.G;
             ColorPicker.Color.RGB_B = color.B;

@@ -13,17 +13,6 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
     public partial class BufferPagePanelAction : Page
     {
         /// <summary>
-        /// Стиль отображения элементов в буфере
-        /// </summary>
-        private readonly QData QDataBackground = new(
-                        [
-                        [255, 243, 164, 207],
-                        [255, 173, 97, 138],
-                        [255, 243, 136, 194],
-                        [255, 190, 166, 181],
-                        ]);
-
-        /// <summary>
         /// Буфер объектов команд
         /// </summary>
         internal Interpreter.Classes.Buffer BufferCommand;
@@ -95,7 +84,6 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                 Height = 40,
                 Margin = new(0, (40 + 2) * BufferCommand.Count, 0, 0),
                 Index = BufferCommand.Count,
-                Background = QDataBackground
             };
             return Button;
         }

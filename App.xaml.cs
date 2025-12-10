@@ -145,7 +145,7 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Открытые окна в приложении
         /// </summary>
-        internal List<Window> OpenedWindowsInApplication;
+        internal readonly List<Window> OpenedWindowsInApplication;
         #endregion
 
         /// <summary>
@@ -179,26 +179,9 @@ namespace ApplicationOperPageLes
         private readonly string PathSettingApplication = StructDirectoryResources.MainDirectoryApplication + "/ApplicationSettings.json";
 
         /// <summary>
-        /// Строка вывода перед сообщением
-        /// </summary>
-        public const string ConsolePreMessage = "%**>>>**";
-
-        /// <summary>
         /// Директория файла открытых настроек <b>приложения</b>
         /// </summary>
         private string ActivePathSettingApplication = string.Empty;
-
-        /// <summary>
-        /// Ресурс настроек для отображения клавиш мыши
-        /// </summary>
-        internal IELMouseImageSetting ResourceDefaultMouseImageSetting { get; }
-        //new ()
-        //{
-        //    NotEventImageMouse = LoadImage(OperPageLes.Properties.Resources.NotMouseButton),
-        //    FullEventImageMouse = LoadImage(OperPageLes.Properties.Resources.DoubleMouseButton),
-        //    OnlyRightEventImageMouse = LoadImage(OperPageLes.Properties.Resources.RightMouseButton),
-        //    OnlyLeftEventImageMouse = LoadImage(OperPageLes.Properties.Resources.LeftMouseButton),
-        //};
 
         /// <summary>
         /// Реальное время
@@ -240,7 +223,6 @@ namespace ApplicationOperPageLes
             LogWriteLine("---------- Старт нового экземпляра ----------");
             LogWriteLine("Инициализация свойств экземпляра");
             #region Resources
-            ResourceDefaultMouseImageSetting = new();
             SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
             InstallingKey = PackKey.StaticKey;
@@ -632,6 +614,21 @@ namespace ApplicationOperPageLes
             ActiveThemeApplication = new();
 
             #endregion
+        }
+
+        /// <summary>
+        /// Инициализировать окно в приложении
+        /// </summary>
+        /// <typeparam name="T">Тип инициализируемого окна</typeparam>
+        /// <param name="SourceObject">Объект окна подлежащий инициализации</param>
+        internal void InicializeWindowInApplication<T>(T SourceObject) where T : Window
+        {
+            OpenedWindowsInApplication.Add(SourceObject);
+            SourceObject.Closed += (sender, e) =>
+            {
+                if (sender != null)
+                    OpenedWindowsInApplication.Remove((Window)sender);
+            };
         }
 
         /// <summary>

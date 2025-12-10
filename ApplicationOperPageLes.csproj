@@ -40,6 +40,7 @@
     <None Remove="Fonts\Vollda.otf" />
     <None Remove="UI\Images\Arrow.png" />
     <None Remove="UI\Images\BrowserChangeSystem.png" />
+    <None Remove="UI\Images\Brush.png" />
     <None Remove="UI\Images\Check.png" />
     <None Remove="UI\Images\Cross.png" />
     <None Remove="UI\Images\DoubleMouseButton.png" />
@@ -115,7 +116,7 @@
     <Resource Include="CORE\Audio\Notification.mp3" />
     <Resource Include="CORE\Audio\Pop-Up.mp3" />
     <Resource Include="CORE\Resources\PaletteDictionary.xaml">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\Bree CYR var.ttf" />
     <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
@@ -141,6 +142,7 @@
     <Resource Include="UI\Images\Autor\MINSI.jpg" />
     <Resource Include="UI\Images\Autor\VECTOR.jpg" />
     <Resource Include="UI\Images\BrowserChangeSystem.png" />
+    <Resource Include="UI\Images\Brush.png" />
     <Resource Include="UI\Images\Check.png" />
     <Resource Include="UI\Images\Cross.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />

@@ -55,7 +55,7 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
             PaletteSpectrum spectrum;
             for (int IndexPaletteElement = 0; IndexPaletteElement < t.Length; IndexPaletteElement++)
             {
-                spectrum = App.CurrentApp.DefaultPalette[t[IndexPaletteElement]];
+                spectrum = (PaletteSpectrum)App.CurrentApp.DefaultPalette[t[IndexPaletteElement]].Clone();
                 for (int IndexQDataSpectrum = 0; IndexQDataSpectrum < PaletteSpectrum.CountQDataSpectrum &&
                     SourceData.Length > IndexPaletteElement * (QData.CountSpectrumColor * QData.CountBytesFromColor * PaletteSpectrum.CountQDataSpectrum);
                     IndexQDataSpectrum++)
@@ -73,17 +73,16 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
                                 IndexByteColor];
                         }
                     }
-                    QData SourceElement = new(BytesFromQdata);
                     switch (IndexQDataSpectrum)
                     {
                         case 0:
-                            spectrum.BG = SourceElement;
+                            spectrum.BG = new(BytesFromQdata);
                             break;
                         case 1:
-                            spectrum.BB = SourceElement;
+                            spectrum.BB = new(BytesFromQdata);
                             break;
                         case 2:
-                            spectrum.FG = SourceElement;
+                            spectrum.FG = new(BytesFromQdata);
                             break;
                         default: throw new Exception("Непредвиденное значение издекса спектра элемента палитры!");
                     }
@@ -92,21 +91,14 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
             }
         }
 
-        /// <summary>
-        /// Изменить данные палитры (Не затрагивает класс)
-        /// </summary>
-        /// <param name="Source">Объект палитры</param>
-        /// <returns></returns>
-        public async Task ChangeSourcePalette(Palette Source)
+        //
+        public void ChangeSourcePaletteData(Palette Source)
         {
-            foreach (var key in _SourcePalette.Keys)
+            foreach (PaletteSpectrumEnum Element in Enum.GetValues<PaletteSpectrumEnum>())
             {
-                await Task.Run(() =>
-                {
-                    _SourcePalette[key].BG.ChangeSourceQData(Source._SourcePalette[key].BG);
-                    _SourcePalette[key].BB.ChangeSourceQData(Source._SourcePalette[key].BB);
-                    _SourcePalette[key].FG.ChangeSourceQData(Source._SourcePalette[key].FG);
-                });
+                _SourcePalette[Element].BG.ChangeSourceQData(Source[Element].BG);
+                _SourcePalette[Element].BB.ChangeSourceQData(Source[Element].BB);
+                _SourcePalette[Element].FG.ChangeSourceQData(Source[Element].FG);
             }
         }
     }
