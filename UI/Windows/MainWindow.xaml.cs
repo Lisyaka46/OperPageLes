@@ -1,10 +1,5 @@
 ﻿#region Link
-using IEL.CORE.Classes;
-using IEL.CORE.Classes.Browser;
-using IEL.CORE.Enums;
-using IEL.GUI;
-using NAudio.Wave;
-using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel;
 using ApplicationOperPageLes.UI.Pages.Browser;
@@ -12,22 +7,20 @@ using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
 using ApplicationOperPageLes.UI.UserElementControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using ApplicationOperPageLes.Windows;
+using IEL.CORE.Classes;
+using IEL.CORE.Classes.Browser;
+using IEL.CORE.Enums;
+using IEL.GUI;
 using System.IO;
-using System.Media;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using WmColor = System.Windows.Media.Color;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
-using Point = System.Windows.Point;
-using Size = System.Windows.Size;
-using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
-using ApplicationOperPageLes.CORE.Enums;
+using WnColor = System.Windows.Media.Color;
 #endregion
 
 namespace ApplicationOperPageLes.UI.Windows
@@ -151,9 +144,11 @@ namespace ApplicationOperPageLes.UI.Windows
             #region SetParameteres
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
-            IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
+            IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+
             IELImageButtonMenu.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
 
             TokenUpdateBackgroundData = new(false);
@@ -200,9 +195,11 @@ namespace ApplicationOperPageLes.UI.Windows
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
+
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay());
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
 
@@ -218,13 +215,13 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 GradientStops = new(
                     [
-                    new GradientStop(WmColor.FromRgb(23, 43, 32), 0d),
-                    new GradientStop(WmColor.FromRgb(43, 56, 49), 0.168d),
-                    new GradientStop(WmColor.FromRgb(48, 58, 66), 0.257d),
-                    new GradientStop(WmColor.FromRgb(60, 70, 82), 0.432d),
-                    new GradientStop(WmColor.FromRgb(86, 116, 140), 0.582d),
-                    new GradientStop(WmColor.FromRgb(115, 109, 94), 0.764d),
-                    new GradientStop(WmColor.FromRgb(72, 64, 41), 1d),
+                    new GradientStop(WnColor.FromRgb(23, 43, 32), 0d),
+                    new GradientStop(WnColor.FromRgb(43, 56, 49), 0.168d),
+                    new GradientStop(WnColor.FromRgb(48, 58, 66), 0.257d),
+                    new GradientStop(WnColor.FromRgb(60, 70, 82), 0.432d),
+                    new GradientStop(WnColor.FromRgb(86, 116, 140), 0.582d),
+                    new GradientStop(WnColor.FromRgb(115, 109, 94), 0.764d),
+                    new GradientStop(WnColor.FromRgb(72, 64, 41), 1d),
                     ]),
                 RelativeTransform = RotateMainWindowBackground,
             };
@@ -286,6 +283,35 @@ namespace ApplicationOperPageLes.UI.Windows
             #endregion
 
             #region UpToolButtons
+
+            #region ImageLogoApplication
+            ImageLogoApplication.OnActivateMouseLeft += (sender, e) =>
+            {
+                DialogLicenseWindow License = new();
+                License.Show();
+            };
+            #endregion
+
+            #region IELButtonTheme
+            IELButtonTheme.MouseHover += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELButtonTheme,
+                    "Управление персонализацией программы",
+                    OrientationBorderPosition.LeftDown);
+            };
+            IELButtonTheme.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            IELButtonTheme.OnActivateMouseLeft += (sender, e) =>
+            {
+                WindowThemeController Window = new();
+                App.CurrentApp.InicializeWindowInApplication(Window);
+                Window.Show();
+                //new DialogSetting().ShowDialog();
+            };
+            #endregion
+
             #region IELImageButtonClose
             IELImageButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
@@ -297,7 +323,7 @@ namespace ApplicationOperPageLes.UI.Windows
             IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
             {
                 WindowDiscriptionCommands j = new();
-                App.CurrentApp.OpenedWindowsInApplication.Add(j);
+                App.CurrentApp.InicializeWindowInApplication(j);
                 j.Show();
             };
             IELImageButtonHelp.MouseHover += (sender, e) =>
@@ -413,12 +439,6 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
 
-            ImageLogoApplication.OnActivateMouseLeft += (sender, e) =>
-            {
-                DialogLicenseWindow License = new();
-                License.Show();
-            };
-
             #region EventsWindow
             BorderWindowMain.MouseLeftButtonDown += (sender, e) =>
             {
@@ -505,10 +525,8 @@ namespace ApplicationOperPageLes.UI.Windows
                     for (int i = 0; i < count; i++)
                     {
                         App.CurrentApp.OpenedWindowsInApplication[0].Close();
-                        App.CurrentApp.OpenedWindowsInApplication.RemoveAt(0);
                         Thread.Sleep(10);
                     }
-                    //App.CurrentApp.OpenedWindowsInApplication.Clear();
                 });
                 Thread.Sleep(500);
 
@@ -813,7 +831,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// Анимировать цвет сигнала в главном Border окна
         /// </summary>
         /// <param name="Color">Цвет который будет отображён как сигнальный</param>
-        internal void BlurMainAnimateColor(WmColor Color)
+        internal void BlurMainAnimateColor(WnColor Color)
         {
             App.ColorAnimationType.AnimateEffect(BorderWindowMain.Background,
                 SolidColorBrush.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));

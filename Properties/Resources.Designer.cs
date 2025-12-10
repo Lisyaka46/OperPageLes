@@ -123,6 +123,16 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Brush {
+            get {
+                object obj = ResourceManager.GetObject("Brush", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Check {
             get {
                 object obj = ResourceManager.GetObject("Check", resourceCulture);

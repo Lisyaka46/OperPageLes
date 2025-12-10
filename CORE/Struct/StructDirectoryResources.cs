@@ -38,9 +38,14 @@ namespace ApplicationOperPageLes.CORE.Struct
         internal static readonly string DirectoryResourcesApplication = MainDirectoryApplication + @"/Resources/";
 
         /// <summary>
-        /// Главная директория ресурсов палитры
+        /// Главная директория ресурсов словарь
         /// </summary>
         internal static readonly string DirectoryDictionaryApplication = DirectoryResourcesApplication + @"/Dictionary/";
+
+        /// <summary>
+        /// Главная директория ресурсов словарь
+        /// </summary>
+        internal static readonly string DirectoryThemeApplication = MainDirectoryApplication + @"/Theme/";
 
         /// <summary>
         /// Директория ресурса ярлыков
@@ -154,7 +159,12 @@ namespace ApplicationOperPageLes.CORE.Struct
             if (!Directory.Exists(DirectoryFolder)) Directory.CreateDirectory(DirectoryFolder);
         }
 
-        //
+        /// <summary>
+        /// Воспроизвести аудио-файл
+        /// </summary>
+        /// <param name="SourceWaveOut">Экземпляр воспроизведения аудио</param>
+        /// <param name="NameResourceSound">Директория звукового файла</param>
+        /// <exception cref="Exception">Исключение не инициализированного экземпляра ресурсов</exception>
         internal static void Play(WaveOut SourceWaveOut, string NameResourceSound) // mp3
         {
             if (PathesFromNameResource.Count == 0) throw new Exception("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");

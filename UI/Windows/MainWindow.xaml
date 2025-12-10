@@ -70,11 +70,13 @@
                                     <ColumnDefinition Width="Auto" MinWidth="50"/>
                                     <ColumnDefinition Width="Auto" MinWidth="50"/>
                                     <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
                                 </Grid.ColumnDefinitions>
-                                <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="3" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Jade}"/>
-                                <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="4" CornerRadius="6,6,6,6" Padding="2,2,2,2" Margin="3,3,3,3" PaletteElement="{DynamicResource Purple}"/>
                                 <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}"/>
-                                <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="2" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}"/>
+                                <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="2" CornerRadius="6,6,6,6" Padding="2,2,2,2" Margin="3,3,3,3" PaletteElement="{DynamicResource Chocolate}"/>
+                                <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Padding="2,2,2,2" Margin="3,3,3,3" PaletteElement="{DynamicResource Purple}"/>
+                                <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Jade}"/>
+                                <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="5" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}"/>
                             </Grid>
                         </Border>
                         <Grid Grid.Row="2" Margin="0,2,0,2">

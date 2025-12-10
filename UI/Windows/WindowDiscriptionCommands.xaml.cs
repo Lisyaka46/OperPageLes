@@ -341,15 +341,15 @@ namespace ApplicationOperPageLes.Windows
                 Height = HeightElement,
                 FontSize = 16d,
                 Margin = new(3),
-                Background = new(
-                            [
-                            [255, 161, 204, 232],
-                            [255, 92, 131, 157],
-                            [255, 122, 172, 205],
-                            [255, 166, 181, 190],
-                            ]),
-                BorderBrush = BorderForegroundSetting,
-                Foreground = BorderForegroundSetting
+                //Background = new(
+                //            [
+                //            [255, 161, 204, 232],
+                //            [255, 92, 131, 157],
+                //            [255, 122, 172, 205],
+                //            [255, 166, 181, 190],
+                //            ]),
+                //BorderBrush = BorderForegroundSetting,
+                //Foreground = BorderForegroundSetting
             };
             System.Windows.Data.Binding binding = new()
             {
