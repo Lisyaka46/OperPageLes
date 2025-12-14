@@ -5,12 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-    xmlns:OPL="clr-namespace:ApplicationOperPageLes.UI.UserElementControl"
+    xmlns:OPL="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl"
     x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageDeveloper"
     Title="PageDeveloper">
     <Page.Resources>
@@ -120,6 +120,9 @@
                         </ModelVisual3D>
                     </Viewport3D.Children>
                 </Viewport3D>
+                <Viewbox Grid.Row="3">
+                    <TextBlock Text="Text"/>
+                </Viewbox>
             </Grid>
         </Grid>
     </ScrollViewer>

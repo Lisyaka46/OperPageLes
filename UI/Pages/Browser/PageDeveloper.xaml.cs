@@ -1,24 +1,16 @@
 ﻿using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.DEV;
-using IEL.CORE.BaseUserControls;
-using IEL.GUI;
-using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
-using Windows.Media.Audio;
-using WinRT;
-using static System.Windows.Forms.AxHost;
 using DrColor = System.Drawing.Color;
-using Point = System.Windows.Point;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
+using Point = System.Windows.Point;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {

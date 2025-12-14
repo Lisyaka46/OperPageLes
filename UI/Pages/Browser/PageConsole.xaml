@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
-      xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
+      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageConsole"
@@ -47,7 +47,7 @@
             </Grid.ColumnDefinitions>
             <GUI:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" FontSize="20" FontFamily="{DynamicResource Deledda Open Regular}" Padding="0,5,0,0" PaletteElement="{DynamicResource Violet}" Text=""/>
             <Grid Grid.Column="2" Grid.Row="2">
-                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" Margin="2,4,2,5" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3"  FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Padding="5,0,5,0" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}"/>
+                <GUI:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}" VerticalContentAlignment="Stretch" Margin="3,3,3,3" MarginViewBox="5,8,5,8"/>
             </Grid>
         </Grid>
         <Grid x:Name="GridHit" Margin="6,0,0,-3" HorizontalAlignment="Left">

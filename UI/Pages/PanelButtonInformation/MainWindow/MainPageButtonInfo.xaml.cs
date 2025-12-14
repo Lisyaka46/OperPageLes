@@ -1,12 +1,12 @@
-﻿using IEL.CORE.Classes;
-using IEL.CORE.Enums;
-using IEL.GUI;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.Other;
+using ApplicationOperPageLes.UI.Pages.Browser;
+using IEL.CORE.Classes;
+using IEL.CORE.Enums;
+using IEL.UserElementsControl;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using static ApplicationOperPageLes.App;
@@ -44,9 +44,9 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         internal Thread ThreadInternetConnection;
 
         /// <summary>
-        /// Настройка отображения страницы настройки громкости в панели действий
+        /// Страница манипуляции громкостью
         /// </summary>
-        private readonly PageSettingVisual SettingVisualVolume;
+        private PageVolumeControl SourcePageVolumeControl;
 
 #if DEBUG
         private readonly TextBlock DEV_InternetMillisecond;
@@ -55,6 +55,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         public MainPageButtonInfo()
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
+            SourcePageVolumeControl = new();
             InitializeComponent();
 #if DEBUG
             DEV_InternetMillisecond = CurrentApp.Is_WindowDeveloper.BlockInlays[1].AddNewTextElement();
@@ -70,7 +71,6 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             TextBlockVolumeValue.Foreground = IELBlockInfoVolume.SourceForeground.SourceBrush;
             #endregion
 
-            SettingVisualVolume = new(GridMain, new PageVolumeControl(), new System.Windows.Size(150, 36));
             TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
             App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
             {
@@ -83,7 +83,6 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
             };
 
-            //UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
             UpdateInformationInObject(IELBlockInfoStateRegister, Console.CapsLock ? "а".ToUpper() : "a".ToLower());
             IELBlockInfoStateRegister.Focusable = false;
             IndicatorLoadingInternetConnection.Opacity = 0d;
@@ -95,7 +94,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
                     InternetPinging.ConnectInternet ? "Есть подключение к интернету" : "Нет подключения к интернету",
-                    OrientationBorderPosition.RightUp);
+                    OrientationPositionCursor.RightUp);
             };
             IELBlockInfoInternetConnection.MouseLeave += (sender, e) =>
             {
@@ -107,7 +106,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
-                    "Установленный регистр клавиатуры", OrientationBorderPosition.RightUp);
+                    "Установленный регистр клавиатуры", OrientationPositionCursor.RightUp);
             };
             IELBlockInfoStateRegister.MouseUp += (sender, e) =>
             {
@@ -130,7 +129,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
                     "Текущий язык раскладки клавиатуры",
-                    OrientationBorderPosition.RightUp);
+                    OrientationPositionCursor.RightUp);
             };
             IELBlockInfoCurrentLanguage.MouseLeave += (sender, e) =>
             {
@@ -141,7 +140,8 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             #region BorderVolume
             IELBlockInfoVolume.MouseRightButtonUp += (sender, e) =>
             {
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(SettingVisualVolume, OrientationPanelActionPosition.LeftCenter);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, SourcePageVolumeControl,
+                    Orientation: OrientationPositionCursor.LeftUp, DependencePointOnSize: false);
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             IELBlockInfoVolume.MouseLeftButtonUp += (sender, e) =>
@@ -152,7 +152,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
                     "Громкость звуков главного окна",
-                    OrientationBorderPosition.RightUp);
+                    OrientationPositionCursor.RightUp);
             };
             IELBlockInfoVolume.MouseLeave += (sender, e) =>
             {
@@ -196,7 +196,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                         {
                             App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
                                 InternetPinging.ConnectInternet ? "Есть подключение к интернету" : "Нет подключения к интернету",
-                                OrientationBorderPosition.RightUp);
+                                OrientationPositionCursor.RightUp);
                         }
                     });
                 }

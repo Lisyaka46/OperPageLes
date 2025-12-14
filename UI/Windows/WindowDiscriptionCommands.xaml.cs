@@ -1,6 +1,6 @@
 ﻿using IEL.CORE.Classes;
 using IEL.CORE.Enums;
-using IEL.GUI;
+using IEL.UserElementsControl;
 using Interpreter.Interfaces;
 using ApplicationOperPageLes.CORE;
 using ApplicationOperPageLes.CORE.Struct;
@@ -121,7 +121,7 @@ namespace ApplicationOperPageLes.Windows
                     "Символ \"%\" является специальным символом (Одинарный символ пропускается):\n" +
                     "- Для записи \"%\" в параметры нужно ввести \"%%\"\n" +
                     "- Для записи \",\" в параметры нужно ввести \"%,\"",
-                    OrientationBorderPosition.LeftDown);
+                    OrientationPositionCursor.LeftDown);
             };
             IELButtonInfoParameter.MouseLeave += (sender, e) => IELMessageInfo.CloseBorderInformation();
             #endregion

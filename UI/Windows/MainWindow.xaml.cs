@@ -4,13 +4,13 @@ using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel;
 using ApplicationOperPageLes.UI.Pages.Browser;
 using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
-using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using ApplicationOperPageLes.Windows;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
-using IEL.GUI;
+using IEL.UserElementsControl;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,16 +31,10 @@ namespace ApplicationOperPageLes.UI.Windows
     public partial class MainWindow : Window
     {
         #region PanelAction
-        #region Source
         /// <summary>
         /// Страница взаимодействия с вкладками браузера страниц
         /// </summary>
         private static readonly PageInlayPanelAction PageInlay = new();
-        #endregion
-        /// <summary>
-        /// Настройки панели действий для браузера страниц
-        /// </summary>
-        private readonly PageSettingVisual PanelActionSettingsInlay;
         #endregion
 
         /// <summary>
@@ -66,11 +60,6 @@ namespace ApplicationOperPageLes.UI.Windows
         /// Страница управления загрузочными процессами
         /// </summary>
         private PageNotificationManager PageControllerLoadingApplication;
-
-        /// <summary>
-        /// Настройка для панели действий страницы управления загрузочными элементами
-        /// </summary>
-        private PageSettingVisual SettingVisualPageLoadingController;
 
         /// <summary>
         /// Текущее состояние отображения загрузки процесса
@@ -257,11 +246,9 @@ namespace ApplicationOperPageLes.UI.Windows
                 if (PageInlay.ActivateManipulateInlay != null)
                     IELBrowserPageMain.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
             };
-            PanelActionSettingsInlay = new(IELBrowserPageMain, PageInlay, new(200d, 240d));
             #endregion
 
             PageControllerLoadingApplication = new();
-            SettingVisualPageLoadingController = new(GridMain, PageControllerLoadingApplication, new(210, 255));
             PageControllerLoadingApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
             {
                 App.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
@@ -297,7 +284,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 IELMessageMain.UsingBorderInformation(IELButtonTheme,
                     "Управление персонализацией программы",
-                    OrientationBorderPosition.LeftDown);
+                    OrientationPositionCursor.LeftDown);
             };
             IELButtonTheme.MouseLeave += (sender, e) =>
             {
@@ -330,7 +317,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
                     "Быстрое открытие описания команд",
-                    OrientationBorderPosition.LeftDown);
+                    OrientationPositionCursor.LeftDown);
             };
             IELImageButtonHelp.MouseLeave += (sender, e) =>
             {
@@ -343,7 +330,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 IELMessageMain.UsingBorderInformation(IELButtonSettings,
                     "Настройки программы",
-                    OrientationBorderPosition.LeftDown);
+                    OrientationPositionCursor.LeftDown);
             };
             IELButtonSettings.MouseLeave += (sender, e) =>
             {
@@ -369,7 +356,8 @@ namespace ApplicationOperPageLes.UI.Windows
 
             BorderIndicator.MouseRightButtonUp += (sender, e) =>
             {
-                IELActionPanelMain.UsingPanelAction(SettingVisualPageLoadingController, OrientationPanelActionPosition.LeftDown);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, PageControllerLoadingApplication,
+                    Orientation: OrientationPositionCursor.LeftUp);
             };
             #endregion
 
@@ -418,7 +406,8 @@ namespace ApplicationOperPageLes.UI.Windows
                 FrameNewInlayBrowser.IsHitTestVisible = true;
                 IELBrowserPageMain.IsEnabled = false;
                 TimeSpan t = TimeSpan.FromMilliseconds(500d);
-                IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, t);
                 App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, t);
                 if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
@@ -430,11 +419,12 @@ namespace ApplicationOperPageLes.UI.Windows
             IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
             {
                 PageInlay.ActivateManipulateInlay = Inlay;
-                IELActionPanelMain.UsingPanelAction(PanelActionSettingsInlay, OrientationPanelActionPosition.LeftUp);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(IELBrowserPageMain, PageInlay,
+                    Orientation: OrientationPositionCursor.RightDown);
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
             {
-                IELMessageMain.UsingBorderInformation(Element, Text, OrientationBorderPosition.Auto);
+                IELMessageMain.UsingBorderInformation(Element, Text, OrientationPositionCursor.Auto);
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
@@ -451,7 +441,11 @@ namespace ApplicationOperPageLes.UI.Windows
                 App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(20), t);
                 App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 1d, t);
             };
-            SizeChanged += (sender, e) => IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            SizeChanged += (sender, e) =>
+            {
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            };
             Activated += (sender, e) =>
             {
                 if (!HiAnimation)
@@ -600,10 +594,9 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <param name="Method">Асинхронный процесс получения значения</param>
         /// <param name="IsCanceledManipulate">Можно ли отменить операцию</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method, bool IsCanceledManipulate = false)
+        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
         {
             OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
-            ViewLoading.ViewClose = IsCanceledManipulate;
             ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
             CancellationToken token = new(false);
             ViewLoading.OnActivateMouseRight += (sender, e) =>
@@ -629,11 +622,6 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             OPLImageViewer Result = PageControllerLoadingApplication.SetViewImageElement();
             Result.Text = Name;
-            Result.OnActivateMouseLeft += (sender, e) =>
-            {
-                Result.VisualClose();
-                PageControllerLoadingApplication.DeleteViewMediaElement(Result);
-            };
             Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
             return Result;
         }
@@ -647,11 +635,6 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             OPLMediaViewer Result = PageControllerLoadingApplication.SetViewMediaElement();
             Result.Text = Name;
-            Result.OnActivateMouseLeft += (sender, e) =>
-            {
-                Result.VisualClose();
-                PageControllerLoadingApplication.DeleteViewMediaElement(Result);
-            };
             Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
             return Result;
         }
@@ -687,7 +670,6 @@ namespace ApplicationOperPageLes.UI.Windows
 #endif
                 App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
-            ViewLoading.VisualOpen();
         } 
 
         /// <summary>
@@ -696,7 +678,6 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
         internal void CompleteVisualizateLoadingProcess(OPLMediaViewer ViewLoading)
         {
-            ViewLoading.VisualClose();
             PageControllerLoadingApplication.DeleteViewMediaElement(ViewLoading);
             App.CurrentApp.DataViewerLoadingProcess.Remove(ViewLoading);
             if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
@@ -792,7 +773,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     OPLImageViewer Element = GenerateVisualizateImage($"Файл картинки фонового изображения не был найден...");
                     Element.MouseHover += (sender, e) =>
                     {
-                        IELMessageMain.UsingBorderInformation(Element, ex.Message, OrientationBorderPosition.LeftUp);
+                        IELMessageMain.UsingBorderInformation(Element, ex.Message, OrientationPositionCursor.LeftUp);
                     };
                     Element.MouseLeave += (sender, e) =>
                     {

@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
-      xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
+      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
       Title="PageManagerBrowser">
@@ -53,13 +53,13 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <GUI:IELButtonText x:Name="IELButtonAddPageLabel" BorderThickness="3,3,3,3" Text="Страница ярлыков" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.RowSpan="1" Padding="0,10,0,10" PaletteElement="{DynamicResource Lime}"/>
-                    <GUI:IELButtonText x:Name="IELButtonPageDeveloper" BorderThickness="3,3,3,3" Text="Страница разработчика" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.Row="1" Padding="0,10,0,10" PaletteElement="{DynamicResource PastelBlue}"/>
-                    <GUI:IELButtonText x:Name="IELButtonPageConsole" BorderThickness="3,3,3,3" Text="Страница консоли" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.Row="2" Padding="0,10,0,10" PaletteElement="{DynamicResource Jade}"/>
-                    <GUI:IELButtonText x:Name="IELButtonPageBrowser" BorderThickness="3,3,3,3" Text="Страница веб-браузера" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Grid.Row="3" Padding="0,10,0,10" PaletteElement="{DynamicResource Violet}"/>
+                    <GUI:IELButtonText x:Name="IELButtonAddPageLabel" BorderThickness="3,3,3,3" Text="Страница ярлыков" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="14" Grid.RowSpan="1" Padding="0,10,0,10" PaletteElement="{DynamicResource Lime}" HeightViewBox="20"/>
+                    <GUI:IELButtonText x:Name="IELButtonPageDeveloper" BorderThickness="3,3,3,3" Text="Страница разработчика" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="14" Grid.Row="1" Padding="0,10,0,10" PaletteElement="{DynamicResource PastelBlue}" HeightViewBox="20"/>
+                    <GUI:IELButtonText x:Name="IELButtonPageConsole" BorderThickness="3,3,3,3" Text="Страница консоли" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="14" Grid.Row="2" Padding="0,10,0,10" PaletteElement="{DynamicResource Jade}" HeightViewBox="20"/>
+                    <GUI:IELButtonText x:Name="IELButtonPageBrowser" BorderThickness="3,3,3,3" Text="Страница веб-браузера" CornerRadius="6,6,6,6" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="14" Grid.Row="3" Padding="0,10,0,10" PaletteElement="{DynamicResource Violet}" HeightViewBox="20"/>
                 </Grid>
             </Border>
         </Grid>
-        <GUI:IELButtonText x:Name="IELButtonCancel" BorderThickness="3,3,3,3" Text="Отмена добавления" CornerRadius="6,6,6,6" Grid.Row="1" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Padding="0,10,0,10" PaletteElement="{DynamicResource Red}"/>
+        <GUI:IELButtonText x:Name="IELButtonCancel" BorderThickness="3,3,3,3" Text="Отмена добавления" CornerRadius="6,6,6,6" Grid.Row="1" Margin="10,3,10,3" FontFamily="{DynamicResource Deledda Open Regular}" Padding="0,10,0,10" PaletteElement="{DynamicResource Red}" FontSize="14" HeightViewBox="20"/>
     </Grid>
 </Page>

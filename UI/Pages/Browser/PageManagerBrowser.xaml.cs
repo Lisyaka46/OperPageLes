@@ -1,6 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using IEL.CORE.Classes.Browser;
-using IEL.GUI;
+using IEL.UserElementsControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;

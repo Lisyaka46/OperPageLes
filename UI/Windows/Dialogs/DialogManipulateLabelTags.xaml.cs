@@ -1,6 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.UserElementsControl;
 using System.Windows;
 using System.Windows.Input;
 using OPRES = ApplicationOperPageLes.Properties.Resources;

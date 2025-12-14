@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.DEV"
-        xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Windows.DEV.WindowQDataViewer"
+        xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Windows.DEV.WindowQDataViewer"
         mc:Ignorable="d"
         Title="WindowQDataViewer" MinHeight="400" MaxHeight="600" MinWidth="400" MaxWidth="900">
     <Grid>

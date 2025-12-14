@@ -2,7 +2,7 @@
 using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel;
-using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
@@ -30,7 +30,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         private OPLLabel? SelectLabelInPage;
 
         #region PanelAction
-        #region Source
         /// <summary>
         /// Страница взаимодействия с ярлыками
         /// </summary>
@@ -40,16 +39,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// Страница элемента ярлыка в панели действий
         /// </summary>
         private readonly PageLabelElementActionPanel PageLabelElement = new();
-        #endregion
-        /// <summary>
-        /// Настройки панели действий для страниц во вкладке ярлыков
-        /// </summary>
-        private readonly PageSettingVisual PanelActionSettingsLabel;
-
-        /// <summary>
-        /// Настройки панели действий для страниц объекта ярлыка
-        /// </summary>
-        private readonly PageSettingVisual PanelActionSettingsLabelElement;
         #endregion
 
         /// <summary>
@@ -159,6 +148,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             GridMainLabels.Visibility = Visibility.Hidden;
 
             #region PanelAction
+
             #region PageLabel
             PageLabel.IELButtonCreateLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
@@ -286,7 +276,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region PageLabelSelectManipulate
             PageLabelElement.PageLabelSelectManipulate.IELButtonBack.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement, false);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(PageLabelElement, RightAlgin: false);
             };
             PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -316,7 +306,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 if (SelectLabelInPage == null && SelectLabelInPage?.SourceLabel.Tag == null) return;
                 App.MainWindow.IELMessageMain.UsingBorderInformation(PageLabelElement.IELBlockInfoTagLabel,
-                    SelectLabelInPage.SourceLabel.Tag ?? string.Empty, OrientationBorderPosition.Auto);
+                    SelectLabelInPage.SourceLabel.Tag ?? string.Empty, OrientationPositionCursor.Auto);
             };
             PageLabelElement.IELBlockInfoTagLabel.MouseLeave += (sender, e) =>
             {
@@ -326,8 +316,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
             #endregion
 
-            PanelActionSettingsLabel = new(this, PageLabel, new(210d, 235d));
-            PanelActionSettingsLabelElement = new(GridMain, PageLabelElement, new(236d, 310d));
             #endregion
 
             IELButtonSorting.OnActivateMouseLeft += async (sender, e) =>
@@ -397,11 +385,13 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             BorderDinamicLabels.MouseRightButtonUp += (sender, e) =>
             {
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabel, OrientationPanelActionPosition.LeftUp);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(this, PageLabel,
+                    Orientation: OrientationPositionCursor.RightDown);
             };
             BorderDinamicLabels.MouseLeftButtonUp += (sender, e) =>
             {
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             SizeChanged += async (sender, e) =>
             {
@@ -610,7 +600,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 //PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
                 PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
                 PageLabelElement.IELButtonSetLabelTag.Text = Label.SourceLabel.Tag != null ? "Изменить тег" : "Добавить тег";
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsLabelElement, OrientationPanelActionPosition.LeftUp);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, PageLabelElement,
+                    Orientation: OrientationPositionCursor.RightDown);
                 e.Handled = true;
             };
             Label.OnActivateMouseLeft += async (sender, e) =>
@@ -645,7 +636,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 string Text = Label.SourceLabel.Description ?? string.Empty;
                 if (Text.Length > 0)
                     App.MainWindow.IELMessageMain.UsingBorderInformation(Label, Text,
-                        IEL.CORE.Enums.OrientationBorderPosition.Auto);
+                        IEL.CORE.Enums.OrientationPositionCursor.Auto);
             };
             Label.MouseLeave += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             Label.MouseLeftButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();

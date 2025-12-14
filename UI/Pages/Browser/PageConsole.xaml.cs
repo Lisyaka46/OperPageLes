@@ -1,7 +1,5 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Enums;
+﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
-using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using Interpreter.Interfaces;
@@ -14,8 +12,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Xml.Linq;
 using Color = System.Windows.Media.Color;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
@@ -31,18 +27,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         public const string ConsolePreMessage = "%**>>>**";
 
         #region PanelActionConsole
-        #region Source
         private static readonly MainPagePanelAction ConsolePage = new();
         /// <summary>
         /// Страница буфера в панели действий
         /// </summary>
         internal static readonly BufferPagePanelAction BufferPage = new();
-        #endregion
-
-        /// <summary>
-        /// Настройки панели действий для страниц во вкладке консоли
-        /// </summary>
-        private readonly PageSettingVisual PanelActionSettingsConsole;
         #endregion
 
         #region Hit
@@ -154,14 +143,13 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region BufferPage
             BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.NextPageInObject(ConsolePage, false);
+                App.MainWindow.IELActionPanelMain.NextPageInObject(ConsolePage, RightAlgin: false);
             };
             #endregion
             App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
             };
-            PanelActionSettingsConsole = new(RichTextBoxMainMessage, ConsolePage, new(305d, 260d));
             #endregion
 
             #region RichTextBoxMainMessage
@@ -169,7 +157,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
                     App.MainWindow.IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right) App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);
+                else if (e.ChangedButton == MouseButton.Right)
+                    App.MainWindow.IELActionPanelMain.UsingPanelAction(RichTextBoxMainMessage, ConsolePage,
+                        Orientation: OrientationPositionCursor.RightDown);
             };
 
             RichTextBoxMainMessage.TextChanged += (sender, e) =>
@@ -246,7 +236,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         else if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
                         break;
                     case Key.Apps:
-                        App.MainWindow.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole, OrientationPanelActionPosition.RightUp);
+                        if (!App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                            App.MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
+                                PositionAnimActionPanel.CenterObject, OrientationPositionCursor.LeftUp);
+                        else
+                            App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                         break;
                     case Key.Down:
                     case Key.Up:

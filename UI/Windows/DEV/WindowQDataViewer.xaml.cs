@@ -1,17 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Settings;
-using ApplicationOperPageLes.CORE.Settings.PaletteElements;
-using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
-using IEL.GUI;
-using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.TextFormatting;
-using static IEL.CORE.Classes.QData;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using WnColor = System.Windows.Media.Color;
 
 namespace ApplicationOperPageLes.UI.Windows.DEV
 {

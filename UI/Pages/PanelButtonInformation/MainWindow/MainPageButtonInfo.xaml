@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
+      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"

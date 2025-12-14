@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
-        xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
+        xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
         mc:Ignorable="d"
         Title="DialogQDataSpectrum" Height="450" Width="490" ResizeMode="NoResize">
     <Grid>

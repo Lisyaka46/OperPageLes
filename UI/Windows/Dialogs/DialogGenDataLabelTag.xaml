@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
-        xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
+        xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
         xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
         x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogGenDataLabelTag"
