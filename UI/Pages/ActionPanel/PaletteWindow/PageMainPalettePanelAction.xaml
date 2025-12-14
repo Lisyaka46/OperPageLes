@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow"
-      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL">
+      xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL">
 
     <Grid>
         <Grid.Resources>

@@ -4,10 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
-      xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
+      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole.BufferPagePanelAction">
+      x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole.BufferPagePanelAction" Width="250" Height="250">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -35,7 +35,7 @@
                 </ScrollViewer>
             </Grid>
         </Border>
-        <Grid>
+        <Grid Margin="0,5,0,0">
             <Grid.Resources>
                 <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
             </Grid.Resources>
@@ -43,8 +43,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" Padding="0,7,0,7" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8"/>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" Padding="0,7,0,7" PaletteElement="{DynamicResource PastelRed}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8" Height="55" MarginViewBox="20,10,20,10"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelRed}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1" Height="55" MarginViewBox="5,10,5,10"/>
         </Grid>
     </Grid>
 </Page>

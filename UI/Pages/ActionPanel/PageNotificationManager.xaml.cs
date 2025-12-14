@@ -1,6 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementControl;
-using ApplicationOperPageLes.UI.UserElementControl.Interfaces;
+using ApplicationOperPageLes.UI.UserElementsControl;
+using ApplicationOperPageLes.UI.UserElementsControl.Interfaces;
 using IEL.CORE.Classes;
 using System.Windows;
 using System.Windows.Controls;

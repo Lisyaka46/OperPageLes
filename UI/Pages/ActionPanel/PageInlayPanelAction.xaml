@@ -1,14 +1,18 @@
 ﻿<Page
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
-      xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+    x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction"
+    Width="180" Height="155">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
-    <Grid>
+    <Grid VerticalAlignment="Center" Margin="5,0,5,0">
         <Grid.Resources>
             <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
         </Grid.Resources>
@@ -18,7 +22,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,4,0,4" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Jade}"/>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Padding="5,10,5,10" Margin="0,4,0,4" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,5,0,5" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Jade}"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Padding="5,10,5,10" Margin="0,5,0,5" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}" PaletteElement="{DynamicResource PastelRed}"/>
     </Grid>
 </Page>

@@ -1,4 +1,4 @@
-﻿using IEL.GUI;
+﻿using IEL.UserElementsControl;
 using System.Windows.Controls;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel
