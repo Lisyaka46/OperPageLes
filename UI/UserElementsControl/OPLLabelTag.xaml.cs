@@ -1,7 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Label;
-using IEL.CORE.BaseUserControls;
 
-namespace ApplicationOperPageLes.UI.UserElementControl
+namespace ApplicationOperPageLes.UI.UserElementsControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLLabelTag.xaml

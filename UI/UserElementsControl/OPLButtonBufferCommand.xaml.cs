@@ -1,9 +1,9 @@
-﻿using IEL.CORE.BaseUserControls;
-using IEL.CORE.Classes.ObjectSettings;
+﻿using IEL.CORE.Classes.ObjectSettings;
 using System.Windows;
 using FontFamily = System.Windows.Media.FontFamily;
+using IEL.UserElementsControl.Base;
 
-namespace ApplicationOperPageLes.UI.UserElementControl
+namespace ApplicationOperPageLes.UI.UserElementsControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLButtonBufferCommand.xaml

@@ -1,14 +1,14 @@
 ﻿<Base:IELButtonBase
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:Base="clr-namespace:IEL.CORE.BaseUserControls;assembly=IEL"
+    xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=IEL"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:GUI="clr-namespace:IEL.GUI;assembly=IEL"
+    xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
     xmlns:local="clr-namespace:ApplicationOperPageLes;assembly=ApplicationOperPageLes"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-    x:Class="ApplicationOperPageLes.UI.UserElementControl.OPLLabel" 
+    x:Class="ApplicationOperPageLes.UI.UserElementsControl.OPLLabel" 
              mc:Ignorable="d" Cursor="Hand" Width="110" Height="110" CornerRadius="5,5,5,5">
     <Grid>
         <Grid.Resources>

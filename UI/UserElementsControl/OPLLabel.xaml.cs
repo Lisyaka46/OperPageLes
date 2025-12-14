@@ -1,6 +1,5 @@
 ﻿using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
-using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
@@ -9,8 +8,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
+using IEL.UserElementsControl.Base;
 
-namespace ApplicationOperPageLes.UI.UserElementControl
+namespace ApplicationOperPageLes.UI.UserElementsControl
 {
     /// <summary>
     /// Логика взаимодействия для OPLLabel.xaml

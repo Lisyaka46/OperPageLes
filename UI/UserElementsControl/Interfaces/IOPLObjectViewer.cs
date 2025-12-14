@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationOperPageLes.UI.UserElementControl.Interfaces
+namespace ApplicationOperPageLes.UI.UserElementsControl.Interfaces
 {
     internal interface IOPLObjectViewer<T> where T : IFormattable
     {

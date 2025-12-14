@@ -1,0 +1,13 @@
+﻿<Base:OPLElementViewerBase
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:Base="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl.Base"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl"
+    xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+    x:Class="ApplicationOperPageLes.UI.UserElementsControl.OPLImageViewer">
+    <Image x:Name="IndicatorImage" Margin="2,2,2,2" Width="30" Height="30"/>
+</Base:OPLElementViewerBase>
