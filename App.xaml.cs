@@ -7,13 +7,13 @@ using ApplicationOperPageLes.CORE.Settings.Struct;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
 using ApplicationOperPageLes.UI.Pages.Browser;
-using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
 using IEL.CORE.Classes.ObjectSettings;
-using IEL.GUI;
+using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -686,7 +686,10 @@ namespace ApplicationOperPageLes
             }
             catch (Exception ex)
             {
-                LogWriteLine($"{ex.Message}");
+                System.Windows.MessageBox.Show("Программа открылась неправильно!.\nПредоставлено логирование процесса...");
+                LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
+                LogStreamWriter?.Close();
+                Environment.Exit(1);
             }
         }
 
