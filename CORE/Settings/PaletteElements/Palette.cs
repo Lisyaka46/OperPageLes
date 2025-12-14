@@ -90,16 +90,5 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
                 _SourcePalette.Add(t[IndexPaletteElement], spectrum);
             }
         }
-
-        //
-        public void ChangeSourcePaletteData(Palette Source)
-        {
-            foreach (PaletteSpectrumEnum Element in Enum.GetValues<PaletteSpectrumEnum>())
-            {
-                _SourcePalette[Element].BG.ChangeSourceQData(Source[Element].BG);
-                _SourcePalette[Element].BB.ChangeSourceQData(Source[Element].BB);
-                _SourcePalette[Element].FG.ChangeSourceQData(Source[Element].FG);
-            }
-        }
     }
 }

@@ -62,16 +62,21 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
             SourcePalette = new Palette(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
         }
 
-        ///// <summary>
-        ///// Изменить данные темы
-        ///// </summary>
-        ///// <param name="Source">Тема, данные которой отражаются</param>
-        ///// <returns></returns>
-        //public void ChangeSourceTheme(Theme Source)
-        //{
-        //    DirectoryFile = Source.DirectoryFile;
-        //    SourcePalette.ChangeSourcePalette(Source);
-        //}
+        /// <summary>
+        /// Изменить данные текущей темы
+        /// </summary>
+        /// <param name="Source">Тема из которой берутся данные</param>
+        public void ChangeSourceData(ref Theme Source)
+        {
+            Name = Source.Name;
+            DirectoryFile = Source.DirectoryFile;
+            foreach (PaletteSpectrumEnum Element in Enum.GetValues<PaletteSpectrumEnum>())
+            {
+                SourcePalette[Element].BG.ChangeSourceQData(Source[Element].BG);
+                SourcePalette[Element].BB.ChangeSourceQData(Source[Element].BB);
+                SourcePalette[Element].FG.ChangeSourceQData(Source[Element].FG);
+            }
+        }
 
         public static implicit operator Palette(Theme obj) => obj.SourcePalette;
     }

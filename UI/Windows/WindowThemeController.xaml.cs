@@ -1,11 +1,10 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementControl;
+using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
-using IEL.CORE.BaseUserControls;
 using IEL.CORE.Classes;
-using IEL.GUI;
+using IEL.UserElementsControl;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +13,7 @@ using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
+using IEL.UserElementsControl.Base;
 
 namespace ApplicationOperPageLes.UI.Windows
 {
@@ -25,9 +25,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <summary>
         /// Активная палитра взаимодействия
         /// </summary>
-        private Palette ActiveManipulatePalette = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
-
-        private string DitectoryOpenManipulatePalette = string.Empty;
+        private Theme ActiveManipulateTheme = new();
 
         /// <summary>
         /// Активный объект спектра палитры над которым производится манипуляция
@@ -75,13 +73,13 @@ namespace ApplicationOperPageLes.UI.Windows
             IELButtonSaveTheme.IsEnabled = false;
             IELButtonSaveTheme.OnActivateMouseLeft += (sender, e) =>
             {
-                if (ActiveManipulatePalette != null)
+                if (ActiveManipulateTheme != null)
                 {
-                    FileStream stream = File.OpenWrite(DitectoryOpenManipulatePalette);
+                    FileStream stream = File.OpenWrite(ActiveManipulateTheme.DirectoryFile);
                     stream.Position = 0;
                     foreach (PaletteSpectrumEnum Element in Enum.GetValues<PaletteSpectrumEnum>())
                     {
-                        PaletteSpectrum spectrum = ActiveManipulatePalette[Element];
+                        PaletteSpectrum spectrum = ActiveManipulateTheme[Element];
                         PaletteSpectrum.WritePalettespectrum(ref stream, ref spectrum);
                     }
                     stream.Close();
@@ -89,30 +87,21 @@ namespace ApplicationOperPageLes.UI.Windows
                 IELButtonSaveTheme.IsEnabled = false;
             };
             ColumnDefinitionQDataViewer.MaxWidth = 0d;
-            PanelActionMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
-            PanelActionMain.Width = 0d;
-            PanelActionMain.Height = 0d;
-            PanelActionMain.Opacity = 0d;
             GridMainPaletteButtons.Opacity = 0d;
             GridPaletteSpectrumViewer.IsEnabled = false;
             GridPaletteSpectrumViewer.Opacity = 0d;
             BorderViewerQData.Opacity = 0d;
 
-            DefaultPaletteElement.VisualOpen();
             DefaultPaletteElement.OnActivateMouseLeft += async (sender, e) =>
             {
+                if (!MessageBoxActivateChangeThemeUnSave()) return;
                 IELButtonSaveTheme.IsEnabled = false;
                 ViewTheme(App.CurrentApp.ActiveThemeApplication);
             };
 
             IELButtonBackViewTheme.OnActivateMouseLeft += (sender, e) =>
             {
-                if (IELButtonSaveTheme.IsEnabled)
-                {
-                    MessageBoxResult Result = System.Windows.MessageBox.Show("Вы точно хотите закрыть тему?\nВсе изменённые данные будут утеряны", "Предупреждение",
-                        MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (Result == MessageBoxResult.No) return;
-                }
+                if (!MessageBoxActivateChangeThemeUnSave()) return;
                 App.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
                 GridPaletteSpectrumViewer.IsEnabled = false;
                 IELButtonSaveTheme.IsEnabled = false;
@@ -173,9 +162,10 @@ namespace ApplicationOperPageLes.UI.Windows
         private void ViewTheme(Theme Source)
         {
             GridPaletteSpectrumViewer.IsEnabled = true;
-            ActiveManipulatePalette.ChangeSourcePaletteData((Palette)Source);
-            TextBlockNameSelectTheme.Text = Source.Name;
-            DitectoryOpenManipulatePalette = Source.DirectoryFile;
+            ActiveManipulateTheme.ChangeSourceData(ref Source);
+            if (ActiveManipulateSpectrum != null)
+                UpdateVisualPaletteSpectrumFromBorder(ref ActiveManipulateSpectrum);
+            TextBlockNameSelectTheme.Text = ActiveManipulateTheme.Name;
             App.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
         }
 
@@ -195,18 +185,37 @@ namespace ApplicationOperPageLes.UI.Windows
             for (int i = 0; i < Files.Length; i++)
             {
                 button = CreateButtonTheme();
-                button.Margin = new(5, i * 45, 5, 0);
                 ArrayInicializeThemes.Add(new Theme(Files[i]));
                 button.Text = ArrayInicializeThemes[^1].Name;
                 ResultGrid.Children.Add(button);
+                button.UpdateLayout();
+                button.Margin = new(5, i == 0 ? 5 : i * (button.ActualHeight + 10), 5, 0);
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(button);
                 button.OnActivateMouseLeft += (sender, e) =>
                 {
-                    int index = ResultGrid.Children.IndexOf((UIElement)sender);
-                    ViewTheme(ArrayInicializeThemes[index]);
+                    if (MessageBoxActivateChangeThemeUnSave())
+                    {
+                        int index = ResultGrid.Children.IndexOf((UIElement)sender);
+                        ViewTheme(ArrayInicializeThemes[index]);
+                    }
                 };
             }
             return ResultGrid;
+        }
+
+        /// <summary>
+        /// Активировать вопрос о сохранении темы
+        /// </summary>
+        /// <returns></returns>
+        private bool MessageBoxActivateChangeThemeUnSave()
+        {
+            if (IELButtonSaveTheme.IsEnabled)
+            {
+                MessageBoxResult Result = System.Windows.MessageBox.Show("Вы точно хотите закрыть тему?\nВсе изменённые данные будут утеряны", "Предупреждение",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                return Result == MessageBoxResult.Yes;
+            }
+            else return true;
         }
 
         /// <summary>
@@ -218,15 +227,14 @@ namespace ApplicationOperPageLes.UI.Windows
             OPLImageViewer Button = new()
             {
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                VerticalAlignment = System.Windows.VerticalAlignment.Stretch,
-                Margin = new(5),
+                VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 Padding = new(0),
                 FontSize = 18d,
                 CornerRadius = new(10),
                 CornerRadiusGuides = new(7.6),
                 BorderThickness = new(2),
                 Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette)),
-                Height = 50,
+                Height = 65,
             };
             return Button;
         }
@@ -252,7 +260,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     App.DoubleAnimationType.AnimateEffect(BorderViewerQData, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
                     SetPaletteViewer(((IELObjectBase)sender).PaletteElement);
                 };
-                ActiveManipulatePalette[ElementPalette].ConnectPalleteFromIELElement(button);
+                ActiveManipulateTheme[ElementPalette].ConnectPalleteFromIELElement(button);
 
                 ResultGrid.Children.Add(button);
 				Grid.SetRow(button, ResultGrid.RowDefinitions.Count);
@@ -288,10 +296,14 @@ namespace ApplicationOperPageLes.UI.Windows
             ActiveManipulateSpectrum = Source;
             IELExampleButtonPalette.PaletteElement = Source;
 
-            UpdateVisualQData(ref Source);
+            UpdateVisualPaletteSpectrumFromBorder(ref Source);
         }
 
-        private void UpdateVisualQData(ref PaletteSpectrum Source)
+        /// <summary>
+        /// Обновить визуализацию спектров бордеров
+        /// </summary>
+        /// <param name="Source">Спектр палитры на значения которого изменяется отображение</param>
+        private void UpdateVisualPaletteSpectrumFromBorder(ref PaletteSpectrum Source)
         {
             TimeSpan span = TimeSpan.FromMilliseconds(400d);
             for (int i = 0; i < 4; i++)
@@ -307,10 +319,10 @@ namespace ApplicationOperPageLes.UI.Windows
 
         private void ActivateDialogManipulatePaletteSectrum(PaletteSpectrum SourceData, EnumDataSpectrum SpectrumManipulate)
         {
-            IELButtonSaveTheme.IsEnabled = DitectoryOpenManipulatePalette.Length > 0;
+            IELButtonSaveTheme.IsEnabled = ActiveManipulateTheme.DirectoryFile.Length > 0;
             DialogQDataSpectrum DialogQDataChange = new();
             DialogQDataChange.ShowDialogChangeQData(SourceData, SpectrumManipulate);
-            UpdateVisualQData(ref SourceData);
+            UpdateVisualPaletteSpectrumFromBorder(ref SourceData);
         }
     }
 }

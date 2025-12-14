@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows"
-        xmlns:OPL="clr-namespace:ApplicationOperPageLes.UI.UserElementControl"
-        xmlns:IEL="clr-namespace:IEL.GUI;assembly=IEL"
+        xmlns:OPL="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl"
+        xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
         mc:Ignorable="d"
         Title="Управление персонализацией" Height="450" Width="800">
@@ -15,6 +15,9 @@
             <GradientStop Color="#FF85C6D2" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.Resources>
             <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
@@ -29,14 +32,16 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" Source="/UI/Images/IconMainApplication.png" Text="DefaultPalette" FontSize="14"/>
-                <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="#FF1D92D0">
+                <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <ScrollViewer>
-                        <Grid x:Name="GridThemes">
+                        <Grid x:Name="GridThemes" VerticalAlignment="Top">
                         </Grid>
                     </ScrollViewer>
                 </Border>
+                <IEL:IELButtonText Grid.Row="2" Margin="5,5,5,5" FontSize="16" PaletteElement="{DynamicResource SpruceColor}" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5"/>
             </Grid>
         </Border>
         <Grid x:Name="GridPaletteSpectrumViewer" Grid.Column="1" Grid.ColumnSpan="2">
@@ -68,9 +73,6 @@
         <IEL:IELPanelAction x:Name="PanelActionMain" Width="120" Height="200" Margin="134,130,251,104" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource PastelBlue}" Grid.ColumnSpan="3"/>
         <Border x:Name="BorderViewerQData" Grid.Column="2" Background="#FFD4D7FF" BorderThickness="2,0,0,0" BorderBrush="Black">
             <Grid>
-                <Grid.Resources>
-                    <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
