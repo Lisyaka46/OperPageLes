@@ -14,6 +14,7 @@ using IEL.UserElementsControl;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -147,10 +148,10 @@ namespace ApplicationOperPageLes.UI.Windows
 
             BorderNotificationIndicator.Opacity = 0d;
             IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
+            IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
-                IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
+                IndicatorLoading.Position = TimeSpan.FromMilliseconds(5);
             };
 
             IELMessageMain.Opacity = 0d;
@@ -164,22 +165,6 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
             };
-            byte[][] ColorBytes =
-            [
-                [255, 55, 101, 144],
-                [255, 103, 120, 121],
-                [255, 45, 113, 95],
-                [255, 41, 91, 122]
-            ];
-            IELBrowserPageMain.QDataDefaultInlayBackground = new(
-            [
-                [255, 141, 195, 223],
-                [255, 199, 223, 224],
-                [255, 130, 224, 199],
-                [255, 230, 188, 224]
-            ]);
-            IELBrowserPageMain.QDataDefaultInlayBorderBrush = new(ColorBytes);
-            IELBrowserPageMain.QDataDefaultInlayForeground = new(ColorBytes);
             IELBrowserPageMain.SetSourceImageButtonAddInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus)));
 
             #region Palette
@@ -194,8 +179,6 @@ namespace ApplicationOperPageLes.UI.Windows
 
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonBackButtons);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonNextButtons);
-
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELImageButtonHelp);
 
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELImageButtonMenu);
             #endregion
@@ -294,6 +277,8 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 WindowThemeController Window = new();
                 App.CurrentApp.InicializeWindowInApplication(Window);
+                if (!Path.Exists(StructDirectoryResources.DirectoryThemeApplication))
+                    Directory.CreateDirectory(StructDirectoryResources.DirectoryThemeApplication);
                 Window.Show();
                 //new DialogSetting().ShowDialog();
             };
@@ -483,6 +468,10 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 if (!IsReboot && !IsClosing) Close();
             };
+            //GotKeyboardFocus += (sender, e) =>
+            //{
+            //    //UpdateInformationInObject(IELBlockInfoStateRegister, Keyboard.PrimaryDevice.IsKeyToggled(Key.CapsLock) ? "а".ToUpper() : "a".ToLower());
+            //};
             #endregion
         }
 
@@ -592,7 +581,6 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
         /// <param name="NameProcess">Название загрузочного процесса</param>
         /// <param name="Method">Асинхронный процесс получения значения</param>
-        /// <param name="IsCanceledManipulate">Можно ли отменить операцию</param>
         /// <returns>Исполненный асинхронный процесс</returns>
         internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
         {
@@ -611,6 +599,30 @@ namespace ApplicationOperPageLes.UI.Windows
             ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
 
             return await Method;
+        }
+
+        /// <summary>
+        /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
+        /// </summary>
+        /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
+        /// <param name="NameProcess">Название загрузочного процесса</param>
+        /// <param name="Method">Асинхронный процесс получения значения</param>
+        /// <returns>Исполненный асинхронный процесс</returns>
+        internal async Task ExecuteVisualizateLoadingProcess(string NameProcess, Task Method)
+        {
+            OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
+            ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
+            CancellationToken token = new(false);
+            ViewLoading.OnActivateMouseRight += (sender, e) =>
+            {
+                token.ThrowIfCancellationRequested();
+                ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
+            };
+
+            await Method.WaitAsync(token);
+
+            if (Method.IsCanceled) throw new OperationCanceledException();
+            ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
         }
 
         /// <summary>

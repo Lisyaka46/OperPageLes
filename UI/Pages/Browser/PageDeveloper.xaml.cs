@@ -31,7 +31,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
             Loaded += async (sender, e) =>
             {
-                const int CountParticles = 30, DelayOneParticle = 100;
+                const int CountParticles = 90, DelayOneParticle = 100;
                 TimeSpan TimeParticle = TimeSpan.FromMilliseconds(DelayOneParticle * 8);
                 Random randomColor = new();
                 //IELObjectBase Particle;
@@ -57,14 +57,16 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         From = 15d,
                         To = 60d
                     };
-                    //Particle = new System.Windows.Shapes.Rectangle()
-                    //{
-                    //    Height = 3,
-                    //    Width = 3,
-                    //    Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
-                    //        (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
-                    //    Opacity = 0d
-                    //};
+                    Particle = new System.Windows.Shapes.Rectangle()
+                    {
+                        Height = 4,
+                        Width = 4,
+                        Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
+                            (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
+                        Opacity = 0d,
+                        RadiusX = 1,
+                        RadiusY = 1,
+                    };
                     //Particle = new IELBlockInfoText()
                     //{
                     //    Width = 20,
@@ -73,15 +75,15 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     //    CornerRadius = new(3),
                     //    Text = "F",
                     //};
-                    Particle = new System.Windows.Controls.Image()
-                    {
-                        Height = 15,
-                        Width = 15,
-                        //Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
-                        //    (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
-                        Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)),
-                        Opacity = 0d
-                    };
+                    //Particle = new System.Windows.Controls.Image()
+                    //{
+                    //    Height = 15,
+                    //    Width = 15,
+                    //    //Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
+                    //    //    (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
+                    //    Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)),
+                    //    Opacity = 0d
+                    //};
                     //App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray].ConnectPalleteFromIELElement(Particle);
                     Thickness Start = new(
                         Particles.ActualWidth / 2 - Particle.Width / 2,
@@ -100,25 +102,24 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     {
                         Particles.Children[i].BeginAnimation(MarginProperty, null);
                         Particles.Children[i].BeginAnimation(OpacityProperty, null);
-                        Particles.Children[i].BeginAnimation(WidthProperty, null);
-                        Particles.Children[i].BeginAnimation(HeightProperty, null);
+                        //Particles.Children[i].BeginAnimation(WidthProperty, null);
+                        //Particles.Children[i].BeginAnimation(HeightProperty, null);
 
                         RepeatBoard(animationT, randomColor, Start);
 
                         Particles.Children[i].BeginAnimation(MarginProperty, animationT);
                         Particles.Children[i].BeginAnimation(OpacityProperty, animationD);
-                        Particles.Children[i].BeginAnimation(WidthProperty, animationW);
-                        Particles.Children[i].BeginAnimation(HeightProperty, animationH);
+                        //Particles.Children[i].BeginAnimation(WidthProperty, animationW);
+                        //Particles.Children[i].BeginAnimation(HeightProperty, animationH);
                         i = ++i % Particles.Children.Count;
                     };
 
                     Particle.BeginAnimation(MarginProperty, animationT);
                     Particle.BeginAnimation(OpacityProperty, animationD);
-                    Particle.BeginAnimation(WidthProperty, animationW);
-                    Particle.BeginAnimation(HeightProperty, animationH);
+                    //Particle.BeginAnimation(WidthProperty, animationW);
+                    //Particle.BeginAnimation(HeightProperty, animationH);
                     await Task.Delay(DelayOneParticle);
                 }
-                i = 0;
             };
 
             MyAnimatedObject.MouseDown += (sender, e) =>

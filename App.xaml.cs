@@ -1,7 +1,7 @@
 ﻿using ApplicationOperPageLes.CORE;
 using ApplicationOperPageLes.CORE.Animation;
+using ApplicationOperPageLes.CORE.Interfaces;
 using ApplicationOperPageLes.CORE.Label;
-using ApplicationOperPageLes.CORE.Settings;
 using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Settings.Struct;
 using ApplicationOperPageLes.CORE.Struct;
@@ -12,7 +12,6 @@ using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.Browser;
-using IEL.CORE.Classes.ObjectSettings;
 using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
@@ -32,11 +31,13 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using Windows.Services.Maps;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes
@@ -63,6 +64,17 @@ namespace ApplicationOperPageLes
         /// </summary>
         internal static OPLDoubleAnimationType<DoubleAnimation> DoubleAnimationType =
             new(new(0, TimeSpan.FromMilliseconds(250d))
+            {
+                DecelerationRatio = 0.2d,
+                EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
+                From = null
+            });
+
+        /// <summary>
+        /// Объект анимации Point
+        /// </summary>
+        internal static OPLPointAnimationType<PointAnimation> PointAnimationType =
+            new(new(new System.Windows.Point(0, 0), TimeSpan.FromMilliseconds(250d))
             {
                 DecelerationRatio = 0.2d,
                 EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
@@ -101,7 +113,7 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Интерпретатор команд
         /// </summary>
-        internal readonly COMInterpreter Interpreter;
+        internal readonly COMInterpreter<IOPERCommandViewer> Interpreter;
 
         /// <summary>
         /// Массив ярлыков
@@ -213,10 +225,15 @@ namespace ApplicationOperPageLes
         /// </summary>
         internal WaveOut SoundChannelWaveOut { get; }
 
-        Socket? UDPSocketServer;
-        Socket? UDPSocketClient;
-        IPEndPoint? IPServer;
-        IPEndPoint? IPClient;
+        /// <summary>
+        /// TCP сервер управления
+        /// </summary>
+        private static TcpListener? Server = null;
+
+        /// <summary>
+        /// TCP клиент заявок
+        /// </summary>
+        private static TcpClient? Client = null;
 
         public App()
         {
@@ -227,6 +244,7 @@ namespace ApplicationOperPageLes
             OpenedWindowsInApplication = [];
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
+
 #if DEBUG
             Is_WindowDeveloper = new();
 #endif
@@ -237,20 +255,21 @@ namespace ApplicationOperPageLes
             LogWriteLine("Настройка интерпретатора");
             Interpreter = new([
                 #region alias
-                new ConsoleCommand("alias",
+                new ConsoleCommand<IOPERCommandViewer>("alias",
                 [
                     new Parameter("Name", typeof(string)),
                     new Parameter("Command", typeof(string)),
                     new Parameter("Description", typeof(string), string.Empty)
                 ],
-                "Создаёт алиас \"Name\" на команду \"Command\". С описанием \"Description\"", (Main, param) =>
+                "Создаёт алиас \"Name\" на команду \"Command\". С описанием \"Description\"", (Main, param, CV) =>
                 {
                     string NameAlias = ((string)param[0]).ToLower();
                     bool CompleteCreateAlias = Interpreter?.AddAliasCommand(NameAlias, (string)param[1], (string)param[2]) ?? false;
                     if (!CompleteCreateAlias)
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
-                            $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите команду: %**alias_replace**//"));
+                            $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как он уже создан\n%#EA5555//Для переопределения введите команду: " +
+                            "%**[alias_replace]**//"));
                     }
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" успешно %**создан**"));
@@ -258,22 +277,22 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region alias_replace
-                new ConsoleCommand("alias_replace",
+                new ConsoleCommand<IOPERCommandViewer>("alias_replace",
                 [
                     new Parameter("Name", typeof(string)),
                     new Parameter("Command", typeof(string)),
                     new Parameter("Description", typeof(string), string.Empty)
                 ],
-                "Изменяет алиас \"Name\" на новую команду алиаса \"Command\". С необязательным изменением описания \"Description\"", (Main, param) =>
+                "Изменяет алиас \"Name\" на новую команду алиаса \"Command\". С необязательным изменением описания \"Description\"", (Main, param, CV) =>
                 {
                     string NameAlias = ((string)param[0]).ToLower();
-                    AliasCommand<ICommandOPER>? alias = Interpreter?.ReadAliasCommand(NameAlias);
+                    AliasCommand<ICommandOPER<IOPERCommandViewer>, IOPERCommandViewer>? alias = Interpreter?.ReadAliasCommand(NameAlias);
                     if (alias == null)
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не существует \n%#EA5555//Для создания алиаса введите команду: %**alias**//"));
                     }
-                    ICommandOPER? Com = Interpreter?.ReadCommand((string)param[1]);
+                    ICommandOPER<IOPERCommandViewer>? Com = Interpreter?.ReadCommand((string)param[1]);
                     CommandStateResult Result = alias.ChangeSourceCommand(Com, (string)param[1], ((string)param[2]).Length > 0 ? (string)param[2] : null);
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
@@ -281,13 +300,13 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region label
-                new ConsoleCommand("label",
+                new ConsoleCommand<IOPERCommandViewer>("label",
                 [
                     new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
                     new Parameter("Description", typeof(string), string.Empty)
                 ],
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
-                (Command, param) =>
+                (Command, param, CV) =>
                 {
                     PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchAnyPageType<PageLabels>();
                     if (SourcePage != null)
@@ -303,8 +322,8 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region create_label
-                new ConsoleCommand("create_label", "Открывает окно создания ярлыка",
-                (Command, param) =>
+                new ConsoleCommand<IOPERCommandViewer>("create_label", "Открывает окно создания ярлыка",
+                (Command, param, CV) =>
                 {
                     DialogGenLabel GenLabel = new();
                     ActiveDialog = GenLabel;
@@ -327,7 +346,7 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region reboot
-                new ConsoleCommand("reboot", "Перезагружает программу", (Command, param) =>
+                new ConsoleCommand<IOPERCommandViewer>("reboot", "Перезагружает программу", (Command, param, CV) =>
                 {
                     RebootApplication();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -335,36 +354,36 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region close
-                new ConsoleCommand("close", "Закрывает программу", (Command, param) =>
+                new ConsoleCommand<IOPERCommandViewer>("close", "Закрывает программу", (Command, param, CV) =>
                 {
                     MainWindow.Close();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
 
-                #region clear
-                new ConsoleCommand("clear",
-                "Очищает текстовый вывод главного меню программы",
-                (Command, param) =>
-                {
-                    MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>()?.ClearConsoleText();
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                }),
-                #endregion
+                //#region clear
+                //new ConsoleCommand("clear",
+                //"Очищает текстовый вывод главного меню программы",
+                //(Command, param) =>
+                //{
+                //    MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>()?.ClearConsoleText();
+                //    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                //}),
+                //#endregion
 
                 #region print
-                new ConsoleCommand("print", [new Parameter("Text", typeof(string))],
+                new ConsoleCommand<IOPERCommandViewer>("print", [new Parameter("Text", typeof(string))],
                 "Выводит введённый параметр \"Text\" в консоль главного меню программы, игнорируя другие параметры",
-                (Command, param) =>
+                (Command, param, CV) =>
                 {
                     return Task.FromResult(CommandStateResult.Completed(Command.Name, (string)param[0]));
                 }),
                 #endregion
 
                 #region buffer
-                new ConsoleCommand("buffer",
+                new ConsoleCommand<IOPERCommandViewer>("buffer",
                 "Отображает содержание буфера команд в консоль главного меню программы",
-                (Command, param) =>
+                (Command, param, CV) =>
                 {
                     BufferPagePanelAction PageBuffer = PageConsole.BufferPage;
                     return Task.FromResult(CommandStateResult.Completed(Command.Name,
@@ -381,9 +400,9 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region open_link
-                new ConsoleCommand("open_link", [new Parameter("Link", typeof(string))],
+                new ConsoleCommand<IOPERCommandViewer>("open_link", [new Parameter("Link", typeof(string))],
                 "Открывает в браузере заданную ссылку \"Link\"",
-                (Command, param) =>
+                (Command, param, CV) =>
                 {
                     try
                     {
@@ -430,13 +449,13 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region open_directory
-                new ConsoleCommand("open_directory",
+                new ConsoleCommand<IOPERCommandViewer>("open_directory",
                 [
                     new Parameter("Directory", typeof(string), string.Empty)
                 ],
                 "Открывает заданную директорию в проводнике. При отсутствии параметра будет открывать главную страницу проводника\n" +
                 "- Вписав \"*\" в параметры, откроет главную директорию процесса приложения",
-                (Command, param) =>
+                (Command, param, CV) =>
                 {
                     string Text = "Открытие директории ";
                     switch ((string)param[0])
@@ -464,12 +483,12 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 #region open_file
-                new ConsoleCommand("open_file",
+                new ConsoleCommand<IOPERCommandViewer>("open_file",
                 [
                     new Parameter("File", typeof(string))
                 ],
                 "Открывает файл по его заданной директории",
-                (Command, param) =>
+                (Command, param, CV) =>
                 {
                     string path = (string)param[0];
                     Paragraph Message = new();
@@ -483,79 +502,154 @@ namespace ApplicationOperPageLes
                 }),
                 #endregion
 
-                #region open_file
-                new ConsoleCommand("udp_init",
+                #region server_start
+                new ConsoleCommand<IOPERCommandViewer>("server_start",
                 [
-                    new Parameter("ip_server", typeof(string)),
-                    new Parameter("port_server", typeof(int)),
-                    new Parameter("ip_client", typeof(string)),
-                    new Parameter("port_client", typeof(int))
+                    new Parameter("ip", typeof(string), String.Empty),
                 ],
-                "Открывает UDP сервер по его \"port_server\". Подключается к устройству по его \"ip_client\" и \"port_client\"",
-                (Command, param) =>
+                "Запуск сервера по ip, если нем параметра то регистрирует сервер по текущему ip компьютера",
+                async (Command, param, CV) =>
                 {
-                    try
+                    if (Server != null)
                     {
-                        UDPSocketServer = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                        UDPSocketClient = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                        IPServer = new(IPAddress.Parse((string)param[0]), (int)param[1]);
-                        IPClient = new(IPAddress.Parse((string)param[2]), (int)param[3]);
-                        UDPSocketServer.Bind(IPServer);
-                        return Task.FromResult(CommandStateResult.Completed(Command.Name, $"UDP-сервер запущен..."));
+                        return CommandStateResult.Failed(Command.Name, "%__Вы уже запустили сервер__");
                     }
-                    catch (Exception ex)
+                    IPAddress ip = IPAddress.Parse("127.1.1.1");
+                    if (((string)param[0]).Length == 0)
                     {
-                        return Task.FromResult(CommandStateResult.Failed(Command.Name, ex.ToString()));
+                        IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+                        foreach (IPAddress Element in localIPs)
+                        {
+                            if (Element.AddressFamily.ToString().Equals("InterNetwork"))
+                            {
+                                ip = Element;
+                                break;
+                            }
+                        }
                     }
+                    else
+                        ip = IPAddress.Parse((string)param[0]);
+                    CV?.AddString($"Регистрация сервера: \"{ip.MapToIPv4()}\".");
+
+                    #region Button CopyIP
+                    IELButtonText ButtonCopyIP = new()
+                    {
+                        MarginViewBox = new(3),
+                        FontSize = 14d,
+                        Text = "Копировать IP",
+                        Width = 105,
+                        CornerRadius = new(5),
+                        BorderThickness = new(2),
+                        Margin = new(3, 0, 0, 0),
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                        VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                    };
+                    System.Windows.Data.Binding binding = new()
+                    {
+                        Mode = BindingMode.OneWay,
+                        Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["RussianRail G Pro"]
+                    };
+                    BindingOperations.SetBinding(ButtonCopyIP, IELButtonText.FontFamilyProperty, binding);
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(ButtonCopyIP);
+                    ButtonCopyIP.OnActivateMouseLeft += (sender, e) =>
+                    {
+                        System.Windows.Clipboard.SetText(ip.MapToIPv4().ToString());
+                    };
+                    CV?.AddNewUIElement(ButtonCopyIP);
+                    #endregion
+
+                    Server = new(IPAddress.Any, 1111);
+                    Server.Start();
+                    CV?.AddString($"Сервер запущен.");
+                    //int count;
+                    byte[] hello = Encoding.Default.GetBytes("hello world");
+                    NetworkStream? ns = null;
+                    while (true)   // бесконечный цикл обслуживания клиентов
+                    {
+                        if (Server.Pending())
+                        {
+                            CV?.AddString($"Найден ожидающий клиент, принято на обработку.");
+                            TcpClient client = await Server.AcceptTcpClientAsync();  // ожидаем подключение клиента
+                            ns = client.GetStream(); // для получения и отправки сообщений
+                            CV?.AddString($"Клиент принят: \"{ns.Socket.AddressFamily}\"");
+
+                            CV?.AddString($"Сообщение отправлено.");
+                            ns.Write(hello, 0, hello.Length);     // отправляем сообщение
+                            //do
+                            //{
+                            //    byte[] msg = new byte[1024];     // готовим место для принятия сообщения
+                            //    count = ns.Read(msg, 0, msg.Length);   // читаем сообщение от клиента
+                            //    CV?.AddString(Encoding.Default.GetString(msg, 0, count)); // выводим на экран полученное сообщение в виде строки
+                            //}
+                            //while (client.Connected && count > 0);
+                        }
+                        else if (ns != null)
+                        {
+                            CV?.AddString($"Сообщение отправлено.");
+                            ns.Write(hello, 0, hello.Length);
+                        }
+                        await Task.Delay(1000);
+                    }
+
+                    return CommandStateResult.Completed(Command.Name);
                 }),
                 #endregion
 
-                #region open_file
-                new ConsoleCommand("udp_message_send",
+                #region client_start
+                new ConsoleCommand<IOPERCommandViewer>("client_start",
                 [
-                    new Parameter("message", typeof(string)),
+                    new Parameter("ip", typeof(string)),
                 ],
+                "Инициализирует пользователя подключающегося к серверу",
+                async (Command, param, CV) =>
+                {
+                    //StreamReader sr = new StreamReader("source.txt");
+                    CV?.AddString($"Произвожу попытку подключения к \"{param[0]}\"");
+                    Client = new();
+                    if (CV != null) await CV.ExecuteVisualizateTask(Client.ConnectAsync((string)param[0], 1111));
+                    else await Client.ConnectAsync((string)param[0], 1111);
+                    CV?.AddString($"Подключение успешно!");
+
+                    if (Client.Connected)
+                    {
+                        await using NetworkStream stream = Client.GetStream();
+
+                        while (true)
+                        {
+                            try
+                            {
+                                var buffer = new byte[100];
+                                int received = await stream.ReadAsync(buffer);
+
+                                var message = Encoding.UTF8.GetString(buffer, 0, received);
+                                CV?.AddString($"Message received: \"{message}\"");
+                                await Task.Delay(1000);
+                            }
+                            catch { break; }
+                        }
+                    }
+                    return CommandStateResult.Completed(Command.Name);
+                }),
+                #endregion
+
+                #region get_ip
+                new ConsoleCommand<IOPERCommandViewer>("get_ip",
                 "Отправляет \"message\" через интернет к подключённому устройству",
-                async (Command, param) =>
+                (Command, param, CV) =>
                 {
-                    try {
-                        if (IPClient == null || UDPSocketClient == null) return CommandStateResult.Failed(Command.Name, "UDP не инициализирован!");
-                        byte[] data = Encoding.UTF8.GetBytes($"{DateTime.Now:HH:mm:ss}: \"{param[0]}\"");
-                        int bytes = await UDPSocketClient.SendToAsync(data, IPClient);
-                        return CommandStateResult.Completed(Command.Name, $"Сообщение отправлено: \"{param[0]}\" \"{bytes} bytes\"");
-                    }
-                    catch (Exception ex)
-                    {
-                        return CommandStateResult.Failed(Command.Name, $"{ex}");
-                    }
-                }),
-                #endregion
-
-                #region open_file
-                new ConsoleCommand("udp_message_receive",
-                "Ожидает сообщение, переданное вашему устройству",
-                async (Command, param) =>
-                {
-                    if (UDPSocketServer == null || IPClient == null) return CommandStateResult.Failed(Command.Name, "UDP не инициализирован!");
-                    PageConsole? PageConsoleElement = (PageConsole?)MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent;
-                    if (PageConsoleElement == null)
-                    {
-                        return CommandStateResult.Failed(Command.Name, $"Страница консоли не найдена!");
-                    }
-                    byte[] data = new byte[256]; // буфер для получаемых данных
-                    PageConsoleElement.AddTextInConsole($"Ожидаю сообщение...");
-
-                    // получаем данные в массив data
-                    SocketReceiveFromResult result = await UDPSocketServer.ReceiveFromAsync(data, IPClient);
-                    return CommandStateResult.Completed(Command.Name, $"\"{Encoding.UTF8.GetString(data, 0, result.ReceivedBytes)}\"\nОтправитель: {result.RemoteEndPoint}");
+                    CV?.AddString("Все сетевые IP:");
+                    IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+                    CV?.AddString(localIPs, (el) => el.AddressFamily.ToString().Equals("InterNetwork") ? el.ToString() : null);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"----"));
                 }),
                 #endregion
                 ]);
             #endregion
+
             LogWriteLine("Инициализация параметров приложения");
 
             #region Settings
-            LogWriteLine("Инициализация настроек");
+            LogWriteLine("Инициализация настроек...");
             SetSettingProcess();
 
             if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
@@ -605,14 +699,15 @@ namespace ApplicationOperPageLes
             };
             #endregion
 
-            #region MediaFiles
+            #region ResourcesInit
             LogWriteLine("Проверка ресурсов");
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
             LogWriteLine("Инициализация палитры");
             DefaultPalette = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
             ActiveThemeApplication = new();
-
+            
+            LogWriteLine("Успешно!");
             #endregion
         }
 
@@ -670,12 +765,23 @@ namespace ApplicationOperPageLes
                 Current.Shutdown();
                 return;
             }
+            LogWriteLine("Ключ валиден!");
             Current.Exit += (sender, e) =>
             {
                 LogWriteLine("---------- Конец текущего экземпляра ----------");
                 LogStreamWriter?.Close();
             };
             Current.MainWindow = new MainWindow();
+            LogWriteLine("Приминение настройки палитры");
+            if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
+            {
+                string FileTheme = $"{StructDirectoryResources.DirectoryThemeApplication}{SettingMainApplication.ThemeInstallName.Value}.qd";
+                if (File.Exists(FileTheme))
+                {
+                    byte[] bytes = File.ReadAllBytes(FileTheme);
+                    ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
+                }
+            }
             LogWriteLine("Открытие главного окна");
             try
             {
@@ -759,7 +865,9 @@ namespace ApplicationOperPageLes
         /// Записать сообщение в тектовый .log
         /// </summary>
         /// <param name="Text">Записываемый текст сообщения</param>
-        internal void LogWriteLine(string Text) => LogStreamWriter?.WriteLine($"{DateTime.Now:HH:mm:ss ff} " + Text);
+        /// <param name="Enclosure">Вложенность текста под отображение зависимости</param>
+        internal void LogWriteLine(string Text, int Enclosure = 1) =>
+            LogStreamWriter?.WriteLine($"{DateTime.Now:HH:mm:ss ff} {new string('>', Enclosure)} " + Text);
 
         /// <summary>
         /// Анимировать эффект блюра - сигнализируя изменение
@@ -916,47 +1024,35 @@ namespace ApplicationOperPageLes
         /// Активировать команду
         /// </summary>
         /// <param name="CommandString">Строка команды</param>
-        /// <param name="AppendBufferCommand">Состояние добавления команды в буфер</param>
-        internal async Task ActivateActionCommand(PageConsole? Console, string CommandString, bool AppendBufferCommand = true)
+        internal async Task ActivateActionCommand(IOPERCommandViewer? CommandView, string CommandString)
         {
             if (CommandString.Length == 0) return;
-            if (Console != null) Console.TextBoxCommandInput.Text = string.Empty;
-            ConsoleCommand? Command = (ConsoleCommand?)Interpreter.ReadCommand(CommandString);
-            string Name = COMInterpreter.ReadNameCommand(CommandString);
-            string[] Parameters = COMInterpreter.ReadParametersCommand(CommandString);
+            ConsoleCommand<IOPERCommandViewer>? Command = Interpreter.ReadCommand<ConsoleCommand<IOPERCommandViewer>>(CommandString);
+            string Name = COMInterpreterBase.ReadNameCommand(CommandString);
+            string[] Parameters = COMInterpreterBase.ReadParametersCommand(CommandString);
 
-            if (AppendBufferCommand && Console != null)
-            {
-                PageConsole.BufferPage.InsertCommandFromBuffer(Name, CommandString, Console);
-            }
-
-            CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) : await Command.ExecuteCommand(Parameters);
+            CommandStateResult result = Command == null ? CommandStateResult.FaledCommand(Name) :
+                await Command.ExecuteCommand(Parameters, CommandView);
             if (result.State == ResultState.InvalidCommand)
             {
-                AliasCommand<ICommandOPER>? Alias = Interpreter.ReadAliasCommand(CommandString);
-                result = Alias == null ? CommandStateResult.FaledCommand(Name) : await Alias.ExecuteCommand(Parameters);
+                AliasCommand<ICommandOPER<IOPERCommandViewer>, IOPERCommandViewer>? Alias = Interpreter.ReadAliasCommand(CommandString);
+                result = Alias == null ? CommandStateResult.FaledCommand(Name) : await Alias.ExecuteCommand(Parameters, CommandView);
             }
-            if (Console != null) SummarizeCommandStateResult(Console, result);
+            if (CommandView != null) SummarizeCommandStateResult(CommandView, result);
         }
-
-        /// <summary>
-        /// Активировать команду не добавляя в буфер
-        /// </summary>
-        /// <param name="CommandString">Строка команды</param>
-        public async Task ActivateActionCommand(PageConsole? Console, string CommandString) => await ActivateActionCommand(Console, CommandString, false);
 
         /// <summary>
         /// Создать действие над итогом выполнения команды
         /// </summary>
         /// <param name="Result">Объект итога выполнения команды</param>
         [MTAThread()]
-        internal static void SummarizeCommandStateResult(PageConsole Console, CommandStateResult Result)
+        internal static void SummarizeCommandStateResult(IOPERCommandViewer CommandView, CommandStateResult Result)
         {
             if (Result.State != ResultState.Complete)
             {
-                App.MainWindow.BlurMainAnimateColor(Colors.Red);
+                MainWindow.BlurMainAnimateColor(Colors.Red);
             }
-            Console.AddTextInConsole(Result.Message);
+            CommandView.AddFormattedString(Result.Message);
         }
 
         [GeneratedRegex(@"[^ ]+")]

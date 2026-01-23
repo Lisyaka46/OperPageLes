@@ -60,6 +60,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 #if DEBUG
             DEV_InternetMillisecond = CurrentApp.Is_WindowDeveloper.BlockInlays[1].AddNewTextElement();
 #endif
+
             #region Palette
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
 
@@ -77,7 +78,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 TextBlockVolumeValue.Text = ((int)(New * 100)).ToString();
             };
 
-            IndicatorLoadingInternetConnection.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingInternet)));
+            IndicatorLoadingInternetConnection.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingInternet));
             IndicatorLoadingInternetConnection.MediaEnded += (sender, e) =>
             {
                 IndicatorLoadingInternetConnection.Position = TimeSpan.FromMilliseconds(1);
@@ -119,11 +120,10 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                 App.MainWindow.IELMessageMain.CloseBorderInformation();
             };
             #endregion
-
             #region BorderCurrentLanguage
             InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
             {
-                //UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.EnglishName[0..3].ToUpper());
+                UpdateInformationInObject(IELBlockInfoCurrentLanguage, InputLanguage.CurrentInputLanguage.Culture.Name);
             };
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {

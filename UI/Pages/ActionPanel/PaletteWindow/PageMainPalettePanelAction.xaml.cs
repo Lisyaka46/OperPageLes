@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationOperPageLes.CORE.Settings.PaletteElements;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ApplicationOperPageLes.CORE.Enums;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow
 {
@@ -23,6 +25,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow
         public PageMainPalettePanelAction()
         {
             InitializeComponent();
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonSelectTheme);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELButtonExecuteTheme);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteTheme);
         }
     }
 }

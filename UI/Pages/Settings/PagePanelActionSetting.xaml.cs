@@ -62,10 +62,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             #endregion
             #region CheckBoxKeyboardMode
             IELButtonSetKeyKeboardMode.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction);
-            IELButtonSetKeyKeboardMode.OnActivateMouseLeft += (sender, e) =>
-            {
-                ActivateSelectButtonKey(IELButtonSetKeyKeboardMode);
-            };
+            IELButtonSetKeyKeboardMode.OnActivateMouseLeft += UsingSelectKeyValueSet;
             IELButtonSetKeyKeboardMode.KeyDown += (sender, e) =>
             {
                 if (!KeysNotValid.Any((i) => i == e.Key))
@@ -77,27 +74,24 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             };
             CheckBoxKeyboardMode.Checked += (sender, e) =>
             {
-                //IELButtonDemo1.CharKeyboardActivate = true;
-                //IELButtonDemo2.CharKeyboardActivate = true;
-                //IELButtonDemo3.CharKeyboardActivate = true;
+                IELButtonDemo1.IsVisibleKeyActivate = true;
+                IELButtonDemo2.IsVisibleKeyActivate = true;
+                IELButtonDemo3.IsVisibleKeyActivate = true;
                 if (CheckBoxKeyboardRightClick.IsChecked ?? false)
                     App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardMode.Unchecked += (sender, e) =>
             {
-                //IELButtonDemo1.CharKeyboardActivate = false;
-                //IELButtonDemo2.CharKeyboardActivate = false;
-                //IELButtonDemo3.CharKeyboardActivate = false;
+                IELButtonDemo1.IsVisibleKeyActivate = false;
+                IELButtonDemo2.IsVisibleKeyActivate = false;
+                IELButtonDemo3.IsVisibleKeyActivate = false;
                 App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
             #region CheckBoxKeyboardRightClick
             ViewActivateRightClick.Opacity = 0d;
             IELButtonSetKeyKeboardRightClick.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick);
-            IELButtonSetKeyKeboardRightClick.OnActivateMouseLeft += (sender, e) =>
-            {
-                ActivateSelectButtonKey(IELButtonSetKeyKeboardRightClick);
-            };
+            IELButtonSetKeyKeboardRightClick.OnActivateMouseLeft += UsingSelectKeyValueSet;
             IELButtonSetKeyKeboardRightClick.KeyDown += (sender, e) =>
             {
                 if (!KeysNotValid.Any((i) => i == e.Key))
@@ -120,10 +114,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             #endregion
             #region CheckBoxKeyboardClosePanelAction
             IELButtonSetKeyKeboardClosePanelAction.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionClose);
-            IELButtonSetKeyKeboardClosePanelAction.OnActivateMouseLeft += (sender, e) =>
-            {
-                ActivateSelectButtonKey(IELButtonSetKeyKeboardClosePanelAction);
-            };
+            IELButtonSetKeyKeboardClosePanelAction.OnActivateMouseLeft += UsingSelectKeyValueSet;
             IELButtonSetKeyKeboardClosePanelAction.KeyDown += (sender, e) =>
             {
                 if (!KeysNotValid.Any((i) => i == e.Key))
@@ -144,6 +135,29 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                 App.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 150d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
+        }
+
+        /// <summary>
+        /// Использовать выделение для установки значения клавиши
+        /// </summary>
+        /// <param name="sender">Вызываемый объект</param>
+        /// <param name="e">Управляемый объект событием</param>
+        private void UsingSelectKeyValueSet(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectSetKey != null)
+            {
+                SelectSetKey.SourceBackground.SetUsedState(false);
+                SelectSetKey.FontStyle = FontStyles.Normal;
+                bool EqualsSelectElement = SelectSetKey.Equals(sender);
+                SelectSetKey = null;
+                if (EqualsSelectElement) return;
+            }
+            if (sender is IELButtonText button)
+            {
+                button.SourceBackground.SetUsedState(true);
+                ActivateSelectButtonKey(button);
+            }
+            e.Handled = true;
         }
 
         /// <summary>
@@ -168,7 +182,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             if (SelectSetKey == null) return;
             SelectSetKey.Text = IELKeyConverter.ConvertKeyToString(key);
             SelectSetKey.FontStyle = FontStyles.Normal;
-            SelectSetKey?.SourceBackground.SetUsedState(false);
+            SelectSetKey.SourceBackground.SetUsedState(false);
             SelectSetKey = null;
         }
     }

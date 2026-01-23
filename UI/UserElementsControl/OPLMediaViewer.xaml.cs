@@ -45,7 +45,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
                 IndicatorMedia.Position = TimeSpan.FromMilliseconds(1);
             };
             IndicatorMedia.Opacity = 0d;
-            IndicatorMedia.Source = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
+            IndicatorMedia.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
         }
     }
 }

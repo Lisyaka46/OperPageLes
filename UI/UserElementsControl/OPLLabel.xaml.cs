@@ -15,7 +15,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
     /// <summary>
     /// Логика взаимодействия для OPLLabel.xaml
     /// </summary>
-    public partial class OPLLabel : IELButtonBase
+    public partial class OPLLabel : IELObjectBase
     {
         ///// <summary>
         ///// Объект события активации кнопки левым щелчком мыши
@@ -60,15 +60,49 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
             InitializeComponent();
             #region Background
             BorderSelectElement.Background = SourceBackground.SourceBrush;
+            BorderMain.Background = SourceBackground.SourceBrush;
             #endregion
 
             #region BorderBrush
+            BorderMain.BorderBrush = SourceBorderBrush.SourceBrush;
             #endregion
 
             #region Foreground
             TextBlockNameLabel.Foreground = SourceForeground.SourceBrush;
             TextBlockNumberSelect.Foreground = SourceForeground.SourceBrush;
             #endregion
+
+            MouseEnter += (sender, e) =>
+            {
+                SourceBackground.SetActiveSpecrum(StateSpectrum.Select, true);
+                SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
+                SourceForeground.SetActiveSpecrum(StateSpectrum.Select, true);
+            };
+            MouseLeave += (sender, e) =>
+            {
+                SourceBackground.SetActiveSpecrum(StateSpectrum.Default, true);
+                SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
+                SourceForeground.SetActiveSpecrum(StateSpectrum.Default, true);
+            };
+            MouseDown += (sender, e) =>
+            {
+                SourceBackground.SetActiveSpecrum(StateSpectrum.Used, false);
+                SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Used, false);
+                SourceForeground.SetActiveSpecrum(StateSpectrum.Used, false);
+            };
+            MouseLeftButtonUp += (sender, e) =>
+            {
+                SourceBackground.SetActiveSpecrum(StateSpectrum.Select, true);
+                SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
+                SourceForeground.SetActiveSpecrum(StateSpectrum.Select, true);
+            };
+            MouseRightButtonUp += (sender, e) =>
+            {
+                SourceBackground.SetActiveSpecrum(StateSpectrum.Select, true);
+                SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Select, true);
+                SourceForeground.SetActiveSpecrum(StateSpectrum.Select, true);
+            };
+
             _Selected = false;
             BorderSelectElement.Opacity = 0d;
             SourceLabel = Label;
@@ -88,7 +122,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
         /// </summary>
         internal void UpdateVisualStyle()
         {
-            string name_command = COMInterpreter.ReadNameCommand(SourceLabel.Command);
+            string name_command = COMInterpreterBase.ReadNameCommand(SourceLabel.Command);
             string NameLabelImage;
             switch (name_command)
             {
@@ -102,7 +136,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
 
                     Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                     {
-                        ImageFaviconLabel.Source = await App.DownloadFavicon(new Uri(COMInterpreter.ReadParametersCommand(SourceLabel.Command)[0]));
+                        ImageFaviconLabel.Source = await App.DownloadFavicon(new Uri(COMInterpreterBase.ReadParametersCommand(SourceLabel.Command)[0]));
                         ImageFaviconLabel.Width = 20;
                         ImageFaviconLabel.Height = 20;
                         ImageFaviconLabel.Opacity = 0d;

@@ -31,7 +31,7 @@
                         <GradientStop Color="#00000000" Offset="0"/>
                     </LinearGradientBrush>
                 </Border.OpacityMask>
-                <TextBlock TextWrapping="Wrap" Text="Происходит сохранение ваших самых важных данных" FontSize="17" TextAlignment="Center" Padding="0,2,0,2" FontFamily="{DynamicResource Deledda Open Regular}" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="TextBlockHead" TextWrapping="Wrap" Text="Происходит сохранение ваших самых важных данных" FontSize="17" TextAlignment="Center" Padding="0,2,0,2" FontFamily="{DynamicResource Deledda Open Regular}" HorizontalAlignment="Center"/>
             </Border>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>

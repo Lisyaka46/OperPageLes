@@ -1,6 +1,7 @@
 ﻿using IEL.UserElementsControl.Base;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using VerticalAlignment = System.Windows.VerticalAlignment;
 
@@ -48,6 +49,28 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
         {
             get => (UIElement)GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
+        }
+        #endregion
+
+        #region TextPadding
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty TextPaddingProperty =
+            DependencyProperty.Register("TextPadding", typeof(Thickness), typeof(OPLElementViewerBase),
+                new(new Thickness(5, 0, 5, 0),
+                    (sender, e) =>
+                    {
+                        ((OPLElementViewerBase)sender).Base_TextBlockName.Padding = (Thickness)e.NewValue;
+                    }));
+
+        /// <summary>
+        /// Смещение текста внутри самого объекта
+        /// </summary>
+        public Thickness TextPadding
+        {
+            get => (Thickness)GetValue(TextPaddingProperty);
+            set => SetValue(TextPaddingProperty, value);
         }
         #endregion
 
@@ -158,6 +181,50 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
         {
             get => (double)GetValue(HeightCircleIndicatorProperty);
             set => SetValue(HeightCircleIndicatorProperty, value);
+        }
+        #endregion
+
+        #region CircleIndicatorFill
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty CircleIndicatorFillProperty =
+            DependencyProperty.Register("CircleIndicatorFill", typeof(SolidColorBrush), typeof(OPLElementViewerBase),
+                new(
+                    (sender, e) =>
+                    {
+                        ((OPLElementViewerBase)sender).Base_BorderCircleIndiator.Background = (SolidColorBrush)e.NewValue;
+                    }));
+
+        /// <summary>
+        /// Цвет закраски индикатора
+        /// </summary>
+        public SolidColorBrush CircleIndicatorFill
+        {
+            get => (SolidColorBrush)GetValue(CircleIndicatorFillProperty);
+            set => SetValue(CircleIndicatorFillProperty, value);
+        }
+        #endregion
+
+        #region CircleIndicatorMargin
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty CircleIndicatorMarginProperty =
+            DependencyProperty.Register("CircleIndicatorMargin", typeof(Thickness), typeof(OPLElementViewerBase),
+                new(
+                    (sender, e) =>
+                    {
+                        ((OPLElementViewerBase)sender).Base_BorderCircleIndiator.Margin = (Thickness)e.NewValue;
+                    }));
+
+        /// <summary>
+        /// Смещение элемента индикатора
+        /// </summary>
+        public Thickness CircleIndicatorMargin
+        {
+            get => (Thickness)GetValue(CircleIndicatorMarginProperty);
+            set => SetValue(CircleIndicatorMarginProperty, value);
         }
         #endregion
 
@@ -297,8 +364,8 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
-            Base_MainGridObject.ColumnDefinitions.Add(new());
             Base_MainGridObject.ColumnDefinitions.Add(new() { Width = new(0d, GridUnitType.Auto) });
+            Base_MainGridObject.ColumnDefinitions.Add(new() { Width = new(1d, GridUnitType.Star) });
 
             Base_BorderCircleIndiator = new()
             {
@@ -311,6 +378,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
                 Background = SourceBackground.SourceBrush,
                 BorderBrush = SourceBorderBrush.SourceBrush,
             };
+            Canvas.SetZIndex(Base_BorderCircleIndiator, 1);
             Grid.SetColumn(Base_BorderCircleIndiator, 0);
             Grid.SetColumnSpan(Base_BorderCircleIndiator, 2);
             Base_MainGridObject.Children.Add(Base_BorderCircleIndiator);
@@ -321,6 +389,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
                 VerticalAlignment = VerticalAlignment.Center,
                 Text = "Name",
                 FontSize = 12d,
+                Padding = new(5, 0, 5, 0),
                 Foreground = SourceForeground.SourceBrush,
             };
             Grid.SetColumn(Base_TextBlockName, 0);
@@ -328,7 +397,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
 
             Base_BorderElementView = new()
             {
-                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Center,
                 BorderThickness = new(2),
                 CornerRadius = new(0),
@@ -338,7 +407,16 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Base
             Grid.SetColumn(Base_BorderElementView, 1);
             Base_MainGridObject.Children.Add(Base_BorderElementView);
 
+            //Base_ViewBoxButton.HorizontalAlignment = HorizontalAlignment.Stretch;
             base.SetValue(IELButtonBase.ContentProperty, Base_MainGridObject);
+        }
+
+        /// <summary>
+        /// Сбросить цвет индикатора на состояние по умолчанию
+        /// </summary>
+        internal void ClearCicleIndicatorColor()
+        {
+            CircleIndicatorFill = SourceBackground.SourceBrush;
         }
     }
 }

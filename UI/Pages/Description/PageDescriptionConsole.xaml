@@ -25,7 +25,15 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="TextBlockDescriptionCountParameter" FontSize="16" VerticalAlignment="Center" Margin="5,0,5,0" TextTrimming="CharacterEllipsis" TextDecorations="Underline" FontFamily="Cascadia Code" Padding="0,2,0,2" Text="О командных параметрах"/>
                 <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="1" CornerRadius="5,5,5,5" Margin="5,0,5,0" Padding="0,2,0,2">
-                    <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Margin="5,0,5,0" FontSize="16" TextAlignment="Center" Grid.ColumnSpan="1" Text="Сама команда" MinWidth="200" MaxWidth="500" FontFamily="Cascadia Code" />
+                    <TextBlock x:Name="TextBlockTextCommand" TextWrapping="Wrap" Margin="5,0,5,0" FontSize="16" TextAlignment="Center" Grid.ColumnSpan="1" Text="Сама команда" MinWidth="200" MaxWidth="500" FontFamily="Cascadia Code" >
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush x:Name="LinearGradientForegroundCommandText" EndPoint="0,0" StartPoint="0,0" Opacity="1" MappingMode="RelativeToBoundingBox" SpreadMethod="Pad">
+                                <GradientStop Color="Black" Offset="1"/>
+                                <GradientStop Color="#FF6CFFB8" Offset="0.5"/>
+                                <GradientStop Color="#FF030303" Offset="0"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
                 </Border>
                 <TextBlock x:Name="TextBlockMainDescriptionCommand" Grid.Row="2" Margin="20,5,20,5" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="текст" FontFamily="{DynamicResource Bree CYR var}" />
             </Grid>

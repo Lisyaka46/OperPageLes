@@ -1,5 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE;
 using ApplicationOperPageLes.CORE.Struct;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -33,12 +34,17 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             Duration = TimeSpan.FromMilliseconds(2000d),
         };
 
+        /// <summary>
+        /// Состояние активации перемещения окна по экрану
+        /// </summary>
+        private bool ActivateMoveWindow = false;
+
         public DialogSaveWait()
         {
             InitializeComponent();
             TaskTokenComplete = new(false);
             ProgressBarIndicator.Value = 0d;
-            IndicatorLoading.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault)));
+            IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
 
             IndicatorLoading.MediaEnded += (sender, e) =>
             {
@@ -46,7 +52,9 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             };
             BorderMain.MouseLeftButtonDown += (sender, e) =>
             {
+                ActivateMoveWindow = true;
                 DragMove();
+                ActivateMoveWindow = false;
             };
         }
 
@@ -58,12 +66,20 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         internal void OpenOnToComplete()
         {
             Random random = new(DateTime.Now.Millisecond);
+            void ActionBackgroundChange()
+            {
+                double x_y = random.Next(30, 80) / 100d;
+                Point_Animation.To = new(x_y, x_y);
+                RadialGradientBackground.BeginAnimation(RadialGradientBrush.CenterProperty, Point_Animation);
+                RadialGradientBackground.BeginAnimation(RadialGradientBrush.GradientOriginProperty, Point_Animation);
+            }
+            void SetText() => TextBlockTime.Text = $"{++Count}";
 
             Task.Run(() =>
             {
                 while (true)
                 {
-                    Dispatcher.Invoke(() => TextBlockTime.Text = $"{++Count}");
+                    Dispatcher.Invoke(SetText);
                     Thread.Sleep(1000);
                 }
             }, TaskTokenComplete);
@@ -72,13 +88,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             {
                 while (true)
                 {
-                    double x_y = random.Next(30, 80) / 100d;
-                    Dispatcher.Invoke(() =>
-                    {
-                        Point_Animation.To = new(x_y, x_y);
-                        RadialGradientBackground.BeginAnimation(RadialGradientBrush.CenterProperty, Point_Animation);
-                        RadialGradientBackground.BeginAnimation(RadialGradientBrush.GradientOriginProperty, Point_Animation);
-                    });
+                    Dispatcher.Invoke(ActionBackgroundChange);
                     Thread.Sleep(2000);
                 }
             }, TaskTokenComplete);
@@ -157,6 +167,12 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             await Task.Run(() =>
             {
                 TaskTokenComplete.ThrowIfCancellationRequested();
+                if (ActivateMoveWindow)
+                {
+                    Dispatcher.Invoke(() => TextBlockHead.Text = "!! ОТПУСТИ МЕНЯ !!");
+                    while (ActivateMoveWindow)
+                        Thread.Sleep(500);
+                }
                 Thread.Sleep(1000);
                 Dispatcher.Invoke(Close);
             });

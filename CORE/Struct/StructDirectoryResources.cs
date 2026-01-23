@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using FontFamily = System.Windows.Media.FontFamily;
 
 namespace ApplicationOperPageLes.CORE.Struct
 {
@@ -15,15 +16,14 @@ namespace ApplicationOperPageLes.CORE.Struct
         private static readonly Dictionary<string, string> PathesFromNameResource = [];
 
         /// <summary>
+        /// Массив всех директорий медиа ресурсов по их именам
+        /// </summary>
+        private static readonly Dictionary<string, Uri> ResourcesMedia = [];
+
+        /// <summary>
         /// Массив всех ресурсных картинок по их именам
         /// </summary>
         private static readonly Dictionary<string, BitmapImage> ResourcesImages = [];
-
-        /// <summary>
-        /// Объект исключения при использовании не инициализированного массива ресурсов
-        /// </summary>
-        private static readonly Exception ExceptionResourceNullDictionary =
-            new("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");
 
         #region MainDirectoryApplication
         /// <summary>
@@ -43,7 +43,7 @@ namespace ApplicationOperPageLes.CORE.Struct
         internal static readonly string DirectoryDictionaryApplication = DirectoryResourcesApplication + @"/Dictionary/";
 
         /// <summary>
-        /// Главная директория ресурсов словарь
+        /// Главная директория ресурсов тем приложения
         /// </summary>
         internal static readonly string DirectoryThemeApplication = MainDirectoryApplication + @"/Theme/";
 
@@ -105,7 +105,6 @@ namespace ApplicationOperPageLes.CORE.Struct
         {
             App.CurrentApp.LogWriteLine("Проверка ресурсных файлов");
             string Prefics;
-            bool SetBitmapImages = ResourcesImages.Count == 0;
             PathesFromNameResource.Clear();
             foreach (PropertyInfo prop in typeof(ApplicationOperPageLes.Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic))
             {
@@ -118,7 +117,8 @@ namespace ApplicationOperPageLes.CORE.Struct
                     if (!File.Exists(Prefics) || prop.Name.Contains("Dictionary"))
                         CreateResourceMedia(Prefics, (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым."));
                     PathesFromNameResource.Add(prop.Name, Prefics);
-                    if (Prefics.Contains(".png") && SetBitmapImages) ResourcesImages.Add(prop.Name, new(new Uri(Prefics)));
+                    if (Prefics.Contains(".png")) ResourcesImages.Add(prop.Name, new(new Uri(Prefics)));
+                    else if (Prefics.Contains(".mp4")) ResourcesMedia.Add(prop.Name, new Uri(Prefics));
                 }
             }
         }
@@ -178,6 +178,12 @@ namespace ApplicationOperPageLes.CORE.Struct
         /// <param name="NameResource">Имя ресурса</param>
         /// <returns>Директория файла ресурса</returns>
         internal static string GetResourcePath(string NameResource) => PathesFromNameResource[NameResource];
+
+        /// <summary>
+        /// Получить ссылку на файл ресурса по его имени
+        /// </summary>
+        /// <param name="NameResource">Имя ресурса</param>
+        internal static Uri GetResourceUri(string NameResource) => ResourcesMedia[NameResource];
 
         /// <summary>
         /// Получить картинку ресурса по его имени

@@ -1,9 +1,12 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.CORE.Interfaces;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
+using ApplicationOperPageLes.UI.UserElementsControl;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
+using System;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -76,6 +79,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// </summary>
         private SelectNavigationPageConsoleEnum SelectNavigation;
 
+        /// <summary>
+        /// Состояние скрытия панели подсказок к командам
+        /// </summary>
+        private bool HidedHitPanel = false;
+
 #if DEBUG
         TextBlock DEVTextBlockSelectNavigation;
 #endif
@@ -99,11 +107,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             GridHintOneCommand.Opacity = 0d;
             RectangleSelect.Width = 0d;
             Canvas.SetZIndex(GridHintOneCommand, -1);
-            RichTextBoxMainMessage.Document = new();
             ButtonReturnCommand.OnActivateMouseLeft += async (sender, e) =>
             {
                 if (HitUse) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+                TextBlockInformation.Text = "Команда отправлена на обработку и исполнение.";
+                await ActivateCommand();
             };
             #region Setting
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
@@ -120,14 +128,22 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
             };
             #endregion
+
             #region PanelAction
+
             #region ConsolePage
-            ConsolePage.IELButtonCrearConsole.OnActivateMouseLeft += (sender, e, Key) =>
+            ConsolePage.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                RichTextBoxMainMessage.Document = new();
+                if (ConsolePage.CommandViewerSelect != null)
+                    DeleteCommandViewer(ConsolePage.CommandViewerSelect);
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
-            ConsolePage.IELButtonCrearConsole.OnActivateMouseRight += (sender, e, Key) => RichTextBoxMainMessage.Document = new();
+
+            ConsolePage.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                GridConsole.Children.Clear();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+            };
 
             ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -140,35 +156,60 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 //App.CurrentApp.UsingDiscriptionCommand();
             };
             #endregion
+
             #region BufferPage
             BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindow.IELActionPanelMain.NextPageInObject(ConsolePage, RightAlgin: false);
             };
             #endregion
+
             App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
+                if (Name == nameof(BorderConsole)) TextBoxCommandInput.Focus();
             };
             #endregion
 
             #region RichTextBoxMainMessage
-            RichTextBoxMainMessage.MouseUp += (sender, e) =>
+            BorderHintCommand.MouseRightButtonUp += (sender, e) =>
             {
+                if (HidedHitPanel)
+                {
+                    HidedHitPanel = false;
+                    HeadHitPanelGrid.IsEnabled = true;
+                    if (StateVisibleHit == ConsoleHitStateEnum.VisibleOneCommand) AnimateHitPanelFromOneCommand();
+                    else ChangeVisualHintCommand(StateVisibleHit);
+                }
+                else
+                {
+                    App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
+                    HeadHitPanelGrid.IsEnabled = false;
+                    HidedHitPanel = true;
+                    Keyboard.ClearFocus();
+                }
+            };
+            BorderConsole.MouseUp += (sender, e) =>
+            {
+                if (ConsolePage.CommandViewerSelect != null) ConsolePage.CommandViewerSelect = null;
                 if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
                     App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right)
-                    App.MainWindow.IELActionPanelMain.UsingPanelAction(RichTextBoxMainMessage, ConsolePage,
+                    App.MainWindow.IELActionPanelMain.UsingPanelAction(BorderConsole, ConsolePage,
                         Orientation: OrientationPositionCursor.RightDown);
-            };
-
-            RichTextBoxMainMessage.TextChanged += (sender, e) =>
-            {
-                RichTextBoxMainMessage.ScrollToEnd();
             };
             #endregion
 
             #region TextBoxCommandInput
+            TextBoxCommandInput.MouseUp += (sender, e) =>
+            {
+                if (HidedHitPanel)
+                {
+                    HidedHitPanel = false;
+                    HeadHitPanelGrid.IsEnabled = true;
+                    if (StateVisibleHit == ConsoleHitStateEnum.VisibleOneCommand) AnimateHitPanelFromOneCommand();
+                    else ChangeVisualHintCommand(StateVisibleHit);
+                }
+            };
             TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
             {
                 switch (e.Key)
@@ -223,7 +264,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         else
                         {
                             if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
-                            await App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+
+                            await ActivateCommand();
                         }
                         break;
                     case Key.Escape:
@@ -236,11 +278,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         else if (StateVisibleHit != ConsoleHitStateEnum.Hidden) ChangeVisualHintCommand(ConsoleHitStateEnum.Hidden);
                         break;
                     case Key.Apps:
-                        if (!App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                            App.MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
-                                PositionAnimActionPanel.CenterObject, OrientationPositionCursor.LeftUp);
-                        else
-                            App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                        //if (!App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                        //    App.MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
+                        //        PositionAnimActionPanel.CenterObject, OrientationPositionCursor.LeftUp);
+                        //else
+                        //    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                         break;
                     case Key.Down:
                     case Key.Up:
@@ -266,7 +308,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
             };
             #endregion
+
             TextBoxCommandInput.Focus();
+            TextBlockInformation.Text = "Страница успешно инициализирована.";
         }
 
         #region HintCommandManipulate
@@ -313,7 +357,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             TimeSpan span = TimeSpan.FromMilliseconds(300d);
 
-            string CommandText = COMInterpreter.ReadNameCommand(TextBoxCommandInput.Text);
+            string CommandText = COMInterpreterBase.ReadNameCommand(TextBoxCommandInput.Text);
             string[] AllHintNames =
                 [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase)).Select((i) => i.Name)];
             if (AllHintNames.Length == 0)
@@ -357,6 +401,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 App.DoubleAnimationType.AnimateEffect(BorderHintCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.Hidden ? 0d : 1d, span);
                 StateVisibleHit = StateHit;
             }
+            if (StateHit == ConsoleHitStateEnum.Hidden) HidedHitPanel = false;
             AnimateSizeHintPanel(0d, 0d, StateHit != ConsoleHitStateEnum.Hidden);
         }
 
@@ -381,7 +426,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 if (AnimateHeight > BorderHintCommand.MaxHeight) AnimateHeight = BorderHintCommand.MaxHeight;
             }
             App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, AnimateWidth, span);
-            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
+            if (!HidedHitPanel) App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
         }
 
         /// <summary>
@@ -390,10 +435,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <param name="TextCommand">Константный текст поиска команды</param>
         private void UsingOneHitCommand(string TextCommand)
         {
-            ICommandOPER? CommandHint;
+            ICommandOPER<IOPERCommandViewer>? CommandHint;
             CommandHint = App.CurrentApp.Interpreter.ReadCommand(TextCommand);
             if (CommandHint == null) return;
-            TimeSpan span = TimeSpan.FromMilliseconds(300d);
             string[] Parameters = [.. CommandHint.Parameters?.Select((i) => $"{i.Name}{(i.Absolutly ? string.Empty : "?")}") ?? []];
             TextBlockHintCommand.Text = $"{CommandHint.Name}* {string.Join(",", Parameters)}";
             TextBlockHintCommand.UpdateLayout();
@@ -406,10 +450,18 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
             ChangeVisualHintCommand(ConsoleHitStateEnum.VisibleOneCommand);
 
-            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, span);
-            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty,
-                TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d, span);
+            AnimateHitPanelFromOneCommand();
 
+        }
+
+        /// <summary>
+        /// Анимировать размер подсказок к конкретной команде исходя их её предпочтительных размеров
+        /// </summary>
+        private void AnimateHitPanelFromOneCommand()
+        {
+            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, TimeSpan.FromMilliseconds(300d));
+            if (!HidedHitPanel) App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty,
+                TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d, TimeSpan.FromMilliseconds(300d));
         }
 
         /// <summary>
@@ -556,107 +608,117 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         }
         #endregion
 
-        #region ManipulateText
+        #region Command
         /// <summary>
-        /// Добавить и отформатировать текст в консоль
+        /// Создать новый визуализационный объект контента выполнения консольной команды
         /// </summary>
-        /// <param name="Text">Текст добавляемый в консоль</param>
-        /// <param name="Formatted">Форматировать или нет</param>
-        internal void AddTextInConsole(string Text, bool Formatted = true)
+        /// <returns></returns>
+        public OPLCommandViewer CreateNewCommandViewer(string Command)
         {
-            if (Text.Length == 0) return;
-            Text = $"{ConsolePreMessage} {Text}";
-            Paragraph Message;
-            if (Formatted) FormattedAllTextDetect(out Message, Text);
-            else Message = new(new Run(Text));
+            OPLCommandViewer Viewer = new()
+            {
+                Margin = new(0, GridConsole.ActualHeight + 5, 0, 5),
+                FontSize = 16d,
+                CornerRadius = new(6),
+                BorderThickness = new(2),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                VerticalAlignment = System.Windows.VerticalAlignment.Top,
+            };
+            Viewer.TextBlockNameCommand.Text = Command;
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
                 Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["RussianRail G Pro"]
             };
-            BindingOperations.SetBinding(Message, Paragraph.FontFamilyProperty, binding);
-            RichTextBoxMainMessage.Document.Blocks.Add(Message);
-        }
+            BindingOperations.SetBinding(Viewer, FontFamilyProperty, binding);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(Viewer);
 
-        /// <summary>
-        /// Очистить текст консоли
-        /// </summary>
-        internal void ClearConsoleText() => RichTextBoxMainMessage.Document = new();
-
-        /// <summary>
-        /// Изменить формативность текста с учётом первых знаков
-        /// </summary>
-        /// <remarks>
-        /// <code>
-        /// %#FFFFFF** <b>Italic</b> **
-        /// </code>
-        /// ** <b>Bold</b> **
-        /// <code></code>
-        /// // <i>Italic</i> //
-        /// <code></code>
-        /// __ <u>UnderLine</u> __
-        /// <code></code>
-        /// </remarks>
-        /// <param name="Text">Текст форматирования</param>
-        /// <returns>Форматированный текст</returns>
-        private static void FormattedAllTextDetect(out Paragraph Result, string Text)
-        {
-            // %//Italic %**Bold**//
-            Result = new();
-            foreach (Match match in RegexFormattedText().Matches(Text))
+            Viewer.MouseUp += (sender, e) =>
             {
-                Result.Inlines.AddRange(FormattedBlockText(match.Value));
-            }
-        }
-
-        private static Inline[] FormattedBlockText(string Text)
-        {
-            Span Result = new();
-            if (Text.Length < 2 || Text[0] != '%')
-            {
-                Result.Inlines.Add(Text);
-                return [.. Result.Inlines];
-            }
-
-            Text = Text[1..]; // удаление "%"
-
-            // логика цвета
-            SolidColorBrush? BackgroundColor = null;
-            if (Text[0] == '#')
-            {
-                BackgroundColor = new((Color)System.Windows.Media.ColorConverter.ConvertFromString(
-                    RegexFormattedTextColor().Match(Text).Value));
-                Text = Text[7..];
-            }
-
-            MatchCollection CollectionRecurce = RegexFormattedText().Matches(Text[2..^2]);
-            foreach (Match match in CollectionRecurce)
-            {
-                if (match.Value[0] == '%' && match.Value.Length > 1)
-                {
-                    foreach (Inline Element in FormattedBlockText(match.Value))
-                    {
-                        Result.Inlines.Add(SwitchBlockText([Text[0], Text[1]], Element));
-                        Result.Inlines.LastInline.Background = BackgroundColor;
-                    }
-                    continue;
-                }
-                Result.Inlines.Add(SwitchBlockText([Text[0], Text[1]], new Run(match.Value)));
-                Result.Inlines.LastInline.Background = BackgroundColor;
-            }
-            return [.. Result.Inlines];
-        }
-
-        private static Inline SwitchBlockText(char[] Parrent, Inline Context)
-        {
-            Contract.Requires(Parrent.Length == 2);
-            return string.Concat(Parrent) switch
-            {
-                "**" => new Bold(Context),
-                "//" => new Italic(Context),
-                "__" => new Underline(Context),
-                _ => Context,
+                if (sender is OPLCommandViewer viewer) ConsolePage.CommandViewerSelect = viewer;
+                if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Right)
+                    App.MainWindow.IELActionPanelMain.UsingPanelAction(BorderConsole, ConsolePage,
+                        Orientation: OrientationPositionCursor.RightDown);
+                e.Handled = true;
             };
+
+            Viewer.IELButtonDeleteElement.OnActivateMouseLeft += (sender, e) =>
+            {
+                if (Viewer.AsyncTokenActive)
+                {
+                    MessageBoxResult Result =
+                        System.Windows.MessageBox.Show("Вы точно хотите принудительно завершить выполнение команды?", "Подтверждение",
+                        MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                    if (Result == MessageBoxResult.No)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+                DeleteCommandViewer(Viewer);
+                e.Handled = true;
+            };
+
+            Viewer.AddContentInViewer += (sender, e) =>
+            {
+                if (sender is OPLCommandViewer viewer && GridConsole.Children.IndexOf(viewer) + 1 < GridConsole.Children.Count)
+                {
+                    double ChangeTop = viewer.Margin.Top + viewer.ActualHeight + 10d;
+                    FrameworkElement Element;
+                    for (int i = GridConsole.Children.IndexOf(viewer) + 1; i < GridConsole.Children.Count; i++)
+                    {
+                        Element = (FrameworkElement)GridConsole.Children[i];
+                        Element.BeginAnimation(MarginProperty, null);
+                        Element.Margin = new(5, ChangeTop, 5, 5);
+                    }
+                }
+            };
+
+            GridConsole.Children.Add(Viewer);
+            ConsoleScrollViewer.ScrollToEnd();
+            App.ThicknessAnimationType.AnimateEffect(Viewer,
+                MarginProperty, new(5, Viewer.Margin.Top, 5, Viewer.Margin.Bottom), TimeSpan.FromMilliseconds(600d));
+            return Viewer;
+        }
+
+        /// <summary>
+        /// Удалить элемент визуализации команды из страницы консоли
+        /// </summary>
+        /// <param name="Element">Удаляемый визуализационный элемент</param>
+        private void DeleteCommandViewer(OPLCommandViewer Element)
+        {
+            int index = GridConsole.Children.IndexOf(Element);
+            double HeightElement = Element.ActualHeight + 10;
+            if (Element.AsyncTokenActive)
+            {
+                Element.CancelExecuteTaskCommand();
+                TextBlockInformation.Text = "Успешно отменён асинхронный процесс исполнения команды.";
+            }
+            GridConsole.Children.Remove(Element);
+            for (; index < GridConsole.Children.Count; index++)
+            {
+                if (GridConsole.Children[index] is FrameworkElement Viewer)
+                {
+                    Viewer.BeginAnimation(MarginProperty, null);
+                    Viewer.Margin = new Thickness(5, Viewer.Margin.Top - HeightElement, 5, 5);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Активировать команду под логикой страницы консоли<br/>
+        /// Команда учитывается из текстового поля
+        /// </summary>
+        /// <returns></returns>
+        public async Task ActivateCommand()
+        {
+            string Command = TextBoxCommandInput.Text;
+            TextBoxCommandInput.Text = string.Empty;
+            BufferPage.InsertCommandFromBuffer(Command, this);
+
+            await App.CurrentApp.ActivateActionCommand(CreateNewCommandViewer(COMInterpreterBase.ReadNameCommand(Command)), Command);
         }
         #endregion
 
@@ -667,20 +729,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         private static Regex StringCommandError(char symbol) => new($"([^\\{symbol}]+|\\{symbol}[^\\{symbol}]+\\{symbol}?)");
 
         /// <summary>
-        /// Регулярное выражение сортировки параметров от специальных символов
+        /// Регулярное выражение определения текста в форматированной кнопке
         /// </summary>
         /// <returns>Регулярное выражение</returns>
-        // Текст который является %#00FF00FF__%**регистрационным**__ и %#FFFFFF**может** %~~даже так~~ %--постоянно-- %__форматироваться__
-        [GeneratedRegex(@"([^%]+|(\%(#[0-9A-F]{6})?)(\*{2}([^\*]+(\*{3,}|\*)){1,}\*|_{2}([^_]+(_{3,}|_)){1,}_|\/{2}([^\/]+(\/{3,}|\/)){1,}\/)|\%)")]
-        private static partial Regex RegexFormattedText();
-
-        /// <summary>
-        /// Регулярное выражение сортировки параметров от специальных символов
-        /// </summary>
-        /// <returns>Регулярное выражение</returns>
-        // %   #FFFFFF   //**d**//
-        [GeneratedRegex(@"#[0-9A-F]{6}")]
-        private static partial Regex RegexFormattedTextColor();
+        [GeneratedRegex(@"[^\]]+")]
+        private static partial Regex RegexFormattedButtonText();
         #endregion
     }
 }

@@ -57,11 +57,6 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
 #endif
             BorderMainAssistentVisual.Opacity = 0d;
             BorderMainAssistentVisual.Margin = new(0, 28, 0, 0);
-            MediaHappy.Source = new Uri(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaHappy)));
-            MediaHappy.MediaEnded += (sender, e) =>
-            {
-                MediaHappy.Position = TimeSpan.FromMilliseconds(1);
-            };
             ImageLogo.Margin = new(20);
             Closed += (sender, e) =>
             {
@@ -159,6 +154,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// </summary>
         internal void ShowHappy()
         {
+            MediaHappy.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaHappy));
+            MediaHappy.MediaEnded += (sender, e) =>
+            {
+                MediaHappy.Position = TimeSpan.FromMilliseconds(1);
+            };
             ThicknessAnimation animThickness = App.ThicknessAnimationType.SourceAnimation.Clone();
             animThickness.BeginTime = TimeSpan.FromMilliseconds(100d);
             animThickness.Duration = TimeSpan.FromMilliseconds(2000d);
@@ -186,9 +186,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             BorderHappy.Visibility = Visibility.Visible;
             GridHappy.Visibility = Visibility.Visible;
 
+            animDouble.From = 0.9d;
             ScaleEffectElement.BeginAnimation(ScaleTransform.ScaleXProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
             ScaleEffectElement.BeginAnimation(ScaleTransform.ScaleYProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
 
+            animDouble.From = null;
             animDouble.To = 10d;
             BlurEffectAllGrid.BeginAnimation(BlurEffect.RadiusProperty, animDouble, HandoffBehavior.SnapshotAndReplace);
         }
@@ -199,9 +201,17 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         internal void HideHappy()
         {
             TimeSpan span = TimeSpan.FromMilliseconds(800d);
+            DoubleAnimation animDouble = App.DoubleAnimationType.SourceAnimation.Clone();
+            animDouble.FillBehavior = FillBehavior.Stop;
+            animDouble.Duration = span;
+            animDouble.To = 0d;
+            animDouble.Completed += (sender, e) =>
+            {
+                MediaHappy.Source = null;
+            };
             Canvas.SetZIndex(GridHappy, -1);
             App.DoubleAnimationType.AnimateEffect(BorderHappy, OpacityProperty, 0d, span);
-            App.DoubleAnimationType.AnimateEffect(MediaHappy, OpacityProperty, 0d, span);
+            MediaHappy.BeginAnimation(OpacityProperty, animDouble);
             App.DoubleAnimationType.AnimateEffect(BlurEffectAllGrid, BlurEffect.RadiusProperty, 0d, span);
         }
 
@@ -251,6 +261,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             base.Show();
             Focus();
             if (DateTime.Now.Month == HappyDay.Month && DateTime.Now.Day == HappyDay.Day) ShowHappy();
+            //ShowHappy();
         }
     }
 }

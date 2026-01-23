@@ -3,6 +3,7 @@ using ApplicationOperPageLes.UI.Pages.Settings;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ApplicationOperPageLes.CORE.Enums;
 
 namespace ApplicationOperPageLes.UI.Windows.Dialogs
 {
@@ -42,6 +43,10 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             GeneralSetting = new();
             ConsoleSetting = new();
             PanelActionSetting = new();
+
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELGeneralButton);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELConsoleButton);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELPanelActionButton);
 
             #region IELButtonsSetting
             #region IELGeneralButton

@@ -72,5 +72,10 @@ namespace ApplicationOperPageLes.CORE.Settings.Struct
         /// Состояние использования границы окна для визуализации загрузки процесса
         /// </summary>
         public ObjSetting<bool> LoadingBorderVisualizate { get; internal set; } = true;
+
+        /// <summary>
+        /// Наименование темы которая должна использоваться в программе
+        /// </summary>
+        public ObjSetting<string> ThemeInstallName { get; internal set; } = string.Empty;
     }
 }

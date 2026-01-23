@@ -37,7 +37,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         /// <returns>Визуализационный объект</returns>
         internal OPLMediaViewer SetViewMediaElement(Uri? uri = null)
         {
-            OPLMediaViewer Result = CreateMediaView(uri ?? new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))));
+            OPLMediaViewer Result = CreateMediaView(uri ?? StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault)));
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Result);
             Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
             GridElementsLoading.Children.Add(Result);

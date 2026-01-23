@@ -1,16 +1,18 @@
-﻿using Interpreter.Classes;
+﻿using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Interfaces;
+using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
-using ApplicationOperPageLes.CORE;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace ApplicationOperPageLes.UI.Pages.Description
 {
     /// <summary>
     /// Логика взаимодействия для PageDescriptionConsole.xaml
     /// </summary>
-    public partial class PageDescriptionConsole : Page, IDiscriptionPage<ICommandOPER>
+    public partial class PageDescriptionConsole : Page, IDiscriptionPage<ICommandOPER<IOPERCommandViewer>>
     {
         /// <summary>
         /// Активно ли выделение команды
@@ -32,7 +34,7 @@ namespace ApplicationOperPageLes.UI.Pages.Description
         /// Обновить описание
         /// </summary>
         /// <param name="command">Описываемый элемент</param>
-        public void UpdateInformation(ICommandOPER command)
+        public void UpdateInformation(ICommandOPER<IOPERCommandViewer> command)
         {
             SelectCommand = true;
             ChangeStateSelectCommand?.Invoke(SelectCommand);
@@ -47,7 +49,7 @@ namespace ApplicationOperPageLes.UI.Pages.Description
                     $"{(i < Parameters.Length - 1 ? ", " : string.Empty)}";
             }
             TextBlockNameCommand.Text = $"Консольная команда: \"{command.Name}\"";
-            if (command.GetType() == typeof(ConsoleCommand)) TextBlockMainDescriptionCommand.Text = ((ConsoleCommand)command).Description;
+            TextBlockMainDescriptionCommand.Text = (command as ConsoleCommand<IOPERCommandViewer>)?.Description;
             TextBlockDescriptionCountParameter.Text = CountParameters == 0 ?
             $"Команда \"{command.Name}\" не использует параметров" : $"Команда \"{command.Name}\" включает в себя {CountParameters} и больше параметров";
             TextBlockTextCommand.Text = command.Name.Trim() + (CountParameters == 0 ? string.Empty : "* " + TextRegistration);
@@ -56,7 +58,12 @@ namespace ApplicationOperPageLes.UI.Pages.Description
         /// <summary>
         /// Узнать синтаксис команды
         /// </summary>
-        public string? GetCommandText() => SelectCommand ? TextBlockTextCommand.Text : null;
+        public string? GetCommandText()
+        {
+            App.PointAnimationType.AnimateEffect(LinearGradientForegroundCommandText,
+                LinearGradientBrush.EndPointProperty, new(0,0), new(50, 0), TimeSpan.FromSeconds(20));
+            return SelectCommand? TextBlockTextCommand.Text: null;
+        }
 
         /// <summary>
         /// Убрать информацию о команде

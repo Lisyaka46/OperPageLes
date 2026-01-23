@@ -13,6 +13,9 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FF657275" Offset="0"/>
@@ -38,50 +41,13 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" FontFamily="{DynamicResource Vollda}">
-                <!--<IEL:IELButtonText.QBackground>
-                    <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30D0B7" Select="#FF30D083" Used="#FF92FFEE"/>
-                </IEL:IELButtonText.QBackground>
-                <IEL:IELButtonText.QBorderBrush>
-                    <Classes:BrushSettingQ NotEnabled="#FF310808" Select="#FF0A1310" Used="#FF232323"/>
-                </IEL:IELButtonText.QBorderBrush>
-                <IEL:IELButtonText.QForeground>
-                    <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF021D10"/>
-                </IEL:IELButtonText.QForeground>-->
-            </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}">
-                <!--<IEL:IELButtonText.QBackground>
-                    <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF30BED0" Select="#FF30A8D0" Used="#FF92FFEE"/>
-                </IEL:IELButtonText.QBackground>
-                <IEL:IELButtonText.QBorderBrush>
-                    <Classes:BrushSettingQ NotEnabled="#FF310808" Select="#FF0A1310" Used="#FF232323"/>
-                </IEL:IELButtonText.QBorderBrush>
-                <IEL:IELButtonText.QForeground>
-                    <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF02161D"/>
-                </IEL:IELButtonText.QForeground>-->
-            </IEL:IELButtonText>
-            <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1">
-                <!--<IEL:IELButtonText.QBackground>
-                    <Classes:BrushSettingQ NotEnabled="#FFD23535" Default="#FF6CC793" Select="#FF618679" Used="#FF42F7DB"/>
-                </IEL:IELButtonText.QBackground>
-                <IEL:IELButtonText.QBorderBrush>
-                    <Classes:BrushSettingQ NotEnabled="#FF310808" Select="#FF0A1310" Used="#FF232323"/>
-                </IEL:IELButtonText.QBorderBrush>
-                <IEL:IELButtonText.QForeground>
-                    <Classes:BrushSettingQ NotEnabled="#FF2F0606" Select="#FF091112" Used="#FF02161D"/>
-                </IEL:IELButtonText.QForeground>-->
-            </IEL:IELButtonText>
+            <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" FontFamily="{DynamicResource Vollda}" PaletteElement="{DynamicResource Tangerine}"/>
+            <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}" PaletteElement="{DynamicResource Green}"/>
+            <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}"/>
         </Grid>
         <Grid Grid.Row="1">
             <Border x:Name="BorderElement" ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderThickness="0,3,0,0" BorderBrush="Black">
                 <ScrollViewer x:Name="ScrollViewerPageSettings" VerticalScrollBarVisibility="Auto" PanningRatio="0.3">
-                    <ScrollViewer.OpacityMask>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#00000000" Offset="1"/>
-                            <GradientStop Color="Black" Offset="0"/>
-                            <GradientStop Color="Black" Offset="0.94"/>
-                        </LinearGradientBrush>
-                    </ScrollViewer.OpacityMask>
                     <Grid ClipToBounds="True" Margin="0,-5,0,-5">
                         <IEL:IELPageController x:Name="MainPageController" RightAnimateSwitch="10,-5,0,-5" LeftAnimateSwitch="-10,-5,0,-5" Grid.ColumnSpan="1" Panel.ZIndex="-1" Padding="0,5,0,5"/>
                     </Grid>

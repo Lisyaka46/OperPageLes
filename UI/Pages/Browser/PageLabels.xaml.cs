@@ -6,6 +6,7 @@ using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
+using InterpreterCommand.Classes;
 using Microsoft.Windows.Themes;
 using Newtonsoft.Json.Linq;
 using System.Windows;
@@ -187,6 +188,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
                 SelectLabelsMode = false;
                 UpdateTextInfoLabels();
+                ListSelectLabel.Clear();
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             #endregion
@@ -207,7 +209,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         TextBlockEventInfo.Text = $"Последовательное выполнение ярлыков {i + 1}/{ListSelectLabel.Count}";
                         ListSelectLabel[i].SourceBorderBrush.SetActiveSpecrum(Colors.White);
                         await Task.Delay(700);
-                        await App.CurrentApp.ActivateActionCommand(Console, ListSelectLabel[i].SourceLabel.Command);
+                        await App.CurrentApp.ActivateActionCommand(
+                            Console?.CreateNewCommandViewer(
+                                COMInterpreterBase.ReadNameCommand(ListSelectLabel[i].SourceLabel.Command)),
+                            ListSelectLabel[i].SourceLabel.Command);
                         ListSelectLabel[i].SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
                         ListSelectLabel[i].Selected = false;
                     }
@@ -219,7 +224,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
                 else if (SelectLabelInPage != null)
                 {
-                    await App.CurrentApp.ActivateActionCommand(Console, SelectLabelInPage.SourceLabel.Command);
+                    await App.CurrentApp.ActivateActionCommand(
+                        Console?.CreateNewCommandViewer(
+                            COMInterpreterBase.ReadNameCommand(SelectLabelInPage.SourceLabel.Command)),
+                        SelectLabelInPage.SourceLabel.Command);
                 }
                 SelectLabelInPage = null;
             };
@@ -586,11 +594,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 Height = HeightLabel,
             };
             Label.ImageSelect.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
-            Label.IntervalHover = TimeSpan.FromMilliseconds(800d);
+            //Label.IntervalHover = TimeSpan.FromMilliseconds(800d);
             Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Label.MouseRightButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
-            Label.OnActivateMouseRight += (sender, e) =>
+            Label.MouseRightButtonUp += (sender, e) =>
             {
                 SelectLabelInPage = Label;
                 PageLabelElement.IELButtonExecuteLabel.IsEnabled = !ActivateConsistentExecuteSelectLabels;
@@ -604,7 +612,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     Orientation: OrientationPositionCursor.RightDown);
                 e.Handled = true;
             };
-            Label.OnActivateMouseLeft += async (sender, e) =>
+            Label.MouseLeftButtonUp += async (sender, e) =>
             {
                 if (ActivateConsistentExecuteSelectLabels)
                 {
@@ -623,21 +631,24 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     return;
                 }
                 PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
-                await App.CurrentApp.ActivateActionCommand(Console, Label.SourceLabel.Command);
+                await App.CurrentApp.ActivateActionCommand(
+                    Console?.CreateNewCommandViewer(
+                        COMInterpreterBase.ReadNameCommand(Label.SourceLabel.Command)),
+                    Label.SourceLabel.Command);
                 e.Handled = true;
             };
             Label.MouseEnter += (sender, e) =>
             {
                 //SelectLabelInMouse = Label;
             };
-            Label.MouseHover += (sender, e) =>
-            {
-                if (sender == null) return;
-                string Text = Label.SourceLabel.Description ?? string.Empty;
-                if (Text.Length > 0)
-                    App.MainWindow.IELMessageMain.UsingBorderInformation(Label, Text,
-                        IEL.CORE.Enums.OrientationPositionCursor.Auto);
-            };
+            //Label.MouseHover += (sender, e) =>
+            //{
+            //    if (sender == null) return;
+            //    string Text = Label.SourceLabel.Description ?? string.Empty;
+            //    if (Text.Length > 0)
+            //        App.MainWindow.IELMessageMain.UsingBorderInformation(Label, Text,
+            //            IEL.CORE.Enums.OrientationPositionCursor.Auto);
+            //};
             Label.MouseLeave += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             Label.MouseLeftButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             //Label.UpdateVisualStyle();

@@ -147,7 +147,7 @@
                     </Grid>
                 </Border>
             </Grid>
-            <Grid x:Name="GridHappy" ClipToBounds="True" Margin="7,7,7,7" Visibility="Hidden">
+            <Grid x:Name="GridHappy" ClipToBounds="True" Margin="7,7,7,7">
                 <Border x:Name="BorderHappy" Panel.ZIndex="0" Background="#B2446363" BorderBrush="Black" BorderThickness="3,3,3,3" Margin="5,5,5,5" CornerRadius="10,10,10,10">
                     <Grid RenderTransformOrigin="0.5,0.5">
                         <Grid.RenderTransform>
@@ -166,7 +166,7 @@
                                 </LinearGradientBrush>
                             </TextBlock.Foreground>
                         </TextBlock>
-                        <MediaElement x:Name="MediaHappy" UnloadedBehavior="Manual" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <MediaElement x:Name="MediaHappy" UnloadedBehavior="Manual" Stretch="UniformToFill" Source="/UI/Images/Media/Happy.mp4">
                             <MediaElement.OpacityMask>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="#00000000"/>

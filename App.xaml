@@ -4,4 +4,11 @@
              xmlns:local="clr-namespace:ApplicationOperPageLes"
              xmlns:GUI="clr-namespace:IEL.CORE.Classes;assembly=IEL"
              x:Class="ApplicationOperPageLes.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

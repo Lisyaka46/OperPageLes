@@ -17,6 +17,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="5,5,5,5">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="1,1.3" StartPoint="1,0">
+                    <GradientStop Color="#FF00FFED"/>
+                    <GradientStop Color="#FF00E2FF" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -44,24 +50,28 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="NameSpectrum" Text="Spectrum" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="16" TextDecorations="Underline" FontWeight="SemiBold" FontFamily="{DynamicResource October Pro Blk}" TextAlignment="Center" Padding="0,10,0,0"/>
-                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0,2,0,0">
+                    <TextBlock x:Name="NameSpectrum" Text="Spectrum" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="16" TextDecorations="Underline" FontWeight="SemiBold" FontFamily="{DynamicResource Deledda Open Regular}" TextAlignment="Center" Padding="0,10,0,0"/>
+                    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="5,5,5,5" Margin="2,2,2,2" Background="White">
                         <Grid x:Name="GridColors" VerticalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock x:Name="TextBlockSelectIndicator" Text="&lt;" FontSize="40" FontFamily="{DynamicResource Tablon}" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.RowSpan="3" Margin="0,0,25,0"/>
-                            <Border x:Name="BorderColorBackground" Width="100" Height="50" Grid.Row="0" Margin="5,5,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Left">
-                                <TextBlock x:Name="TextBlockBackgroundNaming" Text="BG" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Brenzo Slab Personal Use}" FontSize="20" IsHitTestVisible="False"/>
-                            </Border>
-                            <Border x:Name="BorderColorBorderBrush" Width="100" Height="50" Grid.Row="1" Margin="5,5,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Left">
-                                <TextBlock x:Name="TextBlockBorderBrushNaming" Text="BB" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Brenzo Slab Personal Use}" FontSize="20" IsHitTestVisible="False"/>
-                            </Border>
-                            <Border x:Name="BorderColorForeground" Width="100" Height="50" Grid.Row="2" Margin="5,5,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Left">
-                                <TextBlock x:Name="TextBlockForegroundNaming" Text="FG" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{DynamicResource Brenzo Slab Personal Use}" FontSize="20" IsHitTestVisible="False"/>
-                            </Border>
+                            <TextBlock x:Name="TextBlockSelectIndicator" Text="&gt;" FontFamily="{DynamicResource Tablon}" Panel.ZIndex="1" HorizontalAlignment="Left" Grid.RowSpan="3" VerticalAlignment="Top" FontSize="32" Margin="0,8,0,0"/>
+                            <Grid>
+                                <TextBlock Text="BG" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="-70,0,0,0"/>
+                                <Border x:Name="BorderColorBackground" Width="100" Height="50" Grid.Row="0" Margin="5,15,5,5" CornerRadius="10,10,10,10" Background="Red" HorizontalAlignment="Center"/>
+                                
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <TextBlock Text="BB" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="-70,0,0,0"/>
+                                <Border x:Name="BorderColorBorderBrush" Width="100" Height="50" Grid.Row="1" Margin="5,15,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <TextBlock Text="FG" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="-70,0,0,0"/>
+                                <Border x:Name="BorderColorForeground" Width="100" Height="50" Grid.Row="2" Margin="5,15,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Center"/>
+                            </Grid>
                         </Grid>
                     </Border>
                 </Grid>

@@ -1,6 +1,8 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.UI.UserElementsControl;
 using IEL.CORE.Classes;
+using IEL.UserElementsControl;
+using IEL.UserElementsControl.Base;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -56,8 +58,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                 GridBuffer.Children.RemoveAt(index);
                 for (int i = index; i < BufferCommand.Count; i++)
                 {
-                    OPLButtonBufferCommand Button = (OPLButtonBufferCommand)GridBuffer.Children[i];
-                    Button.Index--;
+                    IELButtonText Button = (IELButtonText)GridBuffer.Children[i];
                     AnimationBuffer.To = new Thickness(0, (Button.Height + 2) * i, 0, 0);
                     AnimationBuffer.BeginTime = TimeSpan.FromMilliseconds((i - index) * 20d);
                     Button.BeginAnimation(MarginProperty, AnimationBuffer);
@@ -77,14 +78,20 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <param name="Name">Отображаемое имя</param>
         /// <param name="Command">Выполняющаяся команда</param>
         /// <returns>Кнопка выполняющая команду</returns>
-        private OPLButtonBufferCommand CreateBufferButton(string Name, string Command)
+        private IELButtonText CreateBufferButton(string Command)
         {
-            OPLButtonBufferCommand Button = new(Name, Command, BufferCommand.Count)
+            IELButtonText Button = new()
             {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 Height = 40,
-                Margin = new(0, (40 + 2) * BufferCommand.Count, 0, 0),
-                Index = BufferCommand.Count,
+                Margin = new(0, (40 + 2) * GridBuffer.Children.Count, 0, 0),
+                MarginViewBox = new(0, 3, 0, 3),
+                Text = Command,
+                CornerRadius = new(8),
+
             };
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Button);
             return Button;
         }
 
@@ -94,7 +101,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <param name="Name">Имя команды</param>
         /// <param name="Command">Строка команды</param>
         /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
-        internal void InsertCommandFromBuffer(string Name, string Command, Browser.PageConsole? SourcePage)
+        internal void InsertCommandFromBuffer(string Command, Browser.PageConsole SourcePage)
         {
             if (!IELButtonClearBuffer.IsEnabled)
             {
@@ -103,14 +110,18 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             }
             if (BufferCommand.Count < BufferCommand.Length)
             {
-                OPLButtonBufferCommand Button = CreateBufferButton(Name, Command);
+                IELButtonText Button = CreateBufferButton(Command);
                 Button.OnActivateMouseLeft += async (sender, e) =>
                 {
-                    await App.CurrentApp.ActivateActionCommand(SourcePage, ((OPLButtonBufferCommand)sender).TextBlockButtonCommand.Text);
+                    OPLCommandViewer Viewer = new();
+                    SourcePage.GridConsole.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
+                    Grid.SetRow(Viewer, SourcePage.GridConsole.RowDefinitions.Count);
+                    SourcePage.GridConsole.Children.Add(Viewer);
+                    await App.CurrentApp.ActivateActionCommand(Viewer, Command);
                 };
                 Button.OnActivateMouseRight += (sender, e) =>
                 {
-                    BufferCommand.Delete(Button.Index);
+                    BufferCommand.Delete(Button.Text);
                     TextBlockCounterBuffer.Text =
                         $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
                     if (BufferCommand.Count == 0) IELButtonClearBuffer.IsEnabled = false;
@@ -121,17 +132,15 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             else
             {
                 BufferCommand.Add(Command);
-                OPLButtonBufferCommand RealButton;
+                IELButtonText RealButton;
                 for (int i = 0; i < GridBuffer.Children.Count - 1; i++)
                 {
-                    RealButton = (OPLButtonBufferCommand)GridBuffer.Children[i];
-                    OPLButtonBufferCommand NextButton = (OPLButtonBufferCommand)GridBuffer.Children[i + 1];
+                    RealButton = (IELButtonText)GridBuffer.Children[i];
+                    IELButtonText NextButton = (IELButtonText)GridBuffer.Children[i + 1];
                     RealButton.Text = NextButton.Text;
-                    RealButton.TextCommand = NextButton.TextCommand;
                 }
-                RealButton = (OPLButtonBufferCommand)GridBuffer.Children[^1];
+                RealButton = (IELButtonText)GridBuffer.Children[^1];
                 RealButton.Text = Name;
-                RealButton.TextCommand = Command;
             }
             TextBlockCounterBuffer.Text =
                 $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";

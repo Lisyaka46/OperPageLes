@@ -52,24 +52,22 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 QdataActiveChange.SetFromSpectrumColor(ChangeSpectrum, color);
                 if (BorderSelect == null) return;
                 ((SolidColorBrush)BorderSelect.Background).Color = color;
-                ((SolidColorBrush)((TextBlock)BorderSelect.Child).Foreground).Color =
-                    WnColor.FromRgb((byte)(255 - color.R), (byte)(255 - color.G), (byte)(255 - color.B));
             };
 
-            //BorderColorBackground.MouseLeftButtonUp += (sender, e) =>
-            //{
-            //    ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);
-            //};
+            BorderColorBackground.MouseLeftButtonUp += (sender, e) =>
+            {
+                ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);
+            };
 
-            //BorderColorBorderBrush.MouseLeftButtonUp += (sender, e) =>
-            //{
-            //    ActivateColorPicker(BorderColorBorderBrush, PaletteSpectrumManipulate.BB);
-            //};
+            BorderColorBorderBrush.MouseLeftButtonUp += (sender, e) =>
+            {
+                ActivateColorPicker(BorderColorBorderBrush, PaletteSpectrumManipulate.BB);
+            };
 
-            //BorderColorForeground.MouseLeftButtonUp += (sender, e) =>
-            //{
-            //    ActivateColorPicker(BorderColorForeground, PaletteSpectrumManipulate.FG);
-            //};
+            BorderColorForeground.MouseLeftButtonUp += (sender, e) =>
+            {
+                ActivateColorPicker(BorderColorForeground, PaletteSpectrumManipulate.FG);
+            };
         }
 
         /// <summary>
@@ -89,18 +87,6 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             BorderColorBackground.Background = new SolidColorBrush(PaletteSpectrumManipulate.BG.GetFromSpectrumColor(spectrum));
             BorderColorBorderBrush.Background = new SolidColorBrush(PaletteSpectrumManipulate.BB.GetFromSpectrumColor(spectrum));
             BorderColorForeground.Background = new SolidColorBrush(PaletteSpectrumManipulate.FG.GetFromSpectrumColor(spectrum));
-
-            WnColor SourceColor = PaletteSpectrumManipulate.BG.GetFromSpectrumColor(spectrum);
-            TextBlockBackgroundNaming.Foreground = new SolidColorBrush(
-                WnColor.FromRgb((byte)(255 - SourceColor.R), (byte)(255 - SourceColor.G), (byte)(255 - SourceColor.B)));
-
-            SourceColor = PaletteSpectrumManipulate.BB.GetFromSpectrumColor(spectrum);
-            TextBlockBorderBrushNaming.Foreground = new SolidColorBrush(
-                WnColor.FromRgb((byte)(255 - SourceColor.R), (byte)(255 - SourceColor.G), (byte)(255 - SourceColor.B)));
-
-            SourceColor = PaletteSpectrumManipulate.FG.GetFromSpectrumColor(spectrum);
-            TextBlockForegroundNaming.Foreground = new SolidColorBrush(
-                WnColor.FromRgb((byte)(255 - SourceColor.R), (byte)(255 - SourceColor.G), (byte)(255 - SourceColor.B)));
 
             IELBlockExample50.PaletteElement = PaletteSpectrumManipulate;
             IELBlockExample50.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);

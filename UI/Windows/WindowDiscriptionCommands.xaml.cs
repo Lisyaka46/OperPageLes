@@ -1,10 +1,12 @@
-﻿using IEL.CORE.Classes;
+﻿using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.CORE.Interfaces;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.Pages.Description;
+using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using Interpreter.Interfaces;
-using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.Description;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -71,23 +73,25 @@ namespace ApplicationOperPageLes.Windows
         /// </summary>
         private const int HeightElement = 55;
 
-        /// <summary>
-        /// Настройка отображения элементов списка описания
-        /// </summary>
-        private readonly static QData BorderForegroundSetting = new(
-                        [
-                        [255, 20, 64, 106],
-                        [255, 131, 184, 202],
-                        [255, 131, 184, 202],
-                        [255, 188, 208, 218],
-                        ]);
-
         public WindowDiscriptionCommands()
         {
             App.CurrentApp.LogWriteLine("Создание окна описания элементов");
             StartAnimation = false;
             SearchActivate = false;
             InitializeComponent();
+
+            #region Palette
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonSearchCommand);
+
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonConsole);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonAlias);
+
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonBack);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCloneTextCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonInfoParameter);
+            #endregion
+
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
             IELButtonSearchCommand.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
             //IELButtonCloneTextCommand.Foreground = new SolidColorBrush(Colors.Black);
@@ -107,12 +111,14 @@ namespace ApplicationOperPageLes.Windows
                 else return;
                 System.Windows.Clipboard.SetText(Text);
             };
+
             IELButtonBack.OnActivateMouseLeft += (sender, e) =>
             {
                 if (StateDiscription == ActivateStateDiscription.ConsoleCommand) DescriptionConsole.ClearInformationOnCommand();
                 else if (StateDiscription == ActivateStateDiscription.AliasCommand) DescriptionAlias.ClearInformationOnCommand();
                 else return;
             };
+
             #region IELButtonInfoParameter
             IELButtonInfoParameter.MouseEnter += (sender, e) =>
             {
@@ -144,6 +150,7 @@ namespace ApplicationOperPageLes.Windows
                 });
             };
             #endregion
+
             #region IELButtonAlias
             IELButtonAlias.OnActivateMouseLeft += (sender, e) =>
             {
@@ -170,6 +177,7 @@ namespace ApplicationOperPageLes.Windows
                 //});
             };
             #endregion
+
             #region IELButtonSearchCommand
             IELButtonSearchCommand.OnActivateMouseLeft += (sender, e) =>
             {
@@ -188,7 +196,8 @@ namespace ApplicationOperPageLes.Windows
                 //    }
                 //    IndexSearch = [];
                 //}
-                ICommandOPER[] SearchCommands = [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(IELInputSearchCommand.Text))];
+                ICommandOPER<IOPERCommandViewer>[] SearchCommands =
+                    [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(IELInputSearchCommand.Text))];
                 if (SearchCommands.Length > 0)
                 {
                     Grid MainElementsContainer = (Grid)ScrollViewerElements.Content;
@@ -225,6 +234,7 @@ namespace ApplicationOperPageLes.Windows
                 }
             };
             #endregion
+
             IELInputSearchCommand.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -266,7 +276,8 @@ namespace ApplicationOperPageLes.Windows
         /// <param name="Elements">Массив элеменов подвергаемые к описанию</param>
         /// <param name="ElementDiscriptionPage">Страница с помощью которой будет описываться объект</param>
         /// <returns>Сетка с распределёнными объектами описания</returns>
-        private async Task<Grid> InitializeVisualElementDiscription<T>(T[] Elements, IDiscriptionPage<T> ElementDiscriptionPage) where T : ICommandOPER
+        private async Task<Grid> InitializeVisualElementDiscription<T>(T[] Elements, IDiscriptionPage<T> ElementDiscriptionPage)
+            where T : ICommandOPER<IOPERCommandViewer>
         {
             Grid GridElements = new()
             {
@@ -275,9 +286,9 @@ namespace ApplicationOperPageLes.Windows
             int i = 0;
             foreach (T Element in Elements)
             {
-                await Task.Run((Action)(() =>
+                await Task.Run(() =>
                 {
-                    Dispatcher.Invoke((Action)(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         IELButtonText Button = GenerateCommandButton();
                         Button.Opacity = 0d;
@@ -290,10 +301,10 @@ namespace ApplicationOperPageLes.Windows
                         };
                         GridElements.Children.Add(Button);
                         App.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                    }));
+                    });
                     Thread.Sleep(200);
                     i++;
-                }));
+                });
             }
             return GridElements;
         }
@@ -341,16 +352,11 @@ namespace ApplicationOperPageLes.Windows
                 Height = HeightElement,
                 FontSize = 16d,
                 Margin = new(3),
-                //Background = new(
-                //            [
-                //            [255, 161, 204, 232],
-                //            [255, 92, 131, 157],
-                //            [255, 122, 172, 205],
-                //            [255, 166, 181, 190],
-                //            ]),
-                //BorderBrush = BorderForegroundSetting,
-                //Foreground = BorderForegroundSetting
+                CornerRadius = new(10),
+                Padding = new(0, 5, 0, 5),
+                MarginViewBox = new(5, 10, 5, 10),
             };
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(Element);
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
