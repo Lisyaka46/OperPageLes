@@ -87,5 +87,15 @@ namespace ApplicationOperPageLes.CORE.Enums
         /// Шоколадный
         /// </summary>
         Chocolate = 15u,
+
+        /// <summary>
+        /// Шафрановый
+        /// </summary>
+        Saffron = 16u,
+
+        /// <summary>
+        /// Аквамариновый
+        /// </summary>
+        Aquamarine = 17u,
     }
 }

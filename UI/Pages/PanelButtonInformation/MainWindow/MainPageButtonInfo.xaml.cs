@@ -7,6 +7,7 @@ using IEL.UserElementsControl;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using static ApplicationOperPageLes.App;
@@ -48,23 +49,16 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         /// </summary>
         private PageVolumeControl SourcePageVolumeControl;
 
-#if DEBUG
-        private readonly TextBlock DEV_InternetMillisecond;
-#endif
-
         public MainPageButtonInfo()
         {
             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             SourcePageVolumeControl = new();
             InitializeComponent();
-#if DEBUG
-            DEV_InternetMillisecond = CurrentApp.Is_WindowDeveloper.BlockInlays[1].AddNewTextElement();
-#endif
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
 
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
 
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
 
@@ -160,61 +154,63 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             };
             #endregion
 
+            TextBlock StackInternetCheck = ApplicationPageDeveloper.AddNewStackTextBlock("Thread: Проверка интернета");
             ThreadInternetConnection = new(async () =>
             {
-                await InternetPinging.UpdateInternetConnection();
-#if DEBUG
-                await Dispatcher.InvokeAsync(() => DEV_InternetMillisecond.Text = $"IP_E: {InternetPinging.MillisecondUpdateTime}");
-#endif
-                if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
+                while (true)
                 {
-                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                    Dispatcher.Invoke(() => App.ColorAnimationType.AnimateEffect((SolidColorBrush)StackInternetCheck.Foreground,
+                        SolidColorBrush.ColorProperty, Colors.LightGreen, Colors.Black, TimeSpan.FromMilliseconds(300d)));
+                    await InternetPinging.UpdateInternetConnection();
+                    if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
                     {
-                        bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
+                        await Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+                        {
+                            bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
-                        DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
+                            DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
 
-                        DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
-                    });
-                    Thread.Sleep(InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet ? 2500 : InternetPinging.MillisecondUpdateTime);
-                    await Dispatcher.BeginInvoke(() =>
+                            DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
+                        });
+                        Thread.Sleep(InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet ? 2500 : InternetPinging.MillisecondUpdateTime);
+                        await Dispatcher.BeginInvoke(() =>
+                        {
+                            bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
+
+                            IELBlockInfoInternetConnection.Source =
+                                StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                            if (VisualMillisecondConnectionEnabled)
+                            {
+                                TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
+                            }
+
+                            DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
+
+                            DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
+
+                            if (CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
+                            {
+                                App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
+                                    InternetPinging.ConnectInternet ? "Есть подключение к интернету" : "Нет подключения к интернету",
+                                    OrientationPositionCursor.RightUp);
+                            }
+                        });
+                    }
+                    else
                     {
-                        bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
-
-                        IELBlockInfoInternetConnection.Source =
-                            StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
-                        if (VisualMillisecondConnectionEnabled)
+                        await Dispatcher.BeginInvoke(() =>
                         {
-                            TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
-                        }
-
-                        DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
-
-                        DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
-
-                        if (CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
-                        {
-                            App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
-                                InternetPinging.ConnectInternet ? "Есть подключение к интернету" : "Нет подключения к интернету",
-                                OrientationPositionCursor.RightUp);
-                        }
-                    });
+                            //IELBlockInfoInternetConnection.Imaging =
+                            //    StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                            if (VisualMillisecondConnectionEnabled)
+                            {
+                                TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
+                            }
+                        });
+                    }
+                    await Task.Delay(4000);
                 }
-                else
-                {
-                    await Dispatcher.BeginInvoke(() =>
-                    {
-                        //IELBlockInfoInternetConnection.Imaging =
-                        //    StructDirectoryResources.GetResourceBitmap(InternetPinging.ConnectInternet ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
-                        if (VisualMillisecondConnectionEnabled)
-                        {
-                            TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
-                        }
-                    });
-                }
-            }, 4000);
-
-            ThreadInternetConnection.Start();
+            });
         }
 
         internal void VisibilityInternetMillisecond(bool Value)

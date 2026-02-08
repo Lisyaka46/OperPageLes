@@ -5,6 +5,7 @@ using ApplicationOperPageLes.UI.Pages.ActionPanel;
 using ApplicationOperPageLes.UI.Pages.Browser;
 using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
 using ApplicationOperPageLes.UI.UserElementsControl;
+using ApplicationOperPageLes.UI.Windows.Base;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using ApplicationOperPageLes.Windows;
 using IEL.CORE.Classes;
@@ -29,7 +30,7 @@ namespace ApplicationOperPageLes.UI.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : OPLWindowBase
     {
         #region PanelAction
         /// <summary>
@@ -44,11 +45,6 @@ namespace ApplicationOperPageLes.UI.Windows
         private readonly CancellationToken TokenUpdateBackgroundData;
 
         //private MMDeviceEnumerator Device = new();
-
-        /// <summary>
-        /// Состояние воспроизведения приветственной анимации
-        /// </summary>
-        private bool HiAnimation = false;
 
         private int ActualIndexActivatePageDownToolButtons;
 
@@ -97,11 +93,6 @@ namespace ApplicationOperPageLes.UI.Windows
         /// </summary>
         private PageManagerBrowser ManagerBrowserNewPage;
 
-#if DEBUG
-        private readonly TextBlock DEV_Time;
-        private readonly TextBlock DEV_Data;
-        private readonly TextBlock DEV_IsLoadingProcess;
-#endif
         #region BorderMainWindowLoading
         /// <summary>
         /// 
@@ -123,20 +114,13 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             InitializeComponent();
 
-            #region DEV
-#if DEBUG
-            DEV_Time = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
-            DEV_Data = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
-            DEV_IsLoadingProcess = App.CurrentApp.Is_WindowDeveloper.BlockInlays[0].AddNewTextElement();
-#endif
-            #endregion
-
             #region SetParameteres
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
             IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            IELImageButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
             IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
 
             IELImageButtonMenu.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
@@ -172,6 +156,7 @@ namespace ApplicationOperPageLes.UI.Windows
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELImageButtonCollapse);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
 
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay());
@@ -197,7 +182,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     ]),
                 RelativeTransform = RotateMainWindowBackground,
             };
-            BorderWindowMain.Background = LinearGradientMainWindowBackground;
+            Background = LinearGradientMainWindowBackground;
 
             Canvas.SetZIndex(IELMessageMain, -2);
             Canvas.SetZIndex(IELActionPanelMain, -2);
@@ -281,6 +266,13 @@ namespace ApplicationOperPageLes.UI.Windows
                     Directory.CreateDirectory(StructDirectoryResources.DirectoryThemeApplication);
                 Window.Show();
                 //new DialogSetting().ShowDialog();
+            };
+            #endregion
+
+            #region IELImageButtonCollapse
+            IELImageButtonCollapse.OnActivateMouseLeft += (sender, e) =>
+            {
+                WindowState = WindowState.Minimized;
             };
             #endregion
 
@@ -409,60 +401,39 @@ namespace ApplicationOperPageLes.UI.Windows
             };
             IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
             {
+                if (Text == null) return;
                 IELMessageMain.UsingBorderInformation(Element, Text, OrientationPositionCursor.Auto);
             };
             IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
 
             #region EventsWindow
-            BorderWindowMain.MouseLeftButtonDown += (sender, e) =>
-            {
-                if (IELActionPanelMain.PanelActionActivate)
-                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                TimeSpan t = TimeSpan.FromMilliseconds(900d);
-                App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(45), t);
-                App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 0.4d, t);
-                DragMove();
-                App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(20), t);
-                App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 1d, t);
-            };
+            //BorderWindowMain.MouseLeftButtonDown += (sender, e) =>
+            //{
+            //    if (IELActionPanelMain.PanelActionActivate)
+            //        IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            //    TimeSpan t = TimeSpan.FromMilliseconds(900d);
+            //    App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(45), t);
+            //    App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 0.4d, t);
+            //    DragMove();
+            //    App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(20), t);
+            //    App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 1d, t);
+            //};
+            //StateChanged += (sender, e) =>
+            //{
+            //    if (WindowState == WindowState.Normal)
+            //    {
+            //        App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+            //    }
+            //    else if (WindowState == WindowState.Minimized)
+            //    {
+            //        App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+            //    }
+            //};
             SizeChanged += (sender, e) =>
             {
                 if (IELActionPanelMain.PanelActionActivate)
                     IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-            };
-            Activated += (sender, e) =>
-            {
-                if (!HiAnimation)
-                {
-                    HiAnimation = true;
-                    PagesButtonsInformation =
-                    [
-                        new MainPageButtonInfo(), new Page2()
-                    ];
-                    IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
-
-                    #region Anim Start
-                    #region 1
-                    TimeSpan t1400 = TimeSpan.FromMilliseconds(1400d);
-                    TimeSpan t2000 = TimeSpan.FromMilliseconds(2000d);
-                    App.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, t1400);
-
-                    App.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, t1400);
-
-                    App.ThicknessAnimationType.AnimateEffect(BorderWindowMain, MarginProperty, new(20), new(0), t2000);
-
-                    App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
-
-                    App.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty, 0d, 360d, TimeSpan.FromMilliseconds(3200d));
-
-                    #endregion
-                    #endregion
-                }
-                if (App.ActiveDialog != null && HiAnimation)
-                {
-                    App.ActiveDialog.Activate();
-                }
             };
             base.Closing += (sender, e) =>
             {
@@ -483,9 +454,6 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             IsClosing = true;
             Hide();
-#if DEBUG
-            App.CurrentApp.Is_WindowDeveloper.Close();
-#endif
             TokenUpdateBackgroundData.ThrowIfCancellationRequested();
             Closing?.Invoke(this, new(CloseReason.UserClosing, false));
             bool WindowSaveClose = false;
@@ -541,15 +509,41 @@ namespace ApplicationOperPageLes.UI.Windows
         /// </summary>
         public new void Show()
         {
+            TextBlock StackUpdateData = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: Обновление данных");
             Task.Run(async () =>
             {
                 while (true)
                 {
+                    Dispatcher.Invoke(() => App.ColorAnimationType.AnimateEffect((SolidColorBrush)StackUpdateData.Foreground,
+                        SolidColorBrush.ColorProperty, Colors.LightGreen, Colors.Black, TimeSpan.FromMilliseconds(300d)));
                     await BackgroundUpdateVisualData();
                     Thread.Sleep(1000);
                 }
             }, TokenUpdateBackgroundData);
+            PagesButtonsInformation =
+                    [
+                        new MainPageButtonInfo(), new Page2()
+                    ];
+            IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
+            Opacity = 0d;
             base.Show();
+            ((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection.Start();
+            #region Anim Start
+            #region 1
+            TimeSpan t1400 = TimeSpan.FromMilliseconds(1400d);
+            TimeSpan t2000 = TimeSpan.FromMilliseconds(2000d);
+            App.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, t1400);
+
+            App.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, t1400);
+
+            //App.ThicknessAnimationType.AnimateEffect(BorderWindowMain, MarginProperty, new(20), new(0), t2000);
+
+            App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
+
+            App.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty, 0d, 360d, TimeSpan.FromMilliseconds(3200d));
+
+            #endregion
+            #endregion
         }
         #endregion
 
@@ -592,9 +586,11 @@ namespace ApplicationOperPageLes.UI.Windows
                 token.ThrowIfCancellationRequested();
                 ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
             };
+            TextBlock Element = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: " + NameProcess);
 
             await Method.WaitAsync(token);
 
+            App.ApplicationPageDeveloper.StackPanelElementsVisual.Children.Remove(Element);
             if (Method.IsCanceled) throw new OperationCanceledException();
             ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
 
@@ -618,9 +614,11 @@ namespace ApplicationOperPageLes.UI.Windows
                 token.ThrowIfCancellationRequested();
                 ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
             };
+            TextBlock Element = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: " + NameProcess);
 
             await Method.WaitAsync(token);
 
+            App.ApplicationPageDeveloper.StackPanelElementsVisual.Children.Remove(Element);
             if (Method.IsCanceled) throw new OperationCanceledException();
             ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
         }
@@ -677,9 +675,6 @@ namespace ApplicationOperPageLes.UI.Windows
                     BeginRotateBorder();
                     IsVisualLoagingProcessInBorder = true;
                 }
-#if DEBUG
-                DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
-#endif
                 App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
         } 
@@ -700,9 +695,6 @@ namespace ApplicationOperPageLes.UI.Windows
                     EndRotateBorder();
                     IsVisualLoagingProcessInBorder = false;
                 }
-#if DEBUG
-                DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
-#endif
                 App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
             }
         }
@@ -746,11 +738,6 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 TextBlockTime.Text = App.RealTime.ToShortTimeString();
                 TextBlockData.Text = App.RealTime.ToShortDateString();
-#if DEBUG
-                DEV_Time.Text = $"T: {TextBlockTime.Text}";
-                DEV_Data.Text = $"D: {TextBlockData.Text}";
-                DEV_IsLoadingProcess.Text = $"ILoad_P: {IsLoadingProcess}";
-#endif
             });
         }
 
@@ -826,8 +813,8 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <param name="Color">Цвет который будет отображён как сигнальный</param>
         internal void BlurMainAnimateColor(WnColor Color)
         {
-            App.ColorAnimationType.AnimateEffect(BorderWindowMain.Background,
-                SolidColorBrush.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));
+            //App.ColorAnimationType.AnimateEffect(BorderWindowMain.Background,
+            //    SolidColorBrush.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));
         }
         #endregion
     }

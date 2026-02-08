@@ -1,5 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Interfaces;
 using ApplicationOperPageLes.CORE.Struct;
+using IEL.UserElementsControl;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -7,9 +8,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using WnColor = System.Windows.Media.Color;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
 using System.Windows.Media.Animation;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
+using WnColor = System.Windows.Media.Color;
 
 namespace ApplicationOperPageLes.UI.UserElementsControl
 {
@@ -18,23 +19,40 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
     /// </summary>
     public partial class OPLCommandViewer : IEL.UserElementsControl.Base.IELContainerBase, IOPERCommandViewer
     {
+        /// <summary>
+        /// Главный объект отображения текста
+        /// </summary>
         private TextBlock TextBlockHead;
 
-        private CancellationTokenSource? TokenSource = null;
+        /// <summary>
+        /// Токен отмены асинхронной загрузочной операции
+        /// </summary>
+        private CancellationTokenSource? SourceTokenAsyncLoading = null;
 
         /// <summary>
-        /// Имеется ли активный/исполняемый асинхонный токен
+        /// Имеется ли активный/исполняемый токен асинхонной загрузки
         /// </summary>
-        public bool AsyncTokenActive => (TokenSource?.Token.CanBeCanceled) ?? false;
+        public bool IsTokenAsyncLoadingEnabled => (SourceTokenAsyncLoading?.Token.CanBeCanceled) ?? false;
 
         /// <summary>
         /// Событие добавления контента в объект визуализатора
         /// </summary>
         public event EventHandler? AddContentInViewer;
 
+        /// <summary>
+        /// Состояние асинхронного постоянного исполнения
+        /// </summary>
+        public bool IsTokenAsyncWhileEnabled => (SourceTokenAsyncWhile?.Token.CanBeCanceled) ?? false;
+
+        /// <summary>
+        /// Токен отмены асинхронной циклической операции
+        /// </summary>
+        private CancellationTokenSource? SourceTokenAsyncWhile = null;
+
         public OPLCommandViewer()
         {
             InitializeComponent();
+            AsyncIndicator.Opacity = 0d;
             BorderInfo.BorderBrush = SourceBorderBrush.SourceBrush;
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonDeleteElement);
             IndicatorLoading.Opacity = 0d;
@@ -44,12 +62,10 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
                 IndicatorLoading.Position = TimeSpan.FromMilliseconds(5);
             };
             IndicatorLoading.Stop();
-            GridContainer.Children.Clear();
+            Container.Children.Clear();
 
             TextBlockHead = CreateHeadTextBlock();
-            GridContainer.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
-            Grid.SetRow(TextBlockHead, 0);
-            GridContainer.Children.Add(TextBlockHead);
+            Container.Children.Add(TextBlockHead);
         }
 
         /// <summary>
@@ -58,8 +74,11 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
         /// <param name="Source">Добавляемый текст</param>
         public void AddString(string Source)
         {
-            P_AddString(Source);
-            UpdateLayout();
+            Dispatcher.Invoke(() =>
+            {
+                P_AddString(Source);
+                UpdateLayout();
+            });
             AddContentInViewer?.Invoke(this, EventArgs.Empty);
         }
 
@@ -112,26 +131,54 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
         /// <param name="Source">Добавляемый элемент</param>
         public void AddNewUIElement(UIElement Source)
         {
-            GridContainer.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
-            Grid.SetRow(Source, GridContainer.RowDefinitions.Count - 1);
-            GridContainer.Children.Add(Source);
+            Container.Children.Add(Source);
 
             TextBlockHead = CreateHeadTextBlock();
-            GridContainer.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
-            Grid.SetRow(TextBlockHead, GridContainer.RowDefinitions.Count - 1);
-            GridContainer.Children.Add(TextBlockHead);
+            Container.Children.Add(TextBlockHead);
             UpdateLayout();
             AddContentInViewer?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
+        /// Зарегестрировать циклическую асинхронную операцию
+        /// </summary>
+        /// <param name="Source">Асинхронная операция</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Исключение невозможной регистрации операции</exception>
+        public async Task WaitWhileTaskOperation(Action Source, bool ExceptionRealized = true)
+        {
+            SourceTokenAsyncWhile = new();
+            if (SourceTokenAsyncWhile.IsCancellationRequested)
+                throw new Exception("Невозможно зарегестрировать токен операция которого уже была отменена.");
+
+            DoubleAnimation AnimationDoubleGradientStops = App.DoubleAnimationType.SourceAnimation.Clone();
+            AnimationDoubleGradientStops.RepeatBehavior = RepeatBehavior.Forever;
+            AnimationDoubleGradientStops.AutoReverse = true;
+            AnimationDoubleGradientStops.EasingFunction = null;
+            AnimationDoubleGradientStops.Duration = TimeSpan.FromSeconds(1d);
+            AnimationDoubleGradientStops.From = 0d;
+            AnimationDoubleGradientStops.To = 1d;
+
+            AsyncIndicator.BeginAnimation(OpacityProperty, AnimationDoubleGradientStops);
+            Task task = new(() =>
+            {
+                while (!SourceTokenAsyncWhile.Token.IsCancellationRequested)
+                    Source.Invoke();
+            }, SourceTokenAsyncWhile.Token);
+            task.Start();
+            await ExecuteTask(task, SourceTokenAsyncWhile, ExceptionRealized);
+        }
+
+        /// <summary>
         /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
         /// </summary>
         /// <param name="Method">Исполняемый асинхронный процесс</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        public async Task ExecuteVisualizateTask(Task Method)
+        public async Task ExecuteVisualizateTask(Task Method, bool ExceptionRealized = true)
         {
-            if (AsyncTokenActive) throw new Exception(
+            if (IsTokenAsyncLoadingEnabled) throw new Exception(
                 "Невозможно визуализировать ожидание так как текущее ожидание не завершилось!\n" +
                 "Завершение визуализации команды.");
             IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
@@ -145,19 +192,18 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
                 IndicatorLoading.Stop();
                 IndicatorLoading.Source = null;
             };
-            TokenSource = new();
+            SourceTokenAsyncLoading = new();
             IndicatorLoading.Play();
             App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(480d));
 
-            try { await Method.WaitAsync(TokenSource.Token); }
-            catch (Exception ex) { AddFormattedString(
-                "%#FFBABA__Произошла ошибка в исполнении операции:__\n" +
-                $"\"%//{ex.Message}//\""); }
-
-            IndicatorLoading.BeginAnimation(OpacityProperty, animation);
-            TokenSource.Dispose();
-            GC.Collect();
-            TokenSource = null;
+            try { await ExecuteTask(Method, SourceTokenAsyncLoading, ExceptionRealized); }
+            finally
+            {
+                IndicatorLoading.BeginAnimation(OpacityProperty, animation);
+                SourceTokenAsyncLoading.Dispose();
+                GC.Collect();
+                SourceTokenAsyncLoading = null;
+            }
             if (Method.IsCanceled)
                 throw new OperationCanceledException(
                     "Операция исполнения команды была прервана через визуализатор!\n" +
@@ -168,10 +214,11 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
         /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
         /// </summary>
         /// <param name="Method">Исполняемый асинхронный процесс</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        public async Task<T> ExecuteVisualizateTask<T>(Task<T> Method)
+        public async Task<T> ExecuteVisualizateTask<T>(Task<T> Method, bool ExceptionRealized = true)
         {
-            if (AsyncTokenActive) throw new Exception(
+            if (IsTokenAsyncLoadingEnabled) throw new Exception(
                 "Невозможно визуализировать ожидание так как текущее ожидание не завершилось!\n" +
                 "Завершение визуализации команды.");
             IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
@@ -185,41 +232,88 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
                 IndicatorLoading.Stop();
                 IndicatorLoading.Source = null;
             };
-            TokenSource = new();
+            SourceTokenAsyncLoading = new();
             IndicatorLoading.Play();
             App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(480d));
 
-            T? Result = default;
-            try
+            T Result;
+            try { Result = await ExecuteTask(Method, SourceTokenAsyncLoading, ExceptionRealized); }
+            finally
             {
-                Result = await Method.WaitAsync(TokenSource.Token);
+                IndicatorLoading.BeginAnimation(OpacityProperty, animation);
+                SourceTokenAsyncLoading.Dispose();
+                GC.Collect();
+                SourceTokenAsyncLoading = null;
             }
-            catch (Exception ex)
-            {
-                AddFormattedString(
-                "%#FFBABA__Произошла ошибка в исполнении операции:__\n" +
-                $"\"%//{ex.Message}//\"");
-                throw new Exception("Ошибка в выполнении асинхронной операции.");
-            }
-
-            IndicatorLoading.BeginAnimation(OpacityProperty, animation);
-            TokenSource.Dispose();
-            GC.Collect();
-            TokenSource = null;
             if (Method.IsCanceled)
                 throw new OperationCanceledException(
                     "Операция исполнения команды была прервана через визуализатор!\n" +
                     "Завершение визуализации команды.");
+            return Result;
+        }
+
+        #region AsyncWait
+        /// <summary>
+        /// Исполнить Task и исполнить ожидание исполнения
+        /// </summary>
+        /// <param name="Source">Асинхронная операция</param>
+        /// <param name="SourceToken">Управляемый токен</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке</param>
+        /// <returns></returns>
+        private async Task ExecuteTask(Task Source, CancellationTokenSource SourceToken, bool ExceptionRealized)
+        {
+            try { await Source.WaitAsync(SourceToken.Token); }
+            catch
+            {
+                if (ExceptionRealized)
+                    AddFormattedString(
+                    "%#FFBABA__Произошла ошибка в исполнении операции:__\n");// +
+                    //$"\"%//{ex.Message}//\"");
+                else throw;
+            }
+        }
+
+        /// <summary>
+        /// Исполнить Task и исполнить ожидание исполнения
+        /// </summary>
+        /// <param name="Source">Асинхронная операция</param>
+        /// <param name="SourceToken">Управляемый токен</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке</param>
+        /// <returns></returns>
+        private async Task<T> ExecuteTask<T>(Task<T> Source, CancellationTokenSource SourceToken, bool ExceptionRealized = true)
+        {
+            T? Result = default;
+            try { Result = await Source.WaitAsync(SourceToken.Token); }
+            catch (Exception ex)
+            {
+                if (ExceptionRealized)
+                    AddFormattedString(
+                    "%#FFBABA__Произошла ошибка в исполнении операции:__\n" +
+                    $"\"%//{ex.Message}//\"");
+                else throw;
+            }
             return Result != null ? Result : throw new Exception("Непредвиденное возвращение нулевого объекта в ожидании.");
         }
+        #endregion
 
         /// <summary>
         /// Отменить выполнение асинхронной операции
         /// </summary>
         public void CancelExecuteTaskCommand()
         {
-            if (TokenSource == null) throw new Exception("Невозможно отменить выполнение асинхронной операции не запустив её!");
-            TokenSource.Cancel();
+            if (SourceTokenAsyncLoading == null) throw new Exception("Невозможно отменить выполнение асинхронной операции не запустив её!");
+            SourceTokenAsyncLoading.Cancel();
+        }
+
+        /// <summary>
+        /// Осуществить выход из циклической асинхронной операции
+        /// </summary>
+        public void ExitAsyncWhileOperation()
+        {
+            if (SourceTokenAsyncWhile == null) throw new Exception("Невозможно отменить выполнение асинхронной операции не запустив её!");
+            AsyncIndicator.Dispatcher.Invoke(() =>
+                App.DoubleAnimationType.AnimateEffect(AsyncIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d)));
+            SourceTokenAsyncWhile.Cancel();
         }
 
         /// <summary>
@@ -228,12 +322,15 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
         /// <returns></returns>
         private static TextBlock CreateHeadTextBlock()
         {
-            return new TextBlock()
+            TextBlock Element = new()
             {
                 TextWrapping = TextWrapping.Wrap,
                 TextTrimming = TextTrimming.WordEllipsis,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalAlignment = System.Windows.VerticalAlignment.Stretch,
                 Margin = new(3),
             };
+            return Element;
         }
 
         #region ManipulateText

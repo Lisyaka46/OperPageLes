@@ -3,6 +3,7 @@ using ApplicationOperPageLes.CORE.Interfaces;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
+using InterpreterCommand.Commands;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
@@ -11,7 +12,7 @@ namespace ApplicationOperPageLes.UI.Pages.Description
     /// <summary>
     /// Логика взаимодействия для PageDescriptionAlias.xaml
     /// </summary>
-    public partial class PageDescriptionAlias : Page, IDiscriptionPage<AliasCommand<ICommandOPER<IOPERCommandViewer>, IOPERCommandViewer>>
+    public partial class PageDescriptionAlias : Page, IDiscriptionPage<AliasCommand<CommandOPER<IOPERCommandViewer>, IOPERCommandViewer>>
     {
         /// <summary>
         /// Активно ли выделение команды
@@ -33,7 +34,7 @@ namespace ApplicationOperPageLes.UI.Pages.Description
         /// Обновить описание
         /// </summary>
         /// <param name="command"></param>
-        public void UpdateInformation(AliasCommand<ICommandOPER<IOPERCommandViewer>, IOPERCommandViewer> command)
+        public void UpdateInformation(AliasCommand<CommandOPER<IOPERCommandViewer>, IOPERCommandViewer> command)
         {
             SelectCommand = true;
             ChangeStateSelectCommand?.Invoke(SelectCommand);

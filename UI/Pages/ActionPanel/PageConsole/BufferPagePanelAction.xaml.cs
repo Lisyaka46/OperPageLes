@@ -1,4 +1,5 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.UI.Pages.Browser;
 using ApplicationOperPageLes.UI.UserElementsControl;
 using IEL.CORE.Classes;
 using IEL.UserElementsControl;
@@ -17,7 +18,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <summary>
         /// Буфер объектов команд
         /// </summary>
-        internal Interpreter.Classes.Buffer BufferCommand;
+        internal Interpreter.Classes.Buffer? BufferCommand;
 
         /// <summary>
         /// Объект анимации позиции при удалении одного элемента
@@ -31,8 +32,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         {
             InitializeComponent();
             GridBuffer.Opacity = 0d;
-            BufferCommand = new(App.CurrentApp.SettingMainApplication.BufferSize);
-            TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
+            TextBlockCounterBuffer.Text = "NULL";
 
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBackMainMenu);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearBuffer);
@@ -40,7 +40,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             IELButtonClearBuffer.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 IELButtonClearBuffer.IsEnabled = false;
-                TextBlockCounterBuffer.Text = $"00/{BufferCommand.Length}";
+                TextBlockCounterBuffer.Text = BufferCommand == null ? "NULL" : $"00/{BufferCommand.Length}";
 
                 DoubleAnimation OpacityAnimationBuffer = new()
                 {
@@ -50,9 +50,20 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                     Duration = TimeSpan.FromMilliseconds(300d),
                     FillBehavior = FillBehavior.Stop
                 };
-                OpacityAnimationBuffer.Completed += (sender, e) => BufferCommand.DeleteAll();
+                OpacityAnimationBuffer.Completed += (sender, e) => BufferCommand?.DeleteAll();
                 GridBuffer.BeginAnimation(OpacityProperty, OpacityAnimationBuffer, HandoffBehavior.SnapshotAndReplace);
             };
+            IELButtonClearBuffer.IsEnabled = false;
+        }
+
+        /// <summary>
+        /// Подключить буфер команд к странице буфера
+        /// </summary>
+        /// <param name="SourceBuffer">Передаваемый буфер команд на подключение</param>
+        internal void ConnectBuffer(Interpreter.Classes.Buffer SourceBuffer)
+        {
+            BufferCommand = SourceBuffer;
+            TextBlockCounterBuffer.Text = $"{(BufferCommand.Count < 10 ? "0" : string.Empty)}{BufferCommand.Count}/{BufferCommand.Length}";
             BufferCommand.DelElement += (index) =>
             {
                 GridBuffer.Children.RemoveAt(index);
@@ -103,6 +114,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
         internal void InsertCommandFromBuffer(string Command, Browser.PageConsole SourcePage)
         {
+            if (BufferCommand == null) throw new Exception("Невозможно добавить команду в буфер которого нет!");
             if (!IELButtonClearBuffer.IsEnabled)
             {
                 IELButtonClearBuffer.IsEnabled = true;
@@ -113,10 +125,27 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                 IELButtonText Button = CreateBufferButton(Command);
                 Button.OnActivateMouseLeft += async (sender, e) =>
                 {
-                    OPLCommandViewer Viewer = new();
-                    SourcePage.GridConsole.RowDefinitions.Add(new() { Height = new(0d, GridUnitType.Auto) });
-                    Grid.SetRow(Viewer, SourcePage.GridConsole.RowDefinitions.Count);
-                    SourcePage.GridConsole.Children.Add(Viewer);
+                    if (App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand)
+                    {
+                        await Dispatcher.InvokeAsync(() =>
+                        {
+                            if (!App.MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent.Equals(SourcePage) ?? true)
+                            {
+                                IELInlay? InlaySource = App.MainWindow.IELBrowserPageMain.Inlays.FirstOrDefault(
+                                    (i) => i.PageElement?.PageContent.Equals(SourcePage) ?? false);
+                                if (InlaySource != null)
+                                {
+                                    App.MainWindow.IELBrowserPageMain.ActivateInlayIndex(App.MainWindow.IELBrowserPageMain.Inlays.IndexOf(InlaySource));
+                                }
+                                else if (App.MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is Browser.PageConsole page)
+                                {
+                                    SourcePage = page;
+                                }
+                            }
+                            Task.Delay(300);
+                        });
+                    }
+                    OPLCommandViewer Viewer = SourcePage.CreateNewCommandViewer(Command);
                     await App.CurrentApp.ActivateActionCommand(Viewer, Command);
                 };
                 Button.OnActivateMouseRight += (sender, e) =>

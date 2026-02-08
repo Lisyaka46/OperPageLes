@@ -194,4 +194,28 @@
             <IEL:QData Default="#FFD1B883" Select="#FF55471A" Used="#FF393115" NotEnabled="#FFEEBC9D"/>
         </IEL:PaletteSpectrum.FG>
     </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="Saffron">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FFF4C430" Select="#FFE0CD9C" Used="#FFFBEAB5" NotEnabled="#FF9F6B0B"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF3D2F03" Select="#FF8D9102" Used="#FFFAE198" NotEnabled="#FFCB5B0A"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FF000000" Select="#FF727344" Used="#FFCCC2A2" NotEnabled="#FFEFB97C"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="Aquamarine">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FF7FFFD4" Select="#FF33FFBD" Used="#FFDFF0F4" NotEnabled="#FF479A77"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF2DB996" Select="#FF00C686" Used="#FFC8C8C8" NotEnabled="#FF9F9546"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FF005539" Select="#FF007751" Used="#FF009B9B" NotEnabled="#FF4B391B"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
 </ResourceDictionary>

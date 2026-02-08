@@ -42,6 +42,7 @@
     <None Remove="UI\Images\BrowserChangeSystem.png" />
     <None Remove="UI\Images\Brush.png" />
     <None Remove="UI\Images\Check.png" />
+    <None Remove="UI\Images\Collapse.png" />
     <None Remove="UI\Images\Cross.png" />
     <None Remove="UI\Images\DoubleMouseButton.png" />
     <None Remove="UI\Images\IconMainApplication.png" />
@@ -152,6 +153,7 @@
     <Resource Include="UI\Images\BrowserChangeSystem.png" />
     <Resource Include="UI\Images\Brush.png" />
     <Resource Include="UI\Images\Check.png" />
+    <Resource Include="UI\Images\Collapse.png" />
     <Resource Include="UI\Images\Cross.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
     <Resource Include="UI\Images\IconMainApplication.png" />

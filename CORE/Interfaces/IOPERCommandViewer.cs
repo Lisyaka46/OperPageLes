@@ -29,14 +29,16 @@ namespace ApplicationOperPageLes.CORE.Interfaces
         /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
         /// </summary>
         /// <param name="Method">Исполняемый асинхронный процесс</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке <br/><b>При отключённом состоянии может генерировать исключения</b></param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        public Task ExecuteVisualizateTask(Task Method);
+        public Task ExecuteVisualizateTask(Task Method, bool ExceptionRealized = true);
 
         /// <summary>
         /// Осуществить выполнение процесса через визуализацию асинхронной загрузки с ожидаемым значением
         /// </summary>
         /// <param name="Method">Исполняемый асинхронный процесс</param>
+        /// <param name="ExceptionRealized">Выводить ли сообщение об ошибке</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        public Task<T> ExecuteVisualizateTask<T>(Task<T> Method);
+        public Task<T> ExecuteVisualizateTask<T>(Task<T> Method, bool ExceptionRealized = true);
     }
 }

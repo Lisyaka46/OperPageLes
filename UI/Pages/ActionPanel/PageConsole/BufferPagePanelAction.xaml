@@ -43,8 +43,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8" Height="55" MarginViewBox="20,10,20,10"/>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0"  IsEnabled="False" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelRed}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1" Height="55" MarginViewBox="5,10,5,10"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8" Height="50" MarginViewBox="5,7,5,7" Padding="10,0,10,0"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelRed}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1" Height="50" MarginViewBox="5,7,5,7"/>
         </Grid>
     </Grid>
 </Page>

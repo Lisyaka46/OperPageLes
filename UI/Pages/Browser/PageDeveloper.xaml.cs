@@ -2,6 +2,7 @@
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.DEV;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -19,9 +20,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     /// </summary>
     public partial class PageDeveloper : System.Windows.Controls.Page
     {
-        private bool ScaleMode = false;
-        private bool KeyEventActivate = false;
-
         private Point StartPositionMouse;
         private bool Activate = false;
 
@@ -29,98 +27,98 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             InitializeComponent();
 
-            Loaded += async (sender, e) =>
-            {
-                const int CountParticles = 90, DelayOneParticle = 100;
-                TimeSpan TimeParticle = TimeSpan.FromMilliseconds(DelayOneParticle * 8);
-                Random randomColor = new();
-                //IELObjectBase Particle;
-                FrameworkElement Particle;
-                int i = 0;
-                for (int K = 0; K < CountParticles; K++)
-                {
-                    DoubleAnimation animationD = new()
-                    {
-                        Duration = TimeParticle,
-                        From = 1d,
-                        To = 0d
-                    };
-                    DoubleAnimation animationW = new()
-                    {
-                        Duration = TimeParticle,
-                        From = 15d,
-                        To = 60d
-                    };
-                    DoubleAnimation animationH = new()
-                    {
-                        Duration = TimeParticle,
-                        From = 15d,
-                        To = 60d
-                    };
-                    Particle = new System.Windows.Shapes.Rectangle()
-                    {
-                        Height = 4,
-                        Width = 4,
-                        Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
-                            (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
-                        Opacity = 0d,
-                        RadiusX = 1,
-                        RadiusY = 1,
-                    };
-                    //Particle = new IELBlockInfoText()
-                    //{
-                    //    Width = 20,
-                    //    Height = 20,
-                    //    Opacity = 0d,
-                    //    CornerRadius = new(3),
-                    //    Text = "F",
-                    //};
-                    //Particle = new System.Windows.Controls.Image()
-                    //{
-                    //    Height = 15,
-                    //    Width = 15,
-                    //    //Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
-                    //    //    (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
-                    //    Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)),
-                    //    Opacity = 0d
-                    //};
-                    //App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray].ConnectPalleteFromIELElement(Particle);
-                    Thickness Start = new(
-                        Particles.ActualWidth / 2 - Particle.Width / 2,
-                        Particles.ActualHeight / 2 - Particle.Height / 2, 0, 0);
+            //Loaded += async (sender, e) =>
+            //{
+            //    const int CountParticles = 90, DelayOneParticle = 100;
+            //    TimeSpan TimeParticle = TimeSpan.FromMilliseconds(DelayOneParticle * 8);
+            //    Random randomColor = new();
+            //    //IELObjectBase Particle;
+            //    FrameworkElement Particle;
+            //    int i = 0;
+            //    for (int K = 0; K < CountParticles; K++)
+            //    {
+            //        DoubleAnimation animationD = new()
+            //        {
+            //            Duration = TimeParticle,
+            //            From = 1d,
+            //            To = 0d
+            //        };
+            //        DoubleAnimation animationW = new()
+            //        {
+            //            Duration = TimeParticle,
+            //            From = 15d,
+            //            To = 60d
+            //        };
+            //        DoubleAnimation animationH = new()
+            //        {
+            //            Duration = TimeParticle,
+            //            From = 15d,
+            //            To = 60d
+            //        };
+            //        Particle = new System.Windows.Shapes.Rectangle()
+            //        {
+            //            Height = 4,
+            //            Width = 4,
+            //            Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
+            //                (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
+            //            Opacity = 0d,
+            //            RadiusX = 1,
+            //            RadiusY = 1,
+            //        };
+            //        //Particle = new IELBlockInfoText()
+            //        //{
+            //        //    Width = 20,
+            //        //    Height = 20,
+            //        //    Opacity = 0d,
+            //        //    CornerRadius = new(3),
+            //        //    Text = "F",
+            //        //};
+            //        //Particle = new System.Windows.Controls.Image()
+            //        //{
+            //        //    Height = 15,
+            //        //    Width = 15,
+            //        //    //Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(
+            //        //    //    (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255), (byte)randomColor.Next(0, 255))),
+            //        //    Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)),
+            //        //    Opacity = 0d
+            //        //};
+            //        //App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray].ConnectPalleteFromIELElement(Particle);
+            //        Thickness Start = new(
+            //            Particles.ActualWidth / 2 - Particle.Width / 2,
+            //            Particles.ActualHeight / 2 - Particle.Height / 2, 0, 0);
 
-                    Particle.Margin = Start;
-                    Particles.Children.Add(Particle);
+            //        Particle.Margin = Start;
+            //        Particles.Children.Add(Particle);
 
-                    ThicknessAnimation animationT = App.ThicknessAnimationType.SourceAnimation.Clone();
-                    animationT.Duration = TimeParticle;
-                    animationT.From = Start;
-                    RepeatBoard(animationT, randomColor, Start);
+            //        ThicknessAnimation animationT = App.ThicknessAnimationType.SourceAnimation.Clone();
+            //        animationT.Duration = TimeParticle;
+            //        animationT.From = Start;
+            //        RepeatBoard(animationT, randomColor, Start);
 
-                    animationT.FillBehavior = FillBehavior.Stop;
-                    animationT.Completed += (sender, e) =>
-                    {
-                        Particles.Children[i].BeginAnimation(MarginProperty, null);
-                        Particles.Children[i].BeginAnimation(OpacityProperty, null);
-                        //Particles.Children[i].BeginAnimation(WidthProperty, null);
-                        //Particles.Children[i].BeginAnimation(HeightProperty, null);
+            //        animationT.FillBehavior = FillBehavior.Stop;
+            //        animationT.Completed += (sender, e) =>
+            //        {
+            //            Particles.Children[i].BeginAnimation(MarginProperty, null);
+            //            Particles.Children[i].BeginAnimation(OpacityProperty, null);
+            //            //Particles.Children[i].BeginAnimation(WidthProperty, null);
+            //            //Particles.Children[i].BeginAnimation(HeightProperty, null);
 
-                        RepeatBoard(animationT, randomColor, Start);
+            //            RepeatBoard(animationT, randomColor, Start);
 
-                        Particles.Children[i].BeginAnimation(MarginProperty, animationT);
-                        Particles.Children[i].BeginAnimation(OpacityProperty, animationD);
-                        //Particles.Children[i].BeginAnimation(WidthProperty, animationW);
-                        //Particles.Children[i].BeginAnimation(HeightProperty, animationH);
-                        i = ++i % Particles.Children.Count;
-                    };
+            //            Particles.Children[i].BeginAnimation(MarginProperty, animationT);
+            //            Particles.Children[i].BeginAnimation(OpacityProperty, animationD);
+            //            //Particles.Children[i].BeginAnimation(WidthProperty, animationW);
+            //            //Particles.Children[i].BeginAnimation(HeightProperty, animationH);
+            //            i = ++i % Particles.Children.Count;
+            //        };
 
-                    Particle.BeginAnimation(MarginProperty, animationT);
-                    Particle.BeginAnimation(OpacityProperty, animationD);
-                    //Particle.BeginAnimation(WidthProperty, animationW);
-                    //Particle.BeginAnimation(HeightProperty, animationH);
-                    await Task.Delay(DelayOneParticle);
-                }
-            };
+            //        Particle.BeginAnimation(MarginProperty, animationT);
+            //        Particle.BeginAnimation(OpacityProperty, animationD);
+            //        //Particle.BeginAnimation(WidthProperty, animationW);
+            //        //Particle.BeginAnimation(HeightProperty, animationH);
+            //        await Task.Delay(DelayOneParticle);
+            //    }
+            //};
 
             MyAnimatedObject.MouseDown += (sender, e) =>
             {
@@ -154,76 +152,28 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
                 myAngleRotation.Angle = XY < 25 ? XY : 25;
             };
+            WindowGenerateQdata.Click += (sender, e) =>
+            {
+                WindowQDataViewer window = new();
+                window.Show();
+            };
+        }
 
-
-
-            IELButtonDownloadImage.OnActivateMouseLeft += (sender, e) =>
+        /// <summary>
+        /// Добавить новый элемент текста в стек визуализации
+        /// </summary>
+        /// <param name="TextElement">Отображаемый текст в элементе</param>
+        /// <returns>Элемент цвета визуализации</returns>
+        internal TextBlock AddNewStackTextBlock(string TextElement)
+        {
+            TextBlock Element = new()
             {
+                Text = TextElement,
+                FontSize = 16d,
+                Foreground = new SolidColorBrush(Colors.Black),
             };
-            GridScale.MouseWheel += (sender, e) =>
-            {
-                if (ScaleMode)
-                {
-                    double UpdateScale = e.Delta > 0 ? -0.23d : 0.23d;
-                    ScaleTransformBox.ScaleX += UpdateScale;
-                    ScaleTransformBox.ScaleY += UpdateScale;
-                }
-            };
-            Map.KeyDown += (sender, e) =>
-            {
-                if (KeyEventActivate) return;
-                KeyEventActivate = true;
-                switch (e.Key)
-                {
-                    case System.Windows.Input.Key.LeftCtrl:
-                        ScaleMode = true;
-                        break;
-                }
-                e.Handled = true;
-            };
-            Map.KeyUp += (sender, e) =>
-            {
-                switch (e.Key)
-                {
-                    case System.Windows.Input.Key.LeftCtrl:
-                        ScaleMode = false;
-                        break;
-                }
-                KeyEventActivate = false;
-                e.Handled = true;
-            };
-            IELButtonGenerateImage.OnActivateMouseLeft += (sender, e) =>
-            {
-                Thread t = new(() =>
-                {
-                    Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, async () =>
-                    {
-                        ImageMap.Source = await App.MainWindow.ExecuteVisualizateLoadingProcess("Генерация изображения",
-                            GenImage(100, 100));
-                    });
-                })
-                {
-                    IsBackground = true,
-                };
-                t.SetApartmentState(ApartmentState.STA);
-                t.Priority = ThreadPriority.Highest;
-                t.Start();
-            };
-            IELButtonTest.Focusable = true;
-            IELButtonTest.MouseRightButtonUp += (sender, e) =>
-            {
-                WindowThemeController y = new();
-                y.Show();
-            };
-            IELButtonTest.MouseLeftButtonUp += (sender, e) =>
-            {
-                WindowQDataViewer y = new();
-                y.Show();
-                App.MainWindow.BlurMainAnimateColor(Colors.Blue);
-            };
-            IELButtonTest.MouseRightButtonUp += (sender, e) =>
-            {
-            };
+            StackPanelElementsVisual.Children.Add(Element);
+            return Element;
         }
 
         //

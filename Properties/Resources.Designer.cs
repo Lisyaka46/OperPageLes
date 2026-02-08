@@ -143,6 +143,16 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Collapse {
+            get {
+                object obj = ResourceManager.GetObject("Collapse", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Command {
             get {
                 object obj = ResourceManager.GetObject("Command", resourceCulture);
@@ -316,16 +326,6 @@ namespace ApplicationOperPageLes.Properties {
         internal static byte[] Palette {
             get {
                 object obj = ResourceManager.GetObject("Palette", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] PaletteDictionary {
-            get {
-                object obj = ResourceManager.GetObject("PaletteDictionary", resourceCulture);
                 return ((byte[])(obj));
             }
         }

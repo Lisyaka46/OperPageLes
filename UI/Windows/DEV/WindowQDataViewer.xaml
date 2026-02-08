@@ -29,9 +29,9 @@
                 <GUI:IELButtonText x:Name="IELSourceButton" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" FontFamily="{DynamicResource Bree CYR var}" Padding="5,5,5,5" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Text="Example Text" VerticalAlignment="Center" Margin="0,5,0,5"/>
                 <CheckBox x:Name="CheckBoxIsEnabledController" Content="IsEnabled" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Margin="0,5,0,5" BorderBrush="Black" Background="#FFFFB9B9" FontSize="16" Padding="4,-4,0,0" Grid.RowSpan="1"/>
                 <ComboBox x:Name="ComboBoxSelectQData" Grid.Row="2" FontSize="14" FontFamily="{DynamicResource RussianRail G Pro}">
-                    <ComboBoxItem Content="Background"/>
-                    <ComboBoxItem Content="BorderBrush"/>
-                    <ComboBoxItem Content="Foreground"/>
+                    <ComboBoxItem Content="Фон"/>
+                    <ComboBoxItem Content="Граница"/>
+                    <ComboBoxItem Content="Текст"/>
                 </ComboBox>
             </Grid>
             <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black">
@@ -72,16 +72,19 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <ComboBox x:Name="ComboBoxSelectInitQData" Grid.Row="0"/>
                         <Button x:Name="InicializeQData" Content="Уканать созданную QData" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="1"/>
-                        <Button x:Name="ReadFileQData" Content="Прочитать QData" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="2"/>
-                        <Button x:Name="WriteFileQData" Content="Записать QData" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="3"/>
-                        <TextBox x:Name="TextGeneratePalette" VerticalAlignment="Top" Margin="5,5,5,5" FontSize="14" Padding="1,3,1,3" Grid.Row="4"/>
-                        <Grid Grid.Row="5">
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Имя QData" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            <TextBox x:Name="TextGeneratePalette" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="14" Padding="1,3,1,3" Grid.ColumnSpan="1" Grid.Column="1"/>
+                        </Grid>
+                        <Grid Grid.Row="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>

@@ -75,11 +75,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region IELButtonPageDeveloper
             IELButtonPageDeveloper.OnActivateMouseLeft += (sender, e) =>
             {
-                PageDeveloper page = new();
-                BrowserPage AppendElementPage = new(page, "Страница разработчика", null);
+                IELButtonPageDeveloper.IsEnabled = false;
+                BrowserPage AppendElementPage = new(App.ApplicationPageDeveloper, "Страница разработчика", null);
                 AppendElementPage.Disposed += (sender) =>
                 {
-
+                    IELButtonPageDeveloper.IsEnabled = true;
                 };
                 BrowserPageSelect?.Invoke(this, AppendElementPage);
             };

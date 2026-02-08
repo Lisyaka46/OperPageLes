@@ -347,6 +347,7 @@ namespace ApplicationOperPageLes.UI.Windows
                 CornerRadiusBorderView = new(10),
                 TextPadding = new(0, 5, 5, 0),
                 MarginViewBox = new(0, -10, 0, -10),
+                Cursor = System.Windows.Input.Cursors.Hand,
                 //FontFamily = App.CurrentApp.ResourceDictionaryFonts["Deledda Open Regular"],
             };
             return Button;
@@ -405,9 +406,10 @@ namespace ApplicationOperPageLes.UI.Windows
                 FontSize = 16d,
                 CornerRadius = new(8),
                 CornerRadiusGuides = new(7.6),
-                VisualGuide = IEL.CORE.Enums.StateVisualGuide.LeftArrow,
+                VisualGuide = IEL.CORE.Enums.StateVisualGuide.RightArrow,
                 BorderThickness = new(2),
                 MarginViewBox = new(5, 8, 5, 2),
+                Cursor = System.Windows.Input.Cursors.Hand,
             };
             return Button;
         }

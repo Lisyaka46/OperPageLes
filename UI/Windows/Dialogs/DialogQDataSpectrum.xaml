@@ -7,7 +7,7 @@
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
         mc:Ignorable="d"
-        Title="DialogQDataSpectrum" Height="450" Width="490" ResizeMode="NoResize">
+        Title="DialogQDataSpectrum" Height="475" Width="490" ResizeMode="NoResize">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -50,7 +50,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="NameSpectrum" Text="Spectrum" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="16" TextDecorations="Underline" FontWeight="SemiBold" FontFamily="{DynamicResource Deledda Open Regular}" TextAlignment="Center" Padding="0,10,0,0"/>
+                    <TextBlock x:Name="NameSpectrum" Text="Spectrum" VerticalAlignment="Center" Margin="5,0,5,0" FontSize="16" TextDecorations="Underline" FontWeight="SemiBold" FontFamily="{DynamicResource RussianRail G Pro}" TextAlignment="Center" Padding="0,10,0,0"/>
                     <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="5,5,5,5" Margin="2,2,2,2" Background="White">
                         <Grid x:Name="GridColors" VerticalAlignment="Center">
                             <Grid.RowDefinitions>
@@ -58,25 +58,50 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock x:Name="TextBlockSelectIndicator" Text="&gt;" FontFamily="{DynamicResource Tablon}" Panel.ZIndex="1" HorizontalAlignment="Left" Grid.RowSpan="3" VerticalAlignment="Top" FontSize="32" Margin="0,8,0,0"/>
+                            <TextBlock x:Name="TextBlockSelectIndicator" Text="&gt;" FontFamily="{DynamicResource Tablon}" Panel.ZIndex="1" HorizontalAlignment="Left" Grid.RowSpan="3" VerticalAlignment="Top" FontSize="32" Margin="0,16,0,0"/>
                             <Grid>
-                                <TextBlock Text="BG" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="-70,0,0,0"/>
-                                <Border x:Name="BorderColorBackground" Width="100" Height="50" Grid.Row="0" Margin="5,15,5,5" CornerRadius="10,10,10,10" Background="Red" HorizontalAlignment="Center"/>
-                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Фон (BG)" HorizontalAlignment="Left" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="20,0,0,0" VerticalAlignment="Top" Padding="0,2,0,0"/>
+                                <Border x:Name="BorderColorBackground" Width="100" Height="40" Grid.Row="1" CornerRadius="10,10,10,10" Background="Red" HorizontalAlignment="Left" Grid.RowSpan="1" Margin="20,0,0,5" Cursor="Hand"/>
                             </Grid>
                             <Grid Grid.Row="1">
-                                <TextBlock Text="BB" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="-70,0,0,0"/>
-                                <Border x:Name="BorderColorBorderBrush" Width="100" Height="50" Grid.Row="1" Margin="5,15,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Center"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Граница (BB)" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Grid.RowSpan="1" Margin="20,0,0,0" Padding="0,2,0,0"/>
+                                <Border x:Name="BorderColorBorderBrush" Width="100" Height="40" CornerRadius="10,10,10,10" Background="Red" HorizontalAlignment="Left" Grid.RowSpan="1" Grid.Row="1" Margin="20,0,0,5" Cursor="Hand"/>
                             </Grid>
                             <Grid Grid.Row="2">
-                                <TextBlock Text="FG" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Margin="-70,0,0,0"/>
-                                <Border x:Name="BorderColorForeground" Width="100" Height="50" Grid.Row="2" Margin="5,15,5,5" CornerRadius="5,5,5,5" Background="Red" HorizontalAlignment="Center"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Текст (FG)" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" IsHitTestVisible="False" Padding="0,2,0,0" Grid.RowSpan="1" Margin="20,0,0,0"/>
+                                <Border x:Name="BorderColorForeground" Width="100" Height="40" CornerRadius="10,10,10,10" Background="Red" HorizontalAlignment="Left" Margin="20,0,0,5" Grid.RowSpan="1" Grid.Row="1" Cursor="Hand"/>
                             </Grid>
                         </Grid>
                     </Border>
                 </Grid>
             </Grid>
         </Border>
-        <colorpicker:StandardColorPicker x:Name="ColorPicker" x:FieldModifier="private" Grid.Column="1" HexRepresentation="ARGB" BorderThickness="2,2,2,2" Margin="5,5,5,5" MinHeight="0" FontFamily="{DynamicResource Deledda Open Regular}" FontWeight="Bold" FontSize="10" ShowFractionalPart="False" BorderBrush="Black"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <colorpicker:StandardColorPicker x:Name="ColorPicker" x:FieldModifier="private" Grid.Column="0" HexRepresentation="ARGB" BorderThickness="2,2,2,2" Margin="5,5,5,5" MinHeight="0" FontFamily="{DynamicResource Deledda Open Regular}" FontWeight="Bold" FontSize="10" ShowFractionalPart="False" BorderBrush="Black"/>
+            <Grid VerticalAlignment="Bottom" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <IEL:IELButtonText x:Name="IELButtonCancel" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Red}" Height="35" Grid.ColumnSpan="1" Text="Отмена" Margin="3,3,2,3"/>
+                <IEL:IELButtonText x:Name="IELButtonComplete" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Green}" Height="35" Grid.ColumnSpan="1" Grid.Column="1" Text="Применить" Margin="2,3,3,3"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

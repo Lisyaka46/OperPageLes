@@ -33,14 +33,14 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" Text="DefaultPalette" FontSize="14" CornerRadiusBorderView="10,10,10,10" MarginViewBox="0,-10,0,-10" Source="/UI/Images/IconMainApplication.png" TextPadding="0,5,5,0" CircleIndicatorMargin="0,-4,-4,0" CornerRadiusCircleIndicator="4,4,4,4" HeightCircleIndicator="14" FontFamily="{DynamicResource Deledda Open Regular}"/>
+                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" Text="DefaultPalette" FontSize="14" CornerRadiusBorderView="10,10,10,10" MarginViewBox="0,-10,0,-10" Source="/UI/Images/IconMainApplication.png" TextPadding="0,5,5,0" CircleIndicatorMargin="0,-4,-4,0" CornerRadiusCircleIndicator="4,4,4,4" HeightCircleIndicator="14" FontFamily="{DynamicResource Deledda Open Regular}" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <ScrollViewer>
                         <Grid x:Name="GridThemes" VerticalAlignment="Top">
                         </Grid>
                     </ScrollViewer>
                 </Border>
-                <IEL:IELButtonText x:Name="IELCreateNewTheme" Grid.Row="2" Margin="5,5,5,5" PaletteElement="{DynamicResource SpruceColor}" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5" Height="45"/>
+                <IEL:IELButtonText x:Name="IELCreateNewTheme" Grid.Row="2" Margin="5,5,5,5" PaletteElement="{DynamicResource SpruceColor}" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5" Height="45" MarginViewBox="5,7,5,7"/>
             </Grid>
         </Border>
         <Grid x:Name="GridPaletteSpectrumViewer" Grid.Column="1">
@@ -62,7 +62,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="TextBlockNameSelectTheme" Text="Name Palette" VerticalAlignment="Center" Padding="5,10,5,0" FontSize="20" Grid.ColumnSpan="1" TextTrimming="CharacterEllipsis" FontFamily="{DynamicResource Deledda Open Regular}"/>
-                    <IEL:IELButtonText x:Name="IELButtonBackViewTheme" Grid.Column="1" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Jade}" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Text="Назад" Padding="0,2,0,2" Height="40" Margin="5,0,5,0"/>
+                    <IEL:IELButtonText x:Name="IELButtonBackViewTheme" Grid.Column="1" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Jade}" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Text="Назад" Padding="0,2,0,2" Height="40" Margin="5,5,5,5"/>
                 </Grid>
                 <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="#FF1D92D0">
                     <ScrollViewer>
@@ -106,16 +106,16 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Border x:Name="BorderD" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White">
+                                <Border x:Name="BorderD" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Cursor="Hand">
                                     <TextBlock x:Name="TextBlockD" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Text="Default" TextAlignment="Center"/>
                                 </Border>
-                                <Border x:Name="BorderS" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="1">
+                                <Border x:Name="BorderS" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="1" Cursor="Hand">
                                     <TextBlock x:Name="TextBlockS" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Text="Select" TextAlignment="Center"/>
                                 </Border>
-                                <Border x:Name="BorderU" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="2">
+                                <Border x:Name="BorderU" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="2" Cursor="Hand">
                                     <TextBlock x:Name="TextBlockU" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Text="Used" TextAlignment="Center"/>
                                 </Border>
-                                <Border x:Name="BorderNE" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="3">
+                                <Border x:Name="BorderNE" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="3" Cursor="Hand">
                                     <TextBlock x:Name="TextBlockNE" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Text="NotEnabled" TextAlignment="Center"/>
                                 </Border>
                             </Grid>

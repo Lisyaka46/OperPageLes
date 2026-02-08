@@ -238,9 +238,6 @@
   <data name="Warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Warning.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="PaletteDictionary" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CORE\Resources\PaletteDictionary.xaml;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Tilda" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Tilda.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -252,5 +249,8 @@
   </data>
   <data name="Brush" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Brush.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Collapse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Collapse.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

@@ -23,12 +23,12 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="???" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Background="{DynamicResource BG_Violet}" Foreground="{DynamicResource FG_Violet}" BorderBrush="{DynamicResource BB_Violet}" Width="55" PaletteElement="{DynamicResource Violet}">
+        <GUI:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="???" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="55" PaletteElement="{DynamicResource Violet}">
             <GUI:IELBlockInfoText.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
         </GUI:IELBlockInfoText>
-        <GUI:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Background="{DynamicResource BG_Tangerine}" BorderBrush="{DynamicResource BB_Tangerine}" Foreground="{DynamicResource FG_Tangerine}" Width="40" PaletteElement="{DynamicResource Tangerine}">
+        <GUI:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" Padding="6,0,6,0" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="40" PaletteElement="{DynamicResource Saffron}">
             <GUI:IELBlockInfoText.Effect>
                 <BlurEffect Radius="0"/>
             </GUI:IELBlockInfoText.Effect>
@@ -37,7 +37,7 @@
             <Grid.Effect>
                 <BlurEffect Radius="5"/>
             </Grid.Effect>
-            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="5,5,5,5" Source="/UI/Images/WifiOn.png" Background="{DynamicResource BG_Green}" BorderBrush="{DynamicResource BB_Green}" Foreground="{DynamicResource FG_Green}" Padding="0,0,0,5" Width="39" PaletteElement="{DynamicResource Green}"/>
+            <GUI:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThickness="2,2,2,2" Margin="3,3,3,3" CornerRadius="5,5,5,5" Source="/UI/Images/Wifi.png" Padding="0,0,0,5" Width="39" PaletteElement="{DynamicResource Green}"/>
             <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="???" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="8" FontWeight="Bold"  Margin="5,0,5,4" IsHitTestVisible="False" FontFamily="{DynamicResource RussianRail G Pro}"/>
         </Grid>
         <MediaElement x:Name="IndicatorLoadingInternetConnection" Panel.ZIndex="1" IsHitTestVisible="False" Width="28" Height="28" LoadedBehavior="Play" UnloadedBehavior="Pause">

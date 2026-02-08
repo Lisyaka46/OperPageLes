@@ -8,7 +8,7 @@
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
     x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction"
-    Width="180" Height="155">
+    Width="180" Height="125">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -22,7 +22,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,5,0,5" Padding="5,10,5,10" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Jade}"/>
-        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Padding="5,10,5,10" Margin="0,5,0,5" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}" PaletteElement="{DynamicResource PastelRed}"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonPageOpenInlay" Text="Открыть вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Margin="0,5,0,5" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Jade}" MarginViewBox="5,7,5,7" Height="50"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonPageDeleteInlay" Text="Удалить вкладку" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" FontSize="16" BorderThickness="3,3,3,3" Grid.Row="1" Margin="0,5,0,5" FontFamily="{DynamicResource Bree CYR var}" Background="{DynamicResource BG_PastelRed}" BorderBrush="{DynamicResource BB_PastelRed}" Foreground="{DynamicResource FG_PastelRed}" PaletteElement="{DynamicResource PastelRed}" MarginViewBox="5,7,5,7" Height="50"/>
     </Grid>
 </Page>

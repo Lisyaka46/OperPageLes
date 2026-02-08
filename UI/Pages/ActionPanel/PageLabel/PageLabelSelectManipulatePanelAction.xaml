@@ -8,7 +8,7 @@
     xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-    Width="210" Height="200">
+    Width="210" Height="185">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -23,8 +23,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" Margin="5,5,5,5" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" BorderThickness="3,3,3,3" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" Height="55" MarginViewBox="5,10,5,10"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="5,5,5,5"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="1" PaletteElement="{DynamicResource Olive}" KeyActivateButton="D1" Height="55" MarginViewBox="5,10,5,10"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="5,5,5,5"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="2" PaletteElement="{DynamicResource Cocoa}" KeyActivateButton="D2" Height="55" MarginViewBox="5,10,5,10"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonBack" Text="Назад" CornerRadius="6,6,6,6" Margin="5,5,5,5" Grid.Row="0" Grid.RowSpan="1"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" BorderThickness="3,3,3,3" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" Height="50" MarginViewBox="5,7,5,7"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonExecuteSelect" Text="Выделить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="5,5,5,5"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="1" PaletteElement="{DynamicResource Olive}" KeyActivateButton="D1" Height="50" MarginViewBox="5,7,5,7"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonClearSelect" Text="Снять выделение" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="5,5,5,5"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="2" PaletteElement="{DynamicResource Cocoa}" KeyActivateButton="D2" Height="50" MarginViewBox="5,7,5,7"/>
     </Grid>
 </Page>

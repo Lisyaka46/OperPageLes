@@ -33,15 +33,21 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         //
         private Border? BorderSelect;
 
-        //
-        private PaletteSpectrum PaletteSpectrumManipulate;
+        /// <summary>
+        /// Спектр палитры который представляет визуализацию изменений
+        /// </summary>
+        private PaletteSpectrum? PaletteSpectrumManipulate;
+
+        /// <summary>
+        /// Спектр палитры который является изменяемым
+        /// </summary>
+        private PaletteSpectrum? PaletteSpectrumSource;
 
         //
         private QData? QdataActiveChange;
 
         public DialogQDataSpectrum()
         {
-            PaletteSpectrumManipulate = new();
             InitializeComponent();
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tilda));
 
@@ -56,30 +62,55 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
 
             BorderColorBackground.MouseLeftButtonUp += (sender, e) =>
             {
-                ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);
+                if (PaletteSpectrumManipulate != null)
+                    ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);
             };
 
             BorderColorBorderBrush.MouseLeftButtonUp += (sender, e) =>
             {
-                ActivateColorPicker(BorderColorBorderBrush, PaletteSpectrumManipulate.BB);
+                if (PaletteSpectrumManipulate != null)
+                    ActivateColorPicker(BorderColorBorderBrush, PaletteSpectrumManipulate.BB);
             };
 
             BorderColorForeground.MouseLeftButtonUp += (sender, e) =>
             {
-                ActivateColorPicker(BorderColorForeground, PaletteSpectrumManipulate.FG);
+                if (PaletteSpectrumManipulate != null)
+                    ActivateColorPicker(BorderColorForeground, PaletteSpectrumManipulate.FG);
+            };
+
+            IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
+            {
+                Close();
+            };
+
+            IELButtonComplete.OnActivateMouseLeft += (sender, e) =>
+            {
+                if (PaletteSpectrumSource != null && PaletteSpectrumManipulate != null)
+                {
+                    PaletteSpectrumSource.BG.ChangeSourceQData(PaletteSpectrumManipulate.BG);
+                    PaletteSpectrumSource.BB.ChangeSourceQData(PaletteSpectrumManipulate.BB);
+                    PaletteSpectrumSource.FG.ChangeSourceQData(PaletteSpectrumManipulate.FG);
+                }
+                Close();
+            };
+
+            Closed += (sender, e) =>
+            {
+                PaletteSpectrumSource = null;
+                PaletteSpectrumManipulate = null;
             };
         }
 
         /// <summary>
         /// Отобразить окно манипуляции над спектом QData
         /// </summary>
-        /// <param name="qdBG">Данные фона</param>
-        /// <param name="qdBB">Данные границ</param>
-        /// <param name="qdFG">Данные текста</param>
+        /// <param name="SourceSpectrum">Объект манипуляции спектра палитры</param>
         /// <param name="spectrum">Изменяемый спектр</param>
         internal void ShowDialogChangeQData(PaletteSpectrum SourceSpectrum, QData.EnumDataSpectrum spectrum)
         {
-            PaletteSpectrumManipulate = SourceSpectrum;
+            PaletteSpectrumSource = SourceSpectrum;
+            PaletteSpectrumManipulate = (PaletteSpectrum)SourceSpectrum.Clone();
+
             ChangeSpectrum = spectrum;
             Title = $"Изменение спектра \"{spectrum}\"";
             NameSpectrum.Text = $"Спектр {spectrum}";
@@ -124,8 +155,8 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 GridColors).Transform(new System.Windows.Point(0, 0));
 
             App.ThicknessAnimationType.AnimateEffect(TextBlockSelectIndicator, MarginProperty,
-                new(TextBlockSelectIndicator.Margin.Left, OffsetPosElement.Y + 10, TextBlockSelectIndicator.Margin.Right, TextBlockSelectIndicator.Margin.Bottom),
-                TimeSpan.FromMilliseconds(400d));
+                new(TextBlockSelectIndicator.Margin.Left, OffsetPosElement.Y - 4, TextBlockSelectIndicator.Margin.Right, TextBlockSelectIndicator.Margin.Bottom),
+                TimeSpan.FromMilliseconds(300d));
         }
     }
 }

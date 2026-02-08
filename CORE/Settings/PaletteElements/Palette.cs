@@ -25,16 +25,15 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
         /// <summary>
         /// Инициализировать объект палитры по настройке ресурса
         /// </summary>
-        /// <param name="PathFileXAML">Директория читаемого файла</param>
         /// <exception cref="Exception"></exception>
-        internal Palette(string PathFileXAML)
+        internal Palette(ResourceDictionary Resource)
         {
-            ResourceDictionary Resource = new() { Source = new(PathFileXAML) };
             _SourcePalette = [];
-            string[] Keys = [..Resource.Keys.Cast<string>()];
+            string[] Keys = [.. Resource.Keys.Cast<string>()];
             for (int i = 0; i < Keys.Length; i++)
             {
-                _SourcePalette.Add((PaletteSpectrumEnum)Enum.Parse(typeof(PaletteSpectrumEnum), Keys[i]), (PaletteSpectrum)Resource[Keys[i]]);
+                _SourcePalette.Add((PaletteSpectrumEnum)Enum.Parse(typeof(PaletteSpectrumEnum), Keys[i]),
+                    (PaletteSpectrum)((PaletteSpectrum)Resource[Keys[i]]).Clone());
             }
         }
 
@@ -96,7 +95,8 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
         /// <exception cref="Exception">Исключение несоответствующего количества байтов для установки значения спектра палитры</exception>
         private static void SetDataFromBytesInSpectrum(ref PaletteSpectrum Spectrum, byte[] SourceData)
         {
-            if (SourceData.Length != QData.CountSpectrumColor * QData.CountBytesFromColor * PaletteSpectrum.CountQDataSpectrum)
+            if (SourceData.Length == 0) return;
+            else if (SourceData.Length != QData.CountSpectrumColor * QData.CountBytesFromColor * PaletteSpectrum.CountQDataSpectrum)
                 // 16 значений DSUN -> 3 спектра BG BB FG (ДЛЯ 1 ЭЛЕМЕНТА 4*4*3)
                 throw new Exception("Размер массива байтов не эквивалентен ожидаемому размеру " +
                     $"{SourceData.Length}%{QData.CountSpectrumColor * QData.CountBytesFromColor} байт");

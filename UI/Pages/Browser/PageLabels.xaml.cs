@@ -9,6 +9,7 @@ using IEL.CORE.Enums;
 using InterpreterCommand.Classes;
 using Microsoft.Windows.Themes;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -171,7 +172,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>()];
                 for (int i = 0; i < LabelsElements.Length; i++)
                 {
-                    LabelsElements[i].Selected = true;
+                    if (!LabelsElements[i].Selected)
+                        LabelsElements[i].SelectOn();
                 }
                 SelectLabelsMode = true;
                 UpdateTextInfoLabels();
@@ -184,11 +186,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>().Where((i) => i.Selected)];
                 for (int i = 0; i < LabelsElements.Length; i++)
                 {
-                    LabelsElements[i].Selected = false;
+                    if (!ListSelectLabel.Contains(LabelsElements[i]))
+                        LabelsElements[i].SelectOff();
                 }
-                SelectLabelsMode = false;
+                if (ListSelectLabel.Count == 0) SelectLabelsMode = false;
                 UpdateTextInfoLabels();
-                ListSelectLabel.Clear();
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             #endregion
@@ -202,21 +204,22 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     PageLabelElement.IELButtonExecuteLabel.IsEnabled = false;
                     ActivateConsistentExecuteSelectLabels = true;
-                    SelectLabelsMode = false;
+                    if (!GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected))
+                        SelectLabelsMode = false;
                     UpdateTextInfoLabels();
                     for (int i = 0; i < ListSelectLabel.Count; i++)
                     {
                         TextBlockEventInfo.Text = $"Последовательное выполнение ярлыков {i + 1}/{ListSelectLabel.Count}";
                         ListSelectLabel[i].SourceBorderBrush.SetActiveSpecrum(Colors.White);
+                        OPLCommandViewer? viewer = Console?.CreateNewCommandViewer(
+                                COMInterpreterBase.ReadNameCommand(ListSelectLabel[i].SourceLabel.Command));
                         await Task.Delay(700);
-                        await App.CurrentApp.ActivateActionCommand(
-                            Console?.CreateNewCommandViewer(
-                                COMInterpreterBase.ReadNameCommand(ListSelectLabel[i].SourceLabel.Command)),
-                            ListSelectLabel[i].SourceLabel.Command);
+                        await App.CurrentApp.ActivateActionCommand(viewer, ListSelectLabel[i].SourceLabel.Command);
                         ListSelectLabel[i].SourceBorderBrush.SetActiveSpecrum(StateSpectrum.Default, true);
-                        ListSelectLabel[i].Selected = false;
+                        ListSelectLabel[i].SelectOff();
                     }
                     ListSelectLabel.Clear();
+                    if (!GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected)) SelectLabelsMode = false;
                     ActivateConsistentExecuteSelectLabels = false;
                     UpdateTextInfoLabels();
                     PageLabelElement.IELButtonExecuteLabel.IsEnabled = true;
@@ -265,14 +268,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 if (SelectLabelInPage != null)
                 {
-                    SelectLabelInPage.Selected = true;
+                    SelectLabelInPage.SelectOn();
                     LabelTag? Tag = new DialogManipulateLabelTags().ShowSelectOneTag();
                     if (Tag != null)
                     {
                         SelectLabelInPage.SourceLabel.AppendTag(Tag);
                         TextBlockEventInfo.Text = "Тег успешно установлен";
                     }
-                    SelectLabelInPage.Selected = false;
+                    SelectLabelInPage.SelectOff();
                     SelectLabelInPage = null;
                 }
             };
@@ -294,21 +297,23 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     SelectLabelsMode = true;
                     UpdateTextInfoLabels();
                 }
-                ChangeSelectLabel(SelectLabelInPage);
+                SelectLabelInPage.SelectOn(ref ListSelectLabel);
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = true;
                 PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = false;
             };
             PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (SelectLabelInPage == null) return;
-                else if (ListSelectLabel.Count == 0)
+                if (ListSelectLabel.Contains(SelectLabelInPage)) SelectLabelInPage.SelectOff(ref ListSelectLabel);
+                else SelectLabelInPage.SelectOff();
+                if (ListSelectLabel.Count == 0 && !GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected))
                 {
                     SelectLabelsMode = false;
                     UpdateTextInfoLabels();
                 }
-                ChangeSelectLabel(SelectLabelInPage);
                 PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = false;
                 PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = true;
+                UpdateVisualButtonsFromLabel();
             };
             PageLabelElement.IELBlockInfoTagLabel.MouseHover += (sender, e) =>
             {
@@ -443,28 +448,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         }
 
         /// <summary>
-        /// Изменить выделение ярлыка
-        /// </summary>
-        /// <param name="ElementSelected">Ярлык над которым производится взаимодействие</param>
-        private void ChangeSelectLabel(OPLLabel ElementSelected)
-        {
-            ElementSelected.Selected = !ElementSelected.Selected;
-            if (ElementSelected.Selected)
-            {
-                ListSelectLabel.Add(ElementSelected);
-                ElementSelected.TextBlockNumberSelect.Text = $"{ListSelectLabel.Count.ToString($"D{(int)Math.Log10(GridMainLabels.Children.Count) + 1}")}";
-            }
-            else
-            {
-                for (int i = ListSelectLabel.IndexOf(ElementSelected) + 1; i < ListSelectLabel.Count; i++)
-                {
-                    ListSelectLabel[i].TextBlockNumberSelect.Text = $"{i.ToString($"D{(int)Math.Log10(GridMainLabels.Children.Count) + 1}")}";
-                }
-                ListSelectLabel.Remove(ElementSelected);
-            }
-        }
-
-        /// <summary>
         /// Обновить визуализацию прокрутки
         /// </summary>
         private void UpdateScroll()
@@ -594,20 +577,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 Height = HeightLabel,
             };
             Label.ImageSelect.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
-            //Label.IntervalHover = TimeSpan.FromMilliseconds(800d);
+            //Label.Ho = TimeSpan.FromMilliseconds(800d);
             Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Label.MouseRightButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             Label.MouseRightButtonUp += (sender, e) =>
             {
                 SelectLabelInPage = Label;
-                PageLabelElement.IELButtonExecuteLabel.IsEnabled = !ActivateConsistentExecuteSelectLabels;
-                PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = !ActivateConsistentExecuteSelectLabels && !SelectLabelInPage.Selected;
-                PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = !ActivateConsistentExecuteSelectLabels && SelectLabelInPage.Selected;
-                PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage.SourceLabel.Tag != null;
-                //PageLabelElement.IELBlockInfoTagLabel.MainFrontImage.Opacity = PageLabelElement.IELBlockInfoTagLabel.IsEnabled ? 1d : 0.4d;
-                PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
-                PageLabelElement.IELButtonSetLabelTag.Text = Label.SourceLabel.Tag != null ? "Изменить тег" : "Добавить тег";
+                UpdateVisualButtonsFromLabel();
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, PageLabelElement,
                     Orientation: OrientationPositionCursor.RightDown);
                 e.Handled = true;
@@ -621,10 +598,17 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
                 else if (SelectLabelsMode)
                 {
-                    ChangeSelectLabel(Label);
+                    if (Label.Selected && ListSelectLabel.Contains(Label))
+                    {
+                        for (int i = ListSelectLabel.IndexOf(Label) + 1; i < ListSelectLabel.Count; i++)
+                            ListSelectLabel[i].TextBlockNumberSelect.Text = i.ToString();
+                        Label.SelectOff(ref ListSelectLabel);
+                    }
+                    else Label.SelectOn(ref ListSelectLabel);
+
                     if (ListSelectLabel.Count == 0)
                     {
-                        SelectLabelsMode = false;
+                        if (!GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected)) SelectLabelsMode = false;
                         ListSelectLabel.Clear();
                         UpdateTextInfoLabels();
                     }
@@ -637,21 +621,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     Label.SourceLabel.Command);
                 e.Handled = true;
             };
-            Label.MouseEnter += (sender, e) =>
-            {
-                //SelectLabelInMouse = Label;
-            };
-            //Label.MouseHover += (sender, e) =>
-            //{
-            //    if (sender == null) return;
-            //    string Text = Label.SourceLabel.Description ?? string.Empty;
-            //    if (Text.Length > 0)
-            //        App.MainWindow.IELMessageMain.UsingBorderInformation(Label, Text,
-            //            IEL.CORE.Enums.OrientationPositionCursor.Auto);
-            //};
             Label.MouseLeave += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             Label.MouseLeftButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
-            //Label.UpdateVisualStyle();
             return Label;
         }
 
@@ -661,11 +632,25 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <param name="Index">индекс удаляемого ярлыка</param>
         private async Task RemoveLabel(OPLLabel Source)
         {
-            //int UpdateIndex = GridMainLabels.Children.IndexOf(Source);
             GridMainLabels.Children.Remove(Source);
             App.CurrentApp.DataLabels.Remove(Source.SourceLabel);
             await UpdatePositionLabels(0);
             UpdateTextInfoLabels();
+        }
+
+        /// <summary>
+        /// Обновить отображение кнопок и их активность
+        /// </summary>
+        private void UpdateVisualButtonsFromLabel()
+        {
+            PageLabelElement.IELButtonExecuteLabel.IsEnabled = !ActivateConsistentExecuteSelectLabels && ListSelectLabel.Count > 0 || !SelectLabelsMode;
+            PageLabelElement.PageLabelSelectManipulate.IELButtonExecuteSelect.IsEnabled = !ActivateConsistentExecuteSelectLabels &&
+                    (!SelectLabelInPage?.Selected ?? false);
+            PageLabelElement.PageLabelSelectManipulate.IELButtonClearSelect.IsEnabled = !ActivateConsistentExecuteSelectLabels &&
+                    (SelectLabelInPage?.Selected ?? false);
+            PageLabelElement.IELBlockInfoTagLabel.IsEnabled = SelectLabelInPage?.SourceLabel.Tag != null;
+            PageLabelElement.IELButtonSetLabelTag.IsEnabled = App.CurrentApp.DataLabelTags.Count > 0 && !SelectLabelsMode;
+            PageLabelElement.IELButtonSetLabelTag.Text = SelectLabelInPage?.SourceLabel.Tag != null ? "Изменить тег" : "Добавить тег";
         }
 
         /// <summary>
@@ -728,7 +713,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             }
             IELButtonSorting.Source = StyleSort switch
             {
-                //SortingLabelEnum.Not => App.LoadImage(Properties.Resources.Sorting_Not),
                 SortingLabelEnum.Tag => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_Tag)),
                 SortingLabelEnum.NameAZ => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameAZ)),
                 SortingLabelEnum.NameZA => StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Sorting_NameZA)),

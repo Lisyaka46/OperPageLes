@@ -17,7 +17,9 @@ using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
+using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
+using Microsoft.Win32;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -31,14 +33,16 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Documents.DocumentStructures;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using Windows.Services.Maps;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using Windows.Media.Protection.PlayReady;
+using Windows.Web.Http;
 
 namespace ApplicationOperPageLes
 {
@@ -106,6 +110,12 @@ namespace ApplicationOperPageLes
 
         #region Data
         /// <summary>
+        /// Страница буфера объектов команд
+        /// </summary>
+        internal BufferPagePanelAction AppPageBuffer => _AppPageBuffer ?? throw new Exception("Невозможно получить страницу буфера!");
+        private BufferPagePanelAction? _AppPageBuffer;
+
+        /// <summary>
         /// Установленный ключ валидности для приложения
         /// </summary>
         internal PackKey InstallingKey { get; private set; }
@@ -129,6 +139,11 @@ namespace ApplicationOperPageLes
         /// Массив всех визуализационных объектов процессов
         /// </summary>
         internal readonly List<OPLMediaViewer> DataViewerLoadingProcess = [];
+
+        /// <summary>
+        /// Страница разработчика
+        /// </summary>
+        internal static readonly PageDeveloper ApplicationPageDeveloper = new();
         #endregion
 
         #region Windows
@@ -136,13 +151,6 @@ namespace ApplicationOperPageLes
         /// Главное окно програмы
         /// </summary>
         internal static new MainWindow MainWindow => (MainWindow)Current.MainWindow;
-
-#if DEBUG
-        /// <summary>
-        /// Окно разработчика
-        /// </summary>
-        internal UI.Windows.DEV.WindowDeveloper Is_WindowDeveloper { get; private set; }
-#endif
 
         /// <summary>
         /// Экземпляр созданного приложения
@@ -173,12 +181,13 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Палитра приложения по умолчанию
         /// </summary>
-        internal Palette DefaultPalette { get; }
+        internal Palette? DefaultPalette { get; private set; }
 
         /// <summary>
         /// Активная тема приложения
         /// </summary>
-        internal Theme ActiveThemeApplication { get; private set; }
+        internal Theme ActiveThemeApplication => _ActiveThemeApplication ?? throw new Exception("Невозможно получить тему по умолчанию!");
+        private Theme? _ActiveThemeApplication;
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -203,7 +212,7 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Клиент для манипуляции в сети интернет
         /// </summary>
-        internal static HttpClient UsedHttpClient { get; } = new();
+        internal static System.Net.Http.HttpClient UsedHttpClient { get; } = new();
 
         /// <summary>
         /// Состояние подключения к интернету
@@ -226,14 +235,24 @@ namespace ApplicationOperPageLes
         internal WaveOut SoundChannelWaveOut { get; }
 
         /// <summary>
-        /// TCP сервер управления
+        /// TCP сервер управления текущего устройства
         /// </summary>
-        private static TcpListener? Server = null;
+        private static TcpListener? DeviceServer = null;
+
+        /// <summary>
+        /// Массив TCP клиентов подключённых к серверу
+        /// </summary>
+        private List<TcpClient> ServerConnectedClients;
 
         /// <summary>
         /// TCP клиент заявок
         /// </summary>
-        private static TcpClient? Client = null;
+        private static TcpClient? DeviceClient = null;
+
+        /// <summary>
+        /// Поток данных
+        /// </summary>
+        NetworkStream? SourceNetWorckStream = null;
 
         public App()
         {
@@ -242,12 +261,9 @@ namespace ApplicationOperPageLes
             #region Resources
             SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
+            ServerConnectedClients = [];
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
-
-#if DEBUG
-            Is_WindowDeveloper = new();
-#endif
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             #endregion
 
@@ -264,6 +280,11 @@ namespace ApplicationOperPageLes
                 "Создаёт алиас \"Name\" на команду \"Command\". С описанием \"Description\"", (Main, param, CV) =>
                 {
                     string NameAlias = ((string)param[0]).ToLower();
+                    if (Interpreter?.Commands.Any((i) => i.Key.Equals(NameAlias)) ?? true)
+                    {
+                        return Task.FromResult(CommandStateResult.Failed(Main.Name,
+                            $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как название совпадает с %**консольной** командой"));
+                    }
                     bool CompleteCreateAlias = Interpreter?.AddAliasCommand(NameAlias, (string)param[1], (string)param[2]) ?? false;
                     if (!CompleteCreateAlias)
                     {
@@ -286,13 +307,13 @@ namespace ApplicationOperPageLes
                 "Изменяет алиас \"Name\" на новую команду алиаса \"Command\". С необязательным изменением описания \"Description\"", (Main, param, CV) =>
                 {
                     string NameAlias = ((string)param[0]).ToLower();
-                    AliasCommand<ICommandOPER<IOPERCommandViewer>, IOPERCommandViewer>? alias = Interpreter?.ReadAliasCommand(NameAlias);
+                    AliasCommand<CommandOPER<IOPERCommandViewer>, IOPERCommandViewer>? alias = Interpreter?.ReadAliasCommand(NameAlias);
                     if (alias == null)
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не существует \n%#EA5555//Для создания алиаса введите команду: %**alias**//"));
                     }
-                    ICommandOPER<IOPERCommandViewer>? Com = Interpreter?.ReadCommand((string)param[1]);
+                    CommandOPER<IOPERCommandViewer>? Com = Interpreter?.ReadCommand((string)param[1]);
                     CommandStateResult Result = alias.ChangeSourceCommand(Com, (string)param[1], ((string)param[2]).Length > 0 ? (string)param[2] : null);
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
@@ -361,15 +382,18 @@ namespace ApplicationOperPageLes
                 }),
                 #endregion
 
-                //#region clear
-                //new ConsoleCommand("clear",
-                //"Очищает текстовый вывод главного меню программы",
-                //(Command, param) =>
-                //{
-                //    MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>()?.ClearConsoleText();
-                //    return Task.FromResult(CommandStateResult.Completed(Command.Name));
-                //}),
-                //#endregion
+                #region clear
+                new ConsoleCommand<IOPERCommandViewer>("clear",
+                "Очищает текстовый вывод главного меню программы",
+                (Command, param, CV) =>
+                {
+                    if (MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is PageConsole page)
+                    {
+                        page.StackPanelConsole.Children.Clear();
+                    }
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                }),
+                #endregion
 
                 #region print
                 new ConsoleCommand<IOPERCommandViewer>("print", [new Parameter("Text", typeof(string))],
@@ -385,10 +409,11 @@ namespace ApplicationOperPageLes
                 "Отображает содержание буфера команд в консоль главного меню программы",
                 (Command, param, CV) =>
                 {
-                    BufferPagePanelAction PageBuffer = PageConsole.BufferPage;
+                    if (AppPageBuffer?.BufferCommand == null)
+                        return Task.FromResult(CommandStateResult.Failed(Command.Name, "Буфер команд не подключён!"));
                     return Task.FromResult(CommandStateResult.Completed(Command.Name,
-                        $"%//{PageBuffer.BufferCommand.Count}/{PageBuffer.BufferCommand.Length}://" +
-                        $"%**[**{string.Join(',', PageBuffer.BufferCommand.BufferElements.Where((i) =>
+                        $"%//{AppPageBuffer.BufferCommand.Count}/{AppPageBuffer.BufferCommand.Length}://" +
+                        $"%**[**{string.Join(',', AppPageBuffer.BufferCommand.BufferElements.Where((i) =>
                         {
                             if (i != null)
                             {
@@ -505,12 +530,12 @@ namespace ApplicationOperPageLes
                 #region server_start
                 new ConsoleCommand<IOPERCommandViewer>("server_start",
                 [
-                    new Parameter("ip", typeof(string), String.Empty),
+                    new Parameter("ip", typeof(string), string.Empty),
                 ],
                 "Запуск сервера по ip, если нем параметра то регистрирует сервер по текущему ip компьютера",
                 async (Command, param, CV) =>
                 {
-                    if (Server != null)
+                    if (DeviceServer != null)
                     {
                         return CommandStateResult.Failed(Command.Name, "%__Вы уже запустили сервер__");
                     }
@@ -558,23 +583,29 @@ namespace ApplicationOperPageLes
                     CV?.AddNewUIElement(ButtonCopyIP);
                     #endregion
 
-                    Server = new(IPAddress.Any, 1111);
-                    Server.Start();
+                    DeviceServer = new(IPAddress.Any, 1111);
+                    DeviceServer.Start();
                     CV?.AddString($"Сервер запущен.");
+                    CV?.AddString($"Ожидаю запроса на подключение...");
+                    TcpClient? SourceClient = null;
                     //int count;
-                    byte[] hello = Encoding.Default.GetBytes("hello world");
-                    NetworkStream? ns = null;
-                    while (true)   // бесконечный цикл обслуживания клиентов
+                    Action WhileOperation = new(() =>
                     {
-                        if (Server.Pending())
+                        if (DeviceServer.Pending())
                         {
                             CV?.AddString($"Найден ожидающий клиент, принято на обработку.");
-                            TcpClient client = await Server.AcceptTcpClientAsync();  // ожидаем подключение клиента
-                            ns = client.GetStream(); // для получения и отправки сообщений
-                            CV?.AddString($"Клиент принят: \"{ns.Socket.AddressFamily}\"");
-
-                            CV?.AddString($"Сообщение отправлено.");
-                            ns.Write(hello, 0, hello.Length);     // отправляем сообщение
+                            SourceClient = DeviceServer.AcceptTcpClient();  // ожидаем подключение клиента
+                            ServerConnectedClients.Add(SourceClient);
+                            SourceNetWorckStream = SourceClient.GetStream(); // для получения и отправки сообщений
+                            //Server.
+                            CV?.AddString($"Клиент принят: \"{(SourceNetWorckStream.Socket.RemoteEndPoint?.ToString() ?? "???")}\"");
+                            if (Command.IsAsyncTokenWhileProcessEnabled)
+                                Command.CloseAsyncToken();
+                            else if (CV is OPLCommandViewer OPL_CV)
+                                if (OPL_CV.IsTokenAsyncWhileEnabled)
+                                    OPL_CV.ExitAsyncWhileOperation();
+                            //CV?.AddString($"Сообщение отправлено.");
+                            //ns.Write(hello, 0, hello.Length);     // отправляем сообщение
                             //do
                             //{
                             //    byte[] msg = new byte[1024];     // готовим место для принятия сообщения
@@ -583,12 +614,15 @@ namespace ApplicationOperPageLes
                             //}
                             //while (client.Connected && count > 0);
                         }
-                        else if (ns != null)
-                        {
-                            CV?.AddString($"Сообщение отправлено.");
-                            ns.Write(hello, 0, hello.Length);
-                        }
-                        await Task.Delay(1000);
+                    });
+                    if (CV is OPLCommandViewer OPL_CV)
+                    {
+                        try { await OPL_CV.WaitWhileTaskOperation(WhileOperation, false); }
+                        catch { }
+                    }
+                    else
+                    {
+                        await Command.WaitAsyncToken(WhileOperation, true);
                     }
 
                     return CommandStateResult.Completed(Command.Name);
@@ -603,30 +637,49 @@ namespace ApplicationOperPageLes
                 "Инициализирует пользователя подключающегося к серверу",
                 async (Command, param, CV) =>
                 {
-                    //StreamReader sr = new StreamReader("source.txt");
+                    DeviceClient = new();
+                    Task ConnectTask = DeviceClient.ConnectAsync((string)param[0], 1111);
                     CV?.AddString($"Произвожу попытку подключения к \"{param[0]}\"");
-                    Client = new();
-                    if (CV != null) await CV.ExecuteVisualizateTask(Client.ConnectAsync((string)param[0], 1111));
-                    else await Client.ConnectAsync((string)param[0], 1111);
-                    CV?.AddString($"Подключение успешно!");
-
-                    if (Client.Connected)
+                    if (CV is OPLCommandViewer OPL_CV)
                     {
-                        await using NetworkStream stream = Client.GetStream();
-
-                        while (true)
+                        try
                         {
-                            try
-                            {
-                                var buffer = new byte[100];
-                                int received = await stream.ReadAsync(buffer);
-
-                                var message = Encoding.UTF8.GetString(buffer, 0, received);
-                                CV?.AddString($"Message received: \"{message}\"");
-                                await Task.Delay(1000);
-                            }
-                            catch { break; }
+                            await CV.ExecuteVisualizateTask(ConnectTask, false);
                         }
+                        catch
+                        {
+                            CV?.AddString("Не удалось подключиться к устройсту...");
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            await ConnectTask.WaitAsync(new CancellationToken(false));
+                        }
+                        catch
+                        {
+                            return CommandStateResult.Failed(Command.Name, "Не удалось создать подключение к устройству");
+                        }
+                    }
+                    if (DeviceClient.Connected)
+                    {
+                        CV?.AddString("Подключение успешно!");
+                        SourceNetWorckStream = DeviceClient.GetStream();
+
+                        //while (true)
+                        //{
+                        //    try
+                        //    {
+                        //        var buffer = new byte[100];
+                        //        int received = await stream.ReadAsync(buffer);
+
+                        //        var message = Encoding.UTF8.GetString(buffer, 0, received);
+                        //        CV?.AddString($"Message received: \"{message}\"");
+                        //        await Task.Delay(1000);
+                        //    }
+                        //    catch { break; }
+                        //}
                     }
                     return CommandStateResult.Completed(Command.Name);
                 }),
@@ -643,6 +696,80 @@ namespace ApplicationOperPageLes
                     return Task.FromResult(CommandStateResult.Completed(Command.Name, $"----"));
                 }),
                 #endregion
+
+                #region go_file
+                new ConsoleCommand<IOPERCommandViewer>("go_file",
+                [
+                    new Parameter("file", typeof(string), string.Empty),
+                ],
+                "Отправляет \"file\" через интернет к подключённому устройству",
+                async (Command, param, CV) =>
+                {
+                    string PathFile = (string)param[0];
+                    if (PathFile.Length == 0)
+                    {
+                        Microsoft.Win32.OpenFileDialog dialog = new()
+                        {
+
+                        };
+                        dialog.ShowDialog();
+                        PathFile = dialog.FileName;
+                    }
+                    if (SourceNetWorckStream == null) return CommandStateResult.Failed(Command.Name, "Невозможно передать файл не имея подключения.");
+                    CV?.AddString($"Начинаю процесс передачи файла: \"{PathFile}\"");
+                    CV?.AddString($"Читаю данные для передачи...");
+                    byte[] BytesFile = await File.ReadAllBytesAsync(PathFile);
+                    CV?.AddString($"Передаю данные...");
+                    if (CV != null)
+                    {
+                        await CV.ExecuteVisualizateTask(
+                                SourceNetWorckStream.Socket.SendFileAsync(PathFile,
+                                new byte[1024], new byte[1024], TransmitFileOptions.UseDefaultWorkerThread).AsTask());
+                        SourceNetWorckStream.Close();
+                    }
+                    CV?.AddString($"Готово!");
+                    return CommandStateResult.Completed(Command.Name);
+                }),
+                #endregion
+
+                #region receive_file
+                new ConsoleCommand<IOPERCommandViewer>("receive_file",
+                "Принимает \"file\" через интернет от подключённого устройства",
+                async (Command, param, CV) =>
+                {
+                    if (SourceNetWorckStream == null) return CommandStateResult.Failed(Command.Name, "Невозможно принять файл не имея подключения.");
+                    OpenFolderDialog dialog = new()
+                    {
+
+                    };
+                    dialog.ShowDialog();
+                    FileStream Stream = File.OpenWrite(dialog.FolderName + $"/Oper_File_{Path.GetRandomFileName()}.download");
+                    CV?.AddString($"Начинаю процесс получения файла...");
+                    TextBlock BlockElement = new()
+                    {
+                        Text = "..."
+                    };
+                    CV?.AddNewUIElement(BlockElement);
+                    int CountReadBytes = 1;
+                    long Count = 0;
+                    byte[] Buffer = new byte[16386];
+                    while (CountReadBytes > 0)
+                    {
+                        CountReadBytes = await SourceNetWorckStream.Socket.ReceiveAsync(Buffer);
+                        Count += CountReadBytes;
+                        BlockElement.Text = "Получено ";
+                        if (Count > 1024 && Count < 1024 * 1024) BlockElement.Text += $"{Count / 1024} Кбайт.";
+                        else if (Count > 1024 * 1024) BlockElement.Text += $"{(Count / 1024) / 1024} Мбайт.";
+                        if (CountReadBytes > 0) await Stream.WriteAsync(Buffer, new(false));
+                    }
+                    Stream.Close();
+                    Stream.Dispose();
+                    
+                    CV?.AddString($"Готово!");
+                    return CommandStateResult.Completed(Command.Name);
+                }),
+                #endregion
+
                 ]);
             #endregion
 
@@ -662,6 +789,7 @@ namespace ApplicationOperPageLes
                 ActivePathSettingApplication = PathSettingApplication;
             }
 
+            LogWriteLine("Установка значении на основе настроек");
             DataLabelTags = 
                 [..StructDirectoryResources.DeserializeObjectJson<string>(StructDirectoryResources.DirectoryDataLabelTags).Select(Tag => new LabelTag(Tag))];
 
@@ -703,10 +831,7 @@ namespace ApplicationOperPageLes
             LogWriteLine("Проверка ресурсов");
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
-            LogWriteLine("Инициализация палитры");
-            DefaultPalette = new(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
-            ActiveThemeApplication = new();
-            
+
             LogWriteLine("Успешно!");
             #endregion
         }
@@ -766,6 +891,49 @@ namespace ApplicationOperPageLes
                 return;
             }
             LogWriteLine("Ключ валиден!");
+
+            LogWriteLine("Инициализация палитры");
+            DefaultPalette = new(Resources.MergedDictionaries[1]);
+            _ActiveThemeApplication = new();
+
+            LogWriteLine("Подключение связей страниц");
+            _AppPageBuffer = new();
+            AppPageBuffer.ConnectBuffer(new(SettingMainApplication.BufferSize));
+            AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
+                e.Handled = true;
+            };
+
+            #region ConsolePage
+            PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
+            };
+            PageConsole.PageConsoleActionPanelMain.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                MainWindow.IELActionPanelMain.ClosePanelAction();
+                //App.CurrentApp.UsingDiscriptionCommand();
+            };
+            PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                if (MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is PageConsole page)
+                {
+                    if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
+                        page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
+                }
+                MainWindow.IELActionPanelMain.ClosePanelAction();
+            };
+            PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
+            {
+                if (MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is PageConsole page)
+                {
+                    page.StackPanelConsole.Children.Clear();
+                }
+                MainWindow.IELActionPanelMain.ClosePanelAction();
+            };
+            #endregion
+
             Current.Exit += (sender, e) =>
             {
                 LogWriteLine("---------- Конец текущего экземпляра ----------");
@@ -785,16 +953,13 @@ namespace ApplicationOperPageLes
             LogWriteLine("Открытие главного окна");
             try
             {
-#if DEBUG
-                Is_WindowDeveloper.Show();
-#endif
                 ((MainWindow)Current.MainWindow).Show();
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Программа открылась неправильно!.\nПредоставлено логирование процесса...");
                 LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
                 LogStreamWriter?.Close();
+                System.Windows.MessageBox.Show("Программа открылась неправильно!.\nПредоставлено логирование процесса...");
                 Environment.Exit(1);
             }
         }
@@ -808,13 +973,7 @@ namespace ApplicationOperPageLes
             MainWindow RebootWindow = (MainWindow)Current.MainWindow;
             RebootWindow.Closed += (sender, e) =>
             {
-#if DEBUG
-                Is_WindowDeveloper = new();
-#endif
                 Current.MainWindow = new MainWindow();
-#if DEBUG
-                Is_WindowDeveloper.Show();
-#endif
                 ((MainWindow)Current.MainWindow).Show();
                 LogWriteLine("/// Перезагрузка прошла успешно! ///");
             };
@@ -1035,7 +1194,7 @@ namespace ApplicationOperPageLes
                 await Command.ExecuteCommand(Parameters, CommandView);
             if (result.State == ResultState.InvalidCommand)
             {
-                AliasCommand<ICommandOPER<IOPERCommandViewer>, IOPERCommandViewer>? Alias = Interpreter.ReadAliasCommand(CommandString);
+                AliasCommand<CommandOPER<IOPERCommandViewer>, IOPERCommandViewer>? Alias = Interpreter.ReadAliasCommand(CommandString);
                 result = Alias == null ? CommandStateResult.FaledCommand(Name) : await Alias.ExecuteCommand(Parameters, CommandView);
             }
             if (CommandView != null) SummarizeCommandStateResult(CommandView, result);

@@ -3,12 +3,13 @@ using ApplicationOperPageLes.CORE.Struct;
 using IEL.CORE.Classes;
 using IEL.CORE.Classes.ObjectSettings;
 using IEL.CORE.Enums;
+using IEL.UserElementsControl.Base;
 using InterpreterCommand.Classes;
+using Newtonsoft.Json.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
-using IEL.UserElementsControl.Base;
 
 namespace ApplicationOperPageLes.UI.UserElementsControl
 {
@@ -41,19 +42,10 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
         /// </summary>
         internal LabelAction SourceLabel { get; set; }
 
-        private bool _Selected;
         /// <summary>
         /// Состояние выделенного элемента
         /// </summary>
-        internal bool Selected
-        {
-            get => _Selected;
-            set
-            {
-                App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, value ? 1d : 0d, TimeSpan.FromMilliseconds(200d));
-                _Selected = value;
-            }
-        }
+        internal bool Selected { get; private set; }
 
         public OPLLabel(LabelAction Label)
         {
@@ -103,7 +95,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
                 SourceForeground.SetActiveSpecrum(StateSpectrum.Select, true);
             };
 
-            _Selected = false;
+            Selected = false;
             BorderSelectElement.Opacity = 0d;
             SourceLabel = Label;
             SourceLabel.SetTag += (Old, New) =>
@@ -115,6 +107,55 @@ namespace ApplicationOperPageLes.UI.UserElementsControl
             UpdateVisualStyle();
 
             TextBlockNameLabel.Text = Label.Name;
+        }
+
+        /// <summary>
+        /// Включить состояние выделения ярлыка
+        /// </summary>
+        /// <param name="index">Отображаемый индекс</param>
+        public void SelectOn()
+        {
+            App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+            Selected = true;
+            ImageSelect.Margin = new(0, 5, 0, 5);
+            TextBlockNumberSelect.Text = string.Empty;
+        }
+
+        /// <summary>
+        /// Включить состояние выделения ярлыка
+        /// </summary>
+        /// <param name="ListSource">Массив куда записывается выделяемый ярлык</param>
+        internal void SelectOn(ref List<OPLLabel> ListSource)
+        {
+            ListSource.Add(this);
+            App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+            Selected = true;
+            ImageSelect.Margin = new(0, 0, 0, 10);
+            TextBlockNumberSelect.Text = ListSource.Count.ToString();
+        }
+
+        /// <summary>
+        /// Выключить состояние выделения ярлыка
+        /// </summary>
+        public void SelectOff()
+        {
+            App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, 0d, TimeSpan.FromMilliseconds(200d));
+            Selected = false;
+            ImageSelect.Margin = new(0, 5, 0, 5);
+            TextBlockNumberSelect.Text = string.Empty;
+        }
+
+        /// <summary>
+        /// Выключить состояние выделения ярлыка
+        /// </summary>
+        /// <param name="ListSource">Массив куда записывается выделяемый ярлык</param>
+        internal void SelectOff(ref List<OPLLabel> ListSource)
+        {
+            ListSource.Remove(this);
+            App.DoubleAnimationType.AnimateEffect(BorderSelectElement, OpacityProperty, 0d, TimeSpan.FromMilliseconds(200d));
+            Selected = false;
+            ImageSelect.Margin = new(0, 5, 0, 5);
+            TextBlockNumberSelect.Text = string.Empty;
         }
 
         /// <summary>

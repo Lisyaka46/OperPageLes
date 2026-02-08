@@ -1,5 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.Properties;
 using IEL.CORE.Classes;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Windows.Storage.FileProperties;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
@@ -46,10 +48,11 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
         /// <param name="Source">Данные палитры создающие по экземпляру</param>
         public Theme(string DirectoryFileQData)
         {
-            if (!File.Exists(DirectoryFileQData)) throw new Exception("Файл не существует!");
-            if (!Path.GetExtension(DirectoryFileQData).Equals(".qd")) throw new Exception("Файл не соответствует формату!");
+            if (App.CurrentApp.DefaultPalette == null) throw new Exception("Палитра по умолчанию не инициализирована!");
+            else if (!File.Exists(DirectoryFileQData)) throw new Exception("Файл не существует!");
+            else if (!Path.GetExtension(DirectoryFileQData).Equals(".qd")) throw new Exception("Файл не соответствует формату!");
             DirectoryFile = DirectoryFileQData;
-            SourcePalette = new Palette(App.CurrentApp.ActiveThemeApplication, File.ReadAllBytes(DirectoryFileQData));
+            SourcePalette = new Palette(App.CurrentApp.DefaultPalette, File.ReadAllBytes(DirectoryFileQData));
             Name = Path.GetFileNameWithoutExtension(DirectoryFileQData);
         }
 
@@ -60,7 +63,7 @@ namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
         {
             Name = "Default";
             DirectoryFile = String.Empty;
-            SourcePalette = new Palette(StructDirectoryResources.GetResourcePath(nameof(OPRES.PaletteDictionary)));
+            SourcePalette = new Palette(App.CurrentApp.Resources.MergedDictionaries[1]);
         }
 
         public static implicit operator Palette(Theme obj) => obj.SourcePalette;

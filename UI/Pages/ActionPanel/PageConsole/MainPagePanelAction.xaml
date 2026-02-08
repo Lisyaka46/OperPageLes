@@ -6,7 +6,7 @@
       xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole.MainPagePanelAction" Height="257" Width="250" Margin="5,0,5,0">
+      x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole.MainPagePanelAction" Height="245" Width="250" Margin="5,0,5,0">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
@@ -20,10 +20,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GUI:IELButtonTextKey x:Name="IELButtonDeleteCommandViewer" KeyActivateButton="1" FontFamily="{DynamicResource Bree CYR var}" Text="Удалить выбранный визуализатор"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="18" PaletteElement="{DynamicResource VioletRed}" Height="55" MarginViewBox="1,5,1,5" Margin="0,5,0,5" IsVisibleKeyActivate="False"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonDeleteAllCommandViewers" KeyActivateButton="2" FontFamily="{DynamicResource Bree CYR var}" Text="Удалить все визуализаторы"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" IsVisibleKeyActivate="False" PaletteElement="{DynamicResource PastelRed}" Height="55" MarginViewBox="5,10,5,10" Margin="0,5,0,5" Grid.Row="1"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" KeyActivateButton="3" FontFamily="{DynamicResource Bree CYR var}" Text="Командный буфер" Grid.Row="2" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" VisualGuide="RightArrow" FontSize="16" PaletteElement="{DynamicResource Purple}" CornerRadiusGuides="7.6,7.6,7.6,7.6" IsVisibleKeyActivate="False" Height="55" MarginViewBox="5,10,5,10" Margin="0,5,0,5"/>
-        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" KeyActivateButton="4" FontFamily="{DynamicResource Bree CYR var}" Text="Описание команд" Grid.Row="3"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" PaletteElement="{DynamicResource Jade}" Height="55" MarginViewBox="5,10,5,10" Margin="0,5,0,5"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonDeleteCommandViewer" KeyActivateButton="1" FontFamily="{DynamicResource Bree CYR var}" Text="Удалить выбранный визуализатор"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="18" PaletteElement="{DynamicResource VioletRed}" Height="50" Margin="0,5,0,5" IsVisibleKeyActivate="False" MarginViewBox="5,7,5,7"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonDeleteAllCommandViewers" KeyActivateButton="2" FontFamily="{DynamicResource Bree CYR var}" Text="Удалить все визуализаторы"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" IsVisibleKeyActivate="False" PaletteElement="{DynamicResource PastelRed}" Height="50" MarginViewBox="5,7,5,7" Margin="0,5,0,5" Grid.Row="1"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonCommandBuffer" KeyActivateButton="3" FontFamily="{DynamicResource Bree CYR var}" Text="Командный буфер" Grid.Row="2" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" VisualGuide="RightArrow" FontSize="16" PaletteElement="{DynamicResource Purple}" CornerRadiusGuides="7.6,7.6,7.6,7.6" IsVisibleKeyActivate="False" Height="50" MarginViewBox="5,7,5,7" Margin="0,5,0,5"/>
+        <GUI:IELButtonTextKey x:Name="IELButtonDiscriptionCommand" KeyActivateButton="4" FontFamily="{DynamicResource Bree CYR var}" Text="Описание команд" Grid.Row="3"  CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" FontSize="16" PaletteElement="{DynamicResource Jade}" Height="50" MarginViewBox="5,7,5,7" Margin="0,5,0,5"/>
 
     </Grid>
 </Page>

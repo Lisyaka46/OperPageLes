@@ -21,6 +21,18 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.HitUse.Value = false;
             };
             #endregion
+
+            #region CheckBoxMovePageExecuteBufferCommand
+            CheckBoxMovePageExecuteBufferCommand.IsChecked = App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand;
+            CheckBoxMovePageExecuteBufferCommand.Checked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand.Value = true;
+            };
+            CheckBoxMovePageExecuteBufferCommand.Unchecked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand.Value = false;
+            };
+            #endregion
         }
     }
 }

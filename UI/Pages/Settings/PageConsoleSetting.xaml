@@ -13,10 +13,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B23195CA" MaxWidth="600" Grid.RowSpan="1">
             <CheckBox x:Name="CheckBoxHitUse" Content="Использовать подсказки к командам" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Margin="6,6,6,6" CornerRadius="5,5,5,5" Background="#B247F1B7" MaxWidth="600" Grid.RowSpan="1" Grid.Row="1">
+            <CheckBox x:Name="CheckBoxMovePageExecuteBufferCommand" Content="Переходить на страницу где исполняется команда из буфера" VerticalContentAlignment="Center" Padding="4,4,4,4" IsChecked="False" Cursor="Hand" FontSize="14" BorderBrush="Black" Background="#FF00DAD5"  Margin="4,0,0,0" HorizontalAlignment="Left" FontFamily="{DynamicResource Bree CYR var}"/>
         </Border>
     </Grid>
 </Page>

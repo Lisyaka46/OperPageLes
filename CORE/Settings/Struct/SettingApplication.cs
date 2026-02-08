@@ -77,5 +77,10 @@ namespace ApplicationOperPageLes.CORE.Settings.Struct
         /// Наименование темы которая должна использоваться в программе
         /// </summary>
         public ObjSetting<string> ThemeInstallName { get; internal set; } = string.Empty;
+
+        /// <summary>
+        /// Перемещаться на страницу в которой исполняется команда из буфера
+        /// </summary>
+        public ObjSetting<bool> MovePageExecuteBufferCommand { get; internal set; } = true;
     }
 }

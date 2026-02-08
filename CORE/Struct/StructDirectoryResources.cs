@@ -116,7 +116,7 @@ namespace ApplicationOperPageLes.CORE.Struct
                     else Prefics = DirectoryImagesApplication + $"{prop.Name}.png";
                     if (!File.Exists(Prefics) || prop.Name.Contains("Dictionary"))
                         CreateResourceMedia(Prefics, (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым."));
-                    PathesFromNameResource.Add(prop.Name, Prefics);
+                        PathesFromNameResource.Add(prop.Name, Prefics);
                     if (Prefics.Contains(".png")) ResourcesImages.Add(prop.Name, new(new Uri(Prefics)));
                     else if (Prefics.Contains(".mp4")) ResourcesMedia.Add(prop.Name, new Uri(Prefics));
                 }
