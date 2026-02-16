@@ -77,7 +77,7 @@
                     </Image.Effect>
                 </Image>
 
-                <Grid Grid.Row="1" Opacity="0.7">
+                <Grid Grid.Row="1" Opacity="0.95">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>

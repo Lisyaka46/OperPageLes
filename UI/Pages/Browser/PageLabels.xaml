@@ -1,18 +1,20 @@
-﻿<Page
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser" 
-      xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-      xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Name="MainPageLabel"
-      x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageLabels"
-      mc:Ignorable="d"
-      Title="PageLabels" d:DesignHeight="208.793" d:DesignWidth="313.123">
-    <Page.Resources>
+﻿<Base:PageBrowser
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser" 
+    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Name="MainPageLabel"
+    x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageLabels"
+    mc:Ignorable="d"
+    Title="PageLabels" d:DesignHeight="208.793" d:DesignWidth="313.123">
+    <Base:PageBrowser.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
-    </Page.Resources>
+    </Base:PageBrowser.Resources>
     <Grid x:Name="GridMain">
         <Grid.Resources>
             <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
@@ -88,8 +90,9 @@
         </Border>
         <Border x:Name="BorderDinamicLabels" BorderBrush="Black" Grid.RowSpan="1" Grid.Row="1">
             <ScrollViewer x:Name="ScrollLabels" VerticalScrollBarVisibility="Hidden">
-                <Grid x:Name="GridMainLabels" Margin="2,2,2,2" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                <Grid x:Name="GridMainLabels" Margin="2,2,2,2" VerticalAlignment="Top" HorizontalAlignment="Center">
+                </Grid>
             </ScrollViewer>
         </Border>
     </Grid>
-</Page>
+</Base:PageBrowser>

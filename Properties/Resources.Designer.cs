@@ -173,10 +173,30 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Description {
+            get {
+                object obj = ResourceManager.GetObject("Description", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] DoubleMouseButton {
             get {
                 object obj = ResourceManager.GetObject("DoubleMouseButton", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EyeCloseUp {
+            get {
+                object obj = ResourceManager.GetObject("EyeCloseUp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -333,9 +353,29 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] PaperClip {
+            get {
+                object obj = ResourceManager.GetObject("PaperClip", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Plus {
             get {
                 object obj = ResourceManager.GetObject("Plus", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Read {
+            get {
+                object obj = ResourceManager.GetObject("Read", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -376,6 +416,26 @@ namespace ApplicationOperPageLes.Properties {
         internal static byte[] Search {
             get {
                 object obj = ResourceManager.GetObject("Search", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] ServerOff {
+            get {
+                object obj = ResourceManager.GetObject("ServerOff", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] ServerOn {
+            get {
+                object obj = ResourceManager.GetObject("ServerOn", resourceCulture);
                 return ((byte[])(obj));
             }
         }

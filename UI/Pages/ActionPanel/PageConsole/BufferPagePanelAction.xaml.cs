@@ -1,6 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.UI.Pages.Browser;
-using ApplicationOperPageLes.UI.UserElementsControl;
+using OIEL.UserElementsControl;
 using IEL.CORE.Classes;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
@@ -118,7 +118,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
             if (!IELButtonClearBuffer.IsEnabled)
             {
                 IELButtonClearBuffer.IsEnabled = true;
-                App.DoubleAnimationType.AnimateEffect(GridBuffer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridBuffer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
             }
             if (BufferCommand.Count < BufferCommand.Length)
             {
@@ -129,15 +129,15 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                     {
                         await Dispatcher.InvokeAsync(() =>
                         {
-                            if (!App.MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent.Equals(SourcePage) ?? true)
+                            if (App.MainWindow.IELBrowserPageMain.ActualInlay?.Content?.GetType() != SourcePage.GetType())
                             {
-                                IELInlay? InlaySource = App.MainWindow.IELBrowserPageMain.Inlays.FirstOrDefault(
-                                    (i) => i.PageElement?.PageContent.Equals(SourcePage) ?? false);
+                                OPLInlay? InlaySource = App.MainWindow.IELBrowserPageMain.Inlays.FirstOrDefault(
+                                    (i) => i.Content?.Equals(SourcePage) ?? false);
                                 if (InlaySource != null)
                                 {
                                     App.MainWindow.IELBrowserPageMain.ActivateInlayIndex(App.MainWindow.IELBrowserPageMain.Inlays.IndexOf(InlaySource));
                                 }
-                                else if (App.MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is Browser.PageConsole page)
+                                else if (App.MainWindow.IELBrowserPageMain.ActualInlay?.Content is Browser.PageConsole page)
                                 {
                                     SourcePage = page;
                                 }

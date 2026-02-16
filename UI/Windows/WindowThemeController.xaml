@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows"
-        xmlns:OPL="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl"
+        xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
         xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
         mc:Ignorable="d"
@@ -33,7 +33,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" Text="DefaultPalette" FontSize="14" CornerRadiusBorderView="10,10,10,10" MarginViewBox="0,-10,0,-10" Source="/UI/Images/IconMainApplication.png" TextPadding="0,5,5,0" CircleIndicatorMargin="0,-4,-4,0" CornerRadiusCircleIndicator="4,4,4,4" HeightCircleIndicator="14" FontFamily="{DynamicResource Deledda Open Regular}" Cursor="Hand"/>
+                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" Text="DefaultPalette" FontSize="14" CornerRadiusBorderView="10,10,10,10" MarginViewBox="0,-10,0,-10" TextPadding="0,5,5,0" CircleIndicatorMargin="0,-4,-4,0" CornerRadiusCircleIndicator="4,4,4,4" HeightCircleIndicator="14" FontFamily="{DynamicResource Deledda Open Regular}" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <ScrollViewer>
                         <Grid x:Name="GridThemes" VerticalAlignment="Top">

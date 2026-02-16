@@ -1,4 +1,7 @@
-﻿using IEL.UserElementsControl.Base;
+﻿using IEL.UserElementsControl;
+using IEL.UserElementsControl.Base;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 
 namespace ApplicationOperPageLes.UI.Windows.Base
 {
-    public partial class OPLWindowBase : Window
+    public partial class OPLWindowBase : Window, IOPLAnimate, IDisposable
     {
         #region UIElements
         /// <summary>
@@ -24,6 +28,7 @@ namespace ApplicationOperPageLes.UI.Windows.Base
         /// </summary>
         private Grid MainGridWindow;
 
+        #region Title
         /// <summary>
         /// Сетка элементов заголовка окна
         /// </summary>
@@ -35,9 +40,15 @@ namespace ApplicationOperPageLes.UI.Windows.Base
         private System.Windows.Controls.Image ImageIcon;
 
         /// <summary>
+        /// Объект масштабирования заголовка
+        /// </summary>
+        private Viewbox BoxTitle;
+
+        /// <summary>
         /// Объект текста заголовка окна
         /// </summary>
         private TextBlock TextBlockTitle;
+        #endregion
 
         /// <summary>
         /// Главный объект контента окна
@@ -137,7 +148,12 @@ namespace ApplicationOperPageLes.UI.Windows.Base
         public new string Title
         {
             get => (string)GetValue(TitleProperty);
-            set => SetValue(TitleProperty, value);
+            set
+            {
+                SetValue(TitleProperty, value);
+                TextBlockTitle.UpdateLayout();
+                BoxTitle.MaxWidth = TextBlockTitle.MaxWidth;
+            }
         }
         #endregion
 
@@ -232,6 +248,11 @@ namespace ApplicationOperPageLes.UI.Windows.Base
 
         #endregion
 
+        /// <summary>
+        /// Объект менеджера анимационных настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         public OPLWindowBase()
         {
             ImageIcon = new()
@@ -242,15 +263,30 @@ namespace ApplicationOperPageLes.UI.Windows.Base
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment = System.Windows.VerticalAlignment.Center,
             };
+            BoxTitle = new()
+            {
+                Margin = new(0, 0, 5, 0),
+                Stretch = Stretch.Uniform,
+                StretchDirection = StretchDirection.DownOnly,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalAlignment= System.Windows.VerticalAlignment.Center,
+            };
             TextBlockTitle = new()
             {
                 Text = string.Empty,
                 FontSize = 16d,
                 Foreground = new SolidColorBrush(Colors.Black),
-                FontFamily = new System.Windows.Media.FontFamily("Calibri"),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                 VerticalAlignment = System.Windows.VerticalAlignment.Center,
             };
+            System.Windows.Data.Binding binding = new()
+            {
+                Mode = BindingMode.OneWay,
+                Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Plup"]
+            };
+            BindingOperations.SetBinding(TextBlockTitle, TextBlock.FontFamilyProperty, binding);
+            BoxTitle.Child = TextBlockTitle;
+
             GridTitleContent = new()
             {
                 Margin = new(0, 5, 0, 0),
@@ -258,9 +294,9 @@ namespace ApplicationOperPageLes.UI.Windows.Base
             GridTitleContent.ColumnDefinitions.Add(new() { Width = new(50d, GridUnitType.Pixel) });
             GridTitleContent.ColumnDefinitions.Add(new() { Width = new(1d, GridUnitType.Star) });
             Grid.SetColumn(ImageIcon, 0);
-            Grid.SetColumn(TextBlockTitle, 1);
+            Grid.SetColumn(BoxTitle, 1);
             GridTitleContent.Children.Add(ImageIcon);
-            GridTitleContent.Children.Add(TextBlockTitle);
+            GridTitleContent.Children.Add(BoxTitle);
 
             GridContentWindow = new()
             {
@@ -281,8 +317,45 @@ namespace ApplicationOperPageLes.UI.Windows.Base
                 Background = null,
             };
             base.Content = MainBorderWindow;
+            Background = new SolidColorBrush(Colors.Aqua);
             WindowStyle = WindowStyle.None;
+            AllowsTransparency = true;
             base.Background = null;
+            Opacity = 0d;
+        }
+
+        /// <summary>
+        /// Очистить ресурсы объекта
+        /// </summary>
+        public void Dispose()
+        {
+            if (ShowActivated)
+            ManagerAnimation = null;
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Отобразить объект окна
+        /// </summary>
+        public new void Show()
+        {
+            if (ManagerAnimation != null)
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1400d));
+            else
+                Opacity = 1d;
+            base.Show();
+        }
+
+        /// <summary>
+        /// Отобразить объект окна
+        /// </summary>
+        public new void ShowDialog()
+        {
+            if (ManagerAnimation != null)
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1400d));
+            else
+                Opacity = 1d;
+            base.ShowDialog();
         }
     }
 }

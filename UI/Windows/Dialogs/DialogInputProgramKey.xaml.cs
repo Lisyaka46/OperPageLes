@@ -29,7 +29,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e) =>
             {
                 System.Windows.Clipboard.SetText(TextBlockPack.Text);
-                App.ColorAnimationType.AnimateEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
+                App.ManagerAnimation.ColorAnimationType.AnimateEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
                     System.Windows.Media.Color.FromArgb(255, 0, 255, 0), Colors.Black,
                     TimeSpan.FromMilliseconds(1000d));
             };

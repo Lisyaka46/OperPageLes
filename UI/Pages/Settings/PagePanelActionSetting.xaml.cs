@@ -78,14 +78,14 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                 IELButtonDemo2.IsVisibleKeyActivate = true;
                 IELButtonDemo3.IsVisibleKeyActivate = true;
                 if (CheckBoxKeyboardRightClick.IsChecked ?? false)
-                    App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardMode.Unchecked += (sender, e) =>
             {
                 IELButtonDemo1.IsVisibleKeyActivate = false;
                 IELButtonDemo2.IsVisibleKeyActivate = false;
                 IELButtonDemo3.IsVisibleKeyActivate = false;
-                App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
             #region CheckBoxKeyboardRightClick
@@ -104,12 +104,12 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             CheckBoxKeyboardRightClick.Checked += (sender, e) =>
             {
                 if (CheckBoxKeyboardMode.IsChecked ?? false)
-                    App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardRightClick.Unchecked += (sender, e) =>
             {
                 if (CheckBoxKeyboardMode.IsChecked ?? false)
-                    App.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
             #region CheckBoxKeyboardClosePanelAction
@@ -126,13 +126,13 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             };
             CheckBoxKeyboardClosePanelAction.Checked += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(PanelActionDemo, WidthProperty, 0d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, WidthProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardClosePanelAction.Unchecked += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(PanelActionDemo, WidthProperty, 200d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 150d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, WidthProperty, 200d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 150d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
         }

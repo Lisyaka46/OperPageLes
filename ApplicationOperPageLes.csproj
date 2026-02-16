@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -44,7 +44,9 @@
     <None Remove="UI\Images\Check.png" />
     <None Remove="UI\Images\Collapse.png" />
     <None Remove="UI\Images\Cross.png" />
+    <None Remove="UI\Images\Description.png" />
     <None Remove="UI\Images\DoubleMouseButton.png" />
+    <None Remove="UI\Images\EyeCloseUp.png" />
     <None Remove="UI\Images\IconMainApplication.png" />
     <None Remove="UI\Images\IconMainGray.png" />
     <None Remove="UI\Images\IconMainSettings.png" />
@@ -57,11 +59,15 @@
     <None Remove="UI\Images\Menu.png" />
     <None Remove="UI\Images\NotMouseButton.png" />
     <None Remove="UI\Images\Palette.png" />
+    <None Remove="UI\Images\PaperClip.png" />
     <None Remove="UI\Images\Plus.png" />
+    <None Remove="UI\Images\Read.png" />
     <None Remove="UI\Images\Reload.png" />
     <None Remove="UI\Images\RightMouseButton.png" />
     <None Remove="UI\Images\Save.png" />
     <None Remove="UI\Images\Search.png" />
+    <None Remove="UI\Images\ServerOff.png" />
+    <None Remove="UI\Images\ServerOn.png" />
     <None Remove="UI\Images\Sorting\Sorting-NameAZ.png" />
     <None Remove="UI\Images\Sorting\Sorting-NameZA.png" />
     <None Remove="UI\Images\Sorting\Sorting-Not.png" />
@@ -112,6 +118,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\IEL\IEL.csproj" />
     <ProjectReference Include="..\..\InterpreterCommand\InterpreterCommand.csproj" />
+    <ProjectReference Include="..\OIEL\OIEL.csproj" />
+    <ProjectReference Include="..\OPLAnimation\OPLAnimation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -155,7 +163,9 @@
     <Resource Include="UI\Images\Check.png" />
     <Resource Include="UI\Images\Collapse.png" />
     <Resource Include="UI\Images\Cross.png" />
+    <Resource Include="UI\Images\Description.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
+    <Resource Include="UI\Images\EyeCloseUp.png" />
     <Resource Include="UI\Images\IconMainApplication.png" />
     <Resource Include="UI\Images\IconMainGray.png" />
     <Resource Include="UI\Images\IconMainSettings.png" />
@@ -167,11 +177,15 @@
     <Resource Include="UI\Images\Menu.png" />
     <Resource Include="UI\Images\NotMouseButton.png" />
     <Resource Include="UI\Images\Palette.png" />
+    <Resource Include="UI\Images\PaperClip.png" />
     <Resource Include="UI\Images\Plus.png" />
+    <Resource Include="UI\Images\Read.png" />
     <Resource Include="UI\Images\Reload.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
     <Resource Include="UI\Images\Save.png" />
     <Resource Include="UI\Images\Search.png" />
+    <Resource Include="UI\Images\ServerOff.png" />
+    <Resource Include="UI\Images\ServerOn.png" />
     <Resource Include="UI\Images\Sorting\Sorting-NameAZ.png" />
     <Resource Include="UI\Images\Sorting\Sorting-NameZA.png" />
     <Resource Include="UI\Images\Sorting\Sorting-Not.png" />

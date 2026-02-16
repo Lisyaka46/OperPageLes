@@ -66,14 +66,14 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                     return;
                 }
                 IELButtonCancel.IsEnabled = false;
-                App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
                 Result = ComboBoxThemeSourceCreating.SelectedIndex != -1 ?
                     new(PathesTheme[ComboBoxThemeSourceCreating.SelectedIndex]) : new();
                 Result.Name = IELTextBoxNameTheme.Text;
                 Result.DirectoryFile = Path;
                 await Result.GenerateNewFileSource();
                 await Task.Delay(1000);
-                App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
                 Close();
             };
             IELButtonCancel.OnActivateMouseLeft += (sender, e) =>

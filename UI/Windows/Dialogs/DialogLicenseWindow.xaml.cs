@@ -90,7 +90,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                     int i = -1;
                     ThicknessAnimation animation = Dispatcher.Invoke(() =>
                     {
-                        ThicknessAnimation animate = App.ThicknessAnimationType.SourceAnimation.Clone();
+                        ThicknessAnimation animate = App.ManagerAnimation.ThicknessAnimationType.SourceAnimation.Clone();
                         animate.Duration = TimeSpan.FromSeconds(6d);
                         return animate;
                     });
@@ -114,18 +114,18 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                             TextBlockNickName.Text = assistent.NickName;
                             TextBlockMessage.Text = assistent.Message;
                             ImageIconNickName.ImageSource = StructDirectoryResources.GetResourceBitmap(assistent.NameImageSource ?? nameof(OPRES.IconMainApplication));
-                            App.DoubleAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
-                            App.DoubleAnimationType.AnimateEffect(BorderMainAssistentVisual, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
-                            App.ThicknessAnimationType.AnimateEffect(BorderMainAssistentVisual, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
+                            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(3000d));
+                            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderMainAssistentVisual, OpacityProperty, 1d, TimeSpan.FromMilliseconds(MillisecondsShow));
+                            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(BorderMainAssistentVisual, MarginProperty, new(0), TimeSpan.FromMilliseconds(MillisecondsShow));
 
-                            App.RectAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.ViewboxProperty, new(0.025, 0.025, 0.95, 0.95), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(MillisecondsShow));
+                            App.ManagerAnimation.RectAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.ViewboxProperty, new(0.025, 0.025, 0.95, 0.95), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(MillisecondsShow));
                         });
                         Thread.Sleep(13600);
                         Dispatcher.BeginInvoke(() =>
                         {
-                            App.DoubleAnimationType.AnimateEffect(BorderMainAssistentVisual, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
-                            App.ThicknessAnimationType.AnimateEffect(BorderMainAssistentVisual, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
-                            App.DoubleAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
+                            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderMainAssistentVisual, OpacityProperty, 0d, TimeSpan.FromMilliseconds(MillisecondsHide));
+                            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(BorderMainAssistentVisual, MarginProperty, new(0, 30, 0, 0), TimeSpan.FromMilliseconds(MillisecondsHide));
+                            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageIconNickName, ImageBrush.OpacityProperty, 0d, TimeSpan.FromMilliseconds(1000d));
                         });
                         Thread.Sleep((int)MillisecondsHide + 100);
                     }
@@ -159,11 +159,11 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             {
                 MediaHappy.Position = TimeSpan.FromMilliseconds(1);
             };
-            ThicknessAnimation animThickness = App.ThicknessAnimationType.SourceAnimation.Clone();
+            ThicknessAnimation animThickness = App.ManagerAnimation.ThicknessAnimationType.SourceAnimation.Clone();
             animThickness.BeginTime = TimeSpan.FromMilliseconds(100d);
             animThickness.Duration = TimeSpan.FromMilliseconds(2000d);
 
-            DoubleAnimation animDouble = App.DoubleAnimationType.SourceAnimation.Clone();
+            DoubleAnimation animDouble = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             animDouble.Duration = TimeSpan.FromMilliseconds(1600d);
             animDouble.BeginTime = TimeSpan.FromMilliseconds(400d);
 
@@ -201,7 +201,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         internal void HideHappy()
         {
             TimeSpan span = TimeSpan.FromMilliseconds(800d);
-            DoubleAnimation animDouble = App.DoubleAnimationType.SourceAnimation.Clone();
+            DoubleAnimation animDouble = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             animDouble.FillBehavior = FillBehavior.Stop;
             animDouble.Duration = span;
             animDouble.To = 0d;
@@ -210,9 +210,9 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 MediaHappy.Source = null;
             };
             Canvas.SetZIndex(GridHappy, -1);
-            App.DoubleAnimationType.AnimateEffect(BorderHappy, OpacityProperty, 0d, span);
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHappy, OpacityProperty, 0d, span);
             MediaHappy.BeginAnimation(OpacityProperty, animDouble);
-            App.DoubleAnimationType.AnimateEffect(BlurEffectAllGrid, BlurEffect.RadiusProperty, 0d, span);
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BlurEffectAllGrid, BlurEffect.RadiusProperty, 0d, span);
         }
 
         /// <summary>
@@ -220,8 +220,8 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// </summary>
         public new void Show()
         {      
-            App.DoubleAnimationType.AnimateEffect(ImageLogo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
-            App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1200d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageLogo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1200d));
             if (!IsActivatedShow)
             {
                 IsActivatedShow = true;
@@ -246,7 +246,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 };
                 anim.RepeatBehavior = RepeatBehavior.Forever;
                 RotateTransformTextAutor.BeginAnimation(RotateTransform.AngleProperty, anim, HandoffBehavior.SnapshotAndReplace);
-                ThicknessAnimation animThickness = App.ThicknessAnimationType.SourceAnimation.Clone();
+                ThicknessAnimation animThickness = App.ManagerAnimation.ThicknessAnimationType.SourceAnimation.Clone();
                 animThickness.BeginTime = TimeSpan.FromMilliseconds(80d);
                 animThickness.Duration = TimeSpan.FromSeconds(4d);
                 animThickness.To = new(5);

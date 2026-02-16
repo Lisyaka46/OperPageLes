@@ -1,10 +1,9 @@
 ﻿using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl;
-using ApplicationOperPageLes.UI.UserElementsControl.Interfaces;
-using IEL.CORE.Classes;
+using OIEL.UserElementsControl;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using OIEL.UserElementsControl.Interfaces;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel
@@ -41,7 +40,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Result);
             Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
             GridElementsLoading.Children.Add(Result);
-            App.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             return Result;
         }
 
@@ -57,7 +56,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Result);
             Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
             GridElementsLoading.Children.Add(Result);
-            App.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             return Result;
         }
 
@@ -73,7 +72,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
             for (; i < GridElementsLoading.Children.Count; i++)
             {
                 FrameworkElement element = (FrameworkElement)GridElementsLoading.Children[i];
-                App.ThicknessAnimationType.AnimateEffect(element, MarginProperty,
+                App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(element, MarginProperty,
                     GetMarginFromIndex(i), TimeSpan.FromMilliseconds(300d));
             }
             if (typeof(T) == typeof(ImageSource))
@@ -102,7 +101,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                 Margin = new(4),
                 CornerRadius = new(5),
                 BorderThickness = new(3),
-                Source = uri,//new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))),
+                SourceElement = uri,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 FontSize = 11d,
@@ -123,7 +122,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                 Margin = new(4),
                 CornerRadius = new(5),
                 BorderThickness = new(3),
-                Source = source,//new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))),
+                SourceElement = source,//new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 FontSize = 11d,

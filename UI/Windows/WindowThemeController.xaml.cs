@@ -2,7 +2,7 @@
 using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow;
-using ApplicationOperPageLes.UI.UserElementsControl;
+using OIEL.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.UserElementsControl;
@@ -162,13 +162,13 @@ namespace ApplicationOperPageLes.UI.Windows
 
             IELButtonBackViewTheme.OnActivateMouseLeft += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
 
-                App.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-                App.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
                 BorderViewerQData.IsEnabled = false;
 
-                App.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(400d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(400d));
                 GridPaletteSpectrumViewer.IsEnabled = false;
             };
 
@@ -229,7 +229,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                     for (int i = SelectIndexTheme; i < GridThemes.Children.Count; i++)
                     {
-                        App.ThicknessAnimationType.AnimateEffect((FrameworkElement)GridThemes.Children[i], MarginProperty,
+                        App.ManagerAnimation.ThicknessAnimationType.AnimateEffect((FrameworkElement)GridThemes.Children[i], MarginProperty,
                             new(5, i == 0 ? 5 : i * (((FrameworkElement)GridThemes.Children[i]).ActualHeight + 5) + 5, 5, 0),
                             TimeSpan.FromMilliseconds(500d));
                     }
@@ -237,13 +237,13 @@ namespace ApplicationOperPageLes.UI.Windows
                         ActivateThemeInApplicationFromSelectIndex(-1);
                     if (TextBlockNameSelectTheme.Text.Equals(Path.GetFileName(FileTheme)))
                     {
-                        App.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
 
-                        App.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-                        App.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
                         BorderViewerQData.IsEnabled = false;
 
-                        App.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(400d));
                         GridPaletteSpectrumViewer.IsEnabled = false;
                     }
                 }
@@ -260,9 +260,9 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка спектров палитры",
                     CreateAllPaletteButtons(GridMainPaletteButtons));
-                App.DoubleAnimationType.AnimateEffect(GridMainPaletteButtons, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridMainPaletteButtons, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
                 await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка тем", CreateAllThemeButtons());
-                App.DoubleAnimationType.AnimateEffect(GridThemes, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridThemes, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
             });
             base.Show();
         }
@@ -283,8 +283,8 @@ namespace ApplicationOperPageLes.UI.Windows
             if (ActiveManipulateSpectrum != null)
                 UpdateVisualPaletteSpectrumFromBorder(ref ActiveManipulateSpectrum);
             TextBlockNameSelectTheme.Text = ActiveManipulateTheme.Name;
-            App.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
-            App.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
         }
 
         #region Themes
@@ -340,7 +340,7 @@ namespace ApplicationOperPageLes.UI.Windows
                 CornerRadius = new(12),
                 CornerRadiusGuides = new(7.6),
                 BorderThickness = new(2),
-                Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette)),
+                SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette)),
                 Height = 64.7d,
                 CornerRadiusCircleIndicator = new(4),
                 CircleIndicatorMargin = new(0, -4, -4, 0),
@@ -375,8 +375,8 @@ namespace ApplicationOperPageLes.UI.Windows
                     IndexActivateVisualizateSpectrum = Grid.GetRow((IELObjectBase)sender);
                     if (!BorderViewerQData.IsEnabled)
                     {
-                        App.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
-                        App.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
                     }
                     BorderViewerQData.IsEnabled = true;
                     
@@ -463,7 +463,8 @@ namespace ApplicationOperPageLes.UI.Windows
             }
             else
             {
-                ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(App.CurrentApp.DefaultPalette);
+                ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(App.CurrentApp.DefaultPalette ??
+                    throw new Exception("Непредвиденная ошибка нулевой палитры по умолчанию."));
                 DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
                 App.CurrentApp.SettingMainApplication.ThemeInstallName.Value = string.Empty;
             }
@@ -488,13 +489,13 @@ namespace ApplicationOperPageLes.UI.Windows
             TimeSpan span = TimeSpan.FromMilliseconds(400d);
             for (int i = 0; i < 4; i++)
             {
-                App.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i],
+                App.ManagerAnimation.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i],
                     SolidColorBrush.ColorProperty, Source.BG.GetFromSpectrumColor((EnumDataSpectrum)i), span);
 
-                App.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i + 4],
+                App.ManagerAnimation.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i + 4],
                     SolidColorBrush.ColorProperty, Source.BB.GetFromSpectrumColor((EnumDataSpectrum)i), span);
 
-                App.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i + 8],
+                App.ManagerAnimation.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i + 8],
                     SolidColorBrush.ColorProperty, Source.FG.GetFromSpectrumColor((EnumDataSpectrum)i), span);
             }
         }

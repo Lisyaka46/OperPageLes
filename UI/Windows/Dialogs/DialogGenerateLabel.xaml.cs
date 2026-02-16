@@ -1,5 +1,6 @@
 ﻿using IEL.CORE.Classes;
-using ApplicationOperPageLes.UI.UserElementsControl;
+using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Base.LabelBase;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -131,7 +132,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// </summary>
         /// <param name="Source">Изменяемый объект ярлыка</param>
         /// <returns>Изменённый объект ярлыка</returns>
-        internal void ChangeLabel(OPLLabel Source)
+        internal void ChangeLabel(OPLLabelAction Source)
         {
             LabelAction Label = Source.SourceLabel;
             IELTextBoxNameLabel.Text = Label.Name;
@@ -146,11 +147,10 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                     IELTextBoxDescription.Text.Equals(Label.Description) &&
                     IELTextBoxCommand.Text.Equals(Label.Command)
                 )) return;
-            Source.TextBlockNameLabel.Text = IELTextBoxNameLabel.Text;
             Label.Name = IELTextBoxNameLabel.Text;
             Label.Description = IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty;
             Label.Command = IELTextBoxCommand.Text;
-            Source.UpdateVisualStyle();
+            Source.UpdateLayout();
             return;
         }
     }

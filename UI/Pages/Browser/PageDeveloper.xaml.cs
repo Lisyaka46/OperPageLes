@@ -1,6 +1,7 @@
 ﻿using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.DEV;
+using OIEL.CORE.Browser;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,7 +19,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml
     /// </summary>
-    public partial class PageDeveloper : System.Windows.Controls.Page
+    public partial class PageDeveloper : PageBrowser
     {
         private Point StartPositionMouse;
         private bool Activate = false;
@@ -131,7 +132,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 if (!Activate) return;
                 Activate = false;
-                App.DoubleAnimationType.AnimateEffect(myAngleRotation, AxisAngleRotation3D.AngleProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(myAngleRotation, AxisAngleRotation3D.AngleProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             MyAnimatedObject.MouseMove += (sender, e) =>
             {

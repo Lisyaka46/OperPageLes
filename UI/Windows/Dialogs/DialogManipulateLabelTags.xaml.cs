@@ -1,6 +1,6 @@
-﻿using ApplicationOperPageLes.CORE.Label;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl;
+﻿using ApplicationOperPageLes.CORE.Struct;
+using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Base.LabelBase;
 using System.Windows;
 using System.Windows.Input;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
@@ -105,7 +105,7 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
                 };
             }
             ShowDialog();
-            return !Cancel ? SelectedTag?.Tag : null;
+            return (LabelTag?)(!Cancel ? SelectedTag?.Tag : null);
         }
 
         /// <summary>
@@ -156,10 +156,17 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
         /// <param name="NewTag">Отображаемый объект тега</param>
         private OPLLabelTag AddVisualTag(LabelTag NewTag)
         {
-            OPLLabelTag OPLTag = OPLLabel.CreateVisualTag(NewTag);
-            OPLTag.IELTag.Cursor = System.Windows.Input.Cursors.Hand;
-            OPLTag.Opacity = 0d;
-            App.DoubleAnimationType.AnimateEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            OPLLabelTag OPLTag = new()
+            {
+                BorderThickness = new(1),
+                Text = string.Empty,
+                Padding = new(4, 2, 4, 2),
+                FontSize = 16d,
+                Tag = NewTag,
+                Cursor = System.Windows.Input.Cursors.Hand,
+                Opacity = 0d,
+            };
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             StackPanelTags.Children.Add(OPLTag);
             return OPLTag;
         }

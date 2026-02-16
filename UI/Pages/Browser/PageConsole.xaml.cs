@@ -1,7 +1,7 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Interfaces;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
-using ApplicationOperPageLes.UI.UserElementsControl;
+using OIEL.UserElementsControl;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using Interpreter.Interfaces;
@@ -21,13 +21,16 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
+using ApplicationOperPageLes.CORE.Struct;
+using OIEL.CORE.Browser;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
     /// </summary>
-    public partial class PageConsole : Page
+    public partial class PageConsole : PageBrowser
     {
         [LibraryImport("User32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -123,17 +126,23 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 RadiusY = 5d,
                 Fill = new SolidColorBrush(Color.FromArgb(255, 81, 177, 219))
             };
-            StackPanelAllHit = new();
+            StackPanelAllHit = new()
+            {
+                Orientation = System.Windows.Controls.Orientation.Vertical,
+                VerticalAlignment = VerticalAlignment.Top,
+            };
             GridHitScroll.Children.Add(RectangleSelect);
-            GridHitScroll.Children.Add(StackPanelAllHit);
             IELHitScroll.AutoUpdateVisibleHorizontalScroll = false;
             IELHitScroll.AutoUpdateVisibleVerticalScroll = false;
-            IELHitScroll.Content = GridHitScroll;
+            IELHitScroll.Content = StackPanelAllHit;
 
             StackPanelConsole = new()
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
+                VerticalAlignment = VerticalAlignment.Top,
             };
+            IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
+            IELScrollConsole.VerticalScrollAligment = VerticalScrollAlignment.Right;
             IELScrollConsole.AutoUpdateVisibleHorizontalScroll = false;
             IELScrollConsole.AutoUpdateVisibleVerticalScroll = true;
             IELScrollConsole.Content = StackPanelConsole;
@@ -193,7 +202,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 }
                 else
                 {
-                    App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
                     HeadHitPanelGrid.IsEnabled = false;
                     HidedHitPanel = true;
                     Keyboard.ClearFocus();
@@ -425,15 +434,15 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 if (StateHit == ConsoleHitStateEnum.Hidden) SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
                 TimeSpan span = TimeSpan.FromMilliseconds(300d);
                 Canvas.SetZIndex(GridHintOneCommand, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1 : -1);
-                App.DoubleAnimationType.AnimateEffect(GridHintOneCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1d : 0d, span);
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridHintOneCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 1d : 0d, span);
 
                 Canvas.SetZIndex(StackPanelAllHit, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? -1 : 1);
-                App.DoubleAnimationType.AnimateEffect(IELHitScroll, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 0d : 1d, span);
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELHitScroll, OpacityProperty, StateHit == ConsoleHitStateEnum.VisibleOneCommand ? 0d : 1d, span);
                 if ((StateHit is ConsoleHitStateEnum.VisibleOneCommand or ConsoleHitStateEnum.Hidden) && 
                     IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
                         IELHitScroll.DiactivateVerticalScrollBar();
 
-                App.DoubleAnimationType.AnimateEffect(BorderHintCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.Hidden ? 0d : 1d, span);
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHintCommand, OpacityProperty, StateHit == ConsoleHitStateEnum.Hidden ? 0d : 1d, span);
                 StateVisibleHit = StateHit;
             }
             if (StateHit == ConsoleHitStateEnum.Hidden) HidedHitPanel = false;
@@ -460,8 +469,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 AnimateHeight += BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom + 8;
                 if (AnimateHeight > BorderHintCommand.MaxHeight) AnimateHeight = BorderHintCommand.MaxHeight;
             }
-            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, AnimateWidth + 15, span);
-            if (!HidedHitPanel) App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, AnimateWidth + 15, span);
+            if (!HidedHitPanel) App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
         }
 
         /// <summary>
@@ -498,8 +507,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// </summary>
         private void AnimateHitPanelFromOneCommand()
         {
-            App.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, TimeSpan.FromMilliseconds(300d));
-            if (!HidedHitPanel) App.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty,
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHintCommand, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, TimeSpan.FromMilliseconds(300d));
+            if (!HidedHitPanel) App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderHintCommand, HeightProperty,
                 TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d, TimeSpan.FromMilliseconds(300d));
         }
 
@@ -527,12 +536,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             Result.MouseEnter += (sender, e) =>
             {
-                App.ColorAnimationType.AnimateEffect(Result.Foreground, SolidColorBrush.ColorProperty,
+                App.ManagerAnimation.ColorAnimationType.AnimateEffect(Result.Foreground, SolidColorBrush.ColorProperty,
                     Color.FromRgb(168, 217, 255), TimeSpan.FromMilliseconds(120d));
             };
             Result.MouseLeave += (sender, e) =>
             {
-                App.ColorAnimationType.AnimateEffect(Result.Foreground, SolidColorBrush.ColorProperty,
+                App.ManagerAnimation.ColorAnimationType.AnimateEffect(Result.Foreground, SolidColorBrush.ColorProperty,
                     Color.FromRgb(11, 43, 68), TimeSpan.FromMilliseconds(120d));
             };
             Result.MouseLeftButtonUp += (sender, e) =>
@@ -551,10 +560,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 case SelectNavigationPageConsoleEnum.None:
                     if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
-                        App.DoubleAnimationType.AnimateEffect(RectangleSelect, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleSelect, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
                     break;
                 case SelectNavigationPageConsoleEnum.HitCommands:
-                    App.DoubleAnimationType.AnimateEffect(RectangleSelect, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleSelect, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
                     break;
             }
             SelectNavigation = Value;
@@ -635,24 +644,24 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
                     // Смещение позиции области относительно внешнего элемента
                     System.Windows.Point OffsetPosElement = StackPanelAllHit.Children[ActiveIndexHitCommandInput].TransformToAncestor(
-                        GridHitScroll).Transform(new System.Windows.Point(0, 0));
+                        StackPanelAllHit).Transform(new System.Windows.Point(0, 0));
                     
-                    App.DoubleAnimationType.AnimateEffect(RectangleSelect, WidthProperty,
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleSelect, WidthProperty,
                             ((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).ActualWidth, TimeSpan.FromMilliseconds(400d));
                     if (OffsetPosElement.Y + RectangleSelect.Height >= HeadHitPanelGrid.ActualHeight)
                     {
-                        IELHitScroll.SourceViewer.ScrollToVerticalOffset(
-                            IELHitScroll.SourceViewer.VerticalOffset +
-                            (IELHitScroll.SourceViewer.ScrollableHeight <= HeadHitPanelGrid.ActualHeight ?
-                            IELHitScroll.SourceViewer.ScrollableHeight : HeadHitPanelGrid.ActualHeight));
+                        IELHitScroll.ScrollToVerticalOffset(
+                            IELHitScroll.VerticalOffset +
+                            (IELHitScroll.ScrollableHeight <= HeadHitPanelGrid.ActualHeight ?
+                            IELHitScroll.ScrollableHeight : HeadHitPanelGrid.ActualHeight));
                     }
-                    else if (OffsetPosElement.Y < IELHitScroll.SourceViewer.VerticalOffset)
+                    else if (OffsetPosElement.Y < IELHitScroll.VerticalOffset)
                     {
-                        IELHitScroll.SourceViewer.ScrollToVerticalOffset(
-                            IELHitScroll.SourceViewer.VerticalOffset <= HeadHitPanelGrid.ActualHeight ? 0d :
-                            IELHitScroll.SourceViewer.VerticalOffset - HeadHitPanelGrid.ActualHeight);
+                        IELHitScroll.ScrollToVerticalOffset(
+                            IELHitScroll.VerticalOffset <= HeadHitPanelGrid.ActualHeight ? 0d :
+                            IELHitScroll.VerticalOffset - HeadHitPanelGrid.ActualHeight);
                     }
-                    App.ThicknessAnimationType.AnimateEffect(RectangleSelect, MarginProperty, new(0, OffsetPosElement.Y, 0, 0), TimeSpan.FromMilliseconds(400d));
+                    App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(RectangleSelect, MarginProperty, new(0, OffsetPosElement.Y, 0, 0), TimeSpan.FromMilliseconds(400d));
                     break;
             }
         }
@@ -674,8 +683,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 Opacity = 0d,
+                Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault)),
+                DeleteButtonSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)),
+                Text = Command,
             };
-            Viewer.TextBlockNameCommand.Text = Command;
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(Viewer);
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
@@ -692,7 +704,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 e.Handled = true;
             };
 
-            Viewer.IELButtonDeleteElement.OnActivateMouseLeft += (sender, e) =>
+            Viewer.ButtonDelete_OnActivateMouseLeft += (sender, e) =>
             {
                 if (Viewer.IsTokenAsyncLoadingEnabled || Viewer.IsTokenAsyncWhileEnabled)
                 {
@@ -729,9 +741,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
 
             StackPanelConsole.Children.Add(Viewer);
-            IELScrollConsole.SourceViewer.ScrollToEnd();
-            App.ThicknessAnimationType.AnimateEffect(Viewer, MarginProperty, new(5), TimeSpan.FromMilliseconds(600d));
-            App.DoubleAnimationType.AnimateEffect(Viewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
+            //IELScrollConsole.SourceViewer.ScrollToEnd();
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Viewer, MarginProperty, new(5), TimeSpan.FromMilliseconds(600d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Viewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
             return Viewer;
         }
 
@@ -742,9 +754,9 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         internal void DeleteCommandViewer(OPLCommandViewer Element)
         {
             //StackPanelConsole.Children.Remove(Element);
-            App.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(300d));
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(300d));
             //Element.Height = Element.ActualHeight;
-            DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(400d);
             animation.From = Element.ActualHeight;
             animation.To = 0d;

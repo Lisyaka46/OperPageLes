@@ -1,8 +1,5 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl;
-using IEL.CORE.Classes;
 using System.Windows.Controls;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 

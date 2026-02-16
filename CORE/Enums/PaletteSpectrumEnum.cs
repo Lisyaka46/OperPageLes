@@ -97,5 +97,20 @@ namespace ApplicationOperPageLes.CORE.Enums
         /// Аквамариновый
         /// </summary>
         Aquamarine = 17u,
+
+        /// <summary>
+        /// Французский розовый
+        /// </summary>
+        FrenchPink = 18u,
+
+        /// <summary>
+        /// Фузи-вузи
+        /// </summary>
+        Fuzi_woozy = 19u,
+
+        /// <summary>
+        /// Сливовый Крайола
+        /// </summary>
+        PlumCrayola = 20u,
     }
 }

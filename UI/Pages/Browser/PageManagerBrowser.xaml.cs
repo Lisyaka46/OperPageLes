@@ -1,20 +1,7 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
-using IEL.CORE.Classes.Browser;
-using IEL.UserElementsControl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using OIEL.CORE.Browser;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {
@@ -26,7 +13,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Событие при котором была выделена страница браузера
         /// </summary>
-        internal event EventHandler<BrowserPage?>? BrowserPageSelect;
+        internal event EventHandler<PageBrowser?>? BrowserPageSelect;
 
         public PageManagerBrowser()
         {
@@ -62,52 +49,76 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region IELButtonAddPageLabel
             IELButtonAddPageLabel.OnActivateMouseLeft += (sender, e) =>
             {
-                PageLabels page = new();
-                BrowserPage AppendElementPage = new(page, "Ярлыки", "Средство быстрого выполнения командных инструкций в программе");
-                AppendElementPage.Disposed += (sender) =>
+                PageLabels SourcePageLabels = new()
+                {
+                    Title = "Ярлыки",
+                    Description = "Средство быстрого выполнения командных инструкций в программе",
+                };
+                SourcePageLabels.Disposed += (sender) =>
                 {
 
                 };
-                BrowserPageSelect?.Invoke(this, AppendElementPage);
+                BrowserPageSelect?.Invoke(this, SourcePageLabels);
             };
             #endregion
 
             #region IELButtonPageDeveloper
+            TextBlockDeveloping.Opacity = 0d;
+#if !DEBUG
+            IELButtonPageBrowser.IsEnabled = false;
+            TextBlockDeveloping.Opacity = 1d;
+#endif
             IELButtonPageDeveloper.OnActivateMouseLeft += (sender, e) =>
             {
                 IELButtonPageDeveloper.IsEnabled = false;
-                BrowserPage AppendElementPage = new(App.ApplicationPageDeveloper, "Страница разработчика", null);
-                AppendElementPage.Disposed += (sender) =>
-                {
-                    IELButtonPageDeveloper.IsEnabled = true;
-                };
-                BrowserPageSelect?.Invoke(this, AppendElementPage);
+                BrowserPageSelect?.Invoke(this, App.ApplicationPageDeveloper);
             };
             #endregion
 
             #region IELButtonPageConsole
             IELButtonPageConsole.OnActivateMouseLeft += (sender, e) =>
             {
-                PageConsole page = new();
-                BrowserPage AppendElementPage = new(page, "Консоль", "Гибкий инструмент управления программой с помощью вводимых команд");
-                AppendElementPage.Disposed += (sender) =>
+                PageConsole SourcePageConsole = new()
+                {
+                    Title = "Консоль",
+                    Description = "Гибкий инструмент управления программой с помощью вводимых команд",
+                };
+                SourcePageConsole.Disposed += (sender) =>
                 {
 
                 };
-                BrowserPageSelect?.Invoke(this, AppendElementPage);
+                BrowserPageSelect?.Invoke(this, SourcePageConsole);
+            };
+            #endregion
+
+            #region IELButtonPageNetwork
+            IELButtonPageNetwork.OnActivateMouseLeft += (sender, e) =>
+            {
+                PageNetwork SourcePageNetwork = new()
+                {
+                    Title = "Страница сети",
+                    Description = "Средство управления сетевыми инструментами",
+                };
+                SourcePageNetwork.Disposed += (sender) =>
+                {
+
+                };
+                BrowserPageSelect?.Invoke(this, SourcePageNetwork);
             };
             #endregion
 
             #region IELButtonPageBrowser
             IELButtonPageBrowser.OnActivateMouseLeft += (sender, e) =>
             {
-                PageWebBrowser page = new();
-                BrowserPage AppendElementPage = new(page, "Веб-браузер", null);
-                AppendElementPage.Disposed += (sender) =>
-                {
-                    page.WebBrowserElement.Dispose();
-                };
-                BrowserPageSelect?.Invoke(this, AppendElementPage);
+                //PageWebBrowser SourcePageWebBrowser = new()
+                //{
+                //    Title = "Веб-браузер"
+                //};
+                //SourcePageWebBrowser.Disposed += (sender) =>
+                //{
+                //    SourcePageWebBrowser.WebBrowserElement.Dispose();
+                //};
+                BrowserPageSelect?.Invoke(this, null);
             };
             #endregion
         }

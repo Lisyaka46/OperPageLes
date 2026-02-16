@@ -218,4 +218,40 @@
             <IEL:QData Default="#FF005539" Select="#FF007751" Used="#FF009B9B" NotEnabled="#FF4B391B"/>
         </IEL:PaletteSpectrum.FG>
     </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="FrenchPink">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FFF64A8A" Select="#FFF97DAC" Used="#FFDA96D5" NotEnabled="#FFC20761"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF770631" Select="#FFF10C62" Used="#FF02A9B7" NotEnabled="#FFFE0E56"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FF480243" Select="#FFD3CAD5" Used="#FFFEF1F7" NotEnabled="#FFFF9B9D"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="Fuzi_woozy">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FFCC6666" Select="#FFC44A4A" Used="#FFD27B7B" NotEnabled="#FFD94646"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF632121" Select="#FFC44D4D" Used="#FFD99D91" NotEnabled="#FFE60000"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FF531C1C" Select="#FFD6B4A3" Used="#FFFCE9DA" NotEnabled="#FFF3A978"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
+
+    <IEL:PaletteSpectrum x:Key="PlumCrayola">
+        <IEL:PaletteSpectrum.BG>
+            <IEL:QData Default="#FF8E4585" Select="#FF3D69BC" Used="#FF6B7EB8" NotEnabled="#FF95374F"/>
+        </IEL:PaletteSpectrum.BG>
+        <IEL:PaletteSpectrum.BB>
+            <IEL:QData Default="#FF371C34" Select="#FF6D4F91" Used="#FFCA91C2" NotEnabled="#FF833F70"/>
+        </IEL:PaletteSpectrum.BB>
+        <IEL:PaletteSpectrum.FG>
+            <IEL:QData Default="#FFDFBBDC" Select="#FFA9C1E7" Used="#FFE2F3EC" NotEnabled="#FFE48F9A"/>
+        </IEL:PaletteSpectrum.FG>
+    </IEL:PaletteSpectrum>
 </ResourceDictionary>

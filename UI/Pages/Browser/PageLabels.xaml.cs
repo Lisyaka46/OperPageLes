@@ -1,22 +1,17 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel;
-using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
-using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using InterpreterCommand.Classes;
-using Microsoft.Windows.Themes;
-using Newtonsoft.Json.Linq;
-using System.Linq;
+using OIEL.CORE.Browser;
+using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Base.LabelBase;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
@@ -24,12 +19,12 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml
     /// </summary>
-    public partial class PageLabels : Page
+    public partial class PageLabels : PageBrowser
     {
         /// <summary>
         /// Выделенный элемент панелью действий
         /// </summary>
-        private OPLLabel? SelectLabelInPage;
+        private OPLLabelAction? SelectLabelInPage;
 
         #region PanelAction
         /// <summary>
@@ -118,7 +113,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Массив ярлыков которые были выделены
         /// </summary>
-        private List<OPLLabel> ListSelectLabel = [];
+        private List<OPLLabelAction> ListSelectLabel = [];
 
         /// <summary>
         /// Состояние запуска последовательного выполнения выделенных ярлыков
@@ -169,7 +164,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             PageLabel.IELButtonSelectAllLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageLabel.IELButtonClearAllSelect.IsEnabled = true;
-                OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>()];
+                OPLLabelAction[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelAction>()];
                 for (int i = 0; i < LabelsElements.Length; i++)
                 {
                     if (!LabelsElements[i].Selected)
@@ -183,7 +178,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             PageLabel.IELButtonClearAllSelect.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 PageLabel.IELButtonClearAllSelect.IsEnabled = false;
-                OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>().Where((i) => i.Selected)];
+                OPLLabelAction[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelAction>().Where((i) => i.Selected)];
                 for (int i = 0; i < LabelsElements.Length; i++)
                 {
                     if (!ListSelectLabel.Contains(LabelsElements[i]))
@@ -204,7 +199,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     PageLabelElement.IELButtonExecuteLabel.IsEnabled = false;
                     ActivateConsistentExecuteSelectLabels = true;
-                    if (!GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected))
+                    if (!GridMainLabels.Children.OfType<OPLLabelAction>().Any((i) => i.Selected))
                         SelectLabelsMode = false;
                     UpdateTextInfoLabels();
                     for (int i = 0; i < ListSelectLabel.Count; i++)
@@ -219,7 +214,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         ListSelectLabel[i].SelectOff();
                     }
                     ListSelectLabel.Clear();
-                    if (!GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected)) SelectLabelsMode = false;
+                    if (!GridMainLabels.Children.OfType<OPLLabelAction>().Any((i) => i.Selected)) SelectLabelsMode = false;
                     ActivateConsistentExecuteSelectLabels = false;
                     UpdateTextInfoLabels();
                     PageLabelElement.IELButtonExecuteLabel.IsEnabled = true;
@@ -252,7 +247,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 {
                     if (SelectLabelsMode)
                     {
-                        OPLLabel[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabel>().ToArray().Where((i) => i.Selected)];
+                        OPLLabelAction[] LabelsElements = [.. GridMainLabels.Children.OfType<OPLLabelAction>().ToArray().Where((i) => i.Selected)];
                         for (int i = 0; i < LabelsElements.Length; i++)
                             await RemoveLabel(LabelsElements[i]);
                         SelectLabelsMode = false;
@@ -306,7 +301,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 if (SelectLabelInPage == null) return;
                 if (ListSelectLabel.Contains(SelectLabelInPage)) SelectLabelInPage.SelectOff(ref ListSelectLabel);
                 else SelectLabelInPage.SelectOff();
-                if (ListSelectLabel.Count == 0 && !GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected))
+                if (ListSelectLabel.Count == 0 && !GridMainLabels.Children.OfType<OPLLabelAction>().Any((i) => i.Selected))
                 {
                     SelectLabelsMode = false;
                     UpdateTextInfoLabels();
@@ -422,8 +417,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 IELButtonSearch.IsEnabled = true;
                 IELTextBoxSearch.IsEnabled = true;
                 GridLabels.Visibility = Visibility.Visible;
-                App.DoubleAnimationType.AnimateEffect(GridLabels, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
-                App.DoubleAnimationType.AnimateEffect(TextBlockLabelInfo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridLabels, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockLabelInfo, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
             });
         }
 
@@ -434,7 +429,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             for (int i = 0; i < GridMainLabels.Children.Count; i++)
             {
-                OPLLabel Element = (OPLLabel)GridMainLabels.Children[i];
+                OPLLabelAction Element = (OPLLabelAction)GridMainLabels.Children[i];
                 if (!SearchActivate || IELTextBoxSearch.Text.Length == 0)
                 {
                     Element.SourceBackground.SetUsedState(false);
@@ -458,7 +453,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                 double One = BorderNamingLabel.ActualWidth / ScrollLabels.ScrollableHeight;
                 Offset = One * ScrollLabels.VerticalOffset;
             }
-            App.DoubleAnimationType.AnimateEffect(BorderScrollBackground, WidthProperty, Offset, TimeSpan.FromMilliseconds(300d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderScrollBackground, WidthProperty, Offset, TimeSpan.FromMilliseconds(300d));
         }
 
         /// <summary>
@@ -477,11 +472,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <param name="Index">Индекс данных</param>
         internal async Task AppendNewOPLLbel(int Index)
         {
-            OPLLabel Label = CreateVisualLabel(Index);
+            OPLLabelAction Label = CreateVisualLabel(Index);
             SortLabels(App.CurrentApp.DataLabels, SortingLabelType);
             GridMainLabels.Children.Add(Label);
             await UpdatePositionLabels(0, false);
-            App.DoubleAnimationType.AnimateEffect(Label, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Label, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
             UpdateTextInfoLabels();
         }
 
@@ -496,7 +491,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             {
                 for (int i = StartIndex; i < GridMainLabels.Children.Count; i++)
                 {
-                    OPLLabel Element = (OPLLabel)GridMainLabels.Children[i];
+                    OPLLabelAction Element = (OPLLabelAction)GridMainLabels.Children[i];
                     int indexInData = App.CurrentApp.DataLabels.IndexOf(Element.SourceLabel);
                     int CountOneLine = indexInData % CountOneLineLabel;
                     int CountLine = indexInData / CountOneLineLabel;
@@ -504,7 +499,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     int Top = CountLine == 0 ? MarginLabel : CountLine * FULL_HeightLabel;
                     if (Element.Margin.Left == Left && Element.Margin.Top == Top) continue;
                     if (Animatable) 
-                        App.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(Left, Top, 0, 0), TimeSpan.FromMilliseconds(360d));
+                        App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(Left, Top, 0, 0), TimeSpan.FromMilliseconds(360d));
                     else Element.Margin = new(Left, Top, 0, 0);
                 }
             });
@@ -520,7 +515,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             else TextBlockLabelInfo.Text = string.Empty;
             if (SearchActivate)
             {
-                OPLLabel[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabel>()];
+                OPLLabelAction[] ArrayLabelsElement = [.. GridMainLabels.Children.Cast<OPLLabelAction>()];
                 TextBlockLabelInfo.Text += "Найдено ярлыков: " +
                     $"{ArrayLabelsElement.Count((i) => i.SourceBackground.GetUsedState())} из {App.CurrentApp.DataLabels.Count}";
             }
@@ -546,7 +541,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     Dispatcher.Invoke(() =>
                     {
                         TextBlockEventInfo.Text = $"Идёт загрузка всех ярлыков ({i}/{App.CurrentApp.DataLabels.Count})";
-                        OPLLabel Element = CreateVisualLabel(i);
+                        OPLLabelAction Element = CreateVisualLabel(i);
                         Element.Opacity = 1d;
                         if (Element.SourceLabel.Tag != null)
                         {
@@ -566,20 +561,50 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// <summary>
         /// Сгенерировать объект интерфейса ярлыка
         /// </summary>
-        private OPLLabel CreateVisualLabel(int IndexData)
+        private OPLLabelAction CreateVisualLabel(int IndexData)
         {
-            OPLLabel Label = new(App.CurrentApp.DataLabels[IndexData])
+            OPLLabelAction Label = new(App.CurrentApp.DataLabels[IndexData])
             {
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
                 Opacity = 0d,
                 Width = WidthLabel,
                 Height = HeightLabel,
+                ImageSelectSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check)),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                ManagerAnimation = App.ManagerAnimation,
             };
-            Label.ImageSelect.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
-            //Label.Ho = TimeSpan.FromMilliseconds(800d);
-            Label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            Label.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            string name_command = COMInterpreterBase.ReadNameCommand(Label.SourceLabel.Command);
+            string NameLabelImage;
+            switch (name_command)
+            {
+                case "open_file":
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray].ConnectPalleteFromIELElement(Label);
+                    NameLabelImage = nameof(OPRES.File);
+                    break;
+                case "open_link":
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(Label);
+                    NameLabelImage = nameof(OPRES.Link);
+
+                    Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
+                    {
+                        string[] Param = COMInterpreterBase.ReadParametersCommand(Label.SourceLabel.Command);
+                        if (Param.Length > 0)
+                            await Label.SetFaviconIcon(new Uri(Param[0]));
+                    });
+                    //while (worker.IsBusy) System.Windows.Forms.Application.DoEvents();
+                    //action.Invoke();
+                    break;
+                case "open_directory":
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(Label);
+                    NameLabelImage = nameof(OPRES.Folder);
+                    break;
+                default:
+                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(Label);
+                    NameLabelImage = nameof(OPRES.Command);
+                    break;
+            }
+            Label.ImageSource = StructDirectoryResources.GetResourceBitmap(NameLabelImage);
+            Label.UpdateLayout();
             Label.MouseRightButtonDown += (sender, e) => App.MainWindow.IELMessageMain.CloseBorderInformation();
             Label.MouseRightButtonUp += (sender, e) =>
             {
@@ -601,14 +626,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     if (Label.Selected && ListSelectLabel.Contains(Label))
                     {
                         for (int i = ListSelectLabel.IndexOf(Label) + 1; i < ListSelectLabel.Count; i++)
-                            ListSelectLabel[i].TextBlockNumberSelect.Text = i.ToString();
+                            ListSelectLabel[i].SetIndexVisual(i);
                         Label.SelectOff(ref ListSelectLabel);
                     }
                     else Label.SelectOn(ref ListSelectLabel);
 
                     if (ListSelectLabel.Count == 0)
                     {
-                        if (!GridMainLabels.Children.OfType<OPLLabel>().Any((i) => i.Selected)) SelectLabelsMode = false;
+                        if (!GridMainLabels.Children.OfType<OPLLabelAction>().Any((i) => i.Selected)) SelectLabelsMode = false;
                         ListSelectLabel.Clear();
                         UpdateTextInfoLabels();
                     }
@@ -630,7 +655,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         /// Удалить ярлык по индексу
         /// </summary>
         /// <param name="Index">индекс удаляемого ярлыка</param>
-        private async Task RemoveLabel(OPLLabel Source)
+        private async Task RemoveLabel(OPLLabelAction Source)
         {
             GridMainLabels.Children.Remove(Source);
             App.CurrentApp.DataLabels.Remove(Source.SourceLabel);

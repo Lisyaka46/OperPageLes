@@ -4,17 +4,17 @@ using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel;
 using ApplicationOperPageLes.UI.Pages.Browser;
 using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
-using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows.Base;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using ApplicationOperPageLes.Windows;
-using IEL.CORE.Classes;
-using IEL.CORE.Classes.Browser;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
+using OIEL.CORE.Browser;
+using OIEL.UserElementsControl;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -110,12 +110,12 @@ namespace ApplicationOperPageLes.UI.Windows
         };
         #endregion
 
-        public MainWindow()
+		public MainWindow()
         {
             InitializeComponent();
-
-            #region SetParameteres
-            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
+			#region SetParameteres
+            ManagerAnimation = App.ManagerAnimation;
+			Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
@@ -125,6 +125,7 @@ namespace ApplicationOperPageLes.UI.Windows
 
             IELImageButtonMenu.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
 
+            IELBrowserPageMain.ManagerAnimation = App.ManagerAnimation;
             TokenUpdateBackgroundData = new(false);
             ActualIndexActivatePageDownToolButtons = -1;
             IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
@@ -191,12 +192,12 @@ namespace ApplicationOperPageLes.UI.Windows
             #region IELPanelAction
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                BrowserPage? Page = IELBrowserPageMain.ActualInlay?.PageElement;
+                PageBrowser? Page = IELBrowserPageMain.ActualInlay?.Content;
                 if (Page == null) return;
                 switch (Page.GetType().Name)
                 {
                     case "PageConsole":
-                        ((PageConsole)Page.PageContent).TextBoxCommandInput.Focus();
+                        ((PageConsole)Page).TextBoxCommandInput.Focus();
                         break;
                     default: return;
                 }
@@ -205,8 +206,8 @@ namespace ApplicationOperPageLes.UI.Windows
             #region PageInlay
             PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (PageInlay.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.PageElement);
+                if (PageInlay.ActivateManipulateInlay?.Content != null)
+                    IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.Content);
             };
             PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -219,11 +220,11 @@ namespace ApplicationOperPageLes.UI.Windows
             PageControllerLoadingApplication = new();
             PageControllerLoadingApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
             };
             PageControllerLoadingApplication.ClearedAllViewersImage += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
             };
 
             #endregion
@@ -286,9 +287,12 @@ namespace ApplicationOperPageLes.UI.Windows
             #region IELImageButtonHelp
             IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
             {
-                WindowDiscriptionCommands j = new();
-                App.CurrentApp.InicializeWindowInApplication(j);
-                j.Show();
+                WindowDiscriptionCommands WindowDescription = new()
+                {
+                    ManagerAnimation = this.ManagerAnimation,
+                };
+                App.CurrentApp.InicializeWindowInApplication(WindowDescription);
+                WindowDescription.Show();
             };
             IELImageButtonHelp.MouseHover += (sender, e) =>
             {
@@ -342,18 +346,34 @@ namespace ApplicationOperPageLes.UI.Windows
             ManagerBrowserNewPage = new();
             ManagerBrowserNewPage.BrowserPageSelect += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
                 if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
-                    App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
                 Canvas.SetZIndex(FrameNewInlayBrowser, -1);
                 FrameNewInlayBrowser.IsHitTestVisible = false;
                 FrameNewInlayBrowser.IsEnabled = false;
                 IELBrowserPageMain.IsEnabled = true;
+
                 if (e == null) return;
-                IELInlay? SourceInlay = IELBrowserPageMain.AddInlayPage(e);
-                if (SourceInlay == null) return;
+                OPLInlay SourceInlay = IELBrowserPageMain.AddInlayPage(e);
+                System.Windows.Data.Binding binding = new()
+                {
+                    Mode = BindingMode.OneWay,
+                    Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Deledda Open Regular"]
+                };
+                BindingOperations.SetBinding(SourceInlay, OPLInlay.FontFamilyProperty, binding);
+                SourceInlay.MouseRightButtonUp += InlayPanelActionActivate;
+                SourceInlay.MouseHover += (sender, eMouseHover) =>
+                {
+                    OPLInlay inlay = sender as OPLInlay ?? throw new Exception("Невозможно преобразовать объект вкладки");
+                    IELMessageMain.UsingBorderInformation(inlay, e.Description, OrientationPositionCursor.Auto);
+                };
+                SourceInlay.MouseLeave += (sender, eMouseLeave) =>
+                {
+                    IELMessageMain.CloseBorderInformation();
+                };
                 IELButtonImage ButtonCloseInlay = SourceInlay.GetButtonCloseInlay();
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(SourceInlay);
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.VioletRed].ConnectPalleteFromIELElement(ButtonCloseInlay);
@@ -385,51 +405,17 @@ namespace ApplicationOperPageLes.UI.Windows
                 TimeSpan t = TimeSpan.FromMilliseconds(500d);
                 if (IELActionPanelMain.PanelActionActivate)
                     IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                App.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, t);
-                App.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, t);
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, t);
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, t);
                 if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
-                    App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, t);
-                App.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, t);
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, t);
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, t);
                 Canvas.SetZIndex(FrameNewInlayBrowser, 1);
                 ManagerBrowserNewPage.Focus();
             };
-            IELBrowserPageMain.EventActiveActionInInlay += (Inlay) =>
-            {
-                PageInlay.ActivateManipulateInlay = Inlay;
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(IELBrowserPageMain, PageInlay,
-                    Orientation: OrientationPositionCursor.RightDown);
-            };
-            IELBrowserPageMain.EventOnDescriptionInlay += (Element, Text) =>
-            {
-                if (Text == null) return;
-                IELMessageMain.UsingBorderInformation(Element, Text, OrientationPositionCursor.Auto);
-            };
-            IELBrowserPageMain.EventOffDescriptionInlay += IELMessageMain.CloseBorderInformation;
             #endregion
 
             #region EventsWindow
-            //BorderWindowMain.MouseLeftButtonDown += (sender, e) =>
-            //{
-            //    if (IELActionPanelMain.PanelActionActivate)
-            //        IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-            //    TimeSpan t = TimeSpan.FromMilliseconds(900d);
-            //    App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(45), t);
-            //    App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 0.4d, t);
-            //    DragMove();
-            //    App.ThicknessAnimationType.AnimateEffect(BorderWindowMainContent, MarginProperty, new(20), t);
-            //    App.DoubleAnimationType.AnimateEffect(BorderWindowMainContent, OpacityProperty, 1d, t);
-            //};
-            //StateChanged += (sender, e) =>
-            //{
-            //    if (WindowState == WindowState.Normal)
-            //    {
-            //        App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
-            //    }
-            //    else if (WindowState == WindowState.Minimized)
-            //    {
-            //        App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-            //    }
-            //};
             SizeChanged += (sender, e) =>
             {
                 if (IELActionPanelMain.PanelActionActivate)
@@ -439,11 +425,19 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 if (!IsReboot && !IsClosing) Close();
             };
-            //GotKeyboardFocus += (sender, e) =>
-            //{
-            //    //UpdateInformationInObject(IELBlockInfoStateRegister, Keyboard.PrimaryDevice.IsKeyToggled(Key.CapsLock) ? "а".ToUpper() : "a".ToLower());
-            //};
             #endregion
+        }
+
+        /// <summary>
+        /// Активировать панель действий над элементом вкладки
+        /// </summary>
+        /// <param name="sender">Объект представления вкладки</param>
+        /// <param name="e">Объект упрвления событием</param>
+        private void InlayPanelActionActivate(object sender, MouseButtonEventArgs e)
+        {
+            PageInlay.ActivateManipulateInlay = (OPLInlay)sender;
+            IELActionPanelMain.UsingPanelAction(IELBrowserPageMain, PageInlay,
+                Orientation: OrientationPositionCursor.RightDown);
         }
 
         #region ManipulateWindow
@@ -514,7 +508,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 while (true)
                 {
-                    Dispatcher.Invoke(() => App.ColorAnimationType.AnimateEffect((SolidColorBrush)StackUpdateData.Foreground,
+                    Dispatcher.Invoke(() => App.ManagerAnimation.ColorAnimationType.AnimateEffect((SolidColorBrush)StackUpdateData.Foreground,
                         SolidColorBrush.ColorProperty, Colors.LightGreen, Colors.Black, TimeSpan.FromMilliseconds(300d)));
                     await BackgroundUpdateVisualData();
                     Thread.Sleep(1000);
@@ -526,21 +520,21 @@ namespace ApplicationOperPageLes.UI.Windows
                     ];
             IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
             Opacity = 0d;
-            base.Show();
             ((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection.Start();
+            base.Show();
             #region Anim Start
             #region 1
             TimeSpan t1400 = TimeSpan.FromMilliseconds(1400d);
             TimeSpan t2000 = TimeSpan.FromMilliseconds(2000d);
-            App.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, t1400);
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, t1400);
 
-            App.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, t1400);
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, t1400);
 
             //App.ThicknessAnimationType.AnimateEffect(BorderWindowMain, MarginProperty, new(20), new(0), t2000);
 
-            App.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
+            //App.AnimationManager.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
 
-            App.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty, 0d, 360d, TimeSpan.FromMilliseconds(3200d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty, 0d, 360d, TimeSpan.FromMilliseconds(3200d));
 
             #endregion
             #endregion
@@ -675,7 +669,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     BeginRotateBorder();
                     IsVisualLoagingProcessInBorder = true;
                 }
-                App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             }
         } 
 
@@ -695,7 +689,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     EndRotateBorder();
                     IsVisualLoagingProcessInBorder = false;
                 }
-                App.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
             }
         }
 
@@ -705,7 +699,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// </summary>
         private static void BeginRotateBorder()
         {
-            DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             animation.From = 0d;
             animation.To = 3600d;
             animation.RepeatBehavior = RepeatBehavior.Forever;
@@ -720,7 +714,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <param name="FromValue">Стартовое значение анимирования</param>
         private static void EndRotateBorder(int FullCountRotate = 1)
         {
-            DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             animation.From = RotateMainWindowBackground.Angle % 360;
             animation.To = 361d * FullCountRotate;
             animation.Duration = TimeSpan.FromMilliseconds(3200d);
@@ -782,7 +776,7 @@ namespace ApplicationOperPageLes.UI.Windows
             }
             else
             {
-                App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, TimeSpan.FromMilliseconds(2300d));
             }
         }
 
@@ -794,10 +788,10 @@ namespace ApplicationOperPageLes.UI.Windows
         {
             ImageMenu.ImageSource = bitmap;
 
-            App.RectAnimationType.AnimateEffect(ImageMenu, ImageBrush.ViewboxProperty, new(0.025, 0.025, 0.95, 0.95), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(2300d));
-            App.ThicknessAnimationType.AnimateEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
-            App.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1500d));
-            App.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
+            App.ManagerAnimation.RectAnimationType.AnimateEffect(ImageMenu, ImageBrush.ViewboxProperty, new(0.025, 0.025, 0.95, 0.95), new(0, 0, 1, 1), TimeSpan.FromMilliseconds(2300d));
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageMenu, MarginProperty, new(-4), new(0), TimeSpan.FromMilliseconds(2300d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1500d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(2300d));
         }
 
         internal void ChangeVisibilityMillisecondInternet(bool Value)

@@ -3,6 +3,7 @@ using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Interfaces;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.Description;
+using ApplicationOperPageLes.UI.Windows.Base;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
@@ -20,7 +21,7 @@ namespace ApplicationOperPageLes.Windows
     /// <summary>
     /// Логика взаимодействия для WindowDiscriptionCommands.xaml
     /// </summary>
-    public partial class WindowDiscriptionCommands : Window
+    public partial class WindowDiscriptionCommands : OPLWindowBase
     {
         /// <summary>
         /// Перечисление состояний описания
@@ -73,12 +74,18 @@ namespace ApplicationOperPageLes.Windows
         /// </summary>
         private const int HeightElement = 55;
 
+        /// <summary>
+        /// Объект отображения элементов в визуализационном стековом контенте
+        /// </summary>
+        private StackPanel? VisualElementsInformations;
+
         public WindowDiscriptionCommands()
         {
             App.CurrentApp.LogWriteLine("Создание окна описания элементов");
             StartAnimation = false;
             SearchActivate = false;
             InitializeComponent();
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Description));
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);
@@ -94,7 +101,6 @@ namespace ApplicationOperPageLes.Windows
 
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
             IELButtonSearchCommand.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Search));
-            //IELButtonCloneTextCommand.Foreground = new SolidColorBrush(Colors.Black);
 
             IELMessageInfo.Opacity = 0d;
             DescriptionConsole = new();
@@ -109,7 +115,7 @@ namespace ApplicationOperPageLes.Windows
                 if (StateDiscription == ActivateStateDiscription.ConsoleCommand) Text = DescriptionConsole.GetCommandText();
                 else if (StateDiscription == ActivateStateDiscription.AliasCommand) Text = DescriptionAlias.GetCommandText();
                 else return;
-                System.Windows.Clipboard.SetText(Text);
+                System.Windows.Clipboard.SetText(Text ?? string.Empty);
             };
 
             IELButtonBack.OnActivateMouseLeft += (sender, e) =>
@@ -118,6 +124,15 @@ namespace ApplicationOperPageLes.Windows
                 else if (StateDiscription == ActivateStateDiscription.AliasCommand) DescriptionAlias.ClearInformationOnCommand();
                 else return;
             };
+
+            #region IELImageButtonClose
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
+            IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            IELImageButtonClose.OnActivateMouseLeft += (sender, e) =>
+            {
+                Close();
+            };
+            #endregion
 
             #region IELButtonInfoParameter
             IELButtonInfoParameter.MouseEnter += (sender, e) =>
@@ -142,11 +157,12 @@ namespace ApplicationOperPageLes.Windows
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                 {
-                    ClearVisualGrid();
-                    Grid GridElements = await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка каталога консольных команд",
+                    if (VisualElementsInformations != null)
+                        ClearVisualElementsManager();
+                    VisualElementsInformations = await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка каталога консольных команд",
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Commands.Values], DescriptionConsole));
-                    ScrollViewerElements.Content = GridElements;
-                    App.DoubleAnimationType.AnimateEffect(GridElements, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                    ScrollViewerElements.Content = VisualElementsInformations;
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 });
             };
             #endregion
@@ -161,76 +177,53 @@ namespace ApplicationOperPageLes.Windows
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                 {
-                    ClearVisualGrid();
-                    Grid GridElements = await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка каталога алиасов",
+                    if (VisualElementsInformations != null)
+                        ClearVisualElementsManager();
+                    VisualElementsInformations = await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка каталога алиасов",
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Aliases.Values], DescriptionAlias));
-                    ScrollViewerElements.Content = GridElements;
-                    App.DoubleAnimationType.AnimateEffect(GridElements, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                    ScrollViewerElements.Content = VisualElementsInformations;
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 });
-
-                //Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
-                //{
-                //    ClearVisualGrid();
-                //    Grid GridElements = await InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Aliases.Values], DescriptionAlias);
-                //    ScrollViewerElements.Content = GridElements;
-                //    App.AnimateDoubleEffect(GridElements, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
-                //});
             };
             #endregion
 
             #region IELButtonSearchCommand
             IELButtonSearchCommand.OnActivateMouseLeft += (sender, e) =>
             {
-                if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0) return;
-                if (((Grid)ScrollViewerElements.Content).Children.Count == 0) return;
-                SearchActivate = true;
-                IELButtonSearchCommand.SourceBackground.SetUsedState(true);
-                IELButtonText Button;
-                //if (IndexSearch.Length > 0)
-                //{
-                //    foreach (int Index in IndexSearch)
-                //    {
-                //        Button = (IELButtonText)GridMainElements.Children[Index];
-                //        if (!Button.IELSettingObject.BackgroundSetting.GetUsedState()) continue;
-                //        Button.IELSettingObject.BackgroundSetting.SetUsedState(false);
-                //    }
-                //    IndexSearch = [];
-                //}
+                if (ScrollViewerElements.Content == null || IELInputSearchCommand.Text.Length == 0 ||
+                    VisualElementsInformations == null) return;
                 ICommandOPER<IOPERCommandViewer>[] SearchCommands =
                     [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(IELInputSearchCommand.Text))];
                 if (SearchCommands.Length > 0)
                 {
-                    Grid MainElementsContainer = (Grid)ScrollViewerElements.Content;
-                    int IndexSearching = 0;
-                    for (int i = 0; i < MainElementsContainer.Children.Count; i++)
+                    SearchActivate = true;
+                    IELButtonText Button;
+                    IELButtonSearchCommand.SourceBackground.SetUsedState(true);
+                    for (int i = 0; i < VisualElementsInformations.Children.Count; i++)
                     {
-                        Button = (IELButtonText)MainElementsContainer.Children[i];
+                        Button = (IELButtonText)VisualElementsInformations.Children[i];
                         bool SearchComplete = SearchCommands.Any((k) => k.Name.Equals(Button.Text));
 
                         Button.IsEnabled = SearchComplete;
-                        Canvas.SetZIndex(Button, SearchComplete ? 0 : -1);
-                        App.ThicknessAnimationType.AnimateEffect(Button, MarginProperty,
-                            GetElementMarginFromPositionIndex(SearchComplete ? IndexSearching++ : -1), TimeSpan.FromMilliseconds(300d));
-                        App.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, SearchComplete ? 1d : 0d, TimeSpan.FromMilliseconds(300d));
+                        //App.AnimationManager.DoubleAnimationType.AnimateEffect(Button, HeightProperty,
+                        //    SearchComplete ? Button.ActualHeight : 0d, TimeSpan.FromMilliseconds(300d));
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty,
+                            SearchComplete ? 1d : 0d, TimeSpan.FromMilliseconds(300d));
                     }
                 }
-                else return;
             };
             IELButtonSearchCommand.OnActivateMouseRight += (sender, e) =>
             {
-                if (!SearchActivate) return;
+                if (!SearchActivate || VisualElementsInformations == null) return;
                 Keyboard.ClearFocus();
                 IELButtonSearchCommand.SourceBackground.SetUsedState(false);
                 IELButtonText Button;
-                Grid MainElementsContainer = (Grid)ScrollViewerElements.Content;
-                for (int Index = 0; Index < MainElementsContainer.Children.Count; Index++)
+                for (int Index = 0; Index < VisualElementsInformations.Children.Count; Index++)
                 {
-                    Button = (IELButtonText)MainElementsContainer.Children[Index];
+                    Button = (IELButtonText)VisualElementsInformations.Children[Index];
                     Button.IsEnabled = true;
-                    Canvas.SetZIndex(Button, 0);
-                    App.ThicknessAnimationType.AnimateEffect(Button, MarginProperty,
-                        GetElementMarginFromPositionIndex(Index), TimeSpan.FromMilliseconds(300d));
-                    App.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                    //App.AnimationManager.DoubleAnimationType.AnimateEffect(Button, HeightProperty, Button.ActualHeight, TimeSpan.FromMilliseconds(300d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 }
             };
             #endregion
@@ -249,24 +242,22 @@ namespace ApplicationOperPageLes.Windows
                 if (!StartAnimation)
                 {
                     StartAnimation = true;
-                    App.ColorAnimationType.AnimateEffect(GradientStopBackground1, GradientStop.ColorProperty,
-                        System.Windows.Media.Color.FromRgb(10, 30, 37), System.Windows.Media.Color.FromRgb(22, 73, 82), TimeSpan.FromMilliseconds(2600d));
-                    App.ColorAnimationType.AnimateEffect(GradientStopBackground2, GradientStop.ColorProperty,
-                        System.Windows.Media.Color.FromRgb(5, 100, 60), System.Windows.Media.Color.FromRgb(57, 158, 151), TimeSpan.FromMilliseconds(2000d));
                 }
             };
             App.CurrentApp.LogWriteLine("Готово!");
         }
 
-        //
-        private void ClearVisualGrid()
+        /// <summary>
+        /// Очистить все отображаемые элементы
+        /// </summary>
+        private void ClearVisualElementsManager()
         {
-            if (ScrollViewerElements.Content != null)
-            {
-                Grid ContentVisualElements = (Grid)ScrollViewerElements.Content;
-                ContentVisualElements.Children.Clear();
-                ScrollViewerElements.Content = null;
-            }
+            if (VisualElementsInformations == null)
+                throw new Exception("Невозможно очистить объект который являетмя нулевым.");
+            VisualElementsInformations.Children.Clear();
+            VisualElementsInformations.UpdateLayout();
+            ScrollViewerElements.ClearValue(IELScrollViewer.ContentProperty);
+            GC.Collect();
         }
 
         /// <summary>
@@ -276,12 +267,14 @@ namespace ApplicationOperPageLes.Windows
         /// <param name="Elements">Массив элеменов подвергаемые к описанию</param>
         /// <param name="ElementDiscriptionPage">Страница с помощью которой будет описываться объект</param>
         /// <returns>Сетка с распределёнными объектами описания</returns>
-        private async Task<Grid> InitializeVisualElementDiscription<T>(T[] Elements, IDiscriptionPage<T> ElementDiscriptionPage)
+        private async Task<StackPanel> InitializeVisualElementDiscription<T>(T[] Elements, IDiscriptionPage<T> ElementDiscriptionPage)
             where T : ICommandOPER<IOPERCommandViewer>
         {
-            Grid GridElements = new()
+            StackPanel StackPanelElements = new()
             {
                 Opacity = 0d,
+                Orientation = System.Windows.Controls.Orientation.Vertical,
+                VerticalAlignment = VerticalAlignment.Top,
             };
             int i = 0;
             foreach (T Element in Elements)
@@ -292,21 +285,21 @@ namespace ApplicationOperPageLes.Windows
                     {
                         IELButtonText Button = GenerateCommandButton();
                         Button.Opacity = 0d;
-                        Button.Margin = GetElementMarginFromPositionIndex(i);
+                        //Button.Margin = GetElementMarginFromPositionIndex(i);
                         Button.Text = Element.Name;
                         Button.OnActivateMouseLeft += (sender, e) =>
                         {
                             ElementDiscriptionPage.UpdateInformation(Element);
                             //App.AnimateDoubleEffect(DescriptionConsole, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                         };
-                        GridElements.Children.Add(Button);
-                        App.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                        StackPanelElements.Children.Add(Button);
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
                     });
                     Thread.Sleep(200);
                     i++;
                 });
             }
-            return GridElements;
+            return StackPanelElements;
         }
 
         /// <summary>
@@ -332,11 +325,11 @@ namespace ApplicationOperPageLes.Windows
         /// <param name="ElementSelect">Объект выделяемой кнопки</param>
         private void AnimateEnterPageButton(FrameworkElement ElementSelect)
         {
-            App.ThicknessAnimationType.AnimateEffect(ImageSelectIndicator, MarginProperty,
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageSelectIndicator, MarginProperty,
                     new(ElementSelect.TranslatePoint(new(0, 0), GridMainButtonsPagesInformation).X + ElementSelect.ActualWidth / 2d - 6, -9, 0, -7),
                     TimeSpan.FromMilliseconds(200d));
             if (RotateTransformImageSelectIndicator.Angle == 0d)
-                App.DoubleAnimationType.AnimateEffect(RotateTransformImageSelectIndicator, RotateTransform.AngleProperty, -90d, TimeSpan.FromMilliseconds(200d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateTransformImageSelectIndicator, RotateTransform.AngleProperty, -90d, TimeSpan.FromMilliseconds(200d));
         }
 
         /// <summary>

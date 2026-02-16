@@ -1,6 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Interfaces;
-using ApplicationOperPageLes.UI.UserElementsControl;
+using OIEL.UserElementsControl;
 using System.Windows.Controls;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole

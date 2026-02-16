@@ -82,5 +82,10 @@ namespace ApplicationOperPageLes.CORE.Settings.Struct
         /// Перемещаться на страницу в которой исполняется команда из буфера
         /// </summary>
         public ObjSetting<bool> MovePageExecuteBufferCommand { get; internal set; } = true;
+
+        /// <summary>
+        /// Сила прокрутки визуализаторов консоли
+        /// </summary>
+        public ObjSetting<int> ConsoleScrollForce { get; internal set; } = 30;
     }
 }

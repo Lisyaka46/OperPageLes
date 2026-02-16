@@ -60,7 +60,7 @@ namespace ApplicationOperPageLes.UI.Pages.Description
         /// </summary>
         public string? GetCommandText()
         {
-            App.PointAnimationType.AnimateEffect(LinearGradientForegroundCommandText,
+            App.ManagerAnimation.PointAnimationType.AnimateEffect(LinearGradientForegroundCommandText,
                 LinearGradientBrush.EndPointProperty, new(0,0), new(50, 0), TimeSpan.FromSeconds(20));
             return SelectCommand? TextBlockTextCommand.Text: null;
         }

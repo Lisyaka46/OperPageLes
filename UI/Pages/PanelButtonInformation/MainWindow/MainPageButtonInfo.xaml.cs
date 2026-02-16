@@ -159,7 +159,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             {
                 while (true)
                 {
-                    Dispatcher.Invoke(() => App.ColorAnimationType.AnimateEffect((SolidColorBrush)StackInternetCheck.Foreground,
+                    Dispatcher.Invoke(() => ManagerAnimation.ColorAnimationType.AnimateEffect((SolidColorBrush)StackInternetCheck.Foreground,
                         SolidColorBrush.ColorProperty, Colors.LightGreen, Colors.Black, TimeSpan.FromMilliseconds(300d)));
                     await InternetPinging.UpdateInternetConnection();
                     if (InternetPinging.MillisecondUpdateTime > 100 || InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet)
@@ -168,9 +168,9 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                         {
                             bool VisualMillisecondConnectionEnabled = CurrentApp.SettingMainApplication.MillisecondInternetConnection;
 
-                            DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
+                            ManagerAnimation.DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 10d, TimeSpan.FromMilliseconds(700d));
 
-                            DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
+                            ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 1d, TimeSpan.FromMilliseconds(700d));
                         });
                         Thread.Sleep(InternetPinging.OLD_ConnectInternet != InternetPinging.ConnectInternet ? 2500 : InternetPinging.MillisecondUpdateTime);
                         await Dispatcher.BeginInvoke(() =>
@@ -184,9 +184,9 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
                                 TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
                             }
 
-                            DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
+                            ManagerAnimation.DoubleAnimationType.AnimateEffect((BlurEffect)GridInfoInternetConnection.Effect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(700d));
 
-                            DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
+                            ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoadingInternetConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(700d));
 
                             if (CheckOpenMessageInObject(IELBlockInfoInternetConnection.Name))
                             {
@@ -217,7 +217,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
         {
             //ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection.MainFrontImage, MarginProperty, Value ? new(2, 0, 2, 8) : new(2, 0, 2, 4),
             //    TimeSpan.FromMilliseconds(400d));
-            DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
+            ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty, Value ? 1d : 0d, TimeSpan.FromMilliseconds(500d));
             TextBlockInternetConnectionMillisecond.Text = InternetPinging.ConnectInternet ? InternetPinging.MillisecondUpdateTime.ToString() + "mc" : "???";
         }
 

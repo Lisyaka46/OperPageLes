@@ -138,7 +138,7 @@ namespace ApplicationOperPageLes.UI.Windows.DEV
             DialogResult Result = Dialog.ShowDialog();
             if (Result == System.Windows.Forms.DialogResult.Cancel) return;
             WnColor ResultColor = WnColor.FromArgb(Dialog.Color.A, Dialog.Color.R, Dialog.Color.G, Dialog.Color.B);
-            App.ColorAnimationType.AnimateEffect(ArrayBrushSource[ComboBoxSelectQData.SelectedIndex][(int)DataStateChange],
+            App.ManagerAnimation.ColorAnimationType.AnimateEffect(ArrayBrushSource[ComboBoxSelectQData.SelectedIndex][(int)DataStateChange],
                         SolidColorBrush.ColorProperty, ResultColor, TimeSpan.FromMilliseconds(500d));
             qd.SetFromSpectrumColor(DataStateChange, ResultColor);
             ControlUpdateModeSetBrushQ(IELSourceButton.PaletteElement);

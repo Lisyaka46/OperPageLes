@@ -86,7 +86,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             };
             IELButtonClearImage.OnActivateMouseLeft += (sender, e) =>
             {
-                App.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
                 App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
@@ -104,7 +104,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
                 if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
-                    DoubleAnimation animation = App.DoubleAnimationType.SourceAnimation.Clone();
+                    DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
                     animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
                     animation.Duration = TimeSpan.FromMilliseconds(1200d);
                     animation.To = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
@@ -200,7 +200,7 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
             try
             {
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
-                App.DoubleAnimationType.AnimateEffect(ImageErrorBitmapBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageErrorBitmapBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
                 if (image.PixelWidth > 0 && image.PixelHeight > 0)
                 {
                     IELTextBoxDirectoryBackground.Text = Uri;
@@ -209,12 +209,12 @@ namespace ApplicationOperPageLes.UI.Pages.Settings
                     IELButtonClearImage.IsEnabled = true;
                     App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 
-                    App.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
                 }
             }
             catch
             {
-                App.DoubleAnimationType.AnimateEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
             }
         }
     }

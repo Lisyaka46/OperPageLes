@@ -1,21 +1,15 @@
 ﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Animation;
 using ApplicationOperPageLes.CORE.Interfaces;
-using ApplicationOperPageLes.CORE.Label;
 using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Settings.Struct;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
 using ApplicationOperPageLes.UI.Pages.Browser;
-using ApplicationOperPageLes.UI.UserElementsControl;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
-using IEL.CORE.Classes;
-using IEL.CORE.Classes.Browser;
 using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
-using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
@@ -23,11 +17,14 @@ using Microsoft.Win32;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OIEL.CORE.Browser;
+using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Base.LabelBase;
+using OPLAnimation.CORE.Animation;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
@@ -36,13 +33,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Documents.DocumentStructures;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using Windows.Media.Protection.PlayReady;
-using Windows.Web.Http;
 
 namespace ApplicationOperPageLes
 {
@@ -51,62 +44,10 @@ namespace ApplicationOperPageLes
     /// </summary>
     public partial class App : System.Windows.Application
     {
-        #region AnimationObject
         /// <summary>
-        /// Объект анимации Thickness
+        /// Менеджер анимаций под управлением приложения
         /// </summary>
-        internal static OPLThicknessAnimationType<ThicknessAnimation> ThicknessAnimationType =
-            new(new(new Thickness(0), TimeSpan.FromMilliseconds(300d))
-            {
-                DecelerationRatio = 0.6d,
-                EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
-                From = null
-            });
-
-        /// <summary>
-        /// Объект анимации Double
-        /// </summary>
-        internal static OPLDoubleAnimationType<DoubleAnimation> DoubleAnimationType =
-            new(new(0, TimeSpan.FromMilliseconds(250d))
-            {
-                DecelerationRatio = 0.2d,
-                EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
-                From = null
-            });
-
-        /// <summary>
-        /// Объект анимации Point
-        /// </summary>
-        internal static OPLPointAnimationType<PointAnimation> PointAnimationType =
-            new(new(new System.Windows.Point(0, 0), TimeSpan.FromMilliseconds(250d))
-            {
-                DecelerationRatio = 0.2d,
-                EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut },
-                From = null
-            });
-
-        /// <summary>
-        /// Объект анимации Color
-        /// </summary>
-        internal static OPLColorAnimationType<ColorAnimation> ColorAnimationType =
-            new(new(Colors.Black, TimeSpan.FromMilliseconds(250d))
-            {
-                DecelerationRatio = 0.2d,
-                EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut },
-                From = null
-            });
-
-        /// <summary>
-        /// Объект анимации Rect
-        /// </summary>
-        internal static OPLRectAnimationType<RectAnimation> RectAnimationType =
-            new(new(new Rect(), TimeSpan.FromMilliseconds(250d))
-            {
-                DecelerationRatio = 0.8d,
-                EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
-                From = null
-            });
-        #endregion
+        internal static readonly OPLAnimationManager ManagerAnimation = new();
 
         #region Data
         /// <summary>
@@ -143,7 +84,11 @@ namespace ApplicationOperPageLes
         /// <summary>
         /// Страница разработчика
         /// </summary>
-        internal static readonly PageDeveloper ApplicationPageDeveloper = new();
+        internal static readonly PageDeveloper ApplicationPageDeveloper = new()
+        {
+            Title = "Страница разработчика",
+            Description = "Используйте только если знаете что делаете!"
+        };
         #endregion
 
         #region Windows
@@ -387,7 +332,7 @@ namespace ApplicationOperPageLes
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param, CV) =>
                 {
-                    if (MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is PageConsole page)
+                    if (MainWindow.IELBrowserPageMain.ActualInlay?.Content is PageConsole page)
                     {
                         page.StackPanelConsole.Children.Clear();
                     }
@@ -429,39 +374,44 @@ namespace ApplicationOperPageLes
                 "Открывает в браузере заданную ссылку \"Link\"",
                 (Command, param, CV) =>
                 {
+#if !DEBUG
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{url}\""));
+#endif
                     try
                     {
                         string url = (string)param[0];
                         bool UsePageBroswer = CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
                         if (UsePageBroswer)
                         {
-                            if (!CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser)
-                            {
-                                if (MainWindow == null) return Task.FromResult(CommandStateResult.Failed(Command.Name, $"%**Главное окно не является активным объектом**"));
-                                IELInlay[] AllWebBrowsers = [..MainWindow.IELBrowserPageMain.Inlays.Where(
-                                    (i) => i.PageElement?.PageContent.GetType() == typeof(PageWebBrowser))];
-                                if (AllWebBrowsers.Length > 1)
-                                {
+                            //if (!CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser)
+                            //{
+                            //    if (MainWindow == null) return Task.FromResult(CommandStateResult.Failed(Command.Name, $"%**Главное окно не является активным объектом**"));
+                            //    OPLInlay[] AllWebBrowsers = [..MainWindow.IELBrowserPageMain.Inlays.Where(
+                            //        (i) => i.Content?.GetType() == typeof(PageWebBrowser))];
+                            //    if (AllWebBrowsers.Length > 1)
+                            //    {
 
-                                }
-                                else if (AllWebBrowsers.Length == 1)
-                                {
-                                    PageWebBrowser? PageBrowser = (PageWebBrowser?)AllWebBrowsers[0].PageElement?.PageContent;
-                                    if (PageBrowser == null)
-                                        return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**\n" +
-                                            $"%//Произошла критическая ошибка обнаружения браузера.//"));
-                                    PageBrowser?.WebViewGoUrl(url);
-                                    MainWindow.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].PageElement);
-                                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки в странице браузера \"{url}\""));
-                                }
-                            }
-                            BrowserPage browser_page_element = new(new PageWebBrowser(), "Веб-браузер", null);
-                            browser_page_element.Disposed += (sender) =>
-                            {
-                                ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
-                            };
-                            MainWindow.IELBrowserPageMain.AddInlayPage(browser_page_element);
-                            ((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
+                            //    }
+                            //    else if (AllWebBrowsers.Length == 1)
+                            //    {
+                            //        PageWebBrowser? PageBrowser = (PageWebBrowser?)AllWebBrowsers[0].Content;
+                            //        if (PageBrowser == null)
+                            //            return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**\n" +
+                            //                $"%//Произошла критическая ошибка обнаружения браузера.//"));
+                            //        else {
+                            //        PageBrowser?.WebViewGoUrl(url);
+                            //        MainWindow.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].Content);
+                            //        return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки в странице браузера \"{url}\""));
+                            //        }
+                            //    }
+                            //}
+                            //PageBrowser browser_page_element = new(new PageWebBrowser(), "Веб-браузер", null);
+                            //browser_page_element.Disposed += (sender) =>
+                            //{
+                            //    ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
+                            //};
+                            //MainWindow.IELBrowserPageMain.AddInlayPage(browser_page_element);
+                            //((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
                         }
                         else Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                         return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{url}\""));
@@ -471,7 +421,7 @@ namespace ApplicationOperPageLes
                         return Task.FromResult(CommandStateResult.Failed(Command.Name, $"Не удалось открыть ссылку %#EA5555**\"{param[0]}\"**"));
                     }
                 }),
-                #endregion
+#endregion
 
                 #region open_directory
                 new ConsoleCommand<IOPERCommandViewer>("open_directory",
@@ -706,26 +656,45 @@ namespace ApplicationOperPageLes
                 async (Command, param, CV) =>
                 {
                     string PathFile = (string)param[0];
+                    bool Cancel = true;
+                    TextBlock El = new();
                     if (PathFile.Length == 0)
                     {
                         Microsoft.Win32.OpenFileDialog dialog = new()
                         {
 
                         };
+                        dialog.FileOk += (sender, e) => Cancel = false;
                         dialog.ShowDialog();
                         PathFile = dialog.FileName;
                     }
-                    if (SourceNetWorckStream == null) return CommandStateResult.Failed(Command.Name, "Невозможно передать файл не имея подключения.");
+                    if (Cancel)
+                    {
+                        CV?.AddString("Отмена передачи файла!");
+                        return CommandStateResult.Completed(Command.Name);
+                    }
+                    else if (SourceNetWorckStream == null) return CommandStateResult.Failed(Command.Name, "Невозможно передать файл не имея подключения.");
                     CV?.AddString($"Начинаю процесс передачи файла: \"{PathFile}\"");
                     CV?.AddString($"Читаю данные для передачи...");
                     byte[] BytesFile = await File.ReadAllBytesAsync(PathFile);
-                    CV?.AddString($"Передаю данные...");
+                    int ch = BytesFile.Length / 1024;
+                    bool EndCH = BytesFile.Length != 1024 * ch;
+                    CV?.AddString($"Передаю данные ({BytesFile.Length} байт / ({1024 * ch} + ({BytesFile.Length - (1024 * ch)} байт)) циклов)...");
                     if (CV != null)
                     {
-                        await CV.ExecuteVisualizateTask(
-                                SourceNetWorckStream.Socket.SendFileAsync(PathFile,
-                                new byte[1024], new byte[1024], TransmitFileOptions.UseDefaultWorkerThread).AsTask());
-                        SourceNetWorckStream.Close();
+                        CV.AddNewUIElement(El);
+                        for (int i = 0; i < ch; i++)
+                        {
+                            await SourceNetWorckStream.Socket.SendAsync(new ArraySegment<byte>(BytesFile, 1024 * i, 1024));
+                            El.Text = $"Отправлено {1024 * i} байт";
+                        //await CV.ExecuteVisualizateTask(
+                        //        SourceNetWorckStream.Socket.SendFileAsync(PathFile).AsTask());
+                        }
+                        if (EndCH)
+                        {
+                            await SourceNetWorckStream.Socket.SendAsync(new ArraySegment<byte>(BytesFile, 1024 * ch, BytesFile.Length - (1024 * ch)));
+                            El.Text = $"Отправлено {1024 * ch} + ({BytesFile.Length - (1024 * ch)}) байт";
+                        }
                     }
                     CV?.AddString($"Готово!");
                     return CommandStateResult.Completed(Command.Name);
@@ -750,10 +719,10 @@ namespace ApplicationOperPageLes
                         Text = "..."
                     };
                     CV?.AddNewUIElement(BlockElement);
-                    int CountReadBytes = 1;
+                    int CountReadBytes = 0;
                     long Count = 0;
-                    byte[] Buffer = new byte[16386];
-                    while (CountReadBytes > 0)
+                    byte[] Buffer = new byte[1024];
+                    do
                     {
                         CountReadBytes = await SourceNetWorckStream.Socket.ReceiveAsync(Buffer);
                         Count += CountReadBytes;
@@ -761,7 +730,7 @@ namespace ApplicationOperPageLes
                         if (Count > 1024 && Count < 1024 * 1024) BlockElement.Text += $"{Count / 1024} Кбайт.";
                         else if (Count > 1024 * 1024) BlockElement.Text += $"{(Count / 1024) / 1024} Мбайт.";
                         if (CountReadBytes > 0) await Stream.WriteAsync(Buffer, new(false));
-                    }
+                    } while (CountReadBytes == 1024);
                     Stream.Close();
                     Stream.Dispose();
                     
@@ -771,7 +740,7 @@ namespace ApplicationOperPageLes
                 #endregion
 
                 ]);
-            #endregion
+#endregion
 
             LogWriteLine("Инициализация параметров приложения");
 
@@ -917,7 +886,7 @@ namespace ApplicationOperPageLes
             };
             PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is PageConsole page)
+                if (MainWindow.IELBrowserPageMain.ActualInlay?.Content is PageConsole page)
                 {
                     if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
                         page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
@@ -926,7 +895,7 @@ namespace ApplicationOperPageLes
             };
             PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (MainWindow.IELBrowserPageMain.ActualInlay?.PageElement?.PageContent is PageConsole page)
+                if (MainWindow.IELBrowserPageMain.ActualInlay?.Content is PageConsole page)
                 {
                     page.StackPanelConsole.Children.Clear();
                 }
@@ -1004,21 +973,6 @@ namespace ApplicationOperPageLes
         //    //image.Freeze();
         //    return image;
         //}
-
-        /// <summary>
-        /// Установка иконки хоста сайта через собственный клиент
-        /// </summary>
-        /// <param name="url">Ссылка хоста: Сама преобразуется в управляемый DNS сервер хоста</param>
-        /// <returns>Картинка которая ссылается на иконку управляемого сайта</returns>
-        internal static async Task<BitmapImage> DownloadFavicon(Uri url)
-        {
-            string faviconurl = "http://" + url.DnsSafeHost + "/favicon.ico";
-            BitmapImage bitmapImage = new();
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = await UsedHttpClient.GetStreamAsync(faviconurl);
-            bitmapImage.EndInit();
-            return bitmapImage;
-        }
 
         /// <summary>
         /// Записать сообщение в тектовый .log

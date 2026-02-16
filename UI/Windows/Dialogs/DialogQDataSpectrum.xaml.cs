@@ -147,14 +147,14 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             ColorPicker.Color.RGB_G = color.G;
             ColorPicker.Color.RGB_B = color.B;
             ColorPicker.Color.A = color.A;
-            App.DoubleAnimationType.AnimateEffect(ColorPicker, StandardColorPicker.OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
-            App.DoubleAnimationType.AnimateEffect(TextBlockSelectIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ColorPicker, StandardColorPicker.OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockSelectIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
 
             // Смещение позиции области относительно внешнего элемента
             System.Windows.Point OffsetPosElement = border.TransformToAncestor(
                 GridColors).Transform(new System.Windows.Point(0, 0));
 
-            App.ThicknessAnimationType.AnimateEffect(TextBlockSelectIndicator, MarginProperty,
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(TextBlockSelectIndicator, MarginProperty,
                 new(TextBlockSelectIndicator.Margin.Left, OffsetPosElement.Y - 4, TextBlockSelectIndicator.Margin.Right, TextBlockSelectIndicator.Margin.Bottom),
                 TimeSpan.FromMilliseconds(300d));
         }

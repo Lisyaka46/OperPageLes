@@ -1,4 +1,5 @@
 ﻿using IEL.UserElementsControl;
+using OIEL.UserElementsControl;
 using System.Windows.Controls;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel
@@ -8,11 +9,11 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
     /// </summary>
     public partial class PageInlayPanelAction : Page
     {
-        private IELInlay? _ActivateManipulateInlay;
+        private OPLInlay? _ActivateManipulateInlay;
         /// <summary>
         /// Активная вкладка для взаимодействия с ней
         /// </summary>
-        internal IELInlay? ActivateManipulateInlay
+        internal OPLInlay? ActivateManipulateInlay
         {
             get
             {
