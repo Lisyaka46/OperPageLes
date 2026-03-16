@@ -128,13 +128,13 @@ namespace ApplicationOperPageLes.UI.Windows
             GridQdataStatesColor.Opacity = 0d;
             BorderViewerQData.IsEnabled = false;
 
-            if (App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0)
-                DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
+            //if (App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0)
+            //    DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
 
-            DefaultPaletteElement.OnActivateMouseRight += (sender, e) =>
-            {
-                ActivatePanelActionThemeSelect(DefaultPaletteElement, -1);
-            };
+            //DefaultPaletteElement.OnActivateMouseRight += (sender, e) =>
+            //{
+            //    ActivatePanelActionThemeSelect(DefaultPaletteElement, -1);
+            //};
 
             IELCreateNewTheme.OnActivateMouseLeft += (sender, e) =>
             {
@@ -144,20 +144,20 @@ namespace ApplicationOperPageLes.UI.Windows
 
                 ArrayInicializeFilesTheme.Add(ResultTheme.DirectoryFile);
                 OPLImageViewer button = CreateButtonTheme();
-                button.Text = ResultTheme.Name;
+                //button.Text = ResultTheme.Name;
                 GridThemes.Children.Add(button);
                 button.UpdateLayout();
                 button.Margin = new(5, GridThemes.Children.Count == 0 ? 5 : (GridThemes.Children.Count - 1) * (button.ActualHeight + 5) + 5, 5, 0);
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(button);
-                button.OnActivateMouseLeft += (sender, e) =>
-                {
-                    if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                    ActivateThemeFromFile(GridThemes.Children.IndexOf((UIElement)sender));
-                };
-                button.OnActivateMouseRight += (sender, e) =>
-                {
-                    ActivatePanelActionThemeSelect((OPLImageViewer)sender, GridThemes.Children.IndexOf((UIElement)sender));
-                };
+                //button.OnActivateMouseLeft += (sender, e) =>
+                //{
+                //    if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                //    ActivateThemeFromFile(GridThemes.Children.IndexOf((UIElement)sender));
+                //};
+                //button.OnActivateMouseRight += (sender, e) =>
+                //{
+                //    ActivatePanelActionThemeSelect((OPLImageViewer)sender, GridThemes.Children.IndexOf((UIElement)sender));
+                //};
             };
 
             IELButtonBackViewTheme.OnActivateMouseLeft += (sender, e) =>
@@ -303,25 +303,25 @@ namespace ApplicationOperPageLes.UI.Windows
             for (int i = 0; i < ArrayInicializeFilesTheme.Count; i++)
             {
                 button = CreateButtonTheme();
-                button.Text = Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[i]);
-                if (ActiveNameTheme.Equals(button.Text, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    button.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
-                    ActiveThemeInApplicationIndex = i;
-                }
+                //button.Text = Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[i]);
+                //if (ActiveNameTheme.Equals(button.Text, StringComparison.InvariantCultureIgnoreCase))
+                //{
+                //    //button.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
+                //    ActiveThemeInApplicationIndex = i;
+                //}
                 GridThemes.Children.Add(button);
                 button.UpdateLayout();
                 button.Margin = new(5, i == 0 ? 5 : i * (button.ActualHeight + 5) + 5, 5, 0);
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(button);
-                button.OnActivateMouseLeft += (sender, e) =>
-                {
-                    if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                    ActivateThemeFromFile(GridThemes.Children.IndexOf((UIElement)sender));
-                };
-                button.OnActivateMouseRight += (sender, e) =>
-                {
-                    ActivatePanelActionThemeSelect((OPLImageViewer)sender, GridThemes.Children.IndexOf((UIElement)sender));
-                };
+                //button.OnActivateMouseLeft += (sender, e) =>
+                //{
+                //    if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                //    ActivateThemeFromFile(GridThemes.Children.IndexOf((UIElement)sender));
+                //};
+                //button.OnActivateMouseRight += (sender, e) =>
+                //{
+                //    ActivatePanelActionThemeSelect((OPLImageViewer)sender, GridThemes.Children.IndexOf((UIElement)sender));
+                //};
             }
         }
 
@@ -338,15 +338,15 @@ namespace ApplicationOperPageLes.UI.Windows
                 Padding = new(0),
                 FontSize = 18d,
                 CornerRadius = new(12),
-                CornerRadiusGuides = new(7.6),
+                //CornerRadiusGuides = new(7.6),
                 BorderThickness = new(2),
                 SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette)),
                 Height = 64.7d,
-                CornerRadiusCircleIndicator = new(4),
-                CircleIndicatorMargin = new(0, -4, -4, 0),
-                CornerRadiusBorderView = new(10),
-                TextPadding = new(0, 5, 5, 0),
-                MarginViewBox = new(0, -10, 0, -10),
+                //CornerRadiusCircleIndicator = new(4),
+                //CircleIndicatorMargin = new(0, -4, -4, 0),
+                //CornerRadiusBorderView = new(10),
+                //TextPadding = new(0, 5, 5, 0),
+                //MarginViewBox = new(0, -10, 0, -10),
                 Cursor = System.Windows.Input.Cursors.Hand,
                 //FontFamily = App.CurrentApp.ResourceDictionaryFonts["Deledda Open Regular"],
             };
@@ -430,7 +430,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <param name="Index">Присваемый индекс</param>
         private void ActivatePanelActionThemeSelect(OPLImageViewer Element, int Index)
         {
-            PanelActionPagePalette.IELButtonExecuteTheme.IsEnabled = Element.CircleIndicatorFill?.Color != ActiveThemeColor;
+            //PanelActionPagePalette.IELButtonExecuteTheme.IsEnabled = Element.CircleIndicatorFill?.Color != ActiveThemeColor;
             PanelActionPagePalette.IELButtonDeleteTheme.IsEnabled = Index > -1;
             PanelActionPagePalette.IELButtonSelectTheme.IsEnabled = Index > -1;
             SelectIndexTheme = Index;
@@ -457,7 +457,7 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 byte[] bytes = File.ReadAllBytes(ArrayInicializeFilesTheme[SelectIndexTheme]);
                 ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
-                ((OPLImageViewer)GridThemes.Children[SelectIndexTheme]).CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
+                //((OPLImageViewer)GridThemes.Children[SelectIndexTheme]).CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
                 App.CurrentApp.SettingMainApplication.ThemeInstallName.Value =
                     Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[SelectIndexTheme]);
             }
@@ -465,15 +465,15 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(App.CurrentApp.DefaultPalette ??
                     throw new Exception("Непредвиденная ошибка нулевой палитры по умолчанию."));
-                DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
+                //DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
                 App.CurrentApp.SettingMainApplication.ThemeInstallName.Value = string.Empty;
             }
 
-            if (GridThemes.Children.Count != ActiveThemeInApplicationIndex)
-            {
-                if (ActiveThemeInApplicationIndex == -1) DefaultPaletteElement.ClearCicleIndicatorColor();
-                else ((OPLImageViewer)GridThemes.Children[ActiveThemeInApplicationIndex]).ClearCicleIndicatorColor();
-            }
+            //if (GridThemes.Children.Count != ActiveThemeInApplicationIndex)
+            //{
+            //    //if (ActiveThemeInApplicationIndex == -1) DefaultPaletteElement.ClearCicleIndicatorColor();
+            //    //else ((OPLImageViewer)GridThemes.Children[ActiveThemeInApplicationIndex]).ClearCicleIndicatorColor();
+            //}
 
             ActiveThemeInApplicationIndex = SelectIndexTheme;
             SelectIndexTheme = -1;

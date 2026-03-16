@@ -26,16 +26,25 @@
     <None Remove="CORE\Audio\Move.mp3" />
     <None Remove="CORE\Audio\Notification.mp3" />
     <None Remove="CORE\Audio\Pop-Up.mp3" />
+    <None Remove="Fonts\3PIX.ttf" />
+    <None Remove="Fonts\Alphasano.ttf" />
     <None Remove="Fonts\Bree CYR var.ttf" />
     <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
     <None Remove="Fonts\Deledda Open Regular.ttf" />
+    <None Remove="Fonts\Faithful.ttf" />
+    <None Remove="Fonts\Futura.ttf" />
+    <None Remove="Fonts\Happy.otf" />
     <None Remove="Fonts\Monocraft.otf" />
     <None Remove="Fonts\MOSCOW2024.otf" />
     <None Remove="Fonts\October Pro Blk.ttf" />
     <None Remove="Fonts\Pecita.otf" />
+    <None Remove="Fonts\PizzaHut.ttf" />
     <None Remove="Fonts\Plup.ttf" />
+    <None Remove="Fonts\ProgrammePan.otf" />
+    <None Remove="Fonts\RenaultLife.ttf" />
     <None Remove="Fonts\RussianRail G Pro.otf" />
     <None Remove="Fonts\sangha.ttf" />
+    <None Remove="Fonts\Spotify.otf" />
     <None Remove="Fonts\Tablon.ttf" />
     <None Remove="Fonts\Vollda.otf" />
     <None Remove="UI\Images\Arrow.png" />
@@ -46,6 +55,7 @@
     <None Remove="UI\Images\Cross.png" />
     <None Remove="UI\Images\Description.png" />
     <None Remove="UI\Images\DoubleMouseButton.png" />
+    <None Remove="UI\Images\Download.png" />
     <None Remove="UI\Images\EyeCloseUp.png" />
     <None Remove="UI\Images\IconMainApplication.png" />
     <None Remove="UI\Images\IconMainGray.png" />
@@ -57,6 +67,8 @@
     <None Remove="UI\Images\Media\Happy.mp4" />
     <None Remove="UI\Images\Media\Loading\LoadingDefault.mp4" />
     <None Remove="UI\Images\Menu.png" />
+    <None Remove="UI\Images\Network\Chats.png" />
+    <None Remove="UI\Images\Network\NewChat.png" />
     <None Remove="UI\Images\NotMouseButton.png" />
     <None Remove="UI\Images\Palette.png" />
     <None Remove="UI\Images\PaperClip.png" />
@@ -135,6 +147,8 @@
     <Resource Include="CORE\Resources\PaletteDictionary.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Fonts\3PIX.ttf" />
+    <Resource Include="Fonts\Alphasano.ttf" />
     <Resource Include="Fonts\Bree CYR var.ttf" />
     <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
     <Resource Include="Fonts\Deledda Open Regular.ttf">
@@ -165,6 +179,7 @@
     <Resource Include="UI\Images\Cross.png" />
     <Resource Include="UI\Images\Description.png" />
     <Resource Include="UI\Images\DoubleMouseButton.png" />
+    <Resource Include="UI\Images\Download.png" />
     <Resource Include="UI\Images\EyeCloseUp.png" />
     <Resource Include="UI\Images\IconMainApplication.png" />
     <Resource Include="UI\Images\IconMainGray.png" />
@@ -175,11 +190,13 @@
     <Resource Include="UI\Images\Media\Happy.mp4" />
     <Resource Include="UI\Images\Media\Loading\LoadingDefault.mp4" />
     <Resource Include="UI\Images\Menu.png" />
+    <Resource Include="UI\Images\Network\Chats.png" />
+    <Resource Include="UI\Images\Network\NewChat.png" />
     <Resource Include="UI\Images\NotMouseButton.png" />
     <Resource Include="UI\Images\Palette.png" />
-    <Resource Include="UI\Images\PaperClip.png" />
+    <Resource Include="UI\Images\Network\PaperClip.png" />
     <Resource Include="UI\Images\Plus.png" />
-    <Resource Include="UI\Images\Read.png" />
+    <Resource Include="UI\Images\Network\Read.png" />
     <Resource Include="UI\Images\Reload.png" />
     <Resource Include="UI\Images\RightMouseButton.png" />
     <Resource Include="UI\Images\Save.png" />
@@ -205,6 +222,15 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="UI\UserElementsControl\Network\OPLNetworkChat.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\UserElementsControl\Network\OPLNetworkClipElement.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\UserElementsControl\Network\OPLNetworkMessage.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 

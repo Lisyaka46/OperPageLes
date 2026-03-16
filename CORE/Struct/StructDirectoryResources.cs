@@ -66,17 +66,22 @@ namespace ApplicationOperPageLes.CORE.Struct
         /// <summary>
         /// Главная директория файлов изображений
         /// </summary>
-        internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"/Images/";
+        internal static readonly string DirectoryImagesApplication = MainDirectoryApplication + @"Images/";
 
         /// <summary>
         /// Главная директория файлов видео
         /// </summary>
-        internal static readonly string DirectoryMediaApplication = DirectoryImagesApplication + @"/Media/";
+        internal static readonly string DirectoryMediaApplication = DirectoryImagesApplication + @"Media/";
 
         /// <summary>
         /// Главная директория файлов звука
         /// </summary>
-        internal static readonly string DirectoryAudioApplication = MainDirectoryApplication + @"/Audio/";
+        internal static readonly string DirectoryAudioApplication = MainDirectoryApplication + @"Audio/";
+
+        /// <summary>
+        /// Главная директория скачаных файлов
+        /// </summary>
+        internal static readonly string DirectoryDownloadApplication = MainDirectoryApplication + @"Download/";
 
         #endregion
 

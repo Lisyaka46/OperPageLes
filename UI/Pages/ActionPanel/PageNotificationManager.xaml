@@ -4,7 +4,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
-    xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
     x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageNotificationManager"
@@ -18,9 +20,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Text="Менеджер оповещений" VerticalAlignment="Top" Padding="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Plup}" TextAlignment="Center" Foreground="#FF8FD3F7" IsHitTestVisible="False"/>
-        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Grid.RowSpan="1" Grid.Row="1" Focusable="False">
-            <Grid x:Name="GridElementsLoading" VerticalAlignment="Top">
-            </Grid>
-        </ScrollViewer>
+        <IEL:IELScrollViewer x:FieldModifier="private" x:Name="IELScrollNotification" Grid.Row="1" AutoUpdateVisibleHorizontalScroll="False" ScrollForce="40">
+            
+        </IEL:IELScrollViewer>
     </Grid>
 </Page>

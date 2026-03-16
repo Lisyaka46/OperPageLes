@@ -41,7 +41,12 @@
             </Grid.ColumnDefinitions>
             <IEL:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="0" Grid.Row="1" Margin="3,3,3,3" MinWidth="100" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" FontSize="20" FontFamily="{DynamicResource Deledda Open Regular}" Padding="0,5,0,0" PaletteElement="{DynamicResource Violet}" Text=""/>
             <Grid Grid.Column="2" Grid.Row="2">
-                <IEL:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}" VerticalContentAlignment="Stretch" Margin="3,3,3,3" MarginViewBox="5,8,5,8"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="28*"/>
+                    <ColumnDefinition Width="155*"/>
+                </Grid.ColumnDefinitions>
+                <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="0" Margin="3,5,3,5" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Jade}" Padding="0,2,0,2" MarginViewBox="5,2,5,2" Source="/UI/Images/LightBulb.png"/>
+                <IEL:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3" FontFamily="{DynamicResource Bree CYR var}" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}" VerticalContentAlignment="Stretch" Margin="3,3,3,3" MarginViewBox="5,5,5,7" Grid.Column="1" FontSize="16"/>
             </Grid>
         </Grid>
         <Grid x:Name="GridHit" Margin="6,0,0,-3" HorizontalAlignment="Left">

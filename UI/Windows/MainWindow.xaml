@@ -59,14 +59,12 @@
                                 <ColumnDefinition Width="Auto" MinWidth="50"/>
                                 <ColumnDefinition Width="Auto" MinWidth="50"/>
                                 <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                <ColumnDefinition Width="Auto" MinWidth="50"/>
                             </Grid.ColumnDefinitions>
                             <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}" MarginViewBox="5,2,5,2" Margin="3,3,3,3"/>
                             <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="2" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,3,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="5,2,5,2"/>
                             <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,3,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="5,2,5,2"/>
-                            <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Jade}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
-                            <IEL:IELButtonImage x:Name="IELImageButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="5" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" Padding="0,2,0,2" MarginViewBox="5,1,5,1"/>
-                            <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="6" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
+                            <IEL:IELButtonImage x:Name="IELImageButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" Padding="0,2,0,2" MarginViewBox="5,1,5,1"/>
+                            <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="5" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
                         </Grid>
                     </Border>
                     <Grid Grid.Row="2" Margin="0,2,0,2">

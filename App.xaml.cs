@@ -210,6 +210,7 @@ namespace ApplicationOperPageLes
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
+            Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
             #endregion
 
             #region Interpreter
@@ -477,164 +478,6 @@ namespace ApplicationOperPageLes
                 }),
                 #endregion
 
-                #region server_start
-                new ConsoleCommand<IOPERCommandViewer>("server_start",
-                [
-                    new Parameter("ip", typeof(string), string.Empty),
-                ],
-                "Запуск сервера по ip, если нем параметра то регистрирует сервер по текущему ip компьютера",
-                async (Command, param, CV) =>
-                {
-                    if (DeviceServer != null)
-                    {
-                        return CommandStateResult.Failed(Command.Name, "%__Вы уже запустили сервер__");
-                    }
-                    IPAddress ip = IPAddress.Parse("127.1.1.1");
-                    if (((string)param[0]).Length == 0)
-                    {
-                        IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-                        foreach (IPAddress Element in localIPs)
-                        {
-                            if (Element.AddressFamily.ToString().Equals("InterNetwork"))
-                            {
-                                ip = Element;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                        ip = IPAddress.Parse((string)param[0]);
-                    CV?.AddString($"Регистрация сервера: \"{ip.MapToIPv4()}\".");
-
-                    #region Button CopyIP
-                    IELButtonText ButtonCopyIP = new()
-                    {
-                        MarginViewBox = new(3),
-                        FontSize = 14d,
-                        Text = "Копировать IP",
-                        Width = 105,
-                        CornerRadius = new(5),
-                        BorderThickness = new(2),
-                        Margin = new(3, 0, 0, 0),
-                        HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                        VerticalAlignment = System.Windows.VerticalAlignment.Center,
-                    };
-                    System.Windows.Data.Binding binding = new()
-                    {
-                        Mode = BindingMode.OneWay,
-                        Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["RussianRail G Pro"]
-                    };
-                    BindingOperations.SetBinding(ButtonCopyIP, IELButtonText.FontFamilyProperty, binding);
-                    App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(ButtonCopyIP);
-                    ButtonCopyIP.OnActivateMouseLeft += (sender, e) =>
-                    {
-                        System.Windows.Clipboard.SetText(ip.MapToIPv4().ToString());
-                    };
-                    CV?.AddNewUIElement(ButtonCopyIP);
-                    #endregion
-
-                    DeviceServer = new(IPAddress.Any, 1111);
-                    DeviceServer.Start();
-                    CV?.AddString($"Сервер запущен.");
-                    CV?.AddString($"Ожидаю запроса на подключение...");
-                    TcpClient? SourceClient = null;
-                    //int count;
-                    Action WhileOperation = new(() =>
-                    {
-                        if (DeviceServer.Pending())
-                        {
-                            CV?.AddString($"Найден ожидающий клиент, принято на обработку.");
-                            SourceClient = DeviceServer.AcceptTcpClient();  // ожидаем подключение клиента
-                            ServerConnectedClients.Add(SourceClient);
-                            SourceNetWorckStream = SourceClient.GetStream(); // для получения и отправки сообщений
-                            //Server.
-                            CV?.AddString($"Клиент принят: \"{(SourceNetWorckStream.Socket.RemoteEndPoint?.ToString() ?? "???")}\"");
-                            if (Command.IsAsyncTokenWhileProcessEnabled)
-                                Command.CloseAsyncToken();
-                            else if (CV is OPLCommandViewer OPL_CV)
-                                if (OPL_CV.IsTokenAsyncWhileEnabled)
-                                    OPL_CV.ExitAsyncWhileOperation();
-                            //CV?.AddString($"Сообщение отправлено.");
-                            //ns.Write(hello, 0, hello.Length);     // отправляем сообщение
-                            //do
-                            //{
-                            //    byte[] msg = new byte[1024];     // готовим место для принятия сообщения
-                            //    count = ns.Read(msg, 0, msg.Length);   // читаем сообщение от клиента
-                            //    CV?.AddString(Encoding.Default.GetString(msg, 0, count)); // выводим на экран полученное сообщение в виде строки
-                            //}
-                            //while (client.Connected && count > 0);
-                        }
-                    });
-                    if (CV is OPLCommandViewer OPL_CV)
-                    {
-                        try { await OPL_CV.WaitWhileTaskOperation(WhileOperation, false); }
-                        catch { }
-                    }
-                    else
-                    {
-                        await Command.WaitAsyncToken(WhileOperation, true);
-                    }
-
-                    return CommandStateResult.Completed(Command.Name);
-                }),
-                #endregion
-
-                #region client_start
-                new ConsoleCommand<IOPERCommandViewer>("client_start",
-                [
-                    new Parameter("ip", typeof(string)),
-                ],
-                "Инициализирует пользователя подключающегося к серверу",
-                async (Command, param, CV) =>
-                {
-                    DeviceClient = new();
-                    Task ConnectTask = DeviceClient.ConnectAsync((string)param[0], 1111);
-                    CV?.AddString($"Произвожу попытку подключения к \"{param[0]}\"");
-                    if (CV is OPLCommandViewer OPL_CV)
-                    {
-                        try
-                        {
-                            await CV.ExecuteVisualizateTask(ConnectTask, false);
-                        }
-                        catch
-                        {
-                            CV?.AddString("Не удалось подключиться к устройсту...");
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            await ConnectTask.WaitAsync(new CancellationToken(false));
-                        }
-                        catch
-                        {
-                            return CommandStateResult.Failed(Command.Name, "Не удалось создать подключение к устройству");
-                        }
-                    }
-                    if (DeviceClient.Connected)
-                    {
-                        CV?.AddString("Подключение успешно!");
-                        SourceNetWorckStream = DeviceClient.GetStream();
-
-                        //while (true)
-                        //{
-                        //    try
-                        //    {
-                        //        var buffer = new byte[100];
-                        //        int received = await stream.ReadAsync(buffer);
-
-                        //        var message = Encoding.UTF8.GetString(buffer, 0, received);
-                        //        CV?.AddString($"Message received: \"{message}\"");
-                        //        await Task.Delay(1000);
-                        //    }
-                        //    catch { break; }
-                        //}
-                    }
-                    return CommandStateResult.Completed(Command.Name);
-                }),
-                #endregion
-
                 #region get_ip
                 new ConsoleCommand<IOPERCommandViewer>("get_ip",
                 "Отправляет \"message\" через интернет к подключённому устройству",
@@ -647,95 +490,16 @@ namespace ApplicationOperPageLes
                 }),
                 #endregion
 
-                #region go_file
-                new ConsoleCommand<IOPERCommandViewer>("go_file",
+                #region notification
+                new ConsoleCommand<IOPERCommandViewer>("notification",
                 [
-                    new Parameter("file", typeof(string), string.Empty),
+                    new Parameter("Text", typeof(string)),
                 ],
-                "Отправляет \"file\" через интернет к подключённому устройству",
-                async (Command, param, CV) =>
+                "Создаёт уведомление с определённым \"Text\"",
+                (Command, param, CV) =>
                 {
-                    string PathFile = (string)param[0];
-                    bool Cancel = true;
-                    TextBlock El = new();
-                    if (PathFile.Length == 0)
-                    {
-                        Microsoft.Win32.OpenFileDialog dialog = new()
-                        {
-
-                        };
-                        dialog.FileOk += (sender, e) => Cancel = false;
-                        dialog.ShowDialog();
-                        PathFile = dialog.FileName;
-                    }
-                    if (Cancel)
-                    {
-                        CV?.AddString("Отмена передачи файла!");
-                        return CommandStateResult.Completed(Command.Name);
-                    }
-                    else if (SourceNetWorckStream == null) return CommandStateResult.Failed(Command.Name, "Невозможно передать файл не имея подключения.");
-                    CV?.AddString($"Начинаю процесс передачи файла: \"{PathFile}\"");
-                    CV?.AddString($"Читаю данные для передачи...");
-                    byte[] BytesFile = await File.ReadAllBytesAsync(PathFile);
-                    int ch = BytesFile.Length / 1024;
-                    bool EndCH = BytesFile.Length != 1024 * ch;
-                    CV?.AddString($"Передаю данные ({BytesFile.Length} байт / ({1024 * ch} + ({BytesFile.Length - (1024 * ch)} байт)) циклов)...");
-                    if (CV != null)
-                    {
-                        CV.AddNewUIElement(El);
-                        for (int i = 0; i < ch; i++)
-                        {
-                            await SourceNetWorckStream.Socket.SendAsync(new ArraySegment<byte>(BytesFile, 1024 * i, 1024));
-                            El.Text = $"Отправлено {1024 * i} байт";
-                        //await CV.ExecuteVisualizateTask(
-                        //        SourceNetWorckStream.Socket.SendFileAsync(PathFile).AsTask());
-                        }
-                        if (EndCH)
-                        {
-                            await SourceNetWorckStream.Socket.SendAsync(new ArraySegment<byte>(BytesFile, 1024 * ch, BytesFile.Length - (1024 * ch)));
-                            El.Text = $"Отправлено {1024 * ch} + ({BytesFile.Length - (1024 * ch)}) байт";
-                        }
-                    }
-                    CV?.AddString($"Готово!");
-                    return CommandStateResult.Completed(Command.Name);
-                }),
-                #endregion
-
-                #region receive_file
-                new ConsoleCommand<IOPERCommandViewer>("receive_file",
-                "Принимает \"file\" через интернет от подключённого устройства",
-                async (Command, param, CV) =>
-                {
-                    if (SourceNetWorckStream == null) return CommandStateResult.Failed(Command.Name, "Невозможно принять файл не имея подключения.");
-                    OpenFolderDialog dialog = new()
-                    {
-
-                    };
-                    dialog.ShowDialog();
-                    FileStream Stream = File.OpenWrite(dialog.FolderName + $"/Oper_File_{Path.GetRandomFileName()}.download");
-                    CV?.AddString($"Начинаю процесс получения файла...");
-                    TextBlock BlockElement = new()
-                    {
-                        Text = "..."
-                    };
-                    CV?.AddNewUIElement(BlockElement);
-                    int CountReadBytes = 0;
-                    long Count = 0;
-                    byte[] Buffer = new byte[1024];
-                    do
-                    {
-                        CountReadBytes = await SourceNetWorckStream.Socket.ReceiveAsync(Buffer);
-                        Count += CountReadBytes;
-                        BlockElement.Text = "Получено ";
-                        if (Count > 1024 && Count < 1024 * 1024) BlockElement.Text += $"{Count / 1024} Кбайт.";
-                        else if (Count > 1024 * 1024) BlockElement.Text += $"{(Count / 1024) / 1024} Мбайт.";
-                        if (CountReadBytes > 0) await Stream.WriteAsync(Buffer, new(false));
-                    } while (CountReadBytes == 1024);
-                    Stream.Close();
-                    Stream.Dispose();
-                    
-                    CV?.AddString($"Готово!");
-                    return CommandStateResult.Completed(Command.Name);
+                    MainWindow.GenerateVisualizateImage((string)param[0]);
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
 
@@ -798,6 +562,7 @@ namespace ApplicationOperPageLes
 
             #region ResourcesInit
             LogWriteLine("Проверка ресурсов");
+
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
 

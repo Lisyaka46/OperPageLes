@@ -119,7 +119,6 @@ namespace ApplicationOperPageLes.UI.Windows
             ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
-            IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
             IELImageButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
             IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
 
@@ -156,7 +155,6 @@ namespace ApplicationOperPageLes.UI.Windows
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELImageButtonCollapse);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
 
@@ -281,28 +279,6 @@ namespace ApplicationOperPageLes.UI.Windows
             IELImageButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
                 Close();
-            };
-            #endregion
-
-            #region IELImageButtonHelp
-            IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
-            {
-                WindowDiscriptionCommands WindowDescription = new()
-                {
-                    ManagerAnimation = this.ManagerAnimation,
-                };
-                App.CurrentApp.InicializeWindowInApplication(WindowDescription);
-                WindowDescription.Show();
-            };
-            IELImageButtonHelp.MouseHover += (sender, e) =>
-            {
-                IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
-                    "Быстрое открытие описания команд",
-                    OrientationPositionCursor.LeftDown);
-            };
-            IELImageButtonHelp.MouseLeave += (sender, e) =>
-            {
-                IELMessageMain.CloseBorderInformation();
             };
             #endregion
 
@@ -575,11 +551,11 @@ namespace ApplicationOperPageLes.UI.Windows
             OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
             ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
             CancellationToken token = new(false);
-            ViewLoading.OnActivateMouseRight += (sender, e) =>
-            {
-                token.ThrowIfCancellationRequested();
-                ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
-            };
+            //ViewLoading.OnActivateMouseRight += (sender, e) =>
+            //{
+            //    token.ThrowIfCancellationRequested();
+            //    ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
+            //};
             TextBlock Element = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: " + NameProcess);
 
             await Method.WaitAsync(token);
@@ -603,11 +579,11 @@ namespace ApplicationOperPageLes.UI.Windows
             OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
             ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
             CancellationToken token = new(false);
-            ViewLoading.OnActivateMouseRight += (sender, e) =>
-            {
-                token.ThrowIfCancellationRequested();
-                ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
-            };
+            //ViewLoading.OnActivateMouseRight += (sender, e) =>
+            //{
+            //    token.ThrowIfCancellationRequested();
+            //    ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
+            //};
             TextBlock Element = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: " + NameProcess);
 
             await Method.WaitAsync(token);
@@ -620,26 +596,27 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <summary>
         /// Создать объект визуализирующий изображение (уведомление)
         /// </summary>
-        /// <param name="NameProcess">Название сообщения</param>
+        /// <param name="Name">Название сообщения</param>
+        /// <param name="ImageNotification">Картинка которая будет отображаться в элементе</param>
         /// <returns>Объект визуализации картинки</returns>
-        public OPLImageViewer GenerateVisualizateImage(string Name)
+        public OPLImageViewer GenerateVisualizateImage(string Name, ImageSource? ImageNotification = null)
         {
-            OPLImageViewer Result = PageControllerLoadingApplication.SetViewImageElement();
-            Result.Text = Name;
-            Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
+            OPLImageViewer Result = PageControllerLoadingApplication.SetViewImageElement(ImageNotification);
+            //Result.Text = Name;
+            //Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
             return Result;
         }
 
         /// <summary>
-        /// Создать объект визуализирующий медиа
+        /// Создать объект визуализирующий медиа (уведомление)
         /// </summary>
         /// <param name="Name">Название загрузочного процесса</param>
         /// <returns>Объект визуализации загрузочного процесса</returns>
         public OPLMediaViewer GenerateVisualizateMedia(string Name)
         {
             OPLMediaViewer Result = PageControllerLoadingApplication.SetViewMediaElement();
-            Result.Text = Name;
-            Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
+            //Result.Text = Name;
+            //Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
             return Result;
         }
 

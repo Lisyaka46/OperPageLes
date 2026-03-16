@@ -33,7 +33,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" Text="DefaultPalette" FontSize="14" CornerRadiusBorderView="10,10,10,10" MarginViewBox="0,-10,0,-10" TextPadding="0,5,5,0" CircleIndicatorMargin="0,-4,-4,0" CornerRadiusCircleIndicator="4,4,4,4" HeightCircleIndicator="14" FontFamily="{DynamicResource Deledda Open Regular}" Cursor="Hand"/>
+                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" FontSize="14" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <ScrollViewer>
                         <Grid x:Name="GridThemes" VerticalAlignment="Top">

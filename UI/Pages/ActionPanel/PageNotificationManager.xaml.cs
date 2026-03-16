@@ -23,11 +23,24 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         /// </summary>
         internal event EventHandler? CreatedNewOneOnlyViewerImage;
 
-        private int CountImageViewers = 0;
+        /// <summary>
+        /// Объект визуализации объектов уведомления
+        /// </summary>
+        private StackPanel StackPanelNotifications;
+
+        /// <summary>
+        /// Количество объектов визуализации загрузки
+        /// </summary>
+        private int CountLoadingViewers = 0;
 
         public PageNotificationManager()
         {
             InitializeComponent();
+            StackPanelNotifications = new()
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+            };
+            IELScrollNotification.Content = StackPanelNotifications;
         }
 
         /// <summary>
@@ -38,9 +51,9 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         {
             OPLMediaViewer Result = CreateMediaView(uri ?? StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault)));
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Result);
-            Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
-            GridElementsLoading.Children.Add(Result);
+            StackPanelNotifications.Children.Add(Result);
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+            CountLoadingViewers++;
             return Result;
         }
 
@@ -50,12 +63,10 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         /// <returns>Визуализационный объект</returns>
         internal OPLImageViewer SetViewImageElement(ImageSource? source = null)
         {
-            if (CountImageViewers == 0) CreatedNewOneOnlyViewerImage?.Invoke(this, EventArgs.Empty);
-            CountImageViewers++;
+            if (StackPanelNotifications.Children.Count == 0) CreatedNewOneOnlyViewerImage?.Invoke(this, EventArgs.Empty);
             OPLImageViewer Result = CreateImageView(source ?? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)));
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Result);
-            Result.Margin = GetMarginFromIndex(GridElementsLoading.Children.Count);
-            GridElementsLoading.Children.Add(Result);
+            StackPanelNotifications.Children.Add(Result);
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
             return Result;
         }
@@ -66,28 +77,15 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
         /// <param name="Element">Загрузочный элемент визуализации</param>
         internal void DeleteViewMediaElement<T>(IOPLObjectViewer<T> Element) where T : IFormattable
         {
-            int i = GridElementsLoading.Children.IndexOf((UIElement)Element);
+            int i = StackPanelNotifications.Children.IndexOf((UIElement)Element);
             if (i == -1) throw new Exception("Элемент не находится в контейнере менеджера");
-            GridElementsLoading.Children.RemoveAt(i);
-            for (; i < GridElementsLoading.Children.Count; i++)
-            {
-                FrameworkElement element = (FrameworkElement)GridElementsLoading.Children[i];
-                App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(element, MarginProperty,
-                    GetMarginFromIndex(i), TimeSpan.FromMilliseconds(300d));
-            }
+            StackPanelNotifications.Children.RemoveAt(i);
             if (typeof(T) == typeof(ImageSource))
             {
-                if (CountImageViewers == 1) ClearedAllViewersImage?.Invoke(this, EventArgs.Empty);
-                CountImageViewers--;
+                if (CountLoadingViewers == 1) ClearedAllViewersImage?.Invoke(this, EventArgs.Empty);
+                CountLoadingViewers--;
             }
         }
-
-        /// <summary>
-        /// Узнать позицию элемента по его индексу
-        /// </summary>
-        /// <param name="index">Индекс позиции элемента</param>
-        /// <returns></returns>
-        private Thickness GetMarginFromIndex(int index) => new(4, index > 0 ? 55 * GridElementsLoading.Children.Count + 5 : 5, 4, 4);
 
         /// <summary>
         /// Сгенерировать объект отображения Media
@@ -122,7 +120,7 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                 Margin = new(4),
                 CornerRadius = new(5),
                 BorderThickness = new(3),
-                SourceElement = source,//new(StructDirectoryResources.GetResourcePath(nameof(OPRES.MediaLoadingDefault))),
+                SourceElement = source,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 FontSize = 11d,

@@ -3,9 +3,8 @@
                     xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=IEL">
     <FontFamily x:Key="Monocraft">/Fonts/#Monocraft</FontFamily>
     <FontFamily x:Key="Tablon">/Fonts/#Tablon</FontFamily>
-    <FontFamily x:Key="ShareTechMono">/Fonts/#ShareTechMono</FontFamily>
     <FontFamily x:Key="MOSCOW2024">/Fonts/#MOSCOW2024</FontFamily>
-    <FontFamily x:Key="sangha">/Fonts/#sangha</FontFamily>
+    <FontFamily x:Key="Sangha">/Fonts/#Sangha</FontFamily>
     <FontFamily x:Key="Bree CYR var">/Fonts/#Bree CYR var</FontFamily>
     <FontFamily x:Key="Pecita">/Fonts/#Pecita</FontFamily>
     <FontFamily x:Key="Brenzo Slab Personal Use">/Fonts/#Brenzo Slab Personal Use</FontFamily>
@@ -14,38 +13,9 @@
     <FontFamily x:Key="Plup">/Fonts/#Plup</FontFamily>
     <FontFamily x:Key="Deledda Open Regular">/Fonts/#Deledda Open Regular</FontFamily>
     <FontFamily x:Key="October Pro Blk">/Fonts/#October Pro Blk</FontFamily>
-    <ControlTemplate x:Key="ScrollViewerHorizontalOnTopTemplate" TargetType="{x:Type ScrollViewer}">
-        <Grid x:Name="Grid" Background="{TemplateBinding Background}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" MinHeight="17"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Rectangle x:Name="Corner" 
-                    Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" 
-                    Grid.Column="1" Grid.Row="0"/>
-            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Margin="{TemplateBinding Padding}" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Grid.Column="0" Grid.Row="1" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False"/>
-            <ScrollBar x:Name="PART_VerticalScrollBar" 
-                    Cursor="Arrow" 
-                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
-                    Grid.Column="1" Grid.Row="1" 
-                    AutomationProperties.AutomationId="VerticalScrollBar" 
-                    Maximum="{TemplateBinding ScrollableHeight}" 
-                    Minimum="0" 
-                    Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                    ViewportSize="{TemplateBinding ViewportHeight}"/>
-            <ScrollBar x:Name="PART_HorizontalScrollBar" 
-                    Cursor="Arrow" 
-                    Grid.Column="0" 
-                    AutomationProperties.AutomationId="HorizontalScrollBar" 
-                    Maximum="{TemplateBinding ScrollableWidth}" 
-                    Minimum="0" 
-                    Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                    Orientation="Horizontal" 
-                    ViewportSize="{TemplateBinding ViewportWidth}"/>
-        </Grid>
-    </ControlTemplate>
+
+    <FontFamily x:Key="3PIX">/Fonts/#3PIX</FontFamily>
+    <FontFamily x:Key="Alphasano">/Fonts/#Alphasano</FontFamily>
+    <FontFamily x:Key="Play">/Fonts/#Play</FontFamily>
+    <FontFamily x:Key="AnonymousPro">/Fonts/#AnonymousPro</FontFamily>
 </ResourceDictionary>

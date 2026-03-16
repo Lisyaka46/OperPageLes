@@ -133,6 +133,16 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Chats {
+            get {
+                object obj = ResourceManager.GetObject("Chats", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Check {
             get {
                 object obj = ResourceManager.GetObject("Check", resourceCulture);
@@ -186,6 +196,16 @@ namespace ApplicationOperPageLes.Properties {
         internal static byte[] DoubleMouseButton {
             get {
                 object obj = ResourceManager.GetObject("DoubleMouseButton", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -326,6 +346,16 @@ namespace ApplicationOperPageLes.Properties {
         internal static byte[] MINSI {
             get {
                 object obj = ResourceManager.GetObject("MINSI", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] NewChat {
+            get {
+                object obj = ResourceManager.GetObject("NewChat", resourceCulture);
                 return ((byte[])(obj));
             }
         }

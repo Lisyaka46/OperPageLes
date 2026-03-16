@@ -94,14 +94,14 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region IELButtonPageNetwork
             IELButtonPageNetwork.OnActivateMouseLeft += (sender, e) =>
             {
-                PageNetwork SourcePageNetwork = new()
+                BrowserPageNetwork.PageNetwork SourcePageNetwork = new()
                 {
                     Title = "Страница сети",
                     Description = "Средство управления сетевыми инструментами",
                 };
                 SourcePageNetwork.Disposed += (sender) =>
                 {
-
+                    SourcePageNetwork.Dispose();
                 };
                 BrowserPageSelect?.Invoke(this, SourcePageNetwork);
             };
