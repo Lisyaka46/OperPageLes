@@ -15,12 +15,22 @@ namespace ApplicationOperPageLes.CORE.Network
         /// <summary>
         /// Длинна расширения файла (в байтах)
         /// </summary>
-        internal readonly byte LengthFileExpansion;
+        internal readonly byte LengthFileExtension;
 
         /// <summary>
         /// Длинна имени файла (в байтах)
         /// </summary>
         internal readonly ushort LengthFileName;
+
+        /// <summary>
+        /// Строка имени файла
+        /// </summary>
+        internal readonly string FileName;
+
+        /// <summary>
+        /// Строка разширения файла
+        /// </summary>
+        internal readonly string FileExtension;
 
         /// <summary>
         /// Длинна данных файла (в байтах)
@@ -41,17 +51,21 @@ namespace ApplicationOperPageLes.CORE.Network
         /// Создать информационный объект об передаваемых файлах
         /// </summary>
         /// <remarks>
-        /// <b>[FF - FF_FF - FF_FF_FF_FF]</b><br/>
-        /// <b>FF</b> : <i>Длинна расширения</i><br/>
+        /// <b>[FF_FF {} - FF {} - FF_FF_FF_FF]</b><br/>
         /// <b>FF_FF</b> : <i>Длинна имени</i><br/>
+        /// <b>FF</b> : <i>Длинна расширения</i><br/>
         /// <b>FF_FF_FF_FF</b> : <i>Длинна данных файла</i><br/>
         /// </remarks>
         internal FileNetworkInfo(ArraySegment<byte> Data)
         {
             byte[] BytesInfo = [.. Data];
-            LengthFileExpansion = BytesInfo[0];
-            LengthFileName = BitConverter.ToUInt16(new ArraySegment<byte>(BytesInfo, 1, 2));
-            LengthFileData = BitConverter.ToUInt32(new ArraySegment<byte>(BytesInfo, 3, 4));
+            LengthFileName = BitConverter.ToUInt16(new ArraySegment<byte>(BytesInfo, 0, 2));
+            FileName = Encoding.UTF8.GetString(BytesInfo[2..(LengthFileName + 2)]);
+
+            LengthFileExtension = BytesInfo[LengthFileName + 2];
+            FileExtension = Encoding.UTF8.GetString(BytesInfo[(LengthFileName + 3)..(LengthFileName + LengthFileExtension + 3)]);
+            LengthFileData = BitConverter.ToUInt32(new ArraySegment<byte>(BytesInfo, LengthFileName + LengthFileExtension + 3, 4));
+
             SourceBytes = Data.AsReadOnly();
         }
 
@@ -71,14 +85,39 @@ namespace ApplicationOperPageLes.CORE.Network
             else if (info.Name.Length > ushort.MaxValue / 2)
                 throw new ArgumentOutOfRangeException(nameof(PathFile), "Имя файла слишком большое для передачи");
             List<byte> Data = [];
-            byte[] BytesFileInfo = Encoding.UTF8.GetBytes(info.Extension[1..]);
-            Data.AddRange(BytesFileInfo);
-            LengthFileExpansion = (byte)BytesFileInfo.Length;
-            BytesFileInfo = Encoding.UTF8.GetBytes(info.Name[..^info.Extension.Length]);
-            Data.AddRange(BytesFileInfo);
+
+            FileName = info.Name[..^info.Extension.Length];
+            byte[] BytesFileInfo = Encoding.UTF8.GetBytes(FileName);
             LengthFileName = (ushort)BytesFileInfo.Length;
+            Data.AddRange(BitConverter.GetBytes(LengthFileName));
+            Data.AddRange(BytesFileInfo);
+
+            FileExtension = info.Extension[1..];
+            BytesFileInfo = Encoding.UTF8.GetBytes(FileExtension);
+            LengthFileExtension = (byte)BytesFileInfo.Length;
+            Data.Add(LengthFileExtension);
+            Data.AddRange(BytesFileInfo);
+
             LengthFileData = (uint)info.Length;
+            Data.AddRange(BitConverter.GetBytes(LengthFileData));
             SourceBytes = Data.AsReadOnly();
+        }
+
+        //
+        internal static FileNetworkInfo[] InicializeMainInfoFiles(byte[] SourceBytes)
+        {
+            List<FileNetworkInfo> FilesInfo = [];
+            ushort LengthNameFile;
+            byte LengthExtensionFile;
+            while (SourceBytes.Length > 0)
+            {
+                LengthNameFile = BitConverter.ToUInt16(SourceBytes[..2], 0);
+                LengthExtensionFile = SourceBytes[LengthNameFile + 2];
+                FilesInfo.Add(new(SourceBytes[..(LengthNameFile + LengthExtensionFile + LengthDataOneObject)]));
+                SourceBytes = SourceBytes[(LengthNameFile + LengthExtensionFile + LengthDataOneObject)..];
+            }
+
+            return [.. FilesInfo];
         }
     }
 }

@@ -13,19 +13,14 @@ namespace ApplicationOperPageLes.CORE.Network
         internal readonly ushort LengthMessage;
 
         /// <summary>
-        /// Количество передоваемых файлов
-        /// </summary>
-        internal readonly byte CountFilesData;
-
-        /// <summary>
         /// Массив данных о передаваемых файлах
         /// </summary>
-        internal ReadOnlyCollection<FileNetworkInfo>? FilesInfo => SourceFilesInfo?.AsReadOnly() ?? null;
+        internal ReadOnlyCollection<FileNetworkInfo> FilesInfo => SourceFilesInfo.AsReadOnly();
 
         /// <summary>
         /// Данные о передаваемых файлах
         /// </summary>
-        private FileNetworkInfo[]? SourceFilesInfo = null;
+        private List<FileNetworkInfo> SourceFilesInfo = [];
 
         /// <summary>
         /// Байты отражающие объект передаваемых данных
@@ -49,19 +44,8 @@ namespace ApplicationOperPageLes.CORE.Network
             if (Data.Length < 3)
                 throw new ArgumentException("Недостаточно данных для создания информации о передаваемых данных.");
             LengthMessage = BitConverter.ToUInt16(new ArraySegment<byte>(Data, 0, 2));
-            CountFilesData = Data[2];
-            if (CountFilesData > 0)
-            {
-                if (FileNetworkInfo.LengthDataOneObject * CountFilesData == Data.Length - 3)
-                {
-                    SourceFilesInfo = new FileNetworkInfo[CountFilesData];
-                    for (int i = 0; i < CountFilesData; i++)
-                        SourceFilesInfo[i] = new FileNetworkInfo(new ArraySegment<byte>(Data,
-                        3 + i * FileNetworkInfo.LengthDataOneObject, FileNetworkInfo.LengthDataOneObject));
-                }
-                else throw new ArgumentException(
-                    "Невозможно преобразовать байты в данные файлов, так как данных недостаточно для создания информации о файлах");
-            }
+            if (Data[2] > 0)
+                SourceFilesInfo.AddRange(FileNetworkInfo.InicializeMainInfoFiles(Data[3..]));
             SourceBytes = Data.AsReadOnly();
         }
 
@@ -77,22 +61,14 @@ namespace ApplicationOperPageLes.CORE.Network
             List<byte> Data = [];
             LengthMessage = (ushort)Encoding.UTF8.GetBytes(Message).Length;
             Data.AddRange(BitConverter.GetBytes(LengthMessage));
-            CountFilesData = (byte)PathFiles.Length;
-            Data.Add(CountFilesData);
-            if (CountFilesData > 0)
+            Data.Add((byte)PathFiles.Length);
+            if (PathFiles.Length > 0)
             {
-                if (PathFiles.Length > 0)
+                for (int i = 0; i < PathFiles.Length; i++)
                 {
-                    SourceFilesInfo = new FileNetworkInfo[CountFilesData];
-                    for (int i = 0; i < CountFilesData; i++)
-                    {
-                        SourceFilesInfo[i] = new FileNetworkInfo(PathFiles[i]);
-                        Data.Add(SourceFilesInfo[i].LengthFileExpansion);
-                        Data.AddRange(BitConverter.GetBytes(SourceFilesInfo[i].LengthFileName));
-                        Data.AddRange(BitConverter.GetBytes(SourceFilesInfo[i].LengthFileData));
-                    }
+                    SourceFilesInfo.Add(new(PathFiles[i]));
+                    Data.AddRange(SourceFilesInfo[^1].SourceBytes);
                 }
-                else throw new Exception("Невозможно создать информацию о файлах не имея их директорию");
             }
             SourceBytes = Data.AsReadOnly();
         }

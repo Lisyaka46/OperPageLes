@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
+using Windows.ApplicationModel.Store;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.CORE.Network
@@ -67,6 +68,11 @@ namespace ApplicationOperPageLes.CORE.Network
         /// Введённый текст в поле сообщения
         /// </summary>
         internal string EnteringMessage = string.Empty;
+
+        /// <summary>
+        /// Сохранённое значение прокрутки чата
+        /// </summary>
+        internal double SaveScrollValue = 0d;
 
         /// <summary>
         /// Aсинхронный процесс отправки файлов
@@ -152,20 +158,23 @@ namespace ApplicationOperPageLes.CORE.Network
                 SenderTextPoint = "Вы",
             };
             DataNetworkInfo DataInfo = new(ref Message, ref PathFiles);
-            UIChat.TextBlockHead.Text = $"{(ReceiveFiles.Activate ? "**" : string.Empty)}Вы:";
+            UIChat.TextBlockHead.Text = "Вы:";
             UIChat.EndMessage = Message;
             UIChat.Icon = PathFiles.Length > 0 ? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Save)) : null;
-            UIChat.TextCount = DataInfo.CountFilesData;
+            UIChat.TextCount = DataInfo.FilesInfo.Count;
             NetworkMessage.SetVisualFromNetworkInfo(DataInfo, ClipFiles.Children);
             HistoryMessages.Children.Add(NetworkMessage);
             try
             {
+                DeviceClient.DeviceClientMessageObjInfo.Client.Send(BitConverter.GetBytes(DataInfo.SourceBytes.Count));
                 DeviceClient.DeviceClientMessageObjInfo.Client.Send([.. DataInfo.SourceBytes]);
                 if (DataInfo.LengthMessage > 0)
                     Task.Run(() => SendNetworkByte(Encoding.UTF8.GetBytes(Message)));
-                if (DataInfo.CountFilesData > 0 && PathFiles.Length > 0 && DataInfo.FilesInfo != null)
+                if (PathFiles.Length > 0)
                 {
-                    SendFiles.AddSendProcess(DeviceClient.DeviceClientDataFile, NetworkMessage, DataInfo.FilesInfo, PathFiles);
+                    SendFiles.AddQueue(NetworkMessage, PathFiles);
+                    if (!SendFiles.Activate)
+                        SendFiles.SendProcess(DeviceClient.DeviceClientDataFile.Client);
                 }
             }
             catch
@@ -183,12 +192,14 @@ namespace ApplicationOperPageLes.CORE.Network
             if (!DeviceClient.Connected)
                 throw new InvalidOperationException("Невозможно принять данные не имея текущее подключение");
             List<byte> Data = [];
-            byte[] SourceInfo = new byte[3];
+            byte[] SourceInfo = new byte[4];
             await DeviceClient.DeviceClientMessageObjInfo.Client.ReceiveAsync(SourceInfo);
-            Data.AddRange(SourceInfo);
-            if (Data[2] > 0)
+            int CountBytesFromMessafeInfo = BitConverter.ToInt32(SourceInfo, 0);
+            SourceInfo = new byte[DeviceClient.DeviceClientMessageObjInfo.ReceiveBufferSize];
+            while (Data.Count < CountBytesFromMessafeInfo)
             {
-                SourceInfo = new byte[Data[2] * FileNetworkInfo.LengthDataOneObject];
+                if (CountBytesFromMessafeInfo - Data.Count < DeviceClient.DeviceClientMessageObjInfo.ReceiveBufferSize)
+                    SourceInfo = new byte[CountBytesFromMessafeInfo - Data.Count];
                 await DeviceClient.DeviceClientMessageObjInfo.Client.ReceiveAsync(SourceInfo);
                 Data.AddRange(SourceInfo);
             }
@@ -205,20 +216,23 @@ namespace ApplicationOperPageLes.CORE.Network
             };
             NetworkMessage.SetVisualFromNetworkInfo(DataInfo);
             HistoryMessages.Children.Add(NetworkMessage);
-            UIChat.Icon = DataInfo.FilesInfo != null ? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Save)) : null;
-            UIChat.TextCount = DataInfo.CountFilesData;
+            UIChat.Icon = DataInfo.FilesInfo.Count > 0 ? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Save)) : null;
+            UIChat.TextCount = DataInfo.FilesInfo.Count;
             if (DataInfo.LengthMessage > 0)
             {
                 NetworkMessage.Message = Encoding.UTF8.GetString(ReceiveNetworkByte(DeviceClient.DeviceClientStringMessage, DataInfo.LengthMessage));
             }
             UIChat.EndMessage = NetworkMessage.Message;
             UIChat.TextBlockHead.Text = $"{(ReceiveFiles.Activate ? "**" : string.Empty)}{NetworkMessage.SenderTextPoint}:";
-            if (DataInfo.CountFilesData > 0 && DataInfo.FilesInfo != null)
+            if (DataInfo.FilesInfo.Count > 0 && DataInfo.FilesInfo != null)
             {
-                ReceiveFiles.ReceiveProcess(DeviceClient.DeviceClientDataFile, DataInfo.FilesInfo, NetworkMessage.StackPanelClip.Children);
+                ReceiveFiles.AddQueue(DataInfo.FilesInfo, NetworkMessage.StackPanelClip.Children);
+                if (!ReceiveFiles.Activate)
+                    ReceiveFiles.ReceiveProcess(DeviceClient.DeviceClientDataFile.Client);
             }
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(UIChat.TextBlockHead,
                 TextBlock.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(600d));
+            StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMessageReceive));
         }
 
         #region Send

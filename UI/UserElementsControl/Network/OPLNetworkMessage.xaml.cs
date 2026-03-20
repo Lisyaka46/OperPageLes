@@ -1,8 +1,11 @@
-﻿using ApplicationOperPageLes.CORE.Network;
+﻿using ApplicationOperPageLes.CORE.Enums;
+using ApplicationOperPageLes.CORE.Network;
+using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.UserElementsControl.Network;
 using OIEL.UserElementsControl.Base;
 using System.Windows;
 using System.Windows.Controls;
+using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.UserElementsControl.Network
 {
@@ -75,6 +78,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         /// <param name="NetworkInfo">Данные о передаваемых данных</param>
         internal void SetVisualFromNetworkInfo(DataNetworkInfo NetworkInfo, UIElementCollection? ClipCollection = null)
         {
+            PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue];
             if (NetworkInfo.LengthMessage > 0)
             {
                 TextBlockMessage.Height = double.NaN;
@@ -86,36 +90,35 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
                 TextBlockMessage.Margin = new(0);
                 TextBlockMessage.Text = string.Empty;
             }
-            if (NetworkInfo.CountFilesData > 0)
+            if (NetworkInfo.FilesInfo.Count > 0)
             {
                 OPLNetworkClipElement Element;
                 StackPanelClip.Children.Clear();
-                if (ClipCollection != null)
+                for (int i = 0; i < NetworkInfo.FilesInfo.Count; i++)
                 {
-                    for (int i = 0; i < NetworkInfo.CountFilesData; i++)
+                    if (ClipCollection != null)
                     {
                         Element = (OPLNetworkClipElement)ClipCollection[0];
                         ClipCollection.RemoveAt(0);
                         Element.Margin = new(0);
                         Element.Opacity = 0d;
-                        StackPanelClip.Children.Add(Element);
-                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                        App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(3), TimeSpan.FromMilliseconds(500d));
                     }
-                }
-                else
-                {
-                    for (int i = 0; i < NetworkInfo.CountFilesData; i++)
+                    else
                     {
                         Element = new()
                         {
-                            PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Aquamarine],
+                            PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine],
                             Opacity = 0d,
                             CornerRadius = new(5),
                             Margin = new(0),
+                            TextFileName = $"{NetworkInfo.FilesInfo[i].FileName}.{NetworkInfo.FilesInfo[i].FileExtension}",
+                            ManagerAnimation = App.ManagerAnimation,
                         };
-                        StackPanelClip.Children.Add(Element);
+                        Element.MathSizeFile(NetworkInfo.FilesInfo[i].LengthFileData);
                     }
+                    StackPanelClip.Children.Add(Element);
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                    App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(3), TimeSpan.FromMilliseconds(500d));
                 }
             }
         }

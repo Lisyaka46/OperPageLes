@@ -101,7 +101,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     {
                         if (Chats[i].DeviceClient.DeviceClientMessageObjInfo.Available > 0 && !Chats[i].IsBusy)
                             await Dispatcher.InvokeAsync(Chats[i].ReceiveNetworkData);
-                        await Task.Delay(1000);
+                        else await Task.Delay(100);
                     }
                 }
             }, TokenSourceReceiveClientData.Token);
@@ -118,11 +118,11 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
         private void AddNewChat(TcpClientChat client)
         {
             if (!client.Connected)
-                throw new Exception("Нвозможно создать чат так как клиент не подключён");
+                throw new Exception("Невозможно создать чат так как клиент не подключён");
             StackPanel HistoryMessages = new()
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
-                VerticalAlignment = VerticalAlignment.Top,
+                VerticalAlignment = VerticalAlignment.Bottom,
             };
             StackPanel ClipFiles = new()
             {

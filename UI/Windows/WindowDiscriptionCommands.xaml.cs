@@ -85,7 +85,7 @@ namespace ApplicationOperPageLes.Windows
             StartAnimation = false;
             SearchActivate = false;
             InitializeComponent();
-            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Description));
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.File));
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);

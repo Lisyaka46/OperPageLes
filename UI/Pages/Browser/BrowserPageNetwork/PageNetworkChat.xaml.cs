@@ -60,7 +60,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     {
                         ClipElement = new()
                         {
-                            Text = System.IO.Path.GetFileName(Path),
+                            TextFileName = System.IO.Path.GetFileName(Path),
                             CornerRadius = new(5),
                             Margin = new(5),
                             ManagerAnimation = App.ManagerAnimation,
@@ -68,7 +68,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
                         ClipElement.MathSizeFile(Path);
                         ClipElement.SetExtractAssociatedIcon(Path, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
 
-                        App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Aquamarine].ConnectPalleteFromIELElement(ClipElement);
+                        App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(ClipElement);
                         SourceChat.ClipFiles.Children.Add(ClipElement);
                         ClipElement.SetIndex((uint)SourceChat.ClipFiles.Children.Count);
                         if (BorderClip.Height == 0d)
@@ -108,6 +108,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
             IELTextBoxMessage.Text = SourceChat.EnteringMessage;
             IELScrollHistoryMessage.Content = SourceChat.HistoryMessages;
             IELScrollViewerClipFiles.Content = SourceChat.ClipFiles;
+            IELScrollHistoryMessage.ScrollToVerticalOffset(SourceChat.SaveScrollValue);
             if (SourceChat.IsBusy)
                 BusyActivateVisual();
             IELTextBoxMessage.Focus();
@@ -121,6 +122,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
             SourceChat?.IsBusyChanged -= ChatBusyChanged;
             SourceChat?.EnteringMessage = IELTextBoxMessage.Text;
             IELTextBoxMessage.Text = string.Empty;
+            SourceChat?.SaveScrollValue = IELScrollHistoryMessage.VerticalOffset;
             if (SourceChat?.IsBusy ?? false)
                 BusyDiactivateVisual();
         }

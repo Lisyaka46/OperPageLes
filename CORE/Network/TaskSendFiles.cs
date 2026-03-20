@@ -6,10 +6,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Windows.Controls;
 
 namespace ApplicationOperPageLes.CORE.Network
 {
-    internal class TaskSendFiles
+    internal class TaskSendFiles()
     {
         /// <summary>
         /// Текущий поток отправки файлов
@@ -19,12 +20,12 @@ namespace ApplicationOperPageLes.CORE.Network
         /// <summary>
         /// Состояние активного потока отправки файлов
         /// </summary>
-        internal bool Activate { get; private set; }
+        internal bool Activate { get; private set; } = false;
 
         /// <summary>
         /// Количество файлов переданных в очередь
         /// </summary>
-        internal int CountQueueFiles { get; private set; } = 0;
+        internal uint CountQueueFiles { get; private set; } = 0u;
 
         /// <summary>
         /// Количество файлов загруженных из очереди
@@ -37,95 +38,99 @@ namespace ApplicationOperPageLes.CORE.Network
         internal double LoadingCurrentFile { get; private set; } = 0d;
 
         /// <summary>
-        /// Массив очереди информации о передаваемых сообщениях
-        /// </summary>
-        private List<ReadOnlyCollection<FileNetworkInfo>> InfoSendFiles = [];
-
-        /// <summary>
         /// Массив очереди зависимых объектов сообщений
         /// </summary>
-        private List<OPLNetworkMessage> UIMessages = [];
+        private volatile Queue<OPLNetworkMessage> UIMessages = [];
 
         /// <summary>
         /// Массив очереди передачи файлов
         /// </summary>
-        private List<string[]> InfoPathFiles = [];
+        private volatile Queue<string[]> InfoPathFiles = [];
 
-        public TaskSendFiles()
+        /// <summary>
+        /// Добавить очередь отправки файлов
+        /// </summary>
+        /// <param name="FilesInfo">Информация о принимаемых</param>
+        /// <param name="ClipFiles">Прикреплённые файлы к сообщению</param>
+        internal void AddQueue(OPLNetworkMessage UIMessageElement, string[] PathFiles)
         {
+            for (uint i = 0; i < UIMessageElement.StackPanelClip.Children.Count; i++)
+                ((OPLNetworkClipElement)UIMessageElement.StackPanelClip.Children[(int)i]).SetIndex(CountQueueFiles + i);
+
+            UIMessages.Enqueue(UIMessageElement);
+            InfoPathFiles.Enqueue(PathFiles);
+
+            CountQueueFiles += (uint)PathFiles.Length;
         }
 
         /// <summary>
-        /// Отправить все данные файлов
+        /// Принять все данные файлов
         /// </summary>
-        /// <param name="UIMessageElement">Объект сообщения который отображает прикреплённые файлы</param>
-        /// <param name="FilesInfo">Данные о передаваемых файлах</param>
-        /// <param name="PathFiles">Директории передаваемых файлов</param>
         /// <returns></returns>
-        internal void AddSendProcess(TcpClient Client, OPLNetworkMessage UIMessageElement, ReadOnlyCollection<FileNetworkInfo> FilesInfo, string[] PathFiles)
+        internal void SendProcess(Socket SocketSendFile)
         {
-            InfoSendFiles.Add(FilesInfo);
-            InfoPathFiles.Add(PathFiles);
-            UIMessages.Add(UIMessageElement);
-            CountQueueFiles += FilesInfo.Count;
-            if (!Activate)
-                SourceSendTask = Task.Run(async () => await ExecuteSendFiles(Client));
+            if (Activate)
+                throw new Exception("Невозможно запустить обработку очереди повторно!");
+            SourceSendTask = new(async () =>
+            {
+                Activate = true;
+                while (UIMessages.Count > 0)
+                    ExecuteSendFiles(SocketSendFile, UIMessages.Dequeue(), InfoPathFiles.Dequeue()).Wait();
+                Activate = false;
+                CountCompletedFiles = 0;
+                CountQueueFiles = 0;
+                LoadingCurrentFile = 0d;
+            });
+            SourceSendTask.Start();
         }
 
         /// <summary>
         /// Активировать передачу файлов
         /// </summary>
-        private async Task ExecuteSendFiles(TcpClient SourceTCPClient)
+        private async Task ExecuteSendFiles(Socket SocketSendFile, OPLNetworkMessage UIMessageElement, string[] PathFiles)
         {
-            Stream StreamSendFile;
-            int CountReadBytesInFile;
-            long SendBytes = 0L;
             OPLNetworkClipElement ClipElement;
             byte[] Buffer;
-            Activate = true;
-            while (UIMessages.Count > 0)
+            FileStream Reader;
+            for (int i = 0; i < PathFiles.Length; i++)
             {
-                for (int i = 0; i < InfoPathFiles[0].Length; i++)
+                ClipElement = UIMessageElement.Dispatcher.Invoke(() => (OPLNetworkClipElement)UIMessageElement.StackPanelClip.Children[i]);
+                ClipElement.Dispatcher.Invoke(ClipElement.ClearIndex);
+
+                if (!File.Exists(PathFiles[i]))
                 {
-                    ClipElement = UIMessages[0].Dispatcher.Invoke(() => (OPLNetworkClipElement)UIMessages[0].StackPanelClip.Children[i]);
-                    ClipElement.Dispatcher.Invoke(ClipElement.ClearIndex);
+                    ClipElement.IsEnabled = false;
+                    return;
+                }
+
+                Reader = new(PathFiles[i], FileMode.Open, FileAccess.Read, FileShare.None);
+                LoadingCurrentFile = 0d;
+                await Task.Delay(SocketSendFile.SendTimeout);
+                if (Reader.Length > SocketSendFile.SendBufferSize)
+                {
                     ClipElement.Dispatcher.Invoke(ClipElement.StartManipulate);
-                    await SourceTCPClient.Client.SendAsync(new ArraySegment<byte>([.. InfoSendFiles[0][i].SourceBytes]));
-                    StreamSendFile = File.OpenRead(InfoPathFiles[0][i]);
-                    Buffer = new byte[SourceTCPClient.ReceiveBufferSize];
-                    LoadingCurrentFile = 0d;
-                    while (StreamSendFile.Position < InfoSendFiles[0][i].LengthFileData)
+                    Buffer = new byte[SocketSendFile.SendBufferSize];
+                    while (SocketSendFile.SendBufferSize < Reader.Length - Reader.Position)
                     {
-                        if (StreamSendFile.Position + SourceTCPClient.ReceiveBufferSize > InfoSendFiles[0][i].LengthFileData)
-                        {
-                            Buffer = new byte[InfoSendFiles[0][i].LengthFileData - StreamSendFile.Position];
-                            CountReadBytesInFile = await StreamSendFile.ReadAsync(Buffer);
-                            SendBytes += CountReadBytesInFile;
-                            LoadingCurrentFile = 1d;
-                            ClipElement.Dispatcher.Invoke(() => ClipElement.SetValueManipulate(1d));
-                            await SourceTCPClient.Client.SendAsync(Buffer);
-                            break;
-                        }
-                        CountReadBytesInFile = await StreamSendFile.ReadAsync(Buffer);
-                        SendBytes += CountReadBytesInFile;
-                        LoadingCurrentFile = (double)SendBytes / (double)InfoSendFiles[0][i].LengthFileData;
+                        Reader.ReadExactly(Buffer);
+                        await SocketSendFile.SendAsync(Buffer);
+                        LoadingCurrentFile = (double)Reader.Position / (double)Reader.Length;
                         ClipElement.Dispatcher.Invoke(() => ClipElement.SetValueManipulate(LoadingCurrentFile));
-                        await SourceTCPClient.Client.SendAsync(Buffer);
+                        await Task.Delay(SocketSendFile.SendTimeout);
                     }
-                    StreamSendFile.Close();
-                    StreamSendFile.Dispose();
                     ClipElement.Dispatcher.Invoke(ClipElement.EndManipulate);
                 }
+                Buffer = new byte[Reader.Length - Reader.Position];
+                Reader.ReadExactly(Buffer);
+                await SocketSendFile.SendAsync(Buffer);
+                await Task.Delay(SocketSendFile.SendTimeout);
+
+                Reader.Close();
+                Reader.Dispose();
+
+                CountQueueFiles--;
                 CountCompletedFiles++;
-                UIMessages.RemoveAt(0);
-                InfoPathFiles.RemoveAt(0);
-                InfoSendFiles.RemoveAt(0);
-                GC.Collect();
             }
-            Activate = false;
-            CountCompletedFiles = 0;
-            CountQueueFiles = 0;
-            LoadingCurrentFile = 0d;
         }
     }
 }

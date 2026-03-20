@@ -18,12 +18,12 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
     {
         #region Properties
 
-        #region Text
+        #region TextFileName
         /// <summary>
         /// Данные конкретного свойства
         /// </summary>
-        public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(OPLNetworkClipElement),
+        public static readonly DependencyProperty TextFileNameProperty =
+            DependencyProperty.Register("TextFileName", typeof(string), typeof(OPLNetworkClipElement),
                 new("Name",
                     (sender, e) =>
                     {
@@ -31,34 +31,44 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
                     }));
 
         /// <summary>
-        /// Текст отображаемый в имени файла
+        /// Текст имени файла
         /// </summary>
-        public string Text
+        public string TextFileName
         {
-            get => (string)GetValue(TextProperty);
-            set => SetValue(TextProperty, value);
+            get => (string)GetValue(TextFileNameProperty);
+            set => SetValue(TextFileNameProperty, value);
         }
         #endregion
 
-        #region TextFileLoading
+        #region TextMessage
         /// <summary>
         /// Данные конкретного свойства
         /// </summary>
-        public static readonly DependencyProperty TextFileLoadingProperty =
-            DependencyProperty.Register("TextFileLoading", typeof(string), typeof(OPLNetworkClipElement),
+        public static readonly DependencyProperty TextMessageProperty =
+            DependencyProperty.Register("TextMessage", typeof(string), typeof(OPLNetworkClipElement),
                 new(string.Empty,
                     (sender, e) =>
                     {
-                        ((OPLNetworkClipElement)sender).TextBlockSizeFile.Text = (string)e.NewValue;
+                        ((OPLNetworkClipElement)sender).TextBlockMessage.Text = (string)e.NewValue;
                     }));
 
         /// <summary>
-        /// Текст отображаемый в имени файла
+        /// Текст сообщения
         /// </summary>
-        public string TextFileLoading
+        public string TextMessage
         {
-            get => (string)GetValue(TextFileLoadingProperty);
-            set => SetValue(TextFileLoadingProperty, value);
+            get => (string)GetValue(TextMessageProperty);
+            set
+            {
+                if (value.Length != TextBlockMessage.Text.Length && (value.Length == 0 || TextBlockMessage.Text.Length == 0))
+                {
+                    if (ManagerAnimation != null)
+                        ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockMessage, HeightProperty, value.Length == 0 ? 0d : 14d,
+                            TimeSpan.FromMilliseconds(300d));
+                    else TextBlockMessage.Height = value.Length == 0 ? 0d : 14d;
+                }
+                SetValue(TextMessageProperty, value);
+            }
         }
         #endregion
 
@@ -123,6 +133,8 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         public OPLNetworkClipElement()
         {
             InitializeComponent();
+            TextBlockMessage.Height = 0d;
+            IconLoadingFile.Opacity = 0d;
             BorderIndex.Width = 0;
             RotateGradientLoading.Angle = 0d;
             RadialGradientLoading.Center = new(0.5d, 0.5d);
@@ -165,7 +177,10 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
                 ManagerAnimation.PointAnimationType.AnimateEffect(RadialGradientLoading, RadialGradientBrush.CenterProperty,
                     new(0.35d, 0.5d), TimeSpan.FromMilliseconds(1500d));
                 DoubleAnimation animationAngle = ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-                animationAngle.EasingFunction = null;
+                animationAngle.EasingFunction = new SineEase()
+                {
+                    EasingMode = EasingMode.EaseInOut,
+                };
                 animationAngle.From = 0d;
                 animationAngle.To = 360d;
                 animationAngle.RepeatBehavior = RepeatBehavior.Forever;
@@ -244,17 +259,16 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         /// <param name="DefaultIconFile">Значение по умолчанию при неудачной установке иконки</param>
         public void SetExtractAssociatedIcon(string FilePath, ImageSource? DefaultIconFile = null)
         {
-            try
+            Icon? FileIcon = File.Exists(FilePath) ? System.Drawing.Icon.ExtractAssociatedIcon(FilePath) : null;
+            Dispatcher.Invoke(() =>
             {
-                Icon? FileIcon = System.Drawing.Icon.ExtractAssociatedIcon(FilePath);
-                Dispatcher.Invoke(() => IconLoadingFile.Source =
+                IconLoadingFile.Source =
                     FileIcon != null ? Imaging.CreateBitmapSourceFromHBitmap(FileIcon.ToBitmap().GetHbitmap(),
-                    IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()) : DefaultIconFile);
-            }
-            catch
-            {
-                Dispatcher.Invoke(() => IconLoadingFile.Source = DefaultIconFile);
-            }
+                    IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()) : DefaultIconFile;
+                if (ManagerAnimation != null)
+                    ManagerAnimation.DoubleAnimationType.AnimateEffect(IconLoadingFile, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
+                else IconLoadingFile.Opacity = 1d;
+            });
         }
 
         /// <summary>
@@ -323,7 +337,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
                 _ => throw new Exception("Слишком большой размер файла."),
             };
             MainLengthFile += LengthFile;
-            Dispatcher.Invoke(() => TextFileLoading = $"{Math.Round(MainLengthFile, 2)} {R}");
+            Dispatcher.Invoke(() => TextBlockSizeFile.Text = $"{Math.Round(MainLengthFile, 2)} {R}");
         }
     }
 }

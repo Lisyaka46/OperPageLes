@@ -6,13 +6,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.CORE.Network
 {
-    internal class TaskReceiveFiles
+    internal class TaskReceiveFiles()
     {
         /// <summary>
         /// Текущий поток принятия файлов
@@ -22,12 +23,12 @@ namespace ApplicationOperPageLes.CORE.Network
         /// <summary>
         /// Состояние активного потока отправки файлов
         /// </summary>
-        internal bool Activate { get; private set; }
+        internal bool Activate { get; private set; } = false;
 
         /// <summary>
         /// Количество файлов переданных в очередь
         /// </summary>
-        internal int CountQueueFiles { get; private set; } = 0;
+        internal uint CountQueueFiles { get; private set; } = 0;
 
         /// <summary>
         /// Количество файлов загруженных из очереди
@@ -42,112 +43,115 @@ namespace ApplicationOperPageLes.CORE.Network
         /// <summary>
         /// Массив очереди информации о передаваемых сообщениях
         /// </summary>
-        private List<ReadOnlyCollection<FileNetworkInfo>> InfoReceiveFiles = [];
+        private volatile Queue<ReadOnlyCollection<FileNetworkInfo>> InfoReceiveFiles = [];
 
         /// <summary>
         /// Массив очереди зависимых объектов сообщений
         /// </summary>
-        private List<UIElementCollection> CollectionsClipFiles = [];
+        private volatile Queue<UIElementCollection> CollectionsClipFiles = [];
 
-        public TaskReceiveFiles()
+        /// <summary>
+        /// Добавить очередь отправки файлов
+        /// </summary>
+        /// <param name="FilesInfo">Информация о принимаемых</param>
+        /// <param name="ClipFiles">Прикреплённые файлы к сообщению</param>
+        internal void AddQueue(ReadOnlyCollection<FileNetworkInfo> FilesInfo, UIElementCollection ClipFiles)
         {
+            OPLNetworkClipElement Clip;
+            for (uint i = 0; i < ClipFiles.Count; i++)
+            {
+                Clip = (OPLNetworkClipElement)ClipFiles[(int)i];
+                Clip.SetIndex(CountQueueFiles + i);
+                Clip.SetExtractAssociatedIcon(String.Empty,
+                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
+                //Clip.TextMessage = "В ожидании";
+            }
+
+            InfoReceiveFiles.Enqueue(FilesInfo);
+            CollectionsClipFiles.Enqueue(ClipFiles);
+            CountQueueFiles += (uint)FilesInfo.Count;
         }
 
         /// <summary>
-        /// Отправить все данные файлов
+        /// Принять все данные файлов
         /// </summary>
-        /// <param name="UIMessageElement">Объект сообщения который отображает прикреплённые файлы</param>
-        /// <param name="FilesInfo">Данные о передаваемых файлах</param>
-        /// <param name="PathFiles">Директории передаваемых файлов</param>
         /// <returns></returns>
-        internal void ReceiveProcess(TcpClient Client, ReadOnlyCollection<FileNetworkInfo> FilesInfo, UIElementCollection ClipFiles)
+        internal void ReceiveProcess(Socket SocketReceiveFile)
         {
-            InfoReceiveFiles.Add(FilesInfo);
-            CollectionsClipFiles.Add(ClipFiles);
-            CountQueueFiles += FilesInfo.Count;
-            if (!Activate)
+            if (Activate)
+                throw new Exception("Невозможно запустить обработку очереди повторно!");
+            SourceReceiveTask = new(() =>
             {
-                SourceReceiveTask = new(async () =>
-                {
-                    Activate = true;
-                    while (InfoReceiveFiles.Count > 0)
-                    {
-                        for (int i = 0; i < InfoReceiveFiles.Count; i++)
-                        {
-                            await ExecuteReceiveFile(Client, InfoReceiveFiles[0][i], (OPLNetworkClipElement)CollectionsClipFiles[0][i]);
-                            CountCompletedFiles = i;
-                        }
-                        InfoReceiveFiles.RemoveAt(0);
-                        CollectionsClipFiles.RemoveAt(0);
-                    }
-                    Activate = false;
-                });
-                SourceReceiveTask.Start();
-            }
+                Activate = true;
+                while (InfoReceiveFiles.Count > 0)
+                    ExecuteReceiveFile(SocketReceiveFile, InfoReceiveFiles.Dequeue(), CollectionsClipFiles.Dequeue()).Wait();
+                Activate = false;
+                CountCompletedFiles = 0;
+                CountQueueFiles = 0;
+                LoadingCurrentFile = 0d;
+            });
+            SourceReceiveTask.Start();
         }
 
         /// <summary>
         /// Активировать принятие файлов
         /// </summary>
-        private async Task ExecuteReceiveFile(TcpClient SourceTCPClient, FileNetworkInfo CurrentFileInfo, OPLNetworkClipElement ClipElement)
+        private async Task ExecuteReceiveFile(Socket SocketReceiveFile,
+            ReadOnlyCollection<FileNetworkInfo> CurrentFileInfo, UIElementCollection ClipElementCollection)
         {
-            byte[] ExpansionFileData, NameFileData, Buffer;
-            string PathFile, NameFile;
-            LoadingCurrentFile = 0d;
-
-            ExpansionFileData = Chat.ReceiveNetworkByte(SourceTCPClient, CurrentFileInfo.LengthFileExpansion);
-            NameFileData = Chat.ReceiveNetworkByte(SourceTCPClient, CurrentFileInfo.LengthFileName);
-            NameFile = $"{Encoding.UTF8.GetString(NameFileData)}.{Encoding.UTF8.GetString(ExpansionFileData)}";
-            PathFile = $"{StructDirectoryResources.DirectoryDownloadApplication}{NameFile}";
-
-            ClipElement.Dispatcher.Invoke(() =>
+            byte[] Buffer;
+            string PathFile, ReNamePath;
+            OPLNetworkClipElement ClipElement;
+            FileStream Writer;
+            for (int i = 0; i < CurrentFileInfo.Count; i++)
             {
-                ClipElement.MathSizeFile(CurrentFileInfo.LengthFileData);
-                ClipElement.Text = NameFile;
-            });
+                ClipElement = (OPLNetworkClipElement)ClipElementCollection[i];
 
-            Stream StreamDownloadFile = File.OpenWrite(PathFile);
-            ClipElement.Dispatcher.Invoke(() =>
-            {
-                ClipElement.SetExtractAssociatedIcon(PathFile, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
-                ClipElement.StartManipulate();
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ClipElement,
-                    OPLNetworkClipElement.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ClipElement,
-                    OPLNetworkClipElement.MarginProperty, new(3), TimeSpan.FromMilliseconds(500d));
-            });
+                PathFile = $"{StructDirectoryResources.DirectoryDownloadApplication}{CurrentFileInfo[i].FileName}";
 
-            if (CurrentFileInfo.LengthFileData < SourceTCPClient.ReceiveBufferSize)
-            {
-                Buffer = new byte[CurrentFileInfo.LengthFileData];
-                await SourceTCPClient.Client.ReceiveAsync(Buffer);
-                await StreamDownloadFile.WriteAsync(Buffer);
-                LoadingCurrentFile = 1d;
-                ClipElement.SetValueManipulate(1d);
-            }
-            else
-            {
-                Buffer = new byte[SourceTCPClient.ReceiveBufferSize];
-                while (StreamDownloadFile.Position < CurrentFileInfo.LengthFileData)
+                ClipElement.Dispatcher.Invoke(() =>
                 {
-                    await SourceTCPClient.Client.ReceiveAsync(Buffer);
-                    StreamDownloadFile.Write(Buffer);
-                    if (StreamDownloadFile.Position + SourceTCPClient.ReceiveBufferSize > CurrentFileInfo.LengthFileData)
-                    {
-                        Buffer = new byte[CurrentFileInfo.LengthFileData - StreamDownloadFile.Position];
-                        await SourceTCPClient.Client.ReceiveAsync(Buffer);
-                        StreamDownloadFile.Write(Buffer);
-                    }
-                    LoadingCurrentFile = (double)StreamDownloadFile.Position / (double)CurrentFileInfo.LengthFileData;
-                    ClipElement.Dispatcher.Invoke(() => ClipElement.SetValueManipulate(LoadingCurrentFile));
-                }
-            }
-            StreamDownloadFile.Close();
-            StreamDownloadFile.Dispose();
-            await Task.Delay(SourceTCPClient.ReceiveTimeout);
-            ClipElement.Dispatcher.Invoke(ClipElement.EndManipulate);
+                    ClipElement.ClearIndex();
+                    //ClipElement.TextMessage = string.Empty;
+                    ClipElement.SetExtractAssociatedIcon(PathFile,
+                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
+                });
 
-            GC.Collect();
+                Writer = new($"{PathFile}.download", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                LoadingCurrentFile = 0d;
+                await Task.Delay(SocketReceiveFile.ReceiveTimeout);
+                if (CurrentFileInfo[i].LengthFileData > SocketReceiveFile.ReceiveBufferSize)
+                {
+                    ClipElement.Dispatcher.Invoke(ClipElement.StartManipulate);
+                    Buffer = new byte[SocketReceiveFile.ReceiveBufferSize];
+                    while (Writer.Position + SocketReceiveFile.ReceiveBufferSize < CurrentFileInfo[i].LengthFileData)
+                    {
+                        await SocketReceiveFile.ReceiveAsync(Buffer);
+                        Writer.Write(Buffer);
+                        await Task.Delay(SocketReceiveFile.ReceiveTimeout);
+                        LoadingCurrentFile = (double)Writer.Position / (double)CurrentFileInfo[i].LengthFileData;
+                        ClipElement.Dispatcher.Invoke(() => ClipElement.SetValueManipulate(LoadingCurrentFile));
+                    }
+                    ClipElement.Dispatcher.Invoke(ClipElement.EndManipulate);
+                }
+                Buffer = new byte[CurrentFileInfo[i].LengthFileData - Writer.Position];
+                await SocketReceiveFile.ReceiveAsync(Buffer);
+                Writer.Write(Buffer);
+                await Task.Delay(SocketReceiveFile.ReceiveTimeout);
+
+                Writer.Close();
+                Writer.Dispose();
+
+                ReNamePath = Path.ChangeExtension($"{PathFile}.download", $".{CurrentFileInfo[i].FileExtension}");
+                if (File.Exists(ReNamePath)) File.Delete(ReNamePath);
+                File.Move($"{PathFile}.download", Path.ChangeExtension($"{PathFile}.download", $".{CurrentFileInfo[i].FileExtension}"));
+                ClipElement.Dispatcher.Invoke(() =>
+                    ClipElement.SetExtractAssociatedIcon($"{PathFile}.{CurrentFileInfo[i].FileExtension}",
+                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication))));
+
+                CountQueueFiles--;
+                CountCompletedFiles++;
+            }
         }
     }
 }

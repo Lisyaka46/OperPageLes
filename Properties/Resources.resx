@@ -145,9 +145,6 @@
   <data name="Cross" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Cross.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DoubleMouseButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\DoubleMouseButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="File" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\File.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -165,9 +162,6 @@
   </data>
   <data name="IconMainSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\IconMainSettings.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="LeftMouseButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\LeftMouseButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="LightBulb" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\LightBulb.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -187,17 +181,11 @@
   <data name="MINSI" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Autor\MINSI.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="NotMouseButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\NotMouseButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Plus.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Reload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Reload.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RightMouseButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\RightMouseButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Search.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -253,9 +241,6 @@
   <data name="Collapse" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Collapse.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Description" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Description.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="PaperClip" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Network\PaperClip.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -265,12 +250,6 @@
   <data name="Read" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Network\Read.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="ServerOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\ServerOff.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ServerOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\ServerOn.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Chats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Network\Chats.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -279,5 +258,8 @@
   </data>
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Download.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AudioMessageReceive" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\CORE\Audio\MessageReceive.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

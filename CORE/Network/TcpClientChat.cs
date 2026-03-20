@@ -47,6 +47,8 @@ namespace ApplicationOperPageLes.CORE.Network
                 await DeviceClientDataFile.ConnectAsync(IP, Chat.PortConnectionDataFile);
                 DeviceClientDataFile.ReceiveBufferSize = 16384;
                 DeviceClientDataFile.SendBufferSize = 16384;
+                DeviceClientDataFile.SendTimeout = 10;
+                DeviceClientDataFile.ReceiveTimeout = 10;
                 return true;
             }
             catch
@@ -85,6 +87,8 @@ namespace ApplicationOperPageLes.CORE.Network
                 DeviceClientDataFile = ClientDataFile;
                 DeviceClientDataFile.ReceiveBufferSize = 16384;
                 DeviceClientDataFile.SendBufferSize = 16384;
+                DeviceClientDataFile.SendTimeout = 10;
+                DeviceClientDataFile.ReceiveTimeout = 10;
                 return true;
             }
             return false;

@@ -95,7 +95,7 @@ namespace ApplicationOperPageLes.CORE.Network
                                 }
                             }
                         }
-                        await Task.Delay(3000);
+                        await Task.Delay(1000);
                     }
                 }
                 catch { }
