@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Windows.Threading;
 
 namespace ApplicationOperPageLes.CORE.Network
 {
@@ -40,9 +36,8 @@ namespace ApplicationOperPageLes.CORE.Network
         internal event EventHandler<TcpClientChat>? ListenerPendingChat;
 
         /// <summary>
-        /// Подключиться асинхронно к хосту
+        /// Запустить прослушивание портов
         /// </summary>
-        /// <param name="IP">Хост к которому подключается клиент</param>
         /// <returns></returns>
         internal void ListenerStart()
         {

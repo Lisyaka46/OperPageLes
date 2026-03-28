@@ -43,12 +43,12 @@ namespace ApplicationOperPageLes.CORE.Network
         /// <summary>
         /// Массив очереди информации о передаваемых сообщениях
         /// </summary>
-        private volatile Queue<ReadOnlyCollection<FileNetworkInfo>> InfoReceiveFiles = [];
+        private Queue<ReadOnlyCollection<FileNetworkInfo>> InfoReceiveFiles = [];
 
         /// <summary>
         /// Массив очереди зависимых объектов сообщений
         /// </summary>
-        private volatile Queue<UIElementCollection> CollectionsClipFiles = [];
+        private Queue<UIElementCollection> CollectionsClipFiles = [];
 
         /// <summary>
         /// Добавить очередь отправки файлов
@@ -84,7 +84,9 @@ namespace ApplicationOperPageLes.CORE.Network
             {
                 Activate = true;
                 while (InfoReceiveFiles.Count > 0)
+                {
                     ExecuteReceiveFile(SocketReceiveFile, InfoReceiveFiles.Dequeue(), CollectionsClipFiles.Dequeue()).Wait();
+                }
                 Activate = false;
                 CountCompletedFiles = 0;
                 CountQueueFiles = 0;
@@ -105,7 +107,7 @@ namespace ApplicationOperPageLes.CORE.Network
             FileStream Writer;
             for (int i = 0; i < CurrentFileInfo.Count; i++)
             {
-                ClipElement = (OPLNetworkClipElement)ClipElementCollection[i];
+                ClipElement = ClipElementCollection[i].Dispatcher.Invoke(() => (OPLNetworkClipElement)ClipElementCollection[i]);
 
                 PathFile = $"{StructDirectoryResources.DirectoryDownloadApplication}{CurrentFileInfo[i].FileName}";
 
@@ -119,25 +121,29 @@ namespace ApplicationOperPageLes.CORE.Network
 
                 Writer = new($"{PathFile}.download", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
                 LoadingCurrentFile = 0d;
-                await Task.Delay(SocketReceiveFile.ReceiveTimeout);
                 if (CurrentFileInfo[i].LengthFileData > SocketReceiveFile.ReceiveBufferSize)
                 {
                     ClipElement.Dispatcher.Invoke(ClipElement.StartManipulate);
                     Buffer = new byte[SocketReceiveFile.ReceiveBufferSize];
                     while (Writer.Position + SocketReceiveFile.ReceiveBufferSize < CurrentFileInfo[i].LengthFileData)
                     {
+                        while (SocketReceiveFile.Available < Buffer.Length)
+                            await Task.Delay(100);
                         await SocketReceiveFile.ReceiveAsync(Buffer);
-                        Writer.Write(Buffer);
-                        await Task.Delay(SocketReceiveFile.ReceiveTimeout);
+                        await Writer.WriteAsync(Buffer);
+                        //ClipElement.Dispatcher.Invoke(() => ClipElement.TextMessage = $"{Writer.Position} <- {CurrentFileInfo[i].LengthFileData}");
                         LoadingCurrentFile = (double)Writer.Position / (double)CurrentFileInfo[i].LengthFileData;
                         ClipElement.Dispatcher.Invoke(() => ClipElement.SetValueManipulate(LoadingCurrentFile));
                     }
                     ClipElement.Dispatcher.Invoke(ClipElement.EndManipulate);
                 }
                 Buffer = new byte[CurrentFileInfo[i].LengthFileData - Writer.Position];
+                while (SocketReceiveFile.Available < Buffer.Length)
+                    await Task.Delay(100);
+                //ClipElement.Dispatcher.Invoke(() => ClipElement.TextMessage = $"{Writer.Position} ?<- {CurrentFileInfo[i].LengthFileData}");
                 await SocketReceiveFile.ReceiveAsync(Buffer);
-                Writer.Write(Buffer);
-                await Task.Delay(SocketReceiveFile.ReceiveTimeout);
+                await Writer.WriteAsync(Buffer);
+                //ClipElement.Dispatcher.Invoke(() => ClipElement.TextMessage = $"{Writer.Position} ?? {CurrentFileInfo[i].LengthFileData}");
 
                 Writer.Close();
                 Writer.Dispose();

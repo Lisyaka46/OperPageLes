@@ -71,7 +71,7 @@ namespace ApplicationOperPageLes.CORE.Network
         {
             if (Activate)
                 throw new Exception("Невозможно запустить обработку очереди повторно!");
-            SourceSendTask = new(async () =>
+            SourceSendTask = new(() =>
             {
                 Activate = true;
                 while (UIMessages.Count > 0)
@@ -105,25 +105,22 @@ namespace ApplicationOperPageLes.CORE.Network
 
                 Reader = new(PathFiles[i], FileMode.Open, FileAccess.Read, FileShare.None);
                 LoadingCurrentFile = 0d;
-                await Task.Delay(SocketSendFile.SendTimeout);
                 if (Reader.Length > SocketSendFile.SendBufferSize)
                 {
                     ClipElement.Dispatcher.Invoke(ClipElement.StartManipulate);
                     Buffer = new byte[SocketSendFile.SendBufferSize];
                     while (SocketSendFile.SendBufferSize < Reader.Length - Reader.Position)
                     {
-                        Reader.ReadExactly(Buffer);
+                        await Reader.ReadExactlyAsync(Buffer);
                         await SocketSendFile.SendAsync(Buffer);
                         LoadingCurrentFile = (double)Reader.Position / (double)Reader.Length;
                         ClipElement.Dispatcher.Invoke(() => ClipElement.SetValueManipulate(LoadingCurrentFile));
-                        await Task.Delay(SocketSendFile.SendTimeout);
                     }
                     ClipElement.Dispatcher.Invoke(ClipElement.EndManipulate);
                 }
                 Buffer = new byte[Reader.Length - Reader.Position];
-                Reader.ReadExactly(Buffer);
+                await Reader.ReadExactlyAsync(Buffer);
                 await SocketSendFile.SendAsync(Buffer);
-                await Task.Delay(SocketSendFile.SendTimeout);
 
                 Reader.Close();
                 Reader.Dispose();

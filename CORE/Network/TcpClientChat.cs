@@ -87,8 +87,6 @@ namespace ApplicationOperPageLes.CORE.Network
                 DeviceClientDataFile = ClientDataFile;
                 DeviceClientDataFile.ReceiveBufferSize = 16384;
                 DeviceClientDataFile.SendBufferSize = 16384;
-                DeviceClientDataFile.SendTimeout = 10;
-                DeviceClientDataFile.ReceiveTimeout = 10;
                 return true;
             }
             return false;

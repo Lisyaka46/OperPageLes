@@ -1,17 +1,8 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.UserElementsControl.Network;
-using IEL.CORE.Classes;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Controls;
-using System.Windows.Forms.VisualStyles;
-using Windows.ApplicationModel.Store;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.CORE.Network

@@ -2,11 +2,13 @@
 using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow;
-using OIEL.UserElementsControl;
+using ApplicationOperPageLes.UI.UserElementsControl.Theme;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
+using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
+using OIEL.UserElementsControl;
 using System;
 using System.IO;
 using System.Windows;
@@ -15,7 +17,6 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
-using IEL.CORE.Enums;
 using Binding = System.Windows.Data.Binding;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
@@ -71,6 +72,11 @@ namespace ApplicationOperPageLes.UI.Windows
         /// Индекс выделенной темы панелью действий
         /// </summary>
         private int SelectIndexTheme = -1;
+
+        /// <summary>
+        /// Контейнер всех объектов тем
+        /// </summary>
+        private StackPanel StackPanelThemes;
 
         public WindowThemeController()
         {
@@ -128,13 +134,22 @@ namespace ApplicationOperPageLes.UI.Windows
             GridQdataStatesColor.Opacity = 0d;
             BorderViewerQData.IsEnabled = false;
 
-            //if (App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0)
-            //    DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
+            StackPanelThemes = new()
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+            };
+            ScrollViewerTheme.Opacity = 0d;
+            ScrollViewerTheme.ScrollForce = 35;
+            ScrollViewerTheme.AutoUpdateVisibleHorizontalScroll = false;
+            ScrollViewerTheme.Content = StackPanelThemes;
 
-            //DefaultPaletteElement.OnActivateMouseRight += (sender, e) =>
-            //{
-            //    ActivatePanelActionThemeSelect(DefaultPaletteElement, -1);
-            //};
+            DefaultPaletteElement.ManagerAnimation = App.ManagerAnimation;
+            DefaultPaletteElement.IsActivate = App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0;
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(DefaultPaletteElement);
+            DefaultPaletteElement.MouseRightButtonUp += (sender, e) =>
+            {
+                ActivatePanelActionThemeSelect(DefaultPaletteElement, -1);
+            };
 
             IELCreateNewTheme.OnActivateMouseLeft += (sender, e) =>
             {
@@ -143,21 +158,9 @@ namespace ApplicationOperPageLes.UI.Windows
                 if (ResultTheme == null) return;
 
                 ArrayInicializeFilesTheme.Add(ResultTheme.DirectoryFile);
-                OPLImageViewer button = CreateButtonTheme();
-                //button.Text = ResultTheme.Name;
-                GridThemes.Children.Add(button);
-                button.UpdateLayout();
-                button.Margin = new(5, GridThemes.Children.Count == 0 ? 5 : (GridThemes.Children.Count - 1) * (button.ActualHeight + 5) + 5, 5, 0);
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(button);
-                //button.OnActivateMouseLeft += (sender, e) =>
-                //{
-                //    if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                //    ActivateThemeFromFile(GridThemes.Children.IndexOf((UIElement)sender));
-                //};
-                //button.OnActivateMouseRight += (sender, e) =>
-                //{
-                //    ActivatePanelActionThemeSelect((OPLImageViewer)sender, GridThemes.Children.IndexOf((UIElement)sender));
-                //};
+                OPLThemeFile button = CreateButtonTheme();
+                button.TextNameFile = ResultTheme.Name;
+                StackPanelThemes.Children.Add(button);
             };
 
             IELButtonBackViewTheme.OnActivateMouseLeft += (sender, e) =>
@@ -225,14 +228,8 @@ namespace ApplicationOperPageLes.UI.Windows
                 {
                     File.Delete(FileTheme);
                     ArrayInicializeFilesTheme.RemoveAt(SelectIndexTheme);
-                    GridThemes.Children.RemoveAt(SelectIndexTheme);
+                    StackPanelThemes.Children.RemoveAt(SelectIndexTheme);
                     PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                    for (int i = SelectIndexTheme; i < GridThemes.Children.Count; i++)
-                    {
-                        App.ManagerAnimation.ThicknessAnimationType.AnimateEffect((FrameworkElement)GridThemes.Children[i], MarginProperty,
-                            new(5, i == 0 ? 5 : i * (((FrameworkElement)GridThemes.Children[i]).ActualHeight + 5) + 5, 5, 0),
-                            TimeSpan.FromMilliseconds(500d));
-                    }
                     if (ActiveThemeInApplicationIndex == SelectIndexTheme)
                         ActivateThemeInApplicationFromSelectIndex(-1);
                     if (TextBlockNameSelectTheme.Text.Equals(Path.GetFileName(FileTheme)))
@@ -262,7 +259,7 @@ namespace ApplicationOperPageLes.UI.Windows
                     CreateAllPaletteButtons(GridMainPaletteButtons));
                 App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridMainPaletteButtons, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
                 await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка тем", CreateAllThemeButtons());
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridThemes, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ScrollViewerTheme, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
             });
             base.Show();
         }
@@ -295,33 +292,21 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <returns></returns>
         private async Task CreateAllThemeButtons()
         {
-            GridThemes.Children.Clear();
-            OPLImageViewer button = new();
+            StackPanelThemes.Children.Clear();
+            OPLThemeFile button;
             ArrayInicializeFilesTheme = [..Directory.GetFiles(StructDirectoryResources.DirectoryThemeApplication).Where((i) =>
                 Path.GetExtension(i).Equals(".qd"))];
             string ActiveNameTheme = App.CurrentApp.SettingMainApplication.ThemeInstallName;
             for (int i = 0; i < ArrayInicializeFilesTheme.Count; i++)
             {
                 button = CreateButtonTheme();
-                //button.Text = Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[i]);
-                //if (ActiveNameTheme.Equals(button.Text, StringComparison.InvariantCultureIgnoreCase))
-                //{
-                //    //button.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
-                //    ActiveThemeInApplicationIndex = i;
-                //}
-                GridThemes.Children.Add(button);
-                button.UpdateLayout();
-                button.Margin = new(5, i == 0 ? 5 : i * (button.ActualHeight + 5) + 5, 5, 0);
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(button);
-                //button.OnActivateMouseLeft += (sender, e) =>
-                //{
-                //    if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                //    ActivateThemeFromFile(GridThemes.Children.IndexOf((UIElement)sender));
-                //};
-                //button.OnActivateMouseRight += (sender, e) =>
-                //{
-                //    ActivatePanelActionThemeSelect((OPLImageViewer)sender, GridThemes.Children.IndexOf((UIElement)sender));
-                //};
+                button.TextNameFile = Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[i]);
+                if (ActiveNameTheme.Equals(button.TextNameFile, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    button.IsActivate = true;
+                    ActiveThemeInApplicationIndex = i;
+                }
+                StackPanelThemes.Children.Add(button);
             }
         }
 
@@ -329,26 +314,32 @@ namespace ApplicationOperPageLes.UI.Windows
         /// Создать объект представляющий тему
         /// </summary>
         /// <returns></returns>
-        private static OPLImageViewer CreateButtonTheme()
+        private OPLThemeFile CreateButtonTheme()
         {
-            OPLImageViewer Button = new()
+            OPLThemeFile Button = new()
             {
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                Padding = new(0),
+                Padding = new(0d, 2d, 0d, 2d),
                 FontSize = 18d,
                 CornerRadius = new(12),
-                //CornerRadiusGuides = new(7.6),
+                IsActivate = false,
                 BorderThickness = new(2),
+                Margin = new(1, 2, 1, 2),
                 SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette)),
-                Height = 64.7d,
-                //CornerRadiusCircleIndicator = new(4),
-                //CircleIndicatorMargin = new(0, -4, -4, 0),
-                //CornerRadiusBorderView = new(10),
-                //TextPadding = new(0, 5, 5, 0),
-                //MarginViewBox = new(0, -10, 0, -10),
+                ManagerAnimation = App.ManagerAnimation,
                 Cursor = System.Windows.Input.Cursors.Hand,
-                //FontFamily = App.CurrentApp.ResourceDictionaryFonts["Deledda Open Regular"],
+                FontFamily = (System.Windows.Media.FontFamily)App.CurrentApp.Resources["Alphasano"],
+            };
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(Button);
+            Button.MouseLeftButtonUp += (sender, e) =>
+            {
+                if (PanelActionMain.PanelActionActivate) PanelActionMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                ActivateThemeFromFile(StackPanelThemes.Children.IndexOf((UIElement)sender));
+            };
+            Button.MouseRightButtonUp += (sender, e) =>
+            {
+                ActivatePanelActionThemeSelect((OPLThemeFile)sender, StackPanelThemes.Children.IndexOf((UIElement)sender));
             };
             return Button;
         }
@@ -428,7 +419,7 @@ namespace ApplicationOperPageLes.UI.Windows
         /// </summary>
         /// <param name="Element">Выделенный объект темы</param>
         /// <param name="Index">Присваемый индекс</param>
-        private void ActivatePanelActionThemeSelect(OPLImageViewer Element, int Index)
+        private void ActivatePanelActionThemeSelect(OPLThemeFile Element, int Index)
         {
             //PanelActionPagePalette.IELButtonExecuteTheme.IsEnabled = Element.CircleIndicatorFill?.Color != ActiveThemeColor;
             PanelActionPagePalette.IELButtonDeleteTheme.IsEnabled = Index > -1;
@@ -453,27 +444,23 @@ namespace ApplicationOperPageLes.UI.Windows
         /// <param name="Index">Выделяемый индекс</param>
         private void ActivateThemeInApplicationFromSelectIndex(int Index)
         {
-            if (Index != -1)
+            if (Index == -1)
+                ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(App.CurrentApp.DefaultPalette ??
+                    throw new Exception("Непредвиденная ошибка нулевой палитры по умолчанию."));
+            else
             {
                 byte[] bytes = File.ReadAllBytes(ArrayInicializeFilesTheme[SelectIndexTheme]);
                 ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
-                //((OPLImageViewer)GridThemes.Children[SelectIndexTheme]).CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
-                App.CurrentApp.SettingMainApplication.ThemeInstallName.Value =
-                    Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[SelectIndexTheme]);
-            }
-            else
-            {
-                ((Palette)App.CurrentApp.ActiveThemeApplication).ChangePaletteFromBytes(App.CurrentApp.DefaultPalette ??
-                    throw new Exception("Непредвиденная ошибка нулевой палитры по умолчанию."));
-                //DefaultPaletteElement.CircleIndicatorFill = new SolidColorBrush(ActiveThemeColor);
-                App.CurrentApp.SettingMainApplication.ThemeInstallName.Value = string.Empty;
             }
 
-            //if (GridThemes.Children.Count != ActiveThemeInApplicationIndex)
-            //{
-            //    //if (ActiveThemeInApplicationIndex == -1) DefaultPaletteElement.ClearCicleIndicatorColor();
-            //    //else ((OPLImageViewer)GridThemes.Children[ActiveThemeInApplicationIndex]).ClearCicleIndicatorColor();
-            //}
+            if (ActiveThemeInApplicationIndex == -1) DefaultPaletteElement.IsActivate = false;
+            else ((OPLThemeFile)StackPanelThemes.Children[ActiveThemeInApplicationIndex]).IsActivate = false;
+
+            if (Index == -1) DefaultPaletteElement.IsActivate = true;
+            else ((OPLThemeFile)StackPanelThemes.Children[Index]).IsActivate = true;
+
+            App.CurrentApp.SettingMainApplication.ThemeInstallName.Value = Index == -1 ? string.Empty :
+                Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[SelectIndexTheme]);
 
             ActiveThemeInApplicationIndex = SelectIndexTheme;
             SelectIndexTheme = -1;

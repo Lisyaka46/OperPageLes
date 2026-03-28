@@ -1,5 +1,7 @@
-﻿using Microsoft.Win32;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using ApplicationOperPageLes.CORE.Struct;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Win32;
+using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -11,7 +13,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     /// <summary>
     /// Логика взаимодействия для PageWebBrowser.xaml
     /// </summary>
-    public partial class PageWebBrowser : Page
+    public partial class PageWebBrowser : PageBrowser
     {
         public PageWebBrowser()
         {
@@ -41,34 +43,37 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             IELButtonReloadPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
             IELButtonUnopenPageSystemBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
             App.CurrentApp.LogWriteLine("Инициализация станицы браузера");
+
             #region WebBrowserElement_Events
-            WebBrowserElement.Navigated += (sender, e) =>
-            {
-                TextBoxLink.Text = WebBrowserElement.Source.ToString();
-            };
-            //WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
+            //WebBrowserElement.Na += (sender, e) =>
             //{
-            //    WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
-            //    {
-            //        if (ViewerLoading != null) ViewerLoading.Text = $"Загрузка {e.Uri}";
-            //        else
-            //        {
-            //            ViewerLoading = App.MainWindow.GenerateVisualizateLoadingProcess($"Загрузка {e.Uri}");
-            //            App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
-            //        }
-            //        WebBrowserElement.Source = new Uri(e.Uri);
-            //    };
-            //    WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
-            //    {
-            //        if (ViewerLoading == null) return;
-            //        App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
-            //    };
-            //    WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
-            //    {
-            //        e.NewWindow = WebBrowserElement.CoreWebView2;
-            //    };
+            //    TextBoxLink.Text = WebBrowserElement.Source.ToString();
             //};
+            WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
+            {
+                WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
+                {
+                    TextBoxLink.Text = WebBrowserElement.Source.ToString();
+                    //if (ViewerLoading != null) ViewerLoading.Text = $"Загрузка {e.Uri}";
+                    //else
+                    //{
+                    //    ViewerLoading = App.MainWindow.ExecuteVisualizateLoadingProcess($"Загрузка {e.Uri}");
+                    //    App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
+                    //}
+                    WebBrowserElement.Source = new Uri(e.Uri);
+                };
+                WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
+                {
+                    //if (ViewerLoading == null) return;
+                    //App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
+                };
+                WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
+                {
+                    e.NewWindow = WebBrowserElement.CoreWebView2;
+                };
+            };
             #endregion
+
             TextBoxLink.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -86,7 +91,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             IELButtonReloadPage.OnActivateMouseLeft += (sender, e) =>
             {
-                WebBrowserElement.Refresh();
+                WebBrowserElement.Reload();
             };
             IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e) =>
             {

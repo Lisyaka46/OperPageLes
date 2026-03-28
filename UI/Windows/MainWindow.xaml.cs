@@ -498,22 +498,11 @@ namespace ApplicationOperPageLes.UI.Windows
             Opacity = 0d;
             ((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection.Start();
             base.Show();
-            #region Anim Start
-            #region 1
-            TimeSpan t1400 = TimeSpan.FromMilliseconds(1400d);
-            TimeSpan t2000 = TimeSpan.FromMilliseconds(2000d);
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty, new(8), BorderImageInformation.Margin, t1400);
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty,
+                new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
 
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(BorderDateTime, MarginProperty, new(8), BorderDateTime.Margin, t1400);
-
-            //App.ThicknessAnimationType.AnimateEffect(BorderWindowMain, MarginProperty, new(20), new(0), t2000);
-
-            //App.AnimationManager.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, t1400);
-
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty, 0d, 360d, TimeSpan.FromMilliseconds(3200d));
-
-            #endregion
-            #endregion
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty,
+                0d, 360d, TimeSpan.FromMilliseconds(3200d));
         }
         #endregion
 

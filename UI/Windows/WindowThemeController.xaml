@@ -1,4 +1,4 @@
-﻿<Window x:Class="ApplicationOperPageLes.UI.Windows.WindowThemeController"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,17 +7,19 @@
         xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
         xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+        xmlns:Theme="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl.Theme"
+    x:Class="ApplicationOperPageLes.UI.Windows.WindowThemeController"
         mc:Ignorable="d"
         Title="Управление персонализацией" Height="450" Width="800" MinWidth="670" MinHeight="410">
+    <Window.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Window.Resources>
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0,0">
             <GradientStop Color="#FF6CD1E4"/>
             <GradientStop Color="#FF85C6D2" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
-    </Window.Resources>
     <Grid x:Name="MainGrid">
         <Grid.Resources>
             <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
@@ -33,12 +35,11 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <OPL:OPLImageViewer x:Name="DefaultPaletteElement" HorizontalAlignment="Stretch" Margin="5,5,5,5" CornerRadius="12,12,12,12" PaletteElement="{DynamicResource Cocoa}" FontSize="14" Cursor="Hand"/>
+                <Theme:OPLThemeFile x:Name="DefaultPaletteElement" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Margin="2,2,2,2" CornerRadius="12,12,12,12" TextNameFile="Default" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SourceElement="/UI/Images/Palette.png" FontFamily="{DynamicResource Alphasano}" FontSize="18" IsActivate="True" Padding="0,2,0,2" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
-                    <ScrollViewer>
-                        <Grid x:Name="GridThemes" VerticalAlignment="Top">
-                        </Grid>
-                    </ScrollViewer>
+                    <IEL:IELScrollViewer x:Name="ScrollViewerTheme">
+                        
+                    </IEL:IELScrollViewer>
                 </Border>
                 <IEL:IELButtonText x:Name="IELCreateNewTheme" Grid.Row="2" Margin="5,5,5,5" PaletteElement="{DynamicResource SpruceColor}" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5" Height="45" MarginViewBox="5,7,5,7"/>
             </Grid>

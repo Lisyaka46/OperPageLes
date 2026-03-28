@@ -9,13 +9,16 @@
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork"
     mc:Ignorable="d" 
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="450" d:DesignWidth="800" AllowDrop="True">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Border x:Name="BorderDropFile" Panel.ZIndex="1" Grid.RowSpan="2" Margin="10,10,10,10" Background="#E5263137">
+            <TextBlock Text="Перемещайте файлы для их прикрепления к сообщению" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="{DynamicResource RussianRail G Pro}" FontStyle="Italic" Foreground="#FF03171D" IsHitTestVisible="False"/>
+        </Border>
         <Border Margin="3,4,3,2" BorderBrush="#FF47657D" CornerRadius="5,5,5,5" BorderThickness="2,2,2,2" Grid.RowSpan="1">
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

@@ -63,11 +63,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
 
             #region IELButtonPageDeveloper
-            TextBlockDeveloping.Opacity = 0d;
-#if !DEBUG
-            IELButtonPageBrowser.IsEnabled = false;
-            TextBlockDeveloping.Opacity = 1d;
-#endif
             IELButtonPageDeveloper.OnActivateMouseLeft += (sender, e) =>
             {
                 IELButtonPageDeveloper.IsEnabled = false;
@@ -108,17 +103,18 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #endregion
 
             #region IELButtonPageBrowser
+            TextBlockDeveloping.Opacity = 1d;
             IELButtonPageBrowser.OnActivateMouseLeft += (sender, e) =>
             {
-                //PageWebBrowser SourcePageWebBrowser = new()
-                //{
-                //    Title = "Веб-браузер"
-                //};
-                //SourcePageWebBrowser.Disposed += (sender) =>
-                //{
-                //    SourcePageWebBrowser.WebBrowserElement.Dispose();
-                //};
-                BrowserPageSelect?.Invoke(this, null);
+                PageWebBrowser SourcePageWebBrowser = new()
+                {
+                    Title = "Веб-браузер"
+                };
+                SourcePageWebBrowser.Disposed += (sender) =>
+                {
+                    SourcePageWebBrowser.WebBrowserElement.Dispose();
+                };
+                BrowserPageSelect?.Invoke(this, SourcePageWebBrowser);
             };
             #endregion
         }

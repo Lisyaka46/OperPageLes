@@ -2,6 +2,7 @@
 using ApplicationOperPageLes.CORE.Network;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.UserElementsControl.Network;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -43,37 +44,19 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
             InitializeComponent();
             BorderInfoSendFiles.Margin = new(0, 0, -155, 0);
             LineTextConnection.Opacity = 0d;
+            BorderDropFile.Visibility = Visibility.Hidden;
 
             IELButtonClip.OnActivateMouseLeft += (sender, e) =>
             {
                 if (SourceChat == null)
                     throw new Exception();
-                OPLNetworkClipElement ClipElement;
                 Microsoft.Win32.OpenFileDialog Dialog = new()
                 {
                     Multiselect = true,
                 };
                 Dialog.FileOk += (sender, e) =>
                 {
-                    ClipPathFiles.AddRange(Dialog.FileNames);
-                    foreach (string Path in Dialog.FileNames)
-                    {
-                        ClipElement = new()
-                        {
-                            TextFileName = System.IO.Path.GetFileName(Path),
-                            CornerRadius = new(5),
-                            Margin = new(5),
-                            ManagerAnimation = App.ManagerAnimation,
-                        };
-                        ClipElement.MathSizeFile(Path);
-                        ClipElement.SetExtractAssociatedIcon(Path, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
-
-                        App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(ClipElement);
-                        SourceChat.ClipFiles.Children.Add(ClipElement);
-                        ClipElement.SetIndex((uint)SourceChat.ClipFiles.Children.Count);
-                        if (BorderClip.Height == 0d)
-                            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderClip, HeightProperty, 100d, TimeSpan.FromMilliseconds(400d));
-                    }
+                    AddClipFiles(Dialog.FileNames);
                 };
                 Dialog.ShowDialog();
             };
@@ -88,6 +71,25 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
                         IELTextBoxMessage.Focus();
                         break;
                 }
+            };
+
+            DragEnter += (sender, e) =>
+            {
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderDropFile, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(500d));
+                BorderDropFile.Visibility = Visibility.Visible;
+            };
+            Drop += (sender, e) =>
+            {
+                BorderDropFile.Visibility = Visibility.Hidden;
+                if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+                {
+                    string[] Pathes = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                    AddClipFiles(Pathes);
+                }
+            };
+            DragLeave += (sender, e) =>
+            {
+                BorderDropFile.Visibility = Visibility.Hidden;
             };
 
             IELButtonGoSend.OnActivateMouseLeft += async (sender, e) =>
@@ -125,6 +127,35 @@ namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
             SourceChat?.SaveScrollValue = IELScrollHistoryMessage.VerticalOffset;
             if (SourceChat?.IsBusy ?? false)
                 BusyDiactivateVisual();
+        }
+
+        /// <summary>
+        /// Прикрепить файлы к сообщению
+        /// </summary>
+        /// <param name="Pathes">Массив директорий прикрепляемых файлов</param>
+        private void AddClipFiles(string[] Pathes)
+        {
+            if (SourceChat == null) return;
+            ClipPathFiles.AddRange(Pathes);
+            OPLNetworkClipElement ClipElement;
+            foreach (string Path in Pathes)
+            {
+                ClipElement = new()
+                {
+                    TextFileName = System.IO.Path.GetFileName(Path),
+                    CornerRadius = new(5),
+                    Margin = new(5),
+                    ManagerAnimation = App.ManagerAnimation,
+                };
+                ClipElement.MathSizeFile(Path);
+                ClipElement.SetExtractAssociatedIcon(Path, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
+
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(ClipElement);
+                SourceChat.ClipFiles.Children.Add(ClipElement);
+                ClipElement.SetIndex((uint)SourceChat.ClipFiles.Children.Count);
+                if (BorderClip.Height == 0d)
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderClip, HeightProperty, 100d, TimeSpan.FromMilliseconds(400d));
+            }
         }
 
         /// <summary>
