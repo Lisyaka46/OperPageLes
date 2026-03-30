@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
         xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
-        xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
-        xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-        xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+        xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+        xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
+        xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
         x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogManipulateLabelTags"
         mc:Ignorable="d" Height="300" Width="480" Background="#FF838A7B" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Title="Окно манипуляции над тегами">
     <Window.Resources>

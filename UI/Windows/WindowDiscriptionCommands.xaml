@@ -4,10 +4,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ApplicationOperPageLes.Windows"
-    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Base="clr-namespace:ApplicationOperPageLes.UI.Windows.Base"
-    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     x:Class="ApplicationOperPageLes.Windows.WindowDiscriptionCommands"
     mc:Ignorable="d"
     Title="Описание всех команд" Height="442" Width="850" WindowStartupLocation="CenterScreen" MinWidth="720" MinHeight="420" Foreground="Black" WindowStyle="None" AllowsTransparency="True" CornerRadius="15,15,15,15">

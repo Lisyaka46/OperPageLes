@@ -5,10 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
-    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageNotificationManager"
     Width="200" Height="200">
     <Page.Resources>

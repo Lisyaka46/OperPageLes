@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=IEL">
+                    xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL">
     <FontFamily x:Key="Monocraft">/Fonts/#Monocraft</FontFamily>
     <FontFamily x:Key="Tablon">/Fonts/#Tablon</FontFamily>
     <FontFamily x:Key="MOSCOW2024">/Fonts/#MOSCOW2024</FontFamily>

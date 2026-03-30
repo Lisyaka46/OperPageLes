@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
     xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
-    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageWebBrowser"
     Title="PageWebBrowser">
     <Base:PageBrowser.Resources>

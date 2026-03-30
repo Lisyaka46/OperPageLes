@@ -5,10 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser" 
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
-    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
-    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Name="MainPageLabel"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL" x:Name="MainPageLabel"
     x:Class="ApplicationOperPageLes.UI.Pages.Browser.PageLabels"
     mc:Ignorable="d"
     Title="PageLabels" d:DesignHeight="208.793" d:DesignWidth="313.123">

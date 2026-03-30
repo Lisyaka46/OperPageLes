@@ -3,9 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=IEL"
-      xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL"
+      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+      xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
       x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole.MainPagePanelAction" Height="245" Width="250" Margin="5,0,5,0">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>

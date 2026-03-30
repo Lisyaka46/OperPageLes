@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Base="clr-namespace:ApplicationOperPageLes.UI.Windows.Base"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
-    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=IEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
     mc:Ignorable="d" Height="200" Width="276" WindowStyle="None" AllowsTransparency="True" Background="#FF4DDAD0" TitleForeground="#FF053B3C" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" FontSize="7">
