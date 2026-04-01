@@ -1,21 +1,20 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:IEL="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL">
-    <FontFamily x:Key="Monocraft">/Fonts/#Monocraft</FontFamily>
-    <FontFamily x:Key="Tablon">/Fonts/#Tablon</FontFamily>
-    <FontFamily x:Key="MOSCOW2024">/Fonts/#MOSCOW2024</FontFamily>
-    <FontFamily x:Key="Sangha">/Fonts/#Sangha</FontFamily>
-    <FontFamily x:Key="Bree CYR var">/Fonts/#Bree CYR var</FontFamily>
-    <FontFamily x:Key="Pecita">/Fonts/#Pecita</FontFamily>
-    <FontFamily x:Key="Brenzo Slab Personal Use">/Fonts/#Brenzo Slab Personal Use</FontFamily>
-    <FontFamily x:Key="Vollda">/Fonts/#Vollda</FontFamily>
-    <FontFamily x:Key="RussianRail G Pro">/Fonts/#RussianRail G Pro</FontFamily>
-    <FontFamily x:Key="Plup">/Fonts/#Plup</FontFamily>
-    <FontFamily x:Key="Deledda Open Regular">/Fonts/#Deledda Open Regular</FontFamily>
-    <FontFamily x:Key="October Pro Blk">/Fonts/#October Pro Blk</FontFamily>
+    <FontFamily x:Key="Monocraft">pack://application:,,,/Fonts/#Monocraft</FontFamily>
+    <FontFamily x:Key="Tablon">pack://application:,,,/Fonts/#Tablon</FontFamily>
+    <FontFamily x:Key="MOSCOW2024">pack://application:,,,/Fonts/#MOSCOW2024</FontFamily>
+    <FontFamily x:Key="Sangha">pack://application:,,,/Fonts/#Sangha</FontFamily>
+    <FontFamily x:Key="Bree CYR var">pack://application:,,,/Fonts/#Bree CYR var</FontFamily>
+    <FontFamily x:Key="Pecita">pack://application:,,,/Fonts/#Pecita</FontFamily>
+    <FontFamily x:Key="Brenzo Slab Personal Use">pack://application:,,,/Fonts/#Brenzo Slab Personal Use</FontFamily>
+    <FontFamily x:Key="Vollda">pack://application:,,,/Fonts/#Vollda</FontFamily>
+    <FontFamily x:Key="RussianRail G Pro">pack://application:,,,/Fonts/#RussianRail G Pro</FontFamily>
+    <FontFamily x:Key="Plup">pack://application:,,,/Fonts/#Plup</FontFamily>
+    <FontFamily x:Key="Deledda Open Regular">pack://application:,,,/Fonts/#Deledda Open Regular</FontFamily>
+    <FontFamily x:Key="October Pro Blk">pack://application:,,,/Fonts/#October Pro Blk</FontFamily>
 
-    <FontFamily x:Key="3PIX">/Fonts/#3PIX</FontFamily>
-    <FontFamily x:Key="Alphasano">/Fonts/#Alphasano</FontFamily>
-    <FontFamily x:Key="Play">/Fonts/#Play</FontFamily>
-    <FontFamily x:Key="AnonymousPro">/Fonts/#AnonymousPro</FontFamily>
+    <FontFamily x:Key="3PIX">pack://application:,,,/Fonts/#3PIX</FontFamily>
+    <FontFamily x:Key="Alphasano">pack://application:,,,/Fonts/#Alphasano</FontFamily>
+    <FontFamily x:Key="Play">pack://application:,,,/Fonts/#Play</FontFamily>
 </ResourceDictionary>

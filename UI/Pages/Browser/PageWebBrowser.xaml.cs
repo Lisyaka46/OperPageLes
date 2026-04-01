@@ -19,6 +19,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             App.CurrentApp.LogWriteLine("Инициализация объектов станицы браузера");
             InitializeComponent();
+            
             //int BrowserVer, RegVal;
             //// get the installed IE version
             //using (System.Windows.Forms.WebBrowser Wb = new())
@@ -44,6 +45,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             App.CurrentApp.LogWriteLine("Инициализация станицы браузера");
 
             #region WebBrowserElement_Events
+            WebBrowserElement.KeyUp += (sender, e) =>
+            {
+                WebBrowserElement.RaiseEvent(e);
+            };
             //WebBrowserElement.Na += (sender, e) =>
             //{
             //    TextBoxLink.Text = WebBrowserElement.Source.ToString();
@@ -107,6 +112,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
         internal void WebViewGoUrl(string Url)
         {
+            WebBrowserElement.Load(Url);
+            TextBoxLink.Text = Url;
             //WebBrowserElement.Source = new Uri(Url);
             //WebBrowserElement.Focus();
         }

@@ -201,12 +201,12 @@ namespace ApplicationOperPageLes.Properties {
         }
         
         /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static System.Drawing.Bitmap EyeCloseUp {
+        internal static byte[] EyeCloseUp {
             get {
                 object obj = ResourceManager.GetObject("EyeCloseUp", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((byte[])(obj));
             }
         }
         

@@ -101,7 +101,7 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                             <Grid MinWidth="120">
-                                <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="14"  FontWeight="Bold" FontFamily="{DynamicResource RussianRail G Pro}" Grid.RowSpan="1" HorizontalAlignment="Left" Padding="5,0,5,0" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00:00:00" FontSize="14"  FontWeight="Bold" Grid.RowSpan="1" HorizontalAlignment="Left" Padding="5,0,5,0" VerticalAlignment="Top" Margin="0,3,0,0" FontFamily="{DynamicResource RussianRail G Pro}"/>
                                 <TextBlock x:Name="TextBlockData" TextWrapping="Wrap" Text="00.00.0000" FontSize="14" FontFamily="{DynamicResource RussianRail G Pro}" Grid.Row="1" Padding="5,0,5,0" VerticalAlignment="Bottom" Margin="0,0,0,3" FontWeight="Bold" />
                             </Grid>
                         </Border>
