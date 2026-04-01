@@ -1,16 +1,6 @@
 ﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.Properties;
 using IEL.CORE.Classes;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Windows.Storage.FileProperties;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
 {

@@ -1,5 +1,4 @@
 ﻿using ApplicationOperPageLes.CORE.Struct;
-using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
 using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
@@ -7,6 +6,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
+using CefSharp.Wpf;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {
@@ -19,7 +19,6 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
         {
             App.CurrentApp.LogWriteLine("Инициализация объектов станицы браузера");
             InitializeComponent();
-
             //int BrowserVer, RegVal;
             //// get the installed IE version
             //using (System.Windows.Forms.WebBrowser Wb = new())
@@ -49,29 +48,29 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             //{
             //    TextBoxLink.Text = WebBrowserElement.Source.ToString();
             //};
-            WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
-            {
-                WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
-                {
-                    TextBoxLink.Text = WebBrowserElement.Source.ToString();
-                    //if (ViewerLoading != null) ViewerLoading.Text = $"Загрузка {e.Uri}";
-                    //else
-                    //{
-                    //    ViewerLoading = App.MainWindow.ExecuteVisualizateLoadingProcess($"Загрузка {e.Uri}");
-                    //    App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
-                    //}
-                    WebBrowserElement.Source = new Uri(e.Uri);
-                };
-                WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
-                {
-                    //if (ViewerLoading == null) return;
-                    //App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
-                };
-                WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
-                {
-                    e.NewWindow = WebBrowserElement.CoreWebView2;
-                };
-            };
+            //WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
+            //{
+            //    WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
+            //    {
+            //        TextBoxLink.Text = WebBrowserElement.Source.ToString();
+            //        //if (ViewerLoading != null) ViewerLoading.Text = $"Загрузка {e.Uri}";
+            //        //else
+            //        //{
+            //        //    ViewerLoading = App.MainWindow.ExecuteVisualizateLoadingProcess($"Загрузка {e.Uri}");
+            //        //    App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
+            //        //}
+            //        WebBrowserElement.Source = new Uri(e.Uri);
+            //    };
+            //    WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
+            //    {
+            //        //if (ViewerLoading == null) return;
+            //        //App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
+            //    };
+            //    WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
+            //    {
+            //        e.NewWindow = WebBrowserElement.CoreWebView2;
+            //    };
+            //};
             #endregion
 
             TextBoxLink.KeyUp += (sender, e) =>
@@ -91,7 +90,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             };
             IELButtonReloadPage.OnActivateMouseLeft += (sender, e) =>
             {
-                WebBrowserElement.Reload();
+                //WebBrowserElement.Reload();
             };
             IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e) =>
             {
@@ -108,8 +107,8 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
         internal void WebViewGoUrl(string Url)
         {
-            WebBrowserElement.Source = new Uri(Url);
-            WebBrowserElement.Focus();
+            //WebBrowserElement.Source = new Uri(Url);
+            //WebBrowserElement.Focus();
         }
     }
 }

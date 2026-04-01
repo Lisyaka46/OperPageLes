@@ -1,14 +1,8 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Network;
+﻿using ApplicationOperPageLes.CORE.Network;
 using ApplicationOperPageLes.UI.UserElementsControl.Network;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using Windows.Media.Protection.PlayReady;
 using Orientation = System.Windows.Controls.Orientation;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork

@@ -211,9 +211,6 @@
   <data name="VECTOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Autor\VECTOR.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Volume" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Volume.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Wifi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Wifi.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -244,9 +241,6 @@
   <data name="PaperClip" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Network\PaperClip.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="EyeCloseUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\EyeCloseUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Read" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Network\Read.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -261,5 +255,11 @@
   </data>
   <data name="AudioMessageReceive" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\CORE\Audio\MessageReceive.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Volume" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Volume.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="EyeCloseUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\EyeCloseUp.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

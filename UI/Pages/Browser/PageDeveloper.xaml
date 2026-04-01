@@ -77,11 +77,11 @@
                                                     </LinearGradientBrush>
                                                 </DiffuseMaterial.Brush>
                                             </DiffuseMaterial>
-                                            <DiffuseMaterial>
+                                            <!--<DiffuseMaterial>
                                                 <DiffuseMaterial.Brush>
-                                                    <ImageBrush ImageSource="/UI/Images/Wifi.png"/>
+                                                    --><!--<ImageBrush ImageSource="/UI/Images/Wifi.png"/>--><!--
                                                 </DiffuseMaterial.Brush>
-                                            </DiffuseMaterial>
+                                            </DiffuseMaterial>-->
                                         </MaterialGroup>
                                     </GeometryModel3D.Material>
                                     <GeometryModel3D.Transform>

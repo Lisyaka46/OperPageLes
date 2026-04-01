@@ -124,7 +124,7 @@
                 </Grid>
                 <Border x:Name="BorderMainAssistentVisual" Grid.Row="1" CornerRadius="0,0,19,19" BorderThickness="2,2,2,2" BorderBrush="Black">
                     <Border.Background>
-                        <ImageBrush x:Name="ImageIconNickName" ImageSource="/UI/Images/Autor/VECTOR.jpg" Stretch="UniformToFill"/>
+                        <ImageBrush x:Name="ImageIconNickName" Stretch="UniformToFill"/>
                     </Border.Background>
                     <Grid ClipToBounds="True" Grid.Row="2">
                         <Grid.RowDefinitions>
@@ -166,7 +166,7 @@
                                 </LinearGradientBrush>
                             </TextBlock.Foreground>
                         </TextBlock>
-                        <MediaElement x:Name="MediaHappy" UnloadedBehavior="Manual" Stretch="UniformToFill" Source="/UI/Images/Media/Happy.mp4">
+                        <MediaElement x:Name="MediaHappy" UnloadedBehavior="Manual" Stretch="UniformToFill">
                             <MediaElement.OpacityMask>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="#00000000"/>

@@ -146,6 +146,7 @@ namespace ApplicationOperPageLes.UI.Windows
             DefaultPaletteElement.ManagerAnimation = App.ManagerAnimation;
             DefaultPaletteElement.IsActivate = App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0;
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(DefaultPaletteElement);
+            DefaultPaletteElement.SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette));
             DefaultPaletteElement.MouseRightButtonUp += (sender, e) =>
             {
                 ActivatePanelActionThemeSelect(DefaultPaletteElement, -1);

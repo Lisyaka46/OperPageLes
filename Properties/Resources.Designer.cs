@@ -491,12 +491,12 @@ namespace ApplicationOperPageLes.Properties {
         }
         
         /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static System.Drawing.Bitmap Volume {
+        internal static byte[] Volume {
             get {
                 object obj = ResourceManager.GetObject("Volume", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((byte[])(obj));
             }
         }
         

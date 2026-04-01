@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Browser"
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
-    xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+    xmlns:Wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
@@ -41,8 +41,8 @@
             </Grid>
         </Grid>
         <Grid x:Name="GridBrowser" Grid.Row="1">
-            <Wpf:WebView2 x:Name="WebBrowserElement" Focusable="False">
-            </Wpf:WebView2>
+            <Wpf:ChromiumWebBrowser x:Name="WebBrowserElement" Focusable="False">
+            </Wpf:ChromiumWebBrowser>
         </Grid>
     </Grid>
 </Base:PageBrowser>

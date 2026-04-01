@@ -85,6 +85,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             TextBlockInternetConnectionMillisecond.Opacity = VisualMillisecondConnectionEnabled ? 1d : 0d;
 
             #region BorderInternetConnection
+            IELBlockInfoInternetConnection.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
                 App.MainWindow.IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
@@ -132,6 +133,7 @@ namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
             #endregion
 
             #region BorderVolume
+            IELBlockInfoVolume.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Volume));
             IELBlockInfoVolume.MouseRightButtonUp += (sender, e) =>
             {
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, SourcePageVolumeControl,

@@ -10,7 +10,7 @@
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     x:Name="window" x:Class="ApplicationOperPageLes.UI.Windows.MainWindow"
     mc:Ignorable="d"
-    Title="Главное меню" WindowStartupLocation="CenterScreen" Background="{x:Null}" Icon="/UI/Images/IconMainApplication.png" Width="800" Height="650" MinWidth="700" MinHeight="550" WindowStyle="None" AllowsTransparency="True">
+    Title="Главное меню" WindowStartupLocation="CenterScreen" Background="{x:Null}" Width="800" Height="650" MinWidth="700" MinHeight="550" WindowStyle="None" AllowsTransparency="True">
     <Base:OPLWindowBase.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Base:OPLWindowBase.Resources>

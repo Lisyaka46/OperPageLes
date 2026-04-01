@@ -35,7 +35,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Theme:OPLThemeFile x:Name="DefaultPaletteElement" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Margin="2,2,2,2" CornerRadius="12,12,12,12" TextNameFile="Default" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SourceElement="/UI/Images/Palette.png" FontFamily="{DynamicResource Alphasano}" FontSize="18" IsActivate="True" Padding="0,2,0,2" Cursor="Hand"/>
+                <Theme:OPLThemeFile x:Name="DefaultPaletteElement" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Margin="2,2,2,2" CornerRadius="12,12,12,12" TextNameFile="Default" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" FontFamily="{DynamicResource Alphasano}" FontSize="18" IsActivate="True" Padding="0,2,0,2" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <IEL:IELScrollViewer x:Name="ScrollViewerTheme">
                         

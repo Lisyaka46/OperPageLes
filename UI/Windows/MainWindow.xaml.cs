@@ -114,6 +114,7 @@ namespace ApplicationOperPageLes.UI.Windows
 		public MainWindow()
         {
             InitializeComponent();
+
 			#region SetParameteres
             ManagerAnimation = App.ManagerAnimation;
 			Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
