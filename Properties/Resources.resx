@@ -262,4 +262,7 @@
   <data name="EyeCloseUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\EyeCloseUp.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Home" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Home.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -233,6 +233,16 @@ namespace ApplicationOperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Home {
+            get {
+                object obj = ResourceManager.GetObject("Home", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] IconMainApplication {
             get {
                 object obj = ResourceManager.GetObject("IconMainApplication", resourceCulture);

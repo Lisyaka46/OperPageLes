@@ -7,7 +7,8 @@
     xmlns:local="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl.Theme"
     xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
-    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>

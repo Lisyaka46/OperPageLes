@@ -25,7 +25,7 @@
     </WindowChrome.WindowChrome>
     <Border x:Name="BorderWindowMainContent" CornerRadius="15,15,15,15">
         <Border.Background>
-            <ImageBrush x:Name="ImageMenu"/>
+            <ImageBrush x:Name="ImageMenu" Stretch="UniformToFill"/>
         </Border.Background>
         <Border x:Name="BorderColorMain" CornerRadius="13,13,13,13">
             <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
@@ -67,15 +67,17 @@
                             <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="5" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
                         </Grid>
                     </Border>
+                    <Grid x:FieldModifier="private" x:Name="GridContentFomBrowser" Grid.Row="1">
+                    </Grid>
                     <Grid Grid.Row="2" Margin="0,2,0,2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="13*"/>
-                            <ColumnDefinition Width="19*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="53"/>
                         </Grid.ColumnDefinitions>
                         <Border Margin="4,4,4,4" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" BorderBrush="#FF795671" Background="#CC98658D">
-                            
+                            <IEL:IELButtonImage x:Name="IELButtonHomeBrowser" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource PlumCrayola}"/>
                         </Border>
                         <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#D8C2DFD4" Grid.ColumnSpan="1" Grid.Column="1">
                             <Grid>
@@ -106,7 +108,7 @@
                             </Grid>
                         </Border>
                         <Border x:Name="BorderIndicator" BorderBrush="#FF02637D" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#FFC37EBD" Grid.Column="3">
-                            <Grid>
+                            <Grid IsHitTestVisible="False">
                                 <Border x:Name="BorderNotificationIndicator" BorderThickness="2,2,2,2" BorderBrush="#FF02637D" Background="#FFFBC4F6" CornerRadius="5,5,5,5" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-4,-4,0" IsHitTestVisible="False" Panel.ZIndex="1"/>
                                 <MediaElement x:Name="IndicatorLoading" Grid.Column="5" Stretch="UniformToFill" Margin="2,2,2,2" IsHitTestVisible="False">
                                     <MediaElement.OpacityMask>
@@ -118,15 +120,6 @@
                                 </MediaElement>
                             </Grid>
                         </Border>
-                    </Grid>
-                    <Grid Grid.Row="1" Panel.ZIndex="1" Width="350">
-                        <Frame x:Name="FrameNewInlayBrowser" Margin="0,-5,0,-5"/>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.Effect>
-                            <BlurEffect x:Name="IELBrowserPageBlurEffect" Radius="0"/>
-                        </Grid.Effect>
-                        <OPL:OPLBrowserPage x:Name="IELBrowserPageMain" Grid.Row="1" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="16" FontStyle="Italic" Background="#CC245848" BorderBrush="#B2FFFFFF" Margin="4,4,4,4"/>
                     </Grid>
                 </Grid>
                 <IEL:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" Text="Отображаемый текст" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" OffsetLeftRight="6" FontFamily="{DynamicResource Deledda Open Regular}" DefaultBackground="#FFC5FBE4" FontSize="14" RadiusDefault="15" RadiusMagnite="2"/>

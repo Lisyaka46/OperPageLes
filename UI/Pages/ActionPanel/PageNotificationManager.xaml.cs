@@ -1,9 +1,13 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
+﻿using ApplicationOperPageLes.CORE.Objects;
+using ApplicationOperPageLes.CORE.Struct;
+using ApplicationOperPageLes.UI.UserElementsControl.Default;
 using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using OIEL.UserElementsControl.Interfaces;
+using System.Windows.Media.Animation;
+using System.Xml.Linq;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
 
 namespace ApplicationOperPageLes.UI.Pages.ActionPanel
@@ -41,6 +45,66 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel
                 VerticalAlignment = VerticalAlignment.Top,
             };
             IELScrollNotification.Content = StackPanelNotifications;
+            App.CurrentApp.AddNotification += AddNewNotification;
+            Initialized += (sender, e) =>
+            {
+                LoadingAllNotification();
+            };
+        }
+
+        /// <summary>
+        /// Добавить отображение нового уведомления
+        /// </summary>
+        /// <param name="Sender">Объект вызываемый событие</param>
+        /// <param name="SourceNotification">Объект данных уведомления</param>
+        private void AddNewNotification(object? Sender, Notification SourceNotification)
+        {
+            OPLNotification ViewNotification = new(in SourceNotification)
+            {
+                Opacity = 0d,
+                Margin = new(6d),
+                CornerRadius = new(5d),
+            };
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(ViewNotification);
+            ViewNotification.MouseRightButtonUp += (sender, e) =>
+            {
+                RemoveAtNotification(StackPanelNotifications.Children.IndexOf((UIElement)sender));
+            };
+
+            StackPanelNotifications.Children.Add(ViewNotification);
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ViewNotification, MarginProperty, new(4d), TimeSpan.FromMilliseconds(600d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewNotification, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
+        }
+
+        /// <summary>
+        /// Удалить элемент уведомления
+        /// </summary>
+        /// <param name="Index">Индекс удаляемого уведомления</param>
+        private void RemoveAtNotification(int Index)
+        {
+            App.CurrentApp.RemoveAtNotification(Index);
+            OPLNotification Element = (OPLNotification)StackPanelNotifications.Children[Index];
+            Element.Height = Element.ActualHeight;
+            DoubleAnimation Animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+            Animation.From = Element.ActualHeight;
+            Animation.To = 0d;
+            Animation.FillBehavior = FillBehavior.Stop;
+            Animation.Completed += (sender, e) =>
+                StackPanelNotifications.Children.RemoveAt(Index);
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(500d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
+            Element.BeginAnimation(HeightProperty, Animation);
+        }
+
+        /// <summary>
+        /// Загрузить и отобразить все элементы уведомлений в приложении
+        /// </summary>
+        private void LoadingAllNotification()
+        {
+            foreach (Notification Element in App.CurrentApp.ApplicationNotifications)
+            {
+                AddNewNotification(null, Element);
+            }
         }
 
         /// <summary>

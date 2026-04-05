@@ -17,7 +17,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
     {
         public PageWebBrowser()
         {
-            App.CurrentApp.LogWriteLine("Инициализация объектов станицы браузера");
+            App.CurrentApp.LogWriteLine("Инициализация объектов станицы веб-браузера");
             InitializeComponent();
             
             //int BrowserVer, RegVal;
@@ -42,7 +42,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
             IELButtonReloadPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
             IELButtonUnopenPageSystemBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
-            App.CurrentApp.LogWriteLine("Инициализация станицы браузера");
+            App.CurrentApp.LogWriteLine("Инициализация станицы веб-браузера");
 
             #region WebBrowserElement_Events
             WebBrowserElement.KeyUp += (sender, e) =>

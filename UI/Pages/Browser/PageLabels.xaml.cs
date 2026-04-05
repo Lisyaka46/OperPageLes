@@ -193,7 +193,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             #region PageLabelElement
             PageLabelElement.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
-                PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
+                PageConsole? Console = App.CurrentApp.MainBrowser.SearchAnyPageType<PageConsole>();
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 if (SelectLabelsMode)
                 {
@@ -639,7 +639,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                     }
                     return;
                 }
-                PageConsole? Console = App.MainWindow.IELBrowserPageMain.SearchAnyPageType<PageConsole>();
+                PageConsole? Console = App.CurrentApp.MainBrowser.SearchAnyPageType<PageConsole>();
                 await App.CurrentApp.ActivateActionCommand(
                     Console?.CreateNewCommandViewer(
                         COMInterpreterBase.ReadNameCommand(Label.SourceLabel.Command)),

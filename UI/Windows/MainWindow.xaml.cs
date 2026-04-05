@@ -3,6 +3,7 @@ using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel;
 using ApplicationOperPageLes.UI.Pages.Browser;
+using ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
 using ApplicationOperPageLes.UI.Windows.Base;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
@@ -89,11 +90,6 @@ namespace ApplicationOperPageLes.UI.Windows
         /// </summary>
         private bool IsClosing = false;
 
-        /// <summary>
-        /// Страница выбора новой страницы браузера
-        /// </summary>
-        private PageManagerBrowser ManagerBrowserNewPage;
-
         #region BorderMainWindowLoading
         /// <summary>
         /// 
@@ -111,7 +107,7 @@ namespace ApplicationOperPageLes.UI.Windows
         };
         #endregion
 
-		public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
 
@@ -126,7 +122,30 @@ namespace ApplicationOperPageLes.UI.Windows
 
             IELImageButtonMenu.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
 
-            IELBrowserPageMain.ManagerAnimation = App.ManagerAnimation;
+            #region BrowserPage
+            App.CurrentApp.MainBrowser.ManagerAnimation = App.ManagerAnimation;
+            App.CurrentApp.MainBrowser.Margin = new(4d);
+
+            App.CurrentApp.MainBrowser.EventCloseBrowser += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
+            App.CurrentApp.MainBrowser.EventChangeActiveInlay += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
+            App.CurrentApp.MainBrowser.EventCloseInlay += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+            };
+            App.CurrentApp.MainBrowser.EventAddInlay += () =>
+            {
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            };
+            #endregion
+
+            GridContentFomBrowser.Children.Add(App.CurrentApp.MainBrowser);
             TokenUpdateBackgroundData = new(false);
             ActualIndexActivatePageDownToolButtons = -1;
             IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
@@ -151,7 +170,6 @@ namespace ApplicationOperPageLes.UI.Windows
             {
                 StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
             };
-            IELBrowserPageMain.SetSourceImageButtonAddInlay(StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus)));
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
@@ -160,7 +178,6 @@ namespace ApplicationOperPageLes.UI.Windows
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELImageButtonCollapse);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
 
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELBrowserPageMain.GetButtonAddInlay());
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
 
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonBackButtons);
@@ -192,7 +209,7 @@ namespace ApplicationOperPageLes.UI.Windows
             #region IELPanelAction
             IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                PageBrowser? Page = IELBrowserPageMain.ActualInlay?.Content;
+                PageBrowser? Page = App.CurrentApp.MainBrowser.ActualInlay?.Content;
                 if (Page == null) return;
                 switch (Page.GetType().Name)
                 {
@@ -207,13 +224,13 @@ namespace ApplicationOperPageLes.UI.Windows
             PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (PageInlay.ActivateManipulateInlay?.Content != null)
-                    IELBrowserPageMain.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.Content);
+                    App.CurrentApp.MainBrowser.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.Content);
             };
             PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 IELActionPanelMain.ClosePanelAction();
                 if (PageInlay.ActivateManipulateInlay != null)
-                    IELBrowserPageMain.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
+                    App.CurrentApp.MainBrowser.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
             };
             #endregion
 
@@ -313,84 +330,31 @@ namespace ApplicationOperPageLes.UI.Windows
             IELImageButtonBackButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(3, 0, 0, 0), 400u);
             IELImageButtonBackButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
 
+            IELButtonHomeBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Home));
+            IELButtonHomeBrowser.OnActivateMouseLeft += (sender, e) =>
+            {
+                App.CurrentApp.MainBrowser.OpenManagerAppPage();
+            };
+
+            #region BorderIndicator
+            BorderIndicator.MouseEnter += (sender, e) =>
+            {
+                if (IELActionPanelMain.PanelActionActivate) return;
+                IELMessageMain.UsingBorderInformation(BorderIndicator,
+                    "Менеджер оповещений",
+                    OrientationPositionCursor.LeftUp);
+            };
+            BorderIndicator.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
             BorderIndicator.MouseRightButtonUp += (sender, e) =>
             {
+                IELMessageMain.CloseBorderInformation();
                 App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, PageControllerLoadingApplication,
                     Orientation: OrientationPositionCursor.LeftUp);
             };
             #endregion
-
-            #region IELBrowserPage
-            ManagerBrowserNewPage = new();
-            ManagerBrowserNewPage.BrowserPageSelect += (sender, e) =>
-            {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 0d, TimeSpan.FromMilliseconds(500d));
-                Canvas.SetZIndex(FrameNewInlayBrowser, -1);
-                FrameNewInlayBrowser.IsHitTestVisible = false;
-                FrameNewInlayBrowser.IsEnabled = false;
-                IELBrowserPageMain.IsEnabled = true;
-
-                if (e == null) return;
-                OPLInlay SourceInlay = IELBrowserPageMain.AddInlayPage(e);
-                System.Windows.Data.Binding binding = new()
-                {
-                    Mode = BindingMode.OneWay,
-                    Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Deledda Open Regular"]
-                };
-                BindingOperations.SetBinding(SourceInlay, OPLInlay.FontFamilyProperty, binding);
-                SourceInlay.MouseRightButtonUp += InlayPanelActionActivate;
-                SourceInlay.MouseHover += (sender, eMouseHover) =>
-                {
-                    OPLInlay inlay = sender as OPLInlay ?? throw new Exception("Невозможно преобразовать объект вкладки");
-                    IELMessageMain.UsingBorderInformation(inlay, e.Description, OrientationPositionCursor.Auto);
-                };
-                SourceInlay.MouseLeave += (sender, eMouseLeave) =>
-                {
-                    IELMessageMain.CloseBorderInformation();
-                };
-                IELButtonImage ButtonCloseInlay = SourceInlay.GetButtonCloseInlay();
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(SourceInlay);
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.VioletRed].ConnectPalleteFromIELElement(ButtonCloseInlay);
-                ButtonCloseInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
-            };
-            FrameNewInlayBrowser.IsHitTestVisible = false;
-            FrameNewInlayBrowser.IsEnabled = false;
-            FrameNewInlayBrowser.Content = ManagerBrowserNewPage;
-            FrameNewInlayBrowser.Opacity = 0d;
-            Canvas.SetZIndex(FrameNewInlayBrowser, -1);
-
-            IELBrowserPageMain.EventCloseBrowser += () =>
-            {
-                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
-            };
-            IELBrowserPageMain.EventChangeActiveInlay += () =>
-            {
-                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
-            };
-            IELBrowserPageMain.EventCloseInlay += () =>
-            {
-                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
-            };
-            IELBrowserPageMain.EventAddInlay += () =>
-            {
-                FrameNewInlayBrowser.IsEnabled = true;
-                FrameNewInlayBrowser.IsHitTestVisible = true;
-                IELBrowserPageMain.IsEnabled = false;
-                TimeSpan t = TimeSpan.FromMilliseconds(500d);
-                if (IELActionPanelMain.PanelActionActivate)
-                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(FrameNewInlayBrowser, OpacityProperty, 1d, t);
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageMain, OpacityProperty, 0.9d, t);
-                if (App.CurrentApp.SettingMainApplication.PathMenuImage.Value.Length > 0)
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageMenu, ImageBrush.OpacityProperty, 0.3d, t);
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBrowserPageBlurEffect, BlurEffect.RadiusProperty, 20d, t);
-                Canvas.SetZIndex(FrameNewInlayBrowser, 1);
-                ManagerBrowserNewPage.Focus();
-            };
             #endregion
 
             #region EventsWindow
@@ -414,7 +378,7 @@ namespace ApplicationOperPageLes.UI.Windows
         private void InlayPanelActionActivate(object sender, MouseButtonEventArgs e)
         {
             PageInlay.ActivateManipulateInlay = (OPLInlay)sender;
-            IELActionPanelMain.UsingPanelAction(IELBrowserPageMain, PageInlay,
+            IELActionPanelMain.UsingPanelAction(App.CurrentApp.MainBrowser, PageInlay,
                 Orientation: OrientationPositionCursor.RightDown);
         }
 
@@ -505,6 +469,20 @@ namespace ApplicationOperPageLes.UI.Windows
 
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty,
                 0d, 360d, TimeSpan.FromMilliseconds(3200d));
+            App.CurrentApp.MainBrowser.OpenManagerAppPage();
+
+            #region AppPage
+            App.CurrentApp.AddNewAppPage(typeof(PageConsole), "Консоль",
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Command)));
+            App.CurrentApp.AddNewAppPage(typeof(PageLabels), "Ярлыки",
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.PaperClip)));
+            App.CurrentApp.AddNewAppPage(typeof(PageNetwork), "Сеть",
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Chats)));
+            App.CurrentApp.AddNewAppPage(typeof(PageWebBrowser), "Веб-браузер",
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Aquamarine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Link)));
+            App.CurrentApp.AddNewAppPage(typeof(PageDeveloper), "Для разработчиков",
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed]);
+            #endregion
         }
         #endregion
 

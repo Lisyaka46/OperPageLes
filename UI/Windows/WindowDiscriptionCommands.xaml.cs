@@ -86,6 +86,7 @@ namespace ApplicationOperPageLes.Windows
             SearchActivate = false;
             InitializeComponent();
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.File));
+            ImageSelectIndicator.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Arrow));
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);
@@ -135,6 +136,7 @@ namespace ApplicationOperPageLes.Windows
             #endregion
 
             #region IELButtonInfoParameter
+            IELButtonInfoParameter.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
             IELButtonInfoParameter.MouseEnter += (sender, e) =>
             {
                 IELMessageInfo.UsingBorderInformation(IELButtonInfoParameter,

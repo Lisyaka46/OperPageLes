@@ -1,12 +1,16 @@
 ﻿using ApplicationOperPageLes.CORE;
+using ApplicationOperPageLes.CORE.Enums;
 using ApplicationOperPageLes.CORE.Interfaces;
+using ApplicationOperPageLes.CORE.Objects;
 using ApplicationOperPageLes.CORE.Settings.PaletteElements;
 using ApplicationOperPageLes.CORE.Settings.Struct;
 using ApplicationOperPageLes.CORE.Struct;
 using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
 using ApplicationOperPageLes.UI.Pages.Browser;
+using ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using ApplicationOperPageLes.UI.Windows;
 using ApplicationOperPageLes.UI.Windows.Dialogs;
+using IEL.CORE.Classes;
 using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
@@ -21,6 +25,7 @@ using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
 using OIEL.UserElementsControl.Base.LabelBase;
 using OPLAnimation.CORE.Animation;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
@@ -113,6 +118,51 @@ namespace ApplicationOperPageLes
         internal readonly List<Window> OpenedWindowsInApplication;
         #endregion
 
+        #region Notification
+        /// <summary>
+        /// Доступная коллекция для чтения всех уведомлений в приложении
+        /// </summary>
+        internal ReadOnlyCollection<Notification> ApplicationNotifications =>
+            SourceApplicationNotifications.AsReadOnly();
+
+        /// <summary>
+        /// Уведомления приложения
+        /// </summary>
+        private readonly List<Notification> SourceApplicationNotifications;
+
+        /// <summary>
+        /// Событие добавления уведомления в приложение
+        /// </summary>
+        internal event EventHandler<Notification>? AddNotification;
+
+        /// <summary>
+        /// Добавить новое уведомление в приложение
+        /// </summary>
+        /// <param name="SourceMessage">Сообщение уведомления</param>
+        /// <param name="SourceStyle">Вид уведомления</param>
+        /// <param name="SourceIcon">Иконка уведомления</param>
+        /// <param name="Title">Заголовок уведомления (Если пустой то использует системный заголовок)</param>
+        internal void AddNewNotification(string SourceMessage, EnumNotificationStyle SourceStyle, in ImageSource? SourceIcon = null, string? Title = null)
+        {
+            Notification notification = Title == null ?
+                new(SourceMessage, SourceStyle, SourceIcon) : new(SourceMessage, Title, SourceStyle, SourceIcon);
+            SourceApplicationNotifications.Add(notification);
+            AddNotification?.Invoke(MainWindow, notification);
+        }
+
+        /// <summary>
+        /// Удалить конкретное уведомление из приложения
+        /// </summary>
+        /// <param name="SourceIndex">Индекс удаляемого уведомления</param>
+        internal void RemoveAtNotification(Index SourceIndex) =>
+            SourceApplicationNotifications.RemoveAt(SourceIndex.GetOffset(SourceApplicationNotifications.Count));
+
+        /// <summary>
+        /// Очистить все уведомления в приложении
+        /// </summary>
+        internal void ClearAllNotifications() => SourceApplicationNotifications.Clear();
+        #endregion
+
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
@@ -199,14 +249,34 @@ namespace ApplicationOperPageLes
         /// </summary>
         NetworkStream? SourceNetWorckStream = null;
 
+        #region Browser
+        /// <summary>
+        /// Браузер страниц приложения
+        /// </summary>
+        internal readonly OPLBrowserPage MainBrowser;
+
+        /// <summary>
+        /// Страница выбора приложения страницы для усправления в браузере страниц
+        /// </summary>
+        private readonly PageManagerAppPage SourceManagerAppPage;
+
+        /// <summary>
+        /// Страница менеджера приложений страниц
+        /// </summary>
+        internal Page ManagerAppPage => SourceManagerAppPage;
+        #endregion
+
         public App()
         {
             LogWriteLine("---------- Старт нового экземпляра ----------");
             LogWriteLine("Инициализация свойств экземпляра");
             #region Resources
+            SourceManagerAppPage = new();
+            MainBrowser = new(SourceManagerAppPage);
             SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
             ServerConnectedClients = [];
+            SourceApplicationNotifications = [];
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
@@ -275,7 +345,7 @@ namespace ApplicationOperPageLes
                 "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
                 (Command, param, CV) =>
                 {
-                    PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchAnyPageType<PageLabels>();
+                    PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
                     if (SourcePage != null)
                     {
                         if (SourcePage.SelectLabelsMode) return
@@ -298,7 +368,7 @@ namespace ApplicationOperPageLes
                     ActiveDialog = null;
                     if (label != null)
                     {
-                        PageLabels? SourcePage = MainWindow.IELBrowserPageMain.SearchAnyPageType<PageLabels>();
+                        PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
                         if (SourcePage != null)
                         {
                             if (SourcePage.SelectLabelsMode) return
@@ -333,7 +403,7 @@ namespace ApplicationOperPageLes
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param, CV) =>
                 {
-                    if (MainWindow.IELBrowserPageMain.ActualInlay?.Content is PageConsole page)
+                    if (MainBrowser.ActualInlay?.Content is PageConsole page)
                     {
                         page.StackPanelConsole.Children.Clear();
                     }
@@ -498,7 +568,7 @@ namespace ApplicationOperPageLes
                 "Создаёт уведомление с определённым \"Text\"",
                 (Command, param, CV) =>
                 {
-                    MainWindow.GenerateVisualizateImage((string)param[0]);
+                    AddNewNotification((string)param[0], EnumNotificationStyle.System);
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -651,7 +721,7 @@ namespace ApplicationOperPageLes
             };
             PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (MainWindow.IELBrowserPageMain.ActualInlay?.Content is PageConsole page)
+                if (MainBrowser.ActualInlay?.Content is PageConsole page)
                 {
                     if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
                         page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
@@ -660,7 +730,7 @@ namespace ApplicationOperPageLes
             };
             PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
             {
-                if (MainWindow.IELBrowserPageMain.ActualInlay?.Content is PageConsole page)
+                if (MainBrowser.ActualInlay?.Content is PageConsole page)
                 {
                     page.StackPanelConsole.Children.Clear();
                 }
@@ -713,6 +783,12 @@ namespace ApplicationOperPageLes
             };
             RebootWindow.IsReboot = true;
             RebootWindow.Close();
+        }
+
+        //
+        internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
+        {
+            SourceManagerAppPage.AddNewAppPage(in MainBrowser, TypeAppPage, NameAppPage, Spectrum, Icon);
         }
 
         ///// <summary>

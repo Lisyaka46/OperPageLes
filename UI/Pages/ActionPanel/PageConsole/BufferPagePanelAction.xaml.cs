@@ -129,15 +129,15 @@ namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
                     {
                         await Dispatcher.InvokeAsync(() =>
                         {
-                            if (App.MainWindow.IELBrowserPageMain.ActualInlay?.Content?.GetType() != SourcePage.GetType())
+                            if (App.CurrentApp.MainBrowser.ActualInlay?.Content?.GetType() != SourcePage.GetType())
                             {
-                                OPLInlay? InlaySource = App.MainWindow.IELBrowserPageMain.Inlays.FirstOrDefault(
+                                OPLInlay? InlaySource = App.CurrentApp.MainBrowser.Inlays.FirstOrDefault(
                                     (i) => i.Content?.Equals(SourcePage) ?? false);
                                 if (InlaySource != null)
                                 {
-                                    App.MainWindow.IELBrowserPageMain.ActivateInlayIndex(App.MainWindow.IELBrowserPageMain.Inlays.IndexOf(InlaySource));
+                                    App.CurrentApp.MainBrowser.ActivateInlayIndex(App.CurrentApp.MainBrowser.Inlays.IndexOf(InlaySource));
                                 }
-                                else if (App.MainWindow.IELBrowserPageMain.ActualInlay?.Content is Browser.PageConsole page)
+                                else if (App.CurrentApp.MainBrowser.ActualInlay?.Content is Browser.PageConsole page)
                                 {
                                     SourcePage = page;
                                 }
