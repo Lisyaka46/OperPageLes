@@ -15,30 +15,31 @@
     <UseWPF>True</UseWPF>
     <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
     <UseWindowsForms>True</UseWindowsForms>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -114,9 +115,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CefSharp.Common" Version="146.0.70" />
-    <PackageReference Include="CefSharp.H.264" Version="79.1.360.1" />
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="146.0.70" />
     <PackageReference Include="NAudio" Version="2.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2.3" />
@@ -128,12 +126,6 @@
     <ProjectReference Include="..\..\InterpreterCommand\Interpreter\Interpreter.csproj" />
     <ProjectReference Include="..\OIEL\OIEL.csproj" />
     <ProjectReference Include="..\OPLAnimation\OPLAnimation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="LibraryPackKey">
-      <HintPath>..\..\PackKey\LibraryPackKey\bin\Debug\net8.0\LibraryPackKey.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -167,6 +159,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LibraryPackKey">
+      <HintPath>..\..\PackKey\LibraryPackKey\bin\x64\Debug\net10.0\LibraryPackKey.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

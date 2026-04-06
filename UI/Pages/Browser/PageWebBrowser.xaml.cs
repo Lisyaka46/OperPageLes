@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 using OPRES = ApplicationOperPageLes.Properties.Resources;
-using CefSharp.Wpf;
+//using CefSharp.Wpf;
 
 namespace ApplicationOperPageLes.UI.Pages.Browser
 {
@@ -45,10 +45,10 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
             App.CurrentApp.LogWriteLine("Инициализация станицы веб-браузера");
 
             #region WebBrowserElement_Events
-            WebBrowserElement.KeyUp += (sender, e) =>
-            {
-                WebBrowserElement.RaiseEvent(e);
-            };
+            //WebBrowserElement.KeyUp += (sender, e) =>
+            //{
+            //    WebBrowserElement.RaiseEvent(e);
+            //};
             //WebBrowserElement.Na += (sender, e) =>
             //{
             //    TextBoxLink.Text = WebBrowserElement.Source.ToString();
@@ -86,7 +86,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
                         WebViewGoUrl(TextBoxLink.Text);
                         break;
                     case Key.Escape:
-                        WebBrowserElement.Focus();
+                        //WebBrowserElement.Focus();
                         break;
                     default:
                         break;
@@ -112,7 +112,7 @@ namespace ApplicationOperPageLes.UI.Pages.Browser
 
         internal void WebViewGoUrl(string Url)
         {
-            WebBrowserElement.Load(Url);
+            //WebBrowserElement.Load(Url);
             TextBoxLink.Text = Url;
             //WebBrowserElement.Source = new Uri(Url);
             //WebBrowserElement.Focus();
