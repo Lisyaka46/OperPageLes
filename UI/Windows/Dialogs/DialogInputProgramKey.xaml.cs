@@ -82,7 +82,6 @@ namespace ApplicationOperPageLes.UI.Windows.Dialogs
             try
             {
                 ResultKey = PackKey.GenKey(Pack, IELTextBoxKey.Text);
-                //if (File.Exists(App.DirectoryKeyValidFile)) File.Delete(App.DirectoryKeyValidFile);
                 string SaveKeyOPL = $"{App.GetID()} {TextBlockPack.Text} {ResultKey.SourcePack.UnixTimeCode - 1} {IELTextBoxKey.Text}";
                 File.WriteAllText(StructDirectoryResources.DirectoryKeyValidFile, Convert.ToHexString([..SaveKeyOPL.Select((i) => (byte)i)]));
                 Close();
