@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <StartupObject>ApplicationOperPageLes.App</StartupObject>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\3PIX.ttf" />
+    <None Remove="Fonts\Alphasano.ttf" />
+    <None Remove="Fonts\Bree CYR var.ttf" />
+    <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
+    <None Remove="Fonts\Deledda Open Regular.ttf" />
+    <None Remove="Fonts\Monocraft.otf" />
+    <None Remove="Fonts\MOSCOW2024.otf" />
+    <None Remove="Fonts\October Pro Blk.ttf" />
+    <None Remove="Fonts\Pecita.otf" />
+    <None Remove="Fonts\Play.ttf" />
+    <None Remove="Fonts\Plup.ttf" />
+    <None Remove="Fonts\RussianRail G Pro.otf" />
+    <None Remove="Fonts\Sangha.ttf" />
+    <None Remove="Fonts\Tablon.ttf" />
+    <None Remove="Fonts\Vollda.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2.3" />
+    <PackageReference Include="System.Management" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IEL\LibraryIEL\LibraryIEL.csproj" />
+    <ProjectReference Include="..\..\InterpreterCommand\Interpreter\Interpreter.csproj" />
+    <ProjectReference Include="..\OIEL\OIEL.csproj" />
+    <ProjectReference Include="..\OPLAnimation\OPLAnimation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LibraryPackKey">
+      <HintPath>..\..\PackKey\LibraryPackKey\bin\x64\Debug\net10.0\LibraryPackKey.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\3PIX.ttf" />
+    <Resource Include="Fonts\Alphasano.ttf" />
+    <Resource Include="Fonts\Bree CYR var.ttf" />
+    <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
+    <Resource Include="Fonts\Deledda Open Regular.ttf" />
+    <Resource Include="Fonts\Monocraft.otf" />
+    <Resource Include="Fonts\MOSCOW2024.otf" />
+    <Resource Include="Fonts\October Pro Blk.ttf" />
+    <Resource Include="Fonts\Pecita.otf" />
+    <Resource Include="Fonts\Play.ttf" />
+    <Resource Include="Fonts\Plup.ttf" />
+    <Resource Include="Fonts\RussianRail G Pro.otf" />
+    <Resource Include="Fonts\Sangha.ttf" />
+    <Resource Include="Fonts\Tablon.ttf" />
+    <Resource Include="Fonts\Vollda.otf" />
+  </ItemGroup>
+
+</Project>

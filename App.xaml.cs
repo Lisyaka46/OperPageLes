@@ -680,7 +680,8 @@ namespace ApplicationOperPageLes
 
                     if (!AppGUID.Equals(GetID())) throw new Exception();
                     InstallingKey = PackKey.GenKey(StructPack.GenPack(long.Parse(Code) + 1, Pack), Key);
-                } catch { }
+                }
+                catch { }
                 if (!InstallingKey.IsValid) System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
