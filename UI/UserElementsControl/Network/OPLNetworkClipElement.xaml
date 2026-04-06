@@ -58,8 +58,18 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock x:FieldModifier="private" x:Name="TextBlockSizeFile" Text="4 MB" FontFamily="{DynamicResource RussianRail G Pro}" Grid.RowSpan="1" Grid.Row="1" Padding="0,0,5,0" Margin="0,2,0,0"/>
                         <TextBlock x:FieldModifier="private" x:Name="TextBlockNameFile" Text="File.jpg" FontFamily="{DynamicResource Bree CYR var}" Grid.RowSpan="1" Grid.Row="0" Padding="0,0,5,1"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:FieldModifier="private" x:Name="TextBlockSizeFile" Text="4 MB" FontFamily="{DynamicResource RussianRail G Pro}" Grid.RowSpan="1" Padding="0,0,5,0" Margin="0,2,0,0" Grid.ColumnSpan="1"/>
+                            <TextBlock x:FieldModifier="private" x:Name="TextBlockProgress" Grid.Column="1" VerticalAlignment="Bottom" Padding="0,0,0,0.3" Width="45">
+                                <Run x:FieldModifier="private" x:Name="CurrentProgress" Text="100.00" BaselineAlignment="Bottom" FontFamily="{DynamicResource 3PIX}" FontSize="11"/>
+                                <Run Text="%" FontFamily="{DynamicResource RussianRail G Pro}" BaselineAlignment="Bottom" FontSize="10"/>
+                            </TextBlock>
+                        </Grid>
                     </Grid>
                 </Viewbox>
             </Grid>

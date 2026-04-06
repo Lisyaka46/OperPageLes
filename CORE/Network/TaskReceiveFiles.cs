@@ -16,6 +16,11 @@ namespace ApplicationOperPageLes.CORE.Network
     internal class TaskReceiveFiles()
     {
         /// <summary>
+        /// Конастанта размера файла с привышением которого будет показываться текстовый прогресс
+        /// </summary>
+        private const long LengthBytesFromVisualTextProgress = 11274310L;
+
+        /// <summary>
         /// Текущий поток принятия файлов
         /// </summary>
         private Task? SourceReceiveTask = null;
@@ -123,7 +128,7 @@ namespace ApplicationOperPageLes.CORE.Network
                 LoadingCurrentFile = 0d;
                 if (CurrentFileInfo[i].LengthFileData > SocketReceiveFile.ReceiveBufferSize)
                 {
-                    ClipElement.Dispatcher.Invoke(ClipElement.StartManipulate);
+                    ClipElement.Dispatcher.Invoke(() => ClipElement.StartManipulate(CurrentFileInfo[i].LengthFileData >= LengthBytesFromVisualTextProgress));
                     Buffer = new byte[SocketReceiveFile.ReceiveBufferSize];
                     while (Writer.Position + SocketReceiveFile.ReceiveBufferSize < CurrentFileInfo[i].LengthFileData)
                     {

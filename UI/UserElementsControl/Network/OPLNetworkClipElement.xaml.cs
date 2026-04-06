@@ -1,7 +1,9 @@
 ﻿using IEL.UserElementsControl.Base;
+using Newtonsoft.Json.Linq;
 using OPLAnimation.CORE.Animation;
 using OPLAnimation.CORE.Interfaces;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -126,6 +128,11 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         public bool IsManipulate { get; private set; } = false;
 
         /// <summary>
+        /// Состояние текстовой визуализации загрузки
+        /// </summary>
+        private bool IsProgressTextVizualizate = false;
+
+        /// <summary>
         /// Объект менеджера анимационных настроек OPL
         /// </summary>
         public OPLAnimationManager? ManagerAnimation { get; set; }
@@ -133,6 +140,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         public OPLNetworkClipElement()
         {
             InitializeComponent();
+            TextBlockProgress.Opacity = 0d;
             TextBlockMessage.Height = 0d;
             IconLoadingFile.Opacity = 0d;
             BorderIndex.Width = 0;
@@ -154,11 +162,12 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         /// <summary>
         /// Начать визуализировать взаимодействие
         /// </summary>
-        public void StartManipulate()
+        public void StartManipulate(bool ProgressTextVisualizate)
         {
             if (IsManipulate)
                 throw new Exception("Невозможно визуализировать взаимодействие при уже активном взаимодействии");
             IsManipulate = true;
+            IsProgressTextVizualizate = ProgressTextVisualizate;
 
             RectangleLoading.StrokeDashOffset = 28d;
             if (ManagerAnimation != null)
@@ -217,12 +226,27 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
         {
             if (!IsManipulate)
                 throw new Exception("Невозможно взаимодействовать с объектом, предварительно не включив режим взаимодействия!");
-            if (Value > 1d) Value = 1d;
+            Value = Math.Clamp(Value, 0d, 1d);
             if (ManagerAnimation != null)
+            {
                 ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleLoading, System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty,
                         StrokeDashLength - (Value * StrokeDashLength), TimeSpan.FromMilliseconds(200d));
+                if (IsProgressTextVizualizate && Value > 0.7d)
+                {
+                    if (TextBlockProgress.Opacity == 0d)
+                        ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockProgress, OpacityProperty,
+                            1d, TimeSpan.FromSeconds(2d));
+                    CurrentProgress.Text = $"{Math.Round(Value * 100, 2)}";
+                }
+            }
             else
+            {
                 RectangleLoading.StrokeDashOffset = StrokeDashLength - (Value * StrokeDashLength);
+                if (IsProgressTextVizualizate)
+                {
+                    TextBlockProgress.Opacity = 1d;
+                }
+            }
         }
 
         /// <summary>
@@ -233,6 +257,7 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
             if (!IsManipulate)
                 throw new Exception("Невозможно закончить визуализировать взаимодействие при не активном взаимодействии");
             IsManipulate = false;
+            CurrentProgress.Text = "100.00";
             if (ManagerAnimation != null)
             {
                 RectangleLoading.BeginAnimation(System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty, null);
@@ -243,11 +268,20 @@ namespace ApplicationOperPageLes.UI.UserElementsControl.Network
                     0d, TimeSpan.FromSeconds(2d));
                 ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleLoading, System.Windows.Shapes.Rectangle.StrokeThicknessProperty,
                     0d, TimeSpan.FromSeconds(2d));
+                if (IsProgressTextVizualizate)
+                {
+                    ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockProgress, OpacityProperty,
+                        0d, TimeSpan.FromSeconds(2d));
+                }
                 StrokeDashLength = 448d;
             }
             else
             {
                 RectangleLoading.StrokeThickness = 0d;
+                if (IsProgressTextVizualizate)
+                {
+                    TextBlockProgress.Opacity = 0d;
+                }
             }
             RectangleLoading.StrokeDashOffset = 28d;
         }
