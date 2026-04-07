@@ -1,14 +1,14 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSaveWait.xaml

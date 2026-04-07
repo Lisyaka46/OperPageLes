@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using Point = System.Windows.Point;
 
-namespace ApplicationOperPageLes.CORE.Animation
+namespace OperPageLes.CORE.Animation
 {
     internal class OPLPointAnimationType<T> : OPLAnimationTypeBase<T> where T : PointAnimation
     {

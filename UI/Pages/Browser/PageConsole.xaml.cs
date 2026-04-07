@@ -1,33 +1,24 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Interfaces;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
-using ApplicationOperPageLes.Windows;
-using IEL.CORE.Classes;
-using IEL.CORE.Enums;
+﻿using IEL.CORE.Enums;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
-using NAudio.CoreAudioApi;
 using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
-using System;
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
+using OIEL.UserElementsControl.Interfaces;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageConsole;
+using OperPageLes.Windows;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
-using Point = System.Windows.Point;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml

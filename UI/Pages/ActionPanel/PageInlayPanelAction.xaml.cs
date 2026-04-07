@@ -2,7 +2,7 @@
 using OIEL.UserElementsControl;
 using System.Windows.Controls;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageActionInlay.xaml

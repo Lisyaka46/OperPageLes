@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ApplicationOperPageLes.CORE.DEV
+namespace OperPageLes.CORE.DEV
 {
 #if DEBUG
     internal class TextBlockInlay(string NameInlay)

@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenLabel.xaml

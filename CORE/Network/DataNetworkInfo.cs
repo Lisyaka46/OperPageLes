@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace ApplicationOperPageLes.CORE.Network
+namespace OperPageLes.CORE.Network
 {
     internal class DataNetworkInfo
     {

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-namespace ApplicationOperPageLes.CORE.Network
+namespace OperPageLes.CORE.Network
 {
     internal class TcpListenerChat
     {

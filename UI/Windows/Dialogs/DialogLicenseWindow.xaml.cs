@@ -1,5 +1,5 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE;
+using OperPageLes.CORE.Struct;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +10,9 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для LicenseWindow.xaml

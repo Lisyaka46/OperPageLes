@@ -1,9 +1,9 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
 using System.Windows.Controls;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
+namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelActionPanel.xaml

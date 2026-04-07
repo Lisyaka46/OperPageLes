@@ -1,8 +1,8 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums;
 using IEL.CORE.Classes;
 using System.IO;
 
-namespace ApplicationOperPageLes.CORE.Settings.PaletteElements
+namespace OperPageLes.CORE.Settings.PaletteElements
 {
     internal class Theme
     {

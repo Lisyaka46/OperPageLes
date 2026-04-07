@@ -1,11 +1,11 @@
 ﻿using IEL.CORE.Classes;
-using ApplicationOperPageLes.UI.Pages.Settings;
+using OperPageLes.UI.Pages.Settings;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ApplicationOperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowSetting.xaml

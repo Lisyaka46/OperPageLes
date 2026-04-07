@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.UI.UserElementsControl.Network;
+﻿using OperPageLes.UI.UserElementsControl.Network;
 using Newtonsoft.Json.Linq;
 using OIEL.UserElementsControl;
 using OPLAnimation.CORE.Animation;
@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationOperPageLes.UI.UserElementsControl.Theme
+namespace OperPageLes.UI.UserElementsControl.Theme
 {
     /// <summary>
     /// Логика взаимодействия для OPLThemeFile.xaml

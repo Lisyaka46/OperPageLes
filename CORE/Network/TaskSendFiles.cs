@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.UI.UserElementsControl.Network;
+﻿using OperPageLes.UI.UserElementsControl.Network;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Controls;
 
-namespace ApplicationOperPageLes.CORE.Network
+namespace OperPageLes.CORE.Network
 {
     internal class TaskSendFiles()
     {

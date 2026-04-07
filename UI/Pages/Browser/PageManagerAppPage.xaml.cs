@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Struct;
 using IEL.CORE.Classes;
 using IEL.UserElementsControl;
 using OIEL.CORE.Browser;
@@ -7,9 +7,9 @@ using OIEL.UserElementsControl;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageManagerAppPage.xaml

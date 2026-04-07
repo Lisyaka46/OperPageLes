@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Linq;
 
-namespace ApplicationOperPageLes.CORE.Network
+namespace OperPageLes.CORE.Network
 {
     /// <summary>
     /// Класс информации об передоваемом объекте файла

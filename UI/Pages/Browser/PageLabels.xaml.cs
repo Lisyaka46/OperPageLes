@@ -1,7 +1,7 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageLabel;
+using OperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Enums;
 using InterpreterCommand.Classes;
 using OIEL.CORE.Browser;
@@ -12,9 +12,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageLabels.xaml

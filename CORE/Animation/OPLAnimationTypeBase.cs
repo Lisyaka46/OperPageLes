@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace ApplicationOperPageLes.CORE.Animation
+namespace OperPageLes.CORE.Animation
 {
     /// <summary>
     /// Базовый класс анимационного элемента программы

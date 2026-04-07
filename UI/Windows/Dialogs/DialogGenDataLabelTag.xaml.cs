@@ -1,11 +1,11 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Struct;
 using IEL.CORE.Enums;
 using OIEL.UserElementsControl.Base.LabelBase;
 using System.Windows;
 using Key = System.Windows.Input.Key;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowGenDataLabelTag.xaml

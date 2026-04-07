@@ -1,9 +1,8 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Interfaces;
-using OIEL.UserElementsControl;
+﻿using OIEL.UserElementsControl;
+using OperPageLes.CORE.Enums;
 using System.Windows.Controls;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
+namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
 {
     /// <summary>
     /// Логика взаимодействия для PageMainConsolePanelAction.xaml

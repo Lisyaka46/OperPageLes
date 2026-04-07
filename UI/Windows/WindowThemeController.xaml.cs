@@ -1,9 +1,9 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Settings.PaletteElements;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.ActionPanel.PaletteWindow;
-using ApplicationOperPageLes.UI.UserElementsControl.Theme;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Settings.PaletteElements;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PaletteWindow;
+using OperPageLes.UI.UserElementsControl.Theme;
+using OperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
@@ -18,10 +18,10 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
 using Binding = System.Windows.Data.Binding;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
-namespace ApplicationOperPageLes.UI.Windows
+namespace OperPageLes.UI.Windows
 {
     /// <summary>
     /// Логика взаимодействия для WindowThemeController.xaml

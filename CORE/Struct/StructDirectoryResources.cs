@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FontFamily = System.Windows.Media.FontFamily;
 
-namespace ApplicationOperPageLes.CORE.Struct
+namespace OperPageLes.CORE.Struct
 {
     internal readonly struct StructDirectoryResources
     {
@@ -111,7 +111,11 @@ namespace ApplicationOperPageLes.CORE.Struct
             App.CurrentApp.LogWriteLine("Проверка ресурсных файлов");
             string Prefics;
             PathesFromNameResource.Clear();
-            foreach (PropertyInfo prop in typeof(ApplicationOperPageLes.Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic))
+            CheckCreateDirectoryInFile(DirectoryImagesApplication);
+            CheckCreateDirectoryInFile(DirectoryAudioApplication);
+            CheckCreateDirectoryInFile(DirectoryMediaApplication);
+            CheckCreateDirectoryInFile(DirectoryDictionaryApplication);
+            foreach (PropertyInfo prop in typeof(OperPageLes.Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic))
             {
                 if (prop.PropertyType == typeof(byte[]))
                 {

@@ -2,9 +2,9 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.CORE
+namespace OperPageLes.CORE
 {
     /// <summary>
     /// Класс управления пользователями учавствовавших в разработке

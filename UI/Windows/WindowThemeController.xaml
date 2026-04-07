@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows"
+        xmlns:local="clr-namespace:OperPageLes.UI.Windows"
         xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
         xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
         xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-        xmlns:Theme="clr-namespace:ApplicationOperPageLes.UI.UserElementsControl.Theme"
-    x:Class="ApplicationOperPageLes.UI.Windows.WindowThemeController"
+        xmlns:Theme="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
+    x:Class="OperPageLes.UI.Windows.WindowThemeController"
         mc:Ignorable="d"
         Title="Управление персонализацией" Height="450" Width="800" MinWidth="670" MinHeight="410">
     <Window.Resources>

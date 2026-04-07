@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Color = System.Windows.Media.Color;
 
-namespace ApplicationOperPageLes.CORE.Animation
+namespace OperPageLes.CORE.Animation
 {
     internal class OPLColorAnimationType<T> : OPLAnimationTypeBase<T> where T : ColorAnimation
     {

@@ -1,15 +1,15 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Interfaces;
-using ApplicationOperPageLes.CORE.Objects;
-using ApplicationOperPageLes.CORE.Settings.PaletteElements;
-using ApplicationOperPageLes.CORE.Settings.Struct;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole;
-using ApplicationOperPageLes.UI.Pages.Browser;
-using ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork;
-using ApplicationOperPageLes.UI.Windows;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
+﻿using OperPageLes.CORE;
+using OperPageLes.CORE.Enums;
+using OIEL.UserElementsControl.Interfaces;
+using OperPageLes.CORE.Objects;
+using OperPageLes.CORE.Settings.PaletteElements;
+using OperPageLes.CORE.Settings.Struct;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageConsole;
+using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
+using OperPageLes.UI.Windows;
+using OperPageLes.UI.Windows.Dialogs;
 using IEL.CORE.Classes;
 using IEL.UserElementsControl;
 using Interpreter.Classes;
@@ -42,7 +42,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 
-namespace ApplicationOperPageLes
+namespace OperPageLes
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -1,9 +1,9 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Interfaces;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.Description;
-using ApplicationOperPageLes.UI.Windows.Base;
+﻿using OperPageLes.CORE;
+using OperPageLes.CORE.Enums;
+using OIEL.UserElementsControl.Interfaces;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.Description;
+using OperPageLes.UI.Windows.Base;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
@@ -14,9 +14,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.Windows
+namespace OperPageLes.Windows
 {
     /// <summary>
     /// Логика взаимодействия для WindowDiscriptionCommands.xaml

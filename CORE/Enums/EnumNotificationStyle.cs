@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationOperPageLes.CORE.Enums
+namespace OperPageLes.CORE.Enums
 {
     /// <summary>
     /// Стили уведомлений

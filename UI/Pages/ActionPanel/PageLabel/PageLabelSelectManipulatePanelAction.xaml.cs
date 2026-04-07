@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
+namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelSelectManipulatePanelAction.xaml

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ApplicationOperPageLes.CORE.Network
+namespace OperPageLes.CORE.Network
 {
     internal class TcpClientChat
     {

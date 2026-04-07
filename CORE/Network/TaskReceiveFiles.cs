@@ -1,5 +1,5 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl.Network;
+﻿using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementsControl.Network;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,9 +9,9 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.CORE.Network
+namespace OperPageLes.CORE.Network
 {
     internal class TaskReceiveFiles()
     {

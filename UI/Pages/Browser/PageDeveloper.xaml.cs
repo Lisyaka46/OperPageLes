@@ -1,6 +1,6 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Windows;
-using ApplicationOperPageLes.UI.Windows.DEV;
+﻿using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Windows;
+using OperPageLes.UI.Windows.DEV;
 using OIEL.CORE.Browser;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,10 +11,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using DrColor = System.Drawing.Color;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml

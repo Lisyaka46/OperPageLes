@@ -1,5 +1,5 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Interfaces;
+﻿using OperPageLes.CORE;
+using OIEL.UserElementsControl.Interfaces;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace ApplicationOperPageLes.UI.Pages.Description
+namespace OperPageLes.UI.Pages.Description
 {
     /// <summary>
     /// Логика взаимодействия для PageDescriptionConsole.xaml

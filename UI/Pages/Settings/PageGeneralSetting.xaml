@@ -3,11 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.Settings"
+    xmlns:local="clr-namespace:OperPageLes.UI.Pages.Settings"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
-    x:Class="ApplicationOperPageLes.UI.Pages.Settings.PageGeneralSetting"
+    x:Class="OperPageLes.UI.Pages.Settings.PageGeneralSetting"
     mc:Ignorable="d" 
     d:DesignHeight="626.41"
     Title="PageGeneral">

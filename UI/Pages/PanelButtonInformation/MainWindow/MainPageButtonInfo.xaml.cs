@@ -1,6 +1,6 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.ActionPanel.Other;
-using ApplicationOperPageLes.UI.Pages.Browser;
+﻿using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.Other;
+using OperPageLes.UI.Pages.Browser;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
@@ -10,10 +10,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
-using static ApplicationOperPageLes.App;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using static OperPageLes.App;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
+namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 {
     /// <summary>
     /// Логика взаимодействия для Page1.xaml

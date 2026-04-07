@@ -1,16 +1,16 @@
-﻿using ApplicationOperPageLes.CORE.Network;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Windows.Base;
+﻿using OperPageLes.CORE.Network;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Windows.Base;
 using IEL.UserElementsControl;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Media;
-using ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
+using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для DialogCreateTcpListener.xaml

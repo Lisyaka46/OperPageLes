@@ -1,13 +1,13 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Network;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl.Network;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Network;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementsControl.Network;
 using OIEL.UserElementsControl.Base;
 using System.Windows;
 using System.Windows.Controls;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.UserElementsControl.Network
+namespace OperPageLes.UI.UserElementsControl.Network
 {
     /// <summary>
     /// Логика взаимодействия для OPLNetworkMessage.xaml

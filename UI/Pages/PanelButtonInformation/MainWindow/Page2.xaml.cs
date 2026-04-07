@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow
+namespace OperPageLes.UI.Pages.PanelButtonInformation.MainWindow
 {
     /// <summary>
     /// Логика взаимодействия для Page2.xaml

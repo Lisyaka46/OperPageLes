@@ -1,6 +1,6 @@
 ﻿using IEL.UserElementsControl;
-using ApplicationOperPageLes.CORE.Settings;
-using ApplicationOperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.CORE.Settings;
+using OperPageLes.UI.Pages.ActionPanel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +17,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
 using System.ComponentModel;
-using ApplicationOperPageLes.CORE;
+using OperPageLes.CORE;
 using IEL.CORE.Classes;
 
-namespace ApplicationOperPageLes.UI.Pages.Settings
+namespace OperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PagePanelActionSetting.xaml

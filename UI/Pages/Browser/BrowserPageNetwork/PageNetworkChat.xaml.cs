@@ -1,16 +1,16 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Network;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl.Network;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Network;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementsControl.Network;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Key = System.Windows.Input.Key;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
+namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
 {
     /// <summary>
     /// Логика взаимодействия для PageNetworkChat.xaml

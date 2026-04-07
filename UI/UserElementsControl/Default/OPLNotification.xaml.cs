@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.CORE.Objects;
+﻿using OperPageLes.CORE.Objects;
 using IEL.UserElementsControl.Base;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationOperPageLes.UI.UserElementsControl.Default
+namespace OperPageLes.UI.UserElementsControl.Default
 {
     /// <summary>
     /// Логика взаимодействия для OPLNotification.xaml

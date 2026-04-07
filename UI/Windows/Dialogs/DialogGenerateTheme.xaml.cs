@@ -1,12 +1,12 @@
-﻿using ApplicationOperPageLes.CORE.Settings.PaletteElements;
-using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Settings.PaletteElements;
+using OperPageLes.CORE.Struct;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для DialogGenerateTheme.xaml

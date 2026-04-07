@@ -1,14 +1,14 @@
 ﻿using LibraryPackKey.CORE;
-using ApplicationOperPageLes.CORE.Struct;
+using OperPageLes.CORE.Struct;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для WindowInputProgramKey.xaml

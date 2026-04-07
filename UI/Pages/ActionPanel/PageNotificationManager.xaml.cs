@@ -1,6 +1,6 @@
-﻿using ApplicationOperPageLes.CORE.Objects;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl.Default;
+﻿using OperPageLes.CORE.Objects;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementsControl.Default;
 using OIEL.UserElementsControl;
 using OIEL.UserElementsControl.Interfaces;
 using System.Windows;
@@ -8,9 +8,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Xml.Linq;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageNotificationManager.xaml

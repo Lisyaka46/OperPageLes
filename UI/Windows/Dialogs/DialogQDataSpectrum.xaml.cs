@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Struct;
 using ColorPicker;
 using ColorPicker.Models;
 using IEL.CORE.Classes;
@@ -17,10 +17,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
-namespace ApplicationOperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
     /// Логика взаимодействия для DialogQDataSpectrum.xaml

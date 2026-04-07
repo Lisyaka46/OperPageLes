@@ -1,4 +1,4 @@
-﻿using ApplicationOperPageLes.UI.Windows.Base;
+﻿using OperPageLes.UI.Windows.Base;
 using OIEL.UserElementsControl.Base;
 using OPLAnimation.CORE.Animation;
 using OPLAnimation.CORE.Interfaces;
@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationOperPageLes.UI.UserElementsControl.Network
+namespace OperPageLes.UI.UserElementsControl.Network
 {
     /// <summary>
     /// Логика взаимодействия для OPLNetworkChat.xaml

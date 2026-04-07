@@ -1,13 +1,13 @@
 ﻿<Base:OPLWindowBase
-    x:Class="ApplicationOperPageLes.UI.Windows.Dialogs.DialogConnect"
+    x:Class="OperPageLes.UI.Windows.Dialogs.DialogConnect"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Base="clr-namespace:ApplicationOperPageLes.UI.Windows.Base"
+    xmlns:Base="clr-namespace:OperPageLes.UI.Windows.Base"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Windows.Dialogs"
+    xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
     mc:Ignorable="d" Height="200" Width="276" WindowStyle="None" AllowsTransparency="True" Background="#FF4DDAD0" TitleForeground="#FF053B3C" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" FontSize="7">
     <WindowChrome.WindowChrome>
         <WindowChrome  ResizeBorderThickness="5" UseAeroCaptionButtons="False" CaptionHeight="35" CornerRadius="10,10,10,10" />

@@ -1,10 +1,10 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Media;
 
-namespace ApplicationOperPageLes.CORE.Objects
+namespace OperPageLes.CORE.Objects
 {
     public class Notification
     {

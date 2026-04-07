@@ -1,8 +1,8 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Network;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.UserElementsControl.Network;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Network;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementsControl.Network;
+using OperPageLes.UI.Windows.Dialogs;
 using IEL.UserElementsControl.Base;
 using Microsoft.Windows.Themes;
 using OIEL.CORE.Browser;
@@ -17,9 +17,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using MouseButton = System.Windows.Input.MouseButton;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
+namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
 {
     /// <summary>
     /// Логика взаимодействия для PageNetwork.xaml

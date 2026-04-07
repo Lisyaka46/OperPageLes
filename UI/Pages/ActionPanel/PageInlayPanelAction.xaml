@@ -3,11 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.ActionPanel"
+    xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
-    x:Class="ApplicationOperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction"
+    x:Class="OperPageLes.UI.Pages.ActionPanel.PageInlayPanelAction"
     Width="180" Height="125">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>

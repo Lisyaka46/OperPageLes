@@ -1,11 +1,11 @@
-﻿using ApplicationOperPageLes.CORE.Network;
-using ApplicationOperPageLes.UI.UserElementsControl.Network;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
+﻿using OperPageLes.CORE.Network;
+using OperPageLes.UI.UserElementsControl.Network;
+using OperPageLes.UI.Windows.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using Orientation = System.Windows.Controls.Orientation;
 
-namespace ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork
+namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
 {
     /// <summary>
     /// Логика взаимодействия для PageStackChats.xaml

@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace ApplicationOperPageLes.UI.UserElementsControl.Network
+namespace OperPageLes.UI.UserElementsControl.Network
 {
     /// <summary>
     /// Логика взаимодействия для OPLNetworkClipFile.xaml

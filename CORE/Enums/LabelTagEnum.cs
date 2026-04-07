@@ -1,4 +1,4 @@
-﻿namespace ApplicationOperPageLes.CORE.Enums
+﻿namespace OperPageLes.CORE.Enums
 {
     internal enum LabelTagEnum
     {

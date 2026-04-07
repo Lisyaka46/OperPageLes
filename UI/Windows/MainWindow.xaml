@@ -5,10 +5,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-    xmlns:Base="clr-namespace:ApplicationOperPageLes.UI.Windows.Base"
+    xmlns:Base="clr-namespace:OperPageLes.UI.Windows.Base"
     xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
-    x:Name="window" x:Class="ApplicationOperPageLes.UI.Windows.MainWindow"
+    x:Name="window" x:Class="OperPageLes.UI.Windows.MainWindow"
     mc:Ignorable="d"
     Title="Главное меню" WindowStartupLocation="CenterScreen" Background="{x:Null}" Width="800" Height="650" MinWidth="700" MinHeight="550" WindowStyle="None" AllowsTransparency="True">
     <Base:OPLWindowBase.Resources>

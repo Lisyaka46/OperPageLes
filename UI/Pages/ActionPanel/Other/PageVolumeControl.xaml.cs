@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel.Other
+namespace OperPageLes.UI.Pages.ActionPanel.Other
 {
     /// <summary>
     /// Логика взаимодействия для PageVolumeControl.xaml

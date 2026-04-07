@@ -1,5 +1,5 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.UI.Pages.Browser;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.UI.Pages.Browser;
 using OIEL.UserElementsControl;
 using IEL.CORE.Classes;
 using IEL.UserElementsControl;
@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageConsole
+namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
 {
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml

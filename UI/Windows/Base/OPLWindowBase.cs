@@ -13,7 +13,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 
-namespace ApplicationOperPageLes.UI.Windows.Base
+namespace OperPageLes.UI.Windows.Base
 {
     public partial class OPLWindowBase : Window, IOPLAnimate, IDisposable
     {

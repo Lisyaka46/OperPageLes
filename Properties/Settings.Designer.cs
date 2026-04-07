@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ApplicationOperPageLes.Properties {
+namespace OperPageLes.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -1,11 +1,11 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums;
 using IEL.CORE.Classes;
 using System.Windows;
 using System.Windows.Media;
 using static IEL.CORE.Classes.QData;
 using WnColor = System.Windows.Media.Color;
 
-namespace ApplicationOperPageLes.UI.Windows.DEV
+namespace OperPageLes.UI.Windows.DEV
 {
 #if DEBUG
     /// <summary>

@@ -1,7 +1,7 @@
-﻿using ApplicationOperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums;
 using System.Windows.Controls;
 
-namespace ApplicationOperPageLes.UI.Pages.ActionPanel.PageLabel
+namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
 {
     /// <summary>
     /// Логика взаимодействия для PageLabelMainActionPanel.xaml

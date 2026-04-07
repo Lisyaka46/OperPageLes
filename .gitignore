@@ -362,7 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 *.bkp
-/ApplicationOperPageLes.csproj
-/ApplicationOperPageLes.sln
+/OperPageLes.csproj
+/OperPageLes.sln
 /OtherFiles/Charts/.$OperPage_les.drawio.bkp
-/ApplicationOperPageLes.csproj
+/OperPageLes.csproj

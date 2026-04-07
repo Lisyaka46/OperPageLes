@@ -1,13 +1,13 @@
 ﻿#region Link
-using ApplicationOperPageLes.CORE.Enums;
-using ApplicationOperPageLes.CORE.Struct;
-using ApplicationOperPageLes.UI.Pages.ActionPanel;
-using ApplicationOperPageLes.UI.Pages.Browser;
-using ApplicationOperPageLes.UI.Pages.Browser.BrowserPageNetwork;
-using ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
-using ApplicationOperPageLes.UI.Windows.Base;
-using ApplicationOperPageLes.UI.Windows.Dialogs;
-using ApplicationOperPageLes.Windows;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
+using OperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
+using OperPageLes.UI.Windows.Base;
+using OperPageLes.UI.Windows.Dialogs;
+using OperPageLes.Windows;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using OIEL.CORE.Browser;
@@ -23,11 +23,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using OPRES = ApplicationOperPageLes.Properties.Resources;
+using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 #endregion
 
-namespace ApplicationOperPageLes.UI.Windows
+namespace OperPageLes.UI.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

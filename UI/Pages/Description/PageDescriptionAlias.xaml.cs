@@ -1,5 +1,5 @@
-﻿using ApplicationOperPageLes.CORE;
-using ApplicationOperPageLes.CORE.Interfaces;
+﻿using OperPageLes.CORE;
+using OIEL.UserElementsControl.Interfaces;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -7,7 +7,7 @@ using InterpreterCommand.Commands;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace ApplicationOperPageLes.UI.Pages.Description
+namespace OperPageLes.UI.Pages.Description
 {
     /// <summary>
     /// Логика взаимодействия для PageDescriptionAlias.xaml

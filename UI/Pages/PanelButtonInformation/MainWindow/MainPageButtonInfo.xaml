@@ -5,9 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-      xmlns:local="clr-namespace:ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow"
+      xmlns:local="clr-namespace:OperPageLes.UI.Pages.PanelButtonInformation.MainWindow"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL" x:Class="ApplicationOperPageLes.UI.Pages.PanelButtonInformation.MainWindow.MainPageButtonInfo"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL" x:Class="OperPageLes.UI.Pages.PanelButtonInformation.MainWindow.MainPageButtonInfo"
       mc:Ignorable="d" 
       d:DesignHeight="42">
     <Page.Resources>
