@@ -16,41 +16,47 @@ namespace OperPageLes.CORE
         public bool ConnectInternet { get; private set; }
 
         /// <summary>
-        /// Прошлое состояние подключения к интернету
-        /// </summary>
-        public bool OLD_ConnectInternet { get; private set; }
-
-        /// <summary>
         /// Количество миллисекунд потраченное на обновление подключения
         /// </summary>
-        internal ushort MillisecondUpdateTime { get; private set; }
+        internal ushort CurrentPing { get; private set; }
+
+        /// <summary>
+        /// Максимальный предел ожидания ответа
+        /// </summary>
+        internal readonly ushort MaxPing;
+
+        /// <summary>
+        /// Текущий объект проверки подключения
+        /// </summary>
+        private Ping PingObject = new();
 
         /// <summary>
         /// Инициализировать стартовый объект подключения к интернету
         /// </summary>
-        public ObjectConnect()
+        public ObjectConnect(ushort SourceMaxPing = 3000)
         {
             ConnectInternet = false;
-            MillisecondUpdateTime = 0;
+            CurrentPing = 0;
+            MaxPing = SourceMaxPing;
         }
 
         /// <summary>
         /// Проверка подключения интернета
         /// </summary>
-        internal async Task UpdateInternetConnection()
+        internal ObjectConnectEventArgs UpdateInternetConnection()
         {
             try
             {
-                PingReply reply = await new Ping().SendPingAsync("yandex.ru", 3000);
-                OLD_ConnectInternet = ConnectInternet;
+                PingReply reply = PingObject.Send("yandex.ru", MaxPing);
                 ConnectInternet = reply.Status == IPStatus.Success;
-                MillisecondUpdateTime = (ushort)reply.RoundtripTime;
+                CurrentPing = (ushort)reply.RoundtripTime;
             }
             catch
             {
-                OLD_ConnectInternet = ConnectInternet;
                 ConnectInternet = false;
+                CurrentPing = 3000;
             }
+            return ObjectConnectEventArgs.GetObject(ConnectInternet, CurrentPing);
         }
     }
 }
