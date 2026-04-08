@@ -156,6 +156,7 @@ namespace OperPageLes.UI.UserElementsControl.Network
             TextBlockSizeFile.Foreground = SourceForeground.SourceBrush;
             TextBlockNameFile.Foreground = SourceForeground.SourceBrush;
             TextBlockIndex.Foreground = SourceForeground.SourceBrush;
+            TextBlockProgress.Foreground = SourceForeground.SourceBrush;
             RectangleLoading.Fill = SourceForeground.SourceBrush;
         }
 

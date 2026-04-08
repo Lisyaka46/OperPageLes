@@ -159,7 +159,10 @@ namespace OperPageLes.UI.Pages.Browser
             PageLabel.IELButtonManipulateTags.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 App.MainWindow.IELActionPanelMain.ClosePanelAction();
-                new DialogManipulateLabelTags().ShowManipulateTags();
+                new DialogManipulateLabelTags()
+                {
+                    ManagerAnimation = App.ManagerAnimation,
+                }.ShowManipulateTags();
             };
             PageLabel.IELButtonSelectAllLabel.OnActivateMouseLeft += (sender, e, Key) =>
             {
@@ -264,7 +267,10 @@ namespace OperPageLes.UI.Pages.Browser
                 if (SelectLabelInPage != null)
                 {
                     SelectLabelInPage.SelectOn();
-                    LabelTag? Tag = new DialogManipulateLabelTags().ShowSelectOneTag();
+                    LabelTag? Tag = new DialogManipulateLabelTags()
+                    {
+                        ManagerAnimation = App.ManagerAnimation,
+                    }.ShowSelectOneTag();
                     if (Tag != null)
                     {
                         SelectLabelInPage.SourceLabel.AppendTag(Tag);

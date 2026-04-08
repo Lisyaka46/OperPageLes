@@ -59,7 +59,6 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                App.Current.MainWindow.WindowState = WindowState.Minimized;
             };
 
             MouseUp += (sender, e) =>
