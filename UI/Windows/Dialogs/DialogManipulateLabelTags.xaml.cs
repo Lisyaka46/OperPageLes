@@ -1,8 +1,18 @@
-﻿using OperPageLes.CORE.Struct;
+﻿using IEL.UserElementsControl;
+using IEL.UserElementsControl.Base;
 using OIEL.UserElementsControl;
 using OIEL.UserElementsControl.Base.LabelBase;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Windows.Base;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Xml.Linq;
+using Cursors = System.Windows.Input.Cursors;
 using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Windows.Dialogs
@@ -10,17 +20,27 @@ namespace OperPageLes.UI.Windows.Dialogs
     /// <summary>
     /// Логика взаимодействия для WindowManipulateLabelTags.xaml
     /// </summary>
-    public partial class DialogManipulateLabelTags : Window
+    public partial class DialogManipulateLabelTags : OPLWindowBase
     {
-        /// <summary>
-        /// Выделенный тег
-        /// </summary>
-        private OPLLabelTag? SelectedTag;
-
         /// <summary>
         /// Состояние отмены
         /// </summary>
         private bool Cancel = true;
+
+        /// <summary>
+        /// Состояние активации добавления тега
+        /// </summary>
+        private bool StateActivateAddTag = false;
+
+        /// <summary>
+        /// Выделенный индекс тега
+        /// </summary>
+        private int SelectIndexTag = -1;
+
+        /// <summary>
+        /// Представление объектов массива тегов
+        /// </summary>
+        private StackPanel StackPanelTags;
 
         public DialogManipulateLabelTags()
         {
@@ -28,6 +48,17 @@ namespace OperPageLes.UI.Windows.Dialogs
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             IELButtonChangeTag.IsEnabled = false;
             IELButtonRemoveTag.IsEnabled = false;
+            Opacity = 0d;
+            BorderAddTag.Width = 10d;
+            BorderAddTag.Cursor = Cursors.Hand;
+            StackPanelTags = new()
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+            };
+            ScrollViewerTags.AutoUpdateVisibleHorizontalScroll = false;
+            ScrollViewerTags.Content = StackPanelTags;
+            IELBlockInfoAddTag.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            BlockMessage.Opacity = 0d;
             IELButtonComplete.OnActivateMouseLeft += (sender, e) =>
             {
                 Cancel = false;
@@ -42,6 +73,98 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                 }
             };
+            Activated += (sender, e) =>
+            {
+                if (ManagerAnimation != null)
+                {
+                    ManagerAnimation.DoubleAnimationType.AnimateEffect(BackGroundRadialBrush, RadialGradientBrush.OpacityProperty, 1d, TimeSpan.FromMilliseconds(1500d));
+                    ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+                }
+                else
+                {
+                    BackGroundRadialBrush.Opacity = 1d;
+                    Opacity = 1d;
+                }
+            };
+            BorderAddTag.MouseLeftButtonUp += (sender, e) =>
+            {
+                if (!StateActivateAddTag)
+                    ActivateAddTag();
+            };
+            IELButtonCancelAddTag.OnActivateMouseLeft += (sender, e) =>
+            {
+                DiactivateAddTag();
+                e.Handled = true;
+            };
+            IELBlockInfoAddTag.MouseHover += (sender, e) =>
+            {
+                BlockMessage.UsingBorderInformation(IELBlockInfoAddTag,
+                    "Escape - \"Выход из добавления тега\"\n" +
+                    "Enter - \"Добавить новый тег\"",
+                    IEL.CORE.Enums.OrientationPositionCursor.RightUp);
+            };
+            IELBlockInfoAddTag.MouseLeave += (sender, e) =>
+            {
+                BlockMessage.CloseBorderInformation();
+            };
+            IELTextBoxAddTag.KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        if (IELTextBoxAddTag.Text.Length > 0 &&
+                        (!App.CurrentApp.DataLabelTags.Any((i) => i.ValueTag.Equals(IELTextBoxAddTag.Text)) || App.CurrentApp.DataLabelTags.Count == 0))
+                        {
+                            App.CurrentApp.DataLabelTags.Add(new(IELTextBoxAddTag.Text));
+                            IELBlockInfoText VisualTag = AddVisualTag(IELTextBoxAddTag.Text);
+                            IELTextBoxAddTag.Text = string.Empty;
+                            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                        }
+                        break;
+                    case Key.Escape:
+                        DiactivateAddTag();
+                        break;
+                }
+                e.Handled = true;
+            };
+        }
+
+        /// <summary>
+        /// Активировать состояние добавления нового тега
+        /// </summary>
+        private void ActivateAddTag()
+        {
+            BorderAddTag.Cursor = Cursors.Arrow;
+            IELTextBoxAddTag.Text = string.Empty;
+            Keyboard.Focus(IELTextBoxAddTag);
+            IELTextBoxAddTag.Focus();
+            if (ManagerAnimation != null)
+            {
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderAddTag, WidthProperty, 400d, TimeSpan.FromMilliseconds(500d));
+            }
+            else
+            {
+                BorderAddTag.Width = 400d;
+            }
+            StateActivateAddTag = true;
+        }
+
+        /// <summary>
+        /// Диактивировать сотсояние добавление тега
+        /// </summary>
+        private void DiactivateAddTag()
+        {
+            BorderAddTag.Cursor = Cursors.Hand;
+            Keyboard.ClearFocus();
+            if (ManagerAnimation != null)
+            {
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderAddTag, WidthProperty, 10d, TimeSpan.FromMilliseconds(500d));
+            }
+            else
+            {
+                BorderAddTag.Width = 10d;
+            }
+            StateActivateAddTag = false;
         }
 
         /// <summary>
@@ -49,19 +172,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         internal void ShowManipulateTags()
         {
-            Title = "Окно манипуляции над тегами";
-            IELButtonAddTag.IsEnabled = true;
-            IELButtonAddTag.OnActivateMouseLeft += (sender, e) =>
-            {
-                LabelTag? Tag = new DialogGenDataLabelTag().GenereteTag();
-                if (Tag == null) return;
-                App.CurrentApp.DataLabelTags.Add(Tag);
-                OPLLabelTag VisualTag = AddVisualTag(Tag);
-                VisualTag.MouseLeftButtonUp += (sender, e) =>
-                {
-                    MouseLeftButtonUpOnManipulate(VisualTag);
-                };
-            };
+            BackGroundRadialBrush.Opacity = 0d;
             IELButtonChangeTag.OnActivateMouseLeft += (sender, e) =>
             {
                 //if (SelectedTag == null) return;
@@ -70,18 +181,22 @@ namespace OperPageLes.UI.Windows.Dialogs
             };
             IELButtonRemoveTag.OnActivateMouseLeft += (sender, e) =>
             {
-                if (SelectedTag == null) return;
-                StackPanelTags.Children.Remove(SelectedTag);
-                App.CurrentApp.DataLabelTags.Remove(SelectedTag.Tag);
-                ClearSelectTag();
+                if (SelectIndexTag == -1) return;
+                StackPanelTags.Children.RemoveAt(SelectIndexTag);
+                App.CurrentApp.DataLabelTags.RemoveAt(SelectIndexTag);
+                SelectIndexTag = -1;
             };
             foreach (LabelTag Element in App.CurrentApp.DataLabelTags)
             {
-                OPLLabelTag VisualTag = AddVisualTag(Element);
-                VisualTag.MouseLeftButtonUp += (sender, e) =>
+                IELBlockInfoText VisualTag = AddVisualTag(Element.ValueTag);
+                if (ManagerAnimation != null)
                 {
-                    MouseLeftButtonUpOnManipulate(VisualTag);
-                };
+                    ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                }
+                else
+                {
+                    VisualTag.Opacity = 1d;
+                }
             }
             ShowDialog();
         }
@@ -91,94 +206,65 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         internal LabelTag? ShowSelectOneTag()
         {
-            Title = "Окно выделения тега устанавливаемого для ярлыка";
-            IELButtonAddTag.IsEnabled = false;
-            IELButtonAddTag.Visibility = Visibility.Hidden;
+            BackGroundRadialBrush.Opacity = 0d;
+            BorderAddTag.IsEnabled = false;
+            BorderAddTag.Opacity = 0d;
             IELButtonChangeTag.Visibility = Visibility.Hidden;
             IELButtonRemoveTag.Visibility = Visibility.Hidden;
             foreach (LabelTag Element in App.CurrentApp.DataLabelTags)
             {
-                OPLLabelTag VisualTag = AddVisualTag(Element);
-                VisualTag.MouseLeftButtonUp += (sender, e) =>
+                IELBlockInfoText VisualTag = AddVisualTag(Element.ValueTag);
+                if (ManagerAnimation != null)
                 {
-                    MouseLeftButtonUpNotManipulate(VisualTag);
-                };
+                    ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                }
+                else
+                {
+                    VisualTag.Opacity = 1d;
+                }
             }
             ShowDialog();
-            return (LabelTag?)(!Cancel ? SelectedTag?.Tag : null);
-        }
-
-        /// <summary>
-        /// Взаимодействие с тегом без возможности манипуляции
-        /// </summary>
-        /// <param name="OPLTag">Объект тега</param>
-        private void MouseLeftButtonUpNotManipulate(OPLLabelTag OPLTag)
-        {
-            if (SelectedTag != null)
-            {
-                ClearSelectTag();
-                if (SelectedTag.GetHashCode().Equals(OPLTag.GetHashCode()))
-                {
-                    SelectedTag = null;
-                    return;
-                }
-            }
-            SelectedTag = OPLTag;
-            //bool UsedState = SelectedTag.Background.GetUsedState();
-            //SelectedTag.IELSettingObject.Background.SetUsedState(!UsedState);
-        }
-
-        /// <summary>
-        /// Взаимодействие с тегом с возможностью манипуляции
-        /// </summary>
-        /// <param name="OPLTag">Объект тега</param>
-        private void MouseLeftButtonUpOnManipulate(OPLLabelTag OPLTag)
-        {
-            if (SelectedTag != null)
-            {
-                ClearSelectTag();
-                if (SelectedTag.GetHashCode().Equals(OPLTag.GetHashCode()))
-                {
-                    SelectedTag = null;
-                    return;
-                }
-            }
-            SelectedTag = OPLTag;
-            //bool UsedState = SelectedTag.IELSettingObject.BackgroundSetting.GetUsedState();
-            //SelectedTag.IELSettingObject.BackgroundSetting.SetUsedState(!UsedState);
-            //IELButtonChangeTag.IsEnabled = !UsedState;
-            //IELButtonRemoveTag.IsEnabled = !UsedState;
+            return (!Cancel && SelectIndexTag > -1) ? App.CurrentApp.DataLabelTags[SelectIndexTag] : null;
         }
 
         /// <summary>
         /// Добавить отображение тега
         /// </summary>
         /// <param name="NewTag">Отображаемый объект тега</param>
-        private OPLLabelTag AddVisualTag(LabelTag NewTag)
+        private IELBlockInfoText AddVisualTag(string TextTag)
         {
-            OPLLabelTag OPLTag = new()
+            IELBlockInfoText IELTag = new()
             {
                 BorderThickness = new(1),
-                Text = string.Empty,
-                Padding = new(4, 2, 4, 2),
-                FontSize = 16d,
-                Tag = NewTag,
+                Text = TextTag,
+                CornerRadius = new(5),
+                Margin = new(2),
+                Padding = new(0, 2, 0, 2),
+                FontSize = 17d,
                 Cursor = System.Windows.Input.Cursors.Hand,
                 Opacity = 0d,
+                PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Aquamarine],
             };
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(OPLTag, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
-            StackPanelTags.Children.Add(OPLTag);
-            return OPLTag;
-        }
-
-        /// <summary>
-        /// Очистить выделение тега
-        /// </summary>
-        private void ClearSelectTag()
-        {
-            //SelectedTag?.IELSettingObject.BackgroundSetting.SetUsedState(false);
-            IELButtonChangeTag.IsEnabled = false;
-            IELButtonRemoveTag.IsEnabled = false;
+            IELTag.MouseLeftButtonUp += (sender, e) =>
+            {
+                IELObjectBase Obj = (IELObjectBase)sender;
+                if (SelectIndexTag > -1)
+                {
+                    IELObjectBase BackObj = (IELObjectBase)StackPanelTags.Children[SelectIndexTag];
+                    BackObj.SourceBackground.SetUsedState(false);
+                    if (SelectIndexTag == StackPanelTags.Children.IndexOf(Obj)) return;
+                }
+                SelectIndexTag = StackPanelTags.Children.IndexOf(Obj);
+                Obj.SourceBackground.SetUsedState(true);
+            };
+            System.Windows.Data.Binding binding = new()
+            {
+                Mode = BindingMode.OneWay,
+                Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Alphasano"]
+            };
+            BindingOperations.SetBinding(IELTag, IELBlockInfoText.FontFamilyProperty, binding);
+            StackPanelTags.Children.Add(IELTag);
+            return IELTag;
         }
     }
 }
