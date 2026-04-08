@@ -145,6 +145,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             TextBlockNextInfo.Opacity = 0d;
             BorderHappy.Visibility = Visibility.Hidden;
             ImageIconNickName.ImageSource = null;
+            ImageLogo.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
 
             TextBlockNickName.Foreground = new SolidColorBrush(Colors.Black);
         }

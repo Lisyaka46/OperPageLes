@@ -12,6 +12,7 @@
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <StartupObject>OperPageLes.App</StartupObject>
     <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <ApplicationIcon>IconMainApplication.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
     <None Remove="Fonts\Sangha.ttf" />
     <None Remove="Fonts\Tablon.ttf" />
     <None Remove="Fonts\Vollda.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="IconMainApplication.ico" />
   </ItemGroup>
 
   <ItemGroup>

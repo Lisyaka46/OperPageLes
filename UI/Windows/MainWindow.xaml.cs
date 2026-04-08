@@ -1,28 +1,33 @@
 ﻿#region Link
+using IEL.CORE.Enums;
+using IEL.UserElementsControl;
+using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
+using OIEL.CORE.Browser;
+using OIEL.UserElementsControl;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel;
+using OperPageLes.UI.Pages.ActionPanel.Other;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
-using OperPageLes.UI.Pages.PanelButtonInformation.MainWindow;
 using OperPageLes.UI.Windows.Base;
 using OperPageLes.UI.Windows.Dialogs;
 using OperPageLes.Windows;
-using IEL.CORE.Enums;
-using IEL.UserElementsControl;
-using OIEL.CORE.Browser;
-using OIEL.UserElementsControl;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Windows.Globalization;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 #endregion
@@ -34,6 +39,9 @@ namespace OperPageLes.UI.Windows
     /// </summary>
     public partial class MainWindow : OPLWindowBase
     {
+        [LibraryImport("user32.dll", EntryPoint = "keybd_event")]
+        private static partial void Keybd_event(byte CodeButton, byte CodeScan, uint CodeState, UIntPtr dwExtralnfo);
+
         #region PanelAction
         /// <summary>
         /// Страница взаимодействия с вкладками браузера страниц
@@ -49,11 +57,6 @@ namespace OperPageLes.UI.Windows
         //private MMDeviceEnumerator Device = new();
 
         private int ActualIndexActivatePageDownToolButtons;
-
-        /// <summary>
-        /// Страницы информации нижней панели
-        /// </summary>
-        private Page[] PagesButtonsInformation = [];
 
         /// <summary>
         /// Страница управления загрузочными процессами
@@ -120,8 +123,6 @@ namespace OperPageLes.UI.Windows
             IELImageButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
             IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
 
-            IELImageButtonMenu.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Menu));
-
             #region BrowserPage
             App.CurrentApp.MainBrowser.ManagerAnimation = App.ManagerAnimation;
             App.CurrentApp.MainBrowser.Margin = new(4d);
@@ -148,8 +149,6 @@ namespace OperPageLes.UI.Windows
             GridContentFomBrowser.Children.Add(App.CurrentApp.MainBrowser);
             TokenUpdateBackgroundData = new(false);
             ActualIndexActivatePageDownToolButtons = -1;
-            IELPageControllerButtons.LeftAnimateSwitch = new(-5, 0, 0, 0);
-            IELPageControllerButtons.RightAnimateSwitch = new(5, 0, 0, 0);
 
             BorderNotificationIndicator.Opacity = 0d;
             IndicatorLoading.Opacity = 0d;
@@ -177,13 +176,11 @@ namespace OperPageLes.UI.Windows
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELImageButtonCollapse);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
-
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
-
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonBackButtons);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELImageButtonNextButtons);
-
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELImageButtonMenu);
             #endregion
 
             LinearGradientMainWindowBackground = new()
@@ -322,24 +319,92 @@ namespace OperPageLes.UI.Windows
 
             #region DownToolButtons
             ActualIndexActivatePageDownToolButtons = 0;
-            IELImageButtonNextButtons.OnActivateMouseLeft += (sender, e) => NextPageDownToolButtons();
-            IELImageButtonBackButtons.OnActivateMouseLeft += (sender, e) => NextPageDownToolButtons(false);
-
-            IELImageButtonNextButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(-3, 0, 0, 0), 400u);
-            IELImageButtonNextButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
-            IELImageButtonBackButtons.MouseEnter += (sender, e) => IELPageControllerButtons.MoveActualPage(new(3, 0, 0, 0), 400u);
-            IELImageButtonBackButtons.MouseLeave += (sender, e) => IELPageControllerButtons.MoveActualPage(new(0), 400u);
-
+            
+            #region IELButtonHomeBrowser
             IELButtonHomeBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Home));
             IELButtonHomeBrowser.OnActivateMouseLeft += (sender, e) =>
             {
                 App.CurrentApp.MainBrowser.OpenManagerAppPage();
             };
+            #endregion
+
+            #region IELBlockInfoInternetConnection
+            IELBlockInfoInternetConnection.IsEnabled = false;
+            IELBlockInfoInternetConnection.Padding = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection ?
+                new(0, 0, 0, 7) : new(0);
+            IELBlockInfoInternetConnection.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
+            TextBlockInternetConnectionMillisecond.Opacity = 0d;
+            IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
+                    "Текущее подключение к интернету",
+                    OrientationPositionCursor.RightUp);
+            };
+            IELBlockInfoInternetConnection.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+
+            #region IELBlockInfoStateRegister
+            IELBlockInfoStateRegister.Text = Console.CapsLock ? "а".ToUpper() : "a".ToLower();
+            IELBlockInfoStateRegister.MouseUp += (sender, e) =>
+            {
+                Keybd_event(0x14, 0x45, 0x1, 0);
+                Keybd_event(0x14, 0x45, 0x1 | 0x2, 0);
+                IELBlockInfoStateRegister.Text = !Console.CapsLock ? "а".ToUpper() : "a".ToLower();
+            };
+            IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
+                    "Регистр символов клавиатуры",
+                    OrientationPositionCursor.RightUp);
+            };
+            IELBlockInfoStateRegister.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+
+            #region IELBlockInfoCurrentLanguage
+            IELBlockInfoCurrentLanguage.Text = InputLanguage.CurrentInputLanguage.Culture.NativeName[..3].ToUpper();
+            InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
+            {
+                IELBlockInfoCurrentLanguage.Text = e.NewLanguage.NativeName[..3].ToUpper();
+            };
+            IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
+                    "Текущая раскладка клавиатуры",
+                    OrientationPositionCursor.RightUp);
+            };
+            IELBlockInfoCurrentLanguage.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+
+            #region IELBlockInfoVolume
+            IELBlockInfoVolume.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Volume));
+            TextBlockVolumeValue.Foreground = IELBlockInfoVolume.SourceForeground.SourceBrush;
+            TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
+            IELBlockInfoVolume.MouseHover += (sender, e) =>
+            {
+                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageVolumeControl) return;
+                IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
+                    "Громкость звуков программы",
+                    OrientationPositionCursor.RightUp);
+            };
+            IELBlockInfoVolume.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
 
             #region BorderIndicator
             BorderIndicator.MouseEnter += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate) return;
+                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageNotificationManager) return;
                 IELMessageMain.UsingBorderInformation(BorderIndicator,
                     "Менеджер оповещений",
                     OrientationPositionCursor.LeftUp);
@@ -368,6 +433,24 @@ namespace OperPageLes.UI.Windows
                 if (!IsReboot && !IsClosing) Close();
             };
             #endregion
+
+            App.ConnectionPingChanged += (sender, e) =>
+            {
+                IELBlockInfoInternetConnection.Source =
+                    StructDirectoryResources.GetResourceBitmap(e.Connect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                TextBlockInternetConnectionMillisecond.Text = e.Connect ? $"{e.Ping}ms" : string.Empty;
+                if (e.Connect != IELBlockInfoInternetConnection.IsEnabled)
+                {
+                    IELBlockInfoInternetConnection.IsEnabled = e.Connect;
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBlockInfoInternetConnection, OpacityProperty,
+                        e.Connect ? 1d : 0d, TimeSpan.FromMilliseconds(400d));
+                }
+            };
+
+            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
+            {
+                TextBlockVolumeValue.Text = ((int)(New * 100)).ToString();
+            };
         }
 
         /// <summary>
@@ -456,19 +539,17 @@ namespace OperPageLes.UI.Windows
                     Thread.Sleep(1000);
                 }
             }, TokenUpdateBackgroundData);
-            PagesButtonsInformation =
-                    [
-                        new MainPageButtonInfo(), new Page2()
-                    ];
-            IELPageControllerButtons.NextPage(PagesButtonsInformation[0], false);
             Opacity = 0d;
-            ((MainPageButtonInfo)PagesButtonsInformation[0]).ThreadInternetConnection.Start();
             base.Show();
             App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty,
                 new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
 
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty,
                 0d, 360d, TimeSpan.FromMilliseconds(3200d));
+
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty,
+                        App.CurrentApp.SettingMainApplication.MillisecondInternetConnection ? 1d : 0d, TimeSpan.FromMilliseconds(800d));
+
             App.CurrentApp.MainBrowser.OpenManagerAppPage();
 
             #region AppPage
@@ -483,27 +564,6 @@ namespace OperPageLes.UI.Windows
             App.CurrentApp.AddNewAppPage(typeof(PageDeveloper), "Для разработчиков",
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed]);
             #endregion
-        }
-        #endregion
-
-        #region DownToolButtons
-        //
-        private void NextPageDownToolButtons(bool UpIndex = true)
-        {
-            StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
-            if (UpIndex)
-            {
-                if (ActualIndexActivatePageDownToolButtons == PagesButtonsInformation.Length - 1)
-                    ActualIndexActivatePageDownToolButtons = 0;
-                else ActualIndexActivatePageDownToolButtons++;
-            }
-            else
-            {
-                if (ActualIndexActivatePageDownToolButtons == 0)
-                    ActualIndexActivatePageDownToolButtons = PagesButtonsInformation.Length - 1;
-                else ActualIndexActivatePageDownToolButtons--;
-            }
-            IELPageControllerButtons.NextPage(PagesButtonsInformation[ActualIndexActivatePageDownToolButtons], UpIndex);
         }
         #endregion
 
@@ -742,7 +802,13 @@ namespace OperPageLes.UI.Windows
 
         internal void ChangeVisibilityMillisecondInternet(bool Value)
         {
-            ((MainPageButtonInfo)PagesButtonsInformation[0]).VisibilityInternetMillisecond(Value);
+            if (IELBlockInfoInternetConnection.IsEnabled)
+            {
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty,
+                    Value ? 1d : 0d, TimeSpan.FromMilliseconds(400d));
+            }
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
+                    Value ? new(0, 0, 0, 7) : new(0), TimeSpan.FromMilliseconds(400d));
         }
         #endregion
 
