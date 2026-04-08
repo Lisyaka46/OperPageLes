@@ -1,16 +1,5 @@
-﻿using OperPageLes.CORE;
-using OperPageLes.CORE.Enums;
-using OIEL.UserElementsControl.Interfaces;
-using OperPageLes.CORE.Objects;
-using OperPageLes.CORE.Settings.PaletteElements;
-using OperPageLes.CORE.Settings.Struct;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.ActionPanel.PageConsole;
-using OperPageLes.UI.Pages.Browser;
-using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
-using OperPageLes.UI.Windows;
-using OperPageLes.UI.Windows.Dialogs;
-using IEL.CORE.Classes;
+﻿using IEL.CORE.Classes;
+using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
@@ -24,6 +13,18 @@ using Newtonsoft.Json.Linq;
 using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
 using OIEL.UserElementsControl.Base.LabelBase;
+using OIEL.UserElementsControl.Interfaces;
+using OperPageLes.CORE;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Objects;
+using OperPageLes.CORE.Settings.PaletteElements;
+using OperPageLes.CORE.Settings.Struct;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageConsole;
+using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
+using OperPageLes.UI.Windows;
+using OperPageLes.UI.Windows.Dialogs;
 using OPLAnimation.CORE.Animation;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -41,6 +42,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using System.Windows.Threading;
 
 namespace OperPageLes
 {
@@ -210,11 +212,6 @@ namespace OperPageLes
         internal static System.Net.Http.HttpClient UsedHttpClient { get; } = new();
 
         /// <summary>
-        /// Состояние подключения к интернету
-        /// </summary>
-        internal static readonly ObjectConnect InternetPinging = new();
-
-        /// <summary>
         /// Версия программы
         /// </summary>
         internal static readonly string Version = "*";
@@ -248,6 +245,29 @@ namespace OperPageLes
         /// Поток данных
         /// </summary>
         NetworkStream? SourceNetWorckStream = null;
+
+        #region Threads
+        /// <summary>
+        /// Состояние подключения к интернету
+        /// </summary>
+        private ObjectConnect? InternetPinging;
+
+        /// <summary>
+        /// Состояние подключения к интернету
+        /// </summary>
+        internal bool InternetConnectState = false;
+
+        /// <summary>
+        /// Поток обновляемый данные интернета
+        /// </summary>
+        private Thread? ThreadInternetConnection;
+
+        /// <summary>
+        /// Событие количества миллисекунд которое потребовалось на проверку интернета
+        /// </summary>
+        internal static event EventHandler<ObjectConnectEventArgs>? ConnectionPingChanged;
+        #endregion
+
 
         #region Browser
         /// <summary>
@@ -709,6 +729,20 @@ namespace OperPageLes
                 MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
                 e.Handled = true;
             };
+
+            LogWriteLine("Запуск фоновых потоков");
+            InternetPinging = new();
+            ThreadInternetConnection = new(() =>
+            {
+                ObjectConnectEventArgs EventArgs;
+                while (true)
+                {
+                    EventArgs = InternetPinging.UpdateInternetConnection();
+                    Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
+                    Thread.Sleep(4000);
+                }
+            });
+            ThreadInternetConnection.Start();
 
             #region ConsolePage
             PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
