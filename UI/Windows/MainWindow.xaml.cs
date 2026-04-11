@@ -61,7 +61,12 @@ namespace OperPageLes.UI.Windows
         /// <summary>
         /// Страница управления загрузочными процессами
         /// </summary>
-        private PageNotificationManager PageControllerLoadingApplication;
+        private PageNotificationManager PageNotificationApplication;
+
+        /// <summary>
+        /// Страница управления аудио устройствами
+        /// </summary>
+        private PageAudioControl PageAudioControlApplication;
 
         /// <summary>
         /// Текущее состояние отображения загрузки процесса
@@ -231,12 +236,12 @@ namespace OperPageLes.UI.Windows
             };
             #endregion
 
-            PageControllerLoadingApplication = new();
-            PageControllerLoadingApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
+            PageNotificationApplication = new();
+            PageNotificationApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
             {
                 App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
             };
-            PageControllerLoadingApplication.ClearedAllViewersImage += (sender, e) =>
+            PageNotificationApplication.ClearedAllViewersImage += (sender, e) =>
             {
                 App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
             };
@@ -324,6 +329,8 @@ namespace OperPageLes.UI.Windows
             IELButtonHomeBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Home));
             IELButtonHomeBrowser.OnActivateMouseLeft += (sender, e) =>
             {
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction();
                 App.CurrentApp.MainBrowser.OpenManagerAppPage();
             };
             #endregion
@@ -385,12 +392,13 @@ namespace OperPageLes.UI.Windows
             #endregion
 
             #region IELBlockInfoVolume
+            PageAudioControlApplication = new();
             IELBlockInfoVolume.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Volume));
             TextBlockVolumeValue.Foreground = IELBlockInfoVolume.SourceForeground.SourceBrush;
             TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
             IELBlockInfoVolume.MouseHover += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageVolumeControl) return;
+                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageAudioControl) return;
                 IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
                     "Громкость звуков программы",
                     OrientationPositionCursor.RightUp);
@@ -398,6 +406,17 @@ namespace OperPageLes.UI.Windows
             IELBlockInfoVolume.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
+            };
+            IELBlockInfoVolume.MouseRightButtonUp += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(IELBlockInfoVolume, PageAudioControlApplication,
+                    Orientation: OrientationPositionCursor.RightUp,
+                    DependencePointOnSize: false);
+            };
+            IELBlockInfoVolume.MouseLeftButtonUp += (sender, e) =>
+            {
+                StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioPopUp));
             };
             #endregion
 
@@ -416,8 +435,9 @@ namespace OperPageLes.UI.Windows
             BorderIndicator.MouseRightButtonUp += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(GridMain, PageControllerLoadingApplication,
-                    Orientation: OrientationPositionCursor.LeftUp);
+                App.MainWindow.IELActionPanelMain.UsingPanelAction(BorderIndicator, PageNotificationApplication,
+                    Orientation: OrientationPositionCursor.LeftUp,
+                    DependencePointOnSize: false);
             };
             #endregion
             #endregion
@@ -474,6 +494,7 @@ namespace OperPageLes.UI.Windows
             IsClosing = true;
             Hide();
             TokenUpdateBackgroundData.ThrowIfCancellationRequested();
+            App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
             Closing?.Invoke(this, new(CloseReason.UserClosing, false));
             bool WindowSaveClose = false;
             DialogSaveWait windowSave = new();
@@ -630,7 +651,7 @@ namespace OperPageLes.UI.Windows
         /// <returns>Объект визуализации картинки</returns>
         public OPLImageViewer GenerateVisualizateImage(string Name, ImageSource? ImageNotification = null)
         {
-            OPLImageViewer Result = PageControllerLoadingApplication.SetViewImageElement(ImageNotification);
+            OPLImageViewer Result = PageNotificationApplication.SetViewImageElement(ImageNotification);
             //Result.Text = Name;
             //Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
             return Result;
@@ -643,7 +664,7 @@ namespace OperPageLes.UI.Windows
         /// <returns>Объект визуализации загрузочного процесса</returns>
         public OPLMediaViewer GenerateVisualizateMedia(string Name)
         {
-            OPLMediaViewer Result = PageControllerLoadingApplication.SetViewMediaElement();
+            OPLMediaViewer Result = PageNotificationApplication.SetViewMediaElement();
             //Result.Text = Name;
             //Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
             return Result;
@@ -685,7 +706,7 @@ namespace OperPageLes.UI.Windows
         /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
         internal void CompleteVisualizateLoadingProcess(OPLMediaViewer ViewLoading)
         {
-            PageControllerLoadingApplication.DeleteViewMediaElement(ViewLoading);
+            PageNotificationApplication.DeleteViewMediaElement(ViewLoading);
             App.CurrentApp.DataViewerLoadingProcess.Remove(ViewLoading);
             if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
             {
@@ -767,17 +788,12 @@ namespace OperPageLes.UI.Windows
                                 MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
                     }
                 }
-                catch (FileNotFoundException ex)
+                catch (FileNotFoundException)
                 {
-                    OPLImageViewer Element = GenerateVisualizateImage($"Файл картинки фонового изображения не был найден...");
-                    Element.MouseHover += (sender, e) =>
-                    {
-                        IELMessageMain.UsingBorderInformation(Element, ex.Message, OrientationPositionCursor.LeftUp);
-                    };
-                    Element.MouseLeave += (sender, e) =>
-                    {
-                        IELMessageMain.CloseBorderInformation();
-                    };
+                    App.CurrentApp.AddNewNotification($"Файл картинки фонового изображения не был найден...",
+                        EnumNotificationStyle.System,
+                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)),
+                        "Ошибка установки фона");
                 }
             }
             else
