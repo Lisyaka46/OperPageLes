@@ -25,6 +25,11 @@ namespace OperPageLes.CORE.Struct
         /// </summary>
         private static readonly Dictionary<string, BitmapImage> ResourcesImages = [];
 
+        /// <summary>
+        /// Массив всех ресурсных аудио ресурсов
+        /// </summary>
+        private static readonly Dictionary<string, AudioFileReader> ResourcesAudio = [];
+
         #region MainDirectoryApplication
         /// <summary>
         /// Главная директория ресурсов OperPageLes
@@ -128,6 +133,7 @@ namespace OperPageLes.CORE.Struct
                         PathesFromNameResource.Add(prop.Name, Prefics);
                     if (Prefics.Contains(".png")) ResourcesImages.Add(prop.Name, new(new Uri(Prefics)));
                     else if (Prefics.Contains(".mp4")) ResourcesMedia.Add(prop.Name, new Uri(Prefics));
+                    else if (Prefics.Contains(".mp3")) ResourcesAudio.Add(prop.Name, new AudioFileReader(Prefics));
                 }
             }
         }
@@ -174,10 +180,12 @@ namespace OperPageLes.CORE.Struct
         /// <param name="SourceWaveOut">Экземпляр воспроизведения аудио</param>
         /// <param name="NameResourceSound">Директория звукового файла</param>
         /// <exception cref="Exception">Исключение не инициализированного экземпляра ресурсов</exception>
-        internal static void Play(WaveOut SourceWaveOut, string NameResourceSound) // mp3
+        internal static void Play(in WaveOut SourceWaveOut, string NameResourceSound) // mp3
         {
             if (PathesFromNameResource.Count == 0) throw new Exception("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");
-            SourceWaveOut.Init(new Mp3FileReader(PathesFromNameResource[NameResourceSound]));
+            SourceWaveOut.Resume();
+            ResourcesAudio[NameResourceSound].Position = 0L;
+            SourceWaveOut.Init(ResourcesAudio[NameResourceSound]);
             SourceWaveOut.Play();
         }
 
