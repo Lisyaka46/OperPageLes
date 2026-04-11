@@ -65,10 +65,11 @@ namespace OperPageLes.UI.Pages.ActionPanel
                 Margin = new(6d),
                 CornerRadius = new(5d),
             };
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(ViewNotification);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(ViewNotification);
             ViewNotification.MouseRightButtonUp += (sender, e) =>
             {
-                RemoveAtNotification(StackPanelNotifications.Children.IndexOf((UIElement)sender));
+                if (App.CurrentApp.ApplicationNotifications.Count > 0)
+                    RemoveAtNotification((OPLNotification)sender);
             };
 
             StackPanelNotifications.Children.Add(ViewNotification);
@@ -80,17 +81,17 @@ namespace OperPageLes.UI.Pages.ActionPanel
         /// Удалить элемент уведомления
         /// </summary>
         /// <param name="Index">Индекс удаляемого уведомления</param>
-        private void RemoveAtNotification(int Index)
+        private void RemoveAtNotification(OPLNotification Element)
         {
-            App.CurrentApp.RemoveAtNotification(Index);
-            OPLNotification Element = (OPLNotification)StackPanelNotifications.Children[Index];
+            int Index = StackPanelNotifications.Children.IndexOf(Element);
+            App.CurrentApp.RemoveNotification(Element.CurrentNotification);
             Element.Height = Element.ActualHeight;
             DoubleAnimation Animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             Animation.From = Element.ActualHeight;
             Animation.To = 0d;
             Animation.FillBehavior = FillBehavior.Stop;
             Animation.Completed += (sender, e) =>
-                StackPanelNotifications.Children.RemoveAt(Index);
+                StackPanelNotifications.Children.Remove(Element);
             App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(500d));
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
             Element.BeginAnimation(HeightProperty, Animation);

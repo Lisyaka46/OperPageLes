@@ -19,9 +19,9 @@
         <Grid.Background>
             <ImageBrush x:FieldModifier="private" x:Name="BackgroundNotification" Stretch="Uniform" TileMode="None" Opacity="0.5"/>
         </Grid.Background>
-        <TextBlock x:FieldModifier="private" x:Name="TextBlockTitle" Text="Уведомление" Grid.RowSpan="1" FontSize="20" TextTrimming="CharacterEllipsis" FontFamily="{DynamicResource Alphasano}" TextAlignment="Center" Padding="0,0,0,2" HorizontalAlignment="Center"/>
+        <TextBlock x:FieldModifier="private" x:Name="TextBlockTitle" Text="Уведомление" Grid.RowSpan="1" FontSize="16" TextTrimming="CharacterEllipsis" FontFamily="{DynamicResource Alphasano}" TextAlignment="Center" Padding="0,0,0,2" HorizontalAlignment="Center"/>
         <Viewbox Grid.Row="1" StretchDirection="DownOnly" VerticalAlignment="Top">
-            <TextBlock x:FieldModifier="private" x:Name="TextBlockMessage" Text="Текст уведомления который должен переходить на другую строку" TextWrapping="Wrap" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}" Padding="2,2,2,2" FontFamily="SimSun-ExtB" FontSize="15"/>
+            <TextBlock x:FieldModifier="private" x:Name="TextBlockMessage" Text="Текст уведомления который должен переходить на другую строку" TextWrapping="Wrap" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}" Padding="2,2,2,2" FontFamily="SimSun-ExtB" FontSize="14"/>
         </Viewbox>
     </Grid>
 </Base:IELContainerBase>

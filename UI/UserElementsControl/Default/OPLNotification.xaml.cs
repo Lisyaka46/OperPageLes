@@ -23,7 +23,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
         /// <summary>
         /// Объект данных уведомления
         /// </summary>
-        private Notification CurrentNotification;
+        internal Notification CurrentNotification;
 
         /// <summary>
         /// Создать Объект визуализации уведомления

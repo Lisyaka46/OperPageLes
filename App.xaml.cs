@@ -155,9 +155,9 @@ namespace OperPageLes
         /// <summary>
         /// Удалить конкретное уведомление из приложения
         /// </summary>
-        /// <param name="SourceIndex">Индекс удаляемого уведомления</param>
-        internal void RemoveAtNotification(Index SourceIndex) =>
-            SourceApplicationNotifications.RemoveAt(SourceIndex.GetOffset(SourceApplicationNotifications.Count));
+        /// <param name="Source">Удаляемый элемент уведомления</param>
+        internal void RemoveNotification(in Notification Source) =>
+            SourceApplicationNotifications.Remove(Source);
 
         /// <summary>
         /// Очистить все уведомления в приложении
@@ -227,21 +227,6 @@ namespace OperPageLes
         internal WaveOut SoundChannelWaveOut { get; }
 
         /// <summary>
-        /// TCP сервер управления текущего устройства
-        /// </summary>
-        private static TcpListener? DeviceServer = null;
-
-        /// <summary>
-        /// Массив TCP клиентов подключённых к серверу
-        /// </summary>
-        private List<TcpClient> ServerConnectedClients;
-
-        /// <summary>
-        /// TCP клиент заявок
-        /// </summary>
-        private static TcpClient? DeviceClient = null;
-
-        /// <summary>
         /// Поток данных
         /// </summary>
         NetworkStream? SourceNetWorckStream = null;
@@ -260,7 +245,12 @@ namespace OperPageLes
         /// <summary>
         /// Поток обновляемый данные интернета
         /// </summary>
-        private Thread? ThreadInternetConnection;
+        private Task? TaskInternetConnection;
+
+        /// <summary>
+        /// Токен управления потоком проверки интернета
+        /// </summary>
+        internal CancellationToken TokenInternetConnection;
 
         /// <summary>
         /// Событие количества миллисекунд которое потребовалось на проверку интернета
@@ -295,7 +285,6 @@ namespace OperPageLes
             MainBrowser = new(SourceManagerAppPage);
             SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
-            ServerConnectedClients = [];
             SourceApplicationNotifications = [];
             InstallingKey = PackKey.StaticKey;
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
@@ -727,12 +716,13 @@ namespace OperPageLes
             AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
-                e.Handled = true;
+                //e.Handled = true;
             };
 
             LogWriteLine("Запуск фоновых потоков");
             InternetPinging = new();
-            ThreadInternetConnection = new(() =>
+            TokenInternetConnection = new();
+            TaskInternetConnection = new(() =>
             {
                 ObjectConnectEventArgs EventArgs;
                 while (true)
@@ -741,8 +731,8 @@ namespace OperPageLes
                     Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
                     Thread.Sleep(4000);
                 }
-            });
-            ThreadInternetConnection.Start();
+            }, TokenInternetConnection);
+            TaskInternetConnection.Start();
 
             #region ConsolePage
             PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
