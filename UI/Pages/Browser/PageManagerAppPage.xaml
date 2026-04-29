@@ -8,7 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser">
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
-        <WrapPanel x:FieldModifier="private" x:Name="MainPanel" VerticalAlignment="Top" ItemHeight="100" ItemWidth="100"/>
+    <Grid>
+        <Grid x:FieldModifier="private" x:Name="MainGridContainer">
+            <WrapPanel x:FieldModifier="private" x:Name="MainPanel" Grid.Row="0" VerticalAlignment="Top" Panel.ZIndex="1" HorizontalAlignment="Center"/>
+            <IEL:IELScrollViewer x:FieldModifier="private" x:Name="SctollViewerLabels" AutoUpdateVisibleVerticalScroll="False" ScrollForce="20" HorizontalScrollAligment="Down" ClipToBounds="True"/>
+        </Grid>
     </Grid>
 </Page>

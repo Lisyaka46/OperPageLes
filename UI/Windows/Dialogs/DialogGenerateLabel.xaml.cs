@@ -1,10 +1,7 @@
-﻿using IEL.CORE.Classes;
-using OIEL.UserElementsControl;
-using OIEL.UserElementsControl.Base.LabelBase;
+﻿using OperPageLes.CORE.Objects;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 
 namespace OperPageLes.UI.Windows.Dialogs
 {
@@ -19,19 +16,17 @@ namespace OperPageLes.UI.Windows.Dialogs
         private bool Cancel = true;
 
         /// <summary>
-        /// Анимация цвета
+        /// Выделенный индекс используемого спектра в отображении ярлыка Aquamarine
         /// </summary>
-        private readonly ColorAnimation ButtonAnimationColor = new(Colors.Black, TimeSpan.FromMilliseconds(2000d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-        };
+        private uint SelectIndexSpectrum = 17u;
 
         public DialogGenLabel()
         {
             InitializeComponent();
-            Width = 315d;
-            Height = 336d;
+            ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(CORE.Enums.PaletteSpectrumEnum)SelectIndexSpectrum];
+            IELTextBoxNameLabel.Text = string.Empty;
+            IELTextBoxCommand.Text = string.Empty;
+            IELTextBoxDescription.Text = string.Empty;
             IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
             {
                 Cancel = true;
@@ -85,6 +80,31 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                 }
             };
+            ButtonSelectSpectrumTheme.MouseLeftButtonUp += (sender, e) =>
+            {
+                try
+                {
+                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(CORE.Enums.PaletteSpectrumEnum)(++SelectIndexSpectrum)];
+                }
+                catch
+                {
+                    SelectIndexSpectrum = 0u;
+                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(CORE.Enums.PaletteSpectrumEnum)0u];
+                }
+            };
+            ButtonSelectSpectrumTheme.MouseRightButtonUp += (sender, e) =>
+            {
+                try
+                {
+                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(CORE.Enums.PaletteSpectrumEnum)(--SelectIndexSpectrum)];
+                }
+                catch
+                {
+                    CORE.Enums.PaletteSpectrumEnum[] Array = Enum.GetValues<CORE.Enums.PaletteSpectrumEnum>();
+                    SelectIndexSpectrum = (uint)(Array.Length - 1);
+                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[Array[^1]];
+                }
+            };
             Loaded += (sender, e) =>
             {
                 IELTextBoxNameLabel.Focus();
@@ -114,44 +134,44 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// Создать ярлык с помощью диалогового окна
         /// </summary>
         /// <returns>Созданный объект ярлыка</returns>
-        internal LabelAction? CreateLabel()
+        internal SourceLabelAction? CreateLabel()
         {
             Title = "Создание ярлыка";
             IELButtonCreateLabel.Text = "Создать ярлык";
             Focus();
             ShowDialog();
             if (Cancel) return null;
-            return new(
-                IELTextBoxNameLabel.Text,
-                IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty,
-                IELTextBoxCommand.Text);
+            return new(IELTextBoxNameLabel.Text, IELTextBoxCommand.Text, IELTextBoxDescription.Text)
+            {
+                IndexSpectrumTheme = (int)SelectIndexSpectrum
+            };
         }
 
-        /// <summary>
-        /// Изменить ярлык с помощью диалогового окна
-        /// </summary>
-        /// <param name="Source">Изменяемый объект ярлыка</param>
-        /// <returns>Изменённый объект ярлыка</returns>
-        internal void ChangeLabel(OPLLabelAction Source)
-        {
-            LabelAction Label = Source.SourceLabel;
-            IELTextBoxNameLabel.Text = Label.Name;
-            IELTextBoxDescription.Text = Label.Description ?? string.Empty;
-            IELTextBoxCommand.Text = Label.Command;
-            IELButtonCreateLabel.Text = "Изменить ярлык";
-            Title = "Изменение ярлыка";
-            ShowDialog();
-            if (Cancel ||
-                (
-                    IELTextBoxNameLabel.Text.Equals(Label.Name) &&
-                    IELTextBoxDescription.Text.Equals(Label.Description) &&
-                    IELTextBoxCommand.Text.Equals(Label.Command)
-                )) return;
-            Label.Name = IELTextBoxNameLabel.Text;
-            Label.Description = IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty;
-            Label.Command = IELTextBoxCommand.Text;
-            Source.UpdateLayout();
-            return;
-        }
+        ///// <summary>
+        ///// Изменить ярлык с помощью диалогового окна
+        ///// </summary>
+        ///// <param name="Source">Изменяемый объект ярлыка</param>
+        ///// <returns>Изменённый объект ярлыка</returns>
+        //internal void ChangeLabel(OPLLabelAction Source)
+        //{
+        //    LabelAction Label = Source.SourceLabel;
+        //    IELTextBoxNameLabel.Text = Label.Name;
+        //    IELTextBoxDescription.Text = Label.Description ?? string.Empty;
+        //    IELTextBoxCommand.Text = Label.Command;
+        //    IELButtonCreateLabel.Text = "Изменить ярлык";
+        //    Title = "Изменение ярлыка";
+        //    ShowDialog();
+        //    if (Cancel ||
+        //        (
+        //            IELTextBoxNameLabel.Text.Equals(Label.Name) &&
+        //            IELTextBoxDescription.Text.Equals(Label.Description) &&
+        //            IELTextBoxCommand.Text.Equals(Label.Command)
+        //        )) return;
+        //    Label.Name = IELTextBoxNameLabel.Text;
+        //    Label.Description = IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty;
+        //    Label.Command = IELTextBoxCommand.Text;
+        //    Source.UpdateLayout();
+        //    return;
+        //}
     }
 }

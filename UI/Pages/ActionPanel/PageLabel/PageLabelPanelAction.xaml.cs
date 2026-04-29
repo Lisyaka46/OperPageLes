@@ -18,7 +18,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
         public PageLabelElementActionPanel()
         {
             InitializeComponent();
-            IELBlockInfoTagLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
+            //IELBlockInfoTagLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tag));
             PageLabelSelectManipulate = new();
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonExecuteLabel);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonChangeLabel);

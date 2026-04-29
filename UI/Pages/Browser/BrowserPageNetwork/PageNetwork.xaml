@@ -8,7 +8,7 @@
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
     xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser.BrowserPageNetwork"
-    mc:Ignorable="d" d:DesignHeight="580.454" d:DesignWidth="707.727">
+    mc:Ignorable="d" d:DesignHeight="580.454" d:DesignWidth="707.727" Margin="5,5,5,5">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>

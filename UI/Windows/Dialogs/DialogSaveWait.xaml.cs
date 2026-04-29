@@ -42,14 +42,10 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogSaveWait()
         {
             InitializeComponent();
+            VisualLoading.ManagerAnimation = App.ManagerAnimation;
+            VisualLoading.Opacity = 0d;
             TaskTokenComplete = new(false);
             ProgressBarIndicator.Value = 0d;
-            IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
-
-            IndicatorLoading.MediaEnded += (sender, e) =>
-            {
-                IndicatorLoading.Position = TimeSpan.FromMilliseconds(1);
-            };
             BorderMain.MouseLeftButtonDown += (sender, e) =>
             {
                 ActivateMoveWindow = true;
@@ -66,6 +62,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         internal void OpenOnToComplete()
         {
             Random random = new(DateTime.Now.Millisecond);
+            VisualLoading.OpenLoading();
             void ActionBackgroundChange()
             {
                 double x_y = random.Next(30, 80) / 100d;
@@ -166,6 +163,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             await Task.Run(() =>
             {
+                Dispatcher.Invoke(VisualLoading.CloseLoading);
                 TaskTokenComplete.ThrowIfCancellationRequested();
                 if (ActivateMoveWindow)
                 {

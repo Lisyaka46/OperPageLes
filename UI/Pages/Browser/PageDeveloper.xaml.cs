@@ -1,7 +1,8 @@
-﻿using OperPageLes.CORE.Struct;
+﻿using OIEL.CORE.Browser;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.DEV;
-using OIEL.CORE.Browser;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Xml.Linq;
 using DrColor = System.Drawing.Color;
 using OPRES = OperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
@@ -23,6 +25,18 @@ namespace OperPageLes.UI.Pages.Browser
     {
         private Point StartPositionMouse;
         private bool Activate = false;
+        Storyboard myStoryboard = new();
+        private DoubleAnimation anim = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+        private Vector3DAnimation Vector3DAnim = new()
+        {
+            From = null,
+            To = null,
+            Duration = TimeSpan.FromMilliseconds(500d),
+            EasingFunction = new CircleEase()
+            {
+                EasingMode = EasingMode.EaseInOut,
+            }
+        };
 
         public PageDeveloper()
         {
@@ -120,13 +134,20 @@ namespace OperPageLes.UI.Pages.Browser
             //        await Task.Delay(DelayOneParticle);
             //    }
             //};
-
-            MyAnimatedObject.MouseDown += (sender, e) =>
+            anim.From = null;
+            anim.Duration = TimeSpan.FromMilliseconds(3000d);
+            myStoryboard.Children.Add(anim);
+            ImageBrushModel.ImageSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.VECTOR));
+            MyAnimatedObject.MouseEnter += (sender, e) =>
             {
                 myAngleRotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, null);
-                StartPositionMouse = Mouse.GetPosition(App.Current.MainWindow);
+                Point CurrentPosModel = Model.TransformToAncestor((Visual)App.Current.MainWindow).TransformBounds(Model.Content.Bounds).Location;
+                StartPositionMouse = new(
+                    CurrentPosModel.X + Model.Content.Bounds.SizeX * myPerspectiveCamera.FieldOfView,
+                    CurrentPosModel.Y + Model.Content.Bounds.SizeY * myPerspectiveCamera.FieldOfView);
+                //StartPositionMouse = Mouse.GetPosition(App.Current.MainWindow);
                 Activate = true;
-                myAngleRotation.Angle = 0d;
+                GetAngleModelRotate();
             };
             MyAnimatedObject.MouseLeave += (sender, e) =>
             {
@@ -137,27 +158,26 @@ namespace OperPageLes.UI.Pages.Browser
             MyAnimatedObject.MouseMove += (sender, e) =>
             {
                 if (!Activate) return;
-                const double d = 1.6d;
-                Point CurrentPos = Mouse.GetPosition(App.Current.MainWindow);
-                double X = StartPositionMouse.X - CurrentPos.X, Y = StartPositionMouse.Y - CurrentPos.Y;
-                X /= d; Y /= d;
-                double XY = Math.Abs(X) + Math.Abs(Y);
-                XY /= d;
-                if (Math.Abs(X) < 500)
-                {
-                    myAngleRotation.Axis = new(myAngleRotation.Axis.X, -X, 0);
-                }
-                if (Math.Abs(Y) < 500)
-                {
-                    myAngleRotation.Axis = new(-Y, myAngleRotation.Axis.Y, 0);
-                }
-                myAngleRotation.Angle = XY < 25 ? XY : 25;
+                GetAngleModelRotate();
+                //myAngleRotation.Angle = GetAngleModelRotate();
             };
             WindowGenerateQdata.Click += (sender, e) =>
             {
                 WindowQDataViewer window = new();
                 window.Show();
             };
+        }
+
+        //
+        private void GetAngleModelRotate()
+        {
+            Point CurrentPos = Mouse.GetPosition(App.Current.MainWindow);
+            double X = StartPositionMouse.X - CurrentPos.X, Y = StartPositionMouse.Y - CurrentPos.Y;
+            X /= Model.Content.Bounds.SizeX * myPerspectiveCamera.FieldOfView;
+            Y /= Model.Content.Bounds.SizeY * myPerspectiveCamera.FieldOfView;
+            myAngleRotation.Axis = new(-Y, -X, 0);
+            myAngleRotation.Angle = 15 * (Math.Abs(X) + Math.Abs(Y)) / 2;
+            Element.Text = $"Axis: ({Math.Round(-X, 2)}~2 | {Math.Round(-Y, 2)}~2 | 0~)   Angle: {Math.Round(myAngleRotation.Angle, 2)}~2/2";
         }
 
         /// <summary>

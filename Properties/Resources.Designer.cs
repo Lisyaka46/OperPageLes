@@ -303,29 +303,9 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] MediaLoadingDefault {
-            get {
-                object obj = ResourceManager.GetObject("MediaLoadingDefault", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
         internal static byte[] MediaLoadingInternet {
             get {
                 object obj = ResourceManager.GetObject("MediaLoadingInternet", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Menu {
-            get {
-                object obj = ResourceManager.GetObject("Menu", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -346,6 +326,16 @@ namespace OperPageLes.Properties {
         internal static byte[] NewChat {
             get {
                 object obj = ResourceManager.GetObject("NewChat", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] NewElement {
+            get {
+                object obj = ResourceManager.GetObject("NewElement", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -416,66 +406,6 @@ namespace OperPageLes.Properties {
         internal static byte[] Search {
             get {
                 object obj = ResourceManager.GetObject("Search", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_NameAZ {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_NameAZ", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_NameZA {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_NameZA", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_Not {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_Not", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_Tag {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_Tag", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Tag {
-            get {
-                object obj = ResourceManager.GetObject("Tag", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Tilda {
-            get {
-                object obj = ResourceManager.GetObject("Tilda", resourceCulture);
                 return ((byte[])(obj));
             }
         }

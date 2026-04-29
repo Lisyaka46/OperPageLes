@@ -1,18 +1,13 @@
 ﻿using IEL.CORE.Classes;
-using IEL.CORE.Enums;
-using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
-using Microsoft.Win32;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
-using OIEL.UserElementsControl.Base.LabelBase;
 using OIEL.UserElementsControl.Interfaces;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
@@ -22,7 +17,6 @@ using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
-using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAnimation.CORE.Animation;
@@ -31,17 +25,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace OperPageLes
@@ -72,16 +67,6 @@ namespace OperPageLes
         /// Интерпретатор команд
         /// </summary>
         internal readonly COMInterpreter<IOPERCommandViewer> Interpreter;
-
-        /// <summary>
-        /// Массив ярлыков
-        /// </summary>
-        internal readonly List<LabelAction> DataLabels = [];
-
-        /// <summary>
-        /// Массив тегов для ярлыков
-        /// </summary>
-        internal readonly List<LabelTag> DataLabelTags = [];
 
         /// <summary>
         /// Массив всех визуализационных объектов процессов
@@ -231,6 +216,11 @@ namespace OperPageLes
         /// </summary>
         NetworkStream? SourceNetWorckStream = null;
 
+        /// <summary>
+        /// Клиент для загрузки иконки сайта
+        /// </summary>
+        private readonly HttpClient ClientFavconLoading = new();
+
         #region Threads
         /// <summary>
         /// Состояние подключения к интернету
@@ -345,51 +335,51 @@ namespace OperPageLes
                 }),
                 #endregion
 
-                #region label
-                new ConsoleCommand<IOPERCommandViewer>("label",
-                [
-                    new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
-                    new Parameter("Description", typeof(string), string.Empty)
-                ],
-                "Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
-                (Command, param, CV) =>
-                {
-                    PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
-                    if (SourcePage != null)
-                    {
-                        if (SourcePage.SelectLabelsMode) return
-                            Task.FromResult(CommandStateResult.Failed(Command.Name,
-                            $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
-                    }
-                    DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
-                    SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык %#006B3C**\"{(string)param[0]}\"** успешно создан"));
-                }),
-                #endregion
+                //#region label
+                //new ConsoleCommand<IOPERCommandViewer>("label",
+                //[
+                //    new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
+                //    new Parameter("Description", typeof(string), string.Empty)
+                //],
+                //"Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
+                //(Command, param, CV) =>
+                //{
+                //    PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
+                //    if (SourcePage != null)
+                //    {
+                //        if (SourcePage.SelectLabelsMode) return
+                //            Task.FromResult(CommandStateResult.Failed(Command.Name,
+                //            $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
+                //    }
+                //    DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
+                //    SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
+                //    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык %#006B3C**\"{(string)param[0]}\"** успешно создан"));
+                //}),
+                //#endregion
 
-                #region create_label
-                new ConsoleCommand<IOPERCommandViewer>("create_label", "Открывает окно создания ярлыка",
-                (Command, param, CV) =>
-                {
-                    DialogGenLabel GenLabel = new();
-                    ActiveDialog = GenLabel;
-                    LabelAction? label = GenLabel.CreateLabel();
-                    ActiveDialog = null;
-                    if (label != null)
-                    {
-                        PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
-                        if (SourcePage != null)
-                        {
-                            if (SourcePage.SelectLabelsMode) return
-                                Task.FromResult(CommandStateResult.Failed(Command.Name,
-                                $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
-                        }
-                        DataLabels.Add(label);
-                        SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
-                    }
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык %#006B3C**\"{label?.Name}\"** успешно создан" : null));
-                }),
-                #endregion
+                //#region create_label
+                //new ConsoleCommand<IOPERCommandViewer>("create_label", "Открывает окно создания ярлыка",
+                //(Command, param, CV) =>
+                //{
+                //    DialogGenLabel GenLabel = new();
+                //    ActiveDialog = GenLabel;
+                //    LabelAction? label = GenLabel.CreateLabel();
+                //    ActiveDialog = null;
+                //    if (label != null)
+                //    {
+                //        PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
+                //        if (SourcePage != null)
+                //        {
+                //            if (SourcePage.SelectLabelsMode) return
+                //                Task.FromResult(CommandStateResult.Failed(Command.Name,
+                //                $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
+                //        }
+                //        DataLabels.Add(label);
+                //        SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
+                //    }
+                //    return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык %#006B3C**\"{label?.Name}\"** успешно создан" : null));
+                //}),
+                //#endregion
 
                 #region reboot
                 new ConsoleCommand<IOPERCommandViewer>("reboot", "Перезагружает программу", (Command, param, CV) =>
@@ -601,11 +591,8 @@ namespace OperPageLes
                 ActivePathSettingApplication = PathSettingApplication;
             }
 
-            LogWriteLine("Установка значении на основе настроек");
-            DataLabelTags = 
-                [..StructDirectoryResources.DeserializeObjectJson<string>(StructDirectoryResources.DirectoryDataLabelTags).Select(Tag => new LabelTag(Tag))];
+            LogWriteLine("Установка значений на основе настроек");
 
-            DataLabels = [..StructDirectoryResources.DeserializeObjectJson<LabelAction>(StructDirectoryResources.DirectoryDataLabels)];
             SoundChannelWaveOut.Volume = SettingMainApplication.Volume;
 
             #region SettingRuntimeRealizeSettingChanges
@@ -728,6 +715,7 @@ namespace OperPageLes
                 while (true)
                 {
                     EventArgs = InternetPinging.UpdateInternetConnection();
+                    InternetConnectState = EventArgs.Connect;
                     Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
                     Thread.Sleep(4000);
                 }
@@ -769,6 +757,9 @@ namespace OperPageLes
                 LogStreamWriter?.Close();
             };
             Current.MainWindow = new MainWindow();
+            LogWriteLine("Приминение настроек элементов");
+            SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
+
             LogWriteLine("Приминение настройки палитры");
             if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
             {
@@ -813,32 +804,14 @@ namespace OperPageLes
         //
         internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
         {
-            SourceManagerAppPage.AddNewAppPage(in MainBrowser, TypeAppPage, NameAppPage, Spectrum, Icon);
+            SourceManagerAppPage.AddNewAppPage(MainBrowser, TypeAppPage, NameAppPage, Spectrum, Icon);
         }
 
-        ///// <summary>
-        ///// Загрузчик изображений через данные байтов
-        ///// </summary>
-        ///// <param name="imageData">Массив данных картинки</param>
-        ///// <returns>Объект изображения</returns>
-        ///// <exception cref="Exception">Исключение при повреждённом или пустом изображении</exception>
-        //internal static BitmapImage LoadImage(byte[] imageData)
-        //{
-        //    if (imageData == null || imageData.Length == 0) throw new Exception("Неожиданное содержание нулевого массива байтов.");
-        //    var image = new BitmapImage();
-        //    using (var mem = new MemoryStream(imageData))
-        //    {
-        //        mem.Position = 0;
-        //        image.BeginInit();
-        //        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-        //        image.CacheOption = BitmapCacheOption.OnLoad;
-        //        image.UriSource = null;
-        //        image.StreamSource = mem;
-        //        image.EndInit();
-        //    }
-        //    //image.Freeze();
-        //    return image;
-        //}
+        //
+        internal void AddNewLabel(in SourceLabelAction Source)
+        {
+            SourceManagerAppPage.AddLabel(Source);
+        }
 
         /// <summary>
         /// Записать сообщение в тектовый .log
@@ -955,19 +928,25 @@ namespace OperPageLes
         /// </summary>
         internal void UpdateFileDataLabel()
         {
-            string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabels);
+            string SettingApplicationJSON = JsonConvert.SerializeObject(SourceManagerAppPage.Labels.Select((i) => i.Label));
             File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
         }
+        #endregion
 
         /// <summary>
-        /// Обновить файл данных тегов ярлыков
+        /// Установка иконки хоста сайта через собственный клиент
         /// </summary>
-        internal void UpdateFileDataLabelTag()
+        /// <param name="url">Ссылка хоста: Сама преобразуется в управляемый DNS сервер хоста</param>
+        /// <returns>Картинка которая ссылается на иконку управляемого сайта</returns>
+        internal async Task<BitmapImage> DownloadFavicon(Uri url)
         {
-            string SettingApplicationJSON = JsonConvert.SerializeObject(DataLabelTags.Select(i => i.ValueTag));
-            File.WriteAllText(StructDirectoryResources.DirectoryDataLabelTags, SettingApplicationJSON);
+            string faviconurl = "http://" + url.DnsSafeHost + "/favicon.ico";
+            BitmapImage bitmapImage = new();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = await ClientFavconLoading.GetStreamAsync(faviconurl);
+            bitmapImage.EndInit();
+            return bitmapImage;
         }
-        #endregion
 
         #region SearchNullableProperty
         /// <summary>

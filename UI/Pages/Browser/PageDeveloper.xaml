@@ -31,14 +31,15 @@
                     <ScrollViewer FlowDirection="RightToLeft" Height="180">
                         <StackPanel x:Name="StackPanelElementsVisual" FlowDirection="LeftToRight" VerticalAlignment="Top">
                             <Button x:Name="WindowGenerateQdata" Content="Окно создания QData" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                            <TextBlock x:Name="Element" Text="!" Foreground="White" Padding="5,0,5,0"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
-                <Grid x:Name="GridView" Grid.Row="1" Background="#FF1D1D1D" Margin="0,30,0,30"/>
+                <Grid x:Name="GridView" Grid.Row="1" Background="#FF1D1D1D" Margin="0,15,0,15"/>
                 <Canvas x:Name="Particles" Grid.Row="1" Width="330" Height="230">
                     
                 </Canvas>
-                <Viewport3D Name="MyAnimatedObject" ClipToBounds="True" Width="170" Height="170" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+                <Viewport3D Name="MyAnimatedObject" ClipToBounds="True" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
                     <Viewport3D.Camera>
                         <PerspectiveCamera x:Name="myPerspectiveCamera" Position="0,-0.1,2" LookDirection="0,0,-1" FieldOfView="60" />
                     </Viewport3D.Camera>
@@ -69,25 +70,27 @@
                                                 <DiffuseMaterial.Brush>
                                                     <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
                                                         <LinearGradientBrush.GradientStops>
-                                                            <GradientStop Color="#FF128A56" Offset="0" />
-                                                            <GradientStop Color="#FF28A48F" Offset="0.25" />
+                                                            <GradientStop Color="#FF60A084" Offset="0" />
+                                                            <GradientStop Color="#FF28A1A4" Offset="0.25" />
                                                             <GradientStop Color="#FF34829C" Offset="0.75" />
-                                                            <GradientStop Color="#FF223D8E" Offset="1" />
+                                                            <GradientStop Color="#FF53618C" Offset="1" />
                                                         </LinearGradientBrush.GradientStops>
                                                     </LinearGradientBrush>
                                                 </DiffuseMaterial.Brush>
                                             </DiffuseMaterial>
-                                            <!--<DiffuseMaterial>
+                                            <DiffuseMaterial>
                                                 <DiffuseMaterial.Brush>
-                                                    --><!--<ImageBrush ImageSource="/UI/Images/Wifi.png"/>--><!--
+                                                    
+                                                    <ImageBrush x:Name="ImageBrushModel" AlignmentX="Center" AlignmentY="Center" Stretch="UniformToFill" Viewbox="0,0,1,1" Viewport="0,0,1,1"/>
+                                            
                                                 </DiffuseMaterial.Brush>
-                                            </DiffuseMaterial>-->
+                                            </DiffuseMaterial>
                                         </MaterialGroup>
                                     </GeometryModel3D.Material>
                                     <GeometryModel3D.Transform>
                                         <RotateTransform3D>
                                             <RotateTransform3D.Rotation>
-                                                <AxisAngleRotation3D x:Name="myAngleRotation" Axis="0,0,0" Angle="10"/>
+                                                <AxisAngleRotation3D x:Name="myAngleRotation" Axis="-1,-1,0" Angle="10"/>
                                             </RotateTransform3D.Rotation>
                                         </RotateTransform3D>
                                     </GeometryModel3D.Transform>

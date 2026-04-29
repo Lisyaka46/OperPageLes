@@ -1,12 +1,11 @@
-﻿using OperPageLes.CORE.Enums;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.ActionPanel.PageLabel;
-using OperPageLes.UI.Windows.Dialogs;
-using IEL.CORE.Enums;
+﻿using IEL.CORE.Enums;
 using InterpreterCommand.Classes;
 using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
-using OIEL.UserElementsControl.Base.LabelBase;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageLabel;
+using OperPageLes.UI.Windows.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -41,12 +40,12 @@ namespace OperPageLes.UI.Pages.Browser
         /// <summary>
         /// Константа размера одного ярлыка
         /// </summary>
-        public const int WidthLabel = 145;
+        public const int WidthLabel = 70;
 
         /// <summary>
         /// Константа размера одного ярлыка
         /// </summary>
-        public const int HeightLabel = 115;
+        public const int HeightLabel = 70;
 
         /// <summary>
         /// Константа отступа одного ярлыка
@@ -126,9 +125,9 @@ namespace OperPageLes.UI.Pages.Browser
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSorting);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSearch);
-
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELTextBoxSearch);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(IELButtonSearch);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonNewLabel);
             #endregion
 
             SearchActivate = false;
@@ -332,6 +331,7 @@ namespace OperPageLes.UI.Pages.Browser
 
             #endregion
 
+            #region IELButtonSorting
             IELButtonSorting.OnActivateMouseLeft += async (sender, e) =>
             {
                 if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
@@ -346,6 +346,8 @@ namespace OperPageLes.UI.Pages.Browser
                 await ChangeSortingLabelType(SortingLabelEnum.NameAZ);
                 e.Handled = true;
             };
+            #endregion
+
             #region Search Setting
             IELButtonSearch.OnActivateMouseLeft += async (sender, e) =>
             {
@@ -393,6 +395,18 @@ namespace OperPageLes.UI.Pages.Browser
                 }
             };
             #endregion
+
+            #region IELButtonNewLabel
+            IELButtonNewLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.NewElement));
+            IELButtonNewLabel.OnActivateMouseLeft += async (sender, e) =>
+            {
+                LabelAction? ElementLabel = new DialogGenLabel().CreateLabel();
+                if (ElementLabel == null) return;
+                App.CurrentApp.DataLabels.Add(ElementLabel);
+                await AppendNewOPLLbel(App.CurrentApp.DataLabels.Count - 1);
+            };
+            #endregion
+
             ScrollLabels.ScrollChanged += (sender, e) =>
             {
                 UpdateScroll();

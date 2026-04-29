@@ -668,7 +668,6 @@ namespace OperPageLes.UI.Pages.Browser
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 Opacity = 0d,
-                Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault)),
                 DeleteButtonSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)),
                 Text = Command,
             };

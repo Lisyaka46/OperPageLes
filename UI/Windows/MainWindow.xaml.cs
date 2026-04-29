@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
 using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel;
 using OperPageLes.UI.Pages.ActionPanel.Other;
@@ -55,8 +56,6 @@ namespace OperPageLes.UI.Windows
         private readonly CancellationToken TokenUpdateBackgroundData;
 
         //private MMDeviceEnumerator Device = new();
-
-        private int ActualIndexActivatePageDownToolButtons;
 
         /// <summary>
         /// Страница управления загрузочными процессами
@@ -153,15 +152,10 @@ namespace OperPageLes.UI.Windows
 
             GridContentFomBrowser.Children.Add(App.CurrentApp.MainBrowser);
             TokenUpdateBackgroundData = new(false);
-            ActualIndexActivatePageDownToolButtons = -1;
 
             BorderNotificationIndicator.Opacity = 0d;
-            IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
-            IndicatorLoading.MediaEnded += (sender, e) =>
-            {
-                IndicatorLoading.Position = TimeSpan.FromMilliseconds(5);
-            };
+            VisualLoadingElement.ManagerAnimation = App.ManagerAnimation;
+            VisualLoadingElement.Opacity = 0d;
 
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
@@ -186,6 +180,8 @@ namespace OperPageLes.UI.Windows
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
             #endregion
 
             LinearGradientMainWindowBackground = new()
@@ -323,8 +319,29 @@ namespace OperPageLes.UI.Windows
             #endregion
 
             #region DownToolButtons
-            ActualIndexActivatePageDownToolButtons = 0;
-            
+
+            #region IELButtonAddLabel
+            IELButtonAddLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
+            IELButtonAddLabel.OnActivateMouseLeft += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+                DialogGenLabel dialog = new();
+                SourceLabelAction? Result = dialog.CreateLabel();
+                if (Result == null) return;
+                App.CurrentApp.AddNewLabel(Result);
+            };
+            IELButtonAddLabel.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELButtonAddLabel,
+                    "Добавить ярлык на главную страницу",
+                    OrientationPositionCursor.RightUp);
+            };
+            IELButtonAddLabel.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+
             #region IELButtonHomeBrowser
             IELButtonHomeBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Home));
             IELButtonHomeBrowser.OnActivateMouseLeft += (sender, e) =>
@@ -527,9 +544,6 @@ namespace OperPageLes.UI.Windows
 
                 Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки", 60d));
                 App.CurrentApp.UpdateFileDataLabel();
-                Thread.Sleep(600);
-                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все теги", 87d));
-                App.CurrentApp.UpdateFileDataLabelTag();
                 Thread.Sleep(700);
 
                 Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения...", 100d));
@@ -576,8 +590,8 @@ namespace OperPageLes.UI.Windows
             #region AppPage
             App.CurrentApp.AddNewAppPage(typeof(PageConsole), "Консоль",
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Command)));
-            App.CurrentApp.AddNewAppPage(typeof(PageLabels), "Ярлыки",
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.PaperClip)));
+            //App.CurrentApp.AddNewAppPage(typeof(PageLabels), "Ярлыки",
+            //    App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.PaperClip)));
             App.CurrentApp.AddNewAppPage(typeof(PageNetwork), "Сеть",
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Chats)));
             App.CurrentApp.AddNewAppPage(typeof(PageWebBrowser), "Веб-браузер",
@@ -696,7 +710,7 @@ namespace OperPageLes.UI.Windows
                     BeginRotateBorder();
                     IsVisualLoagingProcessInBorder = true;
                 }
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                VisualLoadingElement.OpenLoading();
             }
         } 
 
@@ -716,7 +730,7 @@ namespace OperPageLes.UI.Windows
                     EndRotateBorder();
                     IsVisualLoagingProcessInBorder = false;
                 }
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(1700d));
+                VisualLoadingElement.CloseLoading();
             }
         }
 

@@ -49,7 +49,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogQDataSpectrum()
         {
             InitializeComponent();
-            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tilda));
+            //Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Tilda));
 
             ColorPicker.ColorChanged += (sender, e) =>
             {

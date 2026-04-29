@@ -114,7 +114,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
         /// <returns>Визуализационный объект</returns>
         internal OPLMediaViewer SetViewMediaElement(Uri? uri = null)
         {
-            OPLMediaViewer Result = CreateMediaView(uri ?? StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault)));
+            OPLMediaViewer Result = CreateMediaView(uri);
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Result);
             StackPanelNotifications.Children.Add(Result);
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Result, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));

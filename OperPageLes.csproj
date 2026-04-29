@@ -31,6 +31,7 @@
     <None Remove="Fonts\Sangha.ttf" />
     <None Remove="Fonts\Tablon.ttf" />
     <None Remove="Fonts\Vollda.otf" />
+    <None Remove="UI\Images\NewElement.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2.3" />
     <PackageReference Include="System.Management" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="UI\Pages\Browser\PageLabels.xaml.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,6 +78,7 @@
     <Resource Include="Fonts\Sangha.ttf" />
     <Resource Include="Fonts\Tablon.ttf" />
     <Resource Include="Fonts\Vollda.otf" />
+    <Resource Include="UI\Images\NewElement.png" />
   </ItemGroup>
 
   <ItemGroup>

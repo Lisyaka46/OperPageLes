@@ -169,14 +169,8 @@
   <data name="Link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Labels\Link.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="MediaLoadingDefault" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Media\Loading\LoadingDefault.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="MediaLoadingInternet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Media\Loading\LoadingInternet.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Menu.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MINSI" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Autor\MINSI.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -189,21 +183,6 @@
   </data>
   <data name="Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Search.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Sorting_NameAZ" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Sorting\Sorting-NameAZ.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Sorting_NameZA" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Sorting\Sorting-NameZA.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Sorting_Not" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Sorting\Sorting-Not.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Sorting_Tag" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Sorting\Sorting-Tag.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Tag" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Tag.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ValidKeyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\ValidKeyIcon.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -222,9 +201,6 @@
   </data>
   <data name="Warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Warning.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Tilda" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\Tilda.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Palette" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Palette.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -264,5 +240,8 @@
   </data>
   <data name="Home" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Home.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NewElement" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\NewElement.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

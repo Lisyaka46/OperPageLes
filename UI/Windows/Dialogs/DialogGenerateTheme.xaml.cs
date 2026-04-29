@@ -16,8 +16,8 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogGenerateTheme()
         {
             InitializeComponent();
-            IndicatorLoading.Opacity = 0d;
-            IndicatorLoading.Source = StructDirectoryResources.GetResourceUri(nameof(OPRES.MediaLoadingDefault));
+            VisualLoading.ManagerAnimation = App.ManagerAnimation;
+            VisualLoading.Opacity = 0d;
             ComboBoxThemeSourceCreating.SelectionChanged += (sender, e) =>
             {
                 if (IELButtonDefaultTheme.SourceBackground.GetUsedState())
@@ -66,14 +66,14 @@ namespace OperPageLes.UI.Windows.Dialogs
                     return;
                 }
                 IELButtonCancel.IsEnabled = false;
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 1d, TimeSpan.FromMilliseconds(200d));
+                VisualLoading.OpenLoading();
                 Result = ComboBoxThemeSourceCreating.SelectedIndex != -1 ?
                     new(PathesTheme[ComboBoxThemeSourceCreating.SelectedIndex]) : new();
                 Result.Name = IELTextBoxNameTheme.Text;
                 Result.DirectoryFile = Path;
                 await Result.GenerateNewFileSource();
                 await Task.Delay(1000);
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IndicatorLoading, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                VisualLoading.CloseLoading();
                 Close();
             };
             IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
