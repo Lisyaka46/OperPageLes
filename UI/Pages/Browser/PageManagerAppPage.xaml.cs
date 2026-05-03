@@ -165,6 +165,7 @@ namespace OperPageLes.UI.Pages.Browser
             NextIndex = StartIndex;
             StackPanelAllLabels.Children.Remove(SourceVisual);
             StackPanelAllLabels.Children.Insert(StartIndex, RectangleSelectPosition);
+            RectangleSelectPosition.Stroke = SourceVisual.SourceBorderBrush.SourceBrush;
 
             MainGridContainer.Children.Add(SourceVisual);
             SourceVisual.MouseRightButtonDown -= LabelSelectPosition;
@@ -283,16 +284,21 @@ namespace OperPageLes.UI.Pages.Browser
         /// Добавить отображение иконки в менеджере приложений страниц
         /// </summary>
         /// <param name="TypeAppPage">Тип создаваемого приложения страницы</param>
-        internal void AddNewAppPage(OPLBrowserPage Browser, Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
+        internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
         {
             ApplicationPage Source = new(TypeAppPage, NameAppPage, new(100, 100));
             Source.VisualELement.PaletteElement = Spectrum ?? App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray];
             Source.VisualELement.Source = Icon ?? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            Source.ApplicationPageActivate += (sender, e) =>
-            {
-                InitAppPageFromType(Browser, in e);
-            };
+            Source.ApplicationPageActivate += Source_ApplicationPageActivate;
             MainPanel.Children.Add(Source.VisualELement);
+        }
+
+        private void Source_ApplicationPageActivate(object? sender, ApplicationPage e)
+        {
+            object? InicializeInlay = App.CurrentApp.MainBrowser.SearchAnyPageType(e.TypeBrowserAppPage);
+            if (InicializeInlay != null)
+                App.CurrentApp.MainBrowser.ActivateInlayInBrowserPage((PageBrowser)InicializeInlay);
+            else InitAppPageFromType(in e);
         }
 
         /// <summary>
@@ -301,12 +307,12 @@ namespace OperPageLes.UI.Pages.Browser
         /// <param name="Browser">Браузер страниц</param>
         /// <param name="UIAppPage">Иконка хранимого типа приложения страницы</param>
         /// <param name="Activate">Активировать созданную вкладку или нет</param>
-        private static void InitAppPageFromType(OPLBrowserPage Browser, in ApplicationPage AppPage)
+        private static void InitAppPageFromType(in ApplicationPage AppPage)
         {
             PageBrowser ElementAppPage = (PageBrowser)(Activator.CreateInstance(AppPage.TypeBrowserAppPage) ??
                 throw new Exception("Не удалось создать объект приложения страницы"));
             ElementAppPage.Title = AppPage.Name;
-            IELButtonImage CloseButtonInlay = Browser.AddInlayPage(in ElementAppPage, AppPage.VisualELement.PaletteElement, true).GetButtonCloseInlay();
+            IELButtonImage CloseButtonInlay = App.CurrentApp.MainBrowser.AddInlayPage(in ElementAppPage, AppPage.VisualELement.PaletteElement, true).GetButtonCloseInlay();
             CloseButtonInlay.PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Red];
             CloseButtonInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }

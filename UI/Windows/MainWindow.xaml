@@ -96,18 +96,18 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <IEL:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,0,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="55" PaletteElement="{DynamicResource Violet}" Focusable="False"/>
-                                <IEL:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" Padding="6,0,6,0" Margin="3,3,0,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="40" PaletteElement="{DynamicResource Saffron}" Focusable="False"/>
+                                <IEL:IELBlockInfoText x:Name="IELBlockInfoCurrentLanguage" Grid.Column="2"  Text="" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Padding="6,0,6,0" Margin="3,3,0,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="55" PaletteElement="{DynamicResource Violet}" Focusable="False" Cursor="Arrow" IsAnimatedSettingQ="False"/>
+                                <IEL:IELBlockInfoText x:Name="IELBlockInfoStateRegister" Grid.Column="1"  FontWeight="Bold" FontSize="23" CornerRadius="5,5,5,5" Padding="6,0,6,0" Margin="3,3,0,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="40" PaletteElement="{DynamicResource Saffron}" Focusable="False" Cursor="Hand" IsAnimatedSettingQ="False"/>
                                 <Grid x:Name="GridInfoInternetConnection">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <IEL:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Green}" Grid.RowSpan="2" Margin="3,3,0,3" Padding="0,0,0,7" Width="45" Focusable="False"/>
+                                    <IEL:IELBlockInfoImage x:Name="IELBlockInfoInternetConnection" Grid.Column="0" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Green}" Grid.RowSpan="2" Margin="3,3,0,3" Padding="0,0,0,7" Width="45" Focusable="False" Cursor="Arrow" IsAnimatedSettingQ="False"/>
                                     <TextBlock x:Name="TextBlockInternetConnectionMillisecond" TextWrapping="Wrap" Text="2999ms" VerticalAlignment="Center" TextAlignment="Center" FontWeight="Bold" IsHitTestVisible="False" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="1" Margin="3,0,0,3" FontSize="11"/>
                                 </Grid>
                                 <Grid Grid.Column="3">
-                                    <IEL:IELBlockInfoImage x:Name="IELBlockInfoVolume" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand" PaletteElement="{DynamicResource Jade}" Padding="0,0,10,0"/>
+                                    <IEL:IELBlockInfoImage x:Name="IELBlockInfoVolume" BorderThickness="2,2,2,2" FontWeight="Bold" CornerRadius="5,5,5,5" FontSize="14" Margin="3,3,3,3" FontFamily="{DynamicResource RussianRail G Pro}" Width="50" Cursor="Hand" PaletteElement="{DynamicResource Jade}" Padding="0,0,10,0" IsAnimatedSettingQ="False"/>
                                     <TextBlock x:Name="TextBlockVolumeValue" Text="100" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="22,0,0,0" IsHitTestVisible="False" FontFamily="{DynamicResource October Pro Blk}"/>
                                 </Grid>
                             </Grid>
@@ -126,8 +126,11 @@
                         </Border>
                         <Border x:Name="BorderIndicator" BorderBrush="#FF02637D" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#FFC37EBD" Grid.Column="3">
                             <Grid IsHitTestVisible="False">
-                                <Ellipse x:Name="BorderNotificationIndicator" Stroke="#FF02637D" Fill="#FFFBC4F6" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" Panel.ZIndex="1" Margin="0,-4,-4,0" StrokeThickness="2"/>
-                                <OIEL:OPLVisualLoading x:FieldModifier="private" x:Name="VisualLoadingElement" Margin="5,5,5,5" BorderBrush="#FF381035"/>
+                                <Ellipse x:Name="NotificationIndicator" Stroke="#FF02637D" Fill="#FFFBC4F6" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" Panel.ZIndex="1" StrokeThickness="2" Margin="0,-4,-4,0"/>
+                                <OIEL:OPLVisualLoading x:FieldModifier="private" x:Name="VisualLoadingElement" Margin="4,4,4,4" BorderBrush="#FF381035"/>
+                                <Viewbox Margin="11,13,11,13" VerticalAlignment="Center">
+                                    <TextBlock x:FieldModifier="internal" x:Name="TextBlockCountLoadingProcess" Text="1" FontFamily="{DynamicResource Deledda Open Regular}" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="1,0,0,0"/>
+                                </Viewbox>
                             </Grid>
                         </Border>
                     </Grid>

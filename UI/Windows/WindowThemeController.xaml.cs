@@ -256,10 +256,10 @@ namespace OperPageLes.UI.Windows
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
             {
-                await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка спектров палитры",
+                await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка спектров палитры",
                     CreateAllPaletteButtons(GridMainPaletteButtons));
                 App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridMainPaletteButtons, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
-                await App.MainWindow.ExecuteVisualizateLoadingProcess("Загрузка тем", CreateAllThemeButtons());
+                await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка тем", CreateAllThemeButtons());
                 App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ScrollViewerTheme, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
             });
             base.Show();

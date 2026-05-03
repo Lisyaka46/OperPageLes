@@ -153,9 +153,10 @@ namespace OperPageLes.UI.Windows
             GridContentFomBrowser.Children.Add(App.CurrentApp.MainBrowser);
             TokenUpdateBackgroundData = new(false);
 
-            BorderNotificationIndicator.Opacity = 0d;
+            NotificationIndicator.Opacity = 0d;
             VisualLoadingElement.ManagerAnimation = App.ManagerAnimation;
             VisualLoadingElement.Opacity = 0d;
+            TextBlockCountLoadingProcess.Opacity = 0d;
 
             IELMessageMain.Opacity = 0d;
             IELActionPanelMain.Opacity = 0d;
@@ -233,13 +234,13 @@ namespace OperPageLes.UI.Windows
             #endregion
 
             PageNotificationApplication = new();
-            PageNotificationApplication.CreatedNewOneOnlyViewerImage += (sender, e) =>
+            App.CurrentApp.AddNotification += (sender, e) =>
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(NotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
             };
-            PageNotificationApplication.ClearedAllViewersImage += (sender, e) =>
+            App.CurrentApp.ClearNotification += (sender, e) =>
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderNotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(NotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
             };
 
             #endregion
@@ -312,7 +313,10 @@ namespace OperPageLes.UI.Windows
             };
             IELButtonSettings.OnActivateMouseLeft += (sender, e) =>
             {
-                new DialogSetting().ShowDialog();
+                App.CurrentApp.SettingApp ??= new();
+                App.CurrentApp.MainBrowser.ActivateCustomPageBrowser(App.CurrentApp.SettingApp);
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             };
             #endregion
 
@@ -602,105 +606,11 @@ namespace OperPageLes.UI.Windows
         }
         #endregion
 
-        #region Loading Manipulate
-        /// <summary>
-        /// Осуществить выполнение процесса через визуализацию асинхронной загрузки
-        /// </summary>
-        /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
-        /// <param name="NameProcess">Название загрузочного процесса</param>
-        /// <param name="Method">Асинхронный процесс получения значения</param>
-        /// <returns>Исполненный асинхронный процесс</returns>
-        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
-        {
-            OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
-            ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
-            CancellationToken token = new(false);
-            //ViewLoading.OnActivateMouseRight += (sender, e) =>
-            //{
-            //    token.ThrowIfCancellationRequested();
-            //    ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
-            //};
-            TextBlock Element = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: " + NameProcess);
-
-            await Method.WaitAsync(token);
-
-            App.ApplicationPageDeveloper.StackPanelElementsVisual.Children.Remove(Element);
-            if (Method.IsCanceled) throw new OperationCanceledException();
-            ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
-
-            return await Method;
-        }
-
-        /// <summary>
-        /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
-        /// </summary>
-        /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
-        /// <param name="NameProcess">Название загрузочного процесса</param>
-        /// <param name="Method">Асинхронный процесс получения значения</param>
-        /// <returns>Исполненный асинхронный процесс</returns>
-        internal async Task ExecuteVisualizateLoadingProcess(string NameProcess, Task Method)
-        {
-            OPLMediaViewer ViewLoading = GenerateVisualizateMediaLoadingProcess(NameProcess);
-            ViewLoading.Dispatcher.Invoke(StartVisualizateLoadingProcess, ViewLoading);
-            CancellationToken token = new(false);
-            //ViewLoading.OnActivateMouseRight += (sender, e) =>
-            //{
-            //    token.ThrowIfCancellationRequested();
-            //    ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
-            //};
-            TextBlock Element = App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: " + NameProcess);
-
-            await Method.WaitAsync(token);
-
-            App.ApplicationPageDeveloper.StackPanelElementsVisual.Children.Remove(Element);
-            if (Method.IsCanceled) throw new OperationCanceledException();
-            ViewLoading.Dispatcher.Invoke(CompleteVisualizateLoadingProcess, ViewLoading);
-        }
-
-        /// <summary>
-        /// Создать объект визуализирующий изображение (уведомление)
-        /// </summary>
-        /// <param name="Name">Название сообщения</param>
-        /// <param name="ImageNotification">Картинка которая будет отображаться в элементе</param>
-        /// <returns>Объект визуализации картинки</returns>
-        public OPLImageViewer GenerateVisualizateImage(string Name, ImageSource? ImageNotification = null)
-        {
-            OPLImageViewer Result = PageNotificationApplication.SetViewImageElement(ImageNotification);
-            //Result.Text = Name;
-            //Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
-            return Result;
-        }
-
-        /// <summary>
-        /// Создать объект визуализирующий медиа (уведомление)
-        /// </summary>
-        /// <param name="Name">Название загрузочного процесса</param>
-        /// <returns>Объект визуализации загрузочного процесса</returns>
-        public OPLMediaViewer GenerateVisualizateMedia(string Name)
-        {
-            OPLMediaViewer Result = PageNotificationApplication.SetViewMediaElement();
-            //Result.Text = Name;
-            //Result.OnActivateMouseRight += Result.OnActivateMouseLeft;
-            return Result;
-        }
-
-        /// <summary>
-        /// Создать объект визуализирующий медиа (Спецификация на загрузочный процесс)
-        /// </summary>
-        /// <param name="Name">Название загрузочного процесса</param>
-        /// <returns>Объект визуализации загрузочного процесса</returns>
-        internal OPLMediaViewer GenerateVisualizateMediaLoadingProcess(string Name)
-        {
-            OPLMediaViewer Result = GenerateVisualizateMedia(Name);
-            App.CurrentApp.DataViewerLoadingProcess.Add(Result);
-            return Result;
-        }
-
         /// <summary>
         /// Начало визуализации загрузки
         /// </summary>
         /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
-        internal void StartVisualizateLoadingProcess(OPLMediaViewer ViewLoading)
+        internal void StartVisualizateLoadingProcess()
         {
             if (!IsLoadingProcess)
             {
@@ -711,6 +621,7 @@ namespace OperPageLes.UI.Windows
                     IsVisualLoagingProcessInBorder = true;
                 }
                 VisualLoadingElement.OpenLoading();
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockCountLoadingProcess, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
             }
         } 
 
@@ -718,11 +629,9 @@ namespace OperPageLes.UI.Windows
         /// Завершение визуализации загрузки
         /// </summary>
         /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
-        internal void CompleteVisualizateLoadingProcess(OPLMediaViewer ViewLoading)
+        internal void CompleteVisualizateLoadingProcess()
         {
-            PageNotificationApplication.DeleteViewMediaElement(ViewLoading);
-            App.CurrentApp.DataViewerLoadingProcess.Remove(ViewLoading);
-            if (App.CurrentApp.DataViewerLoadingProcess.Count == 0 && IsLoadingProcess)
+            if (IsLoadingProcess)
             {
                 IsLoadingProcess = false;
                 if (IsVisualLoagingProcessInBorder)
@@ -731,6 +640,7 @@ namespace OperPageLes.UI.Windows
                     IsVisualLoagingProcessInBorder = false;
                 }
                 VisualLoadingElement.CloseLoading();
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockCountLoadingProcess, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
             }
         }
 
@@ -761,7 +671,6 @@ namespace OperPageLes.UI.Windows
             animation.Duration = TimeSpan.FromMilliseconds(3200d);
             RotateMainWindowBackground.BeginAnimation(RotateTransform.AngleProperty, animation);
         }
-        #endregion
         #endregion
 
         /// <summary>

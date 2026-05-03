@@ -1,16 +1,27 @@
 ﻿using IEL.CORE.Classes;
+using OIEL.CORE.Browser;
+using OperPageLes.CORE.Enums;
 using OperPageLes.UI.Pages.Settings;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using OperPageLes.CORE.Enums;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace OperPageLes.UI.Windows.Dialogs
 {
     /// <summary>
-    /// Логика взаимодействия для WindowSetting.xaml
+    /// Логика взаимодействия для PageSettingApp.xaml
     /// </summary>
-    public partial class DialogSetting : Window
+    public partial class PageSettingApp : PageBrowser
     {
         /// <summary>
         /// Страница общих настроек программы
@@ -37,7 +48,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         private int ActiveIndexColumn = -1;
 
-        public DialogSetting()
+        public PageSettingApp()
         {
             InitializeComponent();
             GeneralSetting = new();
@@ -116,10 +127,10 @@ namespace OperPageLes.UI.Windows.Dialogs
             #endregion
             #endregion
             #region This
-            Closed += (sender, e) =>
-            {
-                App.CurrentApp.UpdateSettingApplication();
-            };
+            //Closed += (sender, e) =>
+            //{
+            //    App.CurrentApp.UpdateSettingApplication();
+            //};
             #endregion
         }
 

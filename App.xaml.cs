@@ -38,6 +38,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Windows.Foundation;
 
 namespace OperPageLes
 {
@@ -68,10 +69,80 @@ namespace OperPageLes
         /// </summary>
         internal readonly COMInterpreter<IOPERCommandViewer> Interpreter;
 
+        #region Loading Manipulate
         /// <summary>
         /// Массив всех визуализационных объектов процессов
         /// </summary>
-        internal readonly List<OPLMediaViewer> DataViewerLoadingProcess = [];
+        private readonly List<IAsyncAction> DataLoadingProcess = [];
+
+        /// <summary>
+        /// Количество загрузочных потоков
+        /// </summary>
+        internal int CountLoadingProcess => DataLoadingProcess.Count;
+
+        /// <summary>
+        /// Осуществить выполнение процесса через визуализацию асинхронной загрузки
+        /// </summary>
+        /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
+        /// <param name="NameProcess">Название загрузочного процесса</param>
+        /// <param name="Method">Асинхронный процесс получения значения</param>
+        /// <returns>Исполненный асинхронный процесс</returns>
+        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MainWindow.TextBlockCountLoadingProcess.Text = (CountLoadingProcess + 1).ToString();
+                MainWindow.StartVisualizateLoadingProcess();
+            });
+
+            IAsyncAction AsyncActionMetod = Method.AsAsyncAction();
+            DataLoadingProcess.Add(AsyncActionMetod);
+            CancellationToken token = new(false);
+            await Method.WaitAsync(token);
+
+            DataLoadingProcess.Remove(AsyncActionMetod);
+            AsyncActionMetod.Close();
+            if (Method.IsCanceled) throw new OperationCanceledException();
+            //GC.Collect(GC.GetGeneration(AsyncActionMetod));
+            Dispatcher.Invoke(() =>
+            {
+                MainWindow.TextBlockCountLoadingProcess.Text = CountLoadingProcess.ToString();
+                if (CountLoadingProcess == 0) MainWindow.CompleteVisualizateLoadingProcess();
+            });
+            return await Method;
+        }
+
+        /// <summary>
+        /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
+        /// </summary>
+        /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
+        /// <param name="NameProcess">Название загрузочного процесса</param>
+        /// <param name="Method">Асинхронный процесс получения значения</param>
+        /// <returns>Исполненный асинхронный процесс</returns>
+        internal async Task ExecuteVisualizateLoadingProcess(string NameProcess, Task Method)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MainWindow.TextBlockCountLoadingProcess.Text = (CountLoadingProcess + 1).ToString();
+                MainWindow.StartVisualizateLoadingProcess();
+            });
+
+            IAsyncAction AsyncActionMetod = Method.AsAsyncAction();
+            DataLoadingProcess.Add(AsyncActionMetod);
+            CancellationToken token = new(false);
+            await Method.WaitAsync(token);
+
+            DataLoadingProcess.Remove(AsyncActionMetod);
+            AsyncActionMetod.Close();
+            if (Method.IsCanceled) throw new OperationCanceledException();
+            //GC.Collect(GC.GetGeneration(AsyncActionMetod));
+            Dispatcher.Invoke(() =>
+            {
+                MainWindow.TextBlockCountLoadingProcess.Text = CountLoadingProcess.ToString();
+                if (CountLoadingProcess == 0) MainWindow.CompleteVisualizateLoadingProcess();
+            });
+        }
+        #endregion
 
         /// <summary>
         /// Страница разработчика
@@ -123,6 +194,11 @@ namespace OperPageLes
         internal event EventHandler<Notification>? AddNotification;
 
         /// <summary>
+        /// Событие очистки всех уведомлений в приложении
+        /// </summary>
+        internal event EventHandler? ClearNotification;
+
+        /// <summary>
         /// Добавить новое уведомление в приложение
         /// </summary>
         /// <param name="SourceMessage">Сообщение уведомления</param>
@@ -141,13 +217,28 @@ namespace OperPageLes
         /// Удалить конкретное уведомление из приложения
         /// </summary>
         /// <param name="Source">Удаляемый элемент уведомления</param>
-        internal void RemoveNotification(in Notification Source) =>
+        internal void RemoveNotification(in Notification Source)
+        {
             SourceApplicationNotifications.Remove(Source);
+            if (SourceApplicationNotifications.Count == 0) ClearNotification?.Invoke(MainWindow, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Очистить все уведомления в приложении
         /// </summary>
-        internal void ClearAllNotifications() => SourceApplicationNotifications.Clear();
+        internal void ClearAllNotifications()
+        {
+            SourceApplicationNotifications.Clear();
+            ClearNotification?.Invoke(MainWindow, EventArgs.Empty);
+        }
+        #endregion
+
+        #region RecourceDialogPages
+        /// <summary>
+        /// Страница управления настройками программы
+        /// </summary>
+        internal PageSettingApp? SettingApp { get; set; }
+
         #endregion
 
         /// <summary>
@@ -247,7 +338,6 @@ namespace OperPageLes
         /// </summary>
         internal static event EventHandler<ObjectConnectEventArgs>? ConnectionPingChanged;
         #endregion
-
 
         #region Browser
         /// <summary>
@@ -655,7 +745,7 @@ namespace OperPageLes
         /// Точка входа в программу
         /// </summary>
         /// <param name="e">Объект события начала работы прораммы</param>
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
             LogWriteLine("Проверка ключа входа");
@@ -727,11 +817,6 @@ namespace OperPageLes
             {
                 MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
             };
-            PageConsole.PageConsoleActionPanelMain.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                MainWindow.IELActionPanelMain.ClosePanelAction();
-                //App.CurrentApp.UsingDiscriptionCommand();
-            };
             PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
             {
                 if (MainBrowser.ActualInlay?.Content is PageConsole page)
@@ -758,7 +843,7 @@ namespace OperPageLes
             };
             Current.MainWindow = new MainWindow();
             LogWriteLine("Приминение настроек элементов");
-            SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
+            await SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
 
             LogWriteLine("Приминение настройки палитры");
             if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
@@ -804,7 +889,7 @@ namespace OperPageLes
         //
         internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
         {
-            SourceManagerAppPage.AddNewAppPage(MainBrowser, TypeAppPage, NameAppPage, Spectrum, Icon);
+            SourceManagerAppPage.AddNewAppPage(TypeAppPage, NameAppPage, Spectrum, Icon);
         }
 
         //
