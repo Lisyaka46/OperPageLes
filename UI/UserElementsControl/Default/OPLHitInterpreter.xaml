@@ -1,0 +1,25 @@
+﻿<Base:IELContainerBase
+    x:Class="OperPageLes.UI.UserElementsControl.Default.OPLHitInterpreter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
+    xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=LibraryIEL"
+    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL" CornerRadius="6,6,0,0" BorderThickness="3,3,3,3" VerticalAlignment="Bottom" MaxHeight="200" Width="279" Height="80" Padding="2,2,2,2" HorizontalAlignment="Left" Margin="6,0,0,-3" IsAnimatedSettingQ="False">
+    <Grid x:Name="HeadHitPanelGrid">
+        <Grid x:Name="GridHintOneCommand" Panel.ZIndex="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="TextBlockHintCommand" Text="Close" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="16" Padding="4,4,10,4" FontFamily="Cascadia Code" Foreground="Black" Grid.Row="1"/>
+            <Grid>
+                <TextBlock x:Name="TextBlockDescriptionHintCommand" Text="Описание команды" FontSize="14" Padding="4,4,0,4" FontFamily="Cascadia Code" Foreground="#FF0C3F67" Grid.Row="0" FontStyle="Italic" VerticalAlignment="Bottom" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+            </Grid>
+        </Grid>
+        <IEL:IELScrollViewer x:Name="IELHitScroll">
+        </IEL:IELScrollViewer>
+    </Grid>
+</Base:IELContainerBase>

@@ -86,7 +86,7 @@ namespace OperPageLes.Windows
             SearchActivate = false;
             InitializeComponent();
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.File));
-            ImageSelectIndicator.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Arrow));
+            ImageSelectIndicator.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ArrowRight));
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);

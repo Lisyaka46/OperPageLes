@@ -1,5 +1,6 @@
 ﻿using LibraryPackKey.CORE;
 using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Windows.Base;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -13,7 +14,7 @@ namespace OperPageLes.UI.Windows.Dialogs
     /// <summary>
     /// Логика взаимодействия для WindowInputProgramKey.xaml
     /// </summary>
-    public partial class DialogInputProgramKey : Window
+    public partial class DialogInputProgramKey : OPLWindowBase
     {
         private StructPack Pack;
 
@@ -22,13 +23,15 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogInputProgramKey()
         {
             InitializeComponent();
+            ManagerAnimation = App.ManagerAnimation;
             Pack = StructPack.NowPack;
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
-            //IELTextBoxKey.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 255, 0, 0));
+            IELTextBoxKey.Text = string.Empty;
+
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e) =>
             {
-                System.Windows.Clipboard.SetText(TextBlockPack.Text);
+                System.Windows.Forms.Clipboard.SetText(TextBlockPack.Text);
                 App.ManagerAnimation.ColorAnimationType.AnimateEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
                     System.Windows.Media.Color.FromArgb(255, 0, 255, 0), Colors.Black,
                     TimeSpan.FromMilliseconds(1000d));
@@ -70,6 +73,18 @@ namespace OperPageLes.UI.Windows.Dialogs
         internal PackKey? SetKeyValid()
         {
             TextBlockPack.Text = Pack.StringPack;
+            Keyboard.PrimaryDevice.ClearFocus();
+            if (ManagerAnimation != null)
+            {
+                TimeSpan SpanFast = TimeSpan.FromSeconds(2d);
+                TimeSpan SpanMiddle = TimeSpan.FromSeconds(2.5d);
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, SpanMiddle);
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceScaleTransform, ScaleTransform.ScaleXProperty, 0.2d, 1d, SpanMiddle);
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceScaleTransform, ScaleTransform.ScaleYProperty, 0.2d, 1d, SpanMiddle);
+
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceSkewTransform, SkewTransform.AngleXProperty, 40d, 0d, SpanFast);
+                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceSkewTransform, SkewTransform.AngleYProperty, 40d, 0d, SpanFast);
+            }
             ShowDialog();
             return ResultKey;
         }
@@ -82,8 +97,6 @@ namespace OperPageLes.UI.Windows.Dialogs
             try
             {
                 ResultKey = PackKey.GenKey(Pack, IELTextBoxKey.Text);
-                string SaveKeyOPL = $"{App.GetID()} {TextBlockPack.Text} {ResultKey.SourcePack.UnixTimeCode - 1} {IELTextBoxKey.Text}";
-                File.WriteAllText(StructDirectoryResources.DirectoryKeyValidFile, Convert.ToHexString([..SaveKeyOPL.Select((i) => (byte)i)]));
                 Close();
             }
             catch

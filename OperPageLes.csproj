@@ -31,7 +31,15 @@
     <None Remove="Fonts\Sangha.ttf" />
     <None Remove="Fonts\Tablon.ttf" />
     <None Remove="Fonts\Vollda.otf" />
+    <None Remove="UI\Images\ArrowRight.png" />
+    <None Remove="UI\Images\Chats.png" />
+    <None Remove="UI\Images\Command.png" />
+    <None Remove="UI\Images\File.png" />
+    <None Remove="UI\Images\Folder.png" />
+    <None Remove="UI\Images\NewChat.png" />
     <None Remove="UI\Images\NewElement.png" />
+    <None Remove="UI\Images\PaperClip.png" />
+    <None Remove="UI\Images\Read.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,12 +54,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="UI\Pages\Browser\PageLabels.xaml.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\IEL\LibraryIEL\LibraryIEL.csproj" />
     <ProjectReference Include="..\..\InterpreterCommand\Interpreter\Interpreter.csproj" />
+    <ProjectReference Include="..\..\LibraryBiu\LibraryBiU.csproj" />
     <ProjectReference Include="..\OIEL\OIEL.csproj" />
     <ProjectReference Include="..\OPLAnimation\OPLAnimation.csproj" />
   </ItemGroup>
@@ -78,7 +83,16 @@
     <Resource Include="Fonts\Sangha.ttf" />
     <Resource Include="Fonts\Tablon.ttf" />
     <Resource Include="Fonts\Vollda.otf" />
+    <Resource Include="UI\Images\ArrowRight.png" />
+    <Resource Include="UI\Images\Chats.png" />
+    <Resource Include="UI\Images\Command.png" />
+    <Resource Include="UI\Images\File.png" />
+    <Resource Include="UI\Images\Folder.png" />
+    <Resource Include="UI\Images\World.png" />
+    <Resource Include="UI\Images\NewChat.png" />
     <Resource Include="UI\Images\NewElement.png" />
+    <Resource Include="UI\Images\PaperClip.png" />
+    <Resource Include="UI\Images\Read.png" />
   </ItemGroup>
 
   <ItemGroup>

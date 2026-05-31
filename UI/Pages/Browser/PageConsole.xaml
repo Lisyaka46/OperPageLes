@@ -7,6 +7,7 @@
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OPL="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
     x:Class="OperPageLes.UI.Pages.Browser.PageConsole"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
@@ -49,23 +50,6 @@
                 <IEL:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3" FontFamily="{DynamicResource Bree CYR var}" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}" VerticalContentAlignment="Stretch" Margin="3,3,3,3" MarginViewBox="5,5,5,7" Grid.Column="1" FontSize="16"/>
             </Grid>
         </Grid>
-        <Grid x:Name="GridHit" Margin="6,0,0,-3" HorizontalAlignment="Left">
-            <Border x:Name="BorderHintCommand" Panel.ZIndex="0" Grid.RowSpan="1" BorderThickness="3,3,3,3" BorderBrush="#FF355592" CornerRadius="6,6,0,0" Background="#FF2989B3" VerticalAlignment="Bottom" MaxHeight="200" Width="279" Height="80" Padding="2,2,2,2">
-                <Grid x:Name="HeadHitPanelGrid">
-                    <Grid x:Name="GridHintOneCommand" Panel.ZIndex="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock x:Name="TextBlockHintCommand" Text="Close" HorizontalAlignment="Left" LineStackingStrategy="BlockLineHeight" FontSize="16" Padding="4,4,10,4" FontFamily="Cascadia Code" Foreground="Black" Grid.Row="1"/>
-                        <Grid>
-                            <TextBlock x:Name="TextBlockDescriptionHintCommand" Text="Описание команды" FontSize="14" Padding="4,4,0,4" FontFamily="Cascadia Code" Foreground="#FF0C3F67" Grid.Row="0" FontStyle="Italic" VerticalAlignment="Bottom" TextWrapping="Wrap" HorizontalAlignment="Left"/>
-                        </Grid>
-                    </Grid>
-                    <IEL:IELScrollViewer x:Name="IELHitScroll">
-                    </IEL:IELScrollViewer>
-                </Grid>
-            </Border>
-        </Grid>
+        <OPL:OPLHitInterpreter x:Name="HitCommandsInterpreter" PaletteElement="{DynamicResource LightBlue}"/>
     </Grid>
 </Base:PageBrowser>

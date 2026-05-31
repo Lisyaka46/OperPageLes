@@ -112,5 +112,25 @@ namespace OperPageLes.CORE.Enums
         /// Сливовый Крайола
         /// </summary>
         PlumCrayola = 20u,
+
+        /// <summary>
+        /// Зеленоватый асфальт
+        /// </summary>
+        GreenishAsphalt = 21u,
+
+        /// <summary>
+        /// Терракотовый
+        /// </summary>
+        Terracotta = 22u,
+
+        /// <summary>
+        /// Сине-зелёный Крайола
+        /// </summary>
+        BlueGreenCrayola = 23u,
+
+        /// <summary>
+        /// Платиновый-серый
+        /// </summary>
+        PlatinumGrey = 24u,
     }
 }

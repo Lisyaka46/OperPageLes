@@ -239,6 +239,11 @@ namespace OperPageLes
         /// </summary>
         internal PageSettingApp? SettingApp { get; set; }
 
+        /// <summary>
+        /// Страница управления персанолизацией программы
+        /// </summary>
+        internal PageThemeController? ThemeApp { get; set; }
+
         #endregion
 
         /// <summary>
@@ -290,7 +295,7 @@ namespace OperPageLes
         /// <summary>
         /// Версия программы
         /// </summary>
-        internal static readonly string Version = "*";
+        internal static readonly string Version = "0.0.04";
 
         /// <summary>
         /// Запись в файл .log
@@ -360,13 +365,17 @@ namespace OperPageLes
         {
             LogWriteLine("---------- Старт нового экземпляра ----------");
             LogWriteLine("Инициализация свойств экземпляра");
+            ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
             #region Resources
-            SourceManagerAppPage = new();
+            SourceManagerAppPage = new()
+            {
+                Focusable = true,
+            };
             MainBrowser = new(SourceManagerAppPage);
             SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
             SourceApplicationNotifications = [];
-            InstallingKey = PackKey.StaticKey;
+            InstallingKey = PackKey.StaticKey(1L);
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
             //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
@@ -424,52 +433,6 @@ namespace OperPageLes
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
                 }),
                 #endregion
-
-                //#region label
-                //new ConsoleCommand<IOPERCommandViewer>("label",
-                //[
-                //    new Parameter("Name", typeof(string)), new Parameter("Command", typeof(string)),
-                //    new Parameter("Description", typeof(string), string.Empty)
-                //],
-                //"Создаёт ярлык с именем \"Name\" и командой \"Command\", можно создать описание не обязательным параметром \"Description\"\n",
-                //(Command, param, CV) =>
-                //{
-                //    PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
-                //    if (SourcePage != null)
-                //    {
-                //        if (SourcePage.SelectLabelsMode) return
-                //            Task.FromResult(CommandStateResult.Failed(Command.Name,
-                //            $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
-                //    }
-                //    DataLabels.Add(new((string)param[0], (string)param[2], (string)param[1]));
-                //    SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
-                //    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Ярлык %#006B3C**\"{(string)param[0]}\"** успешно создан"));
-                //}),
-                //#endregion
-
-                //#region create_label
-                //new ConsoleCommand<IOPERCommandViewer>("create_label", "Открывает окно создания ярлыка",
-                //(Command, param, CV) =>
-                //{
-                //    DialogGenLabel GenLabel = new();
-                //    ActiveDialog = GenLabel;
-                //    LabelAction? label = GenLabel.CreateLabel();
-                //    ActiveDialog = null;
-                //    if (label != null)
-                //    {
-                //        PageLabels? SourcePage = MainBrowser.SearchAnyPageType<PageLabels>();
-                //        if (SourcePage != null)
-                //        {
-                //            if (SourcePage.SelectLabelsMode) return
-                //                Task.FromResult(CommandStateResult.Failed(Command.Name,
-                //                $"%#FF7C66**Невозможно** создать ярлык \"%//{param[0]}//\", так как включён режим выделения"));
-                //        }
-                //        DataLabels.Add(label);
-                //        SourcePage?.AppendNewOPLLbel(DataLabels.Count - 1);
-                //    }
-                //    return Task.FromResult(CommandStateResult.Completed(Command.Name, label != null ? $"Ярлык %#006B3C**\"{label?.Name}\"** успешно создан" : null));
-                //}),
-                //#endregion
 
                 #region reboot
                 new ConsoleCommand<IOPERCommandViewer>("reboot", "Перезагружает программу", (Command, param, CV) =>
@@ -724,6 +687,11 @@ namespace OperPageLes
 
             LogWriteLine("Успешно!");
             #endregion
+
+            Startup += (sender, e) =>
+            {
+                OnStartup();
+            };
         }
 
         /// <summary>
@@ -745,47 +713,13 @@ namespace OperPageLes
         /// Точка входа в программу
         /// </summary>
         /// <param name="e">Объект события начала работы прораммы</param>
-        protected override async void OnStartup(StartupEventArgs e)
+        private async void OnStartup()
         {
             //base.OnStartup(e);
-            LogWriteLine("Проверка ключа входа");
-            if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
-            {
-                try
-                {
-                    string MainPackAndValidKey = Encoding.UTF8.GetString(Convert.FromHexString(File.ReadAllText(StructDirectoryResources.DirectoryKeyValidFile)));
-                    string AppGUID = RegexPackValidKey().Match(MainPackAndValidKey).Value;
-
-                    MainPackAndValidKey = MainPackAndValidKey[(AppGUID.Length + 1)..];
-                    string Pack = RegexPackValidKey().Match(MainPackAndValidKey).Value;
-
-                    MainPackAndValidKey = MainPackAndValidKey[(Pack.Length + 1)..];
-                    string Code = RegexPackValidKey().Match(MainPackAndValidKey).Value;
-
-                    string Key = MainPackAndValidKey[(Code.Length + 1)..];
-
-                    if (!AppGUID.Equals(GetID())) throw new Exception();
-                    InstallingKey = PackKey.GenKey(StructPack.GenPack(long.Parse(Code) + 1, Pack), Key);
-                }
-                catch { }
-                if (!InstallingKey.IsValid) System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            if (!InstallingKey.IsValid)
-            {
-                PackKey? key = new DialogInputProgramKey().SetKeyValid();
-                if (key != null) InstallingKey = key;
-            }
-            if (!InstallingKey.IsValid)
-            {
-                Current.Shutdown();
-                return;
-            }
-            LogWriteLine("Ключ валиден!");
-
             LogWriteLine("Инициализация палитры");
             DefaultPalette = new(Resources.MergedDictionaries[1]);
             _ActiveThemeApplication = new();
+            PageManagerAppPage.PageLabelActionPanel.SetVisualTheme(in _ActiveThemeApplication);
 
             LogWriteLine("Подключение связей страниц");
             _AppPageBuffer = new();
@@ -841,7 +775,6 @@ namespace OperPageLes
                 LogWriteLine("---------- Конец текущего экземпляра ----------");
                 LogStreamWriter?.Close();
             };
-            Current.MainWindow = new MainWindow();
             LogWriteLine("Приминение настроек элементов");
             await SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
 
@@ -855,6 +788,42 @@ namespace OperPageLes
                     ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
                 }
             }
+            Current.MainWindow = new MainWindow();
+
+
+            LogWriteLine("Проверка ключа входа");
+            if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
+            {
+                try
+                {
+                    PackKey? SourceGenKey = PackKey.GenKey(File.ReadAllBytes(StructDirectoryResources.DirectoryKeyValidFile), GetID());
+                    if (SourceGenKey != null)
+                        InstallingKey = SourceGenKey;
+                }
+                catch
+                {
+                    System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            if (!InstallingKey.IsValid)
+            {
+                PackKey? key = new DialogInputProgramKey().SetKeyValid();
+                if (key != null)
+                {
+                    InstallingKey = key;
+                    File.WriteAllBytes(StructDirectoryResources.DirectoryKeyValidFile,
+                        InstallingKey.GetHexDataKeyFromID(GetID()));
+                }
+            }
+            if (!InstallingKey.IsValid)
+            {
+                Current.Shutdown();
+                return;
+            }
+            LogWriteLine("Ключ валиден!");
+
+
             LogWriteLine("Открытие главного окна");
             try
             {
@@ -1097,9 +1066,6 @@ namespace OperPageLes
             }
             CommandView.AddFormattedString(Result.Message);
         }
-
-        [GeneratedRegex(@"[^ ]+")]
-        private static partial Regex RegexPackValidKey();
         #endregion
     }
 }

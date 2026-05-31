@@ -50,7 +50,7 @@ namespace OperPageLes.CORE
         [
             new("Lisyaka",
                 "- За всю разработку.",
-                NameImageAssistent: nameof(OPRES.IconMainGray)),
+                NameImageAssistent: nameof(OPRES.IconMainApplication)),
             new("Minsi",
                 "- За помощь в разработке." +
                 "\n- За проектирование программы." +

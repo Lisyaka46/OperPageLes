@@ -1,6 +1,7 @@
 ﻿#region Link
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
+using IEL.UserElementsControl.Base;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using OIEL.CORE.Browser;
@@ -15,6 +16,7 @@ using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Windows.Base;
 using OperPageLes.UI.Windows.Dialogs;
 using OperPageLes.Windows;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -122,10 +124,11 @@ namespace OperPageLes.UI.Windows
             ManagerAnimation = App.ManagerAnimation;
 			Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
+            IELOpenDataFolder.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Folder));
             IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
-            IELImageButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
-            IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            IELButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
+            IELButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
 
             #region BrowserPage
             App.CurrentApp.MainBrowser.ManagerAnimation = App.ManagerAnimation;
@@ -153,6 +156,8 @@ namespace OperPageLes.UI.Windows
             GridContentFomBrowser.Children.Add(App.CurrentApp.MainBrowser);
             TokenUpdateBackgroundData = new(false);
 
+            TextBlockVersion.Text = App.Version;
+
             NotificationIndicator.Opacity = 0d;
             VisualLoadingElement.ManagerAnimation = App.ManagerAnimation;
             VisualLoadingElement.Opacity = 0d;
@@ -172,17 +177,19 @@ namespace OperPageLes.UI.Windows
 
             #region Palette
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonBack);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELOpenDataFolder);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELImageButtonCollapse);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCollapse);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClose);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
             #endregion
 
             LinearGradientMainWindowBackground = new()
@@ -277,24 +284,28 @@ namespace OperPageLes.UI.Windows
             };
             IELButtonTheme.OnActivateMouseLeft += (sender, e) =>
             {
-                WindowThemeController Window = new();
-                App.CurrentApp.InicializeWindowInApplication(Window);
-                if (!Path.Exists(StructDirectoryResources.DirectoryThemeApplication))
-                    Directory.CreateDirectory(StructDirectoryResources.DirectoryThemeApplication);
-                Window.Show();
-                //new DialogSetting().ShowDialog();
+                if (App.CurrentApp.ThemeApp == null)
+                {
+                    App.CurrentApp.ThemeApp = new()
+                    {
+                        ManagerAnimation = App.ManagerAnimation,
+                        SourcePanelAction = IELActionPanelMain
+                    };
+                    App.CurrentApp.ThemeApp.LoadingThemes();
+                }
+                ActivateCustomPageBrowser(App.CurrentApp.ThemeApp);
             };
             #endregion
 
             #region IELImageButtonCollapse
-            IELImageButtonCollapse.OnActivateMouseLeft += (sender, e) =>
+            IELButtonCollapse.OnActivateMouseLeft += (sender, e) =>
             {
                 WindowState = WindowState.Minimized;
             };
             #endregion
 
             #region IELImageButtonClose
-            IELImageButtonClose.OnActivateMouseLeft += (sender, e) =>
+            IELButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
                 Close();
             };
@@ -314,7 +325,42 @@ namespace OperPageLes.UI.Windows
             IELButtonSettings.OnActivateMouseLeft += (sender, e) =>
             {
                 App.CurrentApp.SettingApp ??= new();
-                App.CurrentApp.MainBrowser.ActivateCustomPageBrowser(App.CurrentApp.SettingApp);
+                ActivateCustomPageBrowser(App.CurrentApp.SettingApp);
+            };
+            #endregion
+
+            #region IELButtonBack
+            IELButtonBack.IsEnabled = false;
+            IELButtonBack.Margin = new(0, 5, 6, 0);
+            IELButtonBack.Width = 0d;
+            IELButtonBack.OnActivateMouseLeft += (sender, e) =>
+            {
+                if (IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                Disable_IELButtonBack();
+                App.CurrentApp.MainBrowser.GoBack();
+            };
+            #endregion
+
+            #region IELOpenDataFolder
+            IELOpenDataFolder.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELOpenDataFolder,
+                    "Главная директория данных программы",
+                    OrientationPositionCursor.LeftDown);
+            };
+            IELOpenDataFolder.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            IELOpenDataFolder.OnActivateMouseLeft += (sender, e) =>
+            {
+                Process p = new();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.Arguments = $"/c start {StructDirectoryResources.MainDirectoryApplication}";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
                 if (IELActionPanelMain.PanelActionActivate)
                     IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             };
@@ -352,6 +398,8 @@ namespace OperPageLes.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate)
                     IELActionPanelMain.ClosePanelAction();
+                if (IELButtonBack.IsEnabled)
+                    Disable_IELButtonBack();
                 App.CurrentApp.MainBrowser.OpenManagerAppPage();
             };
             #endregion
@@ -492,18 +540,54 @@ namespace OperPageLes.UI.Windows
             {
                 TextBlockVolumeValue.Text = ((int)(New * 100)).ToString();
             };
+
+            Activated += (sender, e) =>
+            {
+                if (App.CurrentApp.MainBrowser.ActivateManagerPage)
+                {
+                    App.CurrentApp.ManagerAppPage.Focus();
+                }
+            };
+        }
+
+        #region IELButtonBackControl
+        /// <summary>
+        /// Активировать/Показать кнопку возврата назад
+        /// </summary>
+        private void Enable_IELButtonBack()
+        {
+            IELButtonBack.IsEnabled = true;
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELButtonBack, WidthProperty,
+                80, TimeSpan.FromMilliseconds(400d));
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(IELButtonBack, MarginProperty,
+                new(5, 5, 6, 5), TimeSpan.FromMilliseconds(400d));
         }
 
         /// <summary>
-        /// Активировать панель действий над элементом вкладки
+        /// Диактивировать/Скрыть кнопку возврата назад
         /// </summary>
-        /// <param name="sender">Объект представления вкладки</param>
-        /// <param name="e">Объект упрвления событием</param>
-        private void InlayPanelActionActivate(object sender, MouseButtonEventArgs e)
+        private void Disable_IELButtonBack()
         {
-            PageInlay.ActivateManipulateInlay = (OPLInlay)sender;
-            IELActionPanelMain.UsingPanelAction(App.CurrentApp.MainBrowser, PageInlay,
-                Orientation: OrientationPositionCursor.RightDown);
+            IELButtonBack.IsEnabled = false;
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELButtonBack, WidthProperty,
+                0, TimeSpan.FromMilliseconds(400d));
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(IELButtonBack, MarginProperty,
+                new(0, 5, 6, 0), TimeSpan.FromMilliseconds(400d));
+        }
+        #endregion
+
+        /// <summary>
+        /// Воспроизвести активацию собственной страницы в браузере страниц с логикой отображения
+        /// </summary>
+        /// <param name="SourcePage">Открываемая страница</param>
+        /// <param name="RightAlign">Парвая ориентация появления</param>
+        internal void ActivateCustomPageBrowser(PageBrowser SourcePage, bool RightAlign = true)
+        {
+            if (IELActionPanelMain.PanelActionActivate)
+                IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            if (App.CurrentApp.MainBrowser.ActualPage != null)
+                Enable_IELButtonBack();
+            App.CurrentApp.MainBrowser.ActivateCustomPageBrowser(SourcePage, RightAlign);
         }
 
         #region ManipulateWindow
@@ -580,11 +664,6 @@ namespace OperPageLes.UI.Windows
             }, TokenUpdateBackgroundData);
             Opacity = 0d;
             base.Show();
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageLogoApplication, MarginProperty,
-                new(8), BorderImageInformation.Margin, TimeSpan.FromMilliseconds(1400d));
-
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateMainWindowBackground, RotateTransform.AngleProperty,
-                0d, 360d, TimeSpan.FromMilliseconds(3200d));
 
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty,
                         App.CurrentApp.SettingMainApplication.MillisecondInternetConnection ? 1d : 0d, TimeSpan.FromMilliseconds(800d));
@@ -594,12 +673,10 @@ namespace OperPageLes.UI.Windows
             #region AppPage
             App.CurrentApp.AddNewAppPage(typeof(PageConsole), "Консоль",
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Command)));
-            //App.CurrentApp.AddNewAppPage(typeof(PageLabels), "Ярлыки",
-            //    App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.PaperClip)));
             App.CurrentApp.AddNewAppPage(typeof(PageNetwork), "Сеть",
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Chats)));
             App.CurrentApp.AddNewAppPage(typeof(PageWebBrowser), "Веб-браузер",
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Aquamarine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Link)));
+                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Aquamarine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World)));
             App.CurrentApp.AddNewAppPage(typeof(PageDeveloper), "Для разработчиков",
                 App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed]);
             #endregion

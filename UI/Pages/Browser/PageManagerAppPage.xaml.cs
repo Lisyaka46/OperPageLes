@@ -4,6 +4,8 @@ using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageLabel;
+using OperPageLes.UI.Windows.Dialogs;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -77,9 +79,6 @@ namespace OperPageLes.UI.Pages.Browser
         };
 
         //
-        private bool ActivateMoveLabel = false;
-
-        //
         private int StartIndex = -1;
 
         //
@@ -96,6 +95,43 @@ namespace OperPageLes.UI.Pages.Browser
 
         //
         private readonly System.Windows.Size SizeLabel = new(60, 60);
+        #endregion
+
+        #region PageLabelActionPanel
+        /// <summary>
+        /// Выделенный ярлык для панели действий
+        /// </summary>
+        private LabelAction? _SelectLabelActionPanel = null;
+
+        /// <summary>
+        /// Выделенный ярлык для панели действий с обработкой его отсутствия
+        /// </summary>
+        private LabelAction SelectLabelActionPanel => _SelectLabelActionPanel ?? throw ExceptionNullableSelectLabel;
+
+        /// <summary>
+        /// Объект исключения обрабатывающий нулевое обращение к выделенному объекту ярлыка
+        /// </summary>
+        private static readonly Exception ExceptionNullableSelectLabel = new("Невозможно узнать выделенный объект ярлыка");
+
+        /// <summary>
+        /// Страница контекста действий над объектом ярлыка
+        /// </summary>
+        internal static PageLabelElementActionPanel PageLabelActionPanel = new();
+
+        /// <summary>
+        /// Состояние изменения позиционирования ярлыка
+        /// </summary>
+        private bool IsSelectMoveLabel = false;
+
+        /// <summary>
+        /// Активное состояние изменения позиционирования ярлыка
+        /// </summary>
+        private bool ActivateMoveLabel => SourceMoveLabel != null;
+
+        /// <summary>
+        /// Активный визуальный объект ярлыка кторого изменяется позиция
+        /// </summary>
+        private OPLVisualElementIM? SourceMoveLabel;
         #endregion
 
         /// <summary>
@@ -117,6 +153,69 @@ namespace OperPageLes.UI.Pages.Browser
             SctollViewerLabels.ClipToBounds = false;
             SctollViewerLabels.ClipToBoundsContainer = false;
             SctollViewerLabels.Content = StackPanelAllLabels;
+            MainGridContainer.MouseLeftButtonUp += (sender, e) =>
+            {
+                if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                {
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
+                }
+            };
+
+            KeyDown += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.LeftCtrl:
+                        IsSelectMoveLabel = true;
+                        break;
+                }
+            };
+
+            KeyUp += (sender, e) =>
+            {
+                switch (e.Key)
+                {
+                    case Key.LeftCtrl:
+                        IsSelectMoveLabel = false;
+                        if (SourceMoveLabel != null)
+                            ClearVisualElementMove(SourceMoveLabel, new(Mouse.PrimaryDevice, 0));
+                        break;
+                }
+            };
+
+            #region PageLabelActionPanel
+            PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
+            {
+                await SelectLabelActionPanel.Activate();
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+            };
+            PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseRight += async (sender, e, Key) =>
+            {
+                await SelectLabelActionPanel.Activate();
+            };
+            PageLabelActionPanel.IELButtonChangeLabel.OnActivateMouseLeft += async (sender, e, Key) =>
+            {
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                new DialogGenLabel().ChangeLabel(SelectLabelActionPanel.Label);
+                SelectLabelActionPanel.UpdateVisualLabel();
+            };
+            PageLabelActionPanel.IELButtonRemoveLabel.OnActivateMouseLeft += async (sender, e, Key) =>
+            {
+                StackPanelAllLabels.Children.Remove(SelectLabelActionPanel.VisualELement);
+                SourceLabels.Remove(SelectLabelActionPanel);
+                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                _SelectLabelActionPanel = null;
+            };
+            #endregion
+
+            Loaded += (sender, e) =>
+            {
+                App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (NameFramework) =>
+                {
+                    if (App.CurrentApp.MainBrowser.ActivateManagerPage)
+                        Focus();
+                };
+            };
         }
 
         /// <summary>
@@ -126,6 +225,7 @@ namespace OperPageLes.UI.Pages.Browser
         internal void AddLabel(SourceLabelAction Source)
         {
             LabelAction Label = new(Source, SizeLabel);
+            Label.VisualELement.Focusable = false;
             Label.VisualELement.Padding = new(3d);
             Label.VisualELement.VisualOrientationName = OrientationName.Up;
 
@@ -133,7 +233,22 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 await Label.Activate();
             };
-            Label.VisualELement.MouseRightButtonDown += LabelSelectPosition;
+            Label.VisualELement.OnActivateMouseRight += (sender, e) =>
+            {
+                if (!IsSelectMoveLabel)
+                    SelectLabelElement(Label);
+                else
+                {
+                    if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    {
+                        App.MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
+                    }
+                    LabelSelectPosition(sender, e);
+                }
+            };
+
+
+            //Label.VisualELement.MouseDown += LabelSelectPosition;
 
             StackPanelAllLabels.Children.Add(Label.VisualELement);
             SourceLabels.Add(Label);
@@ -156,23 +271,28 @@ namespace OperPageLes.UI.Pages.Browser
             });
         }
 
+        private void SelectLabelElement(LabelAction SelectLabel)
+        {
+            _SelectLabelActionPanel = SelectLabel;
+            App.MainWindow.IELActionPanelMain.UsingPanelAction(MainGridContainer, PageLabelActionPanel,
+                Orientation: IEL.CORE.Enums.OrientationPositionCursor.RightUp, DependencePointOnSize: false);
+            PageLabelActionPanel.ChangeTextDescription(SelectLabel.Label.Description ?? "- Нет описания", true);
+        }
+
         private void LabelSelectPosition(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OPLVisualElementIM SourceVisual = (OPLVisualElementIM)sender;
-            SourceVisual.BeginAnimation(MarginProperty, null);
-            ActivateMoveLabel = true;
-            StartIndex = StackPanelAllLabels.Children.IndexOf(SourceVisual);
+            SourceMoveLabel = (OPLVisualElementIM)sender;
+            SourceMoveLabel.BeginAnimation(MarginProperty, null);
+            StartIndex = StackPanelAllLabels.Children.IndexOf(SourceMoveLabel);
             NextIndex = StartIndex;
-            StackPanelAllLabels.Children.Remove(SourceVisual);
+            StackPanelAllLabels.Children.Remove(SourceMoveLabel);
             StackPanelAllLabels.Children.Insert(StartIndex, RectangleSelectPosition);
-            RectangleSelectPosition.Stroke = SourceVisual.SourceBorderBrush.SourceBrush;
+            RectangleSelectPosition.Stroke = SourceMoveLabel.SourceBorderBrush.SourceBrush;
 
-            MainGridContainer.Children.Add(SourceVisual);
-            SourceVisual.MouseRightButtonDown -= LabelSelectPosition;
-            SourceVisual.MouseRightButtonUp += ClearVisualElementMove;
-            SourceVisual.MouseMove += MoveToPosVisualElement;
-            SourceVisual.MouseLeave += ClearVisualElementMove;
-            SourceVisual.MouseWheel += ScrollFromSelectLabel;
+            MainGridContainer.Children.Add(SourceMoveLabel);
+            SourceMoveLabel.MouseMove += MoveToPosVisualElement;
+            SourceMoveLabel.MouseLeave += ClearVisualElementMove;
+            SourceMoveLabel.MouseWheel += ScrollFromSelectLabel;
             if (NextIndex > 0)
             {
                 PositionSourceVisualLeft = StackPanelAllLabels.Children[NextIndex - 1].TransformToAncestor(MainGridContainer)
@@ -185,11 +305,11 @@ namespace OperPageLes.UI.Pages.Browser
                     .Transform(new Point(0, 0));
                 //PositionSourceVisualRight.Offset(-35, -35);
             }
-            MoveToPosVisualElement(SourceVisual, e);
+            MoveToPosVisualElement(SourceMoveLabel, e);
 
 
-            Canvas.SetZIndex(SourceVisual, 2);
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceVisual, OpacityProperty,
+            Canvas.SetZIndex(SourceMoveLabel, 2);
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceMoveLabel, OpacityProperty,
                 0.8d, TimeSpan.FromMilliseconds(1500d));
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleSelectPosition, OpacityProperty,
                 1d, TimeSpan.FromMilliseconds(1500d));
@@ -261,10 +381,9 @@ namespace OperPageLes.UI.Pages.Browser
         private void ClearVisualElementMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             OPLVisualElementIM SourceVisual = (OPLVisualElementIM)sender;
-            ActivateMoveLabel = false;
-            SourceVisual.MouseRightButtonDown += LabelSelectPosition;
+            if (!SourceMoveLabel?.Equals(SourceVisual) ?? true) return;
+            SourceMoveLabel = null;
             SourceVisual.MouseMove -= MoveToPosVisualElement;
-            SourceVisual.MouseRightButtonUp -= ClearVisualElementMove;
             SourceVisual.MouseLeave -= ClearVisualElementMove;
             SourceVisual.MouseWheel -= ScrollFromSelectLabel;
             MainGridContainer.Children.Remove(SourceVisual);
@@ -295,9 +414,9 @@ namespace OperPageLes.UI.Pages.Browser
 
         private void Source_ApplicationPageActivate(object? sender, ApplicationPage e)
         {
-            object? InicializeInlay = App.CurrentApp.MainBrowser.SearchAnyPageType(e.TypeBrowserAppPage);
+            PageBrowser? InicializeInlay = App.CurrentApp.MainBrowser.SearchAnyPageType(e.TypeBrowserAppPage);
             if (InicializeInlay != null)
-                App.CurrentApp.MainBrowser.ActivateInlayInBrowserPage((PageBrowser)InicializeInlay);
+                App.CurrentApp.MainBrowser.ActivateInlayInBrowserPage(InicializeInlay);
             else InitAppPageFromType(in e);
         }
 

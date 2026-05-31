@@ -39,34 +39,44 @@
                         <RowDefinition/>
                         <RowDefinition Height="56"/>
                     </Grid.RowDefinitions>
-                    <Border x:Name="BorderButtonsUp" BorderBrush="#FF35755F" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,2,4,2" Grid.RowSpan="1" Focusable="True">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.47,-2.5">
-                                <GradientStop Color="#CC78A08C" Offset="0.99"/>
-                                <GradientStop Color="#D80082AD" Offset="0.129"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <Border.FocusVisualStyle>
-                            <Style>
-                                <Setter Property="Control.Template" Value="{x:Null}"/>
-                            </Style>
-                        </Border.FocusVisualStyle>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                <ColumnDefinition Width="Auto" MinWidth="50"/>
-                            </Grid.ColumnDefinitions>
-                            <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}" MarginViewBox="5,2,5,2" Margin="3,3,3,3"/>
-                            <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="2" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,0,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="5,2,5,2"/>
-                            <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,0,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="5,2,5,2"/>
-                            <IEL:IELButtonImage x:Name="IELImageButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,0,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" Padding="0,2,0,2" MarginViewBox="5,1,5,1"/>
-                            <IEL:IELButtonImage x:Name="IELImageButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="5" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
-                        </Grid>
-                    </Border>
+                    <TextBlock x:Name="TextBlockVersion" Grid.Row="0" Text="*.*.*.**" Grid.ColumnSpan="1" VerticalAlignment="Top" HorizontalAlignment="Right" Padding="5,5,5,0" FontFamily="{DynamicResource Deledda Open Regular}" Margin="0,-20,0,0" FontWeight="Bold" FontSize="14"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <IEL:IELButtonText x:Name="IELButtonBack" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource PlumCrayola}" MarginViewBox="0,0,0,2" Margin="5,5,6,5" Width="80" RenderTransformOrigin="0.5,0.5" FontFamily="{DynamicResource Bree CYR var}" Text="Назад" VisualGuide="LeftArrow" CornerRadiusGuides="7,7,7,7"/>
+                        <Border x:Name="BorderButtonsUp" BorderBrush="#FF35755F" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="0,2,5,2" Grid.RowSpan="1" Focusable="True" Grid.ColumnSpan="1" Grid.Column="1">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.47,-2.5">
+                                    <GradientStop Color="#CC78A08C" Offset="0.99"/>
+                                    <GradientStop Color="#D80082AD" Offset="0.129"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.FocusVisualStyle>
+                                <Style>
+                                    <Setter Property="Control.Template" Value="{x:Null}"/>
+                                </Style>
+                            </Border.FocusVisualStyle>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                </Grid.ColumnDefinitions>
+                                <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}" MarginViewBox="5,2,5,2" Margin="3,3,3,3"/>
+                                <IEL:IELButtonImage x:Name="IELOpenDataFolder" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" MarginViewBox="5,2,5,2" Margin="3,3,3,3" Grid.Column="2"/>
+                                <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,0,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="5,2,5,2"/>
+                                <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="5" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,0,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="5,2,5,2"/>
+                                <IEL:IELButtonImage x:Name="IELButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,0,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" Padding="0,2,0,2" MarginViewBox="5,1,5,1"/>
+                                <IEL:IELButtonImage x:Name="IELButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="6" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
                     <Grid x:FieldModifier="private" x:Name="GridContentFomBrowser" Grid.Row="1"/>
                     <Grid Grid.Row="2" Margin="0,2,0,2">
                         <Grid.ColumnDefinitions>
@@ -82,7 +92,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <IEL:IELButtonImage x:Name="IELButtonHomeBrowser" Margin="3,3,0,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource PlumCrayola}" Grid.ColumnSpan="1"/>
-                                <IEL:IELButtonImage x:Name="IELButtonAddLabel" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource PlumCrayola}" Grid.ColumnSpan="1" Grid.Column="1"/>
+                                <IEL:IELButtonImage x:Name="IELButtonAddLabel" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource BlueGreenCrayola}" Grid.ColumnSpan="1" Grid.Column="1"/>
                             </Grid>
                         </Border>
                         <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#D8C2DFD4" Grid.ColumnSpan="1" Grid.Column="1">

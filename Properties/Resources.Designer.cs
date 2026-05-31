@@ -63,9 +63,9 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] Arrow {
+        internal static byte[] ArrowRight {
             get {
-                object obj = ResourceManager.GetObject("Arrow", resourceCulture);
+                object obj = ResourceManager.GetObject("ArrowRight", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -253,16 +253,6 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] IconMainGray {
-            get {
-                object obj = ResourceManager.GetObject("IconMainGray", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
         internal static byte[] IconMainSettings {
             get {
                 object obj = ResourceManager.GetObject("IconMainSettings", resourceCulture);
@@ -276,16 +266,6 @@ namespace OperPageLes.Properties {
         internal static byte[] LightBulb {
             get {
                 object obj = ResourceManager.GetObject("LightBulb", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Link {
-            get {
-                object obj = ResourceManager.GetObject("Link", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -476,6 +456,16 @@ namespace OperPageLes.Properties {
         internal static byte[] WifiOn {
             get {
                 object obj = ResourceManager.GetObject("WifiOn", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] World {
+            get {
+                object obj = ResourceManager.GetObject("World", resourceCulture);
                 return ((byte[])(obj));
             }
         }

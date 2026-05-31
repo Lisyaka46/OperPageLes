@@ -12,10 +12,10 @@
     <Border CornerRadius="20,20,20,20" ClipToBounds="True">
         <Border.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#CC1F846F" Offset="0.377"/>
+                <GradientStop Color="#F2758868" Offset="0.331"/>
                 <GradientStop Color="#FF566A94" Offset="0.991"/>
-                <GradientStop Color="#E5827C82" Offset="0.634"/>
-                <GradientStop Color="#B2758868" Offset="0"/>
+                <GradientStop Color="#F9827C82" Offset="0.634"/>
+                <GradientStop Color="#E5758868" Offset="0"/>
             </LinearGradientBrush>
         </Border.Background>
         <Grid ClipToBounds="True">

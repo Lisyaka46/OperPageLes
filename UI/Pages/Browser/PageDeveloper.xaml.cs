@@ -1,16 +1,22 @@
 ﻿using OIEL.CORE.Browser;
 using OperPageLes.CORE.Struct;
+using OperPageLes.Properties;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.DEV;
+using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Xml;
 using System.Xml.Linq;
 using DrColor = System.Drawing.Color;
 using OPRES = OperPageLes.Properties.Resources;
@@ -166,6 +172,103 @@ namespace OperPageLes.UI.Pages.Browser
                 WindowQDataViewer window = new();
                 window.Show();
             };
+
+            WindowCheckIcons.Click += (sender, e) =>
+            {
+                WindowTestIcons window = new();
+                window.Show();
+            };
+
+            IAddChild? ChildrenControl = null;
+            UIElement? Child = null;
+            BrushConverter SourceBrushConverter = new();
+            ThicknessConverter SourceThicknessConverter = new();
+            CornerRadiusConverter SourceCornerRadiusConverter = new();
+            DoubleConverter SourceDoubleConverter = new();
+
+            using (XmlReader reader = XmlReader.Create(@"C:\Users\killm\Рабочий стол\Page1.xaml"))
+            {
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            Type type = ByName(reader.Name) ??
+                                throw new Exception($"Данный тип \"{reader.Name}\" не поддерживается");
+                            object instance = Activator.CreateInstance(type) ??
+                                throw new Exception($"Данный тип \"{reader.Name}\" не удалось создать через инициализаторы");
+                            if (type.BaseType == typeof(System.Windows.Controls.Panel))
+                                ChildrenControl = (IAddChild)Convert.ChangeType(instance, type);
+                            else if (ChildrenControl != null)
+                            {
+                                Child = (UIElement)Convert.ChangeType(instance, type);
+                                ChildrenControl.AddChild(Child);
+                                for (int i = 0; i < reader.AttributeCount; i++)
+                                {
+                                    reader.MoveToAttribute(i);
+                                    PropertyInfo P_Info = type.GetProperty(reader.Name) ??
+                                        throw new Exception($"Свойство \"{reader.Name}\" не поддерживается в данном объекте \"{type.Name}\"");
+                                    if (P_Info.PropertyType != reader.ValueType)
+                                    {
+                                        if (reader.ValueType == typeof(string))
+                                        {
+                                            if (P_Info.PropertyType == typeof(System.Windows.Media.Brush))
+                                            {
+                                                P_Info.SetValue(Child, SourceBrushConverter.ConvertFromString(reader.Value));
+                                            }
+                                            else if (P_Info.PropertyType == typeof(Thickness))
+                                            {
+                                                P_Info.SetValue(Child, SourceThicknessConverter.ConvertFromInvariantString(reader.Value));
+                                            }
+                                            else if (P_Info.PropertyType == typeof(CornerRadius))
+                                            {
+                                                P_Info.SetValue(Child, SourceCornerRadiusConverter.ConvertFromInvariantString(reader.Value));
+                                            }
+                                            else if (P_Info.PropertyType == typeof(double))
+                                            {
+                                                P_Info.SetValue(Child, SourceDoubleConverter.ConvertFromInvariantString(reader.Value));
+                                            }
+                                            else throw new Exception(
+                                                $"Не найдено поддерживаемая конвертация строкового значения в ожидаемый тип \"{P_Info.PropertyType.Name}\"");
+                                            continue;
+                                        }
+                                    }
+                                    P_Info.SetValue(Child, Convert.ChangeType(reader.Value, reader.ValueType));
+                                }
+                            }
+                            else throw new Exception("Невозможно создать элемент который находится не в контейнере и не является контейнером");
+                            Console.WriteLine("Start Element {0}", reader.Name);
+                            break;
+                        case XmlNodeType.Text:
+                            Console.WriteLine("Text Node: {0}",
+                                     reader.GetValueAsync());
+                            break;
+                        case XmlNodeType.EndElement:
+                            Console.WriteLine("End Element {0}", reader.Name);
+                            break;
+                        default:
+                            Console.WriteLine("Other node {0} with value {1}",
+                                            reader.NodeType, reader.Value);
+                            break;
+                    }
+                }
+            }
+            if (ChildrenControl != null)
+                SourceGridContent.Children.Add((UIElement)ChildrenControl);
+        }
+
+        private static Type? ByName(string name)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Reverse())
+            {
+                var tt = assembly.GetType(name);
+                if (tt != null)
+                {
+                    return tt;
+                }
+            }
+
+            return null;
         }
 
         //

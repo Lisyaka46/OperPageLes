@@ -6,7 +6,7 @@
       xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
       xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
-      x:Class="OperPageLes.UI.Pages.ActionPanel.PageConsole.MainPagePanelAction" Height="245" Width="250" Margin="5,0,5,0">
+      x:Class="OperPageLes.UI.Pages.ActionPanel.PageConsole.MainPagePanelAction" Height="180" Width="250" Margin="5,0,5,0">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>

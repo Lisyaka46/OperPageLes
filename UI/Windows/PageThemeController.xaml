@@ -1,25 +1,20 @@
-﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OperPageLes.UI.Windows"
-        xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
-        xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-        xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-        xmlns:Theme="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
-    x:Class="OperPageLes.UI.Windows.WindowThemeController"
-        mc:Ignorable="d"
-        Title="Управление персонализацией" Height="450" Width="800" MinWidth="670" MinHeight="410">
-    <Window.Resources>
+﻿<Base:PageBrowser
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:OperPageLes.UI.Windows"
+    xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    xmlns:Theme="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
+    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    x:Class="OperPageLes.UI.Windows.PageThemeController"
+    mc:Ignorable="d"
+    Title="Управление персонализацией" MinWidth="670" MinHeight="410">
+    <Base:PageBrowser.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
-    </Window.Resources>
-    <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0,0">
-            <GradientStop Color="#FF6CD1E4"/>
-            <GradientStop Color="#FF85C6D2" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Background>
+    </Base:PageBrowser.Resources>
     <Grid x:Name="MainGrid">
         <Grid.Resources>
             <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
@@ -28,7 +23,13 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="101*"/>
         </Grid.ColumnDefinitions>
-        <Border BorderThickness="0,0,2,0" BorderBrush="Black" Width="200">
+        <Border BorderThickness="0,0,2,0" BorderBrush="Black" Width="200" CornerRadius="5,0,0,5">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0,0">
+                    <GradientStop Color="#F26CD1E4"/>
+                    <GradientStop Color="#F485C6D2" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -38,7 +39,7 @@
                 <Theme:OPLThemeFile x:Name="DefaultPaletteElement" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Margin="2,2,2,2" CornerRadius="12,12,12,12" TextNameFile="Default" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" FontFamily="{DynamicResource Alphasano}" FontSize="18" IsActivate="True" Padding="0,2,0,2" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <IEL:IELScrollViewer x:Name="ScrollViewerTheme">
-                        
+
                     </IEL:IELScrollViewer>
                 </Border>
                 <IEL:IELButtonText x:Name="IELCreateNewTheme" Grid.Row="2" Margin="5,5,5,5" PaletteElement="{DynamicResource SpruceColor}" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5" Height="45" MarginViewBox="5,7,5,7"/>
@@ -53,6 +54,12 @@
                 <Grid.Resources>
                     <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
                 </Grid.Resources>
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#F2BBC6E6"/>
+                        <GradientStop Color="#F27EC9D7" Offset="0.43"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
@@ -66,14 +73,16 @@
                     <IEL:IELButtonText x:Name="IELButtonBackViewTheme" Grid.Column="1" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Jade}" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Text="Назад" Padding="0,2,0,2" Height="40" Margin="5,5,5,5"/>
                 </Grid>
                 <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="#FF1D92D0">
-                    <ScrollViewer>
-                        <Grid x:Name="GridMainPaletteButtons">
-                            <IEL:IELButtonText VerticalAlignment="Top" Margin="10,5,10,5" PaletteElement="{DynamicResource Red}" CornerRadius="8,8,8,8" CornerRadiusGuides="7.6,7.6,7.6,7.6" FontFamily="{DynamicResource Deledda Open Regular}" FontSize="16" Padding="0,2,0,2" Text="Red" Height="50" MarginViewBox="5,8,5,5"/>
-                        </Grid>
-                    </ScrollViewer>
+                    <IEL:IELScrollViewer x:Name="ScrollViewerSpectrum"/>
                 </Border>
             </Grid>
-            <Border x:Name="BorderViewerQData" Grid.Column="2" Background="#FFD4D7FF" BorderThickness="2,0,0,0" BorderBrush="Black" Opacity="0.9">
+            <Border x:Name="BorderViewerQData" Grid.Column="2" BorderThickness="2,0,0,0" BorderBrush="Black" Opacity="0.9" CornerRadius="0,5,5,0">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFB9C6E6" Offset="0.161"/>
+                        <GradientStop Color="#FF7697D8" Offset="0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -87,7 +96,7 @@
                         <IEL:IELButtonText x:Name="IELExampleButtonPalette" FontSize="20" FontWeight="Bold" FontFamily="{DynamicResource Bree CYR var}" Padding="0,2,0,2" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Text="Пример" VerticalAlignment="Center" Margin="20,5,20,5" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Height="45"/>
                         <CheckBox x:Name="CheckBoxEnabledExampleButtonPalette" Content="Включить кнопку" Grid.Row="1" VerticalAlignment="Top" Margin="0,5,0,5" BorderBrush="Black" Background="#FFFFB9B9" FontSize="16" Padding="4,-4,0,0" Grid.RowSpan="1" FontFamily="{DynamicResource Bree CYR var}" HorizontalAlignment="Center"/>
                     </Grid>
-                    <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black">
+                    <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black" CornerRadius="0,0,5,0">
                         <Border.Background>
                             <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0">
                                 <GradientStop Color="#FF84F7EA" Offset="1"/>
@@ -100,13 +109,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Grid x:Name="GridQdataStatesColor" HorizontalAlignment="Center" Grid.RowSpan="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                            <StackPanel x:Name="GridQdataStatesColor" HorizontalAlignment="Center" Grid.RowSpan="1">
                                 <Border x:Name="BorderD" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Cursor="Hand">
                                     <TextBlock x:Name="TextBlockD" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Text="Default" TextAlignment="Center"/>
                                 </Border>
@@ -119,7 +122,7 @@
                                 <Border x:Name="BorderNE" CornerRadius="5,5,5,5" Margin="5,5,5,5" Padding="10,5,10,5" BorderBrush="Black" BorderThickness="2,2,2,2" Background="White" Grid.Row="3" Cursor="Hand">
                                     <TextBlock x:Name="TextBlockNE" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Text="NotEnabled" TextAlignment="Center"/>
                                 </Border>
-                            </Grid>
+                            </StackPanel>
                             <TextBlock Grid.Row="1" Text="Здесь отображаются 4 состояния выбранного спектра палитры" HorizontalAlignment="Center" TextTrimming="WordEllipsis" TextWrapping="Wrap" TextAlignment="Center" FontFamily="{DynamicResource Bree CYR var}" Margin="3,0,3,5" Opacity="0.5"/>
                             <TextBlock Grid.Row="2" Text="Каждый спектр имеет настройку цвета для фона, границы и текста объекта" HorizontalAlignment="Center" TextTrimming="WordEllipsis" TextWrapping="Wrap" TextAlignment="Center" FontFamily="{DynamicResource Bree CYR var}" FontStyle="Italic" Margin="3,0,3,5" Opacity="0.5"/>
                         </Grid>
@@ -128,6 +131,5 @@
             </Border>
         </Grid>
         <TextBlock x:Name="TextBlockNamingNoSelectPalette" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="Здесь будет отображаться палитра темы" TextAlignment="Center" Opacity="0.4" FontFamily="{DynamicResource Deledda Open Regular}" FontStyle="Italic" Panel.ZIndex="-1"/>
-        <IEL:IELPanelAction x:Name="PanelActionMain" Width="120" Height="200" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource PastelBlue}" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,130,0,0"/>
     </Grid>
-</Window>
+</Base:PageBrowser>

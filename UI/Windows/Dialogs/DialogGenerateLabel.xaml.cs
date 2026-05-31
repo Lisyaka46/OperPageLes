@@ -1,4 +1,6 @@
-﻿using OperPageLes.CORE.Objects;
+﻿using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Objects;
+using OperPageLes.UI.UserElementsControl.Default;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,6 +29,12 @@ namespace OperPageLes.UI.Windows.Dialogs
             IELTextBoxNameLabel.Text = string.Empty;
             IELTextBoxCommand.Text = string.Empty;
             IELTextBoxDescription.Text = string.Empty;
+
+            HitInterpreter.ManagerAnimation = App.ManagerAnimation;
+            HitInterpreter.Connect(in App.CurrentApp.Interpreter, in IELTextBoxCommand.TextBoxMain);
+            HitInterpreter.Height = 0d;
+            HitInterpreter.Width = 0d;
+
             IELButtonCancel.OnActivateMouseLeft += (sender, e) =>
             {
                 Cancel = true;
@@ -43,6 +51,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                     case Key.Down:
                     case Key.Enter:
                         IELTextBoxCommand.Focus();
+                        if (App.CurrentApp.SettingMainApplication.HitUse)
+                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                         break;
                     case Key.Escape:
                         Close();
@@ -56,13 +66,33 @@ namespace OperPageLes.UI.Windows.Dialogs
                     case Key.Down:
                     case Key.Enter:
                         IELTextBoxDescription.Focus();
+                        HitInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         break;
                     case Key.Up:
                         IELTextBoxNameLabel.Focus();
+                        HitInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         break;
                     case Key.Escape:
                         Close();
                         break;
+                    default:
+                        if (App.CurrentApp.SettingMainApplication.HitUse)
+                        {
+                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        }
+                        break;
+                }
+                e.Handled = true;
+            };
+            IELTextBoxCommand.LostFocus += (sender, e) =>
+            {
+                HitInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
+            };
+            IELTextBoxCommand.GotFocus += (sender, e) =>
+            {
+                if (App.CurrentApp.SettingMainApplication.HitUse)
+                {
+                    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                 }
             };
             IELTextBoxDescription.KeyUp += (sender, e) =>
@@ -74,6 +104,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                     case Key.Up:
                         IELTextBoxCommand.Focus();
+                        if (App.CurrentApp.SettingMainApplication.HitUse)
+                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                         break;
                     case Key.Escape:
                         Close();
@@ -138,13 +170,38 @@ namespace OperPageLes.UI.Windows.Dialogs
         {
             Title = "Создание ярлыка";
             IELButtonCreateLabel.Text = "Создать ярлык";
-            Focus();
+            IELTextBoxNameLabel.Focus();
             ShowDialog();
             if (Cancel) return null;
             return new(IELTextBoxNameLabel.Text, IELTextBoxCommand.Text, IELTextBoxDescription.Text)
             {
                 IndexSpectrumTheme = (int)SelectIndexSpectrum
             };
+        }
+
+        /// <summary>
+        /// Изменить ярлык с помощью диалогового окна
+        /// </summary>
+        /// <param name="Source">Изменяемый объект ярлыка</param>
+        /// <returns>Созданный объект ярлыка</returns>
+        internal void ChangeLabel(in SourceLabelAction Source)
+        {
+            Title = "Изменение ярлыка";
+            IELButtonCreateLabel.Text = "Изменить ярлык";
+            IELTextBoxNameLabel.Focus();
+
+            IELTextBoxNameLabel.Text = Source.Name;
+            IELTextBoxCommand.Text = Source.Command;
+            IELTextBoxDescription.Text = Source.Description ?? string.Empty;
+            ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(CORE.Enums.PaletteSpectrumEnum)Source.IndexSpectrumTheme];
+            SelectIndexSpectrum = (uint)Source.IndexSpectrumTheme;
+
+            ShowDialog();
+            if (Cancel) return;
+            Source.Name = IELTextBoxNameLabel.Text;
+            Source.Command = IELTextBoxCommand.Text;
+            Source.Description = IELTextBoxDescription.Text;
+            Source.IndexSpectrumTheme = (int)SelectIndexSpectrum;
         }
 
         ///// <summary>

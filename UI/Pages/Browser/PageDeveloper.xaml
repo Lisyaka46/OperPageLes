@@ -26,18 +26,20 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid>
                     <ScrollViewer FlowDirection="RightToLeft" Height="180">
                         <StackPanel x:Name="StackPanelElementsVisual" FlowDirection="LeftToRight" VerticalAlignment="Top">
                             <Button x:Name="WindowGenerateQdata" Content="Окно создания QData" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                            <Button x:Name="WindowCheckIcons" Content="Окно тестирования иконок" HorizontalAlignment="Left" Margin="5,5,0,0"/>
                             <TextBlock x:Name="Element" Text="!" Foreground="White" Padding="5,0,5,0"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
                 <Grid x:Name="GridView" Grid.Row="1" Background="#FF1D1D1D" Margin="0,15,0,15"/>
                 <Canvas x:Name="Particles" Grid.Row="1" Width="330" Height="230">
-                    
+
                 </Canvas>
                 <Viewport3D Name="MyAnimatedObject" ClipToBounds="True" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
                     <Viewport3D.Camera>
@@ -80,9 +82,9 @@
                                             </DiffuseMaterial>
                                             <DiffuseMaterial>
                                                 <DiffuseMaterial.Brush>
-                                                    
+
                                                     <ImageBrush x:Name="ImageBrushModel" AlignmentX="Center" AlignmentY="Center" Stretch="UniformToFill" Viewbox="0,0,1,1" Viewport="0,0,1,1"/>
-                                            
+
                                                 </DiffuseMaterial.Brush>
                                             </DiffuseMaterial>
                                         </MaterialGroup>
@@ -99,6 +101,9 @@
                         </ModelVisual3D>
                     </Viewport3D.Children>
                 </Viewport3D>
+                <Grid x:Name="SourceGridContent" Grid.Row="2">
+                    
+                </Grid>
             </Grid>
         </Grid>
     </ScrollViewer>
