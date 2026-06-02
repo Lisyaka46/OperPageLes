@@ -158,6 +158,9 @@ namespace OperPageLes.UI.Windows
 
             TextBlockVersion.Text = App.Version;
 
+            Width = App.CurrentApp.SettingMainApplication.MainWindowWidth;
+            Height = App.CurrentApp.SettingMainApplication.MainWindowHeight;
+
             NotificationIndicator.Opacity = 0d;
             VisualLoadingElement.ManagerAnimation = App.ManagerAnimation;
             VisualLoadingElement.Opacity = 0d;
@@ -172,7 +175,7 @@ namespace OperPageLes.UI.Windows
             IELActionPanelMain.KeyCloseElement = App.CurrentApp.SettingMainApplication.KEY_PanelActionClose;
             IELActionPanelMain.EventMovePanelAction += (sender, e) =>
             {
-                StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMove));
+                StructDirectoryResources.Play(in App.CurrentApp.SourceWaveOut, nameof(OPRES.AudioMove));
             };
 
             #region Palette
@@ -464,7 +467,7 @@ namespace OperPageLes.UI.Windows
             PageAudioControlApplication = new();
             IELBlockInfoVolume.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Volume));
             TextBlockVolumeValue.Foreground = IELBlockInfoVolume.SourceForeground.SourceBrush;
-            TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SettingMainApplication.Volume * 100)).ToString();
+            TextBlockVolumeValue.Text = ((int)(App.CurrentApp.SourceWaveOut.Volume * 100)).ToString();
             IELBlockInfoVolume.MouseHover += (sender, e) =>
             {
                 if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageAudioControl) return;
@@ -485,7 +488,7 @@ namespace OperPageLes.UI.Windows
             };
             IELBlockInfoVolume.MouseLeftButtonUp += (sender, e) =>
             {
-                StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioPopUp));
+                StructDirectoryResources.Play(in App.CurrentApp.SourceWaveOut, nameof(OPRES.AudioPopUp));
             };
             #endregion
 
@@ -509,6 +512,7 @@ namespace OperPageLes.UI.Windows
                     DependencePointOnSize: false);
             };
             #endregion
+
             #endregion
 
             #region EventsWindow
@@ -538,7 +542,7 @@ namespace OperPageLes.UI.Windows
 
             App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
             {
-                TextBlockVolumeValue.Text = ((int)(New * 100)).ToString();
+                TextBlockVolumeValue.Text = New.ToString();
             };
 
             Activated += (sender, e) =>
@@ -598,6 +602,8 @@ namespace OperPageLes.UI.Windows
         {
             IsClosing = true;
             Hide();
+            App.CurrentApp.SettingMainApplication.MainWindowWidth.Value = Width;
+            App.CurrentApp.SettingMainApplication.MainWindowHeight.Value = Height;
             TokenUpdateBackgroundData.ThrowIfCancellationRequested();
             App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
             Closing?.Invoke(this, new(CloseReason.UserClosing, false));

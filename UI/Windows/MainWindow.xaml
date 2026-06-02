@@ -68,12 +68,12 @@
                                     <ColumnDefinition Width="Auto" MinWidth="50"/>
                                     <ColumnDefinition Width="Auto" MinWidth="50"/>
                                 </Grid.ColumnDefinitions>
-                                <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}" MarginViewBox="5,2,5,2" Margin="3,3,3,3"/>
-                                <IEL:IELButtonImage x:Name="IELOpenDataFolder" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" MarginViewBox="5,2,5,2" Margin="3,3,3,3" Grid.Column="2"/>
-                                <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,0,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="5,2,5,2"/>
-                                <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="5" CornerRadius="6,6,6,6" Padding="0,2,0,2" Margin="3,3,0,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="5,2,5,2"/>
-                                <IEL:IELButtonImage x:Name="IELButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,0,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" Padding="0,2,0,2" MarginViewBox="5,1,5,1"/>
-                                <IEL:IELButtonImage x:Name="IELButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="6" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
+                                <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}" MarginViewBox="2,2,2,2" Margin="3,3,3,3"/>
+                                <IEL:IELButtonImage x:Name="IELOpenDataFolder" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" MarginViewBox="0,-3,0,0" Margin="3,3,3,3" Grid.Column="2"/>
+                                <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Margin="3,3,0,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="4,4,4,4"/>
+                                <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="5" CornerRadius="6,6,6,6" Margin="3,3,0,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="2,2,2,2"/>
+                                <IEL:IELButtonImage x:Name="IELButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,0,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" MarginViewBox="1,1,1,1"/>
+                                <IEL:IELButtonImage x:Name="IELButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="6" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" MarginViewBox="0,0,0,0"/>
                             </Grid>
                         </Border>
                     </Grid>
@@ -91,8 +91,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <IEL:IELButtonImage x:Name="IELButtonHomeBrowser" Margin="3,3,0,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource PlumCrayola}" Grid.ColumnSpan="1"/>
-                                <IEL:IELButtonImage x:Name="IELButtonAddLabel" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource BlueGreenCrayola}" Grid.ColumnSpan="1" Grid.Column="1"/>
+                                <IEL:IELButtonImage x:Name="IELButtonHomeBrowser" Margin="3,3,0,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource PlumCrayola}" Grid.ColumnSpan="1" MarginViewBox="0,0,0,0"/>
+                                <IEL:IELButtonImage x:Name="IELButtonAddLabel" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource BlueGreenCrayola}" Grid.ColumnSpan="1" Grid.Column="1" MarginViewBox="0,0,0,0"/>
                             </Grid>
                         </Border>
                         <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#D8C2DFD4" Grid.ColumnSpan="1" Grid.Column="1">

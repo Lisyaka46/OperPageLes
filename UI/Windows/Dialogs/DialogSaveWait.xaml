@@ -10,7 +10,7 @@
     <Window.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
-    <Border x:Name="BorderMain" Padding="2,2,2,2" BorderThickness="3,3,3,3" CornerRadius="5,5,5,5" BorderBrush="#FE5C7976">
+    <Border x:Name="BorderMain" BorderThickness="3,3,3,3" CornerRadius="5,5,5,5" BorderBrush="#FF5D7A77">
         <Border.Background>
             <RadialGradientBrush x:Name="RadialGradientBackground" RadiusX="0.8" RadiusY="0.8" Center="0.8,0.8" GradientOrigin="0.8,0.8">
                 <GradientStop Color="#FF618C83"/>
@@ -40,22 +40,9 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid x:Name="GridProgressBar" Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock x:Name="TextBlockInfoSaving" Padding="2,0,2,0" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" Text="Обновление" Background="#66B9B6A1" FontSize="13" FontFamily="{DynamicResource Bree CYR var}" Grid.RowSpan="1" Grid.Row="1" Panel.ZIndex="1"/>
-                    <ProgressBar x:Name="ProgressBarIndicator" Panel.ZIndex="-1" LargeChange="1" Value="30" Foreground="#4C00FF56" BorderBrush="#FF506CA4" Grid.RowSpan="1" Grid.Row="1" Opacity="0.9">
-                        <ProgressBar.Background>
-                            <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                                <GradientStop Color="Red" Offset="0.012"/>
-                                <GradientStop Color="#FF5CA979" Offset="1"/>
-                                <GradientStop Color="#FF947E16" Offset="0.377"/>
-                                <GradientStop Color="#FF279E54" Offset="0.715"/>
-                            </LinearGradientBrush>
-                        </ProgressBar.Background>
-                    </ProgressBar>
+                <Grid x:Name="GridProgressBar" Grid.Row="1" ClipToBounds="True">
+                    <Line x:Name="LineProgress" StrokeThickness="18" X2="441" Stroke="#FF5D7A77" VerticalAlignment="Bottom" StrokeStartLineCap="Round" HorizontalAlignment="Left" StrokeDashCap="Round" StrokeEndLineCap="Round" X1="3"/>
+                    <TextBlock x:Name="TextBlockInfoSaving" Padding="2,0,2,0" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" Text="Обновление" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" Grid.RowSpan="1" Grid.Row="1" Panel.ZIndex="1"/>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -67,16 +54,12 @@
                             <RowDefinition/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="0" TextAlignment="Right" FontSize="16" FontFamily="{DynamicResource Tablon}" Grid.ColumnSpan="1" VerticalAlignment="Center" Padding="0,2,0,0"/>
-                            <Border x:Name="BorderIndicator" BorderBrush="#FFC37EA5" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="3,3,3,3" Background="#FFC37EA5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24">
-                                <OIEL:OPLVisualLoading x:Name="VisualLoading" BorderBrush="#FF44343D"/>
-                            </Border>
-                        </Grid>
+                        <Border x:Name="BorderIndicator" BorderBrush="#FF445856" BorderThickness="2,2,2,2" CornerRadius="5,5,5,5" Margin="0,0,3,3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="35" Height="35" Padding="2,2,2,2">
+                            <Grid>
+                                <OIEL:OPLVisualLoading x:Name="VisualLoading" BorderBrush="#FF445856"/>
+                                <TextBlock x:Name="TextBlockTime" TextWrapping="Wrap" Text="00" TextAlignment="Center" FontFamily="{DynamicResource Tablon}" Grid.ColumnSpan="1" VerticalAlignment="Center" Padding="0,2,0,0" Grid.Column="1" FontSize="10"/>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </Grid>
             </Grid>

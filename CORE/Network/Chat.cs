@@ -147,6 +147,7 @@ namespace OperPageLes.CORE.Network
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
                 Margin = new(3),
                 SenderTextPoint = "Вы",
+                IsAnimatedSettingQ = false,
             };
             DataNetworkInfo DataInfo = new(ref Message, ref PathFiles);
             UIChat.TextBlockHead.Text = "Вы:";
@@ -204,6 +205,7 @@ namespace OperPageLes.CORE.Network
                 SenderTextPoint = "Неизвестный", // Тут должен быть переданный объект пользователя
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                 Margin = new(3),
+                IsAnimatedSettingQ = false,
             };
             NetworkMessage.SetVisualFromNetworkInfo(DataInfo);
             HistoryMessages.Children.Add(NetworkMessage);
@@ -223,7 +225,7 @@ namespace OperPageLes.CORE.Network
             }
             App.ManagerAnimation.DoubleAnimationType.AnimateEffect(UIChat.TextBlockHead,
                 TextBlock.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(600d));
-            StructDirectoryResources.Play(App.CurrentApp.SoundChannelWaveOut, nameof(OPRES.AudioMessageReceive));
+            StructDirectoryResources.Play(in App.CurrentApp.SourceWaveOut, nameof(OPRES.AudioMessageReceive));
         }
 
         #region Send

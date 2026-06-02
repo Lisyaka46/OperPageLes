@@ -4,6 +4,7 @@ using Interpreter.Commands;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,10 +27,7 @@ using System.IO;
 using System.Management;
 using System.Net;
 using System.Net.Http;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -47,12 +45,40 @@ namespace OperPageLes
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        #region ThemeSetting
+        /// <summary>
+        /// Палитра приложения по умолчанию
+        /// </summary>
+        internal Palette? DefaultPalette { get; private set; }
+
+        /// <summary>
+        /// Активная тема приложения
+        /// </summary>
+        internal Theme ActiveThemeApplication => _ActiveThemeApplication ?? throw new Exception("Невозможно получить тему по умолчанию!");
+        private Theme? _ActiveThemeApplication;
+        #endregion
+
+        #region Data
         /// <summary>
         /// Менеджер анимаций под управлением приложения
         /// </summary>
         internal static readonly OPLAnimationManager ManagerAnimation = new();
 
-        #region Data
+        /// <summary>
+        /// Реальное время
+        /// </summary>
+        internal static DateTime RealTime => DateTime.Now;
+
+        /// <summary>
+        /// Версия программы
+        /// </summary>
+        internal static readonly string Version = "0.0.05";
+
+        /// <summary>
+        /// Запись в файл .log
+        /// </summary>
+        private StreamWriter? LogStreamWriter = null;
+
         /// <summary>
         /// Страница буфера объектов команд
         /// </summary>
@@ -60,14 +86,27 @@ namespace OperPageLes
         private BufferPagePanelAction? _AppPageBuffer;
 
         /// <summary>
+        /// Страница разработчика
+        /// </summary>
+        internal static readonly PageDeveloper ApplicationPageDeveloper = new()
+        {
+            Title = "Страница разработчика",
+            Description = "Используйте только если знаете что делаете!"
+        };
+
+        #region PackKey
+        /// <summary>
         /// Установленный ключ валидности для приложения
         /// </summary>
         internal PackKey InstallingKey { get; private set; }
+        #endregion
 
+        #region Interpreter
         /// <summary>
         /// Интерпретатор команд
         /// </summary>
         internal readonly COMInterpreter<IOPERCommandViewer> Interpreter;
+        #endregion
 
         #region Loading Manipulate
         /// <summary>
@@ -144,14 +183,6 @@ namespace OperPageLes
         }
         #endregion
 
-        /// <summary>
-        /// Страница разработчика
-        /// </summary>
-        internal static readonly PageDeveloper ApplicationPageDeveloper = new()
-        {
-            Title = "Страница разработчика",
-            Description = "Используйте только если знаете что делаете!"
-        };
         #endregion
 
         #region Windows
@@ -246,6 +277,7 @@ namespace OperPageLes
 
         #endregion
 
+        #region Settings
         /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
@@ -255,17 +287,6 @@ namespace OperPageLes
         /// Массив ключей настроек <b>приложения</b>
         /// </summary>
         internal SettingApplication SettingMainApplication { get; private set; }
-
-        /// <summary>
-        /// Палитра приложения по умолчанию
-        /// </summary>
-        internal Palette? DefaultPalette { get; private set; }
-
-        /// <summary>
-        /// Активная тема приложения
-        /// </summary>
-        internal Theme ActiveThemeApplication => _ActiveThemeApplication ?? throw new Exception("Невозможно получить тему по умолчанию!");
-        private Theme? _ActiveThemeApplication;
 
         /// <summary>
         /// Файл настроек <b>процесса</b>
@@ -281,36 +302,25 @@ namespace OperPageLes
         /// Директория файла открытых настроек <b>приложения</b>
         /// </summary>
         private string ActivePathSettingApplication = string.Empty;
+        #endregion
+
+        #region AudioSettings
+        /// <summary>
+        /// Объект управления библиотекой VLC
+        /// </summary>
+        internal WaveOut SourceWaveOut;
 
         /// <summary>
-        /// Реальное время
+        /// Объект перечисления уствойств вывода ввода
         /// </summary>
-        internal static DateTime RealTime => DateTime.Now;
+        private readonly MMDeviceEnumerator Enumerator = new();
 
         /// <summary>
-        /// Клиент для манипуляции в сети интернет
+        /// Получить подключённые устройства вывода звука
         /// </summary>
-        internal static System.Net.Http.HttpClient UsedHttpClient { get; } = new();
+        internal MMDeviceCollection MMDevicesOutput => Enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
 
-        /// <summary>
-        /// Версия программы
-        /// </summary>
-        internal static readonly string Version = "0.0.04";
-
-        /// <summary>
-        /// Запись в файл .log
-        /// </summary>
-        private StreamWriter? LogStreamWriter = null;
-
-        /// <summary>
-        /// Канал воспроизведения звуков
-        /// </summary>
-        internal WaveOut SoundChannelWaveOut { get; }
-
-        /// <summary>
-        /// Поток данных
-        /// </summary>
-        NetworkStream? SourceNetWorckStream = null;
+        #endregion
 
         /// <summary>
         /// Клиент для загрузки иконки сайта
@@ -364,25 +374,32 @@ namespace OperPageLes
         public App()
         {
             LogWriteLine("---------- Старт нового экземпляра ----------");
-            LogWriteLine("Инициализация свойств экземпляра");
-            ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
+
+            LogWriteLine("Инициализация свойств экземпляра...");
             #region Resources
             SourceManagerAppPage = new()
             {
                 Focusable = true,
             };
+
+            SourceWaveOut = new()
+            {
+                DeviceNumber = -1,
+                NumberOfBuffers = 1,
+            };
+
             MainBrowser = new(SourceManagerAppPage);
-            SoundChannelWaveOut = new();
             OpenedWindowsInApplication = [];
             SourceApplicationNotifications = [];
             InstallingKey = PackKey.StaticKey(1L);
+            
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
-            //Resources.Add("DefaultMouseImage", ResourceDefaultMouseImageSetting);
             Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
             #endregion
+            LogWriteLine("...Готово");
 
+            LogWriteLine("Настройка интерпретатора...");
             #region Interpreter
-            LogWriteLine("Настройка интерпретатора");
             Interpreter = new([
                 #region alias
                 new ConsoleCommand<IOPERCommandViewer>("alias",
@@ -626,12 +643,11 @@ namespace OperPageLes
                 #endregion
 
                 ]);
-#endregion
+            #endregion
+            LogWriteLine("...Готово");
 
-            LogWriteLine("Инициализация параметров приложения");
-
-            #region Settings
             LogWriteLine("Инициализация настроек...");
+            #region Settings
             SetSettingProcess();
 
             if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
@@ -644,11 +660,10 @@ namespace OperPageLes
                 ActivePathSettingApplication = PathSettingApplication;
             }
 
-            LogWriteLine("Установка значений на основе настроек");
-
-            SoundChannelWaveOut.Volume = SettingMainApplication.Volume;
-
+            LogWriteLine("> Установка значений на основе настроек");
             #region SettingRuntimeRealizeSettingChanges
+            SourceWaveOut.Volume = SettingMainApplication.Volume / 100f;
+
             SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
             {
                 if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
@@ -675,23 +690,30 @@ namespace OperPageLes
             };
             SettingMainApplication.Volume.Changed += (Old, New) =>
             {
-                SoundChannelWaveOut.Volume = New;
+                SourceWaveOut.Volume = New / 100f;
             };
             #endregion
+            LogWriteLine("> ...Готово");
 
+            #endregion
+            LogWriteLine("...Готово");
+
+            LogWriteLine("Проверка ресурсов...");
             #region ResourcesInit
-            LogWriteLine("Проверка ресурсов");
-
             StructDirectoryResources.CheckCreateAllResources();
             #endregion
+            LogWriteLine("...Готово");
 
-            LogWriteLine("Успешно!");
-            #endregion
-
+            LogWriteLine("Установка реагирования на события...");
+            #region Events
             Startup += (sender, e) =>
             {
                 OnStartup();
             };
+            #endregion
+            LogWriteLine("...Готово");
+
+            LogWriteLine("! Инициализация экземпляра успешна");
         }
 
         /// <summary>

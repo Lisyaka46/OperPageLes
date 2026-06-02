@@ -376,7 +376,7 @@ namespace OperPageLes.UI.Windows
                 Cursor = System.Windows.Input.Cursors.Hand,
                 FontFamily = (System.Windows.Media.FontFamily)App.CurrentApp.Resources["Alphasano"],
             };
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(Button);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(Button);
             Button.MouseLeftButtonUp += (sender, e) =>
             {
                 if (SourcePanelAction != null && SourcePanelAction.PanelActionActivate)

@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using NAudio.CoreAudioApi;
+using NAudio.Wave;
 using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
@@ -185,13 +186,14 @@ namespace OperPageLes.CORE.Struct
         /// <param name="SourceWaveOut">Экземпляр воспроизведения аудио</param>
         /// <param name="NameResourceSound">Директория звукового файла</param>
         /// <exception cref="Exception">Исключение не инициализированного экземпляра ресурсов</exception>
-        internal static void Play(in WaveOut SourceWaveOut, string NameResourceSound) // mp3
+        internal static void Play(in WaveOut Player, string NameResourceSound) // mp3
         {
             if (PathesFromNameResource.Count == 0) throw new Exception("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");
-            SourceWaveOut.Resume();
-            ResourcesAudio[NameResourceSound].Position = 0L;
-            SourceWaveOut.Init(ResourcesAudio[NameResourceSound]);
-            SourceWaveOut.Play();
+            else if (Player.PlaybackState == PlaybackState.Playing) return;
+            Player.Resume();
+            ResourcesAudio[NameResourceSound].Seek(0L, SeekOrigin.Begin);
+            Player.Init(ResourcesAudio[NameResourceSound]);
+            Player.Play();
         }
 
         /// <summary>

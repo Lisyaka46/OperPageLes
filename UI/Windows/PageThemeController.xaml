@@ -130,6 +130,6 @@
                 </Grid>
             </Border>
         </Grid>
-        <TextBlock x:Name="TextBlockNamingNoSelectPalette" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="Здесь будет отображаться палитра темы" TextAlignment="Center" Opacity="0.4" FontFamily="{DynamicResource Deledda Open Regular}" FontStyle="Italic" Panel.ZIndex="-1"/>
+        <TextBlock x:Name="TextBlockNamingNoSelectPalette" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="Здесь будет отображаться палитра темы" TextAlignment="Center" Opacity="0.4" FontFamily="{DynamicResource Deledda Open Regular}" FontStyle="Italic" Panel.ZIndex="-1" Background="#CC79C0CD" Padding="0,2,0,2"/>
     </Grid>
 </Base:PageBrowser>

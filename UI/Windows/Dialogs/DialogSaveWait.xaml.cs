@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using OPRES = OperPageLes.Properties.Resources;
 
@@ -44,8 +45,9 @@ namespace OperPageLes.UI.Windows.Dialogs
             InitializeComponent();
             VisualLoading.ManagerAnimation = App.ManagerAnimation;
             VisualLoading.Opacity = 0d;
+            LineProgress.X1 = 3;
+            LineProgress.X2 = 3;
             TaskTokenComplete = new(false);
-            ProgressBarIndicator.Value = 0d;
             BorderMain.MouseLeftButtonDown += (sender, e) =>
             {
                 ActivateMoveWindow = true;
@@ -148,12 +150,12 @@ namespace OperPageLes.UI.Windows.Dialogs
         internal void SetVisualTextSaving(string Text, double ValueIndicator)
         {
             TextBlockInfoSaving.Text = Text;
-            System.Windows.Shapes.Rectangle Marker = CreateMarker();
-            Thickness StartMargin = Marker.Margin = new(GridProgressBar.ActualWidth / ProgressBarIndicator.Maximum * ValueIndicator, 0, 0, -2);
-            GridProgressBar.Children.Add(Marker);
-            Marker.UpdateLayout();
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Marker, MarginProperty, new(StartMargin.Left, 0, 0, 0), TimeSpan.FromMilliseconds(700d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ProgressBarIndicator, System.Windows.Controls.ProgressBar.ValueProperty, ValueIndicator, TimeSpan.FromMilliseconds(400d));
+            //System.Windows.Shapes.Rectangle Marker = CreateMarker();
+            //Thickness StartMargin = Marker.Margin = new(GridProgressBar.ActualWidth / ProgressBarIndicator.Maximum * ValueIndicator, 0, 0, -2);
+            //GridProgressBar.Children.Add(Marker);
+            //Marker.UpdateLayout();
+            //App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Marker, MarginProperty, new(StartMargin.Left, 0, 0, 0), TimeSpan.FromMilliseconds(700d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(LineProgress, Line.X2Property, ValueIndicator / 100 * 438 + 3, TimeSpan.FromMilliseconds(400d));
         }
 
         /// <summary>

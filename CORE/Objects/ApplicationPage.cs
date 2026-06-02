@@ -45,6 +45,7 @@ namespace OperPageLes.CORE.Objects
                 Text = NameAppPage,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                Padding = new(0),
             };
             VisualELement.SetSizeIconApp(SourceSize);
             VisualELement.OnActivateMouseLeft += (sender, e) => ApplicationPageActivate?.Invoke((OPLVisualElementIM)sender, this);

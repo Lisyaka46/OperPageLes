@@ -127,7 +127,8 @@ namespace OperPageLes.UI.Pages.Browser
             #region RichTextBoxMainMessage
             BorderConsole.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                if (BorderCommandInformation.Width != BorderButtonPanelInformationController.Width) return;
+                else if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
                     App.MainWindow.IELActionPanelMain.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right)
                 {
@@ -138,6 +139,39 @@ namespace OperPageLes.UI.Pages.Browser
 
             #region BufferPage
             BufferPage = App.CurrentApp.AppPageBuffer;
+            #endregion
+
+            #region BorderButtonPanelInformationController
+            BorderCommandInformation.Margin = new(0);
+            BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            BorderCommandInformation.Width = BorderButtonPanelInformationController.Width;
+            BorderButtonPanelInformationController.MouseLeftButtonUp += (sender, e) =>
+            {
+                DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+                animation.EasingFunction = new BackEase()
+                {
+                    Amplitude = 0.15d,
+                    EasingMode = EasingMode.EaseOut,
+                };
+                animation.Duration = TimeSpan.FromMilliseconds(400d);
+                if (BorderCommandInformation.HorizontalAlignment == System.Windows.HorizontalAlignment.Left)
+                {
+                    animation.FillBehavior = FillBehavior.Stop;
+                    animation.To = BorderConsole.ActualWidth;
+                    animation.Completed += (sender, e) =>
+                    {
+                        BorderCommandInformation.Width = double.NaN;
+                        BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    };
+                }
+                else
+                {
+                    BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                    animation.From = BorderConsole.ActualWidth;
+                    animation.To = BorderButtonPanelInformationController.Width;
+                }
+                BorderCommandInformation.BeginAnimation(WidthProperty, animation);
+            };
             #endregion
 
             #region TextBoxCommandInput
@@ -292,7 +326,6 @@ namespace OperPageLes.UI.Pages.Browser
             #endregion
 
             TextBoxCommandInput.Focus();
-            TextBlockInformation.Text = "Страница успешно инициализирована.";
         }
 
         #region PanelActionManipulate
@@ -304,7 +337,7 @@ namespace OperPageLes.UI.Pages.Browser
         {
             PageConsoleActionPanelMain.CommandViewerSelect = SelectViewer;
             PageConsoleActionPanelMain.IELButtonCommandBuffer.IsEnabled = BufferPage != null;
-            App.MainWindow.IELActionPanelMain.UsingPanelAction(BorderConsole, PageConsoleActionPanelMain,
+            App.MainWindow.IELActionPanelMain.UsingPanelAction(IELScrollConsole, PageConsoleActionPanelMain,
                 Orientation: OrientationPositionCursor.RightDown);
         }
         #endregion
@@ -336,6 +369,7 @@ namespace OperPageLes.UI.Pages.Browser
                 Opacity = 0d,
                 DeleteButtonSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)),
                 Text = Command,
+                IsAnimatedSettingQ = false,
             };
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(Viewer);
             System.Windows.Data.Binding binding = new()
@@ -433,7 +467,6 @@ namespace OperPageLes.UI.Pages.Browser
         public async Task ActivateCommand(string Command)
         {
             if (Command.Length == 0) return;
-            TextBlockInformation.Text = "Команда отправлена на обработку и исполнение.";
             BufferPage?.InsertCommandFromBuffer(Command, this);
 
             await App.CurrentApp.ActivateActionCommand(CreateNewCommandViewer(COMInterpreterBase.ReadNameCommand(Command)), Command);

@@ -66,7 +66,7 @@ namespace OperPageLes.CORE.Settings.Struct
         /// <summary>
         /// Громкость звуков приложения
         /// </summary>
-        public ObjSetting<float> Volume { get; internal set; } = 0.5f;
+        public ObjSetting<int> Volume { get; internal set; } = 50;
 
         /// <summary>
         /// Состояние использования границы окна для визуализации загрузки процесса
@@ -87,5 +87,15 @@ namespace OperPageLes.CORE.Settings.Struct
         /// Сила прокрутки визуализаторов консоли
         /// </summary>
         public ObjSetting<int> ConsoleScrollForce { get; internal set; } = 30;
+
+        /// <summary>
+        /// Размер главного окна по ширине
+        /// </summary>
+        public ObjSetting<double> MainWindowWidth { get; internal set; } = 800d;
+
+        /// <summary>
+        /// Размер главного окна по высоте
+        /// </summary>
+        public ObjSetting<double> MainWindowHeight { get; internal set; } = 650d;
     }
 }

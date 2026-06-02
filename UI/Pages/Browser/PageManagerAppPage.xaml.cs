@@ -432,6 +432,7 @@ namespace OperPageLes.UI.Pages.Browser
                 throw new Exception("Не удалось создать объект приложения страницы"));
             ElementAppPage.Title = AppPage.Name;
             IELButtonImage CloseButtonInlay = App.CurrentApp.MainBrowser.AddInlayPage(in ElementAppPage, AppPage.VisualELement.PaletteElement, true).GetButtonCloseInlay();
+            CloseButtonInlay.MarginViewBox = new(0);
             CloseButtonInlay.PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Red];
             CloseButtonInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }
