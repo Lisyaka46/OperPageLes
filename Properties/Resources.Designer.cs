@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OperPage_les.Properties {
+namespace OperPageLes.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace OperPage_les.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace OperPage_les.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OperPage_les.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OperPageLes.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,9 +63,49 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] Arrow {
+        internal static byte[] ArrowRight {
             get {
-                object obj = ResourceManager.GetObject("Arrow", resourceCulture);
+                object obj = ResourceManager.GetObject("ArrowRight", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] AudioMessageReceive {
+            get {
+                object obj = ResourceManager.GetObject("AudioMessageReceive", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] AudioMove {
+            get {
+                object obj = ResourceManager.GetObject("AudioMove", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] AudioNotification {
+            get {
+                object obj = ResourceManager.GetObject("AudioNotification", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] AudioPopUp {
+            get {
+                object obj = ResourceManager.GetObject("AudioPopUp", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -93,6 +133,46 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Brush {
+            get {
+                object obj = ResourceManager.GetObject("Brush", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Chats {
+            get {
+                object obj = ResourceManager.GetObject("Chats", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Check {
+            get {
+                object obj = ResourceManager.GetObject("Check", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Collapse {
+            get {
+                object obj = ResourceManager.GetObject("Collapse", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Command {
             get {
                 object obj = ResourceManager.GetObject("Command", resourceCulture);
@@ -113,9 +193,19 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] DoubleMouseButton {
+        internal static byte[] Download {
             get {
-                object obj = ResourceManager.GetObject("DoubleMouseButton", resourceCulture);
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] EyeCloseUp {
+            get {
+                object obj = ResourceManager.GetObject("EyeCloseUp", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -143,9 +233,9 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] IconMainApplication {
+        internal static byte[] Home {
             get {
-                object obj = ResourceManager.GetObject("IconMainApplication", resourceCulture);
+                object obj = ResourceManager.GetObject("Home", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -153,9 +243,9 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] IconMainGray {
+        internal static byte[] IconMainApplication {
             get {
-                object obj = ResourceManager.GetObject("IconMainGray", resourceCulture);
+                object obj = ResourceManager.GetObject("IconMainApplication", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -173,16 +263,6 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] LeftMouseButton {
-            get {
-                object obj = ResourceManager.GetObject("LeftMouseButton", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
         internal static byte[] LightBulb {
             get {
                 object obj = ResourceManager.GetObject("LightBulb", resourceCulture);
@@ -193,9 +273,9 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] Link {
+        internal static byte[] MediaHappy {
             get {
-                object obj = ResourceManager.GetObject("Link", resourceCulture);
+                object obj = ResourceManager.GetObject("MediaHappy", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -203,19 +283,9 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] Loading {
+        internal static byte[] MediaLoadingInternet {
             get {
-                object obj = ResourceManager.GetObject("Loading", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Menu {
-            get {
-                object obj = ResourceManager.GetObject("Menu", resourceCulture);
+                object obj = ResourceManager.GetObject("MediaLoadingInternet", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -233,9 +303,39 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] NotMouseButton {
+        internal static byte[] NewChat {
             get {
-                object obj = ResourceManager.GetObject("NotMouseButton", resourceCulture);
+                object obj = ResourceManager.GetObject("NewChat", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] NewElement {
+            get {
+                object obj = ResourceManager.GetObject("NewElement", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Palette {
+            get {
+                object obj = ResourceManager.GetObject("Palette", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] PaperClip {
+            get {
+                object obj = ResourceManager.GetObject("PaperClip", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -253,6 +353,16 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] Read {
+            get {
+                object obj = ResourceManager.GetObject("Read", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Reload {
             get {
                 object obj = ResourceManager.GetObject("Reload", resourceCulture);
@@ -263,9 +373,9 @@ namespace OperPage_les.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] RightMouseButton {
+        internal static byte[] Save {
             get {
-                object obj = ResourceManager.GetObject("RightMouseButton", resourceCulture);
+                object obj = ResourceManager.GetObject("Save", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -276,56 +386,6 @@ namespace OperPage_les.Properties {
         internal static byte[] Search {
             get {
                 object obj = ResourceManager.GetObject("Search", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_NameAZ {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_NameAZ", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_NameZA {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_NameZA", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_Not {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_Not", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Sorting_Tag {
-            get {
-                object obj = ResourceManager.GetObject("Sorting_Tag", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Tag {
-            get {
-                object obj = ResourceManager.GetObject("Tag", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -346,6 +406,26 @@ namespace OperPage_les.Properties {
         internal static byte[] VECTOR {
             get {
                 object obj = ResourceManager.GetObject("VECTOR", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Volume {
+            get {
+                object obj = ResourceManager.GetObject("Volume", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Warning {
+            get {
+                object obj = ResourceManager.GetObject("Warning", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -376,6 +456,16 @@ namespace OperPage_les.Properties {
         internal static byte[] WifiOn {
             get {
                 object obj = ResourceManager.GetObject("WifiOn", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] World {
+            get {
+                object obj = ResourceManager.GetObject("World", resourceCulture);
                 return ((byte[])(obj));
             }
         }

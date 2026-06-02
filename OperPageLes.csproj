@@ -1,0 +1,114 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <StartupObject>OperPageLes.App</StartupObject>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <ApplicationIcon>IconMainApplication.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\3PIX.ttf" />
+    <None Remove="Fonts\Alphasano.ttf" />
+    <None Remove="Fonts\Bree CYR var.ttf" />
+    <None Remove="Fonts\Brenzo Slab Personal Use.otf" />
+    <None Remove="Fonts\Deledda Open Regular.ttf" />
+    <None Remove="Fonts\Monocraft.otf" />
+    <None Remove="Fonts\MOSCOW2024.otf" />
+    <None Remove="Fonts\October Pro Blk.ttf" />
+    <None Remove="Fonts\Pecita.otf" />
+    <None Remove="Fonts\Play.ttf" />
+    <None Remove="Fonts\Plup.ttf" />
+    <None Remove="Fonts\RussianRail G Pro.otf" />
+    <None Remove="Fonts\Sangha.ttf" />
+    <None Remove="Fonts\Tablon.ttf" />
+    <None Remove="Fonts\Vollda.otf" />
+    <None Remove="UI\Images\ArrowRight.png" />
+    <None Remove="UI\Images\Chats.png" />
+    <None Remove="UI\Images\Command.png" />
+    <None Remove="UI\Images\File.png" />
+    <None Remove="UI\Images\Folder.png" />
+    <None Remove="UI\Images\NewChat.png" />
+    <None Remove="UI\Images\NewElement.png" />
+    <None Remove="UI\Images\PaperClip.png" />
+    <None Remove="UI\Images\Read.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="IconMainApplication.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <PackageReference Include="NAudio.Core" Version="2.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2.3" />
+    <PackageReference Include="System.Management" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IEL\LibraryIEL\LibraryIEL.csproj" />
+    <ProjectReference Include="..\..\InterpreterCommand\Interpreter\Interpreter.csproj" />
+    <ProjectReference Include="..\..\LibraryBiu\LibraryBiU.csproj" />
+    <ProjectReference Include="..\OIEL\OIEL.csproj" />
+    <ProjectReference Include="..\OPLAnimation\OPLAnimation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LibraryPackKey">
+      <HintPath>..\..\PackKey\LibraryPackKey\bin\x64\Debug\net10.0\LibraryPackKey.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\3PIX.ttf" />
+    <Resource Include="Fonts\Alphasano.ttf" />
+    <Resource Include="Fonts\Bree CYR var.ttf" />
+    <Resource Include="Fonts\Brenzo Slab Personal Use.otf" />
+    <Resource Include="Fonts\Deledda Open Regular.ttf" />
+    <Resource Include="Fonts\Monocraft.otf" />
+    <Resource Include="Fonts\MOSCOW2024.otf" />
+    <Resource Include="Fonts\October Pro Blk.ttf" />
+    <Resource Include="Fonts\Pecita.otf" />
+    <Resource Include="Fonts\Play.ttf" />
+    <Resource Include="Fonts\Plup.ttf" />
+    <Resource Include="Fonts\RussianRail G Pro.otf" />
+    <Resource Include="Fonts\Sangha.ttf" />
+    <Resource Include="Fonts\Tablon.ttf" />
+    <Resource Include="Fonts\Vollda.otf" />
+    <Resource Include="UI\Images\ArrowRight.png" />
+    <Resource Include="UI\Images\Chats.png" />
+    <Resource Include="UI\Images\Command.png" />
+    <Resource Include="UI\Images\File.png" />
+    <Resource Include="UI\Images\Folder.png" />
+    <Resource Include="UI\Images\World.png" />
+    <Resource Include="UI\Images\NewChat.png" />
+    <Resource Include="UI\Images\NewElement.png" />
+    <Resource Include="UI\Images\PaperClip.png" />
+    <Resource Include="UI\Images\Read.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

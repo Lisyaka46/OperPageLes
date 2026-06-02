@@ -1,0 +1,47 @@
+﻿<Window
+    x:Class="OperPageLes.UI.Windows.DEV.WindowTestIcons"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:OperPageLes.UI.Windows.DEV"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    Title="WindowTestIcons" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.RowSpan="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <IEL:IELButtonImage x:Name="Icon45" PaletteElement="{DynamicResource Saffron}" CornerRadius="5,5,5,5" Width="45" Height="45" HorizontalAlignment="Left" Margin="5,5,0,5" Grid.Column="0"/>
+                <TextBlock Text="45x45" FontSize="16" Grid.ColumnSpan="1" VerticalAlignment="Center" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <IEL:IELButtonImage x:Name="Icon64" PaletteElement="{DynamicResource Saffron}" CornerRadius="5,5,5,5" Width="64" Height="64" HorizontalAlignment="Left" Margin="5,5,0,5" Grid.Column="0"/>
+                <TextBlock Text="64x64" FontSize="16" Grid.ColumnSpan="1" VerticalAlignment="Center" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <IEL:IELButtonImage x:Name="Icon90" PaletteElement="{DynamicResource Saffron}" CornerRadius="5,5,5,5" Width="90" Height="90" HorizontalAlignment="Left" Margin="5,5,0,5" Grid.Column="0"/>
+                <TextBlock Text="90x90" FontSize="16" Grid.ColumnSpan="1" VerticalAlignment="Center" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+            </Grid>
+            <TextBlock x:Name="TextBlockFile" Text="***" FontSize="16" TextTrimming="CharacterEllipsis"/>
+        </StackPanel>
+        <StackPanel Grid.RowSpan="1" Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,5">
+            <Button x:Name="ButtonSelectFileIcon" Content="Выбрать файл иконки" Margin="10,0,0,0" FontSize="14"/>
+            <ComboBox x:Name="ComboBoxTheme" Margin="10,0,0,0" Width="140" FontSize="14"/>
+        </StackPanel>
+    </Grid>
+</Window>

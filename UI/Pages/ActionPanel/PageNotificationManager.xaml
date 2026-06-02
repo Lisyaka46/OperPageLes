@@ -1,0 +1,29 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel"
+    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    x:Class="OperPageLes.UI.Pages.ActionPanel.PageNotificationManager"
+    Width="250" Height="300">
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black" BorderThickness="0,0,0,2">
+            <TextBlock Text="Менеджер оповещений" VerticalAlignment="Top" Padding="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Plup}" TextAlignment="Center" Foreground="#FF8FD3F7" IsHitTestVisible="False"/>
+        </Border>
+        <IEL:IELScrollViewer x:FieldModifier="private" x:Name="IELScrollNotification" Grid.Row="1" AutoUpdateVisibleHorizontalScroll="False" ScrollForce="40">
+            
+        </IEL:IELScrollViewer>
+    </Grid>
+</Page>

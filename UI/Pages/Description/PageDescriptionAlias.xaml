@@ -3,24 +3,26 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Description"
-      xmlns:GUI="clr-namespace:IEL;assembly=IEL"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL" x:Class="OperPage_les.UI.Pages.Description.PageDescriptionAlias"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:local="clr-namespace:OperPageLes.UI.Pages.Description"
+      xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL" x:Class="OperPageLes.UI.Pages.Description.PageDescriptionAlias"
       Title="PageDescriptionAlias">
     <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMainDescription" Grid.Column="1">
-        <Grid x:Name="GridDiscription" Grid.Row="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="TextBlockNameAlias" FontSize="20" FontFamily="Cascadia Code" TextAlignment="Center" Margin="5,0,5,0" Text="Команда не выбрана" Padding="0,3,0,3" TextTrimming="CharacterEllipsis" FontWeight="Bold" LineStackingStrategy="BlockLineHeight" MinWidth="300"/>
+        <Grid x:Name="GridDiscription" Grid.RowSpan="1" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="TextBlockNameAlias" FontSize="20" FontFamily="Cascadia Code" TextAlignment="Center" Margin="5,0,5,0" Text="Команда не выбрана" Padding="0,3,0,3" TextTrimming="CharacterEllipsis" FontWeight="Bold" LineStackingStrategy="BlockLineHeight"/>
             <TextBlock x:Name="TextBlockAlias" FontSize="16" FontFamily="Cascadia Code" Text="Команда не выбрана" Padding="0,3,0,3" TextTrimming="CharacterEllipsis" Grid.RowSpan="1" Grid.Row="1" TextDecorations="Underline" LineStackingStrategy="BlockLineHeight" Margin="10,0,10,0"/>
             <Border BorderBrush="Black" BorderThickness="2,2,2,2" Grid.Row="2" Margin="5,5,5,5" CornerRadius="5,5,5,5" Grid.RowSpan="1">
                 <Grid>
@@ -32,30 +34,14 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <GUI:IELButtonText x:Name="IELButtonCopyCommandAlias" Grid.Column="2" BorderThicknessBlock="2,2,2,2" CornerRadius="5,5,5,5" Text="Копировать" FontSize="16" Margin="2,2,2,2"  PaddingContent="10,2,10,2" FontFamily="{DynamicResource Bree CYR var}">
-                            <GUI:IELButtonText.IELSettingObject>
-                                <ObjectSettings:IELButtonObjectSetting StateVisualizationButton="LeftArrow">
-                                    <ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF1F0000" Select="#FF191919" Used="#FF001F0F"/>
-                                    </ObjectSettings:IELButtonObjectSetting.ForegroundSetting>
-                                    <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                        <Classes:BrushSettingQ NotEnabled="#FF3A0000" Select="#FF191919" Used="#FF212121"/>
-                                    </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                    <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                        <Classes:BrushSettingQ Default="#FF5996CE" Select="#FF49D0FD" Used="#FF29DAB5" NotEnabled="#FFF74141"/>
-                                    </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                </ObjectSettings:IELButtonObjectSetting>
-                            </GUI:IELButtonText.IELSettingObject>
-                        </GUI:IELButtonText>
-                        <TextBlock x:Name="TextBlockAliasCommand" Text="TextBlock" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" FontStyle="Italic" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="1" FontFamily="Cascadia Code"/>
-                        <TextBlock Text="alias*" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}"/>
+                        <TextBlock x:Name="TextBlockAliasCommand" Text="TextBlock" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="1" FontFamily="Cascadia Code"/>
+                        <TextBlock Text="alias*" VerticalAlignment="Center" Padding="0,5,0,5" FontSize="16" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" Margin="2,0,2,0" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="{DynamicResource Bree CYR var}" FontStyle="Italic"/>
                     </Grid>
                     <TextBlock x:Name="TextBlockDescriptionAliasCommand" Grid.Row="1" Text="Текст" FontSize="16" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Margin="2,0,2,0" Padding="0,2,0,2" />
                 </Grid>
             </Border>
-            <TextBlock x:Name="TextBlockDescriptionAlias" Grid.Row="3" Text="текст" FontSize="16" TextTrimming="CharacterEllipsis"  TextWrapping="Wrap" Margin="20,5,20,5" FontFamily="{DynamicResource Tablon}" FontStyle="Italic"/>
+            <TextBlock x:Name="TextBlockDescriptionAlias" Grid.Row="3" Text="текст" FontSize="16" TextTrimming="CharacterEllipsis"  TextWrapping="Wrap" Margin="20,5,20,5" FontFamily="{DynamicResource Bree CYR var}"/>
         </Grid>
     </Grid>
 </Page>

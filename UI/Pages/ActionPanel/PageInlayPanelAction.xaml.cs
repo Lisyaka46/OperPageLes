@@ -1,19 +1,19 @@
-﻿using IEL;
-using IEL.Interfaces.Core;
+﻿using IEL.UserElementsControl;
+using OIEL.UserElementsControl;
 using System.Windows.Controls;
 
-namespace OperPage_les.UI.Pages.ActionPanel
+namespace OperPageLes.UI.Pages.ActionPanel
 {
     /// <summary>
     /// Логика взаимодействия для PageActionInlay.xaml
     /// </summary>
     public partial class PageInlayPanelAction : Page
     {
-        private IELInlay? _ActivateManipulateInlay;
+        private OPLInlay? _ActivateManipulateInlay;
         /// <summary>
         /// Активная вкладка для взаимодействия с ней
         /// </summary>
-        internal IELInlay? ActivateManipulateInlay 
+        internal OPLInlay? ActivateManipulateInlay
         {
             get
             {
@@ -22,7 +22,7 @@ namespace OperPage_les.UI.Pages.ActionPanel
             set
             {
                 bool ActivateManipulate = value != null;
-                IELButtonPageOpenInlay.IsEnabled = ActivateManipulate && (!value?.UsedState ?? false);
+                IELButtonPageOpenInlay.IsEnabled = ActivateManipulate && (!value?.SourceBackground.GetUsedState() ?? false);
                 IELButtonPageDeleteInlay.IsEnabled = ActivateManipulate;
                 _ActivateManipulateInlay = value;
             }
@@ -32,6 +32,8 @@ namespace OperPage_les.UI.Pages.ActionPanel
         {
             InitializeComponent();
             ActivateManipulateInlay = null;
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonPageOpenInlay);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonPageDeleteInlay);
         }
     }
 }

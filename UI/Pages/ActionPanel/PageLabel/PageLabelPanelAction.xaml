@@ -1,0 +1,40 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel.PageLabel"
+    xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
+    x:Class="OperPageLes.UI.Pages.ActionPanel.PageLabel.PageLabelElementActionPanel"
+    Width="185" Height="280">
+    <Page.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Page.Resources>
+    <Grid x:Name="GridMain" VerticalAlignment="Center">
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border x:FieldModifier="private" x:Name="BorderDiscription" Height="90">
+            <Grid Margin="0,0,0,1">
+                <GUI:IELScrollViewer x:Name="ScrollViewerDescription" Grid.Row="1" AutoUpdateVisibleHorizontalScroll="False" VerticalAlignment="Top" ScrollForce="15"/>
+                <Line X2="165" HorizontalAlignment="Center" VerticalAlignment="Bottom" StrokeThickness="4" Stroke="White" StrokeDashArray="6" StrokeDashCap="Round" StrokeStartLineCap="Round" Margin="0,0,0,-3" StrokeEndLineCap="Round"/>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <GUI:IELButtonTextKey x:Name="IELButtonExecuteLabel" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" Margin="4,4,4,4"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Grid.Row="0" PaletteElement="{DynamicResource Green}" KeyActivateButton="D1" Height="50" MarginViewBox="7,7,7,7"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonChangeLabel" Text="Изменить" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="1" Grid.RowSpan="1"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Purple}" KeyActivateButton="D2" Height="50" MarginViewBox="7,7,7,7"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonRemoveLabel" Text="Удалить" CornerRadius="6,6,6,6" Margin="4,4,4,4" Grid.Row="2" Grid.RowSpan="1"  FontSize="16" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelRed}" KeyActivateButton="D3" Height="50" MarginViewBox="7,7,7,7"/>
+        </Grid>
+    </Grid>
+</Page>

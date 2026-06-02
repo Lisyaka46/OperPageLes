@@ -1,93 +1,47 @@
-﻿using IEL;
-using IEL.CORE.Classes;
-using Interpreter.Classes;
-using Interpreter.Commands;
+﻿using IEL.CORE.Enums;
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
-using OperPage_les.CORE;
-using OperPage_les.CORE.Enums;
-using OperPage_les.Windows.Frames;
-using OperPage_les.Windows.Pages.ActionPanel;
-using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text.RegularExpressions;
+using OIEL.CORE.Browser;
+using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Interfaces;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.ActionPanel.PageConsole;
+using OperPageLes.UI.UserElementsControl.Default;
+using OperPageLes.Windows;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Color = System.Windows.Media.Color;
+using OPRES = OperPageLes.Properties.Resources;
 
-namespace OperPage_les.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
     /// </summary>
-    public partial class PageConsole : Page
+    public partial class PageConsole : PageBrowser
     {
+        [LibraryImport("User32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool SetCursorPos(int X, int Y);
+
         #region PanelActionConsole
-        #region Source
-        private static readonly PageMainConsolePanelAction ConsolePage = new();
+        internal static readonly MainPagePanelAction PageConsoleActionPanelMain = new();
         /// <summary>
         /// Страница буфера в панели действий
         /// </summary>
-        internal static readonly PageBufferPanelAction BufferPage = new();
+        internal BufferPagePanelAction? BufferPage;
         #endregion
-
-        /// <summary>
-        /// Настройки панели действий для страниц во вкладке консоли
-        /// </summary>
-        private readonly PanelActionSettingVisual PanelActionSettingsConsole;
-
-        /// <summary>
-        /// Главная страница панели действий во вкладке консоли
-        /// </summary>
-        private readonly PagePanelAction PanelActionConsolePage = new(ConsolePage);
-
-        /// <summary>
-        /// Страница буфера панели действий во вкладке консоли
-        /// </summary>
-        private readonly PagePanelAction PanelActionBufferPage = new(BufferPage);
-        #endregion
-
-        /// <summary>
-        /// Объект анимации для управления double значением
-        /// </summary>
-        private static readonly DoubleAnimation DoubleAnimate = new(0, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        /// <summary>
-        /// Объект анимации для управления Color значением
-        /// </summary>
-        private static readonly ColorAnimation ColorAnimate = new(Colors.Black, TimeSpan.FromMilliseconds(250d))
-        {
-            DecelerationRatio = 0.2d,
-            EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut }
-        };
-
-        #region Hit
-        /// <summary>
-        /// Состояние видимости подсказок
-        /// </summary>
-        private ConsoleHitStateEnum StateVisibleHit;
 
         /// <summary>
         /// Подключение подсказок к командам
         /// </summary>
         private static bool HitUse => App.CurrentApp.SettingMainApplication.HitUse;
-
-        /// <summary>
-        /// Сохранённое состояние видимости подсказок
-        /// </summary>
-        private ConsoleHitStateEnum SaveStateHit;
-        #endregion
 
         /// <summary>
         /// Активный индекс команды в буфере для строки ввода
@@ -99,88 +53,127 @@ namespace OperPage_les.UI.Pages.Browser
         /// </summary>
         private string SaveStringPrintBuffer;
 
+        /// <summary>
+        /// Производилось ли вычисление события KeyDown
+        /// </summary>
+        private bool SaveKeyDown;
+
+        /// <summary>
+        /// Текущая навигация в текущей странице
+        /// </summary>
+        private SelectNavigationPageConsoleEnum SelectNavigation;
+
+        /// <summary>
+        /// Объект управляемых визуализаторов команд
+        /// </summary>
+        internal StackPanel StackPanelConsole { get; private set; }
+
         public PageConsole()
         {
             InitializeComponent();
-            StateVisibleHit = ConsoleHitStateEnum.Hidden;
+
+            StackPanelConsole = new()
+            {
+                Orientation = System.Windows.Controls.Orientation.Vertical,
+                VerticalAlignment = VerticalAlignment.Top,
+            };
+            IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
+            IELScrollConsole.VerticalScrollAligment = VerticalScrollAlignment.Right;
+            IELScrollConsole.AutoUpdateVisibleHorizontalScroll = false;
+            IELScrollConsole.AutoUpdateVisibleVerticalScroll = true;
+            IELScrollConsole.Content = StackPanelConsole;
+
+            HitCommandsInterpreter.ManagerAnimation = App.ManagerAnimation;
+            HitCommandsInterpreter.Connect(in App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
+
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
+            SelectNavigation = SelectNavigationPageConsoleEnum.None;
+            SaveKeyDown = false;
             ActiveIndexBufferInput = -1;
             SaveStringPrintBuffer = string.Empty;
-            BorderHintCommand.Height = 0d;
-            GridHintOneCommand.Opacity = 0d;
-            Canvas.SetZIndex(GridHintOneCommand, -1);
-            RichTextBoxMainMessage.Document = new();
-            ButtonReturnCommand.OnActivateMouseLeft += (sender, e, Key) => App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
+
+            ButtonReturnCommand.OnActivateMouseLeft += async (sender, e) =>
+            {
+                if (TextBoxCommandInput.Text.Length == 0) return;
+                else if (HitUse) HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
+                string Command = TextBoxCommandInput.Text;
+                TextBoxCommandInput.Text = string.Empty;
+                await ActivateCommand(Command);
+            };
             #region Setting
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
             {
-                if (!New && StateVisibleHit != ConsoleHitStateEnum.Hidden)
+                if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
                 {
-                    SaveStateHit = StateVisibleHit;
-                    HideHitCommand();
+                    HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                 }
-                else if (New && SaveStateHit != ConsoleHitStateEnum.Hidden)
+                else if (New && TextBoxCommandInput.Text.Length > 0)
                 {
-                    if (SaveStateHit == ConsoleHitStateEnum.VisibleMainCommands) UsingAllHintCommand();
-                    else if (SaveStateHit == ConsoleHitStateEnum.VisibleOneCommand) UsingOneHitCommand(TextBoxCommandInput.Text);
+                    if (TextBoxCommandInput.Text.Contains('*')) HitCommandsInterpreter.UsingOneHitCommand(TextBoxCommandInput.Text);
+                    else HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
                 }
             };
             #endregion
+
             #region PanelAction
-            #region ConsolePage
-            ConsolePage.IELButtonCrearConsole.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                RichTextBoxMainMessage.Document = new();
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-            };
-            ConsolePage.IELButtonCrearConsole.OnActivateMouseRight += (sender, e, Key) => RichTextBoxMainMessage.Document = new();
 
-            ConsolePage.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
+            App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
-                App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionBufferPage);
+                if (Name == nameof(BorderConsole)) TextBoxCommandInput.Focus();
             };
+            #endregion
 
-            ConsolePage.IELButtonDiscriptionCommand.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                App.CurrentApp.UsingDiscriptionCommand();
-            };
-            #endregion
-            #region BufferPage
-            BufferPage.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                App.MainWindowApplication.IELActionPanelMain.NextPage(PanelActionConsolePage, false);
-            };
-            #endregion
-            PanelActionConsolePage.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                ConsolePage.IELButtonCrearConsole.CharKeyboardActivate = NewValue;
-                ConsolePage.IELButtonCommandBuffer.CharKeyboardActivate = NewValue;
-                ConsolePage.IELButtonDiscriptionCommand.CharKeyboardActivate = NewValue;
-            };
-            PanelActionBufferPage.IsKeyboardModeChanged += (Source, NewValue) =>
-            {
-                BufferPage.IELButtonBackMainMenu.CharKeyboardActivate = NewValue;
-                BufferPage.IELButtonClearBuffer.CharKeyboardActivate = NewValue;
-            };
-            App.MainWindowApplication.IELActionPanelMain.EventClosingPanelAction += (Name) =>
-            {
-                if (Name == nameof(RichTextBoxMainMessage)) TextBoxCommandInput.Focus();
-            };
-            PanelActionSettingsConsole = new(RichTextBoxMainMessage, PanelActionConsolePage, new(305d, 240d));
-            #endregion
             #region RichTextBoxMainMessage
-            RichTextBoxMainMessage.MouseUp += (sender, e) =>
+            BorderConsole.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && App.MainWindowApplication.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindowApplication.IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right) App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
-            };
-
-            RichTextBoxMainMessage.TextChanged += (sender, e) =>
-            {
-                RichTextBoxMainMessage.ScrollToEnd();
+                if (BorderCommandInformation.Width != BorderButtonPanelInformationController.Width) return;
+                else if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Right)
+                {
+                    UsingPanelActionFromConsolePage(null);
+                }
             };
             #endregion
+
+            #region BufferPage
+            BufferPage = App.CurrentApp.AppPageBuffer;
+            #endregion
+
+            #region BorderButtonPanelInformationController
+            BorderCommandInformation.Margin = new(0);
+            BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            BorderCommandInformation.Width = BorderButtonPanelInformationController.Width;
+            BorderButtonPanelInformationController.MouseLeftButtonUp += (sender, e) =>
+            {
+                DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+                animation.EasingFunction = new BackEase()
+                {
+                    Amplitude = 0.15d,
+                    EasingMode = EasingMode.EaseOut,
+                };
+                animation.Duration = TimeSpan.FromMilliseconds(400d);
+                if (BorderCommandInformation.HorizontalAlignment == System.Windows.HorizontalAlignment.Left)
+                {
+                    animation.FillBehavior = FillBehavior.Stop;
+                    animation.To = BorderConsole.ActualWidth;
+                    animation.Completed += (sender, e) =>
+                    {
+                        BorderCommandInformation.Width = double.NaN;
+                        BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    };
+                }
+                else
+                {
+                    BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                    animation.From = BorderConsole.ActualWidth;
+                    animation.To = BorderButtonPanelInformationController.Width;
+                }
+                BorderCommandInformation.BeginAnimation(WidthProperty, animation);
+            };
+            #endregion
+
             #region TextBoxCommandInput
             TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
             {
@@ -192,352 +185,292 @@ namespace OperPage_les.UI.Pages.Browser
                         {
                             if (TextBoxCommandInput.Text[^1] == '*'
                             && TextBoxCommandInput.Text.AsSpan().Count('*') == 1
-                            && StateVisibleHit == ConsoleHitStateEnum.VisibleOneCommand)
+                            && HitCommandsInterpreter.StateVisibleHit == OPLHitInterpreter.HitStateEnum.VisibleOneCommand)
                             {
-                                UsingAllHintCommand();
+                                HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
                             }
                         }
-                        else HideHitCommand();
+                        else HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         return;
                 }
             };
             TextBoxCommandInput.KeyDown += (sender, e) =>
             {
-                if (e.Key != Key.Up && e.Key != Key.Down && e.Key != Key.Enter && e.Key != Key.Escape)
+                if (!SaveKeyDown)
                 {
-                    ActiveIndexBufferInput = -1;
-                    SaveStringPrintBuffer = string.Empty;
-                }
-                switch (e.Key)
-                {
-                    case Key.Enter:
-                        TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
-                            new ColorAnimation(Color.FromRgb(160, 245, 200), TimeSpan.FromMilliseconds(90d)));
-                        if (HitUse) HideHitCommand();
-                        break;
-                    case Key.Escape:
-                        TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
-                            new ColorAnimation(Color.FromRgb(255, 122, 84), TimeSpan.FromMilliseconds(90d)));
-                        if (HitUse) HideHitCommand();
-                        break;
-                }
-            };
-            TextBoxCommandInput.TextChanged += (sender, e) =>
-            {
-                if (!HitUse) return;
-                if (TextBoxCommandInput.Text.Length > 0 && TextBoxCommandInput.Text.Contains('*') && StateVisibleHit != ConsoleHitStateEnum.VisibleOneCommand)
-                {
-                    UsingOneHitCommand(TextBoxCommandInput.Text);
-                    return;
-                }
-                else if (TextBoxCommandInput.Text.Length == 0 && StateVisibleHit != ConsoleHitStateEnum.Hidden) HideHitCommand();
-            };
-            TextBoxCommandInput.KeyUp += (sender, e) =>
-            {
-                switch (e.Key)
-                {
-                    case Key.Enter:
-                        ActiveIndexBufferInput = -1;
+                    SaveKeyDown = true;
+                    if (SelectNavigation == SelectNavigationPageConsoleEnum.BufferCommandTextBox)
+                        SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
+                    if (e.Key != Key.Up && e.Key != Key.Down && e.Key != Key.Enter && e.Key != Key.Escape)
+                    {
                         SaveStringPrintBuffer = string.Empty;
-                        App.CurrentApp.ActivateActionCommand(this, TextBoxCommandInput.Text, true);
-                        if (HitUse) HideHitCommand();
+                    }
+                }
+            };
+            TextBoxCommandInput.KeyUp += async (sender, e) =>
+            {
+                SaveKeyDown = false;
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        SaveStringPrintBuffer = string.Empty;
+                        TextBoxCommandInput.SetActiveSpecrum(StateSpectrum.Used, true);
+                        if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
+                        {
+                            SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
+                            TextBoxCommandInput.Text += "* ";
+                        }
+                        else if (TextBoxCommandInput.Text.Length > 0)
+                        {
+                            if (HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
+                                HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
+
+                            string Command = TextBoxCommandInput.Text;
+                            TextBoxCommandInput.Text = string.Empty;
+                            await ActivateCommand(Command);
+                        }
                         break;
                     case Key.Escape:
                         TextBoxCommandInput.Text = SaveStringPrintBuffer.Length > 0 ? SaveStringPrintBuffer : string.Empty;
                         SaveStringPrintBuffer = string.Empty;
-                        ActiveIndexBufferInput = -1;
+                        if (TextBoxCommandInput.Text.Length > 0)
+                        {
+                            SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
+                        }
+                        else if (HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
+                            HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         break;
                     case Key.Apps:
-                        App.MainWindowApplication.IELActionPanelMain.UsingPanelAction(PanelActionSettingsConsole);
-                        break;
-                    case Key.Up:
-                        if (BufferPage.BufferCommand.Count == 0) return;
-                        if (ActiveIndexBufferInput == -1)
-                        {
-                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
-                            ActiveIndexBufferInput = BufferPage.BufferCommand.Count - 1;
-                        }
-                        else ActiveIndexBufferInput = ActiveIndexBufferInput > 0 ? ActiveIndexBufferInput - 1 : BufferPage.BufferCommand.Count - 1;
-                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                        //if (!App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                        //    App.MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
+                        //        PositionAnimActionPanel.CenterObject, OrientationPositionCursor.LeftUp);
+                        //else
+                        //    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                         break;
                     case Key.Down:
-                        if (BufferPage.BufferCommand.Count == 0) return;
-                        if (ActiveIndexBufferInput == -1)
+                    case Key.Up:
+                        if (HitCommandsInterpreter.StateVisibleHit == OPLHitInterpreter.HitStateEnum.Hidden && BufferPage.BufferCommand != null)
                         {
-                            SaveStringPrintBuffer = TextBoxCommandInput.Text;
-                            ActiveIndexBufferInput = 0;
+                            if (e.Key == Key.Up)
+                            {
+                                if (BufferPage.BufferCommand.Count == 0) return;
+                                if (ActiveIndexBufferInput == -1)
+                                {
+                                    SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                                    ActiveIndexBufferInput = BufferPage.BufferCommand.Count - 1;
+                                }
+                                else ActiveIndexBufferInput = ActiveIndexBufferInput > 0 ? ActiveIndexBufferInput - 1 : BufferPage.BufferCommand.Count - 1;
+                                TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                            }
+                            else if (e.Key == Key.Down)
+                            {
+                                if (BufferPage.BufferCommand.Count == 0) return;
+                                if (ActiveIndexBufferInput == -1)
+                                {
+                                    SaveStringPrintBuffer = TextBoxCommandInput.Text;
+                                    ActiveIndexBufferInput = 0;
+                                }
+                                else ActiveIndexBufferInput = ActiveIndexBufferInput < BufferPage.BufferCommand.Count - 1 ? ActiveIndexBufferInput + 1 : 0;
+                                TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                            }
                         }
-                        else ActiveIndexBufferInput = ActiveIndexBufferInput < BufferPage.BufferCommand.Count - 1 ? ActiveIndexBufferInput + 1 : 0;
-                        TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
+                        else return;
+                        break;
+                    default:
+                        if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
+                            SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
                         break;
                 }
-                TextBoxCommandInput.Background.BeginAnimation(SolidColorBrush.ColorProperty,
-                            new ColorAnimation(TextBoxCommandInput.IELSettingObject.BackgroundSetting.Used, TimeSpan.FromMilliseconds(430d)));
-
-                DoubleAnimation animation = DoubleAnimate.Clone();
-                animation.Duration = TimeSpan.FromMilliseconds(300d);
-                if (!TextBoxCommandInput.Text.Contains('*') && TextBoxCommandInput.Text.Length > 0 && HitUse) UsingAllHintCommand();
+                if (HitUse && SelectNavigation != SelectNavigationPageConsoleEnum.HitCommands)
+                {
+                    if (TextBoxCommandInput.Text.Length > 0 && TextBoxCommandInput.Text.Contains('*') &&
+                        HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.VisibleOneCommand)
+                    {
+                        ActiveIndexBufferInput = -1;
+                        HitCommandsInterpreter.UsingOneHitCommand(TextBoxCommandInput.Text);
+                        return;
+                    }
+                    else if (TextBoxCommandInput.Text.Length == 0 && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
+                        HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
+                    else if (!TextBoxCommandInput.Text.Contains('*') && TextBoxCommandInput.Text.Length > 0)
+                    {
+                        ActiveIndexBufferInput = -1;
+                        HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
+                    }
+                }
             };
             #endregion
+
+            #region IELImageButtonHelp
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
+            {
+                WindowDiscriptionCommands WindowDescription = new()
+                {
+                    ManagerAnimation = App.ManagerAnimation,
+                };
+                App.CurrentApp.InicializeWindowInApplication(WindowDescription);
+                WindowDescription.Show();
+            };
+            IELImageButtonHelp.MouseHover += (sender, e) =>
+            {
+                App.MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
+                    "Быстрое открытие описания команд",
+                    OrientationPositionCursor.LeftDown);
+            };
+            IELImageButtonHelp.MouseLeave += (sender, e) =>
+            {
+                App.MainWindow.IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+
             TextBoxCommandInput.Focus();
         }
 
-        #region HintCommandManipulate
+        #region PanelActionManipulate
         /// <summary>
-        /// Отобразить подсказки ко всем командам
+        /// Исполнить использование панели действий под страницу консоли
         /// </summary>
-        private void UsingAllHintCommand()
+        /// <param name="SelectViewer">Визуализатор команды который был выделен</param>
+        private void UsingPanelActionFromConsolePage(OPLCommandViewer? SelectViewer)
         {
-            StateVisibleHit = ConsoleHitStateEnum.VisibleMainCommands;
-            TimeSpan span = TimeSpan.FromMilliseconds(300d);
-
-            string CommandText = COMInterpreter.ReadNameCommand(TextBoxCommandInput.Text);
-            string[] AllHintNames =
-                [.. App.CurrentApp.Interpreter.CommandWhere((i) => i.Name.Contains(CommandText, StringComparison.CurrentCultureIgnoreCase)).Select((i) => i.Name)];
-            StackPanelAllHit.Children.Clear();
-            double AnimateWidth = 0d, AnimateHeight = 0d;
-            BorderHintCommand.Width = 0d;
-            BorderHintCommand.Height = 0d;
-            //GridHint.RowDefinitions.Clear();
-            if (AllHintNames.Length > 0)
-            {
-                Sorting.SortNames(ref AllHintNames);
-                foreach (string Name in AllHintNames)
-                {
-                    TextBlock block = CreateHintBlock(Name);
-                    //ScrollViewerAllHit.Off
-                    //GridHint.RowDefinitions.Add(new() { Height = new(HeightHintElement), });
-                    //Grid.SetRow(block, GridHint.RowDefinitions.Count - 1);
-                    StackPanelAllHit.Children.Add(block);
-                    block.UpdateLayout();
-                    block.Width = block.ActualWidth;
-                    block.Height = block.ActualHeight;
-                    if (block.ActualWidth > AnimateWidth) AnimateWidth = block.ActualWidth;
-                    AnimateHeight += block.ActualHeight;
-                }
-                AnimateWidth += BorderHintCommand.Padding.Left + BorderHintCommand.Padding.Right + 8;
-                AnimateHeight += BorderHintCommand.Padding.Top + BorderHintCommand.Padding.Bottom + 8;
-                if (AnimateHeight > BorderHintCommand.MaxHeight) AnimateHeight = BorderHintCommand.MaxHeight;
-            }
-            else HideHitCommand();
-
-            Canvas.SetZIndex(GridHintOneCommand, -1);
-            App.AnimateDoubleEffect(GridHintOneCommand, OpacityProperty, 0d, span);
-
-            Canvas.SetZIndex(StackPanelAllHit, 1);
-            App.AnimateDoubleEffect(StackPanelAllHit, OpacityProperty, 1d, span);
-
-            App.AnimateDoubleEffect(BorderHintCommand, WidthProperty, AnimateWidth, span);
-            App.AnimateDoubleEffect(BorderHintCommand, HeightProperty, AnimateHeight, span);
-            App.AnimateDoubleEffect(BorderHintCommand, OpacityProperty, 1d, span);
-        }
-
-        /// <summary>
-        /// Отобразить подсказку к конкретной команде
-        /// </summary>
-        /// <param name="TextCommand">Константный текст поиска команды</param>
-        private void UsingOneHitCommand(string TextCommand)
-        {
-            ICommandOPER? CommandHint;
-            CommandHint = App.CurrentApp.Interpreter.ReadCommand(TextCommand);
-            if (CommandHint == null) return;
-            StateVisibleHit = ConsoleHitStateEnum.VisibleOneCommand;
-            TimeSpan span = TimeSpan.FromMilliseconds(300d);
-            string[] Parameters = [..CommandHint.Parameters?.Select((i) => $"{i.Name}{(i.Absolutly ? string.Empty : "?")}") ?? []];
-            TextBlockHintCommand.Text = $"{CommandHint.Name}* {string.Join(",", Parameters)}";
-            TextBlockHintCommand.UpdateLayout();
-
-            Canvas.SetZIndex(GridHintOneCommand, 1);
-            App.AnimateDoubleEffect(GridHintOneCommand, OpacityProperty, 1d, span);
-
-            Canvas.SetZIndex(StackPanelAllHit, -1);
-            App.AnimateDoubleEffect(StackPanelAllHit, OpacityProperty, 0d, span);
-
-            App.AnimateDoubleEffect(BorderHintCommand, WidthProperty, TextBlockHintCommand.ActualWidth, span);
-            App.AnimateDoubleEffect(BorderHintCommand, HeightProperty, 35d, span);
-            App.AnimateDoubleEffect(BorderHintCommand, OpacityProperty, 1d, span);
-        }
-
-        /// <summary>
-        /// Скрыть отображение подсказок к командам
-        /// </summary>
-        private void HideHitCommand()
-        {
-            StateVisibleHit = ConsoleHitStateEnum.Hidden;
-            TimeSpan span = TimeSpan.FromMilliseconds(300d);
-
-            App.AnimateDoubleEffect(BorderHintCommand, WidthProperty, 0d, span);
-            App.AnimateDoubleEffect(BorderHintCommand, HeightProperty, 0d, span);
-            App.AnimateDoubleEffect(BorderHintCommand, OpacityProperty, 0d, span);
-        }
-
-        /// <summary>
-        /// Создать объект подсказки к команде
-        /// </summary>
-        /// <param name="Name">Имя команды</param>
-        /// <returns>Объект подсказки к команде</returns>
-        private TextBlock CreateHintBlock(string Name)
-        {
-            TextBlock Result = new()
-            {
-                Text = Name,
-                TextAlignment = TextAlignment.Left,
-                TextTrimming = TextTrimming.None,
-                TextWrapping = TextWrapping.NoWrap,
-                LineStackingStrategy = LineStackingStrategy.BlockLineHeight,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-                Padding = new(6, 2, 6, 2),
-                Foreground = new SolidColorBrush(Color.FromRgb(11, 43, 68)),
-                Cursor = System.Windows.Input.Cursors.Hand,
-                FontSize = 16d,
-                FontFamily = new System.Windows.Media.FontFamily("Cascadia Code"),
-            };
-            Result.MouseEnter += (sender, e) =>
-            {
-                ColorAnimate.Duration = TimeSpan.FromMilliseconds(120d);
-                ColorAnimate.To = Color.FromRgb(168, 217, 255);
-                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-            };
-            Result.MouseLeave += (sender, e) =>
-            {
-                ColorAnimate.Duration = TimeSpan.FromMilliseconds(120d);
-                ColorAnimate.To = Color.FromRgb(11, 43, 68);
-                Result.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnimate);
-            };
-            Result.MouseLeftButtonUp += (sender, e) =>
-            {
-                TextBoxCommandInput.Text = $"{Result.Text}*";
-            };
-            return Result;
+            PageConsoleActionPanelMain.CommandViewerSelect = SelectViewer;
+            PageConsoleActionPanelMain.IELButtonCommandBuffer.IsEnabled = BufferPage != null;
+            App.MainWindow.IELActionPanelMain.UsingPanelAction(IELScrollConsole, PageConsoleActionPanelMain,
+                Orientation: OrientationPositionCursor.RightDown);
         }
         #endregion
 
-        #region ManipulateText
         /// <summary>
-        /// Добавить и отформатировать текст в консоль
+        /// Установить состояние выделяемой навигации
         /// </summary>
-        /// <param name="Text">Текст добавляемый в консоль</param>
-        /// <param name="Formatted">Форматировать или нет</param>
-        internal void AddTextInConsole(string Text, bool Formatted = true)
+        /// <param name="Value">Присваемое значение</param>
+        private void SetSelectNavigation(SelectNavigationPageConsoleEnum Value)
         {
-            if (Text.Length == 0) return;
-            Text = $"{App.ConsolePreMessage} {Text}";
-            Paragraph Message;
-            if (Formatted) FormattedAllTextDetect(out Message, Text);
-            else Message = new(new Run(Text));
+            SelectNavigation = Value;
+        }
+
+        #region Command
+        /// <summary>
+        /// Создать новый визуализационный объект контента выполнения консольной команды
+        /// </summary>
+        /// <returns></returns>
+        public OPLCommandViewer CreateNewCommandViewer(string Command)
+        {
+            OPLCommandViewer Viewer = new()
+            {
+                Margin = new(0),
+                FontSize = 16d,
+                CornerRadius = new(6),
+                BorderThickness = new(2),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                Opacity = 0d,
+                DeleteButtonSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)),
+                Text = Command,
+                IsAnimatedSettingQ = false,
+            };
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(Viewer);
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
                 Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["RussianRail G Pro"]
             };
-            BindingOperations.SetBinding(Message, Paragraph.FontFamilyProperty, binding);
-            RichTextBoxMainMessage.Document.Blocks.Add(Message);
-        }
+            BindingOperations.SetBinding(Viewer, FontFamilyProperty, binding);
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(Viewer);
 
-        /// <summary>
-        /// Очистить текст консоли
-        /// </summary>
-        internal void ClearConsoleText() => RichTextBoxMainMessage.Document = new();
-
-        /// <summary>
-        /// Изменить формативность текста с учётом первых знаков
-        /// </summary>
-        /// <remarks>
-        /// <code>
-        /// %#FFFFFF** <b>Italic</b> **
-        /// </code>
-        /// ** <b>Bold</b> **
-        /// <code></code>
-        /// // <i>Italic</i> //
-        /// <code></code>
-        /// __ <u>UnderLine</u> __
-        /// <code></code>
-        /// </remarks>
-        /// <param name="Text">Текст форматирования</param>
-        /// <returns>Форматированный текст</returns>
-        private static void FormattedAllTextDetect(out Paragraph Result, string Text)
-        {
-            // %//Italic %**Bold**//
-            Result = new();
-            foreach (Match match in RegexFormattedText().Matches(Text))
+            Viewer.MouseUp += (sender, e) =>
             {
-                Result.Inlines.AddRange(FormattedBlockText(match.Value));
-            }
-        }
-
-        private static Inline[] FormattedBlockText(string Text)
-        {
-            Span Result = new();
-            if (Text.Length < 2 || Text[0] != '%')
-            {
-                Result.Inlines.Add(Text);
-                return [.. Result.Inlines];
-            }
-
-            Text = Text[1..]; // удаление "%"
-
-            // логика цвета
-            SolidColorBrush? BackgroundColor = null;
-            if (Text[0] == '#')
-            {
-                BackgroundColor = new((Color)System.Windows.Media.ColorConverter.ConvertFromString(
-                    RegexFormattedTextColor().Match(Text).Value));
-                Text = Text[7..];
-            }
-
-            MatchCollection CollectionRecurce = RegexFormattedText().Matches(Text[2..^2]);
-            foreach (Match match in CollectionRecurce)
-            {
-                if (match.Value[0] == '%' && match.Value.Length > 1)
-                {
-                    foreach (Inline Element in FormattedBlockText(match.Value))
-                    {
-                        Result.Inlines.Add(SwitchBlockText([Text[0], Text[1]], Element));
-                        Result.Inlines.LastInline.Background = BackgroundColor;
-                    }
-                    continue;
-                }
-                Result.Inlines.Add(SwitchBlockText([Text[0], Text[1]], new Run(match.Value)));
-                Result.Inlines.LastInline.Background = BackgroundColor;
-            }
-            return [.. Result.Inlines];
-        }
-
-        private static Inline SwitchBlockText(char[] Parrent, Inline Context)
-        {
-            Contract.Requires(Parrent.Length == 2);
-            return string.Concat(Parrent) switch
-            {
-                "**" => new Bold(Context),
-                "//" => new Italic(Context),
-                "__" => new Underline(Context),
-                _ => Context,
+                if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Right) UsingPanelActionFromConsolePage(sender as OPLCommandViewer);
+                e.Handled = true;
             };
+
+            Viewer.ButtonDelete_OnActivateMouseLeft += (sender, e) =>
+            {
+                if (Viewer.IsTokenAsyncLoadingEnabled || Viewer.IsTokenAsyncWhileEnabled)
+                {
+                    MessageBoxResult Result =
+                        System.Windows.MessageBox.Show("Вы точно хотите принудительно завершить выполнение команды?", "Подтверждение",
+                        MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                    if (Result == MessageBoxResult.No)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                    else if (Viewer.IsTokenAsyncLoadingEnabled)
+                        Viewer.CancelExecuteTaskCommand();
+                    else if (Viewer.IsTokenAsyncWhileEnabled)
+                        Viewer.ExitAsyncWhileOperation();
+                }
+                DeleteCommandViewer(Viewer);
+                e.Handled = true;
+            };
+
+            Viewer.AddContentInViewer += (sender, e) =>
+            {
+                //if (sender is OPLCommandViewer viewer && GridConsole.Children.IndexOf(viewer) + 1 < GridConsole.Children.Count)
+                //{
+                //    double ChangeTop = viewer.Margin.Top + viewer.ActualHeight + 10d;
+                //    FrameworkElement Element;
+                //    for (int i = GridConsole.Children.IndexOf(viewer) + 1; i < GridConsole.Children.Count; i++)
+                //    {
+                //        Element = (FrameworkElement)GridConsole.Children[i];
+                //        Element.BeginAnimation(MarginProperty, null);
+                //        Element.Margin = new(5, ChangeTop, 5, 5);
+                //    }
+                //}
+            };
+
+            StackPanelConsole.Children.Add(Viewer);
+            //IELScrollConsole.SourceViewer.ScrollToEnd();
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Viewer, MarginProperty, new(5), TimeSpan.FromMilliseconds(600d));
+            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Viewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
+            return Viewer;
         }
-        #endregion
-
-        #region Regex
-        /// <summary>
-        /// Функция регулярного выражения выделения текста в ковычках "текст"
-        /// </summary>
-        private static Regex StringCommandError(char symbol) => new($"([^\\{symbol}]+|\\{symbol}[^\\{symbol}]+\\{symbol}?)");
 
         /// <summary>
-        /// Регулярное выражение сортировки параметров от специальных символов
+        /// Удалить элемент визуализации команды из страницы консоли
         /// </summary>
-        /// <returns>Регулярное выражение</returns>
-        // Текст который является %#00FF00FF__%**регистрационным**__ и %#FFFFFF**может** %~~даже так~~ %--постоянно-- %__форматироваться__
-        [GeneratedRegex(@"([^%]+|(\%(#[0-9A-F]{6})?)(\*{2}([^\*]+(\*{3,}|\*)){1,}\*|_{2}([^_]+(_{3,}|_)){1,}_|\/{2}([^\/]+(\/{3,}|\/)){1,}\/)|\%)")]
-        private static partial Regex RegexFormattedText();
+        /// <param name="Element">Удаляемый визуализационный элемент</param>
+        internal void DeleteCommandViewer(OPLCommandViewer Element)
+        {
+            //StackPanelConsole.Children.Remove(Element);
+            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(300d));
+            //Element.Height = Element.ActualHeight;
+            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+            animation.Duration = TimeSpan.FromMilliseconds(400d);
+            animation.From = Element.ActualHeight;
+            animation.To = 0d;
+            Element.BeginAnimation(HeightProperty, animation);
+            animation.FillBehavior = FillBehavior.Stop;
+            animation.Completed += (sender, e) =>
+            {
+                //Element.BeginAnimation(OpacityProperty, null);
+                //Element.BeginAnimation(HeightProperty, null);
+                //Element.Height = 0d;
+                //Element.Opacity = 0d;
+                StackPanelConsole.Children.Remove(Element);
+            };
+            animation.From = 1d;
+            Element.BeginAnimation(OpacityProperty, animation);
+        }
 
         /// <summary>
-        /// Регулярное выражение сортировки параметров от специальных символов
+        /// Активировать команду под логикой страницы консоли<br/>
+        /// Команда учитывается из текстового поля
         /// </summary>
-        /// <returns>Регулярное выражение</returns>
-        // %   #FFFFFF   //**d**//
-        [GeneratedRegex(@"#[0-9A-F]{6}")]
-        private static partial Regex RegexFormattedTextColor();
+        /// <param name="Command">Выполняемая команда</param>
+        /// <returns></returns>
+        public async Task ActivateCommand(string Command)
+        {
+            if (Command.Length == 0) return;
+            BufferPage?.InsertCommandFromBuffer(Command, this);
+
+            await App.CurrentApp.ActivateActionCommand(CreateNewCommandViewer(COMInterpreterBase.ReadNameCommand(Command)), Command);
+        }
         #endregion
     }
 }

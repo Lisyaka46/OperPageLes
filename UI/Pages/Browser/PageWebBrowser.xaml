@@ -1,82 +1,47 @@
-﻿<Page
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OperPage_les.UI.Pages.Browser"
-      xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:IEL="clr-namespace:IEL;assembly=IEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=IEL"
-      xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=IEL" x:Class="OperPage_les.UI.Pages.Browser.PageWebBrowser"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="PageWebBrowser">
-    <Page.Resources>
-        <ResourceDictionary Source="/CORE/Resources/FontsDictionary.xaml"/>
-    </Page.Resources>
+﻿<Base:PageBrowser
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser"
+    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
+    x:Class="OperPageLes.UI.Pages.Browser.PageWebBrowser"
+    Title="PageWebBrowser">
+    <Base:PageBrowser.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Base:PageBrowser.Resources>
     <Grid>
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.ColumnSpan="2">
+        <Grid Grid.ColumnSpan="1" Margin="5,5,5,5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <IEL:IELTextBox x:Name="TextBoxLink" FontSizeText="18"  Text="" Grid.ColumnSpan="1" Margin="5,8,5,8" BorderThicknessBlock="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}">
-                <IEL:IELTextBox.IELSettingObject>
-                    <ObjectSettings:IELObjectSetting>
-                        <ObjectSettings:IELObjectSetting.ForegroundSetting>
-                            <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
-                        </ObjectSettings:IELObjectSetting.ForegroundSetting>
-                        <ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                            <Classes:BrushSettingQ NotEnabled="#FF3A1717" Select="#FF1A1D1B" Used="#FF212121"/>
-                        </ObjectSettings:IELObjectSetting.BorderBrushSetting>
-                        <ObjectSettings:IELObjectSetting.BackgroundSetting>
-                            <Classes:BrushSettingQ Default="#FFB8E4C7" Select="#FF5E9470" Used="#FFDBF5E4" NotEnabled="#FFAD6363"/>
-                        </ObjectSettings:IELObjectSetting.BackgroundSetting>
-                    </ObjectSettings:IELObjectSetting>
-                </IEL:IELTextBox.IELSettingObject>
-            </IEL:IELTextBox>
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <IEL:IELButtonImage x:Name="IELButtonReloadPage" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="8,8,8,8" PaddingContent="2,2,2,2">
-                    <IEL:IELButtonImage.IELSettingObject>
-                        <ObjectSettings:IELButtonObjectSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF1E2512" Used="#FF282B20"/>
-                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF85967F" NotEnabled="#FFEF4949" Select="#FF91C77E" Used="#FFA6FF87"/>
-                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonImage.IELSettingObject>
-                </IEL:IELButtonImage>
-                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" ImageMargin="4,4,4,4" CornerRadius="6,6,6,6" BorderThicknessBlock="2,2,2,2" Margin="8,8,8,8" PaddingContent="2,2,2,2" Grid.Column="1">
-                    <IEL:IELButtonImage.IELSettingObject>
-                        <ObjectSettings:IELButtonObjectSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                                <Classes:BrushSettingQ NotEnabled="#FF400202" Select="#FF122325" Used="#FF352D3C"/>
-                            </ObjectSettings:IELButtonObjectSetting.BorderBrushSetting>
-                            <ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                                <Classes:BrushSettingQ Default="#FF7F8E96" NotEnabled="#FFEF4949" Select="#FF7EB1C7" Used="#FFFFEF87"/>
-                            </ObjectSettings:IELButtonObjectSetting.BackgroundSetting>
-                        </ObjectSettings:IELButtonObjectSetting>
-                    </IEL:IELButtonImage.IELSettingObject>
-                </IEL:IELButtonImage>
+                <IEL:IELButtonImage x:Name="IELButtonReloadPage" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Padding="2,2,2,2" PaletteElement="{DynamicResource Saffron}" Width="40" Height="40" Margin="0,0,2,0"/>
+                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Padding="2,2,2,2" Grid.Column="1" PaletteElement="{DynamicResource PastelBlue}" Width="40" Height="40" Margin="2,0,2,0"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <IEL:IELTextBox x:Name="TextBoxLink" Text="123" Grid.ColumnSpan="1" BorderThickness="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}" PaletteElement="{DynamicResource Green}" CornerRadius="5,5,5,5" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Center" Padding="0,8,0,4" Margin="2,0,0,0"/>
+            </Grid>
+            <Grid Grid.Column="2">
+                
             </Grid>
         </Grid>
         <Grid x:Name="GridBrowser" Grid.Row="1">
-            <Wpf:WebView2 x:Name="WebBrowserElement"/>
-
-            <!--<cefSharp:ChromiumWebBrowser x:Name="WebBrowserElement"/>-->
+            <!--<Wpf:ChromiumWebBrowser x:Name="WebBrowserElement" Focusable="False">
+            </Wpf:ChromiumWebBrowser>-->
         </Grid>
-
-
-
     </Grid>
-</Page>
+</Base:PageBrowser>

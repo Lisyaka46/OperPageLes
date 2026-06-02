@@ -1,13 +1,9 @@
-﻿using OperPage_les.CORE.Settings;
-using IEL.Interfaces.Core;
-using Microsoft.Win32;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace OperPage_les.UI.Pages.Settings
+namespace OperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PageGeneral.xaml
@@ -22,14 +18,34 @@ namespace OperPage_les.UI.Pages.Settings
         internal PageGeneralSetting()
         {
             InitializeComponent();
+
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClearImage);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSetTextClipboard);
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile);
+
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonTextClearValue);
+
+            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
+
             #region PathMenuImage
             string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;
             TextBlockFailedImageSetup.Opacity = 0d;
+            ImageErrorBitmapBackground.Opacity = 0d;
             if (PathBackgroundImage.Length > 0)
             {
                 IELTextBoxDirectoryBackground.Text = PathBackgroundImage;
-                ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
-                IELButtonClearImage.IsEnabled = true;
+                try
+                {
+                    ImageBackground.Source = new BitmapImage(new Uri(PathBackgroundImage, UriKind.RelativeOrAbsolute));
+                    IELButtonClearImage.IsEnabled = true;
+                }
+                catch
+                {
+                    ImageErrorBitmapBackground.Opacity = 1d;
+                    ImageBackground.Opacity = 0d;
+                    IELButtonClearImage.IsEnabled = false;
+                }
             }
             else
             {
@@ -46,7 +62,7 @@ namespace OperPage_les.UI.Pages.Settings
                         break;
                 }
             };
-            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonDialogDirectoryFile.OnActivateMouseLeft += (sender, e) =>
             {
                 System.Windows.Forms.OpenFileDialog dialog = new()
                 {
@@ -64,13 +80,13 @@ namespace OperPage_les.UI.Pages.Settings
                 };
                 dialog.ShowDialog();
             };
-            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonSetTextClipboard.OnActivateMouseLeft += (sender, e) =>
             {
                 SetImageUriValue(System.Windows.Clipboard.GetText());
             };
-            IELButtonClearImage.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonClearImage.OnActivateMouseLeft += (sender, e) =>
             {
-                App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
                 App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
@@ -88,7 +104,7 @@ namespace OperPage_les.UI.Pages.Settings
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
                 if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
-                    DoubleAnimation animation = App.GetDoubleAnimate();
+                    DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
                     animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
                     animation.Duration = TimeSpan.FromMilliseconds(1200d);
                     animation.To = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
@@ -102,7 +118,7 @@ namespace OperPage_les.UI.Pages.Settings
                     BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
                 }
             };
-            IELButtonTextClearValue.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonTextClearValue.OnActivateMouseLeft += (sender, e) =>
             {
                 SliderBufferSize.Value = OriginalSizeBuffer;
                 App.CurrentApp.SettingMainApplication.BufferSize.Value = OriginalSizeBuffer;
@@ -111,17 +127,6 @@ namespace OperPage_les.UI.Pages.Settings
             {
                 if (SliderBufferSize.Value != OriginalSizeBuffer)
                     App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
-            };
-            #endregion
-            #region BlurBackgroundDataTime
-            CheckBoxBlurDataTimeImage.IsChecked = App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime;
-            CheckBoxBlurDataTimeImage.Checked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime.Value = true;
-            };
-            CheckBoxBlurDataTimeImage.Unchecked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.BlurBackgroundDataTime.Value = false;
             };
             #endregion
             #region MillisecondInternetConnection
@@ -173,6 +178,17 @@ namespace OperPage_les.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = false;
             };
             #endregion
+            #region LoadingBorderVisualizate
+            CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
+            CheckBoxLoadingBorderVisualizate.Checked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = true;
+            };
+            CheckBoxLoadingBorderVisualizate.Unchecked += (sender, e) =>
+            {
+                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = false;
+            };
+            #endregion
         }
 
         /// <summary>
@@ -184,6 +200,7 @@ namespace OperPage_les.UI.Pages.Settings
             try
             {
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageErrorBitmapBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
                 if (image.PixelWidth > 0 && image.PixelHeight > 0)
                 {
                     IELTextBoxDirectoryBackground.Text = Uri;
@@ -192,12 +209,12 @@ namespace OperPage_les.UI.Pages.Settings
                     IELButtonClearImage.IsEnabled = true;
                     App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 
-                    App.AnimateDoubleEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
+                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
                 }
             }
             catch
             {
-                App.AnimateDoubleEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
+                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
             }
         }
     }

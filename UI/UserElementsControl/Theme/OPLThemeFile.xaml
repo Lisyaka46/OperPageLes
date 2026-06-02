@@ -1,0 +1,23 @@
+﻿<Base:IELContainerBase
+    x:Class="OperPageLes.UI.UserElementsControl.Theme.OPLThemeFile"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
+    xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=LibraryIEL"
+    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border x:FieldModifier="private" x:Name="BorderActivateIndicator" Grid.Column="0" HorizontalAlignment="Left" Width="10" CornerRadius="0,5,5,0" Background="Black" Margin="0,5,0,5"/>
+        <Border x:FieldModifier="private" x:Name="BorderIcon" Margin="3,1,3,1" BorderThickness="2,2,2,2" BorderBrush="Black" CornerRadius="7,7,7,7" Panel.ZIndex="1">
+            <Image x:FieldModifier="private" x:Name="ImageIcon" Margin="2,2,2,2" Width="30" Height="30" StretchDirection="DownOnly"/>
+        </Border>
+        <TextBlock x:FieldModifier="private" x:Name="TextBlockNameFile" Grid.Column="1" VerticalAlignment="Center" Text="Name" TextAlignment="Center"/>
+    </Grid>
+</Base:IELContainerBase>

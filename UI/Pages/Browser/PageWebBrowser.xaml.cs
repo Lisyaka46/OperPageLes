@@ -1,65 +1,83 @@
-﻿using CefSharp;
-using CefSharp.Wpf;
-using IEL.Interfaces.Core;
-using Microsoft.Maui.Platform;
+﻿using OperPageLes.CORE.Struct;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
+using OIEL.CORE.Browser;
+using OIEL.UserElementsControl;
 using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using OPRES = OperPageLes.Properties.Resources;
+//using CefSharp.Wpf;
 
-namespace OperPage_les.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageWebBrowser.xaml
     /// </summary>
-    public partial class PageWebBrowser : Page
+    public partial class PageWebBrowser : PageBrowser
     {
         public PageWebBrowser()
         {
-            App.Log("Инициализация объектов станицы браузера");
+            App.CurrentApp.LogWriteLine("Инициализация объектов станицы веб-браузера");
             InitializeComponent();
-            IELButtonReloadPage.Imaging = App.LoadImage(Properties.Resources.Reload);
-            IELButtonUnopenPageSystemBrowser.Imaging = App.LoadImage(Properties.Resources.BrowserChangeSystem);
-            App.Log("Инициализация станицы браузера");
+            
+            //int BrowserVer, RegVal;
+            //// get the installed IE version
+            //using (System.Windows.Forms.WebBrowser Wb = new())
+            //    BrowserVer = Wb.Version.Major;
+            //// set the appropriate IE version
+            //if (BrowserVer >= 11)
+            //    RegVal = 11001;
+            //else if (BrowserVer == 10)
+            //    RegVal = 10001;
+            //else if (BrowserVer == 9)
+            //    RegVal = 9999;
+            //else if (BrowserVer == 8)
+            //    RegVal = 8888;
+            //else
+            //    RegVal = 7000;
+            //// set the actual key
+            //using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", RegistryKeyPermissionCheck.ReadWriteSubTree))
+            //    if (Key.GetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe") == null)
+            //        Key.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe", RegVal, RegistryValueKind.DWord);
+
+            IELButtonReloadPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
+            IELButtonUnopenPageSystemBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
+            App.CurrentApp.LogWriteLine("Инициализация станицы веб-браузера");
+
             #region WebBrowserElement_Events
-            WebBrowserElement.SourceChanged += (sender, e) =>
-            {
-                TextBoxLink.Text = WebBrowserElement.Source.ToString();
-            };
-            WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
-            {
-                WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
-                {
-                    App.MainWindowApplication.ActivateLoadingIndicator();
-                    WebBrowserElement.Source = new Uri(e.Uri);
-                };
-                WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
-                {
-                    App.MainWindowApplication.DiactivateLoadingIndicator();
-                };
-                WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
-                {
-                    e.NewWindow = WebBrowserElement.CoreWebView2;
-                };
-            };
+            //WebBrowserElement.KeyUp += (sender, e) =>
+            //{
+            //    WebBrowserElement.RaiseEvent(e);
+            //};
+            //WebBrowserElement.Na += (sender, e) =>
+            //{
+            //    TextBoxLink.Text = WebBrowserElement.Source.ToString();
+            //};
+            //WebBrowserElement.CoreWebView2InitializationCompleted += (sender, e) =>
+            //{
+            //    WebBrowserElement.CoreWebView2.NavigationStarting += (sender, e) =>
+            //    {
+            //        TextBoxLink.Text = WebBrowserElement.Source.ToString();
+            //        //if (ViewerLoading != null) ViewerLoading.Text = $"Загрузка {e.Uri}";
+            //        //else
+            //        //{
+            //        //    ViewerLoading = App.MainWindow.ExecuteVisualizateLoadingProcess($"Загрузка {e.Uri}");
+            //        //    App.MainWindow.StartVisualizateLoadingProcess(ViewerLoading);
+            //        //}
+            //        WebBrowserElement.Source = new Uri(e.Uri);
+            //    };
+            //    WebBrowserElement.CoreWebView2.NavigationCompleted += (sender, e) =>
+            //    {
+            //        //if (ViewerLoading == null) return;
+            //        //App.MainWindow.CompleteVisualizateLoadingProcess(ViewerLoading);
+            //    };
+            //    WebBrowserElement.CoreWebView2.NewWindowRequested += (sender, e) =>
+            //    {
+            //        e.NewWindow = WebBrowserElement.CoreWebView2;
+            //    };
+            //};
             #endregion
+
             TextBoxLink.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -68,33 +86,36 @@ namespace OperPage_les.UI.Pages.Browser
                         WebViewGoUrl(TextBoxLink.Text);
                         break;
                     case Key.Escape:
-                        WebBrowserElement.Focus();
+                        //WebBrowserElement.Focus();
                         break;
                     default:
                         break;
-                };
+                }
+                ;
             };
-            IELButtonReloadPage.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonReloadPage.OnActivateMouseLeft += (sender, e) =>
             {
-                WebBrowserElement.Reload();
+                //WebBrowserElement.Reload();
             };
-            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e, Key) =>
+            IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e) =>
             {
                 Process.Start(new ProcessStartInfo(TextBoxLink.Text) { UseShellExecute = true });
-                WebBrowserElement.Stop();
+                //WebBrowserElement.Stop();
             };
             string DefaultUrl = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
             if (DefaultUrl.Length > 0)
             {
                 WebViewGoUrl(DefaultUrl);
             }
-            App.Log("Инициализация станицы браузера - Готово!");
+            App.CurrentApp.LogWriteLine("Инициализация станицы браузера - Готово!");
         }
 
         internal void WebViewGoUrl(string Url)
         {
-            WebBrowserElement.Source = new Uri(Url);
-            WebBrowserElement.Focus();
+            //WebBrowserElement.Load(Url);
+            TextBoxLink.Text = Url;
+            //WebBrowserElement.Source = new Uri(Url);
+            //WebBrowserElement.Focus();
         }
     }
 }

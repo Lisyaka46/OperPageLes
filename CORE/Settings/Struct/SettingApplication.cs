@@ -1,14 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static OperPage_les.CORE.Settings.ISetting;
+﻿using System.Reflection;
+using System.Windows.Input;
 
-namespace OperPage_les.CORE.Settings.Struct
+namespace OperPageLes.CORE.Settings.Struct
 {
     /// <summary>
     /// Класс настроек приложения
@@ -24,11 +17,6 @@ namespace OperPage_les.CORE.Settings.Struct
         /// Размер буфера команд
         /// </summary>
         public ObjSetting<int> BufferSize { get; internal set; } = 50;
-
-        /// <summary>
-        /// Размытие изображения на панели даты и времени
-        /// </summary>
-        public ObjSetting<bool> BlurBackgroundDataTime { get; internal set; } = false;
 
         /// <summary>
         /// Отображение потраченного времени на ответ интернета
@@ -56,23 +44,58 @@ namespace OperPage_les.CORE.Settings.Struct
         public ObjSetting<bool> UseOnlyCreatePageWebBrowser { get; internal set; } = false;
 
         /// <summary>
-        /// Сколлапсировать пустые значения настроек в значения по умолчанию
+        /// Использование отключения режима клавиатуры при закрытии панели дейтсвий
         /// </summary>
-        /// <param name="setting">Изменяемая ссылка настроек</param>
-        internal readonly SettingApplication CollapseNullSetting()
-        {
-            SettingApplication Def = new();
-            PropertyInfo[] Info = typeof(SettingApplication).GetProperties();
-            for (int i = 0; i < Info.Length; i++)
-            {
-                if (Info[i].GetValue(this) != null)
-                {
-                    object? Value = Info[i].GetValue(this);
-                    //object? OriginValue = Info[i].GetValue(this);
-                    Info[i].SetValue(Def, Value);
-                }
-            }
-            return Def;
-        }
+        public ObjSetting<bool> ExitKeyboardModeInClosePanelAction { get; internal set; } = true;
+
+        /// <summary>
+        /// Клавиша управления режимом клавиатуры в панели дейтсвий
+        /// </summary>
+        public ObjSetting<Key> KEY_KeyboardModePanelAction { get; internal set; } = Key.Z;
+
+        /// <summary>
+        /// Клавиша управления правым режимом нажатия на кнопку в режиме клавиатуры для панели дейтсвий
+        /// </summary>
+        public ObjSetting<Key> KEY_PanelActionRightClick { get; internal set; } = Key.RightCtrl;
+
+        /// <summary>
+        /// Клавиша управления закрытием панели дейтсвий
+        /// </summary>
+        public ObjSetting<Key> KEY_PanelActionClose { get; internal set; } = Key.Escape;
+
+        /// <summary>
+        /// Громкость звуков приложения
+        /// </summary>
+        public ObjSetting<int> Volume { get; internal set; } = 50;
+
+        /// <summary>
+        /// Состояние использования границы окна для визуализации загрузки процесса
+        /// </summary>
+        public ObjSetting<bool> LoadingBorderVisualizate { get; internal set; } = true;
+
+        /// <summary>
+        /// Наименование темы которая должна использоваться в программе
+        /// </summary>
+        public ObjSetting<string> ThemeInstallName { get; internal set; } = string.Empty;
+
+        /// <summary>
+        /// Перемещаться на страницу в которой исполняется команда из буфера
+        /// </summary>
+        public ObjSetting<bool> MovePageExecuteBufferCommand { get; internal set; } = true;
+
+        /// <summary>
+        /// Сила прокрутки визуализаторов консоли
+        /// </summary>
+        public ObjSetting<int> ConsoleScrollForce { get; internal set; } = 30;
+
+        /// <summary>
+        /// Размер главного окна по ширине
+        /// </summary>
+        public ObjSetting<double> MainWindowWidth { get; internal set; } = 800d;
+
+        /// <summary>
+        /// Размер главного окна по высоте
+        /// </summary>
+        public ObjSetting<double> MainWindowHeight { get; internal set; } = 650d;
     }
 }

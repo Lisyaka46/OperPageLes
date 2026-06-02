@@ -1,9 +1,15 @@
 ﻿<Application
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:OperPage_les"
-             x:Class="OperPage_les.App">
+             xmlns:local="clr-namespace:OperPageLes"
+             xmlns:GUI="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+             x:Class="OperPageLes.App">
     <Application.Resources>
-        <DrawingImage x:Key="EmptyImage"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+                <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

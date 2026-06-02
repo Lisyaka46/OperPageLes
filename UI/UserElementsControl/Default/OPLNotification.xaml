@@ -1,0 +1,27 @@
+﻿<Base:IELContainerBase
+    x:Class="OperPageLes.UI.UserElementsControl.Default.OPLNotification"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
+    xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=LibraryIEL"
+    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL">
+    <Base:IELContainerBase.Resources>
+        <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
+    </Base:IELContainerBase.Resources>
+    <Grid x:FieldModifier="private" x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <ImageBrush x:FieldModifier="private" x:Name="BackgroundNotification" Stretch="Uniform" TileMode="None" Opacity="0.5"/>
+        </Grid.Background>
+        <TextBlock x:FieldModifier="private" x:Name="TextBlockTitle" Text="Уведомление" Grid.RowSpan="1" FontSize="16" TextTrimming="CharacterEllipsis" FontFamily="{DynamicResource Alphasano}" TextAlignment="Center" Padding="0,0,0,2" HorizontalAlignment="Center"/>
+        <Viewbox Grid.Row="1" StretchDirection="DownOnly" VerticalAlignment="Top">
+            <TextBlock x:FieldModifier="private" x:Name="TextBlockMessage" Text="Текст уведомления который должен переходить на другую строку" TextWrapping="Wrap" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}" Padding="2,2,2,2" FontFamily="SimSun-ExtB" FontSize="14"/>
+        </Viewbox>
+    </Grid>
+</Base:IELContainerBase>

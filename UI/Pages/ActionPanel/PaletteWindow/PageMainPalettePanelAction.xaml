@@ -1,0 +1,23 @@
+﻿<Page x:Class="OperPageLes.UI.Pages.ActionPanel.PaletteWindow.PageMainPalettePanelAction"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel.PaletteWindow"
+      xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL" Width="145" Height="175" Margin="5,0,5,0">
+
+    <Grid VerticalAlignment="Center">
+        <Grid.Resources>
+            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <IEL:IELButtonTextKey x:Name="IELButtonSelectTheme" Grid.Row="0" Margin="0,5,0,5" PaletteElement="{DynamicResource Jade}" FontFamily="{DynamicResource Bree CYR var}" Text="Открыть" KeyActivateButton="D1" IsVisibleKeyActivate="False" Height="50" MarginViewBox="5,7,5,7" FontSize="16" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonExecuteTheme" Grid.Row="1" Margin="0,5,0,5" PaletteElement="{DynamicResource Olive}" FontFamily="{DynamicResource Bree CYR var}" Text="Применить тему" KeyActivateButton="D2" IsVisibleKeyActivate="False" Height="50" MarginViewBox="5,7,5,7" FontSize="16" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8"/>
+        <IEL:IELButtonTextKey x:Name="IELButtonDeleteTheme" Grid.Row="2" Margin="0,5,0,5" PaletteElement="{DynamicResource PastelRed}" FontFamily="{DynamicResource Bree CYR var}" Text="Удалить тему" KeyActivateButton="D3" Height="50" MarginViewBox="5,7,5,7" FontSize="16" CornerRadius="5,5,5,5" CornerRadiusKey="8,8,8,8" IsVisibleKeyActivate="False"/>
+    </Grid>
+</Page>
