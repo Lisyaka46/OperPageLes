@@ -409,8 +409,7 @@ namespace OperPageLes.UI.Windows
 
             #region IELBlockInfoInternetConnection
             IELBlockInfoInternetConnection.IsEnabled = false;
-            IELBlockInfoInternetConnection.Padding = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection ?
-                new(0, 0, 0, 7) : new(0);
+            IELBlockInfoInternetConnection.Padding = new(0);
             IELBlockInfoInternetConnection.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
             TextBlockInternetConnectionMillisecond.Opacity = 0d;
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
@@ -422,6 +421,30 @@ namespace OperPageLes.UI.Windows
             IELBlockInfoInternetConnection.MouseLeave += (sender, e) =>
             {
                 IELMessageMain.CloseBorderInformation();
+            };
+            App.ConnectionPingChanged += (sender, e) =>
+            {
+                TextBlockInternetConnectionMillisecond.Text = e.Connect ? $"{e.Ping}ms" : string.Empty;
+                if (IELBlockInfoInternetConnection.IsEnabled != e.Connect)
+                {
+                    if (!e.Connect)
+                    {
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty,
+                            0d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
+                            new(0d), TimeSpan.FromMilliseconds(400d));
+                    }
+                    else if (App.CurrentApp.SettingMainApplication.MillisecondInternetConnection)
+                    {
+                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockInternetConnectionMillisecond, OpacityProperty,
+                            1d, TimeSpan.FromMilliseconds(400d));
+                        App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
+                            new(0d, 0d, 0d, 7d), TimeSpan.FromMilliseconds(400d));
+                    }
+                    IELBlockInfoInternetConnection.IsEnabled = e.Connect;
+                    IELBlockInfoInternetConnection.Source =
+                        StructDirectoryResources.GetResourceBitmap(e.Connect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                }
             };
             #endregion
 
@@ -490,6 +513,10 @@ namespace OperPageLes.UI.Windows
             {
                 StructDirectoryResources.Play(in App.CurrentApp.SourceWaveOut, nameof(OPRES.AudioPopUp));
             };
+            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
+            {
+                TextBlockVolumeValue.Text = New.ToString();
+            };
             #endregion
 
             #region BorderIndicator
@@ -525,26 +552,6 @@ namespace OperPageLes.UI.Windows
             {
                 if (!IsReboot && !IsClosing) Close();
             };
-            #endregion
-
-            App.ConnectionPingChanged += (sender, e) =>
-            {
-                IELBlockInfoInternetConnection.Source =
-                    StructDirectoryResources.GetResourceBitmap(e.Connect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
-                TextBlockInternetConnectionMillisecond.Text = e.Connect ? $"{e.Ping}ms" : string.Empty;
-                if (e.Connect != IELBlockInfoInternetConnection.IsEnabled)
-                {
-                    IELBlockInfoInternetConnection.IsEnabled = e.Connect;
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(IELBlockInfoInternetConnection, OpacityProperty,
-                        e.Connect ? 1d : 0d, TimeSpan.FromMilliseconds(400d));
-                }
-            };
-
-            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
-            {
-                TextBlockVolumeValue.Text = New.ToString();
-            };
-
             Activated += (sender, e) =>
             {
                 if (App.CurrentApp.MainBrowser.ActivateManagerPage)
@@ -552,6 +559,7 @@ namespace OperPageLes.UI.Windows
                     App.CurrentApp.ManagerAppPage.Focus();
                 }
             };
+            #endregion
         }
 
         #region IELButtonBackControl

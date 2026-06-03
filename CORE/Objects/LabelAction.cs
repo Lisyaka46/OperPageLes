@@ -113,7 +113,7 @@ namespace OperPageLes.CORE.Objects
             if (SaveOldCommand.Equals(Label.Command)) return;
             else if (Label.Command.Contains("open_link"))
             {
-                VisualELement.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
+                VisualELement.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Link));
                 App.ConnectionPingChanged += LoadFaviconIcon;
             }
             else if (Label.Command.Contains("open_directory"))

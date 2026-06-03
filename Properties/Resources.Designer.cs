@@ -63,6 +63,16 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] ArrowLeft {
+            get {
+                object obj = ResourceManager.GetObject("ArrowLeft", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] ArrowRight {
             get {
                 object obj = ResourceManager.GetObject("ArrowRight", resourceCulture);
@@ -266,6 +276,16 @@ namespace OperPageLes.Properties {
         internal static byte[] LightBulb {
             get {
                 object obj = ResourceManager.GetObject("LightBulb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Link {
+            get {
+                object obj = ResourceManager.GetObject("Link", resourceCulture);
                 return ((byte[])(obj));
             }
         }
