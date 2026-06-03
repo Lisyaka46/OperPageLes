@@ -3,29 +3,24 @@ using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
 using OIEL.CORE.Browser;
-using OIEL.UserElementsControl;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PaletteWindow;
 using OperPageLes.UI.UserElementsControl.Theme;
-using OperPageLes.UI.Windows.Base;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAnimation.CORE.Animation;
-using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
-using Binding = System.Windows.Data.Binding;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
-namespace OperPageLes.UI.Windows
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageThemeController.xaml

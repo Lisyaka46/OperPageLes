@@ -18,6 +18,7 @@ using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAnimation.CORE.Animation;

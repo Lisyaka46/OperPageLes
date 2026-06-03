@@ -1,36 +1,26 @@
 ﻿#region Link
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
-using IEL.UserElementsControl.Base;
-using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
 using OIEL.CORE.Browser;
-using OIEL.UserElementsControl;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel;
 using OperPageLes.UI.Pages.ActionPanel.Other;
-using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
+using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows.Base;
 using OperPageLes.UI.Windows.Dialogs;
-using OperPageLes.Windows;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Windows.Globalization;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 #endregion
@@ -442,6 +432,8 @@ namespace OperPageLes.UI.Windows
                             new(0d, 0d, 0d, 7d), TimeSpan.FromMilliseconds(400d));
                     }
                     IELBlockInfoInternetConnection.IsEnabled = e.Connect;
+                    IELBlockInfoInternetConnection.SourceBackground.SetActiveSpecrum(
+                        e.Connect ? StateSpectrum.Default : StateSpectrum.NotEnabled, true);
                     IELBlockInfoInternetConnection.Source =
                         StructDirectoryResources.GetResourceBitmap(e.Connect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
                 }

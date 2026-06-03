@@ -112,7 +112,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
         /// <param name="Name">Имя команды</param>
         /// <param name="Command">Строка команды</param>
         /// <param name="ActionActivateCommand">Событие которое происходит при активации команды в буфере</param>
-        internal void InsertCommandFromBuffer(string Command, Browser.PageConsole SourcePage)
+        internal void InsertCommandFromBuffer(string Command, Browser.InlayPages.PageConsole SourcePage)
         {
             if (BufferCommand == null) throw new Exception("Невозможно добавить команду в буфер которого нет!");
             if (!IELButtonClearBuffer.IsEnabled)
@@ -137,7 +137,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
                                 {
                                     App.CurrentApp.MainBrowser.ActivateInlayIndex(App.CurrentApp.MainBrowser.Inlays.IndexOf(InlaySource));
                                 }
-                                else if (App.CurrentApp.MainBrowser.ActualInlay?.Content is Browser.PageConsole page)
+                                else if (App.CurrentApp.MainBrowser.ActualInlay?.Content is Browser.InlayPages.PageConsole page)
                                 {
                                     SourcePage = page;
                                 }

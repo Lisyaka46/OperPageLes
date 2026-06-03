@@ -1,22 +1,10 @@
-﻿using IEL.CORE.Classes;
-using OIEL.CORE.Browser;
+﻿using OIEL.CORE.Browser;
 using OperPageLes.CORE.Enums;
 using OperPageLes.UI.Pages.Settings;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
-namespace OperPageLes.UI.Windows.Dialogs
+namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageSettingApp.xaml
@@ -37,11 +25,6 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// Страница настроек панели действий
         /// </summary>
         private readonly PagePanelActionSetting PanelActionSetting;
-
-        /// <summary>
-        /// Активная настройка
-        /// </summary>
-        private QData? ActiveBackgroundSetting;
 
         /// <summary>
         /// Активный индекс столбца позиции складки настроек

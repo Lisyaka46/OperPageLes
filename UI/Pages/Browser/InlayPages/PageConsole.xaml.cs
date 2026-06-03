@@ -1,9 +1,7 @@
 ﻿using IEL.CORE.Enums;
-using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using OIEL.CORE.Browser;
 using OIEL.UserElementsControl;
-using OIEL.UserElementsControl.Interfaces;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
@@ -14,12 +12,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Color = System.Windows.Media.Color;
 using OPRES = OperPageLes.Properties.Resources;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser.InlayPages
 {
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
@@ -72,6 +68,25 @@ namespace OperPageLes.UI.Pages.Browser
         {
             InitializeComponent();
 
+            SelectNavigation = SelectNavigationPageConsoleEnum.None;
+            SaveKeyDown = false;
+            ActiveIndexBufferInput = -1;
+            SaveStringPrintBuffer = string.Empty;
+            BufferPage = App.CurrentApp.AppPageBuffer;
+
+            #region BorderConsole
+            BorderConsole.MouseUp += (sender, e) =>
+            {
+                if (BorderCommandInformation.Width != BorderButtonPanelInformationController.Width) return;
+                else if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Right)
+                {
+                    UsingPanelActionFromConsolePage(null);
+                }
+            };
+
+            #region IELScrollConsole
             StackPanelConsole = new()
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
@@ -82,17 +97,11 @@ namespace OperPageLes.UI.Pages.Browser
             IELScrollConsole.AutoUpdateVisibleHorizontalScroll = false;
             IELScrollConsole.AutoUpdateVisibleVerticalScroll = true;
             IELScrollConsole.Content = StackPanelConsole;
+            #endregion
+            #endregion
 
-            HitCommandsInterpreter.ManagerAnimation = App.ManagerAnimation;
-            HitCommandsInterpreter.Connect(in App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
-
+            #region ButtonReturnCommand
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
-            SelectNavigation = SelectNavigationPageConsoleEnum.None;
-            SaveKeyDown = false;
-            ActiveIndexBufferInput = -1;
-            SaveStringPrintBuffer = string.Empty;
-
             ButtonReturnCommand.OnActivateMouseLeft += async (sender, e) =>
             {
                 if (TextBoxCommandInput.Text.Length == 0) return;
@@ -101,7 +110,11 @@ namespace OperPageLes.UI.Pages.Browser
                 TextBoxCommandInput.Text = string.Empty;
                 await ActivateCommand(Command);
             };
-            #region Setting
+            #endregion
+
+            #region HitCommandsInterpreter
+            HitCommandsInterpreter.ManagerAnimation = App.ManagerAnimation;
+            HitCommandsInterpreter.Connect(in App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
             {
                 if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
@@ -117,28 +130,10 @@ namespace OperPageLes.UI.Pages.Browser
             #endregion
 
             #region PanelAction
-
             App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 if (Name == nameof(BorderConsole)) TextBoxCommandInput.Focus();
             };
-            #endregion
-
-            #region RichTextBoxMainMessage
-            BorderConsole.MouseUp += (sender, e) =>
-            {
-                if (BorderCommandInformation.Width != BorderButtonPanelInformationController.Width) return;
-                else if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
-                else if (e.ChangedButton == MouseButton.Right)
-                {
-                    UsingPanelActionFromConsolePage(null);
-                }
-            };
-            #endregion
-
-            #region BufferPage
-            BufferPage = App.CurrentApp.AppPageBuffer;
             #endregion
 
             #region BorderButtonPanelInformationController
@@ -175,6 +170,7 @@ namespace OperPageLes.UI.Pages.Browser
             #endregion
 
             #region TextBoxCommandInput
+            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
             TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
             {
                 switch (e.Key)
@@ -299,6 +295,7 @@ namespace OperPageLes.UI.Pages.Browser
                     }
                 }
             };
+            TextBoxCommandInput.Focus();
             #endregion
 
             #region IELImageButtonHelp
@@ -325,7 +322,6 @@ namespace OperPageLes.UI.Pages.Browser
             };
             #endregion
 
-            TextBoxCommandInput.Focus();
         }
 
         #region PanelActionManipulate
@@ -437,9 +433,7 @@ namespace OperPageLes.UI.Pages.Browser
         /// <param name="Element">Удаляемый визуализационный элемент</param>
         internal void DeleteCommandViewer(OPLCommandViewer Element)
         {
-            //StackPanelConsole.Children.Remove(Element);
             App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(300d));
-            //Element.Height = Element.ActualHeight;
             DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
             animation.Duration = TimeSpan.FromMilliseconds(400d);
             animation.From = Element.ActualHeight;

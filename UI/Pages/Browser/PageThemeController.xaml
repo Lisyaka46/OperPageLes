@@ -9,7 +9,7 @@
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:Theme="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
-    x:Class="OperPageLes.UI.Windows.PageThemeController"
+    x:Class="OperPageLes.UI.Pages.Browser.PageThemeController"
     mc:Ignorable="d"
     Title="Управление персонализацией" MinWidth="670" MinHeight="410">
     <Base:PageBrowser.Resources>

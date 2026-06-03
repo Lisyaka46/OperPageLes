@@ -8,7 +8,7 @@
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
-    x:Class="OperPageLes.UI.Pages.Browser.PageWebBrowser"
+    x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageWebBrowser"
     Title="PageWebBrowser">
     <Base:PageBrowser.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>

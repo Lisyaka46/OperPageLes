@@ -8,7 +8,7 @@
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
     xmlns:OPL="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
-    x:Class="OperPageLes.UI.Pages.Browser.PageConsole"
+    x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageConsole"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     Title="PageConsole">

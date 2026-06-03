@@ -22,7 +22,7 @@ using DrColor = System.Drawing.Color;
 using OPRES = OperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser.InlayPages
 {
     /// <summary>
     /// Логика взаимодействия для PageDeveloper.xaml

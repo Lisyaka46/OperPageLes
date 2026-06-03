@@ -8,7 +8,7 @@ using System.Windows.Input;
 using OPRES = OperPageLes.Properties.Resources;
 //using CefSharp.Wpf;
 
-namespace OperPageLes.UI.Pages.Browser
+namespace OperPageLes.UI.Pages.Browser.InlayPages
 {
     /// <summary>
     /// Логика взаимодействия для PageWebBrowser.xaml
