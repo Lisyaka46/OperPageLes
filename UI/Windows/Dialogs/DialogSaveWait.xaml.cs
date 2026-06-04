@@ -1,5 +1,6 @@
 ﻿using OperPageLes.CORE;
 using OperPageLes.CORE.Struct;
+using OPLAnimation.CORE.Animation;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,11 @@ namespace OperPageLes.UI.Windows.Dialogs
     /// </summary>
     public partial class DialogSaveWait : Window
     {
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         /// <summary>
         /// Токен управляемой асинхронной операцией отображения обновления информации управляемая завершением сохранения
         /// </summary>
@@ -43,7 +49,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogSaveWait()
         {
             InitializeComponent();
-            VisualLoading.ManagerAnimation = App.ManagerAnimation;
+            VisualLoading.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             VisualLoading.Opacity = 0d;
             LineProgress.X1 = 3;
             LineProgress.X2 = 3;
@@ -93,13 +99,16 @@ namespace OperPageLes.UI.Windows.Dialogs
             }, TaskTokenComplete);
 
             TextBlockTime.Text = "0";
-            Opacity = 0d;
-            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-            animation.BeginTime = TimeSpan.FromMilliseconds(20d);
-            animation.Duration = TimeSpan.FromMilliseconds(1270d);
-            animation.From = 0d;
-            animation.To = 1d;
-            BeginAnimation(OpacityProperty, animation);
+            if (ManagerAnimation != null)
+            {
+                Opacity = 0d;
+                DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                animation.BeginTime = TimeSpan.FromMilliseconds(20d);
+                animation.Duration = TimeSpan.FromMilliseconds(1270d);
+                animation.From = 0d;
+                animation.To = 1d;
+                BeginAnimation(OpacityProperty, animation);
+            }
             Show();
         }
 
@@ -154,8 +163,9 @@ namespace OperPageLes.UI.Windows.Dialogs
             //Thickness StartMargin = Marker.Margin = new(GridProgressBar.ActualWidth / ProgressBarIndicator.Maximum * ValueIndicator, 0, 0, -2);
             //GridProgressBar.Children.Add(Marker);
             //Marker.UpdateLayout();
-            //App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Marker, MarginProperty, new(StartMargin.Left, 0, 0, 0), TimeSpan.FromMilliseconds(700d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(LineProgress, Line.X2Property, ValueIndicator / 100 * 438 + 3, TimeSpan.FromMilliseconds(400d));
+            //App.CurrentApp.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Marker, MarginProperty, new(StartMargin.Left, 0, 0, 0), TimeSpan.FromMilliseconds(700d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, LineProgress, Line.X2Property,
+                ValueIndicator / 100 * 438 + 3, TimeSpan.FromMilliseconds(400d));
         }
 
         /// <summary>

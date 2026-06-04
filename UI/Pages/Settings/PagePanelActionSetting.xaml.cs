@@ -1,8 +1,14 @@
-﻿using IEL.UserElementsControl;
+﻿using IEL.CORE.Classes;
+using IEL.UserElementsControl;
+using OperPageLes.CORE;
 using OperPageLes.CORE.Settings;
 using OperPageLes.UI.Pages.ActionPanel;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,18 +21,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Globalization;
-using System.ComponentModel;
-using OperPageLes.CORE;
-using IEL.CORE.Classes;
 
 namespace OperPageLes.UI.Pages.Settings
 {
     /// <summary>
     /// Логика взаимодействия для PagePanelActionSetting.xaml
     /// </summary>
-    public partial class PagePanelActionSetting : Page
+    public partial class PagePanelActionSetting : Page, IOPLAnimate
     {
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         /// <summary>
         /// Объект кнопки на котором выделен фокус изменения назначенной клавиши
         /// </summary>
@@ -49,6 +56,7 @@ namespace OperPageLes.UI.Pages.Settings
             CheckBoxKeyboardMode.IsChecked = false;
             CheckBoxKeyboardRightClick.IsChecked = false;
             CheckBoxKeyboardClosePanelAction.IsChecked = false;
+
             #region CheckBoxExitKeyboardMode
             CheckBoxExitKeyboardMode.IsChecked = App.CurrentApp.SettingMainApplication.ExitKeyboardModeInClosePanelAction;
             CheckBoxExitKeyboardMode.Checked += (sender, e) =>
@@ -60,6 +68,7 @@ namespace OperPageLes.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.ExitKeyboardModeInClosePanelAction.Value = false;
             };
             #endregion
+
             #region CheckBoxKeyboardMode
             IELButtonSetKeyKeboardMode.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_KeyboardModePanelAction);
             IELButtonSetKeyKeboardMode.OnActivateMouseLeft += UsingSelectKeyValueSet;
@@ -78,16 +87,19 @@ namespace OperPageLes.UI.Pages.Settings
                 IELButtonDemo2.IsVisibleKeyActivate = true;
                 IELButtonDemo3.IsVisibleKeyActivate = true;
                 if (CheckBoxKeyboardRightClick.IsChecked ?? false)
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ViewActivateRightClick, OpacityProperty,
+                        0.7d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardMode.Unchecked += (sender, e) =>
             {
                 IELButtonDemo1.IsVisibleKeyActivate = false;
                 IELButtonDemo2.IsVisibleKeyActivate = false;
                 IELButtonDemo3.IsVisibleKeyActivate = false;
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ViewActivateRightClick, OpacityProperty,
+                    0d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
+
             #region CheckBoxKeyboardRightClick
             ViewActivateRightClick.Opacity = 0d;
             IELButtonSetKeyKeboardRightClick.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionRightClick);
@@ -104,14 +116,17 @@ namespace OperPageLes.UI.Pages.Settings
             CheckBoxKeyboardRightClick.Checked += (sender, e) =>
             {
                 if (CheckBoxKeyboardMode.IsChecked ?? false)
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0.7d, TimeSpan.FromMilliseconds(500d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ViewActivateRightClick, OpacityProperty,
+                        0.7d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardRightClick.Unchecked += (sender, e) =>
             {
                 if (CheckBoxKeyboardMode.IsChecked ?? false)
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewActivateRightClick, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ViewActivateRightClick, OpacityProperty,
+                        0d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
+
             #region CheckBoxKeyboardClosePanelAction
             IELButtonSetKeyKeboardClosePanelAction.Text = IELKeyConverter.ConvertKeyToString(App.CurrentApp.SettingMainApplication.KEY_PanelActionClose);
             IELButtonSetKeyKeboardClosePanelAction.OnActivateMouseLeft += UsingSelectKeyValueSet;
@@ -126,13 +141,13 @@ namespace OperPageLes.UI.Pages.Settings
             };
             CheckBoxKeyboardClosePanelAction.Checked += (sender, e) =>
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, WidthProperty, 0d, TimeSpan.FromMilliseconds(500d));
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, PanelActionDemo, WidthProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, PanelActionDemo, HeightProperty, 0d, TimeSpan.FromMilliseconds(500d));
             };
             CheckBoxKeyboardClosePanelAction.Unchecked += (sender, e) =>
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, WidthProperty, 200d, TimeSpan.FromMilliseconds(500d));
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(PanelActionDemo, HeightProperty, 150d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, PanelActionDemo, WidthProperty, 200d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, PanelActionDemo, HeightProperty, 150d, TimeSpan.FromMilliseconds(500d));
             };
             #endregion
         }

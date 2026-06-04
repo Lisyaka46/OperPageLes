@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -8,12 +10,17 @@ namespace OperPageLes.UI.Pages.Settings
     /// <summary>
     /// Логика взаимодействия для PageGeneral.xaml
     /// </summary>
-    public partial class PageGeneralSetting : Page
+    public partial class PageGeneralSetting : Page, IOPLAnimate
     {
         /// <summary>
         /// Размер буфера из настроек
         /// </summary>
         private readonly int OriginalSizeBuffer = -1;
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         internal PageGeneralSetting()
         {
@@ -86,12 +93,14 @@ namespace OperPageLes.UI.Pages.Settings
             };
             IELButtonClearImage.OnActivateMouseLeft += (sender, e) =>
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(2000d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageBackground, OpacityProperty,
+                    0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
                 App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
             };
             #endregion
+
             #region BufferSize
             BorderSettingBufferSize.Opacity = 0d;
             RowDefinitionBufferSize.MaxHeight = RowDefinitionBufferSize.MinHeight;
@@ -104,18 +113,26 @@ namespace OperPageLes.UI.Pages.Settings
                 TextBlockSliderBufferSize.Text = e.NewValue.ToString();
                 if (RowDefinitionBufferSize.MaxHeight != (e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight))
                 {
-                    DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-                    animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
-                    animation.Duration = TimeSpan.FromMilliseconds(1200d);
-                    animation.To = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
-                    Storyboard storyboard = new();
-                    storyboard.Children.Add(animation);
-                    Storyboard.SetTarget(animation, RowDefinitionBufferSize);
-                    Storyboard.SetTargetProperty(animation, new PropertyPath("(RowDefinition.MaxHeight)"));
-                    storyboard.Begin();
+                    if (ManagerAnimation != null)
+                    {
+                        DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                        animation.BeginTime = TimeSpan.FromMilliseconds(BorderSettingBufferSize.Opacity != 0d && BorderSettingBufferSize.Opacity != 1d ? 0d : 130d);
+                        animation.Duration = TimeSpan.FromMilliseconds(1200d);
+                        animation.To = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
+                        Storyboard storyboard = new();
+                        storyboard.Children.Add(animation);
+                        Storyboard.SetTarget(animation, RowDefinitionBufferSize);
+                        Storyboard.SetTargetProperty(animation, new PropertyPath("(RowDefinition.MaxHeight)"));
+                        storyboard.Begin();
 
-                    animation.To = e.NewValue != OriginalSizeBuffer ? 1d : 0d;
-                    BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
+                        animation.To = e.NewValue != OriginalSizeBuffer ? 1d : 0d;
+                        BorderSettingBufferSize.BeginAnimation(OpacityProperty, animation);
+                    }
+                    else
+                    {
+                        RowDefinitionBufferSize.MaxHeight = e.NewValue != OriginalSizeBuffer ? RowDefinitionBufferSize.Height.Value : RowDefinitionBufferSize.MinHeight;
+                        BorderSettingBufferSize.Opacity = e.NewValue != OriginalSizeBuffer ? 1d : 0d;
+                    }
                 }
             };
             IELButtonTextClearValue.OnActivateMouseLeft += (sender, e) =>
@@ -129,6 +146,7 @@ namespace OperPageLes.UI.Pages.Settings
                     App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
             };
             #endregion
+
             #region MillisecondInternetConnection
             CheckBoxInternetConnectionMillisecond.IsChecked = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection;
             CheckBoxInternetConnectionMillisecond.Checked += (sender, e) =>
@@ -140,6 +158,7 @@ namespace OperPageLes.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = false;
             };
             #endregion
+
             #region DefaultOpenUrlWebView
             IELTextBoxDefaultUrl.Text = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
             IELTextBoxDefaultUrl.KeyUp += (sender, e) =>
@@ -156,6 +175,7 @@ namespace OperPageLes.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView.Value = IELTextBoxDefaultUrl.Text;
             };
             #endregion
+
             #region UseOpenLinkInPageBrowser
             CheckBoxUsePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
             CheckBoxUsePageBrowser.Checked += (sender, e) =>
@@ -167,6 +187,7 @@ namespace OperPageLes.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = false;
             };
             #endregion
+
             #region UseOnlyCreatePageWebBrowser
             CheckBoxUseOnlyCreatePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser;
             CheckBoxUseOnlyCreatePageBrowser.Checked += (sender, e) =>
@@ -178,6 +199,7 @@ namespace OperPageLes.UI.Pages.Settings
                 App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = false;
             };
             #endregion
+
             #region LoadingBorderVisualizate
             CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
             CheckBoxLoadingBorderVisualizate.Checked += (sender, e) =>
@@ -200,7 +222,8 @@ namespace OperPageLes.UI.Pages.Settings
             try
             {
                 BitmapImage image = new(new Uri(Uri, UriKind.RelativeOrAbsolute));
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageErrorBitmapBackground, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageErrorBitmapBackground, OpacityProperty,
+                    0d, TimeSpan.FromMilliseconds(100d));
                 if (image.PixelWidth > 0 && image.PixelHeight > 0)
                 {
                     IELTextBoxDirectoryBackground.Text = Uri;
@@ -209,12 +232,14 @@ namespace OperPageLes.UI.Pages.Settings
                     IELButtonClearImage.IsEnabled = true;
                     App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBackground, OpacityProperty, 0.6d, TimeSpan.FromMilliseconds(1000d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageBackground, OpacityProperty,
+                        0.6d, TimeSpan.FromMilliseconds(1000d));
                 }
             }
             catch
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockFailedImageSetup, OpacityProperty, 1d, 0d, TimeSpan.FromMilliseconds(5000d));
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, TextBlockFailedImageSetup, OpacityProperty,
+                    1d, 0d, TimeSpan.FromMilliseconds(5000d));
             }
         }
     }

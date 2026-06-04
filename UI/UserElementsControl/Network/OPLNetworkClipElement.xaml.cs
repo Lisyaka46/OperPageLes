@@ -64,10 +64,8 @@ namespace OperPageLes.UI.UserElementsControl.Network
             {
                 if (value.Length != TextBlockMessage.Text.Length && (value.Length == 0 || TextBlockMessage.Text.Length == 0))
                 {
-                    if (ManagerAnimation != null)
-                        ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockMessage, HeightProperty, value.Length == 0 ? 0d : 14d,
-                            TimeSpan.FromMilliseconds(300d));
-                    else TextBlockMessage.Height = value.Length == 0 ? 0d : 14d;
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockMessage, HeightProperty,
+                        value.Length == 0 ? 0d : 14d, TimeSpan.FromMilliseconds(300d));
                 }
                 SetValue(TextMessageProperty, value);
             }
@@ -175,18 +173,18 @@ namespace OperPageLes.UI.UserElementsControl.Network
             {
                 RadialGradientLoading.BeginAnimation(RadialGradientBrush.OpacityProperty, null);
                 RadialGradientLoading.Opacity = 0d;
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleLoading, System.Windows.Shapes.Rectangle.StrokeThicknessProperty,
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RectangleLoading, System.Windows.Shapes.Rectangle.StrokeThicknessProperty,
                     4d, TimeSpan.FromSeconds(1d));
                 StrokeDashLength = 28d;
-                DoubleAnimation animation = ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+                DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
                 animation.From = 0d;
                 animation.To = 1d;
                 animation.Duration = TimeSpan.FromSeconds(2d);
                 animation.BeginTime = TimeSpan.FromSeconds(0.8d);
                 RadialGradientLoading.BeginAnimation(RadialGradientBrush.OpacityProperty, animation);
-                ManagerAnimation.PointAnimationType.AnimateEffect(RadialGradientLoading, RadialGradientBrush.CenterProperty,
-                    new(0.35d, 0.5d), TimeSpan.FromMilliseconds(1500d));
-                DoubleAnimation animationAngle = ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RadialGradientLoading, RadialGradientBrush.CenterProperty,
+                    new System.Windows.Point(0.35d, 0.5d), TimeSpan.FromMilliseconds(1500d));
+                DoubleAnimation animationAngle = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
                 animationAngle.EasingFunction = new SineEase()
                 {
                     EasingMode = EasingMode.EaseInOut,
@@ -228,25 +226,14 @@ namespace OperPageLes.UI.UserElementsControl.Network
             if (!IsManipulate)
                 throw new Exception("Невозможно взаимодействовать с объектом, предварительно не включив режим взаимодействия!");
             Value = Math.Clamp(Value, 0d, 1d);
-            if (ManagerAnimation != null)
-            {
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleLoading, System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty,
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RectangleLoading, System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty,
                         StrokeDashLength - (Value * StrokeDashLength), TimeSpan.FromMilliseconds(200d));
-                if (IsProgressTextVizualizate && Value > 0.7d)
-                {
-                    if (TextBlockProgress.Opacity == 0d)
-                        ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockProgress, OpacityProperty,
-                            1d, TimeSpan.FromSeconds(2d));
-                    CurrentProgress.Text = $"{Math.Round(Value * 100, 2)}";
-                }
-            }
-            else
+            if (IsProgressTextVizualizate && Value > 0.7d)
             {
-                RectangleLoading.StrokeDashOffset = StrokeDashLength - (Value * StrokeDashLength);
-                if (IsProgressTextVizualizate)
-                {
-                    TextBlockProgress.Opacity = 1d;
-                }
+                if (TextBlockProgress.Opacity == 0d)
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockProgress, OpacityProperty,
+                        1d, TimeSpan.FromSeconds(2d));
+                CurrentProgress.Text = $"{Math.Round(Value * 100, 2)}";
             }
         }
 
@@ -263,15 +250,15 @@ namespace OperPageLes.UI.UserElementsControl.Network
             {
                 RectangleLoading.BeginAnimation(System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty, null);
                 BeginAnimation(StrokeDashLengthProperty, null);
-                ManagerAnimation.PointAnimationType.AnimateEffect(RadialGradientLoading, RadialGradientBrush.CenterProperty,
-                    new(0.5d, 0.5d), TimeSpan.FromSeconds(2d));
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateGradientLoading, RotateTransform.AngleProperty,
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RadialGradientLoading, RadialGradientBrush.CenterProperty,
+                    new System.Windows.Point(0.5d, 0.5d), TimeSpan.FromSeconds(2d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RotateGradientLoading, RotateTransform.AngleProperty,
                     0d, TimeSpan.FromSeconds(2d));
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleLoading, System.Windows.Shapes.Rectangle.StrokeThicknessProperty,
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RectangleLoading, System.Windows.Shapes.Rectangle.StrokeThicknessProperty,
                     0d, TimeSpan.FromSeconds(2d));
                 if (IsProgressTextVizualizate)
                 {
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockProgress, OpacityProperty,
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockProgress, OpacityProperty,
                         0d, TimeSpan.FromSeconds(2d));
                 }
                 StrokeDashLength = 448d;
@@ -300,9 +287,8 @@ namespace OperPageLes.UI.UserElementsControl.Network
                 IconLoadingFile.Source =
                     FileIcon != null ? Imaging.CreateBitmapSourceFromHBitmap(FileIcon.ToBitmap().GetHbitmap(),
                     IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()) : DefaultIconFile;
-                if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(IconLoadingFile, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(400d));
-                else IconLoadingFile.Opacity = 1d;
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, IconLoadingFile, OpacityProperty,
+                    0d, 1d, TimeSpan.FromMilliseconds(400d));
             });
         }
 
@@ -315,10 +301,8 @@ namespace OperPageLes.UI.UserElementsControl.Network
             TextBlockIndex.Text = IndexView.ToString();
             if (BorderIndex.Width == 0)
             {
-                if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderIndex, WidthProperty, 20d, TimeSpan.FromMilliseconds(500d));
-                else
-                    BorderIndex.Width = 20d;
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderIndex, WidthProperty,
+                    20d, TimeSpan.FromMilliseconds(500d));
             }
                 
         }
@@ -328,10 +312,8 @@ namespace OperPageLes.UI.UserElementsControl.Network
         /// </summary>
         public void ClearIndex()
         {
-            if (ManagerAnimation != null)
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderIndex, WidthProperty, 0d, TimeSpan.FromMilliseconds(500d));
-            else
-                BorderIndex.Width = 0d;
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderIndex, WidthProperty,
+                0d, TimeSpan.FromMilliseconds(500d));
         }
 
         /// <summary>

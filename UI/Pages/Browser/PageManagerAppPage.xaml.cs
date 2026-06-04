@@ -6,6 +6,7 @@ using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
+using OPLAnimation.CORE.Animation;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -23,7 +24,7 @@ namespace OperPageLes.UI.Pages.Browser
     /// <summary>
     /// Логика взаимодействия для PageManagerAppPage.xaml
     /// </summary>
-    public partial class PageManagerAppPage : Page
+    public partial class PageManagerAppPage : MainPageBrowser
     {
         /// <summary>
         /// 
@@ -137,7 +138,7 @@ namespace OperPageLes.UI.Pages.Browser
         /// <summary>
         /// Инициализировать начальную страницу
         /// </summary>
-        public PageManagerAppPage()
+        public PageManagerAppPage() : base(new(100, 100))
         {
             SourceAppPages = [];
             SourceLabels = [];
@@ -260,7 +261,7 @@ namespace OperPageLes.UI.Pages.Browser
         /// <param name="PathJSON">Директория JSON</param>
         internal async Task AddLabelsFromJSON(string PathJSON)
         {
-            SourceLabelAction[] Buffer = StructDirectoryResources.DeserializeObjectJson<SourceLabelAction>(PathJSON);
+            SourceLabelAction[] Buffer = LibraryJSON.Convert.DeserializeObjectJson<SourceLabelAction>(PathJSON);
             Dispatcher.Invoke(() =>
             {
                 for (int i = 0; i < Buffer.Length; i++)
@@ -309,17 +310,20 @@ namespace OperPageLes.UI.Pages.Browser
 
 
             Canvas.SetZIndex(SourceMoveLabel, 2);
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceMoveLabel, OpacityProperty,
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, SourceMoveLabel, OpacityProperty,
                 0.8d, TimeSpan.FromMilliseconds(1500d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleSelectPosition, OpacityProperty,
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RectangleSelectPosition, OpacityProperty,
                 1d, TimeSpan.FromMilliseconds(1500d));
-            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-            animation.From = 0d;
-            animation.To = 7.5d;
-            animation.Duration = TimeSpan.FromSeconds(1d);
-            animation.EasingFunction = null;
-            animation.RepeatBehavior = RepeatBehavior.Forever;
-            RectangleSelectPosition.BeginAnimation(System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty, animation);
+            if (ManagerAnimation != null)
+            {
+                DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                animation.From = 0d;
+                animation.To = 7.5d;
+                animation.Duration = TimeSpan.FromSeconds(1d);
+                animation.EasingFunction = null;
+                animation.RepeatBehavior = RepeatBehavior.Forever;
+                RectangleSelectPosition.BeginAnimation(System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty, animation);
+            }
         }
 
         private void ScrollFromSelectLabel(object sender, MouseWheelEventArgs e)
@@ -392,49 +396,11 @@ namespace OperPageLes.UI.Pages.Browser
             (SourceLabels[StartIndex], SourceLabels[NextIndex]) = (SourceLabels[NextIndex], SourceLabels[StartIndex]);
             Canvas.SetZIndex(SourceVisual, 0);
             SourceVisual.Margin = new(3d);
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceVisual, OpacityProperty,
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, SourceVisual, OpacityProperty,
                 1d, TimeSpan.FromMilliseconds(600d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RectangleSelectPosition, OpacityProperty,
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, RectangleSelectPosition, OpacityProperty,
                 0d, TimeSpan.FromMilliseconds(600d));
             RectangleSelectPosition.BeginAnimation(System.Windows.Shapes.Rectangle.StrokeDashOffsetProperty, null);
-        }
-
-        /// <summary>
-        /// Добавить отображение иконки в менеджере приложений страниц
-        /// </summary>
-        /// <param name="TypeAppPage">Тип создаваемого приложения страницы</param>
-        internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
-        {
-            ApplicationPage Source = new(TypeAppPage, NameAppPage, new(100, 100));
-            Source.VisualELement.PaletteElement = Spectrum ?? App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Gray];
-            Source.VisualELement.Source = Icon ?? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            Source.ApplicationPageActivate += Source_ApplicationPageActivate;
-            MainPanel.Children.Add(Source.VisualELement);
-        }
-
-        private void Source_ApplicationPageActivate(object? sender, ApplicationPage e)
-        {
-            PageBrowser? InicializeInlay = App.CurrentApp.MainBrowser.SearchAnyPageType(e.TypeBrowserAppPage);
-            if (InicializeInlay != null)
-                App.CurrentApp.MainBrowser.ActivateInlayInBrowserPage(InicializeInlay);
-            else InitAppPageFromType(in e);
-        }
-
-        /// <summary>
-        /// Инициализировать страницу по хранимому типу в иконке
-        /// </summary>
-        /// <param name="Browser">Браузер страниц</param>
-        /// <param name="UIAppPage">Иконка хранимого типа приложения страницы</param>
-        /// <param name="Activate">Активировать созданную вкладку или нет</param>
-        private static void InitAppPageFromType(in ApplicationPage AppPage)
-        {
-            PageBrowser ElementAppPage = (PageBrowser)(Activator.CreateInstance(AppPage.TypeBrowserAppPage) ??
-                throw new Exception("Не удалось создать объект приложения страницы"));
-            ElementAppPage.Title = AppPage.Name;
-            IELButtonImage CloseButtonInlay = App.CurrentApp.MainBrowser.AddInlayPage(in ElementAppPage, AppPage.VisualELement.PaletteElement, true).GetButtonCloseInlay();
-            CloseButtonInlay.MarginViewBox = new(0);
-            CloseButtonInlay.PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Red];
-            CloseButtonInlay.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }
     }
 }

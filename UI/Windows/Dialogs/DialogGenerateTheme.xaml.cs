@@ -16,7 +16,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogGenerateTheme()
         {
             InitializeComponent();
-            VisualLoading.ManagerAnimation = App.ManagerAnimation;
+            VisualLoading.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             VisualLoading.Opacity = 0d;
             ComboBoxThemeSourceCreating.SelectionChanged += (sender, e) =>
             {

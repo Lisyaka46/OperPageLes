@@ -1,9 +1,11 @@
-﻿using OperPageLes.CORE.Enums;
-using OperPageLes.UI.Pages.Browser;
-using OIEL.UserElementsControl;
-using IEL.CORE.Classes;
+﻿using IEL.CORE.Classes;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
+using OIEL.UserElementsControl;
+using OperPageLes.CORE.Enums;
+using OperPageLes.UI.Pages.Browser;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -13,12 +15,17 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
     /// <summary>
     /// Логика взаимодействия для PageBufferActionPanel.xaml
     /// </summary>
-    public partial class BufferPagePanelAction : Page
+    public partial class BufferPagePanelAction : Page, IOPLAnimate
     {
         /// <summary>
         /// Буфер объектов команд
         /// </summary>
         internal Interpreter.Classes.Buffer? BufferCommand;
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         /// <summary>
         /// Объект анимации позиции при удалении одного элемента
@@ -118,7 +125,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
             if (!IELButtonClearBuffer.IsEnabled)
             {
                 IELButtonClearBuffer.IsEnabled = true;
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(GridBuffer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridBuffer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
             }
             if (BufferCommand.Count < BufferCommand.Length)
             {

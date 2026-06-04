@@ -1,8 +1,10 @@
-﻿using OperPageLes.CORE.Objects;
+﻿using OIEL.UserElementsControl;
+using OIEL.UserElementsControl.Interfaces;
+using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Default;
-using OIEL.UserElementsControl;
-using OIEL.UserElementsControl.Interfaces;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,8 +17,13 @@ namespace OperPageLes.UI.Pages.ActionPanel
     /// <summary>
     /// Логика взаимодействия для PageNotificationManager.xaml
     /// </summary>
-    public partial class PageNotificationManager : Page
+    public partial class PageNotificationManager : Page, IOPLAnimate
     {
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         /// <summary>
         /// Объект визуализации объектов уведомления
         /// </summary>
@@ -58,8 +65,10 @@ namespace OperPageLes.UI.Pages.ActionPanel
             };
 
             StackPanelNotifications.Children.Add(ViewNotification);
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ViewNotification, MarginProperty, new(4d), TimeSpan.FromMilliseconds(600d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ViewNotification, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ViewNotification, MarginProperty,
+                new Thickness(4d), TimeSpan.FromMilliseconds(600d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ViewNotification, OpacityProperty,
+                1d, TimeSpan.FromMilliseconds(600d));
         }
 
         /// <summary>
@@ -71,15 +80,20 @@ namespace OperPageLes.UI.Pages.ActionPanel
             int Index = StackPanelNotifications.Children.IndexOf(Element);
             App.CurrentApp.RemoveNotification(Element.CurrentNotification);
             Element.Height = Element.ActualHeight;
-            DoubleAnimation Animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-            Animation.From = Element.ActualHeight;
-            Animation.To = 0d;
-            Animation.FillBehavior = FillBehavior.Stop;
-            Animation.Completed += (sender, e) =>
-                StackPanelNotifications.Children.Remove(Element);
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(500d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-            Element.BeginAnimation(HeightProperty, Animation);
+            if (ManagerAnimation != null)
+            {
+                DoubleAnimation Animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                Animation.From = Element.ActualHeight;
+                Animation.To = 0d;
+                Animation.FillBehavior = FillBehavior.Stop;
+                Animation.Completed += (sender, e) =>
+                    StackPanelNotifications.Children.Remove(Element);
+                Element.BeginAnimation(HeightProperty, Animation);
+            } else StackPanelNotifications.Children.Remove(Element);
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Element, MarginProperty,
+                new Thickness(0d), TimeSpan.FromMilliseconds(500d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Element, OpacityProperty,
+                0d, TimeSpan.FromMilliseconds(400d));
         }
 
         /// <summary>

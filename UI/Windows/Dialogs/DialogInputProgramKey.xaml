@@ -16,6 +16,7 @@
         <TransformGroup>
             <ScaleTransform x:FieldModifier="private" x:Name="SourceScaleTransform" ScaleX="1" ScaleY="1"/>
             <SkewTransform x:FieldModifier="private" x:Name="SourceSkewTransform" AngleX="0" AngleY="0"/>
+            <RotateTransform x:FieldModifier="private" x:Name="SourceRotateTransform" Angle="0" CenterX="-50"/>
         </TransformGroup>
     </Base:OPLWindowBase.RenderTransform>
     <Base:OPLWindowBase.Background>

@@ -1,8 +1,10 @@
-﻿using OperPageLes.CORE.Enums;
+﻿using OIEL.UserElementsControl.Base;
+using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
-using OIEL.UserElementsControl.Base;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using OPRES = OperPageLes.Properties.Resources;
@@ -12,7 +14,7 @@ namespace OperPageLes.UI.UserElementsControl.Network
     /// <summary>
     /// Логика взаимодействия для OPLNetworkMessage.xaml
     /// </summary>
-    public partial class OPLNetworkMessage : OPLNetworkElementViewerBase
+    public partial class OPLNetworkMessage : OPLNetworkElementViewerBase, IOPLAnimate
     {
         #region Properties
 
@@ -65,6 +67,11 @@ namespace OperPageLes.UI.UserElementsControl.Network
 
         #endregion
 
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         public OPLNetworkMessage()
         {
             InitializeComponent();
@@ -112,13 +119,15 @@ namespace OperPageLes.UI.UserElementsControl.Network
                             CornerRadius = new(5),
                             Margin = new(0),
                             TextFileName = $"{NetworkInfo.FilesInfo[i].FileName}.{NetworkInfo.FilesInfo[i].FileExtension}",
-                            ManagerAnimation = App.ManagerAnimation,
+                            ManagerAnimation = App.CurrentApp.ManagerAnimation,
                         };
                         Element.MathSizeFile(NetworkInfo.FilesInfo[i].LengthFileData);
                     }
                     StackPanelClip.Children.Add(Element);
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-                    App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(3), TimeSpan.FromMilliseconds(500d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Element, OpacityProperty,
+                        1d, TimeSpan.FromMilliseconds(500d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Element, MarginProperty,
+                        new Thickness(3), TimeSpan.FromMilliseconds(500d));
                 }
             }
         }

@@ -77,7 +77,7 @@
                             </Grid>
                         </Border>
                     </Grid>
-                    <Grid x:FieldModifier="private" x:Name="GridContentFomBrowser" Grid.Row="1"/>
+                    <Grid x:FieldModifier="private" x:Name="GridContentFromBrowser" Grid.Row="1"/>
                     <Grid Grid.Row="2" Margin="0,2,0,2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>

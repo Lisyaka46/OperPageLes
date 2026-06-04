@@ -62,7 +62,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.Other
             OPLCheckAudioDevice Result = new(SourceDevice)
             {
                 Margin = new(3d),
-                ManagerAnimation = App.ManagerAnimation,
+                ManagerAnimation = App.CurrentApp.ManagerAnimation,
             };
             Result.OnActivateMouseLeft += SetActiveDivaceOutput;
             return Result;

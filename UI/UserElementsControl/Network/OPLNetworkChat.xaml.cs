@@ -68,22 +68,12 @@ namespace OperPageLes.UI.UserElementsControl.Network
             get => (ImageSource?)GetValue(IconProperty);
             set
             {
-                if (ManagerAnimation == null)
-                {
-                    ImageIconMessage.Opacity = value == null ? 0d : 1d;
-                    ImageIconMessage.Width = value == null ? 0d : TextBlockEndMessage.ActualHeight;
-                    ImageIconMessage.Margin = value == null ? new(0) : new(1, 0, 4, 0);
-                }
-                else
-                {
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageIconMessage, OpacityProperty,
-                        value == null ? 0d : 1d, TimeSpan.FromMilliseconds(400d));
-                    ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageIconMessage, MarginProperty,
-                        value == null ? new(0) : new(1, 0, 4, 0), TimeSpan.FromMilliseconds(400d));
-
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageIconMessage, OpacityProperty,
-                        value == null ? 0d : TextBlockEndMessage.ActualHeight, TimeSpan.FromMilliseconds(400d));
-                }
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageIconMessage, OpacityProperty,
+                    value == null ? 0d : 1d, TimeSpan.FromMilliseconds(400d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageIconMessage, MarginProperty,
+                    value == null ? new Thickness(0d) : new(1d, 0d, 4d, 0d), TimeSpan.FromMilliseconds(400d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageIconMessage, OpacityProperty,
+                    value == null ? 0d : TextBlockEndMessage.ActualHeight, TimeSpan.FromMilliseconds(400d));
                 SetValue(IconProperty, value);
             }
         }

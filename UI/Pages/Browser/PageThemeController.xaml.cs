@@ -256,20 +256,14 @@ namespace OperPageLes.UI.Pages.Browser
         //
         private void DiactivateSelectTheme()
         {
-            if (ManagerAnimation != null)
-            {
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0.4d, TimeSpan.FromMilliseconds(400d));
-            }
-            else
-            {
-                GridPaletteSpectrumViewer.Opacity = 0d;
-                GridWiewButtonQData.Opacity = 0d;
-                GridQdataStatesColor.Opacity = 0d;
-                TextBlockNamingNoSelectPalette.Opacity = 0.4d;
-            }
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridPaletteSpectrumViewer, OpacityProperty,
+                    0d, TimeSpan.FromMilliseconds(400d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridWiewButtonQData, OpacityProperty,
+                0d, TimeSpan.FromMilliseconds(400d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridQdataStatesColor, OpacityProperty,
+                0d, TimeSpan.FromMilliseconds(400d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockNamingNoSelectPalette, OpacityProperty,
+                0.4d, TimeSpan.FromMilliseconds(400d));
             BorderViewerQData.IsEnabled = false;
             GridPaletteSpectrumViewer.IsEnabled = false;
         }
@@ -284,12 +278,12 @@ namespace OperPageLes.UI.Pages.Browser
                 await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка спектров палитры",
                     CreateAllPaletteButtons(StackPanelSpectrum));
                 if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(StackPanelSpectrum, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, StackPanelSpectrum, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
                 else
                     StackPanelSpectrum.Opacity = 1d;
                 await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка тем", CreateAllThemeButtons());
                 if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(ScrollViewerTheme, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ScrollViewerTheme, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
                 else
                     ScrollViewerTheme.Opacity = 1d;
             });
@@ -312,16 +306,10 @@ namespace OperPageLes.UI.Pages.Browser
                 UpdateVisualPaletteSpectrumFromBorder(ref ActiveManipulateSpectrum);
             TextBlockNameSelectTheme.Text = ActiveManipulateTheme.Name;
 
-            if (ManagerAnimation != null)
-            {
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(GridPaletteSpectrumViewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockNamingNoSelectPalette, OpacityProperty, 0d, TimeSpan.FromMilliseconds(400d));
-            }
-            else
-            {
-                GridPaletteSpectrumViewer.Opacity = 1d;
-                TextBlockNamingNoSelectPalette.Opacity = 0d;
-            }
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridPaletteSpectrumViewer, OpacityProperty,
+                1d, TimeSpan.FromMilliseconds(1000d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockNamingNoSelectPalette, OpacityProperty,
+                0d, TimeSpan.FromMilliseconds(400d));
         }
 
         #region Themes
@@ -407,16 +395,10 @@ namespace OperPageLes.UI.Pages.Browser
                     IndexActivateVisualizateSpectrum = Grid.GetRow((IELObjectBase)sender);
                     if (!BorderViewerQData.IsEnabled)
                     {
-                        if (ManagerAnimation != null)
-                        {
-                            ManagerAnimation.DoubleAnimationType.AnimateEffect(GridWiewButtonQData, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
-                            ManagerAnimation.DoubleAnimationType.AnimateEffect(GridQdataStatesColor, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
-                        }
-                        else
-                        {
-                            GridWiewButtonQData.Opacity = 1d;
-                            GridQdataStatesColor.Opacity = 1d;
-                        }
+                        OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridWiewButtonQData, OpacityProperty,
+                            1d, TimeSpan.FromMilliseconds(400d));
+                        OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridQdataStatesColor, OpacityProperty,
+                            1d, TimeSpan.FromMilliseconds(400d));
                     }
                     BorderViewerQData.IsEnabled = true;
                     
@@ -523,23 +505,12 @@ namespace OperPageLes.UI.Pages.Browser
             TimeSpan span = TimeSpan.FromMilliseconds(400d);
             for (int i = 0; i < 4; i++)
             {
-                if (ManagerAnimation != null)
-                {
-                    ManagerAnimation.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i],
-                        SolidColorBrush.ColorProperty, Source.BG.GetFromSpectrumColor((EnumDataSpectrum)i), span);
-
-                    ManagerAnimation.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i + 4],
-                        SolidColorBrush.ColorProperty, Source.BB.GetFromSpectrumColor((EnumDataSpectrum)i), span);
-
-                    ManagerAnimation.ColorAnimationType.AnimateEffect(DSUNE_ArrayBrush[i + 8],
-                        SolidColorBrush.ColorProperty, Source.FG.GetFromSpectrumColor((EnumDataSpectrum)i), span);
-                }
-                else
-                {
-                    DSUNE_ArrayBrush[i].Color = Source.BG.GetFromSpectrumColor((EnumDataSpectrum)i);
-                    DSUNE_ArrayBrush[i + 4].Color = Source.BB.GetFromSpectrumColor((EnumDataSpectrum)i);
-                    DSUNE_ArrayBrush[i + 8].Color = Source.FG.GetFromSpectrumColor((EnumDataSpectrum)i);
-                }
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, DSUNE_ArrayBrush[i],
+                    SolidColorBrush.ColorProperty, Source.BG.GetFromSpectrumColor((EnumDataSpectrum)i), span);
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, DSUNE_ArrayBrush[i + 4],
+                    SolidColorBrush.ColorProperty, Source.BB.GetFromSpectrumColor((EnumDataSpectrum)i), span);
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, DSUNE_ArrayBrush[i + 8],
+                    SolidColorBrush.ColorProperty, Source.FG.GetFromSpectrumColor((EnumDataSpectrum)i), span);
             }
         }
 

@@ -30,7 +30,6 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -63,7 +62,7 @@ namespace OperPageLes
         /// <summary>
         /// Менеджер анимаций под управлением приложения
         /// </summary>
-        internal static readonly OPLAnimationManager ManagerAnimation = new();
+        internal OPLAnimationManager ManagerAnimation { get; private set; }
 
         /// <summary>
         /// Реальное время
@@ -352,7 +351,7 @@ namespace OperPageLes
         /// <summary>
         /// Событие количества миллисекунд которое потребовалось на проверку интернета
         /// </summary>
-        internal static event EventHandler<ObjectConnectEventArgs>? ConnectionPingChanged;
+        internal event EventHandler<ObjectConnectEventArgs>? ConnectionPingChanged;
         #endregion
 
         #region Browser
@@ -360,16 +359,6 @@ namespace OperPageLes
         /// Браузер страниц приложения
         /// </summary>
         internal readonly OPLBrowserPage MainBrowser;
-
-        /// <summary>
-        /// Страница выбора приложения страницы для усправления в браузере страниц
-        /// </summary>
-        private readonly PageManagerAppPage SourceManagerAppPage;
-
-        /// <summary>
-        /// Страница менеджера приложений страниц
-        /// </summary>
-        internal Page ManagerAppPage => SourceManagerAppPage;
         #endregion
 
         public App()
@@ -378,10 +367,10 @@ namespace OperPageLes
 
             LogWriteLine("Инициализация свойств экземпляра...");
             #region Resources
-            SourceManagerAppPage = new()
-            {
-                Focusable = true,
-            };
+            LogWriteLine("Создание менеджера");
+            ManagerAnimation = new();
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            LogWriteLine("Менеджер создан");
 
             SourceWaveOut = new()
             {
@@ -389,7 +378,11 @@ namespace OperPageLes
                 NumberOfBuffers = 1,
             };
 
-            MainBrowser = new(SourceManagerAppPage);
+            MainBrowser = new(typeof(PageManagerAppPage))
+            {
+                ManagerAnimation = ManagerAnimation,
+                Margin = new(4d),
+            };
             OpenedWindowsInApplication = [];
             SourceApplicationNotifications = [];
             InstallingKey = PackKey.StaticKey(1L);
@@ -705,15 +698,6 @@ namespace OperPageLes
             #endregion
             LogWriteLine("...Готово");
 
-            LogWriteLine("Установка реагирования на события...");
-            #region Events
-            Startup += (sender, e) =>
-            {
-                OnStartup();
-            };
-            #endregion
-            LogWriteLine("...Готово");
-
             LogWriteLine("! Инициализация экземпляра успешна");
         }
 
@@ -736,125 +720,137 @@ namespace OperPageLes
         /// Точка входа в программу
         /// </summary>
         /// <param name="e">Объект события начала работы прораммы</param>
-        private async void OnStartup()
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            //base.OnStartup(e);
-            LogWriteLine("Инициализация палитры");
-            DefaultPalette = new(Resources.MergedDictionaries[1]);
-            _ActiveThemeApplication = new();
-            PageManagerAppPage.PageLabelActionPanel.SetVisualTheme(in _ActiveThemeApplication);
-
-            LogWriteLine("Подключение связей страниц");
-            _AppPageBuffer = new();
-            AppPageBuffer.ConnectBuffer(new(SettingMainApplication.BufferSize));
-            AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
-                //e.Handled = true;
-            };
-
-            LogWriteLine("Запуск фоновых потоков");
-            InternetPinging = new();
-            TokenInternetConnection = new();
-            TaskInternetConnection = new(() =>
-            {
-                ObjectConnectEventArgs EventArgs;
-                while (true)
-                {
-                    EventArgs = InternetPinging.UpdateInternetConnection();
-                    InternetConnectState = EventArgs.Connect;
-                    Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
-                    Thread.Sleep(4000);
-                }
-            }, TokenInternetConnection);
-            TaskInternetConnection.Start();
-
-            #region ConsolePage
-            PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
-            };
-            PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                if (MainBrowser.ActualInlay?.Content is PageConsole page)
-                {
-                    if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
-                        page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
-                }
-                MainWindow.IELActionPanelMain.ClosePanelAction();
-            };
-            PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
-            {
-                if (MainBrowser.ActualInlay?.Content is PageConsole page)
-                {
-                    page.StackPanelConsole.Children.Clear();
-                }
-                MainWindow.IELActionPanelMain.ClosePanelAction();
-            };
-            #endregion
-
-            Current.Exit += (sender, e) =>
-            {
-                LogWriteLine("---------- Конец текущего экземпляра ----------");
-                LogStreamWriter?.Close();
-            };
-            LogWriteLine("Приминение настроек элементов");
-            await SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
-
-            LogWriteLine("Приминение настройки палитры");
-            if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
-            {
-                string FileTheme = $"{StructDirectoryResources.DirectoryThemeApplication}{SettingMainApplication.ThemeInstallName.Value}.qd";
-                if (File.Exists(FileTheme))
-                {
-                    byte[] bytes = File.ReadAllBytes(FileTheme);
-                    ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
-                }
-            }
-            Current.MainWindow = new MainWindow();
-
-
-            LogWriteLine("Проверка ключа входа");
-            if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
-            {
-                try
-                {
-                    PackKey? SourceGenKey = PackKey.GenKey(File.ReadAllBytes(StructDirectoryResources.DirectoryKeyValidFile), GetID());
-                    if (SourceGenKey != null)
-                        InstallingKey = SourceGenKey;
-                }
-                catch
-                {
-                    System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            if (!InstallingKey.IsValid)
-            {
-                PackKey? key = new DialogInputProgramKey().SetKeyValid();
-                if (key != null)
-                {
-                    InstallingKey = key;
-                    File.WriteAllBytes(StructDirectoryResources.DirectoryKeyValidFile,
-                        InstallingKey.GetHexDataKeyFromID(GetID()));
-                }
-            }
-            if (!InstallingKey.IsValid)
-            {
-                Current.Shutdown();
-                return;
-            }
-            LogWriteLine("Ключ валиден!");
-
-
-            LogWriteLine("Открытие главного окна");
+            LogWriteLine(" ** ");
             try
             {
+                //base.OnStartup(e);
+                LogWriteLine("Инициализация палитры");
+                DefaultPalette = new(Resources.MergedDictionaries[1]);
+                _ActiveThemeApplication = new();
+                PageManagerAppPage.PageLabelActionPanel.SetVisualTheme(in _ActiveThemeApplication);
+
+                LogWriteLine("Подключение связей страниц");
+                _AppPageBuffer = new();
+                AppPageBuffer.ConnectBuffer(new(SettingMainApplication.BufferSize));
+                AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
+                {
+                    MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
+                    //e.Handled = true;
+                };
+
+                LogWriteLine("Запуск фоновых потоков");
+                InternetPinging = new();
+                TokenInternetConnection = new();
+                TaskInternetConnection = new(() =>
+                {
+                    ObjectConnectEventArgs EventArgs;
+                    while (true)
+                    {
+                        EventArgs = InternetPinging.UpdateInternetConnection();
+                        InternetConnectState = EventArgs.Connect;
+                        Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
+                        Thread.Sleep(4000);
+                    }
+                }, TokenInternetConnection);
+                TaskInternetConnection.Start();
+
+                #region ConsolePage
+                PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
+                {
+                    MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
+                };
+                PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
+                {
+                    if (MainBrowser.ActualInlay?.Content is PageConsole page)
+                    {
+                        if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
+                            page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
+                    }
+                    MainWindow.IELActionPanelMain.ClosePanelAction();
+                };
+                PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
+                {
+                    if (MainBrowser.ActualInlay?.Content is PageConsole page)
+                    {
+                        page.StackPanelConsole.Children.Clear();
+                    }
+                    MainWindow.IELActionPanelMain.ClosePanelAction();
+                };
+                #endregion
+
+                Current.Exit += (sender, e) =>
+                {
+                    LogWriteLine("---------- Конец текущего экземпляра ----------");
+                    LogStreamWriter?.Close();
+                };
+                LogWriteLine("Приминение настроек элементов");
+                //await SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
+
+                LogWriteLine("Приминение настройки палитры");
+                if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
+                {
+                    string FileTheme = $"{StructDirectoryResources.DirectoryThemeApplication}{SettingMainApplication.ThemeInstallName.Value}.qd";
+                    if (File.Exists(FileTheme))
+                    {
+                        byte[] bytes = File.ReadAllBytes(FileTheme);
+                        ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
+                    }
+                }
+
+                LogWriteLine("Проверка ключа входа");
+                if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
+                {
+                    try
+                    {
+                        PackKey? SourceGenKey = PackKey.GenKey(File.ReadAllBytes(StructDirectoryResources.DirectoryKeyValidFile), GetID());
+                        if (SourceGenKey != null)
+                            InstallingKey = SourceGenKey;
+                    }
+                    catch
+                    {
+                        System.Windows.Forms.MessageBox.Show("Установленный валидный ключ не подходит", "Предупреждение",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                if (!InstallingKey.IsValid)
+                {
+                    LogWriteLine("Открытие диалога ввода ключа");
+                    DialogInputProgramKey dialog = new();
+                    LogWriteLine($"Менеджер анимаций: ({ManagerAnimation != null})");
+                    PackKey? key = dialog.SetKeyValid(ManagerAnimation);
+                    if (key != null)
+                    {
+                        InstallingKey = key;
+                        File.WriteAllBytes(StructDirectoryResources.DirectoryKeyValidFile,
+                            InstallingKey.GetHexDataKeyFromID(GetID()));
+                    }
+                }
+                if (!InstallingKey.IsValid)
+                {
+                    Current.Shutdown();
+                    return;
+                }
+                LogWriteLine("Ключ валиден!");
+
+                LogWriteLine("Создание главного окна формы");
+                Current.MainWindow = new OperPageLes.UI.Windows.MainWindow()
+                {
+                    ManagerAnimation = ManagerAnimation,
+                };
+                MainWindow.ChangeFromSetting(SettingMainApplication);
+                MainWindow.SetPallete(ActiveThemeApplication);
+                ShutdownMode = ShutdownMode.OnMainWindowClose;
+                LogWriteLine("! Создание успешно");
+
+                LogWriteLine("Открытие главного окна");
                 ((MainWindow)Current.MainWindow).Show();
             }
             catch (Exception ex)
             {
                 LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
+                LogWriteLine($"/// Трассировка стека: ///\n{ex.StackTrace}");
                 LogStreamWriter?.Close();
                 System.Windows.MessageBox.Show("Программа открылась неправильно!.\nПредоставлено логирование процесса...");
                 Environment.Exit(1);
@@ -870,7 +866,10 @@ namespace OperPageLes
             MainWindow RebootWindow = (MainWindow)Current.MainWindow;
             RebootWindow.Closed += (sender, e) =>
             {
-                Current.MainWindow = new MainWindow();
+                Current.MainWindow = new MainWindow()
+                {
+                    ManagerAnimation = ManagerAnimation,
+                };
                 ((MainWindow)Current.MainWindow).Show();
                 LogWriteLine("/// Перезагрузка прошла успешно! ///");
             };
@@ -881,13 +880,13 @@ namespace OperPageLes
         //
         internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
         {
-            SourceManagerAppPage.AddNewAppPage(TypeAppPage, NameAppPage, Spectrum, Icon);
+            //SourceManagerAppPage.AddNewAppPage(TypeAppPage, NameAppPage, Spectrum, Icon);
         }
 
         //
         internal void AddNewLabel(in SourceLabelAction Source)
         {
-            SourceManagerAppPage.AddLabel(Source);
+            //SourceManagerAppPage.AddLabel(Source);
         }
 
         /// <summary>
@@ -1005,8 +1004,8 @@ namespace OperPageLes
         /// </summary>
         internal void UpdateFileDataLabel()
         {
-            string SettingApplicationJSON = JsonConvert.SerializeObject(SourceManagerAppPage.Labels.Select((i) => i.Label));
-            File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
+           // string SettingApplicationJSON = JsonConvert.SerializeObject(SourceManagerAppPage.Labels.Select((i) => i.Label));
+           // File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
         }
         #endregion
 

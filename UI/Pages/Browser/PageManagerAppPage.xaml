@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Base:MainPageBrowser
     x:Class="OperPageLes.UI.Pages.Browser.PageManagerAppPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
@@ -14,4 +14,4 @@
             <IEL:IELScrollViewer x:FieldModifier="private" x:Name="SctollViewerLabels" AutoUpdateVisibleVerticalScroll="False" ScrollForce="20" HorizontalScrollAligment="Down" ClipToBounds="True"/>
         </Grid>
     </Grid>
-</Page>
+</Base:MainPageBrowser>

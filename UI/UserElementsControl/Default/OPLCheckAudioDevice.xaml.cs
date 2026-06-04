@@ -109,11 +109,11 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 if (_Activate == value) return;
                 else if (ManagerAnimation != null)
                 {
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(ImageBrushIcon, ImageBrush.OpacityProperty,
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageBrushIcon, ImageBrush.OpacityProperty,
                         value ? 1d : 0d, TimeSpan.FromMilliseconds(600d));
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderActive, WidthProperty,
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderActive, WidthProperty,
                         value ? 20d : 0d, TimeSpan.FromMilliseconds(500d));
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderActive, HeightProperty,
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderActive, HeightProperty,
                         value ? 20d : 0d, TimeSpan.FromMilliseconds(500d));
                 }
                 else

@@ -117,7 +117,8 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 }
                 else
                 {
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(this, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, HeightProperty,
+                        10d, TimeSpan.FromMilliseconds(400d));
                     HeadHitPanelGrid.IsEnabled = false;
                     HidedHitPanel = true;
                     //Keyboard.ClearFocus();
@@ -314,14 +315,12 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 //if (StateHit == ConsoleHitStateEnum.Hidden) SetSelectNavigation(SelectNavigationPageConsoleEnum.None);
                 TimeSpan span = TimeSpan.FromMilliseconds(300d);
                 Canvas.SetZIndex(GridHintOneCommand, StateHit == HitStateEnum.VisibleOneCommand ? 1 : -1);
-                if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(GridHintOneCommand, OpacityProperty, StateHit == HitStateEnum.VisibleOneCommand ? 1d : 0d, span);
-                else
-                    GridHintOneCommand.Opacity = StateHit == HitStateEnum.VisibleOneCommand ? 1d : 0d;
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, GridHintOneCommand, OpacityProperty,
+                    StateHit == HitStateEnum.VisibleOneCommand ? 1d : 0d, span);
 
                 Canvas.SetZIndex(StackPanelAllHit, StateHit == HitStateEnum.VisibleOneCommand ? -1 : 1);
                 if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(IELHitScroll, OpacityProperty, StateHit == HitStateEnum.VisibleOneCommand ? 0d : 1d, span);
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELHitScroll, OpacityProperty, StateHit == HitStateEnum.VisibleOneCommand ? 0d : 1d, span);
                 else
                     IELHitScroll.Opacity = StateHit == HitStateEnum.VisibleOneCommand ? 0d : 1d;
                 if ((StateHit is HitStateEnum.VisibleOneCommand or HitStateEnum.Hidden) &&
@@ -329,7 +328,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
                     IELHitScroll.DiactivateVerticalScrollBar();
 
                 if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, StateHit == HitStateEnum.Hidden ? 0d : 1d, span);
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, OpacityProperty, StateHit == HitStateEnum.Hidden ? 0d : 1d, span);
                 else
                     Opacity = StateHit == HitStateEnum.Hidden ? 0d : 1d;
                 StateVisibleHit = StateHit;
@@ -362,21 +361,10 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 AnimateHeight += Padding.Top + Padding.Bottom + 8;
                 if (AnimateHeight > MaxHeight) AnimateHeight = MaxHeight;
             }
-            if (ManagerAnimation != null)
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, WidthProperty, AnimateWidth + 15, span);
-            else
-                Width = AnimateWidth + 15;
-            if (!HidedHitPanel)
-            {
-                if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(this, HeightProperty, AnimateHeight, span);
-                else
-                    Height = AnimateHeight;
-            }
-            else
-            {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(this, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
-            }
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, WidthProperty,
+                AnimateWidth + 15, span);
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, HeightProperty,
+                !HidedHitPanel ? AnimateHeight : 10d, span);
         }
 
         /// <summary>
@@ -413,20 +401,19 @@ namespace OperPageLes.UI.UserElementsControl.Default
         private void AnimateHitPanelFromOneCommand()
         {
             if (ManagerAnimation != null)
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, TimeSpan.FromMilliseconds(300d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, WidthProperty, TextBlockDescriptionHintCommand.Width + 10d, TimeSpan.FromMilliseconds(300d));
             else
                 Width = TextBlockDescriptionHintCommand.Width + 10d;
             if (!HidedHitPanel)
             {
                 if (ManagerAnimation != null)
-                    ManagerAnimation.DoubleAnimationType.AnimateEffect(this, HeightProperty,
-                        TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d, TimeSpan.FromMilliseconds(300d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, HeightProperty, TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d, TimeSpan.FromMilliseconds(300d));
                 else
                     Height = TextBlockDescriptionHintCommand.ActualHeight + TextBlockHintCommand.ActualHeight + 8d;
             }
             else
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(this, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, HeightProperty, 10d, TimeSpan.FromMilliseconds(400d));
             }
         }
 
@@ -470,25 +457,17 @@ namespace OperPageLes.UI.UserElementsControl.Default
         private void ChangeColorElementHitCommandMouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             TextBlock Element = (TextBlock)sender;
-            if (ManagerAnimation != null)
-                ManagerAnimation.ColorAnimationType.AnimateEffect(e.Timestamp == 0 ? Element.Background : Element.Foreground,
-                    SolidColorBrush.ColorProperty, e.Timestamp == 0 ? Background.Default : Color.FromRgb(11, 43, 68),
-                    TimeSpan.FromMilliseconds(120d));
-            else
-                ((SolidColorBrush)Element.Foreground).Color = Color.FromRgb(11, 43, 68);
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, e.Timestamp == 0 ? Element.Background : Element.Foreground,
+                SolidColorBrush.ColorProperty, e.Timestamp == 0 ? Background.Default : Color.FromRgb(11, 43, 68),
+                TimeSpan.FromMilliseconds(120d));
         }
 
         private void ChangeColorElementHitCommandMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             TextBlock Element = (TextBlock)sender;
-            if (ManagerAnimation != null)
-            {
-                ManagerAnimation.ColorAnimationType.AnimateEffect(e.Timestamp == 0 ? Element.Background : Element.Foreground, 
-                    SolidColorBrush.ColorProperty, e.Timestamp == 0 ? Background.Select : Color.FromRgb(168, 217, 255),
-                    TimeSpan.FromMilliseconds(120d));
-            }
-            else
-                ((SolidColorBrush)Element.Foreground).Color = Color.FromRgb(168, 217, 255);
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, e.Timestamp == 0 ? Element.Background : Element.Foreground, 
+                SolidColorBrush.ColorProperty, e.Timestamp == 0 ? Background.Select : Color.FromRgb(168, 217, 255),
+                TimeSpan.FromMilliseconds(120d));
         }
         #endregion
 

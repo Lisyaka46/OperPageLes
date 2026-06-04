@@ -60,8 +60,8 @@ namespace OperPageLes.UI.Pages.Description
         /// </summary>
         public string? GetCommandText()
         {
-            App.ManagerAnimation.PointAnimationType.AnimateEffect(LinearGradientForegroundCommandText,
-                LinearGradientBrush.EndPointProperty, new(0,0), new(50, 0), TimeSpan.FromSeconds(20));
+            //App.CurrentApp.ManagerAnimation.PointAnimationType.AnimateEffect(LinearGradientForegroundCommandText,
+            //    LinearGradientBrush.EndPointProperty, new(0,0), new(50, 0), TimeSpan.FromSeconds(20));
             return SelectCommand? TextBlockTextCommand.Text: null;
         }
 

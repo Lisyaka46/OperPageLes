@@ -1,12 +1,15 @@
 ﻿using LibraryPackKey.CORE;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Windows.Base;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Windows.Dialogs
@@ -22,19 +25,21 @@ namespace OperPageLes.UI.Windows.Dialogs
 
         public DialogInputProgramKey()
         {
+            App.CurrentApp.LogWriteLine("Инициализация компонентов...");
             InitializeComponent();
-            ManagerAnimation = App.ManagerAnimation;
+            App.CurrentApp.LogWriteLine("...Готово");
             Pack = StructPack.NowPack;
+            App.CurrentApp.LogWriteLine("...1");
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
+            App.CurrentApp.LogWriteLine("...2");
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
             IELTextBoxKey.Text = string.Empty;
 
             IELButtonCopyPack.OnActivateMouseLeft += (sender, e) =>
             {
                 System.Windows.Forms.Clipboard.SetText(TextBlockPack.Text);
-                App.ManagerAnimation.ColorAnimationType.AnimateEffect(TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
-                    System.Windows.Media.Color.FromArgb(255, 0, 255, 0), Colors.Black,
-                    TimeSpan.FromMilliseconds(1000d));
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, TextBlockPack.Foreground, SolidColorBrush.ColorProperty,
+                    System.Windows.Media.Color.FromArgb(255, 0, 255, 0), Colors.Black, TimeSpan.FromMilliseconds(1000d));
             };
             IELButtonUpdatePack.OnActivateMouseLeft += (sender, e) =>
             {
@@ -64,27 +69,33 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                 }
             };
+            App.CurrentApp.LogWriteLine("! Инициализация диалога успешна");
         }
 
         /// <summary>
         /// Открыть окно добавления ключа
         /// </summary>
         /// <returns>Состояние успешности проверки валидности ключа</returns>
-        internal PackKey? SetKeyValid()
+        internal PackKey? SetKeyValid(in OPLAnimationManager? Manager = null)
         {
+            ManagerAnimation = Manager;
             TextBlockPack.Text = Pack.StringPack;
             Keyboard.PrimaryDevice.ClearFocus();
             if (ManagerAnimation != null)
             {
-                TimeSpan SpanFast = TimeSpan.FromSeconds(2d);
                 TimeSpan SpanMiddle = TimeSpan.FromSeconds(2.5d);
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, SpanMiddle);
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceScaleTransform, ScaleTransform.ScaleXProperty, 0.2d, 1d, SpanMiddle);
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceScaleTransform, ScaleTransform.ScaleYProperty, 0.2d, 1d, SpanMiddle);
-
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceSkewTransform, SkewTransform.AngleXProperty, 40d, 0d, SpanFast);
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(SourceSkewTransform, SkewTransform.AngleYProperty, 40d, 0d, SpanFast);
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, this, OpacityProperty,
+                    0d, 1d, SpanMiddle);
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, SourceScaleTransform, ScaleTransform.ScaleXProperty,
+                    0.1d, 1d, SpanMiddle * 1.6d);
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation,SourceScaleTransform, ScaleTransform.ScaleYProperty,
+                    0.1d, 1d, SpanMiddle * 1.6d);
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, SourceSkewTransform, SkewTransform.AngleYProperty,
+                    80d, 0d, SpanMiddle);
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, SourceRotateTransform, RotateTransform.AngleProperty,
+                    -90d, 0d, SpanMiddle / 1.4d);
             }
+            App.CurrentApp.LogWriteLine("Открытие диалога");
             ShowDialog();
             return ResultKey;
         }
@@ -97,7 +108,33 @@ namespace OperPageLes.UI.Windows.Dialogs
             try
             {
                 ResultKey = PackKey.GenKey(Pack, IELTextBoxKey.Text);
-                Close();
+                if (ManagerAnimation != null)
+                {
+                    TimeSpan SpanMiddle = TimeSpan.FromSeconds(1d);
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, OpacityProperty,
+                        0d, SpanMiddle);
+                    DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                    animation.Duration = SpanMiddle * 1.1d;
+                    animation.To = 0.1;
+                    animation.FillBehavior = FillBehavior.Stop;
+                    animation.Completed += (sender, e) =>
+                    {
+                        Close();
+                    };
+                    SourceScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, SourceScaleTransform, ScaleTransform.ScaleYProperty,
+                        0.1d, SpanMiddle * 1.1d);
+
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, SourceSkewTransform, SkewTransform.AngleYProperty,
+                        -40d, SpanMiddle);
+
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, SourceRotateTransform, RotateTransform.AngleProperty,
+                        50d, SpanMiddle);
+                }
+                else
+                {
+                    Close();
+                }
             }
             catch
             {

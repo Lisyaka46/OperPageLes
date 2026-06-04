@@ -7,6 +7,8 @@ using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.UserElementsControl.Default;
 using OperPageLes.Windows;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,11 +22,16 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
     /// </summary>
-    public partial class PageConsole : PageBrowser
+    public partial class PageConsole : PageBrowser, IOPLAnimate
     {
         [LibraryImport("User32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool SetCursorPos(int X, int Y);
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         #region PanelActionConsole
         internal static readonly MainPagePanelAction PageConsoleActionPanelMain = new();
@@ -113,7 +120,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #endregion
 
             #region HitCommandsInterpreter
-            HitCommandsInterpreter.ManagerAnimation = App.ManagerAnimation;
+            HitCommandsInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             HitCommandsInterpreter.Connect(in App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
             {
@@ -142,30 +149,43 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             BorderCommandInformation.Width = BorderButtonPanelInformationController.Width;
             BorderButtonPanelInformationController.MouseLeftButtonUp += (sender, e) =>
             {
-                DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-                animation.EasingFunction = new BackEase()
+                if (ManagerAnimation != null)
                 {
-                    Amplitude = 0.15d,
-                    EasingMode = EasingMode.EaseOut,
-                };
-                animation.Duration = TimeSpan.FromMilliseconds(400d);
-                if (BorderCommandInformation.HorizontalAlignment == System.Windows.HorizontalAlignment.Left)
-                {
-                    animation.FillBehavior = FillBehavior.Stop;
-                    animation.To = BorderConsole.ActualWidth;
-                    animation.Completed += (sender, e) =>
+                    DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                    animation.EasingFunction = new BackEase()
                     {
-                        BorderCommandInformation.Width = double.NaN;
-                        BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                        Amplitude = 0.15d,
+                        EasingMode = EasingMode.EaseOut,
                     };
+                    animation.Duration = TimeSpan.FromMilliseconds(400d);
+                    if (BorderCommandInformation.HorizontalAlignment == System.Windows.HorizontalAlignment.Left)
+                    {
+                        animation.FillBehavior = FillBehavior.Stop;
+                        animation.To = BorderConsole.ActualWidth;
+                        animation.Completed += (sender, e) =>
+                        {
+                            BorderCommandInformation.Width = double.NaN;
+                            BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                        };
+                    }
+                    else
+                    {
+                        BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                        animation.From = BorderConsole.ActualWidth;
+                        animation.To = BorderButtonPanelInformationController.Width;
+                    }
+                    BorderCommandInformation.BeginAnimation(WidthProperty, animation);
+                }
+                else if (BorderCommandInformation.HorizontalAlignment == System.Windows.HorizontalAlignment.Left)
+                {
+                    BorderCommandInformation.Width = double.NaN;
+                    BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                 }
                 else
                 {
                     BorderCommandInformation.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                    animation.From = BorderConsole.ActualWidth;
-                    animation.To = BorderButtonPanelInformationController.Width;
+                    BorderCommandInformation.Width = BorderButtonPanelInformationController.Width;
                 }
-                BorderCommandInformation.BeginAnimation(WidthProperty, animation);
             };
             #endregion
 
@@ -305,7 +325,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 WindowDiscriptionCommands WindowDescription = new()
                 {
-                    ManagerAnimation = App.ManagerAnimation,
+                    ManagerAnimation = App.CurrentApp.ManagerAnimation,
                 };
                 App.CurrentApp.InicializeWindowInApplication(WindowDescription);
                 WindowDescription.Show();
@@ -422,8 +442,10 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
 
             StackPanelConsole.Children.Add(Viewer);
             //IELScrollConsole.SourceViewer.ScrollToEnd();
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Viewer, MarginProperty, new(5), TimeSpan.FromMilliseconds(600d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Viewer, OpacityProperty, 1d, TimeSpan.FromMilliseconds(600d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Viewer, MarginProperty,
+                new Thickness(5), TimeSpan.FromMilliseconds(600d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Viewer, OpacityProperty,
+                1d, TimeSpan.FromMilliseconds(600d));
             return Viewer;
         }
 
@@ -433,23 +455,27 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         /// <param name="Element">Удаляемый визуализационный элемент</param>
         internal void DeleteCommandViewer(OPLCommandViewer Element)
         {
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(Element, MarginProperty, new(0), TimeSpan.FromMilliseconds(300d));
-            DoubleAnimation animation = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
-            animation.Duration = TimeSpan.FromMilliseconds(400d);
-            animation.From = Element.ActualHeight;
-            animation.To = 0d;
-            Element.BeginAnimation(HeightProperty, animation);
-            animation.FillBehavior = FillBehavior.Stop;
-            animation.Completed += (sender, e) =>
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Element, MarginProperty,
+                new Thickness(0), TimeSpan.FromMilliseconds(300d));
+            if (ManagerAnimation != null)
             {
-                //Element.BeginAnimation(OpacityProperty, null);
-                //Element.BeginAnimation(HeightProperty, null);
-                //Element.Height = 0d;
-                //Element.Opacity = 0d;
-                StackPanelConsole.Children.Remove(Element);
-            };
-            animation.From = 1d;
-            Element.BeginAnimation(OpacityProperty, animation);
+                DoubleAnimation animation = ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+                animation.Duration = TimeSpan.FromMilliseconds(400d);
+                animation.From = Element.ActualHeight;
+                animation.To = 0d;
+                Element.BeginAnimation(HeightProperty, animation);
+                animation.FillBehavior = FillBehavior.Stop;
+                animation.Completed += (sender, e) =>
+                {
+                    //Element.BeginAnimation(OpacityProperty, null);
+                    //Element.BeginAnimation(HeightProperty, null);
+                    //Element.Height = 0d;
+                    //Element.Opacity = 0d;
+                    StackPanelConsole.Children.Remove(Element);
+                };
+                animation.From = 1d;
+                Element.BeginAnimation(OpacityProperty, animation);
+            } else StackPanelConsole.Children.Remove(Element);
         }
 
         /// <summary>

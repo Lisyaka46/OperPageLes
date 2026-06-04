@@ -1,8 +1,12 @@
-﻿using OperPageLes.CORE.Struct;
+﻿using OIEL.UserElementsControl;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
+using OPLAnimation.CORE.Animation;
 using System.Net.Sockets;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.CORE.Network
@@ -179,7 +183,7 @@ namespace OperPageLes.CORE.Network
         /// Осуществить принятие данных по переданному шаблону информации о данных
         /// </summary>
         /// <returns></returns>
-        internal async Task ReceiveNetworkData()
+        internal async Task ReceiveNetworkData(OPLAnimationManager? ManagerAnimation)
         {
             if (!DeviceClient.Connected)
                 throw new InvalidOperationException("Невозможно принять данные не имея текущее подключение");
@@ -198,8 +202,8 @@ namespace OperPageLes.CORE.Network
             DataNetworkInfo DataInfo = new([..Data]);
             Data.Clear();
             GC.Collect();
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(UIChat.TextBlockHead,
-                TextBlock.OpacityProperty, 0d, TimeSpan.FromMilliseconds(200d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, UIChat.TextBlockHead, TextBlock.OpacityProperty,
+                0d, TimeSpan.FromMilliseconds(200d));
             OPLNetworkMessage NetworkMessage = new()
             {
                 SenderTextPoint = "Неизвестный", // Тут должен быть переданный объект пользователя
@@ -223,8 +227,8 @@ namespace OperPageLes.CORE.Network
                 if (!ReceiveFiles.Activate)
                     ReceiveFiles.ReceiveProcess(DeviceClient.DeviceClientDataFile.Client);
             }
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(UIChat.TextBlockHead,
-                TextBlock.OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(600d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, UIChat.TextBlockHead, TextBlock.OpacityProperty,
+                1d, TimeSpan.FromMilliseconds(600d));
             StructDirectoryResources.Play(in App.CurrentApp.SourceWaveOut, nameof(OPRES.AudioMessageReceive));
         }
 

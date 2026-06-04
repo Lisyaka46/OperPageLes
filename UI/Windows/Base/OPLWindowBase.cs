@@ -339,10 +339,8 @@ namespace OperPageLes.UI.Windows.Base
         /// </summary>
         public new void Show()
         {
-            if (ManagerAnimation != null)
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1400d));
-            else
-                Opacity = 1d;
+            OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, this, OpacityProperty,
+                0d, 1d, TimeSpan.FromMilliseconds(1400d));
             base.Show();
         }
 
@@ -351,10 +349,8 @@ namespace OperPageLes.UI.Windows.Base
         /// </summary>
         public new void ShowDialog()
         {
-            if (ManagerAnimation != null)
-                ManagerAnimation.DoubleAnimationType.AnimateEffect(this, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(1400d));
-            else
-                Opacity = 1d;
+            OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, this, OpacityProperty,
+                0d, 1d, TimeSpan.FromMilliseconds(1400d));
             base.ShowDialog();
         }
     }

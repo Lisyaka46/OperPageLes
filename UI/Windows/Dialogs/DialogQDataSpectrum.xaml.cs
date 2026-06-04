@@ -1,8 +1,10 @@
-﻿using OperPageLes.CORE.Struct;
-using ColorPicker;
+﻿using ColorPicker;
 using ColorPicker.Models;
 using IEL.CORE.Classes;
 using IEL.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +27,13 @@ namespace OperPageLes.UI.Windows.Dialogs
     /// <summary>
     /// Логика взаимодействия для DialogQDataSpectrum.xaml
     /// </summary>
-    public partial class DialogQDataSpectrum : Window
+    public partial class DialogQDataSpectrum : Window, IOPLAnimate
     {
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         //
         private QData.EnumDataSpectrum ChangeSpectrum;
 
@@ -147,15 +154,17 @@ namespace OperPageLes.UI.Windows.Dialogs
             ColorPicker.Color.RGB_G = color.G;
             ColorPicker.Color.RGB_B = color.B;
             ColorPicker.Color.A = color.A;
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(ColorPicker, StandardColorPicker.OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockSelectIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ColorPicker, StandardColorPicker.OpacityProperty,
+                1d, TimeSpan.FromMilliseconds(400d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockSelectIndicator, OpacityProperty,
+                1d, TimeSpan.FromMilliseconds(400d));
 
             // Смещение позиции области относительно внешнего элемента
             System.Windows.Point OffsetPosElement = border.TransformToAncestor(
                 GridColors).Transform(new System.Windows.Point(0, 0));
 
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(TextBlockSelectIndicator, MarginProperty,
-                new(TextBlockSelectIndicator.Margin.Left, OffsetPosElement.Y - 4, TextBlockSelectIndicator.Margin.Right, TextBlockSelectIndicator.Margin.Bottom),
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockSelectIndicator, MarginProperty,
+                new Thickness(TextBlockSelectIndicator.Margin.Left, OffsetPosElement.Y - 4, TextBlockSelectIndicator.Margin.Right, TextBlockSelectIndicator.Margin.Bottom),
                 TimeSpan.FromMilliseconds(300d));
         }
     }

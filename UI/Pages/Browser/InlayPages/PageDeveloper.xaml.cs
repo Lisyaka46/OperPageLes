@@ -3,6 +3,7 @@ using OperPageLes.CORE.Struct;
 using OperPageLes.Properties;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.DEV;
+using OPLAnimation.CORE.Animation;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.IO;
@@ -32,7 +33,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         private Point StartPositionMouse;
         private bool Activate = false;
         Storyboard myStoryboard = new();
-        private DoubleAnimation anim = App.ManagerAnimation.DoubleAnimationType.SourceAnimation.Clone();
+        private DoubleAnimation anim = App.CurrentApp.ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
         private Vector3DAnimation Vector3DAnim = new()
         {
             From = null,
@@ -159,7 +160,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 if (!Activate) return;
                 Activate = false;
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(myAngleRotation, AxisAngleRotation3D.AngleProperty, 0d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroTo(App.CurrentApp.ManagerAnimation, myAngleRotation, AxisAngleRotation3D.AngleProperty,
+                    0d, TimeSpan.FromMilliseconds(500d));
             };
             MyAnimatedObject.MouseMove += (sender, e) =>
             {

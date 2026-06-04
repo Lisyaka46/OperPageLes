@@ -35,10 +35,8 @@ namespace OperPageLes.UI.UserElementsControl.Theme
                     (sender, e) =>
                     {
                         OPLThemeFile Element = (OPLThemeFile)sender;
-                        if (Element.ManagerAnimation != null)
-                            Element.ManagerAnimation.DoubleAnimationType.AnimateEffect(Element.BorderActivateIndicator, WidthProperty,
-                                (bool)e.NewValue ? 10d : 0d, TimeSpan.FromMilliseconds(400));
-                        else Element.BorderActivateIndicator.Width = (bool)e.NewValue ? 10d : 0d;
+                        OPLAnimationManager.AnimateTakingZeroTo(Element.ManagerAnimation, Element.BorderActivateIndicator, WidthProperty,
+                            (bool)e.NewValue ? 10d : 0d, TimeSpan.FromMilliseconds(400));
                     }));
 
         /// <summary>

@@ -1,6 +1,8 @@
 ﻿using OperPageLes.CORE.Network;
 using OperPageLes.UI.UserElementsControl.Network;
 using OperPageLes.UI.Windows.Dialogs;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using Orientation = System.Windows.Controls.Orientation;
@@ -10,8 +12,13 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
     /// <summary>
     /// Логика взаимодействия для PageStackChats.xaml
     /// </summary>
-    public partial class PageStackChats : Page
+    public partial class PageStackChats : Page, IOPLAnimate
     {
+        /// <summary>
+        /// Менеджер анимаций
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
+
         /// <summary>
         /// Объект прослушивания подключений по конкретному порту
         /// </summary>
@@ -94,7 +101,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     for (i = 0; i < Chats.Count; i++)
                     {
                         if (Chats[i].DeviceClient.DeviceClientMessageObjInfo.Available > 0 && !Chats[i].IsBusy)
-                            await Dispatcher.InvokeAsync(Chats[i].ReceiveNetworkData);
+                            await Dispatcher.InvokeAsync(() => Chats[i].ReceiveNetworkData(ManagerAnimation));
                         else await Task.Delay(100);
                     }
                 }

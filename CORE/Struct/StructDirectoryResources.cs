@@ -92,24 +92,6 @@ namespace OperPageLes.CORE.Struct
         #endregion
 
         /// <summary>
-        /// Функция перевода файла .json в ожидаемый объект.<br/>
-        /// При отсутствии файла в директории создаёт новый экземпляр и возвращает предусматривающее значение объекта по умолчанию.<br/>
-        /// <b>Такая логика задействуется также при ошибке перевода.</b>
-        /// </summary>
-        /// <typeparam name="T">Ожидаемый тип объекта.<br/><b>Преобразуется в массив ожидаемого типа</b></typeparam>
-        /// <param name="PathJSON">Директория читаемого .json файла преобразовываемый в массив ожидаемого типа</param>
-        internal static T[] DeserializeObjectJson<T>(string PathJSON)
-        {
-            if (!File.Exists(PathJSON))
-            {
-                CheckCreateDirectoryInFile(PathJSON);
-                File.WriteAllText(PathJSON, JsonConvert.SerializeObject(Array.Empty<T>()));
-                return [];
-            }
-            return JsonConvert.DeserializeObject<T[]>(File.ReadAllText(PathJSON)) ?? [];
-        }
-
-        /// <summary>
         /// Условное создание ресурсов приложения, при их отсутствии
         /// </summary>
         internal static void CheckCreateAllResources()

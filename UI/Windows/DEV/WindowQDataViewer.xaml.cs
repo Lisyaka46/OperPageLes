@@ -1,5 +1,6 @@
-﻿using OperPageLes.CORE.Enums;
-using IEL.CORE.Classes;
+﻿using IEL.CORE.Classes;
+using OperPageLes.CORE.Enums;
+using OPLAnimation.CORE.Animation;
 using System.Windows;
 using System.Windows.Media;
 using static IEL.CORE.Classes.QData;
@@ -138,7 +139,7 @@ namespace OperPageLes.UI.Windows.DEV
             DialogResult Result = Dialog.ShowDialog();
             if (Result == System.Windows.Forms.DialogResult.Cancel) return;
             WnColor ResultColor = WnColor.FromArgb(Dialog.Color.A, Dialog.Color.R, Dialog.Color.G, Dialog.Color.B);
-            App.ManagerAnimation.ColorAnimationType.AnimateEffect(ArrayBrushSource[ComboBoxSelectQData.SelectedIndex][(int)DataStateChange],
+            OPLAnimationManager.AnimateTakingZeroTo(null, ArrayBrushSource[ComboBoxSelectQData.SelectedIndex][(int)DataStateChange],
                         SolidColorBrush.ColorProperty, ResultColor, TimeSpan.FromMilliseconds(500d));
             qd.SetFromSpectrumColor(DataStateChange, ResultColor);
             ControlUpdateModeSetBrushQ(IELSourceButton.PaletteElement);

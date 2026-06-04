@@ -1,12 +1,13 @@
-﻿using OperPageLes.CORE.Network;
+﻿using IEL.UserElementsControl;
+using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Windows.Base;
-using IEL.UserElementsControl;
+using OPLAnimation.CORE.Animation;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Media;
-using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
@@ -54,7 +55,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                         Result = new();
                         TextBlockIndicatorConnect.Text = "Идёт попытка подключения...";
                         if (ManagerAnimation != null)
-                            ManagerAnimation.DoubleAnimationType.AnimateEffect(TextBlockIndicatorConnect, OpacityProperty,
+                            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockIndicatorConnect, OpacityProperty,
                                 1d, TimeSpan.FromMilliseconds(400d));
                         else
                             TextBlockIndicatorConnect.Opacity = 1d;

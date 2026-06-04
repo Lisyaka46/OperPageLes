@@ -39,7 +39,7 @@ namespace OperPageLes.CORE.Objects
             Label = Source;
             VisualELement = new()
             {
-                ManagerAnimation = App.ManagerAnimation,
+                ManagerAnimation = App.CurrentApp.ManagerAnimation,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 Margin = new(3d),
@@ -54,7 +54,7 @@ namespace OperPageLes.CORE.Objects
         private void LoadFaviconIcon(object? sender, ObjectConnectEventArgs e)
         {
             if (!e.Connect) return;
-            App.ConnectionPingChanged -= LoadFaviconIcon;
+            App.CurrentApp.ConnectionPingChanged -= LoadFaviconIcon;
             LoadFaviconIcon();
         }
 
@@ -114,7 +114,7 @@ namespace OperPageLes.CORE.Objects
             else if (Label.Command.Contains("open_link"))
             {
                 VisualELement.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Link));
-                App.ConnectionPingChanged += LoadFaviconIcon;
+                App.CurrentApp.ConnectionPingChanged += LoadFaviconIcon;
             }
             else if (Label.Command.Contains("open_directory"))
                 VisualELement.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Folder));

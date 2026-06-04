@@ -164,7 +164,7 @@ namespace OperPageLes.Windows
                     VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка каталога консольных команд",
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Commands.Values], DescriptionConsole));
                     ScrollViewerElements.Content = VisualElementsInformations;
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                    //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 });
             };
             #endregion
@@ -184,7 +184,7 @@ namespace OperPageLes.Windows
                     VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка каталога алиасов",
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Aliases.Values], DescriptionAlias));
                     ScrollViewerElements.Content = VisualElementsInformations;
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                    //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 });
             };
             #endregion
@@ -209,8 +209,8 @@ namespace OperPageLes.Windows
                         Button.IsEnabled = SearchComplete;
                         //App.AnimationManager.DoubleAnimationType.AnimateEffect(Button, HeightProperty,
                         //    SearchComplete ? Button.ActualHeight : 0d, TimeSpan.FromMilliseconds(300d));
-                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty,
-                            SearchComplete ? 1d : 0d, TimeSpan.FromMilliseconds(300d));
+                        //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty,
+                        //    SearchComplete ? 1d : 0d, TimeSpan.FromMilliseconds(300d));
                     }
                 }
             };
@@ -225,7 +225,7 @@ namespace OperPageLes.Windows
                     Button = (IELButtonText)VisualElementsInformations.Children[Index];
                     Button.IsEnabled = true;
                     //App.AnimationManager.DoubleAnimationType.AnimateEffect(Button, HeightProperty, Button.ActualHeight, TimeSpan.FromMilliseconds(300d));
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
+                    //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                 }
             };
             #endregion
@@ -295,7 +295,7 @@ namespace OperPageLes.Windows
                             //App.AnimateDoubleEffect(DescriptionConsole, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
                         };
                         StackPanelElements.Children.Add(Button);
-                        App.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
+                        //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(Button, OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
                     });
                     Thread.Sleep(200);
                     i++;
@@ -327,11 +327,11 @@ namespace OperPageLes.Windows
         /// <param name="ElementSelect">Объект выделяемой кнопки</param>
         private void AnimateEnterPageButton(FrameworkElement ElementSelect)
         {
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageSelectIndicator, MarginProperty,
-                    new(ElementSelect.TranslatePoint(new(0, 0), GridMainButtonsPagesInformation).X + ElementSelect.ActualWidth / 2d - 6, -9, 0, -7),
-                    TimeSpan.FromMilliseconds(200d));
-            if (RotateTransformImageSelectIndicator.Angle == 0d)
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateTransformImageSelectIndicator, RotateTransform.AngleProperty, -90d, TimeSpan.FromMilliseconds(200d));
+            //App.CurrentApp.ManagerAnimation.ThicknessAnimationType.AnimateEffect(ImageSelectIndicator, MarginProperty,
+            //        new(ElementSelect.TranslatePoint(new(0, 0), GridMainButtonsPagesInformation).X + ElementSelect.ActualWidth / 2d - 6, -9, 0, -7),
+            //        TimeSpan.FromMilliseconds(200d));
+            //if (RotateTransformImageSelectIndicator.Angle == 0d)
+            //    App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(RotateTransformImageSelectIndicator, RotateTransform.AngleProperty, -90d, TimeSpan.FromMilliseconds(200d));
         }
 
         /// <summary>

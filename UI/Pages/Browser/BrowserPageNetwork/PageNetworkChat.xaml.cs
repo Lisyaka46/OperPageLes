@@ -2,6 +2,8 @@
 using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
+using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +17,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
     /// <summary>
     /// Логика взаимодействия для PageNetworkChat.xaml
     /// </summary>
-    public partial class PageNetworkChat : Page
+    public partial class PageNetworkChat : Page, IOPLAnimate
     {
         /// <summary>
         /// Объект анимации линии загрузки
@@ -28,6 +30,11 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             From = 0d,
             To = 40d,
         };
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         /// <summary>
         /// Объект отображаемый историю сообщений
@@ -75,7 +82,8 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
 
             DragEnter += (sender, e) =>
             {
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderDropFile, OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(500d));
+                OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, BorderDropFile, OpacityProperty,
+                    0d, 1d, TimeSpan.FromMilliseconds(500d));
                 BorderDropFile.Visibility = Visibility.Visible;
             };
             Drop += (sender, e) =>
@@ -145,7 +153,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     TextFileName = System.IO.Path.GetFileName(Path),
                     CornerRadius = new(5),
                     Margin = new(5),
-                    ManagerAnimation = App.ManagerAnimation,
+                    ManagerAnimation = App.CurrentApp.ManagerAnimation,
                 };
                 ClipElement.MathSizeFile(Path);
                 ClipElement.SetExtractAssociatedIcon(Path, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
@@ -154,7 +162,8 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                 SourceChat.ClipFiles.Children.Add(ClipElement);
                 ClipElement.SetIndex((uint)SourceChat.ClipFiles.Children.Count);
                 if (BorderClip.Height == 0d)
-                    App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderClip, HeightProperty, 100d, TimeSpan.FromMilliseconds(400d));
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderClip, HeightProperty,
+                        100d, TimeSpan.FromMilliseconds(400d));
             }
         }
 
@@ -169,7 +178,8 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             {
                 BusyActivateVisual();
 
-                App.ManagerAnimation.DoubleAnimationType.AnimateEffect(BorderClip, HeightProperty, 0d, TimeSpan.FromMilliseconds(400d));
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderClip, HeightProperty,
+                    0d, TimeSpan.FromMilliseconds(400d));
                 string Message = IELTextBoxMessage.Text;
                 string[] PathFiles = [..ClipPathFiles];
                 IELTextBoxMessage.Text = string.Empty;
@@ -196,13 +206,13 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// </summary>
         private void BusyActivateVisual()
         {
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(LineTextConnection,
+            OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, LineTextConnection,
                     HeightProperty, 0d, 10d, TimeSpan.FromMilliseconds(500d));
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(LineTextConnection,
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, LineTextConnection,
                 OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
             LineTextConnection.BeginAnimation(Line.StrokeDashOffsetProperty, AnimationDoubleLine);
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(BorderInfoSendFiles, MarginProperty, new(0),
-                TimeSpan.FromMilliseconds(800d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderInfoSendFiles, MarginProperty,
+                new Thickness(0), TimeSpan.FromMilliseconds(800d));
 
             IELButtonGoSend.IsEnabled = false;
             IELButtonClip.IsEnabled = false;
@@ -214,12 +224,13 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// </summary>
         private void BusyDiactivateVisual()
         {
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(LineTextConnection, OpacityProperty, 0d, TimeSpan.FromMilliseconds(500d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, LineTextConnection, OpacityProperty,
+                0d, TimeSpan.FromMilliseconds(500d));
             LineTextConnection.BeginAnimation(Line.StrokeDashOffsetProperty, null);
-            App.ManagerAnimation.DoubleAnimationType.AnimateEffect(LineTextConnection, Line.StrokeDashOffsetProperty,
+            OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, LineTextConnection, Line.StrokeDashOffsetProperty,
                 LineTextConnection.StrokeDashOffset, LineTextConnection.StrokeDashOffset - 5d, TimeSpan.FromMilliseconds(500d));
-            App.ManagerAnimation.ThicknessAnimationType.AnimateEffect(BorderInfoSendFiles, MarginProperty, new(0, 0, -155, 0),
-                TimeSpan.FromMilliseconds(800d));
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderInfoSendFiles, MarginProperty,
+                new Thickness(0, 0, -155, 0), TimeSpan.FromMilliseconds(800d));
 
             IELButtonGoSend.IsEnabled = true;
             IELButtonClip.IsEnabled = true;
