@@ -3,7 +3,7 @@ using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Windows.Base;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;

@@ -6,7 +6,7 @@ using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using OPLAPI.CORE;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;

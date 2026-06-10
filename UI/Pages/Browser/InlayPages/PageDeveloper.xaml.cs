@@ -1,27 +1,16 @@
-﻿using OPLAPI.OIEL.CORE.Browser;
-using OperPageLes.CORE.Struct;
-using OperPageLes.Properties;
-using OperPageLes.UI.Windows;
+﻿using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Windows.DEV;
-using OPLAnimation.CORE.Animation;
-using OPLAnimation.CORE.Interfaces;
-using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
-using System.IO;
-using System.Reflection;
+using OPLAPI.CORE.Animation;
+using OPLAPI.OIEL.CORE.Browser;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using System.Xml;
-using System.Xml.Linq;
 using DrColor = System.Drawing.Color;
 using OPRES = OperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
@@ -65,7 +54,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         /// </summary>
         public override OPLAnimationManager? ManagerAnimation
         {
-            get => SourceManagerAnimation;
+            get => base.ManagerAnimation;
             set
             {
                 base.ManagerAnimation = value;

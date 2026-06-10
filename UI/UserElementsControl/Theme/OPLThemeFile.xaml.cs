@@ -1,8 +1,8 @@
 ﻿using OperPageLes.UI.UserElementsControl.Network;
 using Newtonsoft.Json.Linq;
 using OPLAPI.OIEL.UserElementsControl;
-using OPLAnimation.CORE.Animation;
-using OPLAnimation.CORE.Interfaces;
+using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

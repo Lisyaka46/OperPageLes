@@ -2,7 +2,7 @@
 using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;

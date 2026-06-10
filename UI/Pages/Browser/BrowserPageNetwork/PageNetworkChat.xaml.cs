@@ -2,8 +2,8 @@
 using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
-using OPLAnimation.CORE.Animation;
-using OPLAnimation.CORE.Interfaces;
+using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

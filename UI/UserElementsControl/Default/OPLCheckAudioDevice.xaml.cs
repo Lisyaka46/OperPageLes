@@ -1,6 +1,6 @@
 ﻿using IEL.UserElementsControl.Base;
 using OperPageLes.CORE.Struct;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using System.Windows;
 using System.Windows.Media;
 using OPRES = OperPageLes.Properties.Resources;

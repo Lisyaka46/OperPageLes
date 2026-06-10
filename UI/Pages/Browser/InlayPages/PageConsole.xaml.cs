@@ -5,7 +5,7 @@ using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.UserElementsControl.Default;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using OPLAPI.OIEL.CORE.Browser;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -69,7 +69,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         /// </summary>
         public override OPLAnimationManager? ManagerAnimation
         {
-            get => SourceManagerAnimation;
+            get => base.ManagerAnimation;
             set
             {
                 base.ManagerAnimation = value;

@@ -6,8 +6,6 @@ using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OPLAPI.OIEL.UserElementsControl;
-using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Enums;
@@ -20,7 +18,9 @@ using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
+using OPLAPI.OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -35,7 +35,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Un4seen.Bass;
 using Windows.Foundation;
 
 namespace OperPageLes
@@ -484,7 +483,7 @@ namespace OperPageLes
                 (Command, param, CV) =>
                 {
 #if !DEBUG
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки \"{url}\""));
+                    return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Команда недоступна в режиме RELESE"));
 #endif
                     try
                     {

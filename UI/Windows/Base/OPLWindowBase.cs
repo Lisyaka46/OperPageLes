@@ -1,12 +1,5 @@
-﻿using IEL.UserElementsControl;
-using IEL.UserElementsControl.Base;
-using OPLAnimation.CORE.Animation;
-using OPLAnimation.CORE.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;

@@ -1,15 +1,11 @@
 ﻿using IEL.UserElementsControl.Base;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Default;
-using OPLAnimation.CORE.Animation;
-using System;
-using System.Collections.Generic;
+using OPLAPI.CORE.Animation;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using Un4seen.Bass;
 
 namespace OperPageLes.CORE.Audio

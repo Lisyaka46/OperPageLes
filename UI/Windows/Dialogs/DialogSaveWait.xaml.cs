@@ -1,6 +1,6 @@
 ﻿using OperPageLes.CORE;
 using OperPageLes.CORE.Struct;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using System;
 using System.Windows;
 using System.Windows.Controls;

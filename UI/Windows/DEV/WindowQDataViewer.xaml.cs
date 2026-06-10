@@ -1,6 +1,6 @@
 ﻿using IEL.CORE.Classes;
 using OperPageLes.CORE.Enums;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using System.Windows;
 using System.Windows.Media;
 using static IEL.CORE.Classes.QData;

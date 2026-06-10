@@ -10,7 +10,7 @@ using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PaletteWindow;
 using OperPageLes.UI.UserElementsControl.Theme;
 using OperPageLes.UI.Windows.Dialogs;
-using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE.Animation;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,19 +19,15 @@ using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
+using OperPageLes.CORE.Interfaces;
 
 namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageThemeController.xaml
     /// </summary>
-    public partial class PageThemeController : PageBrowser, IOPLConnectElements
+    public partial class PageThemeController : PageBrowser, IOPLElementBaseContent
     {
-        /// <summary>
-        /// Объект панели действий подключаемый к элементу отображения OPL
-        /// </summary>
-        public IELPanelAction? SourcePanelAction { get; internal set; }
-
         /// <summary>
         /// Цвет индикатора активной темы
         /// </summary>
