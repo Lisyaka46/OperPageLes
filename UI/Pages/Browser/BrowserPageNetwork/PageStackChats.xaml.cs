@@ -3,6 +3,7 @@ using OperPageLes.UI.UserElementsControl.Network;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAnimation.CORE.Animation;
 using OPLAnimation.CORE.Interfaces;
+using OPLAPI.OIEL.UserElementsControl.Network;
 using System.Windows;
 using System.Windows.Controls;
 using Orientation = System.Windows.Controls.Orientation;

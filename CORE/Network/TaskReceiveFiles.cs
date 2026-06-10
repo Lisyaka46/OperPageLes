@@ -1,5 +1,6 @@
 ﻿using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
+using OPLAPI.OIEL.CORE.Network;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

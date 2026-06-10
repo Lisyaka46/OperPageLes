@@ -3,6 +3,7 @@ using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Struct;
+using OPLAPI.CORE;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -71,7 +72,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
             else
             {
                 TextBlockDescriptionContent.Inlines.Clear();
-                TextBlockDescriptionContent.Inlines.Add(LibraryBIU.BIU.FormattedAllTextDetect(Desctiption));
+                TextBlockDescriptionContent.Inlines.Add(BIU.FormattedAllTextDetect(Desctiption));
             }
         }
 

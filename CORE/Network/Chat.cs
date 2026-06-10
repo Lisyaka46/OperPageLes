@@ -1,4 +1,5 @@
-﻿using OIEL.UserElementsControl;
+﻿using OPLAPI.OIEL.UserElementsControl;
+using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
 using OPLAnimation.CORE.Animation;
@@ -8,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using OPRES = OperPageLes.Properties.Resources;
+using OPLAPI.OIEL.UserElementsControl.Network;
+using OPLAPI.OIEL.CORE.Network;
 
 namespace OperPageLes.CORE.Network
 {
@@ -152,9 +155,10 @@ namespace OperPageLes.CORE.Network
                 Margin = new(3),
                 SenderTextPoint = "Вы",
                 IsAnimatedSettingQ = false,
+                IsEnabledSettingQ = false,
             };
             DataNetworkInfo DataInfo = new(ref Message, ref PathFiles);
-            UIChat.TextBlockHead.Text = "Вы:";
+            UIChat.TextHead = "Вы:";
             UIChat.EndMessage = Message;
             UIChat.Icon = PathFiles.Length > 0 ? StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Save)) : null;
             UIChat.TextCount = DataInfo.FilesInfo.Count;
@@ -202,14 +206,14 @@ namespace OperPageLes.CORE.Network
             DataNetworkInfo DataInfo = new([..Data]);
             Data.Clear();
             GC.Collect();
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, UIChat.TextBlockHead, TextBlock.OpacityProperty,
-                0d, TimeSpan.FromMilliseconds(200d));
+
             OPLNetworkMessage NetworkMessage = new()
             {
                 SenderTextPoint = "Неизвестный", // Тут должен быть переданный объект пользователя
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                 Margin = new(3),
                 IsAnimatedSettingQ = false,
+                IsEnabledSettingQ = false,
             };
             NetworkMessage.SetVisualFromNetworkInfo(DataInfo);
             HistoryMessages.Children.Add(NetworkMessage);
@@ -220,16 +224,15 @@ namespace OperPageLes.CORE.Network
                 NetworkMessage.Message = Encoding.UTF8.GetString(ReceiveNetworkByte(DeviceClient.DeviceClientStringMessage, DataInfo.LengthMessage));
             }
             UIChat.EndMessage = NetworkMessage.Message;
-            UIChat.TextBlockHead.Text = $"{(ReceiveFiles.Activate ? "**" : string.Empty)}{NetworkMessage.SenderTextPoint}:";
+            UIChat.TextHead = $"{(ReceiveFiles.Activate ? "**" : string.Empty)}{NetworkMessage.SenderTextPoint}:";
             if (DataInfo.FilesInfo.Count > 0 && DataInfo.FilesInfo != null)
             {
                 ReceiveFiles.AddQueue(DataInfo.FilesInfo, NetworkMessage.StackPanelClip.Children);
                 if (!ReceiveFiles.Activate)
                     ReceiveFiles.ReceiveProcess(DeviceClient.DeviceClientDataFile.Client);
             }
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, UIChat.TextBlockHead, TextBlock.OpacityProperty,
-                1d, TimeSpan.FromMilliseconds(600d));
-            StructDirectoryResources.Play(in App.CurrentApp.SourceWaveOut, nameof(OPRES.AudioMessageReceive));
+
+            App.CurrentApp.SourcePlayControl.Play(nameof(OPRES.AudioMessageReceive));
         }
 
         #region Send

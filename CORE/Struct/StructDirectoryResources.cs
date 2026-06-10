@@ -1,11 +1,6 @@
-﻿using NAudio.CoreAudioApi;
-using NAudio.Wave;
-using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using FontFamily = System.Windows.Media.FontFamily;
 
 namespace OperPageLes.CORE.Struct
 {
@@ -25,11 +20,6 @@ namespace OperPageLes.CORE.Struct
         /// Массив всех ресурсных картинок по их именам
         /// </summary>
         private static readonly Dictionary<string, BitmapImage> ResourcesImages = [];
-
-        /// <summary>
-        /// Массив всех ресурсных аудио ресурсов
-        /// </summary>
-        private static readonly Dictionary<string, AudioFileReader> ResourcesAudio = [];
 
         #region MainDirectoryApplication
         /// <summary>
@@ -121,7 +111,18 @@ namespace OperPageLes.CORE.Struct
                         ResourcesImages.Add(prop.Name, bitmap);
                     }
                     else if (Prefics.Contains(".mp4")) ResourcesMedia.Add(prop.Name, new Uri(Prefics));
-                    else if (Prefics.Contains(".mp3")) ResourcesAudio.Add(prop.Name, new AudioFileReader(Prefics));
+                    //else if (Prefics.Contains(".mp3"))
+                    //{
+                    //    int h = Bass.BASS_SampleLoad(Prefics, 0L, 0, 5, BASSFlag.BASS_DEFAULT);
+
+                    //    if (h == 0)
+                    //    {
+                    //        BASSError errorCode = Bass.BASS_ErrorGetCode();
+                    //        Console.WriteLine($"Ошибка загрузки: {errorCode}");
+                    //    }
+                    //    else
+                    //        Samples.Add(prop.Name, h);
+                    //}
                 }
             }
         }
@@ -160,22 +161,6 @@ namespace OperPageLes.CORE.Struct
         {
             string DirectoryFolder = Path.GetDirectoryName(path) ?? string.Empty;
             if (!Directory.Exists(DirectoryFolder)) Directory.CreateDirectory(DirectoryFolder);
-        }
-
-        /// <summary>
-        /// Воспроизвести аудио-файл
-        /// </summary>
-        /// <param name="SourceWaveOut">Экземпляр воспроизведения аудио</param>
-        /// <param name="NameResourceSound">Директория звукового файла</param>
-        /// <exception cref="Exception">Исключение не инициализированного экземпляра ресурсов</exception>
-        internal static void Play(in WaveOut Player, string NameResourceSound) // mp3
-        {
-            if (PathesFromNameResource.Count == 0) throw new Exception("Для использования ресурсов их нужно инициализировать \"CheckCreateAllResources()\"");
-            else if (Player.PlaybackState == PlaybackState.Playing) return;
-            Player.Resume();
-            ResourcesAudio[NameResourceSound].Seek(0L, SeekOrigin.Begin);
-            Player.Init(ResourcesAudio[NameResourceSound]);
-            Player.Play();
         }
 
         /// <summary>

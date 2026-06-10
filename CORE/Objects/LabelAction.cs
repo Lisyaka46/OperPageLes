@@ -1,5 +1,5 @@
 ﻿using InterpreterCommand.Classes;
-using OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl;
 using OperPageLes.CORE.Struct;
 using System.IO;
 using System.Windows;
@@ -39,7 +39,7 @@ namespace OperPageLes.CORE.Objects
             Label = Source;
             VisualELement = new()
             {
-                ManagerAnimation = App.CurrentApp.ManagerAnimation,
+                //ManagerAnimation = App.CurrentApp.ManagerAnimation,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 Margin = new(3d),
@@ -89,7 +89,7 @@ namespace OperPageLes.CORE.Objects
         /// <returns></returns>
         internal async Task Activate()
         {
-            await App.CurrentApp.Interpreter.ReadAndExecuteCommand(null, Label.Command, null);
+            await App.CurrentApp.Interpreter.ReadAndExecuteCommand(null, Label.Command, null, Interpreter.Classes.CommandLevel.Basic);
         }
 
         /// <summary>

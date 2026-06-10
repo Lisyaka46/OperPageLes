@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     x:Class="OperPageLes.UI.Windows.Dialogs.DialogGenerateTheme"
     mc:Ignorable="d"

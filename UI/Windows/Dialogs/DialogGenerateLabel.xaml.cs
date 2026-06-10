@@ -30,8 +30,8 @@ namespace OperPageLes.UI.Windows.Dialogs
             IELTextBoxCommand.Text = string.Empty;
             IELTextBoxDescription.Text = string.Empty;
 
-            HitInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
-            HitInterpreter.Connect(in App.CurrentApp.Interpreter, in IELTextBoxCommand.TextBoxMain);
+            //HitInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
+            HitInterpreter.Connect(App.CurrentApp.Interpreter, in IELTextBoxCommand.TextBoxMain);
             HitInterpreter.Height = 0d;
             HitInterpreter.Width = 0d;
 

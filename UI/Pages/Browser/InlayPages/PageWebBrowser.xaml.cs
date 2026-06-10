@@ -1,7 +1,7 @@
 ﻿using OperPageLes.CORE.Struct;
 using Microsoft.Win32;
-using OIEL.CORE.Browser;
-using OIEL.UserElementsControl;
+using OPLAPI.OIEL.CORE.Browser;
+using OPLAPI.OIEL.UserElementsControl;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;

@@ -1,6 +1,7 @@
-﻿using OIEL.CORE.Browser;
+﻿using OPLAPI.OIEL.CORE.Browser;
 using OperPageLes.CORE.Enums;
 using OperPageLes.UI.Pages.Settings;
+using OPLAnimation.CORE.Animation;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -30,6 +31,19 @@ namespace OperPageLes.UI.Pages.Browser
         /// Активный индекс столбца позиции складки настроек
         /// </summary>
         private int ActiveIndexColumn = -1;
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => SourceManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+                GeneralSetting.ManagerAnimation = value;
+            }
+        }
 
         public PageSettingApp()
         {

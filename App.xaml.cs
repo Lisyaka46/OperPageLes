@@ -4,13 +4,12 @@ using Interpreter.Commands;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
-using NAudio.CoreAudioApi;
-using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OIEL.UserElementsControl;
-using OIEL.UserElementsControl.Interfaces;
+using OPLAPI.OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using OperPageLes.CORE;
+using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.PaletteElements;
@@ -36,6 +35,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Un4seen.Bass;
 using Windows.Foundation;
 
 namespace OperPageLes
@@ -62,7 +62,7 @@ namespace OperPageLes
         /// <summary>
         /// Менеджер анимаций под управлением приложения
         /// </summary>
-        internal OPLAnimationManager ManagerAnimation { get; private set; }
+        internal readonly OPLAnimationManager ManagerAnimation = new();
 
         /// <summary>
         /// Реальное время
@@ -72,7 +72,7 @@ namespace OperPageLes
         /// <summary>
         /// Версия программы
         /// </summary>
-        internal static readonly string Version = "0.0.05";
+        internal readonly string Version = "0.0.06 (hot-fix)";
 
         /// <summary>
         /// Запись в файл .log
@@ -266,11 +266,6 @@ namespace OperPageLes
 
         #region RecourceDialogPages
         /// <summary>
-        /// Страница управления настройками программы
-        /// </summary>
-        internal PageSettingApp? SettingApp { get; set; }
-
-        /// <summary>
         /// Страница управления персанолизацией программы
         /// </summary>
         internal PageThemeController? ThemeApp { get; set; }
@@ -306,19 +301,9 @@ namespace OperPageLes
 
         #region AudioSettings
         /// <summary>
-        /// Объект управления библиотекой VLC
+        /// Объект управления воспроизведением звуков
         /// </summary>
-        internal WaveOut SourceWaveOut;
-
-        /// <summary>
-        /// Объект перечисления уствойств вывода ввода
-        /// </summary>
-        private readonly MMDeviceEnumerator Enumerator = new();
-
-        /// <summary>
-        /// Получить подключённые устройства вывода звука
-        /// </summary>
-        internal MMDeviceCollection MMDevicesOutput => Enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+        internal readonly PlayControl SourcePlayControl;
 
         #endregion
 
@@ -358,45 +343,35 @@ namespace OperPageLes
         /// <summary>
         /// Браузер страниц приложения
         /// </summary>
-        internal readonly OPLBrowserPage MainBrowser;
+        internal OPLBrowserPage MainBrowser { get; private set; }
         #endregion
 
         public App()
         {
-            LogWriteLine("---------- Старт нового экземпляра ----------");
-
-            LogWriteLine("Инициализация свойств экземпляра...");
-            #region Resources
-            LogWriteLine("Создание менеджера");
-            ManagerAnimation = new();
-            ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            LogWriteLine("Менеджер создан");
-
-            SourceWaveOut = new()
-            {
-                DeviceNumber = -1,
-                NumberOfBuffers = 1,
-            };
-
-            MainBrowser = new(typeof(PageManagerAppPage))
-            {
-                ManagerAnimation = ManagerAnimation,
-                Margin = new(4d),
-            };
-            OpenedWindowsInApplication = [];
-            SourceApplicationNotifications = [];
-            InstallingKey = PackKey.StaticKey(1L);
-            
             LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
-            Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
-            #endregion
-            LogWriteLine("...Готово");
+            try
+            {
+                LogWriteLine("---------- Старт нового экземпляра ----------");
 
-            LogWriteLine("Настройка интерпретатора...");
-            #region Interpreter
-            Interpreter = new([
-                #region alias
-                new ConsoleCommand<IOPERCommandViewer>("alias",
+                LogWriteLine("Инициализация свойств экземпляра...");
+                #region Resources
+                ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                MainBrowser = new()
+                {
+                    Margin = new(4d),
+                };
+                OpenedWindowsInApplication = [];
+                SourceApplicationNotifications = [];
+                InstallingKey = PackKey.StaticKey(1L);
+                Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
+                #endregion
+                LogWriteLine("...Готово");
+
+                LogWriteLine("Настройка интерпретатора...");
+                #region Interpreter
+                Interpreter = new([
+                    #region alias
+                    new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Basic, "alias",
                 [
                     new Parameter("Name", typeof(string)),
                     new Parameter("Command", typeof(string)),
@@ -410,7 +385,7 @@ namespace OperPageLes
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно создать, так как название совпадает с %**консольной** командой"));
                     }
-                    bool CompleteCreateAlias = Interpreter?.AddAliasCommand(NameAlias, (string)param[1], (string)param[2]) ?? false;
+                    bool CompleteCreateAlias = Interpreter?.AddAliasCommand(NameAlias, (string)param[1], (string)param[2], CommandLevel.LowLevel) ?? false;
                     if (!CompleteCreateAlias)
                     {
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
@@ -423,7 +398,7 @@ namespace OperPageLes
                 #endregion
 
                 #region alias_replace
-                new ConsoleCommand<IOPERCommandViewer>("alias_replace",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Basic, "alias_replace",
                 [
                     new Parameter("Name", typeof(string)),
                     new Parameter("Command", typeof(string)),
@@ -438,7 +413,7 @@ namespace OperPageLes
                         return Task.FromResult(CommandStateResult.Failed(Main.Name,
                             $"Aлиас \"%//{NameAlias}//\" невозможно изменить, так как он не существует \n%#EA5555//Для создания алиаса введите команду: %**alias**//"));
                     }
-                    CommandOPER<IOPERCommandViewer>? Com = Interpreter?.ReadCommand((string)param[1]);
+                    CommandOPER<IOPERCommandViewer>? Com = Interpreter?.ReadCommand((string)param[1], CommandLevel.LowLevel);
                     CommandStateResult Result = alias.ChangeSourceCommand(Com, (string)param[1], ((string)param[2]).Length > 0 ? (string)param[2] : null);
                     return Task.FromResult(CommandStateResult.Completed(Main.Name,
                         $"Aлиас \"%//{NameAlias}//\" на команду \"%//{param[1]}//\" {(Result.State == ResultState.Complete ? "успешно %**изменён**" : "невозможно %**изменить**")}"));
@@ -446,7 +421,7 @@ namespace OperPageLes
                 #endregion
 
                 #region reboot
-                new ConsoleCommand<IOPERCommandViewer>("reboot", "Перезагружает программу", (Command, param, CV) =>
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "reboot", "Перезагружает программу", (Command, param, CV) =>
                 {
                     RebootApplication();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -454,7 +429,7 @@ namespace OperPageLes
                 #endregion
 
                 #region close
-                new ConsoleCommand<IOPERCommandViewer>("close", "Закрывает программу", (Command, param, CV) =>
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "close", "Закрывает программу", (Command, param, CV) =>
                 {
                     MainWindow.Close();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
@@ -462,7 +437,7 @@ namespace OperPageLes
                 #endregion
 
                 #region clear
-                new ConsoleCommand<IOPERCommandViewer>("clear",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Basic, "clear",
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param, CV) =>
                 {
@@ -475,7 +450,7 @@ namespace OperPageLes
                 #endregion
 
                 #region print
-                new ConsoleCommand<IOPERCommandViewer>("print", [new Parameter("Text", typeof(string))],
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Basic, "print", [new Parameter("Text", typeof(string))],
                 "Выводит введённый параметр \"Text\" в консоль главного меню программы, игнорируя другие параметры",
                 (Command, param, CV) =>
                 {
@@ -484,7 +459,7 @@ namespace OperPageLes
                 #endregion
 
                 #region buffer
-                new ConsoleCommand<IOPERCommandViewer>("buffer",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Basic, "buffer",
                 "Отображает содержание буфера команд в консоль главного меню программы",
                 (Command, param, CV) =>
                 {
@@ -504,7 +479,7 @@ namespace OperPageLes
                 #endregion
 
                 #region open_link
-                new ConsoleCommand<IOPERCommandViewer>("open_link", [new Parameter("Link", typeof(string))],
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Managed, "open_link", [new Parameter("Link", typeof(string))],
                 "Открывает в браузере заданную ссылку \"Link\"",
                 (Command, param, CV) =>
                 {
@@ -558,7 +533,7 @@ namespace OperPageLes
 #endregion
 
                 #region open_directory
-                new ConsoleCommand<IOPERCommandViewer>("open_directory",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Managed, "open_directory",
                 [
                     new Parameter("Directory", typeof(string), string.Empty)
                 ],
@@ -592,7 +567,7 @@ namespace OperPageLes
                 #endregion
 
                 #region open_file
-                new ConsoleCommand<IOPERCommandViewer>("open_file",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Managed, "open_file",
                 [
                     new Parameter("File", typeof(string))
                 ],
@@ -612,7 +587,7 @@ namespace OperPageLes
                 #endregion
 
                 #region get_ip
-                new ConsoleCommand<IOPERCommandViewer>("get_ip",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "get_ip",
                 "Отправляет \"message\" через интернет к подключённому устройству",
                 (Command, param, CV) =>
                 {
@@ -624,7 +599,7 @@ namespace OperPageLes
                 #endregion
 
                 #region notification
-                new ConsoleCommand<IOPERCommandViewer>("notification",
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "notification",
                 [
                     new Parameter("Text", typeof(string)),
                 ],
@@ -637,68 +612,75 @@ namespace OperPageLes
                 #endregion
 
                 ]);
-            #endregion
-            LogWriteLine("...Готово");
+                #endregion
+                LogWriteLine("...Готово");
 
-            LogWriteLine("Инициализация настроек...");
-            #region Settings
-            SetSettingProcess();
+                LogWriteLine("Инициализация настроек...");
+                #region Settings
+                SetSettingProcess();
 
-            if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
-            else if (File.Exists(PathSettingApplication)) SetSettingApplication(PathSettingApplication);
-            else
-            {
-                SettingMainApplication = new();
-                string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
-                File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
-                ActivePathSettingApplication = PathSettingApplication;
+                if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
+                else if (File.Exists(PathSettingApplication)) SetSettingApplication(PathSettingApplication);
+                else
+                {
+                    SettingMainApplication = new();
+                    string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
+                    File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
+                    ActivePathSettingApplication = PathSettingApplication;
+                }
+
+                LogWriteLine("> Установка значений на основе настроек");
+                #region SettingRuntimeRealizeSettingChanges
+
+                SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
+                {
+                    if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
+                };
+                SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
+                {
+                    MainWindow.ChangeVisibilityMillisecondInternet(New);
+                };
+                SettingMainApplication.ExitKeyboardModeInClosePanelAction.Changed += (Old, New) =>
+                {
+                    MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
+                };
+                SettingMainApplication.KEY_KeyboardModePanelAction.Changed += (Old, New) =>
+                {
+                    MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
+                };
+                SettingMainApplication.KEY_PanelActionRightClick.Changed += (Old, New) =>
+                {
+                    MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
+                };
+                SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
+                {
+                    MainWindow.IELActionPanelMain.KeyCloseElement = New;
+                };
+                #endregion
+                LogWriteLine("> ...Готово");
+
+                #endregion
+                LogWriteLine("...Готово");
+
+                LogWriteLine("Изучение звуковых данных...");
+                SourcePlayControl = new();
+                LogWriteLine("...Готово");
+
+                LogWriteLine("Проверка ресурсов...");
+                #region ResourcesInit
+                StructDirectoryResources.CheckCreateAllResources();
+                #endregion
+                LogWriteLine("...Готово");
+
+                LogWriteLine("! Инициализация экземпляра успешна");
             }
-
-            LogWriteLine("> Установка значений на основе настроек");
-            #region SettingRuntimeRealizeSettingChanges
-            SourceWaveOut.Volume = SettingMainApplication.Volume / 100f;
-
-            SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
+            catch (Exception ex)
             {
-                if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
-            };
-            SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
-            {
-                MainWindow.ChangeVisibilityMillisecondInternet(New);
-            };
-            SettingMainApplication.ExitKeyboardModeInClosePanelAction.Changed += (Old, New) =>
-            {
-                MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
-            };
-            SettingMainApplication.KEY_KeyboardModePanelAction.Changed += (Old, New) =>
-            {
-                MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
-            };
-            SettingMainApplication.KEY_PanelActionRightClick.Changed += (Old, New) =>
-            {
-                MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
-            };
-            SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
-            {
-                MainWindow.IELActionPanelMain.KeyCloseElement = New;
-            };
-            SettingMainApplication.Volume.Changed += (Old, New) =>
-            {
-                SourceWaveOut.Volume = New / 100f;
-            };
-            #endregion
-            LogWriteLine("> ...Готово");
-
-            #endregion
-            LogWriteLine("...Готово");
-
-            LogWriteLine("Проверка ресурсов...");
-            #region ResourcesInit
-            StructDirectoryResources.CheckCreateAllResources();
-            #endregion
-            LogWriteLine("...Готово");
-
-            LogWriteLine("! Инициализация экземпляра успешна");
+                LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
+                LogWriteLine($"/// Трассировка стека: ///\n{ex.StackTrace}");
+                LogStreamWriter?.Close();
+                System.Windows.MessageBox.Show("Программа проинициализирована неправильно!.\nПредоставлено логирование процесса...");
+            }
         }
 
         /// <summary>
@@ -720,12 +702,11 @@ namespace OperPageLes
         /// Точка входа в программу
         /// </summary>
         /// <param name="e">Объект события начала работы прораммы</param>
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             LogWriteLine(" ** ");
             try
             {
-                //base.OnStartup(e);
                 LogWriteLine("Инициализация палитры");
                 DefaultPalette = new(Resources.MergedDictionaries[1]);
                 _ActiveThemeApplication = new();
@@ -798,6 +779,7 @@ namespace OperPageLes
                         ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
                     }
                 }
+                base.OnStartup(e);
 
                 LogWriteLine("Проверка ключа входа");
                 if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
@@ -835,14 +817,17 @@ namespace OperPageLes
                 LogWriteLine("Ключ валиден!");
 
                 LogWriteLine("Создание главного окна формы");
-                Current.MainWindow = new OperPageLes.UI.Windows.MainWindow()
-                {
-                    ManagerAnimation = ManagerAnimation,
-                };
+                Current.MainWindow = new OperPageLes.UI.Windows.MainWindow();
                 MainWindow.ChangeFromSetting(SettingMainApplication);
                 MainWindow.SetPallete(ActiveThemeApplication);
                 ShutdownMode = ShutdownMode.OnMainWindowClose;
                 LogWriteLine("! Создание успешно");
+
+                LogWriteLine("Установка менеджера анимаций объектам");
+                MainBrowser.ManagerAnimation = ManagerAnimation;
+                MainWindow.ManagerAnimation = ManagerAnimation;
+                //ApplicationPageDeveloper.ManagerAnimation = ManagerAnimation;
+                LogWriteLine("...Готово");
 
                 LogWriteLine("Открытие главного окна");
                 ((MainWindow)Current.MainWindow).Show();
@@ -998,17 +983,6 @@ namespace OperPageLes
 
         #endregion
 
-        #region Labels Manipulate
-        /// <summary>
-        /// Обновить файл данных ярлыков
-        /// </summary>
-        internal void UpdateFileDataLabel()
-        {
-           // string SettingApplicationJSON = JsonConvert.SerializeObject(SourceManagerAppPage.Labels.Select((i) => i.Label));
-           // File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
-        }
-        #endregion
-
         /// <summary>
         /// Установка иконки хоста сайта через собственный клиент
         /// </summary>
@@ -1061,7 +1035,7 @@ namespace OperPageLes
         internal async Task ActivateActionCommand(IOPERCommandViewer? CommandView, string CommandString)
         {
             if (CommandString.Length == 0) return;
-            ConsoleCommand<IOPERCommandViewer>? Command = Interpreter.ReadCommand<ConsoleCommand<IOPERCommandViewer>>(CommandString);
+            ConsoleCommand<IOPERCommandViewer>? Command = Interpreter.ReadCommand<ConsoleCommand<IOPERCommandViewer>>(CommandString, CommandLevel.LowLevel);
             string Name = COMInterpreterBase.ReadNameCommand(CommandString);
             string[] Parameters = COMInterpreterBase.ReadParametersCommand(CommandString);
 

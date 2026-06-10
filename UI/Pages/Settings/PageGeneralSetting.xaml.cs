@@ -1,9 +1,11 @@
-﻿using OPLAnimation.CORE.Animation;
+﻿using OperPageLes.CORE.Struct;
+using OPLAnimation.CORE.Animation;
 using OPLAnimation.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.Settings
 {
@@ -17,10 +19,22 @@ namespace OperPageLes.UI.Pages.Settings
         /// </summary>
         private readonly int OriginalSizeBuffer = -1;
 
+        private OPLAnimationManager? _ManagerAnimation;
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
+        public OPLAnimationManager? ManagerAnimation
+        {
+            get => _ManagerAnimation;
+            set
+            {
+                _ManagerAnimation = value;
+                CheckBoxInternetConnectionMillisecond.ManagerAnimation = value;
+                CheckBoxLoadingBorderVisualizate.ManagerAnimation = value;
+                CheckBoxUsePageBrowser.ManagerAnimation = value;
+                CheckBoxUseOnlyCreatePageBrowser.ManagerAnimation = value;
+            }
+        }
 
         internal PageGeneralSetting()
         {
@@ -148,14 +162,19 @@ namespace OperPageLes.UI.Pages.Settings
             #endregion
 
             #region MillisecondInternetConnection
+            CheckBoxInternetConnectionMillisecond.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
             CheckBoxInternetConnectionMillisecond.IsChecked = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection;
-            CheckBoxInternetConnectionMillisecond.Checked += (sender, e) =>
+            CheckBoxInternetConnectionMillisecond.IsCheckedChanged += (sender, e) =>
             {
-                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = true;
+                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = e;
             };
-            CheckBoxInternetConnectionMillisecond.Unchecked += (sender, e) =>
+            #endregion
+            
+            #region LoadingBorderVisualizate
+            CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
+            CheckBoxLoadingBorderVisualizate.IsCheckedChanged += (sender, e) =>
             {
-                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = false;
+                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = e;
             };
             #endregion
 
@@ -177,40 +196,26 @@ namespace OperPageLes.UI.Pages.Settings
             #endregion
 
             #region UseOpenLinkInPageBrowser
+            CheckBoxUsePageBrowser.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
             CheckBoxUsePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
-            CheckBoxUsePageBrowser.Checked += (sender, e) =>
+            CheckBoxUsePageBrowser.IsCheckedChanged += (sender, e) =>
             {
-                App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = true;
-            };
-            CheckBoxUsePageBrowser.Unchecked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = false;
+                App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = e;
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, CheckBoxUseOnlyCreatePageBrowser, OpacityProperty,
+                    e ? 1d : 0.4d, TimeSpan.FromMilliseconds(300d));
             };
             #endregion
 
             #region UseOnlyCreatePageWebBrowser
+            CheckBoxUseOnlyCreatePageBrowser.Opacity = CheckBoxUsePageBrowser.IsChecked ? 1d : 0.4d;
+            CheckBoxUseOnlyCreatePageBrowser.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.NewElement));
             CheckBoxUseOnlyCreatePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser;
-            CheckBoxUseOnlyCreatePageBrowser.Checked += (sender, e) =>
+            CheckBoxUseOnlyCreatePageBrowser.IsCheckedChanged += (sender, e) =>
             {
-                App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = true;
-            };
-            CheckBoxUseOnlyCreatePageBrowser.Unchecked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = false;
+                App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = e;
             };
             #endregion
 
-            #region LoadingBorderVisualizate
-            CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
-            CheckBoxLoadingBorderVisualizate.Checked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = true;
-            };
-            CheckBoxLoadingBorderVisualizate.Unchecked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = false;
-            };
-            #endregion
         }
 
         /// <summary>

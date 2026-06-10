@@ -1,21 +1,8 @@
 ﻿using IEL.UserElementsControl.Base;
-using NAudio.CoreAudioApi;
-using NAudio.Wave;
 using OperPageLes.CORE.Struct;
 using OPLAnimation.CORE.Animation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Windows.Media.Devices;
 using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.UserElementsControl.Default
@@ -84,9 +71,9 @@ namespace OperPageLes.UI.UserElementsControl.Default
         public event IELButtonBase.ActivateHandler? OnActivateMouseRight;
 
         /// <summary>
-        /// Текущий объект аудио девайса
+        /// Текущий индекс аудио девайса
         /// </summary>
-        internal readonly WaveOutCapabilities CurrentDevice;
+        internal int IndexCurrentDevice;
 
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
@@ -126,12 +113,11 @@ namespace OperPageLes.UI.UserElementsControl.Default
             }
         }
 
-        public OPLCheckAudioDevice(in WaveOutCapabilities SourceDevice)
+        public OPLCheckAudioDevice()
         {
             InitializeComponent();
-            CurrentDevice = SourceDevice;
             DeviceButton.PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine];
-            DeviceButton.Text = $"{SourceDevice.ProductName}" ?? "Нет аудио вывода";
+            DeviceButton.Text = "Неизвестный";
             DeviceButton.OnActivateMouseLeft += (sender, e) => OnActivateMouseLeft?.Invoke(this, e);
             DeviceButton.OnActivateMouseRight += (sender, e) => OnActivateMouseRight?.Invoke(this, e);
             ImageBrushIcon.Opacity = 0d;

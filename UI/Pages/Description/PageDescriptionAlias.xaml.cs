@@ -1,5 +1,5 @@
 ﻿using OperPageLes.CORE;
-using OIEL.UserElementsControl.Interfaces;
+using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using Interpreter.Interfaces;
@@ -57,7 +57,7 @@ namespace OperPageLes.UI.Pages.Description
             }
             else TextBlockAliasCommand.Text = $"({command.NameCommand})"; ;
 
-            ICommandOPER<IOPERCommandViewer>? SourceCommandAlias = App.CurrentApp.Interpreter.GetCommandFindName(NameCommand);
+            ICommandOPER<IOPERCommandViewer>? SourceCommandAlias = App.CurrentApp.Interpreter.GetCommandFindName(NameCommand, CommandLevel.LowLevel);
             TextBlockDescriptionAliasCommand.Text = SourceCommandAlias != null ? SourceCommandAlias.Description : "Такой команды не существует.";
             TextBlockDescriptionAlias.Text = command.Description;
         }

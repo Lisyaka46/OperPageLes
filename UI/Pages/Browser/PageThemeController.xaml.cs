@@ -2,7 +2,7 @@
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
-using OIEL.CORE.Browser;
+using OPLAPI.OIEL.CORE.Browser;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Settings.PaletteElements;
@@ -31,11 +31,6 @@ namespace OperPageLes.UI.Pages.Browser
         /// Объект панели действий подключаемый к элементу отображения OPL
         /// </summary>
         public IELPanelAction? SourcePanelAction { get; internal set; }
-
-        /// <summary>
-        /// Объект менеджера анимаций настроек OPL
-        /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         /// <summary>
         /// Цвет индикатора активной темы

@@ -1,12 +1,13 @@
 ﻿using IEL.CORE.Classes;
 using IEL.UserElementsControl;
-using OIEL.CORE.Browser;
-using OIEL.UserElementsControl;
+using OPLAPI.OIEL.CORE.Browser;
+using OPLAPI.OIEL.UserElementsControl;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAnimation.CORE.Animation;
+using OPLAPI.CORE;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -138,7 +139,7 @@ namespace OperPageLes.UI.Pages.Browser
         /// <summary>
         /// Инициализировать начальную страницу
         /// </summary>
-        public PageManagerAppPage() : base(new(100, 100))
+        public PageManagerAppPage() : base(new(80, 80))
         {
             SourceAppPages = [];
             SourceLabels = [];
@@ -151,6 +152,11 @@ namespace OperPageLes.UI.Pages.Browser
                 Margin = new(3d),
             };
             InitializeComponent();
+
+            MainGridContainer.Children.Add(MainPanelAllApplicationPages);
+            MainPanelAllApplicationPages.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            MainPanelAllApplicationPages.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+
             SctollViewerLabels.ClipToBounds = false;
             SctollViewerLabels.ClipToBoundsContainer = false;
             SctollViewerLabels.Content = StackPanelAllLabels;
@@ -229,6 +235,7 @@ namespace OperPageLes.UI.Pages.Browser
             Label.VisualELement.Focusable = false;
             Label.VisualELement.Padding = new(3d);
             Label.VisualELement.VisualOrientationName = OrientationName.Up;
+            Label.VisualELement.ManagerAnimation = ManagerAnimation;
 
             Label.VisualELement.OnActivateMouseLeft += async (sender, e) =>
             {
@@ -261,7 +268,7 @@ namespace OperPageLes.UI.Pages.Browser
         /// <param name="PathJSON">Директория JSON</param>
         internal async Task AddLabelsFromJSON(string PathJSON)
         {
-            SourceLabelAction[] Buffer = LibraryJSON.Convert.DeserializeObjectJson<SourceLabelAction>(PathJSON);
+            SourceLabelAction[] Buffer = ConvertJSON.DeserializeObjectJson<SourceLabelAction>(PathJSON);
             Dispatcher.Invoke(() =>
             {
                 for (int i = 0; i < Buffer.Length; i++)

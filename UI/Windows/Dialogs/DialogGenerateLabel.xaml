@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:OPL="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL" 
@@ -30,7 +30,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Viewbox Margin="10,100,10,0" VerticalAlignment="Top" Height="250" StretchDirection="DownOnly" Panel.ZIndex="1" HorizontalAlignment="Left">
-                        <OPL:OPLHitInterpreter x:Name="HitInterpreter" Width="250" Grid.Row="0" Height="10" PaletteElement="{DynamicResource PastelBlue}" HorizontalAlignment="Left" BorderThickness="3,1,3,3" VerticalAlignment="Top" CornerRadius="0,0,6,6" MaxHeight="250" Margin="0,0,0,0" Padding="0,0,0,0"/>
+                        <OPL:OPLHitInterpreter x:Name="HitInterpreter" Width="250" Grid.Row="0" Height="10" PaletteElement="{DynamicResource PastelBlue}" HorizontalAlignment="Left" BorderThickness="3,1,3,3" VerticalAlignment="Top" CornerRadius="0,0,6,6" MaxHeight="250" Margin="0,0,0,0" Padding="0,0,0,0" IsEnabledSettingQ="False"/>
                     </Viewbox>
                     <StackPanel>
                         <Grid Margin="5,5,5,0">

@@ -1,15 +1,17 @@
-﻿using OIEL.CORE.Browser;
+﻿using OPLAPI.OIEL.CORE.Browser;
 using OperPageLes.CORE.Struct;
 using OperPageLes.Properties;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.DEV;
 using OPLAnimation.CORE.Animation;
+using OPLAnimation.CORE.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Markup;
@@ -17,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using DrColor = System.Drawing.Color;
@@ -30,10 +33,22 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
     /// </summary>
     public partial class PageDeveloper : PageBrowser
     {
+        private double _sagOffset = 20;
+
+        private bool _isDragging = false;
+        private FrameworkElement _draggedElement;
+        private Point _dragStartPoint;
+        private Point _elementStartPosition;
+        private Point _lastPosition1;
+        private Point _lastPosition2;
+        private DispatcherTimer _moveTimer;
+        private Point _currentControlPoint;
+        private Point _lastPos1, _lastPos2;
+
+
         private Point StartPositionMouse;
         private bool Activate = false;
         Storyboard myStoryboard = new();
-        private DoubleAnimation anim = App.CurrentApp.ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
         private Vector3DAnimation Vector3DAnim = new()
         {
             From = null,
@@ -45,10 +60,22 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             }
         };
 
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => SourceManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+                Check.ManagerAnimation = value;
+            }
+        }
+
         public PageDeveloper()
         {
             InitializeComponent();
-
             //Loaded += async (sender, e) =>
             //{
             //    const int CountParticles = 90, DelayOneParticle = 100;
@@ -141,9 +168,11 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             //        await Task.Delay(DelayOneParticle);
             //    }
             //};
-            anim.From = null;
-            anim.Duration = TimeSpan.FromMilliseconds(3000d);
-            myStoryboard.Children.Add(anim);
+            //ManagerAnimation.GetCloneAnimationElementFromType<DoubleAnimation>();
+            //anim.From = null;
+            //anim.Duration = TimeSpan.FromMilliseconds(3000d);
+            //myStoryboard.Children.Add(anim);
+            //Check.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
             ImageBrushModel.ImageSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.VECTOR));
             MyAnimatedObject.MouseEnter += (sender, e) =>
             {
@@ -160,7 +189,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 if (!Activate) return;
                 Activate = false;
-                OPLAnimationManager.AnimateTakingZeroTo(App.CurrentApp.ManagerAnimation, myAngleRotation, AxisAngleRotation3D.AngleProperty,
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, myAngleRotation, AxisAngleRotation3D.AngleProperty,
                     0d, TimeSpan.FromMilliseconds(500d));
             };
             MyAnimatedObject.MouseMove += (sender, e) =>
@@ -181,82 +210,277 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 window.Show();
             };
 
-            IAddChild? ChildrenControl = null;
-            UIElement? Child = null;
-            BrushConverter SourceBrushConverter = new();
-            ThicknessConverter SourceThicknessConverter = new();
-            CornerRadiusConverter SourceCornerRadiusConverter = new();
-            DoubleConverter SourceDoubleConverter = new();
+            //IAddChild? ChildrenControl = null;
+            //UIElement? Child = null;
+            //BrushConverter SourceBrushConverter = new();
+            //ThicknessConverter SourceThicknessConverter = new();
+            //CornerRadiusConverter SourceCornerRadiusConverter = new();
+            //DoubleConverter SourceDoubleConverter = new();
 
-            using (XmlReader reader = XmlReader.Create(@"C:\Users\killm\Рабочий стол\Page1.xaml"))
+            //using (XmlReader reader = XmlReader.Create(@"C:\Users\killm\Рабочий стол\Page1.xaml"))
+            //{
+            //    while (reader.Read())
+            //    {
+            //        switch (reader.NodeType)
+            //        {
+            //            case XmlNodeType.Element:
+            //                Type type = ByName(reader.Name) ??
+            //                    throw new Exception($"Данный тип \"{reader.Name}\" не поддерживается");
+            //                object instance = Activator.CreateInstance(type) ??
+            //                    throw new Exception($"Данный тип \"{reader.Name}\" не удалось создать через инициализаторы");
+            //                if (type.BaseType == typeof(System.Windows.Controls.Panel))
+            //                    ChildrenControl = (IAddChild)Convert.ChangeType(instance, type);
+            //                else if (ChildrenControl != null)
+            //                {
+            //                    Child = (UIElement)Convert.ChangeType(instance, type);
+            //                    ChildrenControl.AddChild(Child);
+            //                    for (int i = 0; i < reader.AttributeCount; i++)
+            //                    {
+            //                        reader.MoveToAttribute(i);
+            //                        PropertyInfo P_Info = type.GetProperty(reader.Name) ??
+            //                            throw new Exception($"Свойство \"{reader.Name}\" не поддерживается в данном объекте \"{type.Name}\"");
+            //                        if (P_Info.PropertyType != reader.ValueType)
+            //                        {
+            //                            if (reader.ValueType == typeof(string))
+            //                            {
+            //                                if (P_Info.PropertyType == typeof(System.Windows.Media.Brush))
+            //                                {
+            //                                    P_Info.SetValue(Child, SourceBrushConverter.ConvertFromString(reader.Value));
+            //                                }
+            //                                else if (P_Info.PropertyType == typeof(Thickness))
+            //                                {
+            //                                    P_Info.SetValue(Child, SourceThicknessConverter.ConvertFromInvariantString(reader.Value));
+            //                                }
+            //                                else if (P_Info.PropertyType == typeof(CornerRadius))
+            //                                {
+            //                                    P_Info.SetValue(Child, SourceCornerRadiusConverter.ConvertFromInvariantString(reader.Value));
+            //                                }
+            //                                else if (P_Info.PropertyType == typeof(double))
+            //                                {
+            //                                    P_Info.SetValue(Child, SourceDoubleConverter.ConvertFromInvariantString(reader.Value));
+            //                                }
+            //                                else throw new Exception(
+            //                                    $"Не найдено поддерживаемая конвертация строкового значения в ожидаемый тип \"{P_Info.PropertyType.Name}\"");
+            //                                continue;
+            //                            }
+            //                        }
+            //                        P_Info.SetValue(Child, Convert.ChangeType(reader.Value, reader.ValueType));
+            //                    }
+            //                }
+            //                else throw new Exception("Невозможно создать элемент который находится не в контейнере и не является контейнером");
+            //                Console.WriteLine("Start Element {0}", reader.Name);
+            //                break;
+            //            case XmlNodeType.Text:
+            //                Console.WriteLine("Text Node: {0}",
+            //                         reader.GetValueAsync());
+            //                break;
+            //            case XmlNodeType.EndElement:
+            //                Console.WriteLine("End Element {0}", reader.Name);
+            //                break;
+            //            default:
+            //                Console.WriteLine("Other node {0} with value {1}",
+            //                                reader.NodeType, reader.Value);
+            //                break;
+            //        }
+            //    }
+            //}
+            //if (ChildrenControl != null)
+            //    SourceGridContent.Children.Add((UIElement)ChildrenControl);
+
+            // Таймер для отслеживания движения
+            _moveTimer = new DispatcherTimer();
+            _moveTimer.Interval = TimeSpan.FromMilliseconds(5);
+            _moveTimer.Tick += CheckMovement;
+
+            Element1.MouseLeftButtonDown += OnMouseDown;
+            Element2.MouseLeftButtonDown += OnMouseDown;
+            Element1.MouseMove += OnMouseMove;
+            Element2.MouseMove += OnMouseMove;
+            Element1.MouseLeftButtonUp += OnMouseUp;
+            Element2.MouseLeftButtonUp += OnMouseUp;
+
+            int _sagOffset = 30;
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(1);
+            timer.Tick += (s, e) =>
             {
-                while (reader.Read())
+                double x1 = Canvas.GetLeft(Element1);
+                double y1 = Canvas.GetTop(Element1);
+                double x2 = Canvas.GetLeft(Element2);
+                double y2 = Canvas.GetTop(Element2);
+
+                x1 += Element1.Width / 2;
+                y1 += Element1.Height / 2;
+                x2 += Element2.Width / 2;
+                y2 += Element2.Height / 2;
+
+                Point currentPos1 = new Point(x1, y1);
+                Point currentPos2 = new Point(x2, y2);
+
+                double speed1 = Math.Sqrt(Math.Pow(currentPos1.X - _lastPos1.X, 2) + Math.Pow(currentPos1.Y - _lastPos1.Y, 2));
+                double speed2 = Math.Sqrt(Math.Pow(currentPos2.X - _lastPos2.X, 2) + Math.Pow(currentPos2.Y - _lastPos2.Y, 2));
+                double maxSpeed = Math.Max(speed1, speed2);
+
+                // Устанавливаем точки
+                PathFigureSegment.StartPoint = new Point(x1, y1);
+                SourceSegment.Point2 = new Point(x2, y2);
+
+                // Расчёт центра и длины
+                double midX = (x1 + x2) / 2;
+                double midY = (y1 + y2) / 2;
+                double dx = x2 - x1;
+                double dy = y2 - y1;
+                double length = Math.Sqrt(dx * dx + dy * dy);
+
+                // Базовое провисание
+                double sag = _sagOffset + length * 0.42;
+
+                // Угол наклона верёвки (для эффекта маятника)
+                double angle = Math.Atan2(dy, dx);
+
+                double targetX = midX;
+                double targetY = midY + sag;
+
+                if (_isDragging || maxSpeed > 1)
                 {
-                    switch (reader.NodeType)
+                    double time = DateTime.Now.Millisecond / 1000.0;
+
+                    // Амплитуда зависит от скорости
+                    double amplitude = Math.Min(20, maxSpeed * 2);
+
+                    // Частота колебаний
+                    double frequency = 30 + (maxSpeed * 0.8);
+
+                    // Затухание
+                    double decay = Math.Min(1, maxSpeed / 2);
+
+                    // Основные колебания вверх-вниз
+                    double swingY = Math.Sin(time * frequency) * amplitude * decay;
+
+                    // Покачивание влево-вправо (маятниковое движение)
+                    // Чем быстрее движение, тем сильнее раскачивание
+                    double pendulumAmplitude = amplitude * 2.8;
+                    double pendulumSwing = Math.Sin(time * (frequency - 2)) * pendulumAmplitude * decay;
+
+                    // Смещение контрольной точки влево-вправо (перпендикулярно верёвке)
+                    double perpX = -Math.Sin(angle) * pendulumSwing;
+                    double perpY = Math.Cos(angle) * pendulumSwing;
+
+                    // Эффект "волны" при движении (дополнительное покачивание)
+                    double waveX = Math.Sin(time * 12) * (amplitude * 0.8) * decay;
+
+                    targetX = midX + perpX + waveX;
+                    targetY = midY + sag + swingY + perpY * 0.5;
+
+                    // Эффект "хлыста" при резком дёрганье
+                    if (maxSpeed > 6)
                     {
-                        case XmlNodeType.Element:
-                            Type type = ByName(reader.Name) ??
-                                throw new Exception($"Данный тип \"{reader.Name}\" не поддерживается");
-                            object instance = Activator.CreateInstance(type) ??
-                                throw new Exception($"Данный тип \"{reader.Name}\" не удалось создать через инициализаторы");
-                            if (type.BaseType == typeof(System.Windows.Controls.Panel))
-                                ChildrenControl = (IAddChild)Convert.ChangeType(instance, type);
-                            else if (ChildrenControl != null)
-                            {
-                                Child = (UIElement)Convert.ChangeType(instance, type);
-                                ChildrenControl.AddChild(Child);
-                                for (int i = 0; i < reader.AttributeCount; i++)
-                                {
-                                    reader.MoveToAttribute(i);
-                                    PropertyInfo P_Info = type.GetProperty(reader.Name) ??
-                                        throw new Exception($"Свойство \"{reader.Name}\" не поддерживается в данном объекте \"{type.Name}\"");
-                                    if (P_Info.PropertyType != reader.ValueType)
-                                    {
-                                        if (reader.ValueType == typeof(string))
-                                        {
-                                            if (P_Info.PropertyType == typeof(System.Windows.Media.Brush))
-                                            {
-                                                P_Info.SetValue(Child, SourceBrushConverter.ConvertFromString(reader.Value));
-                                            }
-                                            else if (P_Info.PropertyType == typeof(Thickness))
-                                            {
-                                                P_Info.SetValue(Child, SourceThicknessConverter.ConvertFromInvariantString(reader.Value));
-                                            }
-                                            else if (P_Info.PropertyType == typeof(CornerRadius))
-                                            {
-                                                P_Info.SetValue(Child, SourceCornerRadiusConverter.ConvertFromInvariantString(reader.Value));
-                                            }
-                                            else if (P_Info.PropertyType == typeof(double))
-                                            {
-                                                P_Info.SetValue(Child, SourceDoubleConverter.ConvertFromInvariantString(reader.Value));
-                                            }
-                                            else throw new Exception(
-                                                $"Не найдено поддерживаемая конвертация строкового значения в ожидаемый тип \"{P_Info.PropertyType.Name}\"");
-                                            continue;
-                                        }
-                                    }
-                                    P_Info.SetValue(Child, Convert.ChangeType(reader.Value, reader.ValueType));
-                                }
-                            }
-                            else throw new Exception("Невозможно создать элемент который находится не в контейнере и не является контейнером");
-                            Console.WriteLine("Start Element {0}", reader.Name);
-                            break;
-                        case XmlNodeType.Text:
-                            Console.WriteLine("Text Node: {0}",
-                                     reader.GetValueAsync());
-                            break;
-                        case XmlNodeType.EndElement:
-                            Console.WriteLine("End Element {0}", reader.Name);
-                            break;
-                        default:
-                            Console.WriteLine("Other node {0} with value {1}",
-                                            reader.NodeType, reader.Value);
-                            break;
+                        double whip = Math.Sin(time * 12) * (amplitude * 0.5) * decay;
+                        targetX += Math.Cos(angle) * whip;
+                        targetY += Math.Sin(angle) * whip * 0.5;
                     }
                 }
+
+                // Плавное движение контрольной точки
+                if (_currentControlPoint == default)
+                    _currentControlPoint = new Point(targetX, targetY);
+                else
+                {
+                    double smooth = 0.12d;
+                    double newX = _currentControlPoint.X + (targetX - _currentControlPoint.X) * smooth;
+                    double newY = _currentControlPoint.Y + (targetY - _currentControlPoint.Y) * smooth;
+                    _currentControlPoint = new Point(newX, newY);
+                }
+
+                SourceSegment.Point1 = _currentControlPoint;
+
+                // Сохраняем позиции
+                _lastPos1 = currentPos1;
+                _lastPos2 = currentPos2;
+            };
+            _moveTimer.Start();
+            timer.Start();
+
+            //DispatcherTimer Dashtimer = new DispatcherTimer();
+            //Dashtimer.Interval = TimeSpan.FromMilliseconds(1);
+            //Dashtimer.Tick += (s, e) =>
+            //{
+            //    SourcePath.StrokeDashOffset =
+            //        (SourcePath.StrokeDashOffset + SourcePath.StrokeDashArray[0] / 10) % (SourcePath.StrokeDashArray[0] * 2);
+            //};
+            //Dashtimer.Start();
+
+            DoubleAnimation anim = new()
+            {
+                Duration = TimeSpan.FromMilliseconds(400d),
+                From = 0d,
+                To = -(SourcePath.StrokeDashArray[0] * 2),
+                RepeatBehavior = RepeatBehavior.Forever,
+            };
+            SourcePath.BeginAnimation(System.Windows.Shapes.Path.StrokeDashOffsetProperty, anim);
+        }
+
+        private void CheckMovement(object sender, EventArgs e)
+        {
+            if (Element1 == null || Element2 == null) return;
+
+            Point currentPos1 = new Point(Canvas.GetLeft(Element1), Canvas.GetTop(Element1));
+            Point currentPos2 = new Point(Canvas.GetLeft(Element2), Canvas.GetTop(Element2));
+
+            double dist1 = Math.Abs(currentPos1.X - _lastPosition1.X) + Math.Abs(currentPos1.Y - _lastPosition1.Y);
+            double dist2 = Math.Abs(currentPos2.X - _lastPosition2.X) + Math.Abs(currentPos2.Y - _lastPosition2.Y);
+
+            //// Если объект переместился больше чем на 2 пикселя - считаем что двигается
+            //_isMoving = (dist1 > 2 || dist2 > 2);
+
+            _lastPosition1 = currentPos1;
+            _lastPosition2 = currentPos2;
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _draggedElement = sender as FrameworkElement;
+            if (_draggedElement != null)
+            {
+                _isDragging = true;
+                _dragStartPoint = e.GetPosition(SourceContainer);
+                _elementStartPosition = new Point(
+                    Canvas.GetLeft(_draggedElement),
+                    Canvas.GetTop(_draggedElement)
+                );
+                _draggedElement.CaptureMouse();
+                e.Handled = true;
             }
-            if (ChildrenControl != null)
-                SourceGridContent.Children.Add((UIElement)ChildrenControl);
+        }
+
+        private void OnMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (_isDragging && _draggedElement != null)
+            {
+                Point currentPoint = e.GetPosition(SourceContainer);
+                double deltaX = currentPoint.X - _dragStartPoint.X;
+                double deltaY = currentPoint.Y - _dragStartPoint.Y;
+
+                double newLeft = _elementStartPosition.X + deltaX;
+                double newTop = _elementStartPosition.Y + deltaY;
+
+                // Ограничиваем перемещение в пределах Canvas
+                newLeft = Math.Max(0, Math.Min(newLeft, SourceContainer.ActualWidth - _draggedElement.Width));
+                newTop = Math.Max(0, Math.Min(newTop, SourceContainer.ActualHeight - _draggedElement.Height));
+
+                Canvas.SetLeft(_draggedElement, newLeft);
+                Canvas.SetTop(_draggedElement, newTop);
+            }
+        }
+
+        private void OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_draggedElement != null)
+            {
+                _draggedElement.ReleaseMouseCapture();
+            }
+            _isDragging = false;
+            _draggedElement = null;
         }
 
         private static Type? ByName(string name)

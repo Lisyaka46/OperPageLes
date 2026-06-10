@@ -248,10 +248,18 @@ namespace OperPageLes.UI.Windows.Base
 
         #endregion
 
+        protected OPLAnimationManager? SourceManagerAnimation;
         /// <summary>
-        /// Объект менеджера анимационных настроек OPL
+        /// Объект менеджера анимаций настроек OPL
         /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
+        public virtual OPLAnimationManager? ManagerAnimation
+        {
+            get => SourceManagerAnimation;
+            set
+            {
+                SourceManagerAnimation = value;
+            }
+        }
 
         public OPLWindowBase()
         {

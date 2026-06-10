@@ -4,11 +4,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:OperPageLes.UI.Windows"
-    xmlns:OPL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OPL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:Theme="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
-    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
     x:Class="OperPageLes.UI.Pages.Browser.PageThemeController"
     mc:Ignorable="d"
     Title="Управление персонализацией" MinWidth="670" MinHeight="410">

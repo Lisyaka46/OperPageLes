@@ -1,16 +1,15 @@
 ﻿<Base:MainPageBrowser
     x:Class="OperPageLes.UI.Pages.Browser.PageManagerAppPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser">
     <Grid>
         <Grid x:FieldModifier="private" x:Name="MainGridContainer">
-            <WrapPanel x:FieldModifier="private" x:Name="MainPanel" Grid.Row="0" VerticalAlignment="Top" Panel.ZIndex="1" HorizontalAlignment="Center"/>
             <IEL:IELScrollViewer x:FieldModifier="private" x:Name="SctollViewerLabels" AutoUpdateVisibleVerticalScroll="False" ScrollForce="20" HorizontalScrollAligment="Down" ClipToBounds="True"/>
         </Grid>
     </Grid>

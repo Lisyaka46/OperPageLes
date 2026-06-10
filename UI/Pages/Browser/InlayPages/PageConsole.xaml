@@ -4,9 +4,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser"
-    xmlns:Base="clr-namespace:OIEL.CORE.Browser;assembly=OIEL"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:OPL="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
     x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageConsole"
     mc:Ignorable="d" 
@@ -109,10 +109,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <IEL:IELButtonImage x:Name="IELImageButtonHelp" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="0" Margin="3,5,3,5" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Jade}" Padding="0,2,0,2" MarginViewBox="5,2,5,2"/>
             <IEL:IELTextBox x:Name="TextBoxCommandInput" CornerRadius="2,6,6,6" Grid.Column="1" Grid.Row="0" Margin="3,3,3,3" MinWidth="100" BorderThickness="3,3,3,3" Grid.ColumnSpan="1" Panel.ZIndex="1" FontSize="20" FontFamily="{DynamicResource Deledda Open Regular}" Padding="0,5,0,0" PaletteElement="{DynamicResource Violet}" Text=""/>
             <IEL:IELButtonText x:Name="ButtonReturnCommand" Text="Выполнить" CornerRadius="6,6,6,6" Grid.ColumnSpan="1" BorderThickness="3,3,3,3" FontFamily="{DynamicResource Bree CYR var}" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" PaletteElement="{DynamicResource Green}" VerticalContentAlignment="Stretch" Margin="3,3,3,3" MarginViewBox="5,5,5,7" Grid.Column="2" FontSize="16"/>
         </Grid>
-        <OPL:OPLHitInterpreter x:Name="HitCommandsInterpreter" PaletteElement="{DynamicResource LightBlue}" Panel.ZIndex="2" Margin="55,0,0,-3"/>
+        <OPL:OPLHitInterpreter x:Name="HitCommandsInterpreter" PaletteElement="{DynamicResource LightBlue}" Panel.ZIndex="2" Margin="8,0,0,-3" IsEnabledSettingQ="False"/>
     </Grid>
 </Base:PageBrowser>

@@ -97,5 +97,10 @@ namespace OperPageLes.CORE.Settings.Struct
         /// Размер главного окна по высоте
         /// </summary>
         public ObjSetting<double> MainWindowHeight { get; internal set; } = 650d;
+
+        /// <summary>
+        /// Активный индекс устройства для воспроизведения взуков
+        /// </summary>
+        public ObjSetting<int> DeviceIndexActive { get; internal set; } = 1;
     }
 }

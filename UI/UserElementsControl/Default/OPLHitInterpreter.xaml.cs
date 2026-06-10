@@ -2,7 +2,7 @@
 using Interpreter.Interfaces;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
-using OIEL.UserElementsControl.Interfaces;
+using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using OperPageLes.CORE.Enums;
 using OPLAnimation.CORE.Animation;
 using OPLAnimation.CORE.Interfaces;
@@ -205,47 +205,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 return;
             }
             else if ((e.Key != Key.Up && e.Key != Key.Down) || StackPanelAllHit.Children.Count == 0) return;
-            else if (ActiveIndexHitCommandInput == -1)
-            {
-                ActiveIndexHitCommandInput = e.Key == Key.Up ? StackPanelAllHit.Children.Count - 1 : 0;
-            }
-            else
-            {
-                ChangeColorElementHitCommandMouseLeave((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput],
-                        OPLHitInterpreter.SourceMouseEventArgs);
-                if (e.Key == Key.Up)
-                {
-                    ActiveIndexHitCommandInput = ActiveIndexHitCommandInput > 0 ?
-                        ActiveIndexHitCommandInput - 1 : StackPanelAllHit.Children.Count - 1;
-                }
-                else
-                {
-                    ActiveIndexHitCommandInput = ActiveIndexHitCommandInput < StackPanelAllHit.Children.Count - 1 ?
-                        ActiveIndexHitCommandInput + 1 : 0;
-                }
-            }
-            ChangeColorElementHitCommandMouseEnter((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput],
-                        OPLHitInterpreter.SourceMouseEventArgs);
-            //SourceInputElement?.Text = SelectElement.Text;
-
-            // Смещение позиции области относительно внешнего элемента
-            System.Windows.Point OffsetPosElement = StackPanelAllHit.Children[ActiveIndexHitCommandInput].TransformToAncestor(
-                StackPanelAllHit).Transform(new System.Windows.Point(0, 0));
-
-            if (OffsetPosElement.Y + ((FrameworkElement)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).ActualHeight >= 
-                HeadHitPanelGrid.ActualHeight)
-            {
-                IELHitScroll.ScrollToVerticalOffset(
-                    IELHitScroll.VerticalOffset +
-                    (IELHitScroll.ScrollableHeight <= HeadHitPanelGrid.ActualHeight ?
-                    IELHitScroll.ScrollableHeight : HeadHitPanelGrid.ActualHeight));
-            }
-            else if (OffsetPosElement.Y < IELHitScroll.VerticalOffset)
-            {
-                IELHitScroll.ScrollToVerticalOffset(
-                    IELHitScroll.VerticalOffset <= HeadHitPanelGrid.ActualHeight ? 0d :
-                    IELHitScroll.VerticalOffset - HeadHitPanelGrid.ActualHeight);
-            }
+            NextSelectHit(e.Key == Key.Up);
 
             if (IsEnabled && StateVisibleHit == HitStateEnum.Hidden && SourceInputElement != null)
             {
@@ -259,6 +219,55 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 {
                     UsingAllHintCommand(SourceInputElement.Text);
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Выделить сделующий элемент подсказки
+        /// </summary>
+        /// <param name="Up">Направление поиска следующиего элемента</param>
+        public void NextSelectHit(bool Up)
+        {
+            if (StateVisibleHit != HitStateEnum.VisibleMainCommands) return;
+            else if (ActiveIndexHitCommandInput == -1)
+            {
+                ActiveIndexHitCommandInput = Up ? StackPanelAllHit.Children.Count - 1 : 0;
+            }
+            else
+            {
+                ChangeColorElementHitCommandMouseLeave((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput],
+                        OPLHitInterpreter.SourceMouseEventArgs);
+                if (Up)
+                {
+                    ActiveIndexHitCommandInput = ActiveIndexHitCommandInput > 0 ?
+                        ActiveIndexHitCommandInput - 1 : StackPanelAllHit.Children.Count - 1;
+                }
+                else
+                {
+                    ActiveIndexHitCommandInput = ActiveIndexHitCommandInput < StackPanelAllHit.Children.Count - 1 ?
+                        ActiveIndexHitCommandInput + 1 : 0;
+                }
+            }
+            ChangeColorElementHitCommandMouseEnter((TextBlock)StackPanelAllHit.Children[ActiveIndexHitCommandInput],
+                        OPLHitInterpreter.SourceMouseEventArgs);
+
+            // Смещение позиции области относительно внешнего элемента
+            System.Windows.Point OffsetPosElement = StackPanelAllHit.Children[ActiveIndexHitCommandInput].TransformToAncestor(
+                StackPanelAllHit).Transform(new System.Windows.Point(0, 0));
+
+            if (OffsetPosElement.Y + ((FrameworkElement)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).ActualHeight >=
+                HeadHitPanelGrid.ActualHeight)
+            {
+                IELHitScroll.ScrollToVerticalOffset(
+                    IELHitScroll.VerticalOffset +
+                    (IELHitScroll.ScrollableHeight <= HeadHitPanelGrid.ActualHeight ?
+                    IELHitScroll.ScrollableHeight : HeadHitPanelGrid.ActualHeight));
+            }
+            else if (OffsetPosElement.Y < IELHitScroll.VerticalOffset)
+            {
+                IELHitScroll.ScrollToVerticalOffset(
+                    IELHitScroll.VerticalOffset <= HeadHitPanelGrid.ActualHeight ? 0d :
+                    IELHitScroll.VerticalOffset - HeadHitPanelGrid.ActualHeight);
             }
         }
 
@@ -373,7 +382,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
         /// <param name="TextCommand">Константный текст поиска команды</param>
         public void UsingOneHitCommand(string TextCommand)
         {
-            CommandOPER<IOPERCommandViewer>? CommandHint = App.CurrentApp.Interpreter.ReadCommand(TextCommand);
+            CommandOPER<IOPERCommandViewer>? CommandHint = App.CurrentApp.Interpreter.ReadCommand(TextCommand, Interpreter.Classes.CommandLevel.LowLevel);
             if (CommandHint == null)
             {
                 ChangeVisualHintCommand(HitStateEnum.Hidden);

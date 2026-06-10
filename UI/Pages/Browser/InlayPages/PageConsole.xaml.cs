@@ -1,14 +1,12 @@
 ﻿using IEL.CORE.Enums;
 using InterpreterCommand.Classes;
-using OIEL.CORE.Browser;
-using OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.UserElementsControl.Default;
-using OperPageLes.Windows;
 using OPLAnimation.CORE.Animation;
-using OPLAnimation.CORE.Interfaces;
+using OPLAPI.OIEL.CORE.Browser;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,16 +20,11 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
     /// <summary>
     /// Логика взаимодействия для PageConsole.xaml
     /// </summary>
-    public partial class PageConsole : PageBrowser, IOPLAnimate
+    public partial class PageConsole : PageBrowser
     {
         [LibraryImport("User32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool SetCursorPos(int X, int Y);
-
-        /// <summary>
-        /// Объект менеджера анимаций настроек OPL
-        /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         #region PanelActionConsole
         internal static readonly MainPagePanelAction PageConsoleActionPanelMain = new();
@@ -71,10 +64,23 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         /// </summary>
         internal StackPanel StackPanelConsole { get; private set; }
 
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => SourceManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+                HitCommandsInterpreter.ManagerAnimation = value;
+            }
+        }
+
         public PageConsole()
         {
             InitializeComponent();
-
+            Description = "Страница гибкого управления системой через команды";
             SelectNavigation = SelectNavigationPageConsoleEnum.None;
             SaveKeyDown = false;
             ActiveIndexBufferInput = -1;
@@ -120,8 +126,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #endregion
 
             #region HitCommandsInterpreter
-            HitCommandsInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
-            HitCommandsInterpreter.Connect(in App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
+            //HitCommandsInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
+            HitCommandsInterpreter.Connect(App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
             App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
             {
                 if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
@@ -208,6 +214,10 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                         }
                         else HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         return;
+                    case Key.Tab:
+                        HitCommandsInterpreter.NextSelectHit(false);
+                        e.Handled = true;
+                        break;
                 }
             };
             TextBoxCommandInput.KeyDown += (sender, e) =>
@@ -263,6 +273,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                         //else
                         //    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                         break;
+                    case Key.Tab:
                     case Key.Down:
                     case Key.Up:
                         if (HitCommandsInterpreter.StateVisibleHit == OPLHitInterpreter.HitStateEnum.Hidden && BufferPage.BufferCommand != null)
@@ -278,7 +289,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                                 else ActiveIndexBufferInput = ActiveIndexBufferInput > 0 ? ActiveIndexBufferInput - 1 : BufferPage.BufferCommand.Count - 1;
                                 TextBoxCommandInput.Text = BufferPage.BufferCommand.BufferElements[ActiveIndexBufferInput];
                             }
-                            else if (e.Key == Key.Down)
+                            else if (e.Key == Key.Down || e.Key == Key.Tab)
                             {
                                 if (BufferPage.BufferCommand.Count == 0) return;
                                 if (ActiveIndexBufferInput == -1)
@@ -319,27 +330,27 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #endregion
 
             #region IELImageButtonHelp
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
-            IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
-            IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
-            {
-                WindowDiscriptionCommands WindowDescription = new()
-                {
-                    ManagerAnimation = App.CurrentApp.ManagerAnimation,
-                };
-                App.CurrentApp.InicializeWindowInApplication(WindowDescription);
-                WindowDescription.Show();
-            };
-            IELImageButtonHelp.MouseHover += (sender, e) =>
-            {
-                App.MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
-                    "Быстрое открытие описания команд",
-                    OrientationPositionCursor.LeftDown);
-            };
-            IELImageButtonHelp.MouseLeave += (sender, e) =>
-            {
-                App.MainWindow.IELMessageMain.CloseBorderInformation();
-            };
+            //App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELImageButtonHelp);
+            //IELImageButtonHelp.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.LightBulb));
+            //IELImageButtonHelp.OnActivateMouseLeft += (sender, e) =>
+            //{
+            //    WindowDiscriptionCommands WindowDescription = new()
+            //    {
+            //        //ManagerAnimation = App.CurrentApp.ManagerAnimation,
+            //    };
+            //    App.CurrentApp.InicializeWindowInApplication(WindowDescription);
+            //    WindowDescription.Show();
+            //};
+            //IELImageButtonHelp.MouseHover += (sender, e) =>
+            //{
+            //    App.MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
+            //        "Быстрое открытие описания команд",
+            //        OrientationPositionCursor.LeftDown);
+            //};
+            //IELImageButtonHelp.MouseLeave += (sender, e) =>
+            //{
+            //    App.MainWindow.IELMessageMain.CloseBorderInformation();
+            //};
             #endregion
 
         }
@@ -386,6 +397,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 DeleteButtonSource = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross)),
                 Text = Command,
                 IsAnimatedSettingQ = false,
+                IsEnabledSettingQ = false,
             };
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(Viewer);
             System.Windows.Data.Binding binding = new()

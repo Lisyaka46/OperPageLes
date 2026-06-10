@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
     xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=LibraryIEL"
-    xmlns:OIEL="clr-namespace:OIEL.UserElementsControl;assembly=OIEL"
+    xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <Grid>

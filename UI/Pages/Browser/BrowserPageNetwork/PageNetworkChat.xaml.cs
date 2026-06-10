@@ -153,7 +153,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     TextFileName = System.IO.Path.GetFileName(Path),
                     CornerRadius = new(5),
                     Margin = new(5),
-                    ManagerAnimation = App.CurrentApp.ManagerAnimation,
+                    //ManagerAnimation = App.CurrentApp.ManagerAnimation,
                 };
                 ClipElement.MathSizeFile(Path);
                 ClipElement.SetExtractAssociatedIcon(Path, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));

@@ -122,13 +122,13 @@
     <value>..\UI\Images\ArrowRight.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="AudioMove" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CORE\Audio\Move.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\CORE\Audio\Resources\Move.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="AudioNotification" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CORE\Audio\Notification.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\CORE\Audio\Resources\Notification.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="AudioPopUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CORE\Audio\Pop-Up.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\CORE\Audio\Resources\Pop-Up.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="BlackSquare" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\BlackSquare.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -182,7 +182,7 @@
     <value>..\UI\Images\Search.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ValidKeyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UI\Images\ValidKeyIcon.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\UI\Images\ValidKeylcon.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="VECTOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Autor\VECTOR.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -227,7 +227,7 @@
     <value>..\UI\Images\Download.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="AudioMessageReceive" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CORE\Audio\MessageReceive.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\CORE\Audio\Resources\MessageReceive.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Volume" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Volume.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

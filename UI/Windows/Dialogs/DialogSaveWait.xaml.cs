@@ -49,7 +49,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogSaveWait()
         {
             InitializeComponent();
-            VisualLoading.ManagerAnimation = App.CurrentApp.ManagerAnimation;
+            //VisualLoading.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             VisualLoading.Opacity = 0d;
             LineProgress.X1 = 3;
             LineProgress.X2 = 3;
