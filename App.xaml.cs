@@ -321,7 +321,7 @@ namespace OperPageLes
         /// <summary>
         /// Состояние подключения к интернету
         /// </summary>
-        internal bool InternetConnectState = false;
+        internal bool InternetConnectState => InternetPinging?.ConnectInternet ?? false;
 
         /// <summary>
         /// Поток обновляемый данные интернета
@@ -370,7 +370,7 @@ namespace OperPageLes
                 LogWriteLine("Настройка интерпретатора...");
                 #region Interpreter
                 Interpreter = new([
-                    #region alias
+                #region alias
                     new ConsoleCommand<IOPERCommandViewer>(CommandLevel.Basic, "alias",
                 [
                     new Parameter("Name", typeof(string)),
@@ -680,6 +680,7 @@ namespace OperPageLes
                 LogWriteLine($"/// Трассировка стека: ///\n{ex.StackTrace}");
                 LogStreamWriter?.Close();
                 System.Windows.MessageBox.Show("Программа проинициализирована неправильно!.\nПредоставлено логирование процесса...");
+                Environment.Exit(1);
             }
         }
 
@@ -730,7 +731,6 @@ namespace OperPageLes
                     while (true)
                     {
                         EventArgs = InternetPinging.UpdateInternetConnection();
-                        InternetConnectState = EventArgs.Connect;
                         Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
                         Thread.Sleep(4000);
                     }

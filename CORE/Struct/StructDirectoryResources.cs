@@ -49,9 +49,14 @@ namespace OperPageLes.CORE.Struct
         internal static readonly string DirectoryDataLabels = DirectoryResourcesApplication + "Labels.json";
 
         /// <summary>
-        /// Директория ресурса тегов для ярлыков
+        /// Файл настроек <b>процесса</b>
         /// </summary>
-        internal static readonly string DirectoryDataLabelTags = DirectoryResourcesApplication + "Label_Tags.json";
+        internal static readonly string PathSettingProcess = StructDirectoryResources.MainDirectoryApplication + "/CurrentSettings.json";
+
+        /// <summary>
+        /// Имя файла настроек <b>приложения</b>
+        /// </summary>
+        internal static readonly string PathSettingApplication = StructDirectoryResources.MainDirectoryApplication + "/ApplicationSettings.json";
         #endregion
 
         /// <summary>
