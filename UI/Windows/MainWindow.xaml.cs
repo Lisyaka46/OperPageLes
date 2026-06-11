@@ -2,10 +2,6 @@
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OPLAPI.OIEL.CORE.Browser;
-using OPLAPI.OIEL.UserElementsControl;
-using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.PaletteElements;
@@ -16,10 +12,11 @@ using OperPageLes.UI.Pages.ActionPanel.Other;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Pages.Browser.InlayPages;
-using OperPageLes.UI.Windows.Base;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
-using OPLAPI.CORE.Interfaces;
+using OPLAPI.OIEL.CORE.Browser;
+using OPLAPI.OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl.Base;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -126,7 +123,7 @@ namespace OperPageLes.UI.Windows
         /// </summary>
         public override OPLAnimationManager? ManagerAnimation
         {
-            get => SourceManagerAnimation;
+            get => base.ManagerAnimation;
             set
             {
                 base.ManagerAnimation = value;
@@ -360,6 +357,32 @@ namespace OperPageLes.UI.Windows
             App.CurrentApp.LogWriteLine("...5");
 
             #region DownToolButtons
+
+            #region IELButtonInstallAppPage
+            IELButtonInstallAppPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.File));
+            IELButtonInstallAppPage.OnActivateMouseLeft += (sender, e) =>
+            {
+                OpenFileDialog dialog = new()
+                {
+
+                };
+                dialog.ShowDialog();
+                MainBrowser.AddNewAppPage(dialog.FileName,
+                    App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue],
+                    StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
+            };
+            IELButtonInstallAppPage.MouseEnter += (sender, e) =>
+            {
+                IELMessageMain.UsingBorderInformation(IELButtonInstallAppPage,
+                    "Установить новое страничное приложение",
+                    OrientationPositionCursor.RightUp);
+            };
+            IELButtonInstallAppPage.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+            App.CurrentApp.LogWriteLine("...5-0");
 
             #region IELButtonAddLabel
             IELButtonAddLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
@@ -605,6 +628,7 @@ namespace OperPageLes.UI.Windows
             SourceTheme[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
             SourceTheme[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
             SourceTheme[PaletteSpectrumEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
+            SourceTheme[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonInstallAppPage);
         }
 
         /// <summary>

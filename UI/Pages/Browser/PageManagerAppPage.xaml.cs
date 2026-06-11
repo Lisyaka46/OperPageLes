@@ -1,23 +1,16 @@
-﻿using IEL.CORE.Classes;
-using IEL.UserElementsControl;
-using OPLAPI.OIEL.CORE.Browser;
-using OPLAPI.OIEL.UserElementsControl;
-using OperPageLes.CORE.Objects;
-using OperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Objects;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
-using OPLAPI.CORE.Animation;
 using OPLAPI.CORE;
+using OPLAPI.CORE.Animation;
+using OPLAPI.OIEL.CORE.Browser;
+using OPLAPI.OIEL.UserElementsControl;
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using OPRES = OperPageLes.Properties.Resources;
 using Point = System.Windows.Point;
 
 namespace OperPageLes.UI.Pages.Browser
@@ -28,24 +21,14 @@ namespace OperPageLes.UI.Pages.Browser
     public partial class PageManagerAppPage : MainPageBrowser
     {
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <returns></returns>
-        [LibraryImport("User32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        protected static partial bool SetCursorPos(int X, int Y);
-
-        /// <summary>
         /// Массив всех страничных приложений подключённых к начальной странице
         /// </summary>
-        private List<ApplicationPage> SourceAppPages;
+        private List<AppPage> SourceAppPages;
 
         /// <summary>
         /// Массив всех страничных приложений доступный только для чтения
         /// </summary>
-        internal ReadOnlyCollection<ApplicationPage> AppPages => SourceAppPages.AsReadOnly();
+        internal ReadOnlyCollection<AppPage> AppPages => SourceAppPages.AsReadOnly();
 
         /// <summary>
         /// Объект отображения ярлыков

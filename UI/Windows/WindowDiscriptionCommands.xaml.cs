@@ -1,18 +1,16 @@
-﻿using OperPageLes.CORE;
-using OperPageLes.CORE.Enums;
-using OPLAPI.OIEL.UserElementsControl.Interfaces;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.Description;
-using OperPageLes.UI.Windows.Base;
-using IEL.CORE.Classes;
-using IEL.CORE.Enums;
+﻿using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using Interpreter.Interfaces;
+using OperPageLes.CORE;
+using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Struct;
+using OperPageLes.UI.Pages.Description;
+using OPLAPI.OIEL.UserElementsControl.Base;
+using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using OPRES = OperPageLes.Properties.Resources;
 

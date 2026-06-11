@@ -1,12 +1,7 @@
 ﻿using LibraryPackKey.CORE;
 using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Windows.Base;
 using OPLAPI.CORE.Animation;
-using OPLAPI.CORE.Interfaces;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Windows;
+using OPLAPI.OIEL.UserElementsControl.Base;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;

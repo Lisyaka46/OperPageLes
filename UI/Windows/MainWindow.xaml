@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-    xmlns:Base="clr-namespace:OperPageLes.UI.Windows.Base"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.UserElementsControl.Base;assembly=OPLAPI"
     xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     x:Name="window" x:Class="OperPageLes.UI.Windows.MainWindow"
@@ -86,14 +86,11 @@
                             <ColumnDefinition Width="53"/>
                         </Grid.ColumnDefinitions>
                         <Border Margin="4,4,4,4" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" BorderBrush="#FF795671" Background="#CC98658D">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
                                 <IEL:IELButtonImage x:Name="IELButtonHomeBrowser" Margin="3,3,0,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource PlumCrayola}" Grid.ColumnSpan="1" MarginViewBox="0,0,0,0"/>
-                                <IEL:IELButtonImage x:Name="IELButtonAddLabel" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource BlueGreenCrayola}" Grid.ColumnSpan="1" Grid.Column="1" MarginViewBox="0,0,0,0"/>
-                            </Grid>
+                                <IEL:IELButtonImage x:Name="IELButtonAddLabel" Margin="3,3,0,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource BlueGreenCrayola}" Grid.ColumnSpan="1" Grid.Column="1" MarginViewBox="0,0,0,0"/>
+                                <IEL:IELButtonImage x:Name="IELButtonInstallAppPage" Margin="3,3,3,3" CornerRadius="7,7,7,7" PaletteElement="{DynamicResource LightBlue}" Grid.ColumnSpan="1" Grid.Column="1" MarginViewBox="0,0,0,0"/>
+                            </StackPanel>
                         </Border>
                         <Border x:Name="BorderImageInformation" BorderBrush="#FF29B1C3" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" Margin="4,4,4,4" Background="#D8C2DFD4" Grid.ColumnSpan="1" Grid.Column="1">
                             <StackPanel Orientation="Horizontal">

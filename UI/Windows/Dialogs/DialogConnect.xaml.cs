@@ -1,15 +1,9 @@
-﻿using IEL.UserElementsControl;
-using OperPageLes.CORE.Network;
+﻿using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
-using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
-using OperPageLes.UI.Windows.Base;
 using OPLAPI.CORE.Animation;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
+using OPLAPI.OIEL.UserElementsControl.Base;
 using System.Windows.Media;
 using OPRES = OperPageLes.Properties.Resources;
-using WnColor = System.Windows.Media.Color;
 
 namespace OperPageLes.UI.Windows.Dialogs
 {

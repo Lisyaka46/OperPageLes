@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:OperPageLes.Windows"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-    xmlns:Base="clr-namespace:OperPageLes.UI.Windows.Base"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.UserElementsControl.Base;assembly=OPLAPI"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     x:Class="OperPageLes.Windows.WindowDiscriptionCommands"

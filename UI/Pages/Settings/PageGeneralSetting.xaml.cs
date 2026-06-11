@@ -1,6 +1,8 @@
 ﻿using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
+using OPLAPI.OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl.Base;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -233,7 +235,7 @@ namespace OperPageLes.UI.Pages.Settings
                 {
                     IELTextBoxDirectoryBackground.Text = Uri;
                     ImageBackground.Source = image;
-                    App.AnimateBlurEffect(BlurEffectImageBackground, 10u, 2000d);
+                    OPLWindowBase.AnimateBlurEffect(ManagerAnimation, BlurEffectImageBackground, 10u, 2000d);
                     IELButtonClearImage.IsEnabled = true;
                     App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 

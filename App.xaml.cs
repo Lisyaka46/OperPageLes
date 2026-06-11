@@ -683,21 +683,7 @@ namespace OperPageLes
             }
         }
 
-        /// <summary>
-        /// Инициализировать окно в приложении
-        /// </summary>
-        /// <typeparam name="T">Тип инициализируемого окна</typeparam>
-        /// <param name="SourceObject">Объект окна подлежащий инициализации</param>
-        internal void InicializeWindowInApplication<T>(T SourceObject) where T : Window
-        {
-            OpenedWindowsInApplication.Add(SourceObject);
-            SourceObject.Closed += (sender, e) =>
-            {
-                if (sender != null)
-                    OpenedWindowsInApplication.Remove((Window)sender);
-            };
-        }
-
+        #region ApplicationManipulate
         /// <summary>
         /// Точка входа в программу
         /// </summary>
@@ -860,19 +846,9 @@ namespace OperPageLes
             RebootWindow.IsReboot = true;
             RebootWindow.Close();
         }
+        #endregion
 
-        //
-        internal void AddNewAppPage(Type TypeAppPage, string NameAppPage, PaletteSpectrum? Spectrum = null, ImageSource? Icon = null)
-        {
-            //SourceManagerAppPage.AddNewAppPage(TypeAppPage, NameAppPage, Spectrum, Icon);
-        }
-
-        //
-        internal void AddNewLabel(in SourceLabelAction Source)
-        {
-            //SourceManagerAppPage.AddLabel(Source);
-        }
-
+        #region LOG
         /// <summary>
         /// Записать сообщение в тектовый .log
         /// </summary>
@@ -880,28 +856,7 @@ namespace OperPageLes
         /// <param name="Enclosure">Вложенность текста под отображение зависимости</param>
         internal void LogWriteLine(string Text, int Enclosure = 1) =>
             LogStreamWriter?.WriteLine($"{DateTime.Now:HH:mm:ss ff} {new string('>', Enclosure)} " + Text);
-
-        /// <summary>
-        /// Анимировать эффект блюра - сигнализируя изменение
-        /// </summary>
-        /// <param name="Effect">Объект эффекта анимации</param>
-        /// <param name="Power">Сила блюра при старте</param>
-        /// <param name="Duration">Количество миллисекунд для анимации</param>
-        /// <param name="EnterToOriginValue">Возвратиться к текущему значению</param>
-        internal static void AnimateBlurEffect(BlurEffect Effect, uint Power, double Duration = 700d, bool EnterToOriginValue = true)
-        {
-            DoubleAnimation animation = new()
-            {
-                EasingFunction = new CubicEase()
-                {
-                    EasingMode = EasingMode.EaseOut,
-                },
-                Duration = TimeSpan.FromMilliseconds(Duration),
-                From = EnterToOriginValue ? Power : Effect.Radius,
-                To = EnterToOriginValue ? 0d : Power
-            };
-            Effect.BeginAnimation(BlurEffect.RadiusProperty, animation);
-        }
+        #endregion
 
         /// <summary>
         /// Получить уникальный идентификатор устройства
