@@ -1,6 +1,7 @@
 ﻿using OperPageLes.CORE;
 using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
+using OPLAPI.OIEL.UserElementsControl.Base;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,12 +16,20 @@ namespace OperPageLes.UI.Windows.Dialogs
     /// <summary>
     /// Логика взаимодействия для WindowSaveWait.xaml
     /// </summary>
-    public partial class DialogSaveWait : Window
+    public partial class DialogSaveWait : OPLWindowBase
     {
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => base.ManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+                VisualLoading.ManagerAnimation = value;
+            }
+        }
 
         /// <summary>
         /// Токен управляемой асинхронной операцией отображения обновления информации управляемая завершением сохранения
@@ -49,12 +58,11 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogSaveWait()
         {
             InitializeComponent();
-            //VisualLoading.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             VisualLoading.Opacity = 0d;
             LineProgress.X1 = 3;
             LineProgress.X2 = 3;
             TaskTokenComplete = new(false);
-            BorderMain.MouseLeftButtonDown += (sender, e) =>
+            MouseLeftButtonDown += (sender, e) =>
             {
                 ActivateMoveWindow = true;
                 DragMove();

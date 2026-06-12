@@ -94,7 +94,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <IEL:IELButtonText x:Name="IELExampleButtonPalette" FontSize="20" FontWeight="Bold" FontFamily="{DynamicResource Bree CYR var}" Padding="0,2,0,2" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Text="Пример" VerticalAlignment="Center" Margin="20,5,20,5" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Height="45"/>
-                        <CheckBox x:Name="CheckBoxEnabledExampleButtonPalette" Content="Включить кнопку" Grid.Row="1" VerticalAlignment="Top" Margin="0,5,0,5" BorderBrush="Black" Background="#FFFFB9B9" FontSize="16" Padding="4,-4,0,0" Grid.RowSpan="1" FontFamily="{DynamicResource Bree CYR var}" HorizontalAlignment="Center"/>
+                        <OPL:OPLCheckBox x:Name="CheckBoxEnabledExampleButtonPalette" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" PaletteElement="{DynamicResource Terracotta}" Text="Включить кнопку" CheckBoxCornerRadius="15" CornerRadius="15,15,15,15" Margin="5,0,5,2" FontFamily="{DynamicResource Alphasano}" FontSize="16" CheckBoxBorderThickness="0,0,0,0" Padding="10,0,10,0" IsChecked="True"/>
                     </Grid>
                     <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black" CornerRadius="0,0,5,0">
                         <Border.Background>

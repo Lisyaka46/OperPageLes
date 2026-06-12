@@ -1,22 +1,23 @@
-﻿<Window
+﻿<Base:OPLWindowBase
     x:Class="OperPageLes.UI.Windows.Dialogs.DialogSaveWait"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.UserElementsControl.Base;assembly=OPLAPI"
     xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
-    Title="Сохранение..." Height="150" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="{x:Null}" AllowsTransparency="True" Topmost="True" UseLayoutRounding="True" ShowInTaskbar="False" SnapsToDevicePixels="True">
-    <Window.Resources>
+    Title="Сохранение..." Height="150" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Topmost="True" UseLayoutRounding="True" ShowInTaskbar="False" SnapsToDevicePixels="True">
+    <Base:OPLWindowBase.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
-    </Window.Resources>
+    </Base:OPLWindowBase.Resources>
+    <Base:OPLWindowBase.Background>
+        <RadialGradientBrush x:Name="RadialGradientBackground" RadiusX="0.8" RadiusY="0.8" Center="0.8,0.8" GradientOrigin="0.8,0.8">
+            <GradientStop Color="#FF618C83"/>
+            <GradientStop Color="#FF7FB7B6" Offset="1"/>
+        </RadialGradientBrush>
+    </Base:OPLWindowBase.Background>
     <Border x:Name="BorderMain" BorderThickness="3,3,3,3" CornerRadius="5,5,5,5" BorderBrush="#FF5D7A77">
-        <Border.Background>
-            <RadialGradientBrush x:Name="RadialGradientBackground" RadiusX="0.8" RadiusY="0.8" Center="0.8,0.8" GradientOrigin="0.8,0.8">
-                <GradientStop Color="#FF618C83"/>
-                <GradientStop Color="#FF7FB7B6" Offset="1"/>
-            </RadialGradientBrush>
-        </Border.Background>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -65,4 +66,4 @@
             </Grid>
         </Grid>
     </Border>
-</Window>
+</Base:OPLWindowBase>

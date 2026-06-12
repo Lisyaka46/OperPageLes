@@ -270,7 +270,7 @@ namespace OperPageLes.UI.Windows
                 {
                     App.CurrentApp.ThemeApp = new()
                     {
-                        //ManagerAnimation = App.CurrentApp.ManagerAnimation,
+                        ManagerAnimation = ManagerAnimation,
                         SourcePanelAction = IELActionPanelMain
                     };
                     App.CurrentApp.ThemeApp.LoadingThemes();
@@ -703,7 +703,10 @@ namespace OperPageLes.UI.Windows
             App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
             Closing?.Invoke(this, new(CloseReason.UserClosing, false));
             bool WindowSaveClose = false;
-            DialogSaveWait windowSave = new();
+            DialogSaveWait windowSave = new()
+            {
+                ManagerAnimation = ManagerAnimation,
+            };
             windowSave.Closed += (sender, e) =>
             {
                 WindowSaveClose = true;

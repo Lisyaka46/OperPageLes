@@ -2,8 +2,6 @@
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
-using OPLAPI.OIEL.CORE.Browser;
-using OperPageLes.CORE;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Struct;
@@ -11,6 +9,7 @@ using OperPageLes.UI.Pages.ActionPanel.PaletteWindow;
 using OperPageLes.UI.UserElementsControl.Theme;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
+using OPLAPI.OIEL.CORE.Browser;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,14 +18,13 @@ using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
-using OPLAPI.OIEL.CORE.Interfaces;
 
 namespace OperPageLes.UI.Pages.Browser
 {
     /// <summary>
     /// Логика взаимодействия для PageThemeController.xaml
     /// </summary>
-    public partial class PageThemeController : PageBrowser, IOPLElementBaseContent
+    public partial class PageThemeController : PageBrowser
     {
         /// <summary>
         /// Цвет индикатора активной темы
@@ -83,6 +81,20 @@ namespace OperPageLes.UI.Pages.Browser
         /// </summary>
         private StackPanel StackPanelSpectrum;
 
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => base.ManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+                DefaultPaletteElement.ManagerAnimation = value;
+                CheckBoxEnabledExampleButtonPalette.ManagerAnimation = value;
+            }
+        }
+
         public PageThemeController()
         {
             InitializeComponent();
@@ -109,7 +121,6 @@ namespace OperPageLes.UI.Pages.Browser
             TextBlockU.Foreground = DSUNE_ArrayBrush[10];
             TextBlockNE.Foreground = DSUNE_ArrayBrush[11];
 
-            CheckBoxEnabledExampleButtonPalette.IsChecked = true;
             //IELButtonSaveTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Save));
             //IELButtonSaveTheme.IsEnabled = false;
             //IELButtonSaveTheme.OnActivateMouseLeft += (sender, e) =>
@@ -178,13 +189,10 @@ namespace OperPageLes.UI.Pages.Browser
                 DiactivateSelectTheme();
             };
 
-            CheckBoxEnabledExampleButtonPalette.Checked += (sender, e) =>
+            CheckBoxEnabledExampleButtonPalette.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Check));
+            CheckBoxEnabledExampleButtonPalette.IsCheckedChanged += (sender, e) =>
             {
-                IELExampleButtonPalette.IsEnabled = true;
-            };
-            CheckBoxEnabledExampleButtonPalette.Unchecked += (sender, e) =>
-            {
-                IELExampleButtonPalette.IsEnabled = false;
+                IELExampleButtonPalette.IsEnabled = e;
             };
 
             BorderD.MouseLeftButtonUp += (sender, e) =>
@@ -240,6 +248,14 @@ namespace OperPageLes.UI.Pages.Browser
                         DiactivateSelectTheme();
                     }
                 }
+            };
+            #endregion
+
+            #region Events
+            MainGrid.MouseLeftButtonUp += (sender, e) =>
+            {
+                if (SourcePanelAction?.PanelActionActivate ?? false)
+                    SourcePanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             };
             #endregion
         }

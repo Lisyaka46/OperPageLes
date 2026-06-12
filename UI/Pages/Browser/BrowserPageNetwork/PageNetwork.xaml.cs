@@ -1,10 +1,11 @@
-﻿using OperPageLes.CORE.Enums;
+﻿using IEL.UserElementsControl.Base;
+using Microsoft.Windows.Themes;
+using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
 using OperPageLes.UI.Windows.Dialogs;
-using IEL.UserElementsControl.Base;
-using Microsoft.Windows.Themes;
+using OPLAPI.CORE.Animation;
 using OPLAPI.OIEL.CORE.Browser;
 using OPLAPI.OIEL.UserElementsControl;
 using System.Diagnostics;
@@ -35,6 +36,20 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// Страница отображения всех чатов
         /// </summary>
         private static PageNetworkChat SourcePageNetworkChat = new();
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => base.ManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+                SourcePageStackChats.ManagerAnimation = value;
+                SourcePageNetworkChat.ManagerAnimation = value;
+            }
+        }
 
         public PageNetwork()
         {
