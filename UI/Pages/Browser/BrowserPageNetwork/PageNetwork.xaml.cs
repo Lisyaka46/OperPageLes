@@ -43,6 +43,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             SourcePageNetworkChat.IELButtonClip.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.PaperClip));
             IELButtonChats.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Chats));
             IELButtonFolderDownloads.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Download));
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Chats));
 
             SourcePageStackChats.SelectChat += SelectChat;
 

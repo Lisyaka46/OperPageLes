@@ -19,7 +19,7 @@ using System.Windows.Threading;
 using static IEL.CORE.Classes.QData;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
-using OperPageLes.CORE.Interfaces;
+using OPLAPI.OIEL.CORE.Interfaces;
 
 namespace OperPageLes.UI.Pages.Browser
 {

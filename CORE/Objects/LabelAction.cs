@@ -89,7 +89,7 @@ namespace OperPageLes.CORE.Objects
         /// <returns></returns>
         internal async Task Activate()
         {
-            await App.CurrentApp.Interpreter.ReadAndExecuteCommand(null, Label.Command, null, Interpreter.Classes.CommandLevel.Basic);
+            await App.CurrentApp.Interpreter.ReadAndExecuteCommand(null, Label.Command, null, Interpreter.Classes.CommandLevel.LowLevel);
         }
 
         /// <summary>

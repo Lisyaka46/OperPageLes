@@ -11,7 +11,7 @@
     x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageConsole"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    Title="PageConsole">
+    Title="Консоль" Description="Средство гибкого управления системой">
     <Base:PageBrowser.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Base:PageBrowser.Resources>

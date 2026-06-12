@@ -84,15 +84,6 @@ namespace OperPageLes
         internal BufferPagePanelAction AppPageBuffer => _AppPageBuffer ?? throw new Exception("Невозможно получить страницу буфера!");
         private BufferPagePanelAction? _AppPageBuffer;
 
-        /// <summary>
-        /// Страница разработчика
-        /// </summary>
-        internal static readonly PageDeveloper ApplicationPageDeveloper = new()
-        {
-            Title = "Страница разработчика",
-            Description = "Используйте только если знаете что делаете!"
-        };
-
         #region PackKey
         /// <summary>
         /// Установленный ключ валидности для приложения

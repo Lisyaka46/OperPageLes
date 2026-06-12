@@ -19,7 +19,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         {
             App.CurrentApp.LogWriteLine("Инициализация объектов станицы веб-браузера");
             InitializeComponent();
-            
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
+
             //int BrowserVer, RegVal;
             //// get the installed IE version
             //using (System.Windows.Forms.WebBrowser Wb = new())

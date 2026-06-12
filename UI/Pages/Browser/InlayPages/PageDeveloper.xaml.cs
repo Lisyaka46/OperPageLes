@@ -65,6 +65,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         public PageDeveloper()
         {
             InitializeComponent();
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
             //Loaded += async (sender, e) =>
             //{
             //    const int CountParticles = 90, DelayOneParticle = 100;

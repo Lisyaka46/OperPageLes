@@ -80,7 +80,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         public PageConsole()
         {
             InitializeComponent();
-            Description = "Страница гибкого управления системой через команды";
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Command));
             SelectNavigation = SelectNavigationPageConsoleEnum.None;
             SaveKeyDown = false;
             ActiveIndexBufferInput = -1;

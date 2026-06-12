@@ -367,9 +367,7 @@ namespace OperPageLes.UI.Windows
 
                 };
                 dialog.ShowDialog();
-                MainBrowser.AddNewAppPage(dialog.FileName,
-                    App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue],
-                    StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
+                MainBrowser.AddNewAppPage(dialog.FileName);
             };
             IELButtonInstallAppPage.MouseEnter += (sender, e) =>
             {
@@ -784,14 +782,10 @@ namespace OperPageLes.UI.Windows
             _ = ((PageManagerAppPage?)MainBrowser.SourceManagerAppPage)?.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
 
             #region AppPage
-            MainBrowser.AddNewAppPage(typeof(PageConsole), "Консоль",
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Command)));
-            MainBrowser.AddNewAppPage(typeof(PageNetwork), "Сеть",
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Chats)));
-            MainBrowser.AddNewAppPage(typeof(PageWebBrowser), "Веб-браузер",
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Aquamarine], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World)));
-            MainBrowser.AddNewAppPage(typeof(PageDeveloper), "Для разработчиков",
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed], StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon)));
+            MainBrowser.AddNewAppPage(typeof(PageConsole));
+            MainBrowser.AddNewAppPage(typeof(PageNetwork));
+            MainBrowser.AddNewAppPage(typeof(PageWebBrowser));
+            MainBrowser.AddNewAppPage(typeof(PageDeveloper));
             #endregion
 
             #endregion

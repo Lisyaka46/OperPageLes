@@ -8,7 +8,7 @@
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageDeveloper"
-    Title="PageDeveloper">
+    Title="Для разработчиков">
     <Base:PageBrowser.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Base:PageBrowser.Resources>

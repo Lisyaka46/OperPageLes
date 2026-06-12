@@ -1,4 +1,5 @@
 ﻿using OperPageLes.CORE.Objects;
+using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Point = System.Windows.Point;
+using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.Browser
 {
@@ -135,7 +137,7 @@ namespace OperPageLes.UI.Pages.Browser
                 Margin = new(3d),
             };
             InitializeComponent();
-
+            DefaultIconAppPage = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             MainGridContainer.Children.Add(MainPanelAllApplicationPages);
             MainPanelAllApplicationPages.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             MainPanelAllApplicationPages.VerticalAlignment = System.Windows.VerticalAlignment.Top;
