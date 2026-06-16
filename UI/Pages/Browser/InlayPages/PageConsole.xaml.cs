@@ -106,9 +106,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 VerticalAlignment = VerticalAlignment.Top,
             };
             IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
-            IELScrollConsole.VerticalScrollAligment = VerticalScrollAlignment.Right;
-            IELScrollConsole.AutoUpdateVisibleHorizontalScroll = false;
-            IELScrollConsole.AutoUpdateVisibleVerticalScroll = true;
+            //IELScrollConsole.VerticalScrollAligment = VerticalScrollAlignment.Right;
             IELScrollConsole.Content = StackPanelConsole;
             #endregion
             #endregion

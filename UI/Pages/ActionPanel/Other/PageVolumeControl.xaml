@@ -14,7 +14,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <IEL:IELScrollViewer x:FieldModifier="private" x:Name="ScrollDevices" ScrollForce="20" AutoUpdateVisibleHorizontalScroll="False"/>
+        <IEL:IELScrollViewer x:FieldModifier="private" x:Name="ScrollDevices" ScrollForce="5"/>
         <Line Stroke="White" X2="1" Stretch="Uniform" VerticalAlignment="Bottom" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeThickness="2" Margin="3,0,3,-2"/>
         <Grid Grid.Row="1" Margin="3,5,3,3">
             <Grid.ColumnDefinitions>

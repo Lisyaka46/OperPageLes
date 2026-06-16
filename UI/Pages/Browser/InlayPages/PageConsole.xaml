@@ -60,7 +60,7 @@
                                             <IEL:IELButtonImage x:Name="IELButtonInfoParameter" Grid.Column="2" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Width="35" Height="35" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" PaletteElement="{DynamicResource PastelBlue}" MarginViewBox="2,2,2,2" Margin="3,2,3,2"/>
                                         </StackPanel>
                                         <Line Stroke="{Binding BorderBrush, ElementName=BorderElements}" Grid.RowSpan="1" VerticalAlignment="Bottom" X2="1" StrokeThickness="2" Stretch="Uniform" StrokeEndLineCap="Square" StrokeStartLineCap="Square"/>
-                                        <IEL:IELScrollViewer x:Name="ScrollViewerElements" Background="#269BA481" VerticalScrollAligment="Left" AutoUpdateVisibleHorizontalScroll="False" ScrollForce="20" Grid.RowSpan="1" Grid.Row="1"/>
+                                        <IEL:IELScrollViewer x:Name="ScrollViewerElements" Background="#269BA481" VerticalScrollAligment="Left" ScrollForce="20" Grid.RowSpan="1" Grid.Row="1"/>
                                     </Grid>
                                 </Border>
                             </Grid>
@@ -95,7 +95,7 @@
                         </Border>
                     </Grid>
                 </Border>
-                <IEL:IELScrollViewer x:Name="IELScrollConsole" Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
+                <IEL:IELScrollViewer x:Name="IELScrollConsole" Grid.Row="0" Grid.Column="1" Margin="14,0,0,0" ThicknessScroll="15" MinScrollSize="100">
                     <StackPanel VerticalAlignment="Top"/>
                 </IEL:IELScrollViewer>
             </Grid>

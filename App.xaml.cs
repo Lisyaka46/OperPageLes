@@ -1,5 +1,4 @@
-﻿using IEL.CORE.Classes;
-using Interpreter.Classes;
+﻿using Interpreter.Classes;
 using Interpreter.Commands;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
@@ -31,8 +30,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Windows.Foundation;
@@ -71,7 +68,7 @@ namespace OperPageLes
         /// <summary>
         /// Версия программы
         /// </summary>
-        internal readonly string Version = "0.0.06 (hot-fix)";
+        internal readonly string Version = "0.0.07";
 
         /// <summary>
         /// Запись в файл .log
@@ -668,8 +665,8 @@ namespace OperPageLes
             {
                 LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
                 LogWriteLine($"/// Трассировка стека: ///\n{ex.StackTrace}");
-                LogStreamWriter?.Close();
                 System.Windows.MessageBox.Show("Программа проинициализирована неправильно!.\nПредоставлено логирование процесса...");
+                LogStreamWriter?.Close();
                 Environment.Exit(1);
             }
         }

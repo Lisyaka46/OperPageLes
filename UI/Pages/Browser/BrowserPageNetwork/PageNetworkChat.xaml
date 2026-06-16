@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Base:PageBrowser
     x:Class="OperPageLes.UI.Pages.Browser.BrowserPageNetwork.PageNetworkChat"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -16,7 +16,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border x:Name="BorderDropFile" Panel.ZIndex="1" Grid.RowSpan="2" Margin="10,10,10,10" Background="#E5263137">
+        <Border x:Name="BorderDropFile" Panel.ZIndex="1" Grid.RowSpan="2" Margin="10,10,10,10" Background="#E5263137" Visibility="Hidden">
             <TextBlock Text="Перемещайте файлы для их прикрепления к сообщению" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="{DynamicResource RussianRail G Pro}" FontStyle="Italic" Foreground="#FF03171D" IsHitTestVisible="False"/>
         </Border>
         <Border Margin="3,4,3,2" BorderBrush="#FF47657D" CornerRadius="5,5,5,5" BorderThickness="2,2,2,2" Grid.RowSpan="1">
@@ -27,7 +27,7 @@
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
-                <IEL:IELScrollViewer x:Name="IELScrollHistoryMessage" AutoUpdateVisibleHorizontalScroll="False" ScrollForce="40">
+                <IEL:IELScrollViewer x:Name="IELScrollHistoryMessage" ScrollForce="40">
                 </IEL:IELScrollViewer>
             </Grid>
         </Border>
@@ -38,7 +38,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Border x:Name="BorderClip" Grid.RowSpan="1" Margin="6,0,6,0" CornerRadius="7,7,0,0" Background="#FF242F46" Height="0">
-                    <IEL:IELScrollViewer x:Name="IELScrollViewerClipFiles" AutoUpdateVisibleHorizontalScroll="False" ScrollForce="35">
+                    <IEL:IELScrollViewer x:Name="IELScrollViewerClipFiles" ScrollForce="35">
                     </IEL:IELScrollViewer>
                 </Border>
                 <Border BorderBrush="{Binding Background, ElementName=BorderClip}" CornerRadius="0,0,7,7" BorderThickness="2,2,2,2" Margin="6,0,6,0" VerticalAlignment="Top" Height="70" Grid.RowSpan="1" Grid.Row="1">
@@ -56,37 +56,6 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Line x:Name="LineTextConnection" StrokeDashArray="3" StrokeDashCap="Triangle" StrokeEndLineCap="Square" StrokeThickness="10" Stretch="Fill" VerticalAlignment="Top" X1="1" Stroke="{Binding Background, ElementName=BorderClip}" Height="10" Margin="-10,-5,-10,0" HorizontalAlignment="Center" StrokeMiterLimit="14"/>
-                            <Viewbox Grid.Row="1" HorizontalAlignment="Right" Stretch="None" VerticalAlignment="Center" Margin="2,0,2,0">
-                                <Border x:FieldModifier="private" x:Name="BorderInfoSendFiles" Background="#FF45A9A2" CornerRadius="4,4,1,1" Grid.RowSpan="1" Grid.Row="1" Width="150" HorizontalAlignment="Right">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="1*"/>
-                                        </Grid.RowDefinitions>
-                                        <Viewbox Panel.ZIndex="1" Stretch="Fill" HorizontalAlignment="Center" StretchDirection="DownOnly">
-                                            <TextBlock x:FieldModifier="private" x:Name="TextBlockInfoSendFiles" Text="Передача файлов" FontFamily="{DynamicResource Play}" Padding="1,1,1,1"/>
-                                        </Viewbox>
-                                        <Grid Grid.Row="1" Height="2">
-                                            <Line x:FieldModifier="private" x:Name="InfoCurrentLoadingFiles" StrokeThickness="2" Y1="0" VerticalAlignment="Bottom" Stroke="#FFB8FF73" StrokeEndLineCap="Round" Margin="1,0,0,0" StrokeStartLineCap="Round">
-                                                <Line.OpacityMask>
-                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                        <GradientStop Color="Transparent" Offset="0.5"/>
-                                                        <GradientStop Color="White" Offset="0.05"/>
-                                                    </LinearGradientBrush>
-                                                </Line.OpacityMask>
-                                            </Line>
-                                            <Line x:FieldModifier="private" x:Name="InfoMainLoadingFile" StrokeThickness="2" Y1="0" VerticalAlignment="Bottom" Stroke="#FF10463B" StrokeEndLineCap="Round" StrokeStartLineCap="Round" Margin="1,0,0,0">
-                                                <Line.OpacityMask>
-                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                        <GradientStop Color="Transparent" Offset="0.3"/>
-                                                        <GradientStop Color="White" Offset="0.6"/>
-                                                    </LinearGradientBrush>
-                                                </Line.OpacityMask>
-                                            </Line>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </Viewbox>
                         </Grid>
                         <Grid Grid.Row="1" VerticalAlignment="Bottom">
                             <Grid.ColumnDefinitions>
@@ -103,4 +72,4 @@
             </Grid>
         </Border>
     </Grid>
-</Page>
+</Base:PageBrowser>

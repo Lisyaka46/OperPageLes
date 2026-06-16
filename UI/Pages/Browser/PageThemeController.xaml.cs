@@ -150,8 +150,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 VerticalAlignment = VerticalAlignment.Top,
             };
-            ScrollViewerSpectrum.ScrollForce = 35;
-            ScrollViewerTheme.AutoUpdateVisibleHorizontalScroll = false;
+            ScrollViewerSpectrum.ScrollForce = 5;
             ScrollViewerSpectrum.Content = StackPanelSpectrum;
 
             StackPanelThemes = new()
@@ -159,8 +158,7 @@ namespace OperPageLes.UI.Pages.Browser
                 VerticalAlignment = VerticalAlignment.Top,
             };
             ScrollViewerTheme.Opacity = 0d;
-            ScrollViewerTheme.ScrollForce = 35;
-            ScrollViewerTheme.AutoUpdateVisibleHorizontalScroll = false;
+            ScrollViewerTheme.ScrollForce = 5;
             ScrollViewerTheme.Content = StackPanelThemes;
 
             DefaultPaletteElement.ManagerAnimation = ManagerAnimation;

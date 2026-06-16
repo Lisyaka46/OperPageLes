@@ -86,7 +86,7 @@ namespace OperPageLes.CORE.Settings.Struct
         /// <summary>
         /// Сила прокрутки визуализаторов консоли
         /// </summary>
-        public ObjSetting<int> ConsoleScrollForce { get; internal set; } = 30;
+        public ObjSetting<int> ConsoleScrollForce { get; internal set; } = 4;
 
         /// <summary>
         /// Размер главного окна по ширине

@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <Border x:FieldModifier="private" x:Name="BorderDiscription" Height="90">
             <Grid Margin="0,0,0,1">
-                <GUI:IELScrollViewer x:Name="ScrollViewerDescription" Grid.Row="1" AutoUpdateVisibleHorizontalScroll="False" VerticalAlignment="Top" ScrollForce="15"/>
+                <GUI:IELScrollViewer x:Name="ScrollViewerDescription" Grid.Row="1" VerticalAlignment="Top" ScrollForce="15"/>
                 <Line X2="165" HorizontalAlignment="Center" VerticalAlignment="Bottom" StrokeThickness="4" Stroke="White" StrokeDashArray="6" StrokeDashCap="Round" StrokeStartLineCap="Round" Margin="0,0,0,-3" StrokeEndLineCap="Round"/>
             </Grid>
         </Border>

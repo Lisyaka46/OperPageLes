@@ -10,7 +10,7 @@
     xmlns:local="clr-namespace:OperPageLes.UI.Pages.Browser">
     <Grid>
         <Grid x:FieldModifier="private" x:Name="MainGridContainer">
-            <IEL:IELScrollViewer x:FieldModifier="private" x:Name="SctollViewerLabels" AutoUpdateVisibleVerticalScroll="False" ScrollForce="20" HorizontalScrollAligment="Down" ClipToBounds="True"/>
+            <IEL:IELScrollViewer x:FieldModifier="private" x:Name="SctollViewerLabels" ScrollForce="20" HorizontalScrollAligment="Down"/>
         </Grid>
     </Grid>
 </Base:MainPageBrowser>

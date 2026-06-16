@@ -143,7 +143,6 @@ namespace OperPageLes.UI.Pages.Browser
             MainPanelAllApplicationPages.VerticalAlignment = System.Windows.VerticalAlignment.Top;
 
             SctollViewerLabels.ClipToBounds = false;
-            SctollViewerLabels.ClipToBoundsContainer = false;
             SctollViewerLabels.Content = StackPanelAllLabels;
             MainGridContainer.MouseLeftButtonUp += (sender, e) =>
             {
@@ -320,10 +319,6 @@ namespace OperPageLes.UI.Pages.Browser
 
         private void ScrollFromSelectLabel(object sender, MouseWheelEventArgs e)
         {
-            if (e.Delta < 0)
-                SctollViewerLabels.ScrollToHorizontalRight();
-            else
-                SctollViewerLabels.ScrollToHorizontalLeft();
             if (NextIndex > 0)
             {
                 PositionSourceVisualLeft = StackPanelAllLabels.Children[NextIndex - 1].TransformToAncestor(MainGridContainer)

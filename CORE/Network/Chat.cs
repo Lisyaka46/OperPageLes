@@ -11,10 +11,11 @@ using System.Windows.Forms.VisualStyles;
 using OPRES = OperPageLes.Properties.Resources;
 using OPLAPI.OIEL.UserElementsControl.Network;
 using OPLAPI.OIEL.CORE.Network;
+using OPLAPI.CORE.Interfaces;
 
 namespace OperPageLes.CORE.Network
 {
-    internal class Chat : IDisposable
+    internal class Chat : IDisposable, IOPLAnimate
     {
         /// <summary>
         /// Делегат события изменения занятости принятия или отправки данных объектом
@@ -83,6 +84,11 @@ namespace OperPageLes.CORE.Network
         private TaskReceiveFiles ReceiveFiles;
 
         private bool _IsBusy = false;
+
+        /// <summary>
+        /// Объект менеджера анимаций настроек OPL
+        /// </summary>
+        public OPLAnimationManager? ManagerAnimation { get; set; }
 
         public Chat(ref StackPanel History, ref StackPanel Clips, ref OPLNetworkChat ChatElement)
         {

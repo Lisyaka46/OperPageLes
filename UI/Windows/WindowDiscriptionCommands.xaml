@@ -136,7 +136,7 @@
                                 <GradientStop Color="#33182631" Offset="0"/>
                             </LinearGradientBrush>
                         </Border.Background>
-                        <IEL:IELScrollViewer x:Name="ScrollViewerElements" Background="#269BA481" VerticalScrollAligment="Left" AutoUpdateVisibleHorizontalScroll="False" ScrollForce="20">
+                        <IEL:IELScrollViewer x:Name="ScrollViewerElements" Background="#269BA481" VerticalScrollAligment="Left" ScrollForce="20">
                         </IEL:IELScrollViewer>
                     </Border>
                 </Grid>

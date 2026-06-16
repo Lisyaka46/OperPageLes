@@ -4,6 +4,8 @@ using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Network;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
+using OPLAPI.OIEL.CORE.Browser;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,7 +19,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
     /// <summary>
     /// Логика взаимодействия для PageNetworkChat.xaml
     /// </summary>
-    public partial class PageNetworkChat : Page, IOPLAnimate
+    public partial class PageNetworkChat : PageBrowser
     {
         /// <summary>
         /// Объект анимации линии загрузки
@@ -34,7 +36,14 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
+        public override OPLAnimationManager? ManagerAnimation
+        {
+            get => base.ManagerAnimation;
+            set
+            {
+                base.ManagerAnimation = value;
+            }
+        }
 
         /// <summary>
         /// Объект отображаемый историю сообщений
@@ -49,7 +58,6 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         public PageNetworkChat()
         {
             InitializeComponent();
-            BorderInfoSendFiles.Margin = new(0, 0, -155, 0);
             LineTextConnection.Opacity = 0d;
             BorderDropFile.Visibility = Visibility.Hidden;
 
@@ -132,7 +140,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             SourceChat?.IsBusyChanged -= ChatBusyChanged;
             SourceChat?.EnteringMessage = IELTextBoxMessage.Text;
             IELTextBoxMessage.Text = string.Empty;
-            SourceChat?.SaveScrollValue = IELScrollHistoryMessage.VerticalOffset;
+            SourceChat?.SaveScrollValue = IELScrollHistoryMessage.ActualVerticalOffset;
             if (SourceChat?.IsBusy ?? false)
                 BusyDiactivateVisual();
         }
@@ -211,8 +219,6 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, LineTextConnection,
                 OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
             LineTextConnection.BeginAnimation(Line.StrokeDashOffsetProperty, AnimationDoubleLine);
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderInfoSendFiles, MarginProperty,
-                new Thickness(0), TimeSpan.FromMilliseconds(800d));
 
             IELButtonGoSend.IsEnabled = false;
             IELButtonClip.IsEnabled = false;
@@ -229,8 +235,6 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             LineTextConnection.BeginAnimation(Line.StrokeDashOffsetProperty, null);
             OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, LineTextConnection, Line.StrokeDashOffsetProperty,
                 LineTextConnection.StrokeDashOffset, LineTextConnection.StrokeDashOffset - 5d, TimeSpan.FromMilliseconds(500d));
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderInfoSendFiles, MarginProperty,
-                new Thickness(0, 0, -155, 0), TimeSpan.FromMilliseconds(800d));
 
             IELButtonGoSend.IsEnabled = true;
             IELButtonClip.IsEnabled = true;

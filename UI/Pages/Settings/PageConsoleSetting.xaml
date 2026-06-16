@@ -38,7 +38,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock TextWrapping="Wrap" Text="Сила прокрутки визуализаторов" FontFamily="{DynamicResource Bree CYR var}" Margin="5,0,5,0" VerticalAlignment="Center" TextTrimming="WordEllipsis" Width="120" FontSize="14" Grid.IsSharedSizeScope="True" TextAlignment="Center"/>
-                    <Slider x:Name="SliderScrollForce" SmallChange="1" Maximum="150" Minimum="5" TickFrequency="1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#99FFFFFF"  IsSnapToTickEnabled="True" Value="30" Grid.Column="1" Grid.ColumnSpan="1" Margin="2,2,2,2" Grid.RowSpan="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Delay="100" IsMoveToPointEnabled="True" VerticalAlignment="Center"/>
+                    <Slider x:Name="SliderScrollForce" SmallChange="1" Maximum="12" Minimum="2" TickFrequency="1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#99FFFFFF"  IsSnapToTickEnabled="True" Value="4" Grid.Column="1" Grid.ColumnSpan="1" Margin="2,2,2,2" Grid.RowSpan="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Delay="100" IsMoveToPointEnabled="True" VerticalAlignment="Center"/>
                     <TextBlock x:Name="TextBlockSliderScrollForce" TextWrapping="Wrap" Text="000" Grid.Column="2"  FontSize="16" VerticalAlignment="Center" FontFamily="{DynamicResource Brenzo Slab Personal Use}" Padding="3,0,8,0" Width="40"/>
                 </Grid>
             </Border>

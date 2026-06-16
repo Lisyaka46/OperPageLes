@@ -97,8 +97,6 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 Orientation = System.Windows.Controls.Orientation.Vertical,
                 VerticalAlignment = VerticalAlignment.Top,
             };
-            IELHitScroll.AutoUpdateVisibleHorizontalScroll = false;
-            IELHitScroll.AutoUpdateVisibleVerticalScroll = false;
             IELHitScroll.Content = StackPanelAllHit;
             StateVisibleHit = HitStateEnum.Hidden;
             ActiveIndexHitCommandInput = -1;
@@ -125,17 +123,17 @@ namespace OperPageLes.UI.UserElementsControl.Default
                 }
             };
 
-            SizeChanged += (sender, e) =>
-            {
-                if (StackPanelAllHit.ActualHeight > MaxHeight)
-                {
-                    if (!IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
-                        IELHitScroll.ActivateVerticalScrollBar();
-                    IELHitScroll.UpdateHeightScrollBar();
-                }
-                else if (IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
-                    IELHitScroll.DiactivateVerticalScrollBar();
-            };
+            //SizeChanged += (sender, e) =>
+            //{
+            //    if (StackPanelAllHit.ActualHeight > MaxHeight)
+            //    {
+            //        if (!IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
+            //            IELHitScroll.ActivateVerticalScrollBar();
+            //        IELHitScroll.UpdateHeightScrollBar();
+            //    }
+            //    else if (IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
+            //        IELHitScroll.DiactivateVerticalScrollBar();
+            //};
         }
 
         /// <summary>
@@ -255,20 +253,20 @@ namespace OperPageLes.UI.UserElementsControl.Default
             System.Windows.Point OffsetPosElement = StackPanelAllHit.Children[ActiveIndexHitCommandInput].TransformToAncestor(
                 StackPanelAllHit).Transform(new System.Windows.Point(0, 0));
 
-            if (OffsetPosElement.Y + ((FrameworkElement)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).ActualHeight >=
-                HeadHitPanelGrid.ActualHeight)
-            {
-                IELHitScroll.ScrollToVerticalOffset(
-                    IELHitScroll.VerticalOffset +
-                    (IELHitScroll.ScrollableHeight <= HeadHitPanelGrid.ActualHeight ?
-                    IELHitScroll.ScrollableHeight : HeadHitPanelGrid.ActualHeight));
-            }
-            else if (OffsetPosElement.Y < IELHitScroll.VerticalOffset)
-            {
-                IELHitScroll.ScrollToVerticalOffset(
-                    IELHitScroll.VerticalOffset <= HeadHitPanelGrid.ActualHeight ? 0d :
-                    IELHitScroll.VerticalOffset - HeadHitPanelGrid.ActualHeight);
-            }
+            //if (OffsetPosElement.Y + ((FrameworkElement)StackPanelAllHit.Children[ActiveIndexHitCommandInput]).ActualHeight >=
+            //    HeadHitPanelGrid.ActualHeight)
+            //{
+            //    IELHitScroll.ScrollToVerticalOffset(
+            //        IELHitScroll.ActualVerticalOffset +
+            //        (IELHitScroll.ScrollableHeight <= HeadHitPanelGrid.ActualHeight ?
+            //        IELHitScroll.ScrollableHeight : HeadHitPanelGrid.ActualHeight));
+            //}
+            //else if (OffsetPosElement.Y < IELHitScroll.ActualVerticalOffset)
+            //{
+            //    IELHitScroll.ScrollToVerticalOffset(
+            //        IELHitScroll.ActualVerticalOffset <= HeadHitPanelGrid.ActualHeight ? 0d :
+            //        IELHitScroll.ActualVerticalOffset - HeadHitPanelGrid.ActualHeight);
+            //}
         }
 
         #region HintCommandManipulate
@@ -332,9 +330,9 @@ namespace OperPageLes.UI.UserElementsControl.Default
                     OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELHitScroll, OpacityProperty, StateHit == HitStateEnum.VisibleOneCommand ? 0d : 1d, span);
                 else
                     IELHitScroll.Opacity = StateHit == HitStateEnum.VisibleOneCommand ? 0d : 1d;
-                if ((StateHit is HitStateEnum.VisibleOneCommand or HitStateEnum.Hidden) &&
-                    IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
-                    IELHitScroll.DiactivateVerticalScrollBar();
+                //if ((StateHit is HitStateEnum.VisibleOneCommand or HitStateEnum.Hidden) &&
+                //    IELHitScroll.IsVisibleScrollBar(IEL.CORE.Enums.ScrollOrientation.Vertical))
+                //    IELHitScroll.DiactivateVerticalScrollBar();
 
                 if (ManagerAnimation != null)
                     OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, this, OpacityProperty, StateHit == HitStateEnum.Hidden ? 0d : 1d, span);
