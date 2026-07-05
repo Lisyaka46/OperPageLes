@@ -42,7 +42,7 @@
                 <Border x:Name="BorderElement" ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderThickness="0,3,0,0" BorderBrush="Black">
                     <ScrollViewer x:Name="ScrollViewerPageSettings" VerticalScrollBarVisibility="Auto" PanningRatio="0.3">
                         <Grid ClipToBounds="True" Margin="0,-5,0,-5">
-                            <IEL:IELPageController x:Name="MainPageController" RightAnimateSwitch="10,-5,0,-5" LeftAnimateSwitch="-10,-5,0,-5" Grid.ColumnSpan="1" Panel.ZIndex="-1" Padding="0,5,0,5"/>
+                            <IEL:IELContentController x:Name="MainPageController" RightAnimateSwitch="10,-5,0,-5" LeftAnimateSwitch="-10,-5,0,-5" Grid.ColumnSpan="1" Panel.ZIndex="-1" Padding="0,5,0,5"/>
                         </Grid>
                     </ScrollViewer>
                 </Border>

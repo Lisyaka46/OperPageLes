@@ -67,7 +67,7 @@ namespace OperPageLes.CORE.Settings.PaletteElements
             int i;
             QData SourceBytes;
             FileStream Stream = File.OpenWrite(DirectoryFile);
-            foreach (PaletteSpectrumEnum Element in Enum.GetValues(typeof(PaletteSpectrumEnum)))
+            foreach (PaletteSpectrumEnum Element in Enum.GetValues<PaletteSpectrumEnum>())
             {
                 for (i = 0; i < 3; i++)
                 {

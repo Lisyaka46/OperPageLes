@@ -1,22 +1,8 @@
-﻿using IEL.UserElementsControl.Base;
-using Microsoft.Windows.Themes;
-using OperPageLes.CORE.Enums;
-using OperPageLes.CORE.Network;
+﻿using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementsControl.Network;
-using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
 using OPLAPI.OIEL.CORE.Browser;
-using OPLAPI.OIEL.UserElementsControl;
 using System.Diagnostics;
-using System.Net.Sockets;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using MouseButton = System.Windows.Input.MouseButton;
 using OPRES = OperPageLes.Properties.Resources;
 
@@ -88,7 +74,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                 }
             };
 
-            PageControllerNetwork.NextPage(SourcePageStackChats);
+            PageControllerNetwork.NextElement(SourcePageStackChats);
             IELButtonChats.IsEnabled = false;
             if (!PageStackChats.IsActiveListener)
                 SourcePageStackChats.OpenListener();
@@ -104,7 +90,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// </summary>
         private void BackChatList()
         {
-            PageControllerNetwork.NextPage(SourcePageStackChats, false);
+            PageControllerNetwork.NextElement(SourcePageStackChats, false);
             SourcePageNetworkChat.SelectChatClear();
             IELButtonChats.IsEnabled = false;
         }
@@ -115,7 +101,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// <param name="chat">Чат</param>
         private void SelectChat(ref Chat chat)
         {
-            PageControllerNetwork.NextPage(SourcePageNetworkChat);
+            PageControllerNetwork.NextElement(SourcePageNetworkChat);
             SourcePageNetworkChat.SelectChat(ref chat);
             IELButtonChats.IsEnabled = true;
         }

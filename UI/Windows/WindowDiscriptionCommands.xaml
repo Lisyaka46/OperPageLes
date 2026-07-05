@@ -111,7 +111,7 @@
                                 </Grid>
                             </Border>
                             <Border Grid.Row="1" Margin="3,3,3,3" BorderThickness="1,1,1,1" CornerRadius="5,5,5,5" BorderBrush="Black" Background="#6678C3A2">
-                                <IEL:IELPageController x:Name="IELControllerDescription" LeftAnimateSwitch="-15,0,15,0" RightAnimateSwitch="15,0,-15,0"/>
+                                <IEL:IELContentController x:Name="IELControllerDescription" LeftAnimateSwitch="-15,0,15,0" RightAnimateSwitch="15,0,-15,0"/>
                             </Border>
                         </Grid>
                     </Border>

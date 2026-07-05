@@ -132,7 +132,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
                 IELButtonText Button = CreateBufferButton(Command);
                 Button.OnActivateMouseLeft += async (sender, e) =>
                 {
-                    if (App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand)
+                    if (false) // App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand
                     {
                         await Dispatcher.InvokeAsync(() =>
                         {

@@ -19,10 +19,19 @@ namespace OperPageLes.UI.Pages.ActionPanel
     /// </summary>
     public partial class PageNotificationManager : Page, IOPLAnimate
     {
+        private OPLAnimationManager? _ManagerAnimation;
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
+        public OPLAnimationManager? ManagerAnimation
+        {
+            get => _ManagerAnimation;
+            set
+            {
+                _ManagerAnimation = value;
+
+            }
+        }
 
         /// <summary>
         /// Объект визуализации объектов уведомления
@@ -38,10 +47,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             };
             IELScrollNotification.Content = StackPanelNotifications;
             App.CurrentApp.AddNotification += AddNewNotification;
-            Initialized += (sender, e) =>
-            {
-                LoadingAllNotification();
-            };
+            LoadingAllNotification();
         }
 
         /// <summary>

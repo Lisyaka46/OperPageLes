@@ -149,6 +149,7 @@ namespace OperPageLes.UI.Pages.Browser
             StackPanelSpectrum = new()
             {
                 VerticalAlignment = VerticalAlignment.Top,
+                ClipToBounds = true,
             };
             ScrollViewerSpectrum.ScrollForce = 5;
             ScrollViewerSpectrum.Content = StackPanelSpectrum;
@@ -162,7 +163,7 @@ namespace OperPageLes.UI.Pages.Browser
             ScrollViewerTheme.Content = StackPanelThemes;
 
             DefaultPaletteElement.ManagerAnimation = ManagerAnimation;
-            DefaultPaletteElement.IsActivate = App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0;
+            //DefaultPaletteElement.IsActivate = App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0;
             App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(DefaultPaletteElement);
             DefaultPaletteElement.SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette));
             DefaultPaletteElement.MouseRightButtonUp += (sender, e) =>
@@ -329,7 +330,7 @@ namespace OperPageLes.UI.Pages.Browser
             OPLThemeFile button;
             ArrayInicializeFilesTheme = [..Directory.GetFiles(StructDirectoryResources.DirectoryThemeApplication).Where((i) =>
                 Path.GetExtension(i).Equals(".qd"))];
-            string ActiveNameTheme = App.CurrentApp.SettingMainApplication.ThemeInstallName;
+            string ActiveNameTheme = string.Empty; // App.CurrentApp.SettingMainApplication.ThemeInstallName;
             for (int i = 0; i < ArrayInicializeFilesTheme.Count; i++)
             {
                 button = CreateButtonTheme();
@@ -493,8 +494,8 @@ namespace OperPageLes.UI.Pages.Browser
             if (Index == -1) DefaultPaletteElement.IsActivate = true;
             else ((OPLThemeFile)StackPanelThemes.Children[Index]).IsActivate = true;
 
-            App.CurrentApp.SettingMainApplication.ThemeInstallName.Value = Index == -1 ? string.Empty :
-                Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[SelectIndexTheme]);
+            //App.CurrentApp.SettingMainApplication.ThemeInstallName.Value = Index == -1 ? string.Empty :
+            //    Path.GetFileNameWithoutExtension(ArrayInicializeFilesTheme[SelectIndexTheme]);
 
             ActiveThemeInApplicationIndex = SelectIndexTheme;
             SelectIndexTheme = -1;

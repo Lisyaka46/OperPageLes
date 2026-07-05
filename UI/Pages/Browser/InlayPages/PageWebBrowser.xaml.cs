@@ -1,12 +1,14 @@
-﻿using OperPageLes.CORE.Struct;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using Microsoft.Win32;
+using OperPageLes.CORE.Struct;
 using OPLAPI.OIEL.CORE.Browser;
 using OPLAPI.OIEL.UserElementsControl;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using OPRES = OperPageLes.Properties.Resources;
-//using CefSharp.Wpf;
 
 namespace OperPageLes.UI.Pages.Browser.InlayPages
 {
@@ -19,33 +21,27 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         {
             App.CurrentApp.LogWriteLine("Инициализация объектов станицы веб-браузера");
             InitializeComponent();
-            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
+            //WebBrowserElement.CreateBrowser(HwndSource.FromHwnd(
+            //    new System.Windows.Interop.WindowInteropHelper(App.Current.MainWindow).EnsureHandle()), new(800, 800));
+            //WebBrowserElement.BrowserSettings = new BrowserSettings(true)
+            //{
+            //    WindowlessFrameRate = 1
+            //};
+            //SourceBrowser = WebBrowserElement.GetBrowser();
 
-            //int BrowserVer, RegVal;
-            //// get the installed IE version
-            //using (System.Windows.Forms.WebBrowser Wb = new())
-            //    BrowserVer = Wb.Version.Major;
-            //// set the appropriate IE version
-            //if (BrowserVer >= 11)
-            //    RegVal = 11001;
-            //else if (BrowserVer == 10)
-            //    RegVal = 10001;
-            //else if (BrowserVer == 9)
-            //    RegVal = 9999;
-            //else if (BrowserVer == 8)
-            //    RegVal = 8888;
-            //else
-            //    RegVal = 7000;
-            //// set the actual key
-            //using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", RegistryKeyPermissionCheck.ReadWriteSubTree))
-            //    if (Key.GetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe") == null)
-            //        Key.SetValue(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe", RegVal, RegistryValueKind.DWord);
+            Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
 
             IELButtonReloadPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
             IELButtonUnopenPageSystemBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
             App.CurrentApp.LogWriteLine("Инициализация станицы веб-браузера");
 
             #region WebBrowserElement_Events
+            WebBrowserElement.GotFocus += (sender, e) =>
+            {
+                if (SourcePanelAction?.PanelActionActivate ?? false)
+                    SourcePanelAction.ClosePanelAction();
+            };
+            //WebBrowserElement.
             //WebBrowserElement.KeyUp += (sender, e) =>
             //{
             //    WebBrowserElement.RaiseEvent(e);
@@ -96,14 +92,20 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             };
             IELButtonReloadPage.OnActivateMouseLeft += (sender, e) =>
             {
-                //WebBrowserElement.Reload();
+                //SourceBrowser.Reload();
             };
             IELButtonUnopenPageSystemBrowser.OnActivateMouseLeft += (sender, e) =>
             {
-                Process.Start(new ProcessStartInfo(TextBoxLink.Text) { UseShellExecute = true });
-                //WebBrowserElement.Stop();
+                Process.Start(new ProcessStartInfo(WebBrowserElement.Address) { UseShellExecute = true });
             };
-            string DefaultUrl = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
+            Loaded += (sender, e) =>
+            {
+                //SourceBrowser = WebBrowserElement.GetBrowser();
+            };
+
+
+            string DefaultUrl = string.Empty; // App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
+            TextBoxLink.Text = DefaultUrl;
             if (DefaultUrl.Length > 0)
             {
                 WebViewGoUrl(DefaultUrl);
@@ -113,8 +115,9 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
 
         internal void WebViewGoUrl(string Url)
         {
-            //WebBrowserElement.Load(Url);
+            WebBrowserElement.Load(Url);
             TextBoxLink.Text = Url;
+            WebBrowserElement.Focus();
             //WebBrowserElement.Source = new Uri(Url);
             //WebBrowserElement.Focus();
         }

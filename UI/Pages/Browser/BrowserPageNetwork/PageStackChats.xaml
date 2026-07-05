@@ -23,7 +23,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Border Margin="5,5,5,5" BorderThickness="2,2,2,2" CornerRadius="10,10,10,10" BorderBrush="Black" Grid.RowSpan="1">
-                <IEL:IELScrollViewer x:FieldModifier="private" x:Name="IELScrollViewerChats" ScrollForce="40">
+                <IEL:IELScrollViewer x:FieldModifier="private" x:Name="IELScrollViewerChats" ScrollForce="5">
                 </IEL:IELScrollViewer>
             </Border>
             <Grid Grid.Row="1">

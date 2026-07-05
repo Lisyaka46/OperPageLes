@@ -29,9 +29,9 @@
                 </Grid>
             </Border>
             <Grid Grid.Row="1">
-                <IEL:IELPageController x:Name="PageControllerNetwork" LeftAnimateSwitch="-20,5,20,5" RightAnimateSwitch="20,5,-20,5">
+                <IEL:IELContentController x:Name="PageControllerNetwork" LeftAnimateSwitch="-20,5,20,5" RightAnimateSwitch="20,5,-20,5">
 
-                </IEL:IELPageController>
+                </IEL:IELContentController>
             </Grid>
         </Grid>
     </Grid>

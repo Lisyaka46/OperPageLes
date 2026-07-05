@@ -153,7 +153,7 @@ namespace OperPageLes.Windows
                 StateDiscription = ActivateStateDiscription.ConsoleCommand;
                 SetStateManipulateInformation(DescriptionConsole.SelectCommand);
                 AnimateEnterPageButton(IELButtonConsole);
-                IELControllerDescription.NextPage(DescriptionConsole, false);
+                IELControllerDescription.NextElement(DescriptionConsole, false);
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                 {
@@ -173,7 +173,7 @@ namespace OperPageLes.Windows
                 StateDiscription = ActivateStateDiscription.AliasCommand;
                 SetStateManipulateInformation(DescriptionAlias.SelectCommand);
                 AnimateEnterPageButton(IELButtonAlias);
-                IELControllerDescription.NextPage(DescriptionAlias, true);
+                IELControllerDescription.NextElement(DescriptionAlias, true);
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                 {

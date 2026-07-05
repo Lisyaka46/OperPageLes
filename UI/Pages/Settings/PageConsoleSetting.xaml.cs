@@ -24,31 +24,31 @@ namespace OperPageLes.UI.Pages.Settings
             InitializeComponent();
 
             #region CheckBoxHitUse
-            CheckBoxHitUse.IsChecked = App.CurrentApp.SettingMainApplication.HitUse;
+            //CheckBoxHitUse.IsChecked = App.CurrentApp.SettingMainApplication.HitUse;
             CheckBoxHitUse.Checked += (sender, e) =>
             {
-                App.CurrentApp.SettingMainApplication.HitUse.Value = true;
+                //App.CurrentApp.SettingMainApplication.HitUse.Value = true;
             };
             CheckBoxHitUse.Unchecked += (sender, e) =>
             {
-                App.CurrentApp.SettingMainApplication.HitUse.Value = false;
+                //App.CurrentApp.SettingMainApplication.HitUse.Value = false;
             };
             #endregion
             #region CheckBoxMovePageExecuteBufferCommand
-            CheckBoxMovePageExecuteBufferCommand.IsChecked = App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand;
-            CheckBoxMovePageExecuteBufferCommand.Checked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand.Value = true;
-            };
-            CheckBoxMovePageExecuteBufferCommand.Unchecked += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand.Value = false;
-            };
+            //CheckBoxMovePageExecuteBufferCommand.IsChecked = App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand;
+            //CheckBoxMovePageExecuteBufferCommand.Checked += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand.Value = true;
+            //};
+            //CheckBoxMovePageExecuteBufferCommand.Unchecked += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand.Value = false;
+            //};
             #endregion
             #region ConsoleScrollForce
             BorderSettingScrollForce.Opacity = 0d;
             BorderSettingScrollForce.Height = 0d;
-            OriginalConsoleScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
+            //OriginalConsoleScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
             SliderScrollForce.Value = OriginalConsoleScrollForce;
             TextBlockSliderScrollForce.Text = SliderScrollForce.Value.ToString();
             //BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
@@ -64,16 +64,16 @@ namespace OperPageLes.UI.Pages.Settings
                         e.NewValue != OriginalConsoleScrollForce ? 1d : 0d, TimeSpan.FromMilliseconds(1200d));
                 }
             };
-            IELButtonClearScrollForceValue.OnActivateMouseLeft += (sender, e) =>
-            {
-                SliderScrollForce.Value = OriginalConsoleScrollForce;
-                App.CurrentApp.SettingMainApplication.ConsoleScrollForce.Value = OriginalConsoleScrollForce;
-            };
-            SliderScrollForce.MouseLeave += (sender, e) =>
-            {
-                if (SliderScrollForce.Value != OriginalConsoleScrollForce)
-                    App.CurrentApp.SettingMainApplication.ConsoleScrollForce.Value = (int)SliderScrollForce.Value;
-            };
+            //IELButtonClearScrollForceValue.OnActivateMouseLeft += (sender, e) =>
+            //{
+            //    SliderScrollForce.Value = OriginalConsoleScrollForce;
+            //    App.CurrentApp.SettingMainApplication.ConsoleScrollForce.Value = OriginalConsoleScrollForce;
+            //};
+            //SliderScrollForce.MouseLeave += (sender, e) =>
+            //{
+            //    if (SliderScrollForce.Value != OriginalConsoleScrollForce)
+            //        App.CurrentApp.SettingMainApplication.ConsoleScrollForce.Value = (int)SliderScrollForce.Value;
+            //};
             #endregion
         }
     }

@@ -25,6 +25,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.Other
             StackPanelAudioDevices = new()
             {
                 VerticalAlignment = VerticalAlignment.Top,
+                ClipToBounds = true,
             };
             ScrollDevices.Content = StackPanelAudioDevices;
             SliderVolume.MouseWheel += (sender, e) =>
@@ -35,10 +36,10 @@ namespace OperPageLes.UI.Pages.ActionPanel.Other
             SliderVolume.ValueChanged += (sender, e) =>
             {
                 int NewValue = (int)e.NewValue;
-                App.CurrentApp.SettingMainApplication.Volume.Value = NewValue;
+                //App.CurrentApp.SettingMainApplication.Volume.Value = NewValue;
                 TextBlockValue.Text = NewValue.ToString();
             };
-            SliderVolume.Value = App.CurrentApp.SettingMainApplication.Volume;
+            //SliderVolume.Value = App.CurrentApp.SettingMainApplication.Volume;
             TextBlockValue.Text = ((int)SliderVolume.Value).ToString();
             //_ = DeviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
         }

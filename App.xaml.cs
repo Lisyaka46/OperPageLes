@@ -1,4 +1,7 @@
-﻿using Interpreter.Classes;
+﻿using CefSharp;
+using CefSharp.Wpf;
+using FluentFTP;
+using Interpreter.Classes;
 using Interpreter.Commands;
 using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
@@ -18,8 +21,14 @@ using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Language;
+using OPLAPI.CORE.Settings;
+using OPLAPI.CORE.Settings.Base;
+using OPLAPI.CORE.Settings.Interfaces;
+using OPLAPI.CORE.Settings.Parameters;
 using OPLAPI.OIEL.UserElementsControl;
 using OPLAPI.OIEL.UserElementsControl.Interfaces;
+using Renci.SshNet;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -28,6 +37,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -261,19 +271,19 @@ namespace OperPageLes
 
         #region Settings
         /// <summary>
+        /// Страница отображающая настройки приложения и компонентов
+        /// </summary>
+        internal readonly PageSetting PageSettingApplication;
+
+        /// <summary>
+        /// Категория настроек для общих параметров приложения
+        /// </summary>
+        internal readonly CategorySetting<EnumGeneralSettings> CategoryGeneralSetting;
+
+        /// <summary>
         /// Массив ключей настроек <b>процесса</b>
         /// </summary>
         private SettingProcess SettingApplicationProcess;
-
-        /// <summary>
-        /// Массив ключей настроек <b>приложения</b>
-        /// </summary>
-        internal SettingApplication SettingMainApplication { get; private set; }
-
-        /// <summary>
-        /// Файл настроек <b>процесса</b>
-        /// </summary>
-        private readonly string PathSettingProcess = StructDirectoryResources.MainDirectoryApplication + "/CurrentSettings.json";
 
         /// <summary>
         /// Имя файла настроек <b>приложения</b>
@@ -292,6 +302,23 @@ namespace OperPageLes
         /// </summary>
         internal readonly PlayControl SourcePlayControl;
 
+        #endregion
+
+        #region DialogSaveWait
+        /// <summary>
+        /// Окно сохранения данных
+        /// </summary>
+        private DialogSaveWait DialogSaveData = null!;
+
+        /// <summary>
+        /// Поток сохранения данных
+        /// </summary>
+        private readonly ThreadStart ThreadSaveData;
+
+        /// <summary>
+        /// Состояние перезакрузки приложения
+        /// </summary>
+        private bool IsReboot;
         #endregion
 
         /// <summary>
@@ -332,6 +359,23 @@ namespace OperPageLes
         /// </summary>
         internal OPLBrowserPage MainBrowser { get; private set; }
         #endregion
+
+        #region Events
+        /// <summary>
+        /// Событие закрытия приложения
+        /// </summary>
+        private event EventHandler? Close;
+        #endregion
+
+#if DEBUG
+        #region Testing
+        /// <summary>
+        /// Клиент SFTP для подключения к удалённому серверу
+        /// </summary>
+        SftpClient? SourceNetWorkClient = null;
+
+        #endregion
+#endif
 
         public App()
         {
@@ -476,7 +520,7 @@ namespace OperPageLes
                     try
                     {
                         string url = (string)param[0];
-                        bool UsePageBroswer = CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
+                        bool UsePageBroswer = false;//CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
                         if (UsePageBroswer)
                         {
                             //if (!CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser)
@@ -604,48 +648,72 @@ namespace OperPageLes
 
                 LogWriteLine("Инициализация настроек...");
                 #region Settings
-                SetSettingProcess();
+                PageSettingApplication = new();
+                CategoryGeneralSetting = new("OPL");
 
-                if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting)) SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
-                else if (File.Exists(PathSettingApplication)) SetSettingApplication(PathSettingApplication);
-                else
-                {
-                    SettingMainApplication = new();
-                    string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
-                    File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
-                    ActivePathSettingApplication = PathSettingApplication;
-                }
-
-                LogWriteLine("> Установка значений на основе настроек");
+                //LogWriteLine("> Установка значений на основе настроек");
                 #region SettingRuntimeRealizeSettingChanges
 
-                SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
-                {
-                    if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
-                };
-                SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
-                {
-                    MainWindow.ChangeVisibilityMillisecondInternet(New);
-                };
-                SettingMainApplication.ExitKeyboardModeInClosePanelAction.Changed += (Old, New) =>
-                {
-                    MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
-                };
-                SettingMainApplication.KEY_KeyboardModePanelAction.Changed += (Old, New) =>
-                {
-                    MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
-                };
-                SettingMainApplication.KEY_PanelActionRightClick.Changed += (Old, New) =>
-                {
-                    MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
-                };
-                SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
-                {
-                    MainWindow.IELActionPanelMain.KeyCloseElement = New;
-                };
+                //SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
+                //{
+                //    if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
+                //};
+                //SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
+                //{
+                //    MainWindow.ChangeVisibilityMillisecondInternet(New);
+                //};
+                //SettingMainApplication.ExitKeyboardModeInClosePanelAction.Changed += (Old, New) =>
+                //{
+                //    MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
+                //};
+                //SettingMainApplication.KEY_KeyboardModePanelAction.Changed += (Old, New) =>
+                //{
+                //    MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
+                //};
+                //SettingMainApplication.KEY_PanelActionRightClick.Changed += (Old, New) =>
+                //{
+                //    MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
+                //};
+                //SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
+                //{
+                //    MainWindow.IELActionPanelMain.KeyCloseElement = New;
+                //};
                 #endregion
                 LogWriteLine("> ...Готово");
 
+                #endregion
+                LogWriteLine("...Готово");
+
+                LogWriteLine("Создание потока сохранения данных...");
+                #region TheadSave
+                ThreadSaveData = async () =>
+                {
+                    Dispatcher.Invoke(() => DialogSaveData.SetVisualTextSaving("Закрываются все окна приложения", 0d));
+                    Dispatcher.Invoke(() =>
+                    {
+                        int count = OpenedWindowsInApplication.Count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            OpenedWindowsInApplication[0].Close();
+                            Thread.Sleep(10);
+                        }
+                    });
+                    Thread.Sleep(500);
+
+                    Dispatcher.Invoke(() => DialogSaveData.SetVisualTextSaving("Обновляются ваши настройки", 30d));
+                    UpdateSettingApplication();
+                    Thread.Sleep(300);
+
+                    Dispatcher.Invoke(() => DialogSaveData.SetVisualTextSaving("Сохраняются все ярлыки", 60d));
+                    PageManagerAppPage AppPage = (PageManagerAppPage?)MainBrowser.SourceManagerAppPage ??
+                        throw new Exception("Главная страница браузера не инициализирована!");
+                    string SettingApplicationJSON = JsonConvert.SerializeObject(AppPage.Labels.Select((i) => i.Label));
+                    File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
+                    Thread.Sleep(700);
+
+                    Dispatcher.Invoke(() => DialogSaveData.SetVisualTextSaving("Ожидайте завершения...", 100d));
+                    await DialogSaveData.Complete();
+                };
                 #endregion
                 LogWriteLine("...Готово");
 
@@ -658,6 +726,21 @@ namespace OperPageLes
                 StructDirectoryResources.CheckCreateAllResources();
                 #endregion
                 LogWriteLine("...Готово");
+
+                #region WebBrowser
+                CefSettings settings = new();
+                settings.CefCommandLineArgs.Add("enable-media-stream", "1");
+                settings.CefCommandLineArgs.Add("allow-running-insecure-content", "1");
+                settings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream", "1");
+                settings.CefCommandLineArgs.Add("enable-speech-input", "1");
+                settings.CefCommandLineArgs.Add("enable-usermedia-screen-capture", "1");
+                settings.CefCommandLineArgs.Add("debug-plugin-loading", "1");
+                settings.CefCommandLineArgs.Add("allow-outdated-plugins", "1");
+                settings.CefCommandLineArgs.Add("always-authorize-plugins", "1");
+                settings.CefCommandLineArgs.Add("disable-web-security", "1");
+                settings.CefCommandLineArgs.Add("enable-npapi", "1");
+                Cef.Initialize(settings);
+                #endregion
 
                 LogWriteLine("! Инициализация экземпляра успешна");
             }
@@ -688,12 +771,183 @@ namespace OperPageLes
 
                 LogWriteLine("Подключение связей страниц");
                 _AppPageBuffer = new();
-                AppPageBuffer.ConnectBuffer(new(SettingMainApplication.BufferSize));
+                AppPageBuffer.ConnectBuffer(new(50)); // SettingMainApplication.BufferSize
                 AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
                 {
                     MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
                     //e.Handled = true;
                 };
+
+                LogWriteLine("Обработка языковых переводов");
+                Lang.ActivatePreInstalledDictionaryLang();
+                LogWriteLine("Готово...");
+
+                LogWriteLine("Обработка настроек");
+                #region Settings
+                Setting.AddCategory(CategoryGeneralSetting);
+
+                // Добавление параметров в общую категорию настроек приложения
+                #region Setting Parameters
+                CategoryGeneralSetting.AddParameter(EnumGeneralSettings.VisualMillisecondConnect, new ParameterSetting<bool>(false));
+                CategoryGeneralSetting.AddParameter(EnumGeneralSettings.BufferLength, new LimitedParameterIntSetting(0, 100, 50));
+                #endregion
+
+                if (File.Exists(SettingApplicationProcess.PathFileApplicationSetting))
+                    SetSettingApplication(SettingApplicationProcess.PathFileApplicationSetting);
+                else if (File.Exists(PathSettingApplication)) SetSettingApplication(PathSettingApplication);
+                else
+                {
+                    var result = new Dictionary<string, object[]>
+                    {
+                        { CategoryGeneralSetting.KeyCategory, [..CategoryGeneralSetting.Parameters.Select((i) => i.Value.Value)] }
+                    };
+
+                    string json = JsonConvert.SerializeObject(result);
+
+                    Dictionary<string, object[]> result2 = 
+                        JsonConvert.DeserializeObject<Dictionary<string, object[]>>(json) ??
+                        throw new Exception();
+                    result2["OPL"][1] = 101;
+                    foreach (string Key in result2.Keys)
+                    {
+                        CategorySettingBase Category = Key.Equals("OPL") ?
+                            CategoryGeneralSetting : Setting.GetCategory(Key);
+                        for (uint i = 0u; i < result2[Key].Length; i++)
+                        {
+                            //object Parameter = Category.GetParameter(i);
+                            ParameterSettingBase.SetValue(Category.GetParameter(i), result2[Key][i]);
+                        }
+                    }
+
+                    bool t = false;
+                    //string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
+                    //string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
+                    //File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
+                    //ActivePathSettingApplication = PathSettingApplication;
+                }
+
+                PageSettingApplication.ManagerAnimation = ManagerAnimation;
+
+                Interpreter.AddCommand(new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "p_i",
+                "*", (Main, param, CV) =>
+                {
+                    ParameterSetting<bool> Parameter =
+                        (ParameterSetting<bool>)CategoryGeneralSetting[EnumGeneralSettings.VisualMillisecondConnect];
+                    Parameter.Value = !Parameter.Value;
+                    return Task.FromResult(CommandStateResult.Completed(Main.Name));
+                }));
+
+                #endregion
+
+#if DEBUG
+                LogWriteLine("Добавление отдельных $ команд");
+                AddNewNotification(
+                    "У вас есть доступ к отладочному режиму программы\n" +
+                    "Все команды начинающиеся с '$' доступны,\n" +
+                    "использование их может повлечь за собой непредсказуемое поведение",
+                    EnumNotificationStyle.System, Title: "Предупреждение");
+                #region Console
+                #region $server_connect
+                Interpreter.AddCommand(new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "$server_connect",
+                "Подключиться к удалённому серверу", (Main, param, CV) =>
+                {
+                    if (SourceNetWorkClient != null)
+                    {
+                        if (SourceNetWorkClient.IsConnected)
+                            return Task.FromResult(CommandStateResult.Completed(Main.Name, "Уже имеется активное подключение к серверу"));
+                        SourceNetWorkClient.Dispose();
+                    }
+                    FtpConfig config = new()
+                    {
+                        ConnectTimeout = 1000, // Тайм-аут подключения: 30 секунд
+                    };
+                    SourceNetWorkClient = new("193.42.125.40", 6000, "UserCocaga", "1234567890");
+                    CancellationTokenSource TokenConnect = new();
+                    TextBlock TextConnect = new()
+                    {
+                        Text = "Подключение к серверу...",
+                        FontSize = 16d,
+                        Foreground = new SolidColorBrush(Colors.Gold),
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                        Opacity = 0d,
+                    };
+                    CV?.AddNewUIElement(TextConnect);
+                    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextConnect, TextBlock.OpacityProperty,
+                        1d, TimeSpan.FromMilliseconds(500));
+                    TextConnect.Text = "Происходит подключение к серверу...";
+                    try
+                    {
+                        SourceNetWorkClient.Connect();
+                        TextConnect.Text = "Подключение к серверу успешно!";
+                    }
+                    catch (Exception ex)
+                    {
+                        TextConnect.Foreground = new SolidColorBrush(Colors.Red);
+                        TextConnect.Text = "Не удалось подключиться к серверу!";
+                        CV?.AddString($"Ошибка подключения к серверу:\n{ex.Message}");
+                    }
+                    OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, TextConnect, TextBlock.MarginProperty,
+                        new Thickness(14d, 0d, 0d, 0d), new Thickness(0d), TimeSpan.FromMilliseconds(1000));
+                    return Task.FromResult(CommandStateResult.Completed(Main.Name));
+                }));
+                #endregion
+
+                #region $server_disconnect
+                Interpreter.AddCommand(new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "$server_disconnect",
+                "Отключиться от удалённого сервера", (Main, param, CV) =>
+                {
+                    if (SourceNetWorkClient != null)
+                    {
+                        if (SourceNetWorkClient.IsConnected)
+                            SourceNetWorkClient.Disconnect();
+                        SourceNetWorkClient.Dispose();
+                        SourceNetWorkClient = null;
+                        return Task.FromResult(CommandStateResult.Completed(Main.Name, "Успешно отключено от сервера!"));
+                    }
+                    else
+                        return Task.FromResult(CommandStateResult.Completed(Main.Name, "Нет активного подключения к серверу"));
+                }));
+                #endregion
+
+                #region $category_rename
+                Interpreter.AddCommand(new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "$category_rename",
+                [new Parameter("Name", typeof(string))],
+                "Переименовать общую категорию настроек",
+                (Command, param, CV) =>
+                {
+                    string Name = (string)param[0];
+                    CategoryGeneralSetting.NameCategory = Name;
+                    return Task.FromResult(CommandStateResult.Failed(Command.Name, "Успешно"));
+                }));
+                #endregion
+
+                #region $parameter_rename
+                Interpreter.AddCommand(new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "$parameter_rename",
+                [new Parameter("Name", typeof(string))],
+                "Переименовать параметр в общей категории настроек",
+                (Command, param, CV) =>
+                {
+                    string Name = (string)param[0];
+                    ((ParameterSetting<bool>)CategoryGeneralSetting[EnumGeneralSettings.VisualMillisecondConnect]).ParameterName = Name;
+                    return Task.FromResult(CommandStateResult.Failed(Command.Name, "Успешно"));
+                }));
+                #endregion
+
+                #region $lang_title_rename
+                Interpreter.AddCommand(new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "$lang_title_rename",
+                [new Parameter("Name", typeof(string))],
+                "Переименовать параметр заголовка главного окна, языкового перевода",
+                (Command, param, CV) =>
+                {
+                    string Name = (string)param[0];
+                    Lang.ActiveDictionaryLang[EnumLanguage.MainWindowTitledir] = Name;
+                    var t = Lang.ActiveDictionaryLang.AsReadOnly();
+                    Lang.UpdateDictionaryLang(ref t);
+                    return Task.FromResult(CommandStateResult.Failed(Command.Name, "Успешно"));
+                }));
+                #endregion
+                #endregion
+#endif
 
                 LogWriteLine("Запуск фоновых потоков");
                 InternetPinging = new();
@@ -701,7 +955,7 @@ namespace OperPageLes
                 TaskInternetConnection = new(() =>
                 {
                     ObjectConnectEventArgs EventArgs;
-                    while (true)
+                    while (!TokenInternetConnection.IsCancellationRequested)
                     {
                         EventArgs = InternetPinging.UpdateInternetConnection();
                         Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
@@ -709,6 +963,26 @@ namespace OperPageLes
                     }
                 }, TokenInternetConnection);
                 TaskInternetConnection.Start();
+                Close += (sender, e) =>
+                {
+                    if (!IsReboot) Shutdown();
+                    else
+                    {
+                        IsReboot = false;
+                        MainBrowser = new()
+                        {
+                            Margin = new(4d),
+                            ManagerAnimation = ManagerAnimation,
+                        };
+                        Current.MainWindow = new OperPageLes.UI.Windows.MainWindow();
+                        MainWindow.ManagerAnimation = ManagerAnimation;
+                        Current.MainWindow.Closed += async (sender, e) => await MainWindow_Closed(sender, e);
+                        //MainWindow.ChangeFromSetting(SettingMainApplication);
+                        MainWindow.SetPallete(ActiveThemeApplication);
+                        MainWindow.Show();
+                        LogWriteLine("/// Процесс перезагрузки прошёл успешно! ///");
+                    }
+                };
 
                 #region ConsolePage
                 PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
@@ -743,18 +1017,19 @@ namespace OperPageLes
                 //await SourceManagerAppPage.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
 
                 LogWriteLine("Приминение настройки палитры");
-                if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
-                {
-                    string FileTheme = $"{StructDirectoryResources.DirectoryThemeApplication}{SettingMainApplication.ThemeInstallName.Value}.qd";
-                    if (File.Exists(FileTheme))
-                    {
-                        byte[] bytes = File.ReadAllBytes(FileTheme);
-                        ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
-                    }
-                }
+                //if (SettingMainApplication.ThemeInstallName.Value.Length > 0)
+                //{
+                //    string FileTheme = $"{StructDirectoryResources.DirectoryThemeApplication}{SettingMainApplication.ThemeInstallName.Value}.qd";
+                //    if (File.Exists(FileTheme))
+                //    {
+                //        byte[] bytes = File.ReadAllBytes(FileTheme);
+                //        ((Palette)ActiveThemeApplication).ChangePaletteFromBytes(ref bytes);
+                //    }
+                //}
                 base.OnStartup(e);
 
                 LogWriteLine("Проверка ключа входа");
+                #region KeyValid
                 if (File.Exists(StructDirectoryResources.DirectoryKeyValidFile))
                 {
                     try
@@ -787,13 +1062,14 @@ namespace OperPageLes
                     Current.Shutdown();
                     return;
                 }
+                #endregion
                 LogWriteLine("Ключ валиден!");
 
                 LogWriteLine("Создание главного окна формы");
-                Current.MainWindow = new OperPageLes.UI.Windows.MainWindow();
-                MainWindow.ChangeFromSetting(SettingMainApplication);
+                Current.MainWindow = new MainWindow();
+                Current.MainWindow.Closed += async (sender, e) => await MainWindow_Closed(sender, e);
+                //MainWindow.ChangeFromSetting(SettingMainApplication);
                 MainWindow.SetPallete(ActiveThemeApplication);
-                ShutdownMode = ShutdownMode.OnMainWindowClose;
                 LogWriteLine("! Создание успешно");
 
                 LogWriteLine("Установка менеджера анимаций объектам");
@@ -803,7 +1079,9 @@ namespace OperPageLes
                 LogWriteLine("...Готово");
 
                 LogWriteLine("Открытие главного окна");
+                Current.MainWindow.Topmost = true;
                 ((MainWindow)Current.MainWindow).Show();
+                Current.MainWindow.Topmost = false;
             }
             catch (Exception ex)
             {
@@ -816,23 +1094,41 @@ namespace OperPageLes
         }
 
         /// <summary>
+        /// Функция обработки закрытия главного окна
+        /// </summary>
+        private async Task MainWindow_Closed(object? sender, EventArgs e)
+        {
+            bool WindowSaveClose = false;
+            Thread thread = new(ThreadSaveData);
+            DialogSaveData = new()
+            {
+                ManagerAnimation = ManagerAnimation,
+            };
+            DialogSaveData.Closed += (sender, e) =>
+            {
+                WindowSaveClose = true;
+            };
+            DialogSaveData.OpenOnToComplete();
+            DialogSaveData.Focus();
+            thread.Start();
+
+            await Task.Run(() =>
+            {
+                while (!WindowSaveClose) ;
+                thread.Join();
+                DialogSaveData.Dispatcher.Invoke(DialogSaveData.Dispose);
+                Dispatcher.Invoke(() => Close?.Invoke(this, e));
+            });
+        }
+
+        /// <summary>
         /// Перезагрузить программу
         /// </summary>
         internal void RebootApplication()
         {
             LogWriteLine("/// Старт процесса перезагрузки! ///");
-            MainWindow RebootWindow = (MainWindow)Current.MainWindow;
-            RebootWindow.Closed += (sender, e) =>
-            {
-                Current.MainWindow = new MainWindow()
-                {
-                    ManagerAnimation = ManagerAnimation,
-                };
-                ((MainWindow)Current.MainWindow).Show();
-                LogWriteLine("/// Перезагрузка прошла успешно! ///");
-            };
-            RebootWindow.IsReboot = true;
-            RebootWindow.Close();
+            IsReboot = true;
+            Current.MainWindow.Close();
         }
         #endregion
 
@@ -861,21 +1157,6 @@ namespace OperPageLes
         }
 
         #region Setting Manipulate
-        /// <summary>
-        /// Задать значение настроек процесса
-        /// </summary>
-        private void SetSettingProcess()
-        {
-            if (!File.Exists(PathSettingProcess))
-            {
-                SettingApplicationProcess = new();
-                string SettingProcessJSON = JsonConvert.SerializeObject(SettingApplicationProcess);
-                File.WriteAllText(PathSettingProcess, SettingProcessJSON);
-                return;
-            }
-            SettingProcess Setting = JsonConvert.DeserializeObject<SettingProcess>(File.ReadAllText(PathSettingProcess));
-            SettingApplicationProcess = EqualsNullPropertyInObject(Setting) ? new() : Setting;
-        }
 
         /// <summary>
         /// Задать значение настроек приложения по директории json файла
@@ -883,20 +1164,11 @@ namespace OperPageLes
         /// <param name="PathJsonFile">Директория файла настроек</param>
         private void SetSettingApplication(string PathJsonFile)
         {
-            SettingApplication Setting;
             try
             {
-                Setting = new();
-                object ObjSetting = Setting;
+                ReadOnlyDictionary<uint, ParameterSettingBase> Parameters = CategoryGeneralSetting.Parameters;
                 JObject? ObjectSetting = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(PathJsonFile));
-                PropertyInfo[] properties = Setting.GetType().GetProperties();
-                for (int i = 0; i < properties.Length; i++)
-                {
-                    object? Value = ObjectSetting?.GetValue(properties[i].Name)?.ToObject(properties[i].PropertyType);
-                    if (Value == null) continue;
-                    properties[i].SetValue(ObjSetting, Value);
-                }
-                Setting = (SettingApplication)ObjSetting;
+                _ = ObjectSetting;
             }
             catch
             {
@@ -906,11 +1178,11 @@ namespace OperPageLes
                     $"ПРИМЕЧАНИЕ: При отказе редактирования файла настроек программа будет закрыта!", "Ошибка чтения настроек",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No, System.Windows.MessageBoxOptions.DefaultDesktopOnly);
                 if (Result == MessageBoxResult.No) Environment.Exit(0);
-                Setting = new();
-                string SettingApplicationJSON = JsonConvert.SerializeObject(Setting);
-                File.WriteAllText(PathJsonFile, SettingApplicationJSON);
+                //Setting = new();
+                //string SettingApplicationJSON = JsonConvert.SerializeObject(Setting);
+                //File.WriteAllText(PathJsonFile, SettingApplicationJSON);
             }
-            SettingMainApplication = Setting;
+            //SettingMainApplication = Setting;
             ActivePathSettingApplication = PathJsonFile;
         }
 
@@ -919,8 +1191,8 @@ namespace OperPageLes
         /// </summary>
         internal void UpdateSettingApplication()
         {
-            string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
-            File.WriteAllText(ActivePathSettingApplication, SettingApplicationJSON);
+            //string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
+            //File.WriteAllText(ActivePathSettingApplication, SettingApplicationJSON);
         }
 
         #endregion

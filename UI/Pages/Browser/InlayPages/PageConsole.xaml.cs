@@ -37,7 +37,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         /// <summary>
         /// Подключение подсказок к командам
         /// </summary>
-        private static bool HitUse => App.CurrentApp.SettingMainApplication.HitUse;
+        private static bool HitUse => true; // App.CurrentApp.SettingMainApplication.HitUse;
 
         /// <summary>
         /// Активный индекс команды в буфере для строки ввода
@@ -104,8 +104,9 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
                 VerticalAlignment = VerticalAlignment.Top,
+                ClipToBounds = true,
             };
-            IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
+            //IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
             //IELScrollConsole.VerticalScrollAligment = VerticalScrollAlignment.Right;
             IELScrollConsole.Content = StackPanelConsole;
             #endregion
@@ -126,18 +127,18 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #region HitCommandsInterpreter
             //HitCommandsInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             HitCommandsInterpreter.Connect(App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
-            App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
-            {
-                if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
-                {
-                    HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
-                }
-                else if (New && TextBoxCommandInput.Text.Length > 0)
-                {
-                    if (TextBoxCommandInput.Text.Contains('*')) HitCommandsInterpreter.UsingOneHitCommand(TextBoxCommandInput.Text);
-                    else HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
-                }
-            };
+            //App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
+            //{
+            //    if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
+            //    {
+            //        HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
+            //    }
+            //    else if (New && TextBoxCommandInput.Text.Length > 0)
+            //    {
+            //        if (TextBoxCommandInput.Text.Contains('*')) HitCommandsInterpreter.UsingOneHitCommand(TextBoxCommandInput.Text);
+            //        else HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
+            //    }
+            //};
             #endregion
 
             #region PanelAction

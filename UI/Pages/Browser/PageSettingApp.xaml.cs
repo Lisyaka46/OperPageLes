@@ -73,7 +73,7 @@ namespace OperPageLes.UI.Pages.Browser
                 int OriginIndex = Grid.GetColumn(IELGeneralButton);
                 //ActiveBackgroundSetting?.SetUsedState(false);
                 //ActiveBackgroundSetting = IELGeneralButton.SourceBackground.Sou;
-                MainPageController.NextPage(GeneralSetting, ActiveIndexColumn < OriginIndex);
+                MainPageController.NextElement(GeneralSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 //ActiveBackgroundSetting.SetUsedState(true);
             };
@@ -95,7 +95,7 @@ namespace OperPageLes.UI.Pages.Browser
                 int OriginIndex = Grid.GetColumn(IELConsoleButton);
                 //ActiveBackgroundSetting?.SetUsedState(false);
                 //ActiveBackgroundSetting = IELConsoleButton.SourceBackground;
-                MainPageController.NextPage(ConsoleSetting, ActiveIndexColumn < OriginIndex);
+                MainPageController.NextElement(ConsoleSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 //ActiveBackgroundSetting.SetUsedState(true);
             };
@@ -117,7 +117,7 @@ namespace OperPageLes.UI.Pages.Browser
                 int OriginIndex = Grid.GetColumn(IELPanelActionButton);
                 //ActiveBackgroundSetting?.SetUsedState(false);
                 //ActiveBackgroundSetting = IELPanelActionButton.SourceBackground;
-                MainPageController.NextPage(PanelActionSetting, ActiveIndexColumn < OriginIndex);
+                MainPageController.NextElement(PanelActionSetting, ActiveIndexColumn < OriginIndex);
                 ActiveIndexColumn = OriginIndex;
                 //ActiveBackgroundSetting.SetUsedState(true);
             };

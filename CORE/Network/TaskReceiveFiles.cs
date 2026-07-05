@@ -1,14 +1,9 @@
 ﻿using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementsControl.Network;
 using OPLAPI.OIEL.CORE.Network;
-using System;
-using System.Collections.Generic;
+using OPLAPI.OIEL.UserElementsControl.Network;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Controls;
 using OPRES = OperPageLes.Properties.Resources;
 
@@ -63,11 +58,11 @@ namespace OperPageLes.CORE.Network
         /// <param name="ClipFiles">Прикреплённые файлы к сообщению</param>
         internal void AddQueue(ReadOnlyCollection<FileNetworkInfo> FilesInfo, UIElementCollection ClipFiles)
         {
-            OPLNetworkClipElement Clip;
+            OPLVisualNetworkClipFile Clip;
             for (uint i = 0; i < ClipFiles.Count; i++)
             {
-                Clip = (OPLNetworkClipElement)ClipFiles[(int)i];
-                Clip.SetIndex(CountQueueFiles + i);
+                Clip = (OPLVisualNetworkClipFile)ClipFiles[(int)i];
+                Clip.NumberIndex = CountQueueFiles + i;
                 Clip.SetExtractAssociatedIcon(String.Empty,
                         StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
                 //Clip.TextMessage = "В ожидании";
@@ -109,17 +104,17 @@ namespace OperPageLes.CORE.Network
         {
             byte[] Buffer;
             string PathFile, ReNamePath;
-            OPLNetworkClipElement ClipElement;
+            OPLVisualNetworkClipFile ClipElement;
             FileStream Writer;
             for (int i = 0; i < CurrentFileInfo.Count; i++)
             {
-                ClipElement = ClipElementCollection[i].Dispatcher.Invoke(() => (OPLNetworkClipElement)ClipElementCollection[i]);
+                ClipElement = ClipElementCollection[i].Dispatcher.Invoke(() => (OPLVisualNetworkClipFile)ClipElementCollection[i]);
 
                 PathFile = $"{StructDirectoryResources.DirectoryDownloadApplication}{CurrentFileInfo[i].FileName}";
 
                 ClipElement.Dispatcher.Invoke(() =>
                 {
-                    ClipElement.ClearIndex();
+                    ClipElement.IsVisibleIndex = false;
                     //ClipElement.TextMessage = string.Empty;
                     ClipElement.SetExtractAssociatedIcon(PathFile,
                         StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));

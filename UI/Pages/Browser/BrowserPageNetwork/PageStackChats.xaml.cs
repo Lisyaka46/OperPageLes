@@ -1,5 +1,4 @@
 ﻿using OperPageLes.CORE.Network;
-using OperPageLes.UI.UserElementsControl.Network;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
@@ -101,7 +100,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                 {
                     for (i = 0; i < Chats.Count; i++)
                     {
-                        if (Chats[i].DeviceClient.DeviceClientMessageObjInfo.Available > 0 && !Chats[i].IsBusy)
+                        if (Chats[i].DeviceClient.DeviceClientMessageObjInfo.Available > 0)
                             await Dispatcher.InvokeAsync(() => Chats[i].ReceiveNetworkData(ManagerAnimation));
                         else await Task.Delay(100);
                     }
@@ -125,11 +124,13 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
                 VerticalAlignment = VerticalAlignment.Bottom,
+                ClipToBounds = true,
             };
             StackPanel ClipFiles = new()
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
-                VerticalAlignment = VerticalAlignment.Top,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                ClipToBounds = true,
             };
             OPLNetworkChat SourceNetworkChat = new()
             {

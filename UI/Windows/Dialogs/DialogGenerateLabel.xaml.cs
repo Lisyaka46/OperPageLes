@@ -51,8 +51,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                     case Key.Down:
                     case Key.Enter:
                         IELTextBoxCommand.Focus();
-                        if (App.CurrentApp.SettingMainApplication.HitUse)
-                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        //if (App.CurrentApp.SettingMainApplication.HitUse)
+                        //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                         break;
                     case Key.Escape:
                         Close();
@@ -76,10 +76,10 @@ namespace OperPageLes.UI.Windows.Dialogs
                         Close();
                         break;
                     default:
-                        if (App.CurrentApp.SettingMainApplication.HitUse)
-                        {
-                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
-                        }
+                        //if (App.CurrentApp.SettingMainApplication.HitUse)
+                        //{
+                        //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        //}
                         break;
                 }
                 e.Handled = true;
@@ -90,10 +90,10 @@ namespace OperPageLes.UI.Windows.Dialogs
             };
             IELTextBoxCommand.GotFocus += (sender, e) =>
             {
-                if (App.CurrentApp.SettingMainApplication.HitUse)
-                {
-                    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
-                }
+                //if (App.CurrentApp.SettingMainApplication.HitUse)
+                //{
+                //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                //}
             };
             IELTextBoxDescription.KeyUp += (sender, e) =>
             {
@@ -104,8 +104,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                     case Key.Up:
                         IELTextBoxCommand.Focus();
-                        if (App.CurrentApp.SettingMainApplication.HitUse)
-                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        //if (App.CurrentApp.SettingMainApplication.HitUse)
+                        //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                         break;
                     case Key.Escape:
                         Close();
