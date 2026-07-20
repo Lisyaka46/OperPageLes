@@ -1,8 +1,8 @@
 ﻿#region Link
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
-using Newtonsoft.Json;
 using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Language;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Settings.Struct;
@@ -106,6 +106,13 @@ namespace OperPageLes.UI.Windows
         internal PageSettingApp SettingApp => _SettingApp ??= new();
         #endregion
 
+        #region PanelActionPages
+        /// <summary>
+        /// Страница управления языковыпи переводами
+        /// </summary>
+        private PageLanguageController? SourcePageLanguageController = null;
+        #endregion
+
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
@@ -117,6 +124,7 @@ namespace OperPageLes.UI.Windows
                 base.ManagerAnimation = value;
                 SettingApp.ManagerAnimation = value;
                 PageNotificationApplication.ManagerAnimation = value;
+                VisualLoadingElement.ManagerAnimation = value;
                 App.CurrentApp.SourcePlayControl.UpdateVisualElementsFromStackPanel(PageAudioControlApplication.StackPanelAudioDevices,
                     ManagerAnimation, PageAudioControlApplication.SetActiveDeviceOutput);
             }
@@ -128,14 +136,11 @@ namespace OperPageLes.UI.Windows
             InitializeComponent();
             App.CurrentApp.LogWriteLine("...Готово");
 
-            #region Language
-            Lang_LanguageUpdated(null, EventArgs.Empty);
-            Lang.LanguageUpdated += Lang_LanguageUpdated;
-            #endregion
-
             #region SetParameteres
+            Lang_LanguageUpdated(null, EventArgs.Empty);
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
+            IELLangApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
             IELOpenDataFolder.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Folder));
             IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
@@ -253,11 +258,48 @@ namespace OperPageLes.UI.Windows
             #endregion
             App.CurrentApp.LogWriteLine("...4-1");
 
+            #region IELLangApplication
+            IELLangApplication.OnActivateMouseLeft += async (sender, e) =>
+            {
+                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage?.GetType() == typeof(PageLanguageController))
+                {
+                    IELActionPanelMain.AnimationMovePanelAction(PositionAnimActionPanel.Cursor, OrientationPositionCursor.RightDown, false);
+                    return;
+                }
+                PageLanguageController Source = SourcePageLanguageController ?? new() { ManagerAnimation = ManagerAnimation };
+                IELMessageMain.CloseBorderInformation();
+                if (!IELActionPanelMain.PanelActionActivate)
+                    IELActionPanelMain.OpenPanelAction(IELLangApplication, Source,
+                    Orientation: OrientationPositionCursor.RightDown, DependencePointOnSize: false);
+                else IELActionPanelMain.MoveNextObjectPage(IELLangApplication, Source,
+                    Orientation: OrientationPositionCursor.RightDown, DependencePointOnSize: false);
+                if (SourcePageLanguageController == null)
+                {
+                    SourcePageLanguageController = Source;
+                    StartVisualizateLoadingProcess();
+                    await SourcePageLanguageController.UpdateListLanguages();
+                    CompleteVisualizateLoadingProcess();
+                }
+            };
+            IELLangApplication.MouseHover += (sender, e) =>
+            {
+                if (IELActionPanelMain.ActualVisualPage?.GetType() != typeof(PageLanguageController))
+                {
+                    IELMessageMain.UsingBorderInformation(IELLangApplication, Lang.GetValue(LangUITranslate.LangTranslate),
+                        OrientationPositionCursor.RightUp);
+                }
+            };
+            IELLangApplication.MouseLeave += (sender, e) =>
+            {
+                IELMessageMain.CloseBorderInformation();
+            };
+            #endregion
+
             #region IELButtonTheme
             IELButtonTheme.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELButtonTheme,
-                    "Управление персонализацией программы",
+                    Lang.GetValue(LangUITranslate.PersonalizationSetting),
                     OrientationPositionCursor.LeftDown);
             };
             IELButtonTheme.MouseLeave += (sender, e) =>
@@ -291,7 +333,7 @@ namespace OperPageLes.UI.Windows
             #region IELImageButtonClose
             IELButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
-                Close();
+                App.CurrentApp.CloseApplication();
             };
             #endregion
             App.CurrentApp.LogWriteLine("...4-4");
@@ -300,7 +342,7 @@ namespace OperPageLes.UI.Windows
             IELButtonSettings.MouseHover += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELButtonSettings,
-                    "Настройки программы",
+                    Lang.GetValue(LangUITranslate.ProgramSetting),
                     OrientationPositionCursor.LeftDown);
             };
             IELButtonSettings.MouseLeave += (sender, e) =>
@@ -332,7 +374,7 @@ namespace OperPageLes.UI.Windows
             IELOpenDataFolder.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELOpenDataFolder,
-                    "Главная директория данных программы",
+                    Lang.GetValue(LangUITranslate.MainDirectoryData),
                     OrientationPositionCursor.LeftDown);
             };
             IELOpenDataFolder.MouseLeave += (sender, e) =>
@@ -372,7 +414,7 @@ namespace OperPageLes.UI.Windows
             IELButtonInstallAppPage.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELButtonInstallAppPage,
-                    "Установить новое страничное приложение",
+                    Lang.GetValue(LangUITranslate.InstallNewPageApp),
                     OrientationPositionCursor.RightUp);
             };
             IELButtonInstallAppPage.MouseLeave += (sender, e) =>
@@ -397,7 +439,7 @@ namespace OperPageLes.UI.Windows
             IELButtonAddLabel.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELButtonAddLabel,
-                    "Добавить ярлык на главную страницу",
+                    Lang.GetValue(LangUITranslate.CreateShortcutInfo),
                     OrientationPositionCursor.RightUp);
             };
             IELButtonAddLabel.MouseLeave += (sender, e) =>
@@ -428,7 +470,7 @@ namespace OperPageLes.UI.Windows
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
-                    "Текущее подключение к интернету",
+                    Lang.GetValue(LangUITranslate.CurrentInternetConnection),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoInternetConnection.MouseLeave += (sender, e) =>
@@ -448,13 +490,6 @@ namespace OperPageLes.UI.Windows
                         OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
                             new Thickness(0d), TimeSpan.FromMilliseconds(400d));
                     }
-                    //else if (App.CurrentApp.SettingMainApplication.MillisecondInternetConnection)
-                    //{
-                    //    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockInternetConnectionMillisecond, OpacityProperty,
-                    //        1d, TimeSpan.FromMilliseconds(400d));
-                    //    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
-                    //        new Thickness(0d, 0d, 0d, 7d), TimeSpan.FromMilliseconds(400d));
-                    //}
                     IELBlockInfoInternetConnection.IsEnabled = e.Connect;
                     IELBlockInfoInternetConnection.SourceBackground.SetActiveSpecrum(
                         e.Connect ? StateSpectrum.Default : StateSpectrum.NotEnabled, true);
@@ -476,7 +511,7 @@ namespace OperPageLes.UI.Windows
             IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
-                    "Регистр символов клавиатуры",
+                    Lang.GetValue(LangUITranslate.KeyboardCharacterCase),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoStateRegister.MouseLeave += (sender, e) =>
@@ -495,7 +530,7 @@ namespace OperPageLes.UI.Windows
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
-                    "Текущая раскладка клавиатуры",
+                    Lang.GetValue(LangUITranslate.CurrentKeyboardLayout),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoCurrentLanguage.MouseLeave += (sender, e) =>
@@ -512,7 +547,7 @@ namespace OperPageLes.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageAudioControl) return;
                 IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
-                    "Громкость звуков программы",
+                    Lang.GetValue(LangUITranslate.AudioСontrol),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoVolume.MouseLeave += (sender, e) =>
@@ -547,7 +582,7 @@ namespace OperPageLes.UI.Windows
             {
                 if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageNotificationManager) return;
                 IELMessageMain.UsingBorderInformation(BorderIndicator,
-                    "Менеджер оповещений",
+                    Lang.GetValue(LangUITranslate.NotificationManager),
                     OrientationPositionCursor.LeftUp);
             };
             BorderIndicator.MouseLeave += (sender, e) =>
@@ -580,16 +615,18 @@ namespace OperPageLes.UI.Windows
                 TokenUpdateBackgroundData.ThrowIfCancellationRequested();
                 App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
             };
+            Lang.LanguageUpdated += Lang_LanguageUpdated;
             #endregion
             App.CurrentApp.LogWriteLine("! Инициализация успешна");
         }
 
         /// <summary>
-        /// Обработчик события обновления языкового перевода
+        /// Обработчик собфтия изменения языкового перевода
         /// </summary>
         private void Lang_LanguageUpdated(object? sender, EventArgs e)
         {
-            Title = Lang.GetValue(EnumLanguage.MainWindowTitle);
+            Title = Lang.GetValue(LangUITranslate.MainWindowTitle);
+            IELButtonBack.Text = Lang.GetValue(LangUITranslate.Back);
         }
 
         #region BrowserPageControl
@@ -881,8 +918,7 @@ namespace OperPageLes.UI.Windows
                 {
                     App.CurrentApp.AddNewNotification($"Файл картинки фонового изображения не был найден...",
                         EnumNotificationStyle.System,
-                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)),
-                        "Ошибка установки фона");
+                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)));
                 }
             }
             else

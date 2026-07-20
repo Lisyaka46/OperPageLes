@@ -10,7 +10,7 @@ namespace OperPageLes.CORE.Enums
     public enum EnumNotificationStyle
     {
         /// <summary>
-        /// Системное уведомление
+        /// Иное уведомление
         /// </summary>
         Other = -1,
 
@@ -18,5 +18,10 @@ namespace OperPageLes.CORE.Enums
         /// Системное уведомление
         /// </summary>
         System = 0,
+
+        /// <summary>
+        /// Предупреждение
+        /// </summary>
+        Warning = 1,
     }
 }

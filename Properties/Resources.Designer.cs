@@ -233,6 +233,26 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] FlagRussian {
+            get {
+                object obj = ResourceManager.GetObject("FlagRussian", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] FlagUSA {
+            get {
+                object obj = ResourceManager.GetObject("FlagUSA", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Folder {
             get {
                 object obj = ResourceManager.GetObject("Folder", resourceCulture);
@@ -266,6 +286,26 @@ namespace OperPageLes.Properties {
         internal static byte[] IconMainSettings {
             get {
                 object obj = ResourceManager.GetObject("IconMainSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] LangRussian {
+            get {
+                object obj = ResourceManager.GetObject("LangRussian", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] LangUSA {
+            get {
+                object obj = ResourceManager.GetObject("LangUSA", resourceCulture);
                 return ((byte[])(obj));
             }
         }

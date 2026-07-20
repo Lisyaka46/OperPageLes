@@ -499,7 +499,8 @@ namespace OperPageLes.UI.Pages.Browser
 
             ActiveThemeInApplicationIndex = SelectIndexTheme;
             SelectIndexTheme = -1;
-            App.CurrentApp.UpdateSettingApplication();
+#warning Сохранение настроек темы в приложении отключено
+            //App.CurrentApp.WriteSettingApplication();
         }
 
         /// <summary>

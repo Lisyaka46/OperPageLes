@@ -20,7 +20,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Border BorderBrush="Black" BorderThickness="0,0,0,2">
-            <TextBlock Text="Менеджер оповещений" VerticalAlignment="Top" Padding="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Plup}" TextAlignment="Center" Foreground="#FF8FD3F7" IsHitTestVisible="False"/>
+            <TextBlock x:Name="TextBlockNotificationManagerTitle" Text="Title" VerticalAlignment="Top" Padding="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Plup}" TextAlignment="Center" Foreground="#FF8FD3F7" IsHitTestVisible="False"/>
         </Border>
         <IEL:IELScrollViewer x:FieldModifier="private" x:Name="IELScrollNotification" Grid.Row="1" ScrollForce="40">
             

@@ -107,8 +107,8 @@ namespace OperPageLes.CORE.Objects
             catch
             {
                 VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[Enums.PaletteSpectrumEnum.Aquamarine];
-                App.CurrentApp.AddNewNotification($"Не удалось присвоить спектр темы \"{Label.IndexSpectrumTheme}\" ярлыку \"{Label.Name}\"", Enums.EnumNotificationStyle.System,
-                    null, "Ошибка ярлыка");
+                App.CurrentApp.AddNewNotification($"Не удалось присвоить спектр темы \"{Label.IndexSpectrumTheme}\" ярлыку \"{Label.Name}\"",
+                    Enums.EnumNotificationStyle.System);
             }
             if (SaveOldCommand.Equals(Label.Command)) return;
             else if (Label.Command.Contains("open_link"))

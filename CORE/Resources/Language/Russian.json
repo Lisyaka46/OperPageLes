@@ -1,0 +1,48 @@
+{
+    "Locate": "Russian",
+    "Version": "Infinity",
+    "Name": "(Russian) Русский",
+    "Autor": "Daniil Lisov",
+    "Contacts": [
+        {
+            "Locate": "Telegram",
+            "URL": "https://t.me/OperPageLes",
+            "Mask": "OPL Channel"
+        }
+    ],
+  "Translation": {
+    "LangUITranslate": {
+      "HeadNameProgram": "OperPageLes",
+      "MainWindowTitle": "Главное меню",
+      "Autor": "Автор",
+      "LangTranslate": "Языковые переводы",
+      "MainDirectoryData": "Главная директория данных программы",
+      "ProgramSetting": "Настройки программы",
+      "PersonalizationSetting": "Настройки персонализации",
+      "NotificationManager": "Менеджер оповещений",
+      "AudioСontrol": "Настройки звука",
+      "CurrentKeyboardLayout": "Текущая раскладка клавиатуры",
+      "KeyboardCharacterCase": "Регистр символов клавиатуры",
+      "CurrentInternetConnection": "Текущее подключение к интернету",
+      "WarningNotification": "Предупреждение",
+      "SystemNotification": "Системное уведомление",
+      "OtherNotification": "Иное уведомление",
+      "Back": "Назад",
+      "InstallNewPageApp": "Установить новое страничное приложение",
+      "CreateShortcutInfo": "Добавить ярлык на главную страницу",
+      "Cancel": "Отмена",
+      "CreateShortcutTitle": "Создание ярлыка",
+      "ShortcutName": "Название ярлыка",
+      "ShortcutCommand": "Команда ярлыка",
+      "ShortcutDescription": "Описание ярлыка",
+      "ShortcutCreate": "Создать ярлык",
+      "RequiredMarker": "*",
+      "RequiredMarkerDescription": "Символ обязательного параметра",
+      "ChangeShortcutTitle": "Изменение ярлыка",
+      "ShortcutChange": "Изменить ярлык"
+    },
+    "LangSettingGeneralUITranslate": {
+      "GeneralTitle": "Общие"
+    }
+  }
+}

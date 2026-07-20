@@ -1,0 +1,50 @@
+﻿<Base:IELContainerBase
+    x:Class="OperPageLes.UI.UserElementsControl.Default.OPLLanguageButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Base="clr-namespace:IEL.UserElementsControl.Base;assembly=LibraryIEL"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Width="50" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Border.Background>
+                    <ImageBrush x:Name="ImageBrushImageLanguage" Stretch="UniformToFill"/>
+                </Border.Background>
+            </Border>
+            <Grid Grid.Column="1" Margin="3,0,3,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="14"/>
+                </Grid.RowDefinitions>
+                <Viewbox HorizontalAlignment="Left" StretchDirection="DownOnly">
+                    <TextBlock x:Name="TextBlockNameLanguage" Text="(Russian) Русский" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}"/>
+                </Viewbox>
+                <Viewbox HorizontalAlignment="Left" StretchDirection="DownOnly" Grid.Row="1">
+                    <TextBlock x:Name="TextBlockVersionLanguage" Opacity="0.7" Text="0.0.1" FontFamily="{DynamicResource Plup}"/>
+                </Viewbox>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1" Margin="5,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox HorizontalAlignment="Left" StretchDirection="DownOnly" Margin="0,0,4,0">
+                <TextBlock x:Name="TextBlockAutor" FontFamily="{DynamicResource Plup}" Padding="2,0,2,0">
+                    <Run x:Name="RunTextAutorTitle">Автор</Run><Run>:</Run>
+                    <Run x:Name="RunTextAutorName">OPL</Run>
+                </TextBlock>
+            </Viewbox>
+            <IEL:IELButtonText x:Name="IELButtonContacts" Grid.Column="1" Text="Contacts" PaletteElement="{DynamicResource BlueGreenCrayola}" CornerRadius="5,5,5,5" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="10" MarginViewBox="1,5,1,5" VerticalAlignment="Center" Margin="3,1,3,1"/>
+        </Grid>
+    </Grid>
+</Base:IELContainerBase>

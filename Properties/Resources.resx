@@ -247,4 +247,16 @@
   <data name="Palette" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UI\Images\Palette.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="LangRussian" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\CORE\Resources\Language\Russian.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FlagRussian" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Lang\FlagRussian.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FlagUSA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\UI\Images\Lang\FlagUSA.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LangUSA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\CORE\Resources\Language\USA.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

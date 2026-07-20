@@ -86,7 +86,6 @@ namespace OperPageLes.UI.Pages.Browser
             };
             IELScrollCategoryButtons.Content = StackPanelButtonsCategories;
             SourceVisualCategories = [];
-            Setting.AppendCategory += HandlerAppendCategory;
         }
 
         #region Handlers
@@ -95,7 +94,7 @@ namespace OperPageLes.UI.Pages.Browser
         /// </summary>
         /// <param name="sender">Нулевой объект</param>
         /// <param name="e">Добавляемая категория</param>
-        private void HandlerAppendCategory(object? sender, CategorySettingBase e)
+        internal void HandlerAppendCategory(object? sender, CategorySettingBase e)
         {
             StackPanel NewVisualCategory = new()
             {

@@ -1,0 +1,48 @@
+{
+  "Locate": "USA",
+  "Version": "Infinity",
+  "Name": "English",
+  "Autor": "Daniil Lisov",
+  "Contacts": [
+    {
+      "Locate": "Telegram",
+      "URL": "https://t.me/OperPageLes",
+      "Mask": "OPL Channel"
+    }
+  ],
+  "Translation": {
+    "LangUITranslate": {
+      "HeadNameProgram": "OperPageLes",
+      "MainWindowTitle": "Main menu",
+      "Autor": "By",
+      "LangTranslate": "Language translations",
+      "MainDirectoryData": "Program data root directory",
+      "ProgramSetting": "Program settings",
+      "PersonalizationSetting": "Personalization settings",
+      "NotificationManager": "Notification manager",
+      "AudioСontrol": "Audio controls",
+      "CurrentKeyboardLayout": "Current keyboard layout",
+      "KeyboardCharacterCase": "Keyboard character case",
+      "CurrentInternetConnection": "Current internet connection",
+      "WarningNotification": "Warning",
+      "SystemNotification": "System notification",
+      "OtherNotification": "Other notification",
+      "Back": "Back",
+      "InstallNewPageApp": "Install new page app",
+      "CreateShortcutInfo": "Add shortcut to desktop",
+      "Cancel": "Cancel",
+      "CreateShortcutTitle": "Creating shortcut",
+      "ShortcutName": "Shortcut name",
+      "ShortcutCommand": "Shortcut command",
+      "ShortcutDescription": "Shortcut description",
+      "ShortcutCreate": "Create shortcut",
+      "RequiredMarker": "*",
+      "RequiredMarkerDescription": "Required parameter symbol",
+      "ChangeShortcutTitle": "Changing shortcut",
+      "ShortcutChange": "Change shortcut"
+    },
+    "LangSettingGeneralUITranslate": {
+      "GeneralTitle": "General"
+    }
+  }
+}
