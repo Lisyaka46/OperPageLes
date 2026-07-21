@@ -4,11 +4,11 @@
     "Name": "(Russian) Русский",
     "Autor": "Daniil Lisov",
     "Contacts": [
-        {
-            "Locate": "Telegram",
-            "URL": "https://t.me/OperPageLes",
-            "Mask": "OPL Channel"
-        }
+      {
+        "Locate": "Telegram",
+        "URL": "https://t.me/OperPageLes",
+        "Mask": "OPL Channel"
+      }
     ],
   "Translation": {
     "LangUITranslate": {
