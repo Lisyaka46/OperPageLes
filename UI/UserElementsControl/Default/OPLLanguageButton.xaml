@@ -10,7 +10,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid Margin="3,1,3,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -33,18 +33,26 @@
                 </Viewbox>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" Margin="5,0,5,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" Margin="5,0,5,1">
             <Viewbox HorizontalAlignment="Left" StretchDirection="DownOnly" Margin="0,0,4,0">
-                <TextBlock x:Name="TextBlockAutor" FontFamily="{DynamicResource Plup}" Padding="2,0,2,0">
+                <TextBlock x:Name="TextBlockAutor" FontFamily="{DynamicResource Plup}" Padding="2,0,2,0" Margin="0,5,0,0">
                     <Run x:Name="RunTextAutorTitle">Автор</Run><Run>:</Run>
-                    <Run x:Name="RunTextAutorName">OPL</Run>
+                    <Run x:Name="RunTextAutorName">249067209486720936709286</Run>
                 </TextBlock>
             </Viewbox>
-            <IEL:IELButtonText x:Name="IELButtonContacts" Grid.Column="1" Text="Contacts" PaletteElement="{DynamicResource BlueGreenCrayola}" CornerRadius="5,5,5,5" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="10" MarginViewBox="1,5,1,5" VerticalAlignment="Center" Margin="3,1,3,1"/>
+        </Grid>
+        <Grid Grid.Column="0" Grid.Row="1">
+            <IEL:IELButtonImage x:Name="IELButtonContacts" PaletteElement="{DynamicResource BlueGreenCrayola}" CornerRadius="5,5,5,5" FontFamily="{DynamicResource RussianRail G Pro}" FontSize="10" MarginViewBox="1,2,2,2" VerticalAlignment="Center" Margin="0,1,0,1" Source="/UI/Images/ContactInfo.png" Width="30" Height="30" HorizontalAlignment="Right" Panel.ZIndex="1"/>
+            <Border Margin="0,3,20,3" BorderBrush="{Binding SourceBorderBrush.SourceBrush, ElementName=IELButtonContacts}" BorderThickness="2,2,0,2" Padding="0,0,5,0" CornerRadius="{Binding CornerRadius, ElementName=IELButtonContacts}" HorizontalAlignment="Right">
+                <Viewbox Height="25" HorizontalAlignment="Left" StretchDirection="DownOnly" MaxWidth="100" Margin="0,0,5,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <IEL:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="10,10,10,10" Margin="3,3,3,3" Height="25" PaletteElement="{DynamicResource PastelBlue}" Source="/UI/Images/Brush.png" MarginViewBox="3,3,3,3"/>
+                        <IEL:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="10,10,10,10" Margin="3,3,3,3" Height="25" PaletteElement="{DynamicResource PastelBlue}" Source="/UI/Images/Brush.png" MarginViewBox="3,3,3,3"/>
+                        <IEL:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="10,10,10,10" Margin="3,3,3,3" Height="25" PaletteElement="{DynamicResource PastelBlue}" Source="/UI/Images/Brush.png" MarginViewBox="3,3,3,3"/>
+                        <IEL:IELButtonImage HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="10,10,10,10" Margin="3,3,3,3" Height="25" PaletteElement="{DynamicResource PastelBlue}" Source="/UI/Images/Brush.png" MarginViewBox="3,3,3,3"/>
+                    </StackPanel>
+                </Viewbox>
+            </Border>
         </Grid>
     </Grid>
 </Base:IELContainerBase>

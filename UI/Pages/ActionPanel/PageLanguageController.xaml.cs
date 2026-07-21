@@ -32,7 +32,6 @@ namespace OperPageLes.UI.Pages.ActionPanel
             set
             {
                 _ManagerAnimation = value;
-
             }
         }
 
@@ -108,6 +107,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
         {
             OPLLanguageButton NewButton = new()
             {
+                ManagerAnimation = ManagerAnimation,
                 DataContext = SourceInfo,
                 PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PlumCrayola],
                 CornerRadius = new(6d),

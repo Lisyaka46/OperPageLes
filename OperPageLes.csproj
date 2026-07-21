@@ -37,6 +37,7 @@
     <None Remove="UI\Images\ArrowRight.png" />
     <None Remove="UI\Images\Chats.png" />
     <None Remove="UI\Images\Command.png" />
+    <None Remove="UI\Images\ContactInfo.png" />
     <None Remove="UI\Images\File.png" />
     <None Remove="UI\Images\Folder.png" />
     <None Remove="UI\Images\IconMainApplication.png" />
@@ -106,6 +107,7 @@
     <Resource Include="UI\Images\ArrowRight.png" />
     <Resource Include="UI\Images\Chats.png" />
     <Resource Include="UI\Images\Command.png" />
+    <Resource Include="UI\Images\ContactInfo.png" />
     <Resource Include="UI\Images\File.png" />
     <Resource Include="UI\Images\Folder.png" />
     <Resource Include="UI\Images\IconMainApplication.png" />

@@ -193,6 +193,16 @@ namespace OperPageLes.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] ContactInfo {
+            get {
+                object obj = ResourceManager.GetObject("ContactInfo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] Cross {
             get {
                 object obj = ResourceManager.GetObject("Cross", resourceCulture);
