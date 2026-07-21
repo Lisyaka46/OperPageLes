@@ -43,6 +43,16 @@
     },
     "LangSettingGeneralUITranslate": {
       "GeneralTitle": "General"
+    },
+    "LangShortcutUITranslate": {
+      "ShortcutName": "Shortcut name",
+      "ShortcutCommand": "Shortcut command",
+      "ShortcutDescription": "Описание ярлыка",
+      "ShortcutCreate": "Создать ярлык",
+      "ShortcutChange": "Изменить ярлык",
+      "ShortcutCreateTitle": "Создание ярлыка",
+      "ShortcutChangeTitle": "Изменение ярлыка",
+      "ShortcutCreateDescription": "Добавить ярлык на главную страницу"
     }
   }
 }

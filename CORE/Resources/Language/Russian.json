@@ -29,20 +29,22 @@
       "OtherNotification": "Иное уведомление",
       "Back": "Назад",
       "InstallNewPageApp": "Установить новое страничное приложение",
-      "CreateShortcutInfo": "Добавить ярлык на главную страницу",
       "Cancel": "Отмена",
-      "CreateShortcutTitle": "Создание ярлыка",
+      "RequiredMarker": "*",
+      "RequiredMarkerDescription": "Символ обязательного параметра"
+    },
+    "LangSettingGeneralUITranslate": {
+      "GeneralTitle": "Общие"
+    },
+    "LangShortcutUITranslate": {
       "ShortcutName": "Название ярлыка",
       "ShortcutCommand": "Команда ярлыка",
       "ShortcutDescription": "Описание ярлыка",
       "ShortcutCreate": "Создать ярлык",
-      "RequiredMarker": "*",
-      "RequiredMarkerDescription": "Символ обязательного параметра",
-      "ChangeShortcutTitle": "Изменение ярлыка",
-      "ShortcutChange": "Изменить ярлык"
-    },
-    "LangSettingGeneralUITranslate": {
-      "GeneralTitle": "Общие"
+      "ShortcutChange": "Изменить ярлык",
+      "ShortcutCreateTitle": "Создание ярлыка",
+      "ShortcutChangeTitle": "Изменение ярлыка",
+      "ShortcutCreateDescription": "Добавить ярлык на главную страницу"
     }
   }
 }

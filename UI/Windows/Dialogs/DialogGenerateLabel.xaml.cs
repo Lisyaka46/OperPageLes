@@ -25,9 +25,9 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogGenLabel()
         {
             InitializeComponent();
-            RunNameShortcut.Text = Lang.GetValue(LangUITranslate.ShortcutName);
-            RunCommandShortcut.Text = Lang.GetValue(LangUITranslate.ShortcutCommand);
-            RunDescriptionShortcut.Text = Lang.GetValue(LangUITranslate.ShortcutDescription);
+            RunNameShortcut.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutName);
+            RunCommandShortcut.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutCommand);
+            RunDescriptionShortcut.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutDescription);
             RunNameRequiredSymbol.Text = Lang.GetValue(LangUITranslate.RequiredMarker);
             RunCommandRequiredSymbol.Text = Lang.GetValue(LangUITranslate.RequiredMarker);
             IELButtonCancel.Text = Lang.GetValue(LangUITranslate.Cancel);
@@ -175,8 +175,8 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// <returns>Созданный объект ярлыка</returns>
         internal SourceLabelAction? CreateLabel()
         {
-            Title = Lang.GetValue(LangUITranslate.CreateShortcutTitle);
-            IELButtonCreateLabel.Text = Lang.GetValue(LangUITranslate.ShortcutCreate);
+            Title = Lang.GetValue(LangShortcutUITranslate.ShortcutCreateTitle);
+            IELButtonCreateLabel.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutCreate);
             IELTextBoxNameLabel.Focus();
             ShowDialog();
             if (Cancel) return null;
@@ -193,8 +193,8 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// <returns>Созданный объект ярлыка</returns>
         internal void ChangeLabel(in SourceLabelAction Source)
         {
-            Title = Lang.GetValue(LangUITranslate.ChangeShortcutTitle);
-            IELButtonCreateLabel.Text = Lang.GetValue(LangUITranslate.ShortcutChange);
+            Title = Lang.GetValue(LangShortcutUITranslate.ShortcutChangeTitle);
+            IELButtonCreateLabel.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutChange);
             IELTextBoxNameLabel.Focus();
 
             IELTextBoxNameLabel.Text = Source.Name;

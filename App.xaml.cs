@@ -443,10 +443,10 @@ namespace OperPageLes
                 #endregion
 
                 #region reboot
-                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "reboot", "Перезагружает программу", (Command, param, CV) =>
+                new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "reboot", "Перезагружает программу", async (Command, param, CV) =>
                 {
-                    RebootApplication();
-                    return Task.FromResult(CommandStateResult.Completed(Command.Name));
+                    await RebootApplication();
+                    return CommandStateResult.Completed(Command.Name);
                 }),
                 #endregion
 

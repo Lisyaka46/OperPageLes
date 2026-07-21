@@ -439,7 +439,7 @@ namespace OperPageLes.UI.Windows
             IELButtonAddLabel.MouseEnter += (sender, e) =>
             {
                 IELMessageMain.UsingBorderInformation(IELButtonAddLabel,
-                    Lang.GetValue(LangUITranslate.CreateShortcutInfo),
+                    Lang.GetValue(LangShortcutUITranslate.ShortcutCreateDescription),
                     OrientationPositionCursor.RightUp);
             };
             IELButtonAddLabel.MouseLeave += (sender, e) =>
