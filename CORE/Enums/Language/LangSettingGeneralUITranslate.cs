@@ -13,5 +13,17 @@ namespace OperPageLes.CORE.Enums.Language
         /// "Общие"
         /// </summary>
         GeneralTitle = 0LU,
+
+        #region VisibleConnectInternetMillisecond
+        /// <summary>
+        /// "Отображать отклик интернета в миллисекундах"
+        /// </summary>
+        ParameterName_VisibleConnectInternetMillisecond = 1LU,
+
+        /// <summary>
+        /// "Если включён, тогда будет отображаться снизу количество потраченых миллицекунд на проверку подключения интернета"
+        /// </summary>
+        ParameterDescription_VisibleConnectInternetMillisecond = 2LU,
+        #endregion
     }
 }

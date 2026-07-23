@@ -104,6 +104,12 @@ namespace OperPageLes.UI.Windows
         /// Страница управления настройками программы
         /// </summary>
         internal PageSettingApp SettingApp => _SettingApp ??= new();
+
+        private PageLanguageGeneratorApp? _LanguageGeneratorApp = null;
+        /// <summary>
+        /// Страница управления настройками программы
+        /// </summary>
+        internal PageLanguageGeneratorApp LanguageGeneratorApp => _LanguageGeneratorApp ??= new();
         #endregion
 
         #region PanelActionPages

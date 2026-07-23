@@ -108,5 +108,70 @@ namespace OperPageLes.CORE.Enums.Language
         /// "Символ обязательного параметра"
         /// </summary>
         RequiredMarkerDescription = 19LU,
+
+        /// <summary>
+        /// "Переведено"
+        /// </summary>
+        Translated = 20LU,
+
+        /// <summary>
+        /// Тестировать
+        /// </summary>
+        Testing = 21LU,
+
+        /// <summary>
+        /// Выполнить
+        /// </summary>
+        Execute = 22LU,
+
+        /// <summary>
+        /// Изменить
+        /// </summary>
+        Change = 23LU,
+
+        /// <summary>
+        /// Удалить
+        /// </summary>
+        Delete = 24LU,
+
+        /// <summary>
+        /// "Не переведено"
+        /// </summary>
+        NotTranslated = 25LU,
+
+        /// <summary>
+        /// "Локализация"
+        /// </summary>
+        Localization = 26LU,
+
+        /// <summary>
+        /// "Версия"
+        /// </summary>
+        Version = 27LU,
+
+        /// <summary>
+        /// "Название"
+        /// </summary>
+        Naming = 28LU,
+
+        /// <summary>
+        /// "Авторы"
+        /// </summary>
+        Autors = 29LU,
+
+        /// <summary>
+        /// "Директория сохранения"
+        /// </summary>
+        DirectorySave = 30LU,
+
+        /// <summary>
+        /// "Сгенерировать"
+        /// </summary>
+        Generate = 31LU,
+
+        /// <summary>
+        /// "Обзор"
+        /// </summary>
+        Overview = 32LU,
     }
 }

@@ -639,7 +639,10 @@ namespace OperPageLes
 
                 LogWriteLine("Инициализация настроек...");
                 #region Settings
-                PageSettingApplication = new();
+                PageSettingApplication = new()
+                {
+                    ManagerAnimation = ManagerAnimation
+                };
                 CategoryGeneralSetting = new("OPL");
 
                 //LogWriteLine("> Установка значений на основе настроек");
@@ -792,8 +795,21 @@ namespace OperPageLes
 
                 // Добавление параметров в общую категорию настроек приложения
                 #region Setting Parameters
-                CategoryGeneralSetting.AddParameter(EnumGeneralSettings.VisualMillisecondConnect, new ParameterSetting<bool>(false));
-                CategoryGeneralSetting.AddParameter(EnumGeneralSettings.BufferLength, new LimitedParameterIntSetting(0, 100, 50));
+                ParameterSettingBase Parameter;
+                #region VisualMillisecondConnect
+                Parameter = new ParameterSetting<bool>(false);
+                Parameter.ConnectLangParameters(LangParameterValue.Name,
+                    LangSettingGeneralUITranslate.ParameterName_VisibleConnectInternetMillisecond);
+                Parameter.ConnectLangParameters(LangParameterValue.Description,
+                    LangSettingGeneralUITranslate.ParameterName_VisibleConnectInternetMillisecond);
+                CategoryGeneralSetting.AddParameter(EnumGeneralSettings.VisualMillisecondConnect, Parameter);
+                #endregion
+
+                #region BufferLength
+                Parameter = new LimitedParameterIntSetting(0, 100, 50);
+                //Parameter.ConnectLangParameters(LangParameterValue.Name, LangSettingGeneralUITranslate.ParameterName_VisibleConnectInternetMillisecond);
+                CategoryGeneralSetting.AddParameter(EnumGeneralSettings.BufferLength, Parameter);
+                #endregion
                 #endregion
                 #endregion
                 LogWriteLine("...Готово");
@@ -975,8 +991,7 @@ namespace OperPageLes
                 LogWriteLine("Установка встроенного языкового перевода");
                 #region Language
                 Lang.UpdateLang(Lang.GetLangFromLocate("Russian") ??
-                    throw new Exception("Не удалось найти предустановленный языковой перевод \"Russian\""),
-                    out string[] InvalidKeys);
+                    throw new Exception("Не удалось найти предустановленный языковой перевод \"Russian\""));
                 #endregion
                 LogWriteLine("...Готово");
 
@@ -1027,7 +1042,7 @@ namespace OperPageLes
                 #region ManagerAnimationInstalled
                 MainBrowser.ManagerAnimation = ManagerAnimation;
                 MainWindow.ManagerAnimation = ManagerAnimation;
-                PageSettingApplication.ManagerAnimation = ManagerAnimation;
+                //PageSettingApplication.ManagerAnimation = ManagerAnimation;
                 //ApplicationPageDeveloper.ManagerAnimation = ManagerAnimation;
                 #endregion
                 LogWriteLine("...Готово");

@@ -31,15 +31,9 @@
       "InstallNewPageApp": "Install new page app",
       "CreateShortcutInfo": "Add shortcut to desktop",
       "Cancel": "Cancel",
-      "CreateShortcutTitle": "Creating shortcut",
-      "ShortcutName": "Shortcut name",
-      "ShortcutCommand": "Shortcut command",
-      "ShortcutDescription": "Shortcut description",
-      "ShortcutCreate": "Create shortcut",
       "RequiredMarker": "*",
       "RequiredMarkerDescription": "Required parameter symbol",
-      "ChangeShortcutTitle": "Changing shortcut",
-      "ShortcutChange": "Change shortcut"
+      "Translated": "Translated"
     },
     "LangSettingGeneralUITranslate": {
       "GeneralTitle": "General"
@@ -47,12 +41,12 @@
     "LangShortcutUITranslate": {
       "ShortcutName": "Shortcut name",
       "ShortcutCommand": "Shortcut command",
-      "ShortcutDescription": "Описание ярлыка",
-      "ShortcutCreate": "Создать ярлык",
-      "ShortcutChange": "Изменить ярлык",
-      "ShortcutCreateTitle": "Создание ярлыка",
-      "ShortcutChangeTitle": "Изменение ярлыка",
-      "ShortcutCreateDescription": "Добавить ярлык на главную страницу"
+      "ShortcutDescription": "Shortcut description",
+      "ShortcutCreate": "Create shortcut",
+      "ShortcutChange": "Change shortcut",
+      "ShortcutCreateTitle": "Creating shortcut",
+      "ShortcutChangeTitle": "Changing shortcut",
+      "ShortcutCreateDescription": "Add Shortcut to Home screen"
     }
   }
 }

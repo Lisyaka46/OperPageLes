@@ -31,7 +31,8 @@
       "InstallNewPageApp": "Установить новое страничное приложение",
       "Cancel": "Отмена",
       "RequiredMarker": "*",
-      "RequiredMarkerDescription": "Символ обязательного параметра"
+      "RequiredMarkerDescription": "Символ обязательного параметра",
+      "Translated": "Переведено"
     },
     "LangSettingGeneralUITranslate": {
       "GeneralTitle": "Общие"
