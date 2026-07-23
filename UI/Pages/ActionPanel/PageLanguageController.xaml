@@ -5,13 +5,6 @@
     xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="400" Height="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid>
-            
-        </Grid>
         <IEL:IELScrollViewer x:Name="LanguagesScrollController" Grid.Row="1" MinScrollSize="70" ThicknessScroll="12">
         </IEL:IELScrollViewer>
         <TextBlock x:Name="TextBlockUpdateInfo" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="Идёт обновление списка..." Padding="0,0,3,3" FontStyle="Italic" FontFamily="{DynamicResource Bree CYR var}"/>

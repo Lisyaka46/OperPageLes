@@ -65,6 +65,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
             BorderContacts.Child = StackVisualContacts;
             TextBlockNameLanguage.Foreground = SourceForeground.SourceBrush;
             TextBlockVersionLanguage.Foreground = SourceForeground.SourceBrush;
+            TextBlockPercentTranslate.Foreground = SourceForeground.SourceBrush;
             TextBlockAutor.Foreground = SourceForeground.SourceBrush;
             Lang.LanguageUpdated += Lang_LanguageUpdated;
             IELButtonContacts.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ContactInfo));
@@ -95,6 +96,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
         private void Lang_LanguageUpdated(object? sender, EventArgs e)
         {
             RunTextAutorTitle.Text = Lang.GetValue(LangUITranslate.Autor);
+            RunPercentTranslateName.Text = Lang.GetValue(LangUITranslate.Translated);
         }
 
         /// <summary>
@@ -107,6 +109,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
 
             TextBlockNameLanguage.Text = DataContext.Name;
             TextBlockVersionLanguage.Text = DataContext.Config.Version;
+            RunPercentTranslateValue.Text = $"{(double)Math.Round(DataContext.PercentTranslate, 2) * 100d}%";
             RunTextAutorName.Text = DataContext.LangAutor.Name;
             IELButtonContacts.IsEnabled = DataContext.LangAutor.Contacts.Length > 0;
             await UpdateVisualContacts(DataContext.LangAutor.Contacts);

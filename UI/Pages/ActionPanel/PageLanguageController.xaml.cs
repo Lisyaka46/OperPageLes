@@ -116,7 +116,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             NewButton.MouseLeftButtonUp += (sender, e) =>
             {
                 OPLLanguageButton Button = (OPLLanguageButton)sender;
-                Lang.UpdateLang(Button.DataContext, out string[] InvalidKeys);
+                Lang.UpdateLang(Button.DataContext);
                 ChangeVisualActiveLanguage(Button);
             };
             return NewButton;
