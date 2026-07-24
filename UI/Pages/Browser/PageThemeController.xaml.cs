@@ -281,13 +281,12 @@ namespace OperPageLes.UI.Pages.Browser
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
             {
-                await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка спектров палитры",
-                    CreateAllPaletteButtons(StackPanelSpectrum));
+                await App.CurrentApp.ExecuteVisualizateLoadingProcess(CreateAllPaletteButtons(StackPanelSpectrum));
                 if (ManagerAnimation != null)
                     OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, StackPanelSpectrum, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
                 else
                     StackPanelSpectrum.Opacity = 1d;
-                await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка тем", CreateAllThemeButtons());
+                await App.CurrentApp.ExecuteVisualizateLoadingProcess(CreateAllThemeButtons());
                 if (ManagerAnimation != null)
                     OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ScrollViewerTheme, OpacityProperty, 1d, TimeSpan.FromMilliseconds(1000d));
                 else

@@ -159,7 +159,7 @@ namespace OperPageLes.Windows
                 {
                     if (VisualElementsInformations != null)
                         ClearVisualElementsManager();
-                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка каталога консольных команд",
+                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess(
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Commands.Values], DescriptionConsole));
                     ScrollViewerElements.Content = VisualElementsInformations;
                     //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
@@ -179,7 +179,7 @@ namespace OperPageLes.Windows
                 {
                     if (VisualElementsInformations != null)
                         ClearVisualElementsManager();
-                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка каталога алиасов",
+                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess(
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Aliases.Values], DescriptionAlias));
                     ScrollViewerElements.Content = VisualElementsInformations;
                     //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));

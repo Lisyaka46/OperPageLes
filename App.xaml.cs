@@ -206,10 +206,9 @@ namespace OperPageLes
         /// Осуществить выполнение процесса через визуализацию асинхронной загрузки
         /// </summary>
         /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
-        /// <param name="NameProcess">Название загрузочного процесса</param>
         /// <param name="Method">Асинхронный процесс получения значения</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(string NameProcess, Task<T> Method)
+        internal async Task<T> ExecuteVisualizateLoadingProcess<T>(Task<T> Method)
         {
             Dispatcher.Invoke(() =>
             {
@@ -238,10 +237,9 @@ namespace OperPageLes
         /// Осуществить выполнение процесса через визуализацию асинхронной загрузки без ожидаемого значения
         /// </summary>
         /// <typeparam name="T">Тип ожидаемого элемента</typeparam>
-        /// <param name="NameProcess">Название загрузочного процесса</param>
         /// <param name="Method">Асинхронный процесс получения значения</param>
         /// <returns>Исполненный асинхронный процесс</returns>
-        internal async Task ExecuteVisualizateLoadingProcess(string NameProcess, Task Method)
+        internal async Task ExecuteVisualizateLoadingProcess(Task Method)
         {
             Dispatcher.Invoke(() =>
             {
