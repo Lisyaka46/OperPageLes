@@ -93,7 +93,7 @@ namespace OperPageLes.CORE.Struct
         /// </summary>
         internal static void CheckCreateAllResources()
         {
-            App.CurrentApp.LogWriteLine("Проверка ресурсных файлов");
+            App.LogWriteLine("Проверка ресурсных файлов");
             string Prefics;
             PathesFromNameResource.Clear();
             CheckCreateDirectoryInFile(DirectoryImagesApplication);

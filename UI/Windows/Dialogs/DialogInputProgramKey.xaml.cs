@@ -20,13 +20,13 @@ namespace OperPageLes.UI.Windows.Dialogs
 
         public DialogInputProgramKey()
         {
-            App.CurrentApp.LogWriteLine("Инициализация компонентов...");
+            App.LogWriteLine("Инициализация компонентов...");
             InitializeComponent();
-            App.CurrentApp.LogWriteLine("...Готово");
+            App.LogWriteLine("...Готово");
             Pack = StructPack.NowPack;
-            App.CurrentApp.LogWriteLine("...1");
+            App.LogWriteLine("...1");
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ValidKeyIcon));
-            App.CurrentApp.LogWriteLine("...2");
+            App.LogWriteLine("...2");
             TextBlockPack.Foreground = new SolidColorBrush(Colors.Black);
             IELTextBoxKey.Text = string.Empty;
 
@@ -64,7 +64,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                 }
             };
-            App.CurrentApp.LogWriteLine("! Инициализация диалога успешна");
+            App.LogWriteLine("! Инициализация диалога успешна");
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                 OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, SourceRotateTransform, RotateTransform.AngleProperty,
                     -90d, 0d, SpanMiddle / 1.4d);
             }
-            App.CurrentApp.LogWriteLine("Открытие диалога");
+            App.LogWriteLine("Открытие диалога");
             ShowDialog();
             return ResultKey;
         }

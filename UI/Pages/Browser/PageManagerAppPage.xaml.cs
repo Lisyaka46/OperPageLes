@@ -158,7 +158,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             HandlerClosePanelAction = (NameFramework) =>
             {
-                if (App.CurrentApp.MainBrowser.ActivateManagerPage)
+                if (App.GUIE_Browser.ActivateManagerPage)
                     Focus();
             };
             InitializeComponent();
@@ -205,7 +205,7 @@ namespace OperPageLes.UI.Pages.Browser
             PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 await SelectLabelActionPanel.Activate();
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
             };
             PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseRight += async (sender, e, Key) =>
             {
@@ -213,7 +213,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             PageLabelActionPanel.IELButtonChangeLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
                 new DialogGenLabel().ChangeLabel(SelectLabelActionPanel.Label);
                 SelectLabelActionPanel.UpdateVisualLabel();
             };
@@ -221,7 +221,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 StackPanelAllLabels.Children.Remove(SelectLabelActionPanel.VisualELement);
                 SourceLabels.Remove(SelectLabelActionPanel);
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
                 _SelectLabelActionPanel = null;
             };
             #endregion
@@ -249,9 +249,9 @@ namespace OperPageLes.UI.Pages.Browser
                     SelectLabelElement(Label);
                 else
                 {
-                    if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    if (App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.PanelActionActivate)
                     {
-                        App.MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
+                        App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
                     }
                     LabelSelectPosition(sender, e);
                 }

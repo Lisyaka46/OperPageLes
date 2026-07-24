@@ -156,7 +156,6 @@
                         </Border>
                     </Grid>
                 </Grid>
-                <IEL:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" Text="Отображаемый текст" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" OffsetLeftRight="6" FontFamily="{DynamicResource Deledda Open Regular}" DefaultBackground="#FFC5FBE4" FontSize="14" RadiusDefault="15" RadiusMagnite="2"/>
             </Grid>
         </Border>
     </Border>

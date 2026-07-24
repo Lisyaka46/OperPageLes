@@ -91,8 +91,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             BorderConsole.MouseUp += (sender, e) =>
             {
                 if (BorderCommandInformation.Width != BorderButtonPanelInformationController.Width) return;
-                else if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Left && App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right)
                 {
                     UsingPanelActionFromConsolePage(null);
@@ -142,7 +142,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #endregion
 
             #region PanelAction
-            App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
             {
                 if (Name == nameof(BorderConsole)) TextBoxCommandInput.Focus();
             };
@@ -266,11 +266,11 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                             HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         break;
                     case Key.Apps:
-                        //if (!App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                        //    App.MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
+                        //if (!App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.PanelActionActivate)
+                        //    App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
                         //        PositionAnimActionPanel.CenterObject, OrientationPositionCursor.LeftUp);
                         //else
-                        //    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                        //    App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                         break;
                     case Key.Tab:
                     case Key.Down:
@@ -342,13 +342,13 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             //};
             //IELImageButtonHelp.MouseHover += (sender, e) =>
             //{
-            //    App.MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
+            //    App.CurrentApp.GUIE_MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
             //        "Быстрое открытие описания команд",
             //        OrientationPositionCursor.LeftDown);
             //};
             //IELImageButtonHelp.MouseLeave += (sender, e) =>
             //{
-            //    App.MainWindow.IELMessageMain.CloseBorderInformation();
+            //    App.CurrentApp.GUIE_MainWindow.IELMessageMain.CloseBorderInformation();
             //};
             #endregion
 
@@ -363,7 +363,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         {
             PageConsoleActionPanelMain.CommandViewerSelect = SelectViewer;
             PageConsoleActionPanelMain.IELButtonCommandBuffer.IsEnabled = BufferPage != null;
-            App.MainWindow.IELActionPanelMain.UsingPanelAction(IELScrollConsole, PageConsoleActionPanelMain,
+            App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.UsingPanelAction(IELScrollConsole, PageConsoleActionPanelMain,
                 Orientation: OrientationPositionCursor.RightDown);
         }
         #endregion
@@ -409,8 +409,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
 
             Viewer.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                if (e.ChangedButton == MouseButton.Left && App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.PanelActionActivate)
+                    App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right) UsingPanelActionFromConsolePage(sender as OPLCommandViewer);
                 e.Handled = true;
             };

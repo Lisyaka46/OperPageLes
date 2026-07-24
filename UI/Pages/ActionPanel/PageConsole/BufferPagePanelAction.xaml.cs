@@ -136,15 +136,15 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
                     {
                         await Dispatcher.InvokeAsync(() =>
                         {
-                            if (App.CurrentApp.MainBrowser.ActualInlay?.Content?.GetType() != SourcePage.GetType())
+                            if (App.GUIE_Browser.ActualInlay?.Content?.GetType() != SourcePage.GetType())
                             {
-                                OPLInlay? InlaySource = App.CurrentApp.MainBrowser.Inlays.FirstOrDefault(
+                                OPLInlay? InlaySource = App.GUIE_Browser.Inlays.FirstOrDefault(
                                     (i) => i.Content?.Equals(SourcePage) ?? false);
                                 if (InlaySource != null)
                                 {
-                                    App.CurrentApp.MainBrowser.ActivateInlayIndex(App.CurrentApp.MainBrowser.Inlays.IndexOf(InlaySource));
+                                    App.GUIE_Browser.ActivateInlayIndex(App.GUIE_Browser.Inlays.IndexOf(InlaySource));
                                 }
-                                else if (App.CurrentApp.MainBrowser.ActualInlay?.Content is Browser.InlayPages.PageConsole page)
+                                else if (App.GUIE_Browser.ActualInlay?.Content is Browser.InlayPages.PageConsole page)
                                 {
                                     SourcePage = page;
                                 }

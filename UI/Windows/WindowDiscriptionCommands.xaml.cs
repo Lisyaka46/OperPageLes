@@ -79,7 +79,7 @@ namespace OperPageLes.Windows
 
         public WindowDiscriptionCommands()
         {
-            App.CurrentApp.LogWriteLine("Создание окна описания элементов");
+            App.LogWriteLine("Создание окна описания элементов");
             StartAnimation = false;
             SearchActivate = false;
             InitializeComponent();
@@ -244,7 +244,7 @@ namespace OperPageLes.Windows
                     StartAnimation = true;
                 }
             };
-            App.CurrentApp.LogWriteLine("Готово!");
+            App.LogWriteLine("Готово!");
         }
 
         /// <summary>

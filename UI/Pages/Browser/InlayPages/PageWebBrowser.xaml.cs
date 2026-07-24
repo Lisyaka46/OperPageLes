@@ -19,7 +19,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
     {
         public PageWebBrowser()
         {
-            App.CurrentApp.LogWriteLine("Инициализация объектов станицы веб-браузера");
+            App.LogWriteLine("Инициализация объектов станицы веб-браузера");
             InitializeComponent();
             //WebBrowserElement.CreateBrowser(HwndSource.FromHwnd(
             //    new System.Windows.Interop.WindowInteropHelper(App.Current.MainWindow).EnsureHandle()), new(800, 800));
@@ -33,7 +33,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
 
             IELButtonReloadPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Reload));
             IELButtonUnopenPageSystemBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.BrowserChangeSystem));
-            App.CurrentApp.LogWriteLine("Инициализация станицы веб-браузера");
+            App.LogWriteLine("Инициализация станицы веб-браузера");
 
             #region WebBrowserElement_Events
             WebBrowserElement.GotFocus += (sender, e) =>
@@ -110,7 +110,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 WebViewGoUrl(DefaultUrl);
             }
-            App.CurrentApp.LogWriteLine("Инициализация станицы браузера - Готово!");
+            App.LogWriteLine("Инициализация станицы браузера - Готово!");
         }
 
         internal void WebViewGoUrl(string Url)

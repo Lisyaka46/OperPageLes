@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using FluentFTP;
+using IEL.UserElementsControl;
 using Interpreter.Classes;
 using Interpreter.Commands;
 using InterpreterCommand.Classes;
@@ -29,6 +30,7 @@ using OPLAPI.CORE.Settings.Base;
 using OPLAPI.CORE.Settings.Interfaces;
 using OPLAPI.CORE.Settings.Parameters;
 using OPLAPI.OIEL.UserElementsControl;
+using OPLAPI.OIEL.UserElementsControl.Base;
 using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using Renci.SshNet;
 using System.Collections.ObjectModel;
@@ -68,11 +70,6 @@ namespace OperPageLes
 
         #region Data
         /// <summary>
-        /// Менеджер анимаций под управлением приложения
-        /// </summary>
-        internal readonly OPLAnimationManager ManagerAnimation = new();
-
-        /// <summary>
         /// Реальное время
         /// </summary>
         internal static DateTime RealTime => DateTime.Now;
@@ -85,7 +82,7 @@ namespace OperPageLes
         /// <summary>
         /// Запись в файл .log
         /// </summary>
-        private StreamWriter? LogStreamWriter = null;
+        private static StreamWriter LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
 
         /// <summary>
         /// Страница буфера объектов команд
@@ -93,11 +90,84 @@ namespace OperPageLes
         internal BufferPagePanelAction AppPageBuffer => _AppPageBuffer ?? throw new Exception("Невозможно получить страницу буфера!");
         private BufferPagePanelAction? _AppPageBuffer;
 
+        #region GlobalUIElements
+        #region GUIE_MainWindow
+        /// <summary>
+        /// Базовый элемент окна приложения
+        /// </summary>
+        private new OPLWindowBase MainWindow
+        {
+            get => (OPLWindowBase)base.MainWindow;
+            set
+            {
+                base.MainWindow = value;
+            }
+        }
+        /// <summary>
+        /// Глобальный элемент главного окна приложения
+        /// </summary>
+        internal MainWindow GUIE_MainWindow
+        {
+            get => (MainWindow)MainWindow;
+            private set
+            {
+                this.MainWindow = value;
+            }
+        }
+
+        #region Inicialize
+        /// <summary>
+        /// Создать объект главного окна приложения
+        /// </summary>
+        private static MainWindow InicializeGUIE_MainWindow()
+        {
+            MainWindow Result = new()
+            {
+                ManagerAnimation = ManagerAnimation,
+            };
+            return Result;
+        }
+        #endregion
+        #endregion
+
+        /// <summary>
+        /// Глобальный элемент менеджера анимаций под управлением приложения
+        /// </summary>
+        internal static readonly OPLAnimationManager ManagerAnimation = new();
+
+        /// <summary>
+        /// Глобальный элемент интерфейса для отображения сообщения
+        /// </summary>
+        internal static readonly IELBlockMessage GUIE_Message = new();
+
+        #region GUIE_Browser
+        /// <summary>
+        /// Глобальный элемент интерфейса браузера страниц приложения
+        /// </summary>
+        internal static readonly OPLBrowserPage GUIE_Browser = InicializeGUIE_Browser();
+
+        #region Inicialize
+        /// <summary>
+        /// Создать объект браузера страниц
+        /// </summary>
+        private static OPLBrowserPage InicializeGUIE_Browser()
+        {
+            OPLBrowserPage Result = new()
+            {
+                Margin = new(4d),
+                ManagerAnimation = ManagerAnimation,
+            };
+            return Result;
+        }
+        #endregion
+        #endregion
+        #endregion
+
         #region PackKey
         /// <summary>
         /// Установленный ключ валидности для приложения
         /// </summary>
-        internal PackKey InstallingKey { get; private set; }
+        internal PackKey InstallingKey { get; private set; } = PackKey.StaticKey(1L);
         #endregion
 
         #region Interpreter
@@ -129,8 +199,8 @@ namespace OperPageLes
         {
             Dispatcher.Invoke(() =>
             {
-                MainWindow.TextBlockCountLoadingProcess.Text = (CountLoadingProcess + 1).ToString();
-                MainWindow.StartVisualizateLoadingProcess();
+                GUIE_MainWindow.TextBlockCountLoadingProcess.Text = (CountLoadingProcess + 1).ToString();
+                GUIE_MainWindow.StartVisualizateLoadingProcess();
             });
 
             IAsyncAction AsyncActionMetod = Method.AsAsyncAction();
@@ -144,8 +214,8 @@ namespace OperPageLes
             //GC.Collect(GC.GetGeneration(AsyncActionMetod));
             Dispatcher.Invoke(() =>
             {
-                MainWindow.TextBlockCountLoadingProcess.Text = CountLoadingProcess.ToString();
-                if (CountLoadingProcess == 0) MainWindow.CompleteVisualizateLoadingProcess();
+                GUIE_MainWindow.TextBlockCountLoadingProcess.Text = CountLoadingProcess.ToString();
+                if (CountLoadingProcess == 0) GUIE_MainWindow.CompleteVisualizateLoadingProcess();
             });
             return await Method;
         }
@@ -161,8 +231,8 @@ namespace OperPageLes
         {
             Dispatcher.Invoke(() =>
             {
-                MainWindow.TextBlockCountLoadingProcess.Text = (CountLoadingProcess + 1).ToString();
-                MainWindow.StartVisualizateLoadingProcess();
+                GUIE_MainWindow.TextBlockCountLoadingProcess.Text = (CountLoadingProcess + 1).ToString();
+                GUIE_MainWindow.StartVisualizateLoadingProcess();
             });
 
             IAsyncAction AsyncActionMetod = Method.AsAsyncAction();
@@ -176,8 +246,8 @@ namespace OperPageLes
             //GC.Collect(GC.GetGeneration(AsyncActionMetod));
             Dispatcher.Invoke(() =>
             {
-                MainWindow.TextBlockCountLoadingProcess.Text = CountLoadingProcess.ToString();
-                if (CountLoadingProcess == 0) MainWindow.CompleteVisualizateLoadingProcess();
+                GUIE_MainWindow.TextBlockCountLoadingProcess.Text = CountLoadingProcess.ToString();
+                if (CountLoadingProcess == 0) GUIE_MainWindow.CompleteVisualizateLoadingProcess();
             });
         }
         #endregion
@@ -185,11 +255,6 @@ namespace OperPageLes
         #endregion
 
         #region Windows
-        /// <summary>
-        /// Главное окно програмы
-        /// </summary>
-        internal static new MainWindow MainWindow => (MainWindow)Current.MainWindow;
-
         /// <summary>
         /// Экземпляр созданного приложения
         /// </summary>
@@ -354,13 +419,6 @@ namespace OperPageLes
         internal event EventHandler<ObjectConnectEventArgs>? ConnectionPingChanged;
         #endregion
 
-        #region Browser
-        /// <summary>
-        /// Браузер страниц приложения
-        /// </summary>
-        internal OPLBrowserPage MainBrowser { get; private set; }
-        #endregion
-
 #if DEBUG
         #region Testing
         /// <summary>
@@ -373,7 +431,6 @@ namespace OperPageLes
 
         public App()
         {
-            LogStreamWriter = StructDirectoryResources.CreateLogStreamWriter($"LOG_Access {DateTime.Now:dd.MM.yyyy}");
             try
             {
                 LogWriteLine("---------- Старт нового экземпляра ----------");
@@ -381,10 +438,8 @@ namespace OperPageLes
                 LogWriteLine("Инициализация свойств экземпляра...");
                 #region Resources
                 ShutdownMode = ShutdownMode.OnExplicitShutdown;
-                MainBrowser = MainBrowserInicialize();
                 OpenedWindowsInApplication = [];
                 SourceApplicationNotifications = [];
-                InstallingKey = PackKey.StaticKey(1L);
                 Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
                 #endregion
                 LogWriteLine("...Готово");
@@ -453,7 +508,7 @@ namespace OperPageLes
                 #region close
                 new ConsoleCommand<IOPERCommandViewer>(CommandLevel.LowLevel, "close", "Закрывает программу", (Command, param, CV) =>
                 {
-                    MainWindow.Close();
+                    GUIE_MainWindow.Close();
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -463,7 +518,7 @@ namespace OperPageLes
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param, CV) =>
                 {
-                    if (MainBrowser.ActualInlay?.Content is PageConsole page)
+                    if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
                     {
                         page.StackPanelConsole.Children.Clear();
                     }
@@ -517,7 +572,7 @@ namespace OperPageLes
                             //if (!CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser)
                             //{
                             //    if (MainWindow == null) return Task.FromResult(CommandStateResult.Failed(Command.Name, $"%**Главное окно не является активным объектом**"));
-                            //    OPLInlay[] AllWebBrowsers = [..MainWindow.IELBrowserPageMain.Inlays.Where(
+                            //    OPLInlay[] AllWebBrowsers = [..GUIE_MainWindow.IELBrowserPageMain.Inlays.Where(
                             //        (i) => i.Content?.GetType() == typeof(PageWebBrowser))];
                             //    if (AllWebBrowsers.Length > 1)
                             //    {
@@ -531,7 +586,7 @@ namespace OperPageLes
                             //                $"%//Произошла критическая ошибка обнаружения браузера.//"));
                             //        else {
                             //        PageBrowser?.WebViewGoUrl(url);
-                            //        MainWindow.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].Content);
+                            //        GUIE_MainWindow.IELBrowserPageMain.ActivateInlayInBrowserPage(AllWebBrowsers[0].Content);
                             //        return Task.FromResult(CommandStateResult.Completed(Command.Name, $"Открытие ссылки в странице браузера \"{url}\""));
                             //        }
                             //    }
@@ -541,7 +596,7 @@ namespace OperPageLes
                             //{
                             //    ((PageWebBrowser)browser_page_element.PageContent).WebBrowserElement.Dispose();
                             //};
-                            //MainWindow.IELBrowserPageMain.AddInlayPage(browser_page_element);
+                            //GUIE_MainWindow.IELBrowserPageMain.AddInlayPage(browser_page_element);
                             //((PageWebBrowser)browser_page_element.PageContent).WebViewGoUrl(url);
                         }
                         else Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
@@ -650,27 +705,27 @@ namespace OperPageLes
 
                 //SettingMainApplication.PathMenuImage.Changed += (Old, New) =>
                 //{
-                //    if (!Old.Equals(New)) MainWindow.UpdateImageMenu(New);
+                //    if (!Old.Equals(New)) GUIE_MainWindow.UpdateImageMenu(New);
                 //};
                 //SettingMainApplication.MillisecondInternetConnection.Changed += (Old, New) =>
                 //{
-                //    MainWindow.ChangeVisibilityMillisecondInternet(New);
+                //    GUIE_MainWindow.ChangeVisibilityMillisecondInternet(New);
                 //};
                 //SettingMainApplication.ExitKeyboardModeInClosePanelAction.Changed += (Old, New) =>
                 //{
-                //    MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
+                //    GUIE_MainWindow.IELActionPanelMain.IsKeyboardModeExit = New;
                 //};
                 //SettingMainApplication.KEY_KeyboardModePanelAction.Changed += (Old, New) =>
                 //{
-                //    MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
+                //    GUIE_MainWindow.IELActionPanelMain.KeyActivateKeyboardMode = New;
                 //};
                 //SettingMainApplication.KEY_PanelActionRightClick.Changed += (Old, New) =>
                 //{
-                //    MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
+                //    GUIE_MainWindow.IELActionPanelMain.KeyKeyboardModeActivateRightClick = New;
                 //};
                 //SettingMainApplication.KEY_PanelActionClose.Changed += (Old, New) =>
                 //{
-                //    MainWindow.IELActionPanelMain.KeyCloseElement = New;
+                //    GUIE_MainWindow.IELActionPanelMain.KeyCloseElement = New;
                 //};
                 #endregion
                 //LogWriteLine("> ...Готово");
@@ -714,7 +769,7 @@ namespace OperPageLes
                         #region Action
                         OriginAction = () =>
                         {
-                            PageManagerAppPage AppPage = (PageManagerAppPage?)MainBrowser.SourceManagerAppPage ??
+                            PageManagerAppPage AppPage = (PageManagerAppPage?)GUIE_Browser.SourceManagerAppPage ??
                                 throw new Exception("Главная страница браузера не инициализирована!");
                             string SettingApplicationJSON = JsonConvert.SerializeObject(AppPage.Labels.Select((i) => i.Label));
                             File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
@@ -757,7 +812,7 @@ namespace OperPageLes
                 LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
                 LogWriteLine($"/// Трассировка стека: ///\n{ex.StackTrace}");
                 System.Windows.MessageBox.Show("Программа проинициализирована не правильно!.\nПредоставлено логирование процесса...");
-                LogStreamWriter?.Close();
+                LogStreamWriter.Close();
                 Environment.Exit(1);
             }
         }
@@ -783,7 +838,7 @@ namespace OperPageLes
                 AppPageBuffer.ConnectBuffer(new(50)); // SettingMainApplication.BufferSize
                 AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
+                    GUIE_MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
                     //e.Handled = true;
                 };
                 LogWriteLine("...Готово");
@@ -960,31 +1015,31 @@ namespace OperPageLes
                 #region ConsolePage
                 PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
+                    GUIE_MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
                 };
                 PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    if (MainBrowser.ActualInlay?.Content is PageConsole page)
+                    if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
                     {
                         if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
                             page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
                     }
-                    MainWindow.IELActionPanelMain.ClosePanelAction();
+                    GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
                 };
                 PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    if (MainBrowser.ActualInlay?.Content is PageConsole page)
+                    if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
                     {
                         page.StackPanelConsole.Children.Clear();
                     }
-                    MainWindow.IELActionPanelMain.ClosePanelAction();
+                    GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
                 };
                 #endregion
 
                 Current.Exit += (sender, e) =>
                 {
                     LogWriteLine("---------- Конец текущего экземпляра ----------");
-                    LogStreamWriter?.Close();
+                    LogStreamWriter.Close();
                 };
                 base.OnStartup(e);
 
@@ -1032,23 +1087,14 @@ namespace OperPageLes
                 #endregion
                 LogWriteLine("Ключ валиден!");
 
-                LogWriteLine("Создание главного окна формы");
-                #region MainWindowInicialized
-                Current.MainWindow = MainWindowInicialize();
+                LogWriteLine($"Настройка \"{nameof(GUIE_MainWindow)}\"");
+                #region GUIE_MainWindow
+                GUIE_MainWindow = InicializeGUIE_MainWindow();
                 #endregion
                 LogWriteLine("...Готово");
 
-                LogWriteLine("Установка менеджера анимаций объектам");
-                #region ManagerAnimationInstalled
-                MainBrowser.ManagerAnimation = ManagerAnimation;
-                MainWindow.ManagerAnimation = ManagerAnimation;
-                //PageSettingApplication.ManagerAnimation = ManagerAnimation;
-                //ApplicationPageDeveloper.ManagerAnimation = ManagerAnimation;
-                #endregion
-                LogWriteLine("...Готово");
-
-                LogWriteLine("Обновление языка");
-                #region LanguageUpdated
+                LogWriteLine($"Настройка \"{nameof(Lang)}\"");
+                #region Lang
                 Lang.LanguageUpdated += Lang_LanguageUpdated;
                 Lang_LanguageUpdated(null, EventArgs.Empty);
                 #endregion
@@ -1068,20 +1114,15 @@ namespace OperPageLes
 
                     string json = JsonConvert.SerializeObject(result);
                     File.WriteAllText(PathSettingApplication, json);
-
-                    //string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
-                    //string SettingApplicationJSON = JsonConvert.SerializeObject(SettingMainApplication);
-                    //File.WriteAllText(PathSettingApplication, SettingApplicationJSON);
-                    //ActivePathSettingApplication = PathSettingApplication;
                 }
                 #endregion
                 LogWriteLine("...Готово");
 
                 LogWriteLine("Открытие главного окна");
                 #region MainWindowShow
-                Current.MainWindow.Topmost = true;
-                ((MainWindow)Current.MainWindow).Show();
-                Current.MainWindow.Topmost = false;
+                GUIE_MainWindow.Topmost = true;
+                GUIE_MainWindow.Show();
+                GUIE_MainWindow.Topmost = false;
                 #endregion
                 LogWriteLine("...Готово");
                 #endregion
@@ -1090,7 +1131,7 @@ namespace OperPageLes
             {
                 LogWriteLine($"/// ОШИБКА {ex.HResult}: {ex.Message} ///");
                 LogWriteLine($"/// Трассировка стека: ///\n{ex.StackTrace}");
-                LogStreamWriter?.Close();
+                LogStreamWriter.Close();
                 System.Windows.MessageBox.Show("Программа открылась неправильно!.\nПредоставлено логирование процесса...");
                 Environment.Exit(1);
             }
@@ -1102,16 +1143,15 @@ namespace OperPageLes
         /// </summary>
         internal async Task CloseApplication(bool Exit = true)
         {
-            LogWriteLine("/// Старт процесса закрытия! ///");
+            if (Exit) LogWriteLine("/// Начало закрытия экземпляра! ///");
             #region Close
-            Current.MainWindow.Close();
-            Current.MainWindow = null;
+            GUIE_MainWindow.Close();
             await DialogSaveData.ActivateVisualManipulate(SaveDataActions);
             #endregion
-            LogWriteLine("/// Процесс закрыт! ///");
             if (Exit)
             {
-                LogStreamWriter?.Close();
+                LogWriteLine("/// Экземпляр закрыт! ///");
+                LogStreamWriter.Close();
                 Environment.Exit(0);
             }
         }
@@ -1121,17 +1161,17 @@ namespace OperPageLes
         /// </summary>
         internal async Task RebootApplication()
         {
-            LogWriteLine("/// Старт процесса перезагрузки! ///");
+            LogWriteLine("/// Начало перезагрузки экземпляра! ///");
             #region Reboot
             await CloseApplication(false);
-
-            MainBrowser = MainBrowserInicialize();
-            Current.MainWindow = MainWindowInicialize();
-            Current.MainWindow.Topmost = true;
-            ((MainWindow)Current.MainWindow).Show();
-            Current.MainWindow.Topmost = false;
+            (GUIE_Message.Parent as System.Windows.Controls.Panel)?.Children.Remove(GUIE_Message);
+            (GUIE_Browser.Parent as System.Windows.Controls.Panel)?.Children.Remove(GUIE_Browser);
+            GUIE_MainWindow = InicializeGUIE_MainWindow();
+            GUIE_MainWindow.Topmost = true;
+            GUIE_MainWindow.Show();
+            GUIE_MainWindow.Topmost = false;
             #endregion
-            LogWriteLine("/// Процесс перезагружен! ///");
+            LogWriteLine("/// Экземпляр перезагружен! ///");
         }
         #endregion
 
@@ -1141,34 +1181,8 @@ namespace OperPageLes
         /// </summary>
         /// <param name="Text">Записываемый текст сообщения</param>
         /// <param name="Enclosure">Вложенность текста под отображение зависимости</param>
-        internal void LogWriteLine(string Text, int Enclosure = 1) =>
-            LogStreamWriter?.WriteLine($"{DateTime.Now:HH:mm:ss ff} {new string('>', Enclosure)} " + Text);
-        #endregion
-
-        #region Inicialize
-        /// <summary>
-        /// Создать объект браузера страниц
-        /// </summary>
-        private OPLBrowserPage MainBrowserInicialize()
-        {
-            OPLBrowserPage Result = new()
-            {
-                Margin = new(4d),
-                ManagerAnimation = ManagerAnimation,
-            };
-            return Result;
-        }
-
-        /// <summary>
-        /// Создать объект главного окна
-        /// </summary>
-        private MainWindow MainWindowInicialize()
-        {
-            MainWindow SourceMainWindow = new();
-            //MainWindow.ChangeFromSetting(SettingMainApplication);
-            SourceMainWindow.SetPallete(ActiveThemeApplication);
-            return SourceMainWindow;
-        }
+        internal static void LogWriteLine(string Text, int Enclosure = 1) =>
+            LogStreamWriter.WriteLine($"{DateTime.Now:HH:mm:ss ff} {new string('>', Enclosure)} " + Text);
         #endregion
 
         /// <summary>
@@ -1306,11 +1320,11 @@ namespace OperPageLes
         /// </summary>
         /// <param name="Result">Объект итога выполнения команды</param>
         [MTAThread()]
-        internal static void SummarizeCommandStateResult(IOPERCommandViewer CommandView, CommandStateResult Result)
+        internal void SummarizeCommandStateResult(IOPERCommandViewer CommandView, CommandStateResult Result)
         {
             if (Result.State != ResultState.Complete)
             {
-                MainWindow.BlurMainAnimateColor(Colors.Red);
+                GUIE_MainWindow.BlurMainAnimateColor(Colors.Red);
             }
             CommandView.AddFormattedString(Result.Message);
         }
