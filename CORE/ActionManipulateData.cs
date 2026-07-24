@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Threading;
 
 namespace OperPageLes.CORE
 {
@@ -35,9 +36,9 @@ namespace OperPageLes.CORE
         /// <summary>
         /// Активировать событие сохранения данных
         /// </summary>
-        internal async Task InvokeActionSave()
+        internal async Task InvokeActionSave(Dispatcher SourceDispatcherInvoke)
         {
-            OriginAction?.Invoke();
+            await SourceDispatcherInvoke.InvokeAsync(OriginAction);
             await Task.Delay((int)SleepMilliseconds);
         }
     }

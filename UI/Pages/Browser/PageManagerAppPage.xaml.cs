@@ -205,7 +205,7 @@ namespace OperPageLes.UI.Pages.Browser
             PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 await SelectLabelActionPanel.Activate();
-                App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.GUIE_PanelAction.ClosePanelAction();
             };
             PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseRight += async (sender, e, Key) =>
             {
@@ -213,7 +213,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             PageLabelActionPanel.IELButtonChangeLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
-                App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.GUIE_PanelAction.ClosePanelAction();
                 new DialogGenLabel().ChangeLabel(SelectLabelActionPanel.Label);
                 SelectLabelActionPanel.UpdateVisualLabel();
             };
@@ -221,7 +221,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 StackPanelAllLabels.Children.Remove(SelectLabelActionPanel.VisualELement);
                 SourceLabels.Remove(SelectLabelActionPanel);
-                App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.GUIE_PanelAction.ClosePanelAction();
                 _SelectLabelActionPanel = null;
             };
             #endregion
@@ -249,9 +249,9 @@ namespace OperPageLes.UI.Pages.Browser
                     SelectLabelElement(Label);
                 else
                 {
-                    if (App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.PanelActionActivate)
+                    if (App.GUIE_PanelAction.PanelActionActivate)
                     {
-                        App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
+                        App.GUIE_PanelAction.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
                     }
                     LabelSelectPosition(sender, e);
                 }

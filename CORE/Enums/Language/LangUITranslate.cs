@@ -173,5 +173,10 @@ namespace OperPageLes.CORE.Enums.Language
         /// "Обзор"
         /// </summary>
         Overview = 32LU,
+
+        /// <summary>
+        /// "Ожидание"
+        /// </summary>
+        Wait = 33LU,
     }
 }

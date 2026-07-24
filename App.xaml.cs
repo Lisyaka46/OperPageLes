@@ -20,6 +20,7 @@ using OperPageLes.CORE.Struct;
 using OperPageLes.Properties;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
+using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows;
 using OperPageLes.UI.Windows.Dialogs;
@@ -35,6 +36,7 @@ using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using Renci.SshNet;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.IO;
 using System.Management;
 using System.Net;
@@ -46,6 +48,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using Windows.Foundation;
 
 namespace OperPageLes
@@ -77,7 +80,7 @@ namespace OperPageLes
         /// <summary>
         /// Версия программы
         /// </summary>
-        internal readonly string Version = "0.0.07";
+        internal readonly string Version = "0.0.075";
 
         /// <summary>
         /// Запись в файл .log
@@ -134,6 +137,17 @@ namespace OperPageLes
         /// Глобальный элемент менеджера анимаций под управлением приложения
         /// </summary>
         internal static readonly OPLAnimationManager ManagerAnimation = new();
+
+        /// <summary>
+        /// Глобальный элемент интерфейса панели действий
+        /// </summary>
+        internal static readonly IELPanelAction GUIE_PanelAction = new()
+        {
+            IsEnabledSettingQ = false,
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+            VerticalAlignment = System.Windows.VerticalAlignment.Top,
+            CornerRadius = new(3d),
+        };
 
         /// <summary>
         /// Глобальный элемент интерфейса для отображения сообщения
@@ -375,16 +389,21 @@ namespace OperPageLes
 
         #endregion
 
-        #region DialogSaveWait
+        #region DialogManipulateAction
         /// <summary>
-        /// Окно сохранения данных
+        /// Окно обработки данных
         /// </summary>
-        private DialogSaveWait DialogSaveData;
+        private DialogManipulateActionWait DialogManipulateData;
 
         /// <summary>
         /// Массив этапов сохранения данных
         /// </summary>
         private readonly ActionManipulateData[] SaveDataActions;
+
+        /// <summary>
+        /// Массив этапов чтения данных
+        /// </summary>
+        private readonly ActionManipulateData[] ReadDataActions;
         #endregion
 
         /// <summary>
@@ -441,6 +460,7 @@ namespace OperPageLes
                 OpenedWindowsInApplication = [];
                 SourceApplicationNotifications = [];
                 Directory.CreateDirectory(StructDirectoryResources.DirectoryDownloadApplication);
+                Canvas.SetZIndex(GUIE_PanelAction, 2);
                 #endregion
                 LogWriteLine("...Готово");
 
@@ -733,14 +753,15 @@ namespace OperPageLes
                 #endregion
                 LogWriteLine("...Готово");
 
-                LogWriteLine("Инициализация процесса сохранения данных...");
-                #region DataSaveActions
-                DialogSaveData = new()
+                LogWriteLine($"Настройка \"{nameof(DialogManipulateData)}\"");
+                #region DialogManipulateData
+                DialogManipulateData = new()
                 {
                     ManagerAnimation = ManagerAnimation,
                 };
                 SaveDataActions =
                 [
+                    #region DataSaveActions
                     new("Закрытие всех окон приложения", 300d)
                     {
                         #region Action
@@ -773,6 +794,22 @@ namespace OperPageLes
                                 throw new Exception("Главная страница браузера не инициализирована!");
                             string SettingApplicationJSON = JsonConvert.SerializeObject(AppPage.Labels.Select((i) => i.Label));
                             File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
+                        },
+                        #endregion
+                    }
+                    #endregion
+                ];
+                ReadDataActions =
+                [
+                    new("Инициализация системных страничных приложений", 1600d)
+                    {
+                        #region Action
+                        OriginAction = async () =>
+                        {
+                            await GUIE_Browser.AddNewAppPage(typeof(PageConsole));
+                            await GUIE_Browser.AddNewAppPage(typeof(PageNetwork));
+                            await GUIE_Browser.AddNewAppPage(typeof(PageWebBrowser));
+                            await GUIE_Browser.AddNewAppPage(typeof(PageDeveloper));
                         },
                         #endregion
                     }
@@ -838,7 +875,7 @@ namespace OperPageLes
                 AppPageBuffer.ConnectBuffer(new(50)); // SettingMainApplication.BufferSize
                 AppPageBuffer.IELButtonBackMainMenu.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    GUIE_MainWindow.IELActionPanelMain.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
+                    GUIE_PanelAction.NextPageInObject(PageConsole.PageConsoleActionPanelMain, RightAlgin: false);
                     //e.Handled = true;
                 };
                 LogWriteLine("...Готово");
@@ -1015,7 +1052,7 @@ namespace OperPageLes
                 #region ConsolePage
                 PageConsole.PageConsoleActionPanelMain.IELButtonCommandBuffer.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    GUIE_MainWindow.IELActionPanelMain.NextPageInObject(AppPageBuffer);
+                    GUIE_PanelAction.NextPageInObject(AppPageBuffer);
                 };
                 PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
                 {
@@ -1024,7 +1061,7 @@ namespace OperPageLes
                         if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
                             page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
                     }
-                    GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
+                    GUIE_PanelAction.ClosePanelAction();
                 };
                 PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
                 {
@@ -1032,7 +1069,7 @@ namespace OperPageLes
                     {
                         page.StackPanelConsole.Children.Clear();
                     }
-                    GUIE_MainWindow.IELActionPanelMain.ClosePanelAction();
+                    GUIE_PanelAction.ClosePanelAction();
                 };
                 #endregion
 
@@ -1093,6 +1130,11 @@ namespace OperPageLes
                 #endregion
                 LogWriteLine("...Готово");
 
+                LogWriteLine($"Настройка \"{nameof(GUIE_Browser)}\"");
+                GUIE_Browser.GenerateNewMainManagerAppPage(typeof(PageManagerAppPage));
+                GUIE_Browser.SourceManagerAppPage?.SourcePanelAction = GUIE_PanelAction;
+                LogWriteLine("...Готово");
+
                 LogWriteLine($"Настройка \"{nameof(Lang)}\"");
                 #region Lang
                 Lang.LanguageUpdated += Lang_LanguageUpdated;
@@ -1120,9 +1162,14 @@ namespace OperPageLes
 
                 LogWriteLine("Открытие главного окна");
                 #region MainWindowShow
-                GUIE_MainWindow.Topmost = true;
-                GUIE_MainWindow.Show();
-                GUIE_MainWindow.Topmost = false;
+                Dispatcher.BeginInvoke(async () =>
+                {
+                    DialogManipulateData.TitleHead = Lang.GetValue(LangManipulateDataTranslate.ReadImportantData);
+                    await DialogManipulateData.ActivateVisualManipulate(ReadDataActions);
+                    GUIE_MainWindow.Topmost = true;
+                    await GUIE_MainWindow.Show();
+                    GUIE_MainWindow.Topmost = false;
+                });
                 #endregion
                 LogWriteLine("...Готово");
                 #endregion
@@ -1146,7 +1193,8 @@ namespace OperPageLes
             if (Exit) LogWriteLine("/// Начало закрытия экземпляра! ///");
             #region Close
             GUIE_MainWindow.Close();
-            await DialogSaveData.ActivateVisualManipulate(SaveDataActions);
+            DialogManipulateData.TitleHead = Lang.GetValue(LangManipulateDataTranslate.SaveImportantData);
+            await DialogManipulateData.ActivateVisualManipulate(SaveDataActions);
             #endregion
             if (Exit)
             {
@@ -1164,11 +1212,14 @@ namespace OperPageLes
             LogWriteLine("/// Начало перезагрузки экземпляра! ///");
             #region Reboot
             await CloseApplication(false);
+
             (GUIE_Message.Parent as System.Windows.Controls.Panel)?.Children.Remove(GUIE_Message);
             (GUIE_Browser.Parent as System.Windows.Controls.Panel)?.Children.Remove(GUIE_Browser);
+            (GUIE_PanelAction.Parent as System.Windows.Controls.Panel)?.Children.Remove(GUIE_PanelAction);
+
             GUIE_MainWindow = InicializeGUIE_MainWindow();
             GUIE_MainWindow.Topmost = true;
-            GUIE_MainWindow.Show();
+            await GUIE_MainWindow.Show();
             GUIE_MainWindow.Topmost = false;
             #endregion
             LogWriteLine("/// Экземпляр перезагружен! ///");

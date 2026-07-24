@@ -1,6 +1,7 @@
 ﻿using OperPageLes.CORE;
 using OPLAPI.CORE.Animation;
 using OPLAPI.OIEL.UserElementsControl.Base;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
@@ -11,8 +12,47 @@ namespace OperPageLes.UI.Windows.Dialogs
     /// <summary>
     /// Логика взаимодействия для WindowSaveWait.xaml
     /// </summary>
-    public partial class DialogSaveWait : OPLWindowBase
+    public partial class DialogManipulateActionWait : OPLWindowBase
     {
+        #region Properties
+
+        #region TitleHead
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty TitleHeadProperty =
+            DependencyProperty.Register("TitleHead", typeof(string), typeof(DialogManipulateActionWait),
+                new("???"));
+
+        /// <summary>
+        /// Внутренний заголовок окна
+        /// </summary>
+        public string TitleHead
+        {
+            get => (string)GetValue(TitleHeadProperty);
+            set => SetValue(TitleHeadProperty, value);
+        }
+        #endregion
+
+        #region ExitMessage
+        /// <summary>
+        /// Данные конкретного свойства
+        /// </summary>
+        public static readonly DependencyProperty ExitMessageProperty =
+            DependencyProperty.Register("ExitMessage", typeof(string), typeof(DialogManipulateActionWait),
+                new("???"));
+
+        /// <summary>
+        /// Конечное сообщение перед закрытием окна
+        /// </summary>
+        public string ExitMessage
+        {
+            get => (string)GetValue(ExitMessageProperty);
+            set => SetValue(ExitMessageProperty, value);
+        }
+        #endregion
+
+        #endregion
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
@@ -31,15 +71,6 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </summary>
         private int Count = 0;
 
-        private static readonly PointAnimation Point_Animation = new()
-        {
-            EasingFunction = new QuadraticEase()
-            {
-                EasingMode = EasingMode.EaseInOut,
-            },
-            Duration = TimeSpan.FromMilliseconds(2000d),
-        };
-
         /// <summary>
         /// Состояние активации перемещения окна по экрану
         /// </summary>
@@ -48,22 +79,23 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// <summary>
         /// Секундный таймер для отображения времени потраченного на сохранение
         /// </summary>
-        private System.Windows.Forms.Timer TimerSecond;
+        private DispatcherTimer TimerSecond;
 
         /// <summary>
         /// Контроллер рандомного числа
         /// </summary>
         private Random RandomController;
 
-        public DialogSaveWait()
+        public DialogManipulateActionWait()
         {
             InitializeComponent();
             RandomController = new(DateTime.Now.Millisecond);
+            Opacity = 0d;
             VisualLoading.Opacity = 0d;
             LineProgress.X1 = 3;
             TimerSecond = new()
             {
-                Interval = 1000
+                Interval = TimeSpan.FromMilliseconds(1000d),
             };
             TimerSecond.Tick += TimerSecond_TickHandler;
             MouseLeftButtonDown += (sender, e) =>
@@ -72,6 +104,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                 DragMove();
                 ActivateMoveWindow = false;
             };
+            UpdateLayout();
+            Hide();
         }
 
         /// <summary>
@@ -83,6 +117,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// </remarks>
         internal async Task ActivateVisualManipulate(ActionManipulateData[] StageActions)
         {
+            TextBlockHead.Text = TitleHead;
             VisualLoading.OpenLoading();
             LineProgress.BeginAnimation(Line.X2Property, null);
             LineProgress.X2 = 3;
@@ -90,21 +125,23 @@ namespace OperPageLes.UI.Windows.Dialogs
             TextBlockTime.Text = Count.ToString();
             TimerSecond.Start();
             Show();
+            Opacity = 0d;
+            UpdateLayout();
             Focus();
             OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, this, OpacityProperty,
                 0d, 1d, TimeSpan.FromMilliseconds(1270d));
             for (int i = 0; i < StageActions.Length; i++)
             {
                 SetVisualStageAction(StageActions[i].Name, (double)i / (double)StageActions.Length * 100d);
-                await Dispatcher.Invoke(StageActions[i].InvokeActionSave);
+                await StageActions[i].InvokeActionSave(Dispatcher);
             }
-            SetVisualStageAction("Ожидание завершения...", 100d);
+            SetVisualStageAction(ExitMessage, 100d);
             VisualLoading.CloseLoading();
             if (ActivateMoveWindow)
             {
                 TextBlockHead.Text = "!! ОТПУСТИ МЕНЯ !!";
                 while (ActivateMoveWindow)
-                    await Task.Delay(100);
+                    await Task.Delay(1000);
             }
             await Task.Delay(400);
             OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, this, OpacityProperty,
@@ -123,18 +160,6 @@ namespace OperPageLes.UI.Windows.Dialogs
         private void TimerSecond_TickHandler(object? sender, EventArgs e)
         {
             TextBlockTime.Text = $"{++Count}";
-            ActionBackgroundChange();
-        }
-
-        /// <summary>
-        /// Изменить позицию бликающегося градиента на фоне окна
-        /// </summary>
-        private void ActionBackgroundChange()
-        {
-            double x_y = RandomController.Next(30, 80) / 100d;
-            Point_Animation.To = new(x_y, x_y);
-            RadialGradientBackground.BeginAnimation(RadialGradientBrush.CenterProperty, Point_Animation);
-            RadialGradientBackground.BeginAnimation(RadialGradientBrush.GradientOriginProperty, Point_Animation);
         }
 
         /// <summary>
