@@ -1,4 +1,5 @@
 ﻿using OperPageLes.CORE.Struct;
+using OperPageLes.UI.UserElementsControl.Default;
 using OperPageLes.UI.Windows.DEV;
 using OPLAPI.CORE.Animation;
 using OPLAPI.OIEL.CORE.Browser;
@@ -33,6 +34,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         private DispatcherTimer _moveTimer;
         private Point _currentControlPoint;
         private Point _lastPos1, _lastPos2;
+        private readonly Random _random = new();
 
 
         private Point StartPositionMouse;
@@ -59,6 +61,12 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 base.ManagerAnimation = value;
                 Check.ManagerAnimation = value;
+                Reel1.ManagerAnimation = value;
+                Reel2.ManagerAnimation = value;
+                Reel3.ManagerAnimation = value;
+                Reel4.ManagerAnimation = value;
+                Reel5.ManagerAnimation = value;
+                Reel6.ManagerAnimation = value;
             }
         }
 
@@ -312,8 +320,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 double maxSpeed = Math.Max(speed1, speed2);
 
                 // Устанавливаем точки
-                PathFigureSegment.StartPoint = new Point(x1, y1);
-                SourceSegment.Point2 = new Point(x2, y2);
+                //PathFigureSegment.StartPoint = new Point(x1, y1);
+                //SourceSegment.Point2 = new Point(x2, y2);
 
                 // Расчёт центра и длины
                 double midX = (x1 + x2) / 2;
@@ -382,7 +390,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                     _currentControlPoint = new Point(newX, newY);
                 }
 
-                SourceSegment.Point1 = _currentControlPoint;
+                //SourceSegment.Point1 = _currentControlPoint;
 
                 // Сохраняем позиции
                 _lastPos1 = currentPos1;
@@ -408,6 +416,65 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 RepeatBehavior = RepeatBehavior.Forever,
             };
             SourcePath.BeginAnimation(System.Windows.Shapes.Path.StrokeDashOffsetProperty, anim);
+
+            IELButtonSpin.OnActivateMouseLeft += async (sender, e) => await SpinButton_Click(sender, e);
+
+            AddSymbolsReel(Reel1);
+            AddSymbolsReel(Reel2);
+            AddSymbolsReel(Reel3);
+            AddSymbolsReel(Reel4);
+            AddSymbolsReel(Reel5);
+            AddSymbolsReel(Reel6);
+        }
+
+        private void AddSymbolsReel(OPLReel SourceReel)
+        {
+            TextBlock SourceSymbol;
+            SourceReel.AddSymbol("🍒");
+            SourceReel.AddSymbol("🍉");
+            SourceSymbol = SourceReel.AddSymbol("⭐");
+            SourceSymbol.FontSize = 35d;
+            SourceSymbol.Padding = new(0d, 0d, 0d, 4d);
+            SourceSymbol = SourceReel.AddSymbol("💎");
+            SourceSymbol.Padding = new(0d, 0d, 0d, 4d);
+            SourceSymbol = SourceReel.AddSymbol("🔔");
+            SourceSymbol = SourceReel.AddSymbol("🍋");
+            SourceSymbol = SourceReel.AddSymbol("7️⃣");
+            SourceSymbol.Padding = new(0d, 0d, 0d, 4d);
+        }
+
+        private async Task SpinButton_Click(object sender, MouseButtonEventArgs e)
+        {
+            IELButtonSpin.IsEnabled = false;
+            Random _random = new();
+            Task TR1 = Reel1.SpinAsync(_random.Next(Reel1.SymbolsCount));
+            await Task.Delay(100);
+            Task TR2 = Reel2.SpinAsync(_random.Next(Reel2.SymbolsCount));
+            await Task.Delay(100);
+            Task TR3 = Reel3.SpinAsync(_random.Next(Reel3.SymbolsCount));
+            await Task.Delay(100);
+            Task TR4 = Reel4.SpinAsync(_random.Next(Reel4.SymbolsCount));
+            await Task.Delay(100);
+            Task TR5 = Reel5.SpinAsync(_random.Next(Reel5.SymbolsCount));
+            await Task.Delay(100);
+            Task TR6 = Reel6.SpinAsync(_random.Next(Reel6.SymbolsCount));
+            await Task.Delay(100);
+
+            //int finalIndex1 = _random.Next(Reel1.Symbols.Count);
+            //int finalIndex2 = _random.Next(Reel2.Symbols.Count);
+            //int finalIndex3 = _random.Next(Reel3.Symbols.Count);
+
+            //// Запускаем все барабаны
+            //var task1 = Reel1.SpinAsync(finalIndex1);
+            //var task2 = Reel2.SpinAsync(finalIndex2);
+            //var task3 = Reel3.SpinAsync(finalIndex3);
+
+            await Task.WhenAll(TR1, TR2, TR3, TR4, TR5, TR6);
+
+            IELButtonSpin.IsEnabled = true;
+
+            // Проверяем выигрыш
+            //CheckWin();
         }
 
         private void CheckMovement(object sender, EventArgs e)

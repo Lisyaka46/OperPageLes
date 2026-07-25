@@ -7,6 +7,8 @@
     xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
+    xmlns:OPL="clr-namespace:OperPageLes.UI.UserElementsControl.Default"
+    xmlns:System="clr-namespace:System;assembly=System.Runtime"
     x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageDeveloper"
     Title="Для разработчиков">
     <Base:PageBrowser.Resources>
@@ -38,68 +40,62 @@
                     </ScrollViewer>
                 </Grid>
                 <Grid x:Name="GridView" Grid.Row="1" Background="#FF1D1D1D" Margin="0,15,0,15"/>
-                <Canvas x:Name="Particles" Grid.Row="1" Width="330" Height="230">
-
-                </Canvas>
-                <Viewport3D Name="MyAnimatedObject" ClipToBounds="True" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+                <Canvas x:Name="Particles" Grid.Row="1" Width="330" Height="230"/>
+                <Viewport3D x:Name="MyAnimatedObject" ClipToBounds="True" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
                     <Viewport3D.Camera>
                         <PerspectiveCamera x:Name="myPerspectiveCamera" Position="0,-0.1,2" LookDirection="0,0,-1" FieldOfView="60" />
                     </Viewport3D.Camera>
-                    <Viewport3D.Children>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <DirectionalLight Color="#FFFFFF" Direction="0.612372,-0.5,-0.612372" />
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D x:Name="Model">
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D>
-                                    <GeometryModel3D.Geometry>
-                                        <MeshGeometry3D
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <DirectionalLight Color="#FFFFFF" Direction="0.612372,-0.5,-0.612372" />
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                    <ModelVisual3D x:Name="Model">
+                        <ModelVisual3D.Content>
+                            <GeometryModel3D>
+                                <GeometryModel3D.Geometry>
+                                    <MeshGeometry3D
         TriangleIndices="0, 1, 2, 3, 4, 5"
-        Normals="0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1"
-        TextureCoordinates="0,1, 1,1, 1,0, 1,0, 0,0, 0,1"
-        Positions="-0.5,-0.7,0.5, 0.5,-0.7,0.5, 0.5,0.5,0.5, 0.5,0.5,0.5, -0.5,0.5,0.5, -0.5,-0.7,0.5 " />
-                                    </GeometryModel3D.Geometry>
-                                    <GeometryModel3D.Material>
-                                        <MaterialGroup>
-                                            <DiffuseMaterial>
-                                                <DiffuseMaterial.Brush>
-                                                    <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
-                                                        <LinearGradientBrush.GradientStops>
-                                                            <GradientStop Color="#FF60A084" Offset="0" />
-                                                            <GradientStop Color="#FF28A1A4" Offset="0.25" />
-                                                            <GradientStop Color="#FF34829C" Offset="0.75" />
-                                                            <GradientStop Color="#FF53618C" Offset="1" />
-                                                        </LinearGradientBrush.GradientStops>
-                                                    </LinearGradientBrush>
-                                                </DiffuseMaterial.Brush>
-                                            </DiffuseMaterial>
-                                            <DiffuseMaterial>
-                                                <DiffuseMaterial.Brush>
+        Normals="0,0,1 0,0,1 0,0,1 0,0,1 0,0,1 0,0,1"
+        TextureCoordinates="0,1 1,1 1,0 1,0 0,0 0,1"
+        Positions="-0.5,-0.7,0.5 0.5,-0.7,0.5 0.5,0.5,0.5 0.5,0.5,0.5 -0.5,0.5,0.5 -0.5,-0.7,0.5" />
+                                </GeometryModel3D.Geometry>
+                                <GeometryModel3D.Material>
+                                    <MaterialGroup>
+                                        <DiffuseMaterial>
+                                            <DiffuseMaterial.Brush>
+                                                <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
+                                                    <GradientStop Color="#FF60A084" Offset="0" />
+                                                    <GradientStop Color="#FF28A1A4" Offset="0.25" />
+                                                    <GradientStop Color="#FF34829C" Offset="0.75" />
+                                                    <GradientStop Color="#FF53618C" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </DiffuseMaterial.Brush>
+                                        </DiffuseMaterial>
+                                        <DiffuseMaterial>
+                                            <DiffuseMaterial.Brush>
 
-                                                    <ImageBrush x:Name="ImageBrushModel" AlignmentX="Center" AlignmentY="Center" Stretch="UniformToFill" Viewbox="0,0,1,1" Viewport="0,0,1,1"/>
+                                                <ImageBrush x:Name="ImageBrushModel" AlignmentX="Center" AlignmentY="Center" Stretch="UniformToFill" Viewbox="0,0,1,1" Viewport="0,0,1,1"/>
 
-                                                </DiffuseMaterial.Brush>
-                                            </DiffuseMaterial>
-                                        </MaterialGroup>
-                                    </GeometryModel3D.Material>
-                                    <GeometryModel3D.Transform>
-                                        <RotateTransform3D>
-                                            <RotateTransform3D.Rotation>
-                                                <AxisAngleRotation3D x:Name="myAngleRotation" Axis="-1,-1,0" Angle="10"/>
-                                            </RotateTransform3D.Rotation>
-                                        </RotateTransform3D>
-                                    </GeometryModel3D.Transform>
-                                </GeometryModel3D>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                    </Viewport3D.Children>
+                                            </DiffuseMaterial.Brush>
+                                        </DiffuseMaterial>
+                                    </MaterialGroup>
+                                </GeometryModel3D.Material>
+                                <GeometryModel3D.Transform>
+                                    <RotateTransform3D>
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D x:Name="myAngleRotation" Axis="-1,-1,0" Angle="10"/>
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
+                                </GeometryModel3D.Transform>
+                            </GeometryModel3D>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
                 </Viewport3D>
                 <Grid x:Name="SourceGridContent" Grid.Row="2">
                     <StackPanel>
@@ -113,14 +109,21 @@
                             </Border>
                             <Path x:Name="SourcePath" Stroke="#FF2EED77" StrokeThickness="3" Stretch="None" StrokeDashArray="2" StrokeDashOffset="0" Panel.ZIndex="-1">
                                 <Path.Data>
-                                    <PathGeometry>
-                                        <PathFigure x:Name="PathFigureSegment" StartPoint="0,0">
-                                            <QuadraticBezierSegment x:Name="SourceSegment" Point1="9,40" Point2="50,10" />
-                                        </PathFigure>
-                                    </PathGeometry>
+                                    <PathGeometry Figures="M0,0 Q9,40 50,10"/>
                                 </Path.Data>
                             </Path>
                         </Canvas>
+                        <Border Background="White" CornerRadius="5" BorderThickness="3" BorderBrush="Black">
+                            <StackPanel Orientation="Horizontal">
+                                <OPL:OPLReel x:Name="Reel1" Margin="2,2,0,2"/>
+                                <OPL:OPLReel x:Name="Reel2" Margin="2,2,0,2"/>
+                                <OPL:OPLReel x:Name="Reel3" Margin="2,2,0,2"/>
+                                <OPL:OPLReel x:Name="Reel4" Margin="20,2,0,2"/>
+                                <OPL:OPLReel x:Name="Reel5" Margin="2,2,0,2"/>
+                                <OPL:OPLReel x:Name="Reel6" Margin="2,2,0,2"/>
+                                <IEL:IELButtonText x:Name="IELButtonSpin" VerticalAlignment="Center" Text="Spin" MarginViewBox="8,5,8,5" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Fuzi_woozy}" HorizontalAlignment="Right" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Grid>
             </Grid>

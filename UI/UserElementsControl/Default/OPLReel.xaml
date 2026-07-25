@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="OperPageLes.UI.UserElementsControl.Default.OPLReel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" VerticalAlignment="Top" Height="40" Width="40">
+    <Grid>
+        <Border CornerRadius="5" BorderBrush="Black" BorderThickness="3" Background="#FF2F2D2D">
+            <Canvas x:Name="CanvasReel" ClipToBounds="True">
+            </Canvas>
+        </Border>
+    </Grid>
+</UserControl>
