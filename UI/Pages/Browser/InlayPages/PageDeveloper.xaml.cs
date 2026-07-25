@@ -298,8 +298,10 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             Element2.MouseLeftButtonUp += OnMouseUp;
 
             int _sagOffset = 30;
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(1);
+            DispatcherTimer timer = new()
+            {
+                Interval = TimeSpan.FromMilliseconds(1)
+            };
             timer.Tick += (s, e) =>
             {
                 double x1 = Canvas.GetLeft(Element1);

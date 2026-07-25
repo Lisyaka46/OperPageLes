@@ -79,7 +79,7 @@ namespace OperPageLes.Windows
 
         public WindowDiscriptionCommands()
         {
-            App.CurrentApp.LogWriteLine("Создание окна описания элементов");
+            App.LogWriteLine("Создание окна описания элементов");
             StartAnimation = false;
             SearchActivate = false;
             InitializeComponent();
@@ -153,13 +153,13 @@ namespace OperPageLes.Windows
                 StateDiscription = ActivateStateDiscription.ConsoleCommand;
                 SetStateManipulateInformation(DescriptionConsole.SelectCommand);
                 AnimateEnterPageButton(IELButtonConsole);
-                IELControllerDescription.NextPage(DescriptionConsole, false);
+                IELControllerDescription.NextElement(DescriptionConsole, false);
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                 {
                     if (VisualElementsInformations != null)
                         ClearVisualElementsManager();
-                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка каталога консольных команд",
+                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess(
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Commands.Values], DescriptionConsole));
                     ScrollViewerElements.Content = VisualElementsInformations;
                     //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
@@ -173,13 +173,13 @@ namespace OperPageLes.Windows
                 StateDiscription = ActivateStateDiscription.AliasCommand;
                 SetStateManipulateInformation(DescriptionAlias.SelectCommand);
                 AnimateEnterPageButton(IELButtonAlias);
-                IELControllerDescription.NextPage(DescriptionAlias, true);
+                IELControllerDescription.NextElement(DescriptionAlias, true);
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, async () =>
                 {
                     if (VisualElementsInformations != null)
                         ClearVisualElementsManager();
-                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess("Загрузка каталога алиасов",
+                    VisualElementsInformations = await App.CurrentApp.ExecuteVisualizateLoadingProcess(
                         InitializeVisualElementDiscription([.. App.CurrentApp.Interpreter.Aliases.Values], DescriptionAlias));
                     ScrollViewerElements.Content = VisualElementsInformations;
                     //App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(VisualElementsInformations, OpacityProperty, 1d, TimeSpan.FromMilliseconds(300d));
@@ -244,7 +244,7 @@ namespace OperPageLes.Windows
                     StartAnimation = true;
                 }
             };
-            App.CurrentApp.LogWriteLine("Готово!");
+            App.LogWriteLine("Готово!");
         }
 
         /// <summary>

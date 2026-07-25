@@ -37,7 +37,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         /// <summary>
         /// Подключение подсказок к командам
         /// </summary>
-        private static bool HitUse => App.CurrentApp.SettingMainApplication.HitUse;
+        private static bool HitUse => true; // App.CurrentApp.SettingMainApplication.HitUse;
 
         /// <summary>
         /// Активный индекс команды в буфере для строки ввода
@@ -91,8 +91,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             BorderConsole.MouseUp += (sender, e) =>
             {
                 if (BorderCommandInformation.Width != BorderButtonPanelInformationController.Width) return;
-                else if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                else if (e.ChangedButton == MouseButton.Left && App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right)
                 {
                     UsingPanelActionFromConsolePage(null);
@@ -104,8 +104,9 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             {
                 Orientation = System.Windows.Controls.Orientation.Vertical,
                 VerticalAlignment = VerticalAlignment.Top,
+                ClipToBounds = true,
             };
-            IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
+            //IELScrollConsole.ScrollForce = App.CurrentApp.SettingMainApplication.ConsoleScrollForce;
             //IELScrollConsole.VerticalScrollAligment = VerticalScrollAlignment.Right;
             IELScrollConsole.Content = StackPanelConsole;
             #endregion
@@ -126,22 +127,22 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #region HitCommandsInterpreter
             //HitCommandsInterpreter.ManagerAnimation = App.CurrentApp.ManagerAnimation;
             HitCommandsInterpreter.Connect(App.CurrentApp.Interpreter, in TextBoxCommandInput.TextBoxMain);
-            App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
-            {
-                if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
-                {
-                    HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
-                }
-                else if (New && TextBoxCommandInput.Text.Length > 0)
-                {
-                    if (TextBoxCommandInput.Text.Contains('*')) HitCommandsInterpreter.UsingOneHitCommand(TextBoxCommandInput.Text);
-                    else HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
-                }
-            };
+            //App.CurrentApp.SettingMainApplication.HitUse.Changed += (Old, New) =>
+            //{
+            //    if (!New && HitCommandsInterpreter.StateVisibleHit != OPLHitInterpreter.HitStateEnum.Hidden)
+            //    {
+            //        HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
+            //    }
+            //    else if (New && TextBoxCommandInput.Text.Length > 0)
+            //    {
+            //        if (TextBoxCommandInput.Text.Contains('*')) HitCommandsInterpreter.UsingOneHitCommand(TextBoxCommandInput.Text);
+            //        else HitCommandsInterpreter.UsingAllHintCommand(TextBoxCommandInput.Text);
+            //    }
+            //};
             #endregion
 
             #region PanelAction
-            App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            App.GUIE_PanelAction.EventClosingPanelAction += (Name) =>
             {
                 if (Name == nameof(BorderConsole)) TextBoxCommandInput.Focus();
             };
@@ -265,11 +266,11 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                             HitCommandsInterpreter.ChangeVisualHintCommand(OPLHitInterpreter.HitStateEnum.Hidden);
                         break;
                     case Key.Apps:
-                        //if (!App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                        //    App.MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
+                        //if (!App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.PanelActionActivate)
+                        //    App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.OpenPanelAction(RichTextBoxMainMessage, ConsolePage,
                         //        PositionAnimActionPanel.CenterObject, OrientationPositionCursor.LeftUp);
                         //else
-                        //    App.MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                        //    App.CurrentApp.GUIE_MainWindow.IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                         break;
                     case Key.Tab:
                     case Key.Down:
@@ -341,13 +342,13 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             //};
             //IELImageButtonHelp.MouseHover += (sender, e) =>
             //{
-            //    App.MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
+            //    App.CurrentApp.GUIE_MainWindow.IELMessageMain.UsingBorderInformation(IELImageButtonHelp,
             //        "Быстрое открытие описания команд",
             //        OrientationPositionCursor.LeftDown);
             //};
             //IELImageButtonHelp.MouseLeave += (sender, e) =>
             //{
-            //    App.MainWindow.IELMessageMain.CloseBorderInformation();
+            //    App.CurrentApp.GUIE_MainWindow.IELMessageMain.CloseBorderInformation();
             //};
             #endregion
 
@@ -362,7 +363,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
         {
             PageConsoleActionPanelMain.CommandViewerSelect = SelectViewer;
             PageConsoleActionPanelMain.IELButtonCommandBuffer.IsEnabled = BufferPage != null;
-            App.MainWindow.IELActionPanelMain.UsingPanelAction(IELScrollConsole, PageConsoleActionPanelMain,
+            App.GUIE_PanelAction.UsingPanelAction(IELScrollConsole, PageConsoleActionPanelMain,
                 Orientation: OrientationPositionCursor.RightDown);
         }
         #endregion
@@ -408,8 +409,8 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
 
             Viewer.MouseUp += (sender, e) =>
             {
-                if (e.ChangedButton == MouseButton.Left && App.MainWindow.IELActionPanelMain.PanelActionActivate)
-                    App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                if (e.ChangedButton == MouseButton.Left && App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction();
                 else if (e.ChangedButton == MouseButton.Right) UsingPanelActionFromConsolePage(sender as OPLCommandViewer);
                 e.Handled = true;
             };

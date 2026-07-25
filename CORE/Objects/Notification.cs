@@ -1,32 +1,56 @@
 ﻿using OperPageLes.CORE.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using OperPageLes.CORE.Enums.Language;
+using OPLAPI.CORE.Language;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace OperPageLes.CORE.Objects
 {
-    public class Notification
+    public class Notification : INotifyPropertyChanged
     {
         /// <summary>
         /// Иконка уведомления
         /// </summary>
         internal ImageSource? Icon { get; set; } = null;
 
+        private string _Title;
         /// <summary>
         /// Краткий заголовок
         /// </summary>
-        public string Title { get; set; }
+        public string Title
+        {
+            get => _Title;
+            private set
+            {
+                _Title = value;
+                OnPropertyChanged(nameof(Title));
+            }
+        }
 
         /// <summary>
         /// Сообщение уведомления
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; }
 
         /// <summary>
         /// Вид уведомления
         /// </summary>
         public readonly EnumNotificationStyle Style;
+
+        #region PropertyChanged
+        /// <summary>
+        /// Событие изменения свойства параметра
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Запустить событие изменения свойства объекта
+        /// </summary>
+        /// <param name="Name">Имя изменяемого свойства</param>
+        protected void OnPropertyChanged([CallerMemberName] string? Name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Name));
+        #endregion
 
         /// <summary>
         /// Создать уведомление с системным заголовком
@@ -38,23 +62,9 @@ namespace OperPageLes.CORE.Objects
         {
             Icon = SourceIcon;
             Style = SourceStyle;
-            Title = GetTitleFromStyle(SourceStyle);
+            _Title = GetTitleFromStyle(SourceStyle);
             Message = SourceMessage;
-        }
-
-        /// <summary>
-        /// Создать уведомление с собственным заголовком
-        /// </summary>
-        /// <param name="SourceMessage">Сообщение уведомления</param>
-        /// <param name="SourceTitle">Заголовок уведомления</param>
-        /// <param name="SourceIcon">Иконка уведомления</param>
-        /// <param name="SourceStyle">Вид уведомления</param>
-        internal Notification(string SourceMessage, string SourceTitle, EnumNotificationStyle SourceStyle, in ImageSource? SourceIcon = null)
-        {
-            Icon = SourceIcon;
-            Style = SourceStyle;
-            Title = SourceTitle;
-            Message = SourceMessage;
+            Lang.LanguageUpdated += Lang_LanguageUpdated;
         }
 
         /// <summary>
@@ -65,8 +75,17 @@ namespace OperPageLes.CORE.Objects
         private static string GetTitleFromStyle(EnumNotificationStyle Style) =>
             Style switch
             {
-                EnumNotificationStyle.System => "Системное уведомление",
-                _ => "Иное уведомление"
+                EnumNotificationStyle.System => Lang.GetValue(LangUITranslate.SystemNotification),
+                EnumNotificationStyle.Warning => Lang.GetValue(LangUITranslate.WarningNotification),
+                _ => Lang.GetValue(LangUITranslate.OtherNotification)
             };
+
+        /// <summary>
+        /// Обработчик события изменения языкового перевода
+        /// </summary>
+        private void Lang_LanguageUpdated(object? sender, EventArgs e)
+        {
+            Title = GetTitleFromStyle(Style);
+        }
     }
-}
+}       

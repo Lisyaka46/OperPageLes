@@ -10,7 +10,7 @@
     xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     x:Name="window" x:Class="OperPageLes.UI.Windows.MainWindow"
     mc:Ignorable="d"
-    Title="Главное меню" WindowStartupLocation="CenterScreen" Background="{x:Null}" Width="800" Height="650" MinWidth="700" MinHeight="550" WindowStyle="None" AllowsTransparency="True">
+    WindowStartupLocation="CenterScreen" Background="{x:Null}" Width="800" Height="650" MinWidth="700" MinHeight="550" WindowStyle="None" AllowsTransparency="True">
     <Base:OPLWindowBase.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Base:OPLWindowBase.Resources>
@@ -27,12 +27,11 @@
         <Border.Background>
             <ImageBrush x:Name="ImageMenu" Stretch="UniformToFill"/>
         </Border.Background>
-        <Border x:Name="BorderColorMain" CornerRadius="13,13,13,13">
+        <Border x:Name="BorderColorMain" CornerRadius="13,13,13,13" BorderBrush="Black" BorderThickness="1,1,1,1">
             <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
                 <Grid.Resources>
                     <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
                 </Grid.Resources>
-                <IEL:IELPanelAction x:Name="IELActionPanelMain" HorizontalAlignment="Left" Margin="124,84,0,0" VerticalAlignment="Top" Panel.ZIndex="2" PaletteElement="{DynamicResource Cocoa}" CornerRadius="3,3,3,3" IsEnabledSettingQ="False"/>
                 <Grid Panel.ZIndex="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="53"/>
@@ -60,20 +59,20 @@
                             </Border.FocusVisualStyle>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Lime}" MarginViewBox="2,2,2,2" Margin="3,3,3,3"/>
-                                <IEL:IELButtonImage x:Name="IELOpenDataFolder" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" MarginViewBox="0,-3,0,0" Margin="3,3,3,3" Grid.Column="2"/>
-                                <IEL:IELButtonImage x:Name="IELButtonTheme" Grid.ColumnSpan="1" Grid.Column="3" CornerRadius="6,6,6,6" Margin="3,3,0,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="4,4,4,4"/>
-                                <IEL:IELButtonImage x:Name="IELButtonSettings" Grid.ColumnSpan="1" Grid.Column="5" CornerRadius="6,6,6,6" Margin="3,3,0,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="2,2,2,2"/>
-                                <IEL:IELButtonImage x:Name="IELButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="4" Margin="3,3,0,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}" MarginViewBox="1,1,1,1"/>
-                                <IEL:IELButtonImage x:Name="IELButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Grid.Column="6" Margin="3,3,3,3" Grid.ColumnSpan="1" PaletteElement="{DynamicResource Red}" MarginViewBox="0,0,0,0"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <IEL:IELButtonImage x:Name="ImageLogoApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource PlatinumGrey}" MarginViewBox="2,2,2,2" Margin="3,3,3,3"/>
+                                    <IEL:IELButtonImage x:Name="IELLangApplication" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource BlueGreenCrayola}" MarginViewBox="2,2,2,2" Margin="3,3,3,3"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                                    <IEL:IELButtonImage x:Name="IELOpenDataFolder" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" MarginViewBox="0,-3,0,0" Margin="3,3,3,3"/>
+                                    <IEL:IELButtonImage x:Name="IELButtonSettings" CornerRadius="6,6,6,6" Margin="3,3,0,3" PaletteElement="{DynamicResource Purple}" MarginViewBox="2,2,2,2"/>
+                                    <IEL:IELButtonImage x:Name="IELButtonTheme" CornerRadius="6,6,6,6" Margin="3,3,0,3" PaletteElement="{DynamicResource Chocolate}" MarginViewBox="4,4,4,4"/>
+                                    <IEL:IELButtonImage x:Name="IELButtonCollapse" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="3,3,0,3" PaletteElement="{DynamicResource LightBlue}" MarginViewBox="1,1,1,1"/>
+                                    <IEL:IELButtonImage x:Name="IELButtonClose" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Margin="3,3,3,3" PaletteElement="{DynamicResource Red}" MarginViewBox="0,0,0,0"/>
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </Grid>
@@ -156,7 +155,6 @@
                         </Border>
                     </Grid>
                 </Grid>
-                <IEL:IELBlockMessage x:Name="IELMessageMain" Grid.Column="0" HorizontalAlignment="Left" Margin="219,82,0,0" Grid.Row="0" VerticalAlignment="Top" Text="Отображаемый текст" OffsetUpDown="6" Panel.ZIndex="2" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" OffsetLeftRight="6" FontFamily="{DynamicResource Deledda Open Regular}" DefaultBackground="#FFC5FBE4" FontSize="14" RadiusDefault="15" RadiusMagnite="2"/>
             </Grid>
         </Border>
     </Border>

@@ -52,7 +52,7 @@ namespace OperPageLes.UI.Pages.Settings
             App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
 
             #region PathMenuImage
-            string PathBackgroundImage = App.CurrentApp.SettingMainApplication.PathMenuImage;
+            string PathBackgroundImage = string.Empty; // App.CurrentApp.SettingMainApplication.PathMenuImage;
             TextBlockFailedImageSetup.Opacity = 0d;
             ImageErrorBitmapBackground.Opacity = 0d;
             if (PathBackgroundImage.Length > 0)
@@ -113,14 +113,14 @@ namespace OperPageLes.UI.Pages.Settings
                     0d, TimeSpan.FromMilliseconds(2000d));
                 IELTextBoxDirectoryBackground.Text = string.Empty;
                 IELButtonClearImage.IsEnabled = false;
-                App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
+                //App.CurrentApp.SettingMainApplication.PathMenuImage.Value = string.Empty;
             };
             #endregion
 
             #region BufferSize
             BorderSettingBufferSize.Opacity = 0d;
             RowDefinitionBufferSize.MaxHeight = RowDefinitionBufferSize.MinHeight;
-            OriginalSizeBuffer = App.CurrentApp.SettingMainApplication.BufferSize;
+            // OriginalSizeBuffer = App.CurrentApp.SettingMainApplication.BufferSize;
             SliderBufferSize.Value = OriginalSizeBuffer;
             TextBlockSliderBufferSize.Text = SliderBufferSize.Value.ToString();
             //BorderSettingBufferSize.Margin = new(BorderSettingBufferSize.Margin.Left, 0, BorderSettingBufferSize.Margin.Right, 35);
@@ -154,34 +154,34 @@ namespace OperPageLes.UI.Pages.Settings
             IELButtonTextClearValue.OnActivateMouseLeft += (sender, e) =>
             {
                 SliderBufferSize.Value = OriginalSizeBuffer;
-                App.CurrentApp.SettingMainApplication.BufferSize.Value = OriginalSizeBuffer;
+                //App.CurrentApp.SettingMainApplication.BufferSize.Value = OriginalSizeBuffer;
             };
             SliderBufferSize.MouseLeave += (sender, e) =>
             {
-                if (SliderBufferSize.Value != OriginalSizeBuffer)
-                    App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
+                //if (SliderBufferSize.Value != OriginalSizeBuffer)
+                //    App.CurrentApp.SettingMainApplication.BufferSize.Value = (int)SliderBufferSize.Value;
             };
             #endregion
 
             #region MillisecondInternetConnection
             CheckBoxInternetConnectionMillisecond.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
-            CheckBoxInternetConnectionMillisecond.IsChecked = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection;
-            CheckBoxInternetConnectionMillisecond.IsCheckedChanged += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = e;
-            };
+            //CheckBoxInternetConnectionMillisecond.IsChecked = App.CurrentApp.SettingMainApplication.MillisecondInternetConnection;
+            //CheckBoxInternetConnectionMillisecond.IsCheckedChanged += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.MillisecondInternetConnection.Value = e;
+            //};
             #endregion
             
             #region LoadingBorderVisualizate
-            CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
-            CheckBoxLoadingBorderVisualizate.IsCheckedChanged += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = e;
-            };
+            //CheckBoxLoadingBorderVisualizate.IsChecked = App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate;
+            //CheckBoxLoadingBorderVisualizate.IsCheckedChanged += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate.Value = e;
+            //};
             #endregion
 
             #region DefaultOpenUrlWebView
-            IELTextBoxDefaultUrl.Text = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
+            //IELTextBoxDefaultUrl.Text = App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView;
             IELTextBoxDefaultUrl.KeyUp += (sender, e) =>
             {
                 switch (e.Key)
@@ -191,31 +191,31 @@ namespace OperPageLes.UI.Pages.Settings
                         break;
                 }
             };
-            IELTextBoxDefaultUrl.TextChanged += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView.Value = IELTextBoxDefaultUrl.Text;
-            };
+            //IELTextBoxDefaultUrl.TextChanged += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.DefaultOpenUrlWebView.Value = IELTextBoxDefaultUrl.Text;
+            //};
             #endregion
 
             #region UseOpenLinkInPageBrowser
             CheckBoxUsePageBrowser.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
-            CheckBoxUsePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
-            CheckBoxUsePageBrowser.IsCheckedChanged += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = e;
-                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, CheckBoxUseOnlyCreatePageBrowser, OpacityProperty,
-                    e ? 1d : 0.4d, TimeSpan.FromMilliseconds(300d));
-            };
+            //CheckBoxUsePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser;
+            //CheckBoxUsePageBrowser.IsCheckedChanged += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.UseOpenLinkInPageBrowser.Value = e;
+            //    OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, CheckBoxUseOnlyCreatePageBrowser, OpacityProperty,
+            //        e ? 1d : 0.4d, TimeSpan.FromMilliseconds(300d));
+            //};
             #endregion
 
             #region UseOnlyCreatePageWebBrowser
             CheckBoxUseOnlyCreatePageBrowser.Opacity = CheckBoxUsePageBrowser.IsChecked ? 1d : 0.4d;
             CheckBoxUseOnlyCreatePageBrowser.ImageOpacityTexture = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.NewElement));
-            CheckBoxUseOnlyCreatePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser;
-            CheckBoxUseOnlyCreatePageBrowser.IsCheckedChanged += (sender, e) =>
-            {
-                App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = e;
-            };
+            //CheckBoxUseOnlyCreatePageBrowser.IsChecked = App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser;
+            //CheckBoxUseOnlyCreatePageBrowser.IsCheckedChanged += (sender, e) =>
+            //{
+            //    App.CurrentApp.SettingMainApplication.UseOnlyCreatePageWebBrowser.Value = e;
+            //};
             #endregion
 
         }
@@ -237,7 +237,7 @@ namespace OperPageLes.UI.Pages.Settings
                     ImageBackground.Source = image;
                     OPLWindowBase.AnimateBlurEffect(ManagerAnimation, BlurEffectImageBackground, 10u, 2000d);
                     IELButtonClearImage.IsEnabled = true;
-                    App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
+                    //App.CurrentApp.SettingMainApplication.PathMenuImage.Value = Uri;
 
                     OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ImageBackground, OpacityProperty,
                         0.6d, TimeSpan.FromMilliseconds(1000d));

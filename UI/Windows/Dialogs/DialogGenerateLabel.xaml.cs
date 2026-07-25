@@ -1,8 +1,8 @@
-﻿using OperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums.Language;
 using OperPageLes.CORE.Objects;
 using OperPageLes.UI.UserElementsControl.Default;
+using OPLAPI.CORE.Language;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace OperPageLes.UI.Windows.Dialogs
@@ -25,6 +25,13 @@ namespace OperPageLes.UI.Windows.Dialogs
         public DialogGenLabel()
         {
             InitializeComponent();
+            RunNameShortcut.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutName);
+            RunCommandShortcut.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutCommand);
+            RunDescriptionShortcut.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutDescription);
+            RunNameRequiredSymbol.Text = Lang.GetValue(LangUITranslate.RequiredMarker);
+            RunCommandRequiredSymbol.Text = Lang.GetValue(LangUITranslate.RequiredMarker);
+            IELButtonCancel.Text = Lang.GetValue(LangUITranslate.Cancel);
+
             ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(CORE.Enums.PaletteSpectrumEnum)SelectIndexSpectrum];
             IELTextBoxNameLabel.Text = string.Empty;
             IELTextBoxCommand.Text = string.Empty;
@@ -51,8 +58,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                     case Key.Down:
                     case Key.Enter:
                         IELTextBoxCommand.Focus();
-                        if (App.CurrentApp.SettingMainApplication.HitUse)
-                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        //if (App.CurrentApp.SettingMainApplication.HitUse)
+                        //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                         break;
                     case Key.Escape:
                         Close();
@@ -76,10 +83,10 @@ namespace OperPageLes.UI.Windows.Dialogs
                         Close();
                         break;
                     default:
-                        if (App.CurrentApp.SettingMainApplication.HitUse)
-                        {
-                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
-                        }
+                        //if (App.CurrentApp.SettingMainApplication.HitUse)
+                        //{
+                        //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        //}
                         break;
                 }
                 e.Handled = true;
@@ -90,10 +97,10 @@ namespace OperPageLes.UI.Windows.Dialogs
             };
             IELTextBoxCommand.GotFocus += (sender, e) =>
             {
-                if (App.CurrentApp.SettingMainApplication.HitUse)
-                {
-                    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
-                }
+                //if (App.CurrentApp.SettingMainApplication.HitUse)
+                //{
+                //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                //}
             };
             IELTextBoxDescription.KeyUp += (sender, e) =>
             {
@@ -104,8 +111,8 @@ namespace OperPageLes.UI.Windows.Dialogs
                         break;
                     case Key.Up:
                         IELTextBoxCommand.Focus();
-                        if (App.CurrentApp.SettingMainApplication.HitUse)
-                            HitInterpreter.UpdateState(IELTextBoxCommand.Text);
+                        //if (App.CurrentApp.SettingMainApplication.HitUse)
+                        //    HitInterpreter.UpdateState(IELTextBoxCommand.Text);
                         break;
                     case Key.Escape:
                         Close();
@@ -168,8 +175,8 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// <returns>Созданный объект ярлыка</returns>
         internal SourceLabelAction? CreateLabel()
         {
-            Title = "Создание ярлыка";
-            IELButtonCreateLabel.Text = "Создать ярлык";
+            Title = Lang.GetValue(LangShortcutUITranslate.ShortcutCreateTitle);
+            IELButtonCreateLabel.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutCreate);
             IELTextBoxNameLabel.Focus();
             ShowDialog();
             if (Cancel) return null;
@@ -186,8 +193,8 @@ namespace OperPageLes.UI.Windows.Dialogs
         /// <returns>Созданный объект ярлыка</returns>
         internal void ChangeLabel(in SourceLabelAction Source)
         {
-            Title = "Изменение ярлыка";
-            IELButtonCreateLabel.Text = "Изменить ярлык";
+            Title = Lang.GetValue(LangShortcutUITranslate.ShortcutChangeTitle);
+            IELButtonCreateLabel.Text = Lang.GetValue(LangShortcutUITranslate.ShortcutChange);
             IELTextBoxNameLabel.Focus();
 
             IELTextBoxNameLabel.Text = Source.Name;
@@ -203,32 +210,5 @@ namespace OperPageLes.UI.Windows.Dialogs
             Source.Description = IELTextBoxDescription.Text;
             Source.IndexSpectrumTheme = (int)SelectIndexSpectrum;
         }
-
-        ///// <summary>
-        ///// Изменить ярлык с помощью диалогового окна
-        ///// </summary>
-        ///// <param name="Source">Изменяемый объект ярлыка</param>
-        ///// <returns>Изменённый объект ярлыка</returns>
-        //internal void ChangeLabel(OPLLabelAction Source)
-        //{
-        //    LabelAction Label = Source.SourceLabel;
-        //    IELTextBoxNameLabel.Text = Label.Name;
-        //    IELTextBoxDescription.Text = Label.Description ?? string.Empty;
-        //    IELTextBoxCommand.Text = Label.Command;
-        //    IELButtonCreateLabel.Text = "Изменить ярлык";
-        //    Title = "Изменение ярлыка";
-        //    ShowDialog();
-        //    if (Cancel ||
-        //        (
-        //            IELTextBoxNameLabel.Text.Equals(Label.Name) &&
-        //            IELTextBoxDescription.Text.Equals(Label.Description) &&
-        //            IELTextBoxCommand.Text.Equals(Label.Command)
-        //        )) return;
-        //    Label.Name = IELTextBoxNameLabel.Text;
-        //    Label.Description = IELTextBoxDescription.Text.Length > 0 ? IELTextBoxDescription.Text : string.Empty;
-        //    Label.Command = IELTextBoxCommand.Text;
-        //    Source.UpdateLayout();
-        //    return;
-        //}
     }
 }

@@ -36,6 +36,20 @@ namespace OperPageLes.UI.UserElementsControl.Default
             BackgroundNotification.ImageSource = CurrentNotification.Icon;
             TextBlockTitle.Text = CurrentNotification.Title;
             TextBlockMessage.Text = CurrentNotification.Message;
+            SourceNotification.PropertyChanged += SourceNotification_PropertyChanged;
+        }
+
+        /// <summary>
+        /// Обработчик события изменения параметра в объекте уведомления
+        /// </summary>
+        private void SourceNotification_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Notification.Title):
+                    TextBlockTitle.Text = CurrentNotification.Title;
+                    break;
+            }
         }
     }
 }

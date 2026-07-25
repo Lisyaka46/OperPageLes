@@ -1,28 +1,17 @@
-﻿using OPLAPI.OIEL.UserElementsControl;
-using OperPageLes.CORE.Audio;
-using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementsControl.Network;
+﻿using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Interfaces;
+using OPLAPI.OIEL.CORE.Network;
+using OPLAPI.OIEL.UserElementsControl.Network;
 using System.Net.Sockets;
 using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms.VisualStyles;
 using OPRES = OperPageLes.Properties.Resources;
-using OPLAPI.OIEL.UserElementsControl.Network;
-using OPLAPI.OIEL.CORE.Network;
-using OPLAPI.CORE.Interfaces;
 
 namespace OperPageLes.CORE.Network
 {
     internal class Chat : IDisposable, IOPLAnimate
     {
-        /// <summary>
-        /// Делегат события изменения занятости принятия или отправки данных объектом
-        /// </summary>
-        /// <param name="NewValue">Новое актуальное значение</param>
-        internal delegate void IsBusyChangedEventHandler(bool NewValue);
-
         /// <summary>
         /// Клиент с которым осуществляется передача данных информации об передаваемом сообщении
         /// </summary>
@@ -34,7 +23,7 @@ namespace OperPageLes.CORE.Network
         internal ChatUser User { get; private set; }
 
         /// <summary>
-        /// Порт который является прослушиваемым для объектов сообщений
+        /// Порт который является прослушиваемым для объектов информации
         /// </summary>
         internal static readonly int PortConnectionMessageObjInfo = 6019;
 
@@ -83,8 +72,6 @@ namespace OperPageLes.CORE.Network
         /// </summary>
         private TaskReceiveFiles ReceiveFiles;
 
-        private bool _IsBusy = false;
-
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
@@ -100,24 +87,6 @@ namespace OperPageLes.CORE.Network
             ReceiveFiles = new();
             User = new();
         }
-
-        /// <summary>
-        /// Состояние занятости
-        /// </summary>
-        internal bool IsBusy
-        {
-            get => _IsBusy;
-            private set
-            {
-                _IsBusy = value;
-                IsBusyChanged?.Invoke(IsBusy);
-            }
-        }
-
-        /// <summary>
-        /// Событие изменения свойства занятости объекта
-        /// </summary>
-        internal event IsBusyChangedEventHandler? IsBusyChanged;
 
         /// <summary>
         /// Принять подключение

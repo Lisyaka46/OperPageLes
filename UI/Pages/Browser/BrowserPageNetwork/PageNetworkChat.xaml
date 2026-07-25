@@ -27,49 +27,47 @@
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
-                <IEL:IELScrollViewer x:Name="IELScrollHistoryMessage" ScrollForce="40">
+                <IEL:IELScrollViewer x:Name="IELScrollHistoryMessage" ScrollForce="5">
                 </IEL:IELScrollViewer>
             </Grid>
         </Border>
-        <Border Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border x:Name="BorderClip" Grid.RowSpan="1" Margin="6,0,6,0" CornerRadius="7,7,0,0" Background="#FF242F46" Height="0">
-                    <IEL:IELScrollViewer x:Name="IELScrollViewerClipFiles" ScrollForce="35">
-                    </IEL:IELScrollViewer>
-                </Border>
-                <Border BorderBrush="{Binding Background, ElementName=BorderClip}" CornerRadius="0,0,7,7" BorderThickness="2,2,2,2" Margin="6,0,6,0" VerticalAlignment="Top" Height="70" Grid.RowSpan="1" Grid.Row="1">
-                    <Border.Background>
-                        <SolidColorBrush Color="#FF2FA9C1" Opacity="0.7"/>
-                    </Border.Background>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid ClipToBounds="True">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Line x:Name="LineTextConnection" StrokeDashArray="3" StrokeDashCap="Triangle" StrokeEndLineCap="Square" StrokeThickness="10" Stretch="Fill" VerticalAlignment="Top" X1="1" Stroke="{Binding Background, ElementName=BorderClip}" Height="10" Margin="-10,-5,-10,0" HorizontalAlignment="Center" StrokeMiterLimit="14"/>
-                        </Grid>
-                        <Grid Grid.Row="1" VerticalAlignment="Bottom">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <IEL:IELButtonImage x:Name="IELButtonClip" Grid.Column="0" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Saffron}" MarginViewBox="2,2,2,2" Margin="5,0,0,2" Width="37" Height="37"/>
-                            <IEL:IELTextBox x:Name="IELTextBoxMessage" PaletteElement="{DynamicResource PastelBlue}" TextBoxHorizontalAlignment="Left" TextBoxVerticalAlignment="Center" CornerRadius="8,8,8,8" Margin="5,1,2,3" Padding="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" MinHeight="30" Grid.ColumnSpan="1" Grid.Column="1" Text="" Focusable="False"/>
-                            <IEL:IELButtonText x:Name="IELButtonGoSend" Grid.Column="2" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" Text="Отправить" Margin="2,0,5,2" FontFamily="{DynamicResource Bree CYR var}" FontSize="16"/>
-                        </Grid>
-                    </Grid>
-                </Border>
-            </Grid>
+        <Border x:Name="BorderClip" Grid.RowSpan="1" Margin="6,0,6,0" CornerRadius="7,7,0,0" Background="#FF242F46" Height="0" VerticalAlignment="Bottom">
+            <IEL:IELScrollViewer x:Name="IELScrollViewerClipFiles" ScrollForce="5">
+            </IEL:IELScrollViewer>
         </Border>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="{Binding Background, ElementName=BorderClip}" CornerRadius="0,0,7,7" BorderThickness="2,2,2,2" Margin="6,0,6,0" VerticalAlignment="Top" Height="70" Grid.RowSpan="1" Grid.Row="1">
+                <Border.Background>
+                    <SolidColorBrush Color="#FF2FA9C1" Opacity="0.7"/>
+                </Border.Background>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid ClipToBounds="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Line x:Name="LineTextConnection" StrokeDashArray="3" StrokeDashCap="Triangle" StrokeEndLineCap="Square" StrokeThickness="10" Stretch="Fill" VerticalAlignment="Top" X1="1" Stroke="{Binding Background, ElementName=BorderClip}" Height="10" Margin="-10,-5,-10,0" HorizontalAlignment="Center" StrokeMiterLimit="14"/>
+                    </Grid>
+                    <Grid Grid.Row="1" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <IEL:IELButtonImage x:Name="IELButtonClip" Grid.Column="0" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Saffron}" MarginViewBox="2,2,2,2" Margin="5,0,0,2" Width="37" Height="37"/>
+                        <IEL:IELTextBox x:Name="IELTextBoxMessage" PaletteElement="{DynamicResource PastelBlue}" TextBoxHorizontalAlignment="Left" TextBoxVerticalAlignment="Center" CornerRadius="8,8,8,8" Margin="5,1,2,3" Padding="2,2,2,2" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" MinHeight="30" Grid.ColumnSpan="1" Grid.Column="1" Text="" Focusable="False"/>
+                        <IEL:IELButtonText x:Name="IELButtonGoSend" Grid.Column="2" CornerRadius="6,6,6,6" PaletteElement="{DynamicResource Green}" Text="Отправить" Margin="2,0,5,2" FontFamily="{DynamicResource Bree CYR var}" FontSize="16"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Base:PageBrowser>

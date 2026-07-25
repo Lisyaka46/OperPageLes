@@ -1,0 +1,71 @@
+﻿<Base:PageBrowser
+    x:Class="OperPageLes.UI.Pages.Browser.PageLanguageGeneratorApp"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:OPL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
+    xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
+    xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
+    xmlns:Theme="clr-namespace:OperPageLes.UI.UserElementsControl.Theme"
+    xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
+    >
+    <Grid Width="500">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <IEL:IELScrollViewer/>
+        <Grid Grid.Column="1" Width="150">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <Border>
+                    <StackPanel>
+                        <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguageLocate"/>
+                        <IEL:IELTextBox PaletteElement="{DynamicResource PlatinumGrey}"/>
+                    </StackPanel>
+                </Border>
+                <Border>
+                    <StackPanel>
+                        <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguageName"/>
+                        <IEL:IELTextBox PaletteElement="{DynamicResource Aquamarine}"/>
+                    </StackPanel>
+                </Border>
+                <Border>
+                    <StackPanel>
+                        <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguageVersion"/>
+                        <IEL:IELTextBox PaletteElement="{DynamicResource LightBlue}"/>
+                    </StackPanel>
+                </Border>
+                <IEL:IELButtonText x:Name="IELButtonAutors" PaletteElement="{DynamicResource Jade}"/>
+            </StackPanel>
+            <Line Grid.Row="1" Margin="5,5,5,4" StrokeThickness="2" Stroke="Black" X2="1" HorizontalAlignment="Center" Stretch="Fill" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+            <StackPanel Grid.Row="2">
+                <Border>
+                    <StackPanel>
+                        <TextBlock x:FieldModifier="private" x:Name="TextBlockSourceLanguage"/>
+                        <ComboBox x:FieldModifier="private" x:Name="ComboBoxLanguages"/>
+                    </StackPanel>
+                </Border>
+                <Border>
+                    <StackPanel>
+                        <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguagePathSave"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60*"/>
+                                <ColumnDefinition Width="37*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:FieldModifier="private" x:Name="TextBlockPath"/>
+                            <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonOverview" Grid.Column="1" PaletteElement="{DynamicResource GreenishAsphalt}"/>
+                        </Grid>
+                        <TextBlock x:FieldModifier="private" x:Name="TextBlockErrorPath"/>
+                    </StackPanel>
+                </Border>
+                <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonManipulation" PaletteElement="{DynamicResource BlueGreenCrayola}"/>
+                <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonCancel" PaletteElement="{DynamicResource Red}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Base:PageBrowser>

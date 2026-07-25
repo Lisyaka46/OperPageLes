@@ -1,16 +1,12 @@
-﻿using OPLAPI.OIEL.UserElementsControl;
-using OPLAPI.OIEL.UserElementsControl.Interfaces;
+﻿using OperPageLes.CORE.Enums.Language;
 using OperPageLes.CORE.Objects;
-using OperPageLes.CORE.Struct;
 using OperPageLes.UI.UserElementsControl.Default;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
+using OPLAPI.CORE.Language;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Xml.Linq;
-using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.ActionPanel
 {
@@ -19,10 +15,19 @@ namespace OperPageLes.UI.Pages.ActionPanel
     /// </summary>
     public partial class PageNotificationManager : Page, IOPLAnimate
     {
+        private OPLAnimationManager? _ManagerAnimation;
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
-        public OPLAnimationManager? ManagerAnimation { get; set; }
+        public OPLAnimationManager? ManagerAnimation
+        {
+            get => _ManagerAnimation;
+            set
+            {
+                _ManagerAnimation = value;
+
+            }
+        }
 
         /// <summary>
         /// Объект визуализации объектов уведомления
@@ -38,10 +43,17 @@ namespace OperPageLes.UI.Pages.ActionPanel
             };
             IELScrollNotification.Content = StackPanelNotifications;
             App.CurrentApp.AddNotification += AddNewNotification;
-            Initialized += (sender, e) =>
-            {
-                LoadingAllNotification();
-            };
+            Lang.LanguageUpdated += Lang_LanguageUpdated;
+            Lang_LanguageUpdated(null, EventArgs.Empty);
+            LoadingAllNotification();
+        }
+
+        /// <summary>
+        /// Обработчик события изменения языкового перевода
+        /// </summary>
+        private void Lang_LanguageUpdated(object? sender, EventArgs e)
+        {
+            TextBlockNotificationManagerTitle.Text = Lang.GetValue(LangUITranslate.NotificationManager);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<CefSharpBuildAction>Content</CefSharpBuildAction>
     <OutputType>WinExe</OutputType>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <None Remove="bass.dll" />
+    <None Remove="CORE\Resources\Language\Russian.json" />
     <None Remove="Fonts\3PIX.ttf" />
     <None Remove="Fonts\Alphasano.ttf" />
     <None Remove="Fonts\Bree CYR var.ttf" />
@@ -35,13 +37,23 @@
     <None Remove="UI\Images\ArrowRight.png" />
     <None Remove="UI\Images\Chats.png" />
     <None Remove="UI\Images\Command.png" />
+    <None Remove="UI\Images\ContactInfo.png" />
     <None Remove="UI\Images\File.png" />
     <None Remove="UI\Images\Folder.png" />
+    <None Remove="UI\Images\IconMainApplication.png" />
+    <None Remove="UI\Images\IconMainSettings.png" />
+    <None Remove="UI\Images\Lang\FlagRussian.png" />
+    <None Remove="UI\Images\Lang\FlagUSA.png" />
     <None Remove="UI\Images\NewChat.png" />
     <None Remove="UI\Images\NewElement.png" />
     <None Remove="UI\Images\PaperClip.png" />
     <None Remove="UI\Images\Read.png" />
     <None Remove="UI\Images\ValidKeylcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="CORE\Resources\PaletteDictionary.xaml" />
+    <Page Remove="CORE\Resources\VisualDictionary.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,7 +64,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="148.0.90" />
+    <PackageReference Include="FluentFTP" Version="54.2.0" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2.3" />
+    <PackageReference Include="SSH.NET" Version="2025.1.0" />
     <PackageReference Include="System.Management" Version="10.0.9" />
     <PackageReference Include="Un4seen.Bass" Version="2.4.18.2" />
   </ItemGroup>
@@ -70,6 +85,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="CORE\Resources\Language\USA.json" />
+    <Resource Include="CORE\Resources\Language\Russian.json" />
+    <Resource Include="CORE\Resources\PaletteDictionary.xaml" />
+    <Resource Include="CORE\Resources\VisualDictionary.xaml" />
     <Resource Include="Fonts\3PIX.ttf" />
     <Resource Include="Fonts\Alphasano.ttf" />
     <Resource Include="Fonts\Bree CYR var.ttf" />
@@ -88,8 +107,13 @@
     <Resource Include="UI\Images\ArrowRight.png" />
     <Resource Include="UI\Images\Chats.png" />
     <Resource Include="UI\Images\Command.png" />
+    <Resource Include="UI\Images\ContactInfo.png" />
     <Resource Include="UI\Images\File.png" />
     <Resource Include="UI\Images\Folder.png" />
+    <Resource Include="UI\Images\IconMainApplication.png" />
+    <Resource Include="UI\Images\IconMainSettings.png" />
+    <Resource Include="UI\Images\Lang\FlagRussian.png" />
+    <Resource Include="UI\Images\Lang\FlagUSA.png" />
     <Resource Include="UI\Images\ValidKeylcon.png" />
     <Resource Include="UI\Images\World.png" />
     <Resource Include="UI\Images\NewChat.png" />

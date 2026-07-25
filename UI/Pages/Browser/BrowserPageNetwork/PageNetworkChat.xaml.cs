@@ -1,13 +1,10 @@
 ﻿using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Network;
 using OperPageLes.CORE.Struct;
-using OperPageLes.UI.UserElementsControl.Network;
 using OPLAPI.CORE.Animation;
-using OPLAPI.CORE.Interfaces;
 using OPLAPI.OIEL.CORE.Browser;
-using System.Configuration;
+using OPLAPI.OIEL.UserElementsControl.Network;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
@@ -21,18 +18,6 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
     /// </summary>
     public partial class PageNetworkChat : PageBrowser
     {
-        /// <summary>
-        /// Объект анимации линии загрузки
-        /// </summary>
-        private readonly DoubleAnimation AnimationDoubleLine = new()
-        {
-            Duration = TimeSpan.FromSeconds(5d),
-            EasingFunction = null,
-            RepeatBehavior = RepeatBehavior.Forever,
-            From = 0d,
-            To = 40d,
-        };
-
         /// <summary>
         /// Объект менеджера анимаций настроек OPL
         /// </summary>
@@ -122,13 +107,10 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         internal void SelectChat(ref Chat SourceChat)
         {
             this.SourceChat = SourceChat;
-            this.SourceChat.IsBusyChanged += ChatBusyChanged;
             IELTextBoxMessage.Text = SourceChat.EnteringMessage;
             IELScrollHistoryMessage.Content = SourceChat.HistoryMessages;
             IELScrollViewerClipFiles.Content = SourceChat.ClipFiles;
             IELScrollHistoryMessage.ScrollToVerticalOffset(SourceChat.SaveScrollValue);
-            if (SourceChat.IsBusy)
-                BusyActivateVisual();
             IELTextBoxMessage.Focus();
         }
 
@@ -137,12 +119,9 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         /// </summary>
         internal void SelectChatClear()
         {
-            SourceChat?.IsBusyChanged -= ChatBusyChanged;
             SourceChat?.EnteringMessage = IELTextBoxMessage.Text;
             IELTextBoxMessage.Text = string.Empty;
             SourceChat?.SaveScrollValue = IELScrollHistoryMessage.ActualVerticalOffset;
-            if (SourceChat?.IsBusy ?? false)
-                BusyDiactivateVisual();
         }
 
         /// <summary>
@@ -153,7 +132,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
         {
             if (SourceChat == null) return;
             ClipPathFiles.AddRange(Pathes);
-            OPLNetworkClipElement ClipElement;
+            OPLVisualNetworkClipFile ClipElement;
             foreach (string Path in Pathes)
             {
                 ClipElement = new()
@@ -161,14 +140,22 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     TextFileName = System.IO.Path.GetFileName(Path),
                     CornerRadius = new(5),
                     Margin = new(5),
-                    //ManagerAnimation = App.CurrentApp.ManagerAnimation,
+                    PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine],
+                    ManagerAnimation = ManagerAnimation,
                 };
                 ClipElement.MathSizeFile(Path);
                 ClipElement.SetExtractAssociatedIcon(Path, StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication)));
+                ClipElement.UnClipElement += (sender, e) =>
+                {
+                    ClipPathFiles.Remove(Path);
+                    SourceChat.ClipFiles.Children.Remove(ClipElement);
+                    if (SourceChat.ClipFiles.Children.Count == 0)
+                        OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderClip, HeightProperty,
+                            0d, TimeSpan.FromMilliseconds(400d));
+                };
 
-                App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(ClipElement);
                 SourceChat.ClipFiles.Children.Add(ClipElement);
-                ClipElement.SetIndex((uint)SourceChat.ClipFiles.Children.Count);
+                ClipElement.NumberIndex = (uint)SourceChat.ClipFiles.Children.Count;
                 if (BorderClip.Height == 0d)
                     OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderClip, HeightProperty,
                         100d, TimeSpan.FromMilliseconds(400d));
@@ -184,8 +171,6 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             if ((IELTextBoxMessage.Text.Length == 0 && ClipPathFiles.Count == 0) || SourceChat == null) return;
             else
             {
-                BusyActivateVisual();
-
                 OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderClip, HeightProperty,
                     0d, TimeSpan.FromMilliseconds(400d));
                 string Message = IELTextBoxMessage.Text;
@@ -194,52 +179,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                 ClipPathFiles.Clear();
 
                 SourceChat.SendNetworkData(Message, PathFiles);
-
-                BusyDiactivateVisual();
             }
-        }
-
-        /// <summary>
-        /// Функция события изменения занятости
-        /// </summary>
-        /// <param name="NewValue">Новое значение занятости чата</param>
-        private void ChatBusyChanged(bool NewValue)
-        {
-            if (NewValue) BusyActivateVisual();
-            else BusyDiactivateVisual();
-        }
-
-        /// <summary>
-        /// Активировать визуализацию занятости чата
-        /// </summary>
-        private void BusyActivateVisual()
-        {
-            OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, LineTextConnection,
-                    HeightProperty, 0d, 10d, TimeSpan.FromMilliseconds(500d));
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, LineTextConnection,
-                OpacityProperty, 1d, TimeSpan.FromMilliseconds(500d));
-            LineTextConnection.BeginAnimation(Line.StrokeDashOffsetProperty, AnimationDoubleLine);
-
-            IELButtonGoSend.IsEnabled = false;
-            IELButtonClip.IsEnabled = false;
-            IELTextBoxMessage.IsEnabled = false;
-        }
-
-        /// <summary>
-        /// Активировать визуализацию занятости чата
-        /// </summary>
-        private void BusyDiactivateVisual()
-        {
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, LineTextConnection, OpacityProperty,
-                0d, TimeSpan.FromMilliseconds(500d));
-            LineTextConnection.BeginAnimation(Line.StrokeDashOffsetProperty, null);
-            OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, LineTextConnection, Line.StrokeDashOffsetProperty,
-                LineTextConnection.StrokeDashOffset, LineTextConnection.StrokeDashOffset - 5d, TimeSpan.FromMilliseconds(500d));
-
-            IELButtonGoSend.IsEnabled = true;
-            IELButtonClip.IsEnabled = true;
-            IELTextBoxMessage.IsEnabled = true;
-            IELTextBoxMessage.Text = string.Empty;
         }
     }
 }

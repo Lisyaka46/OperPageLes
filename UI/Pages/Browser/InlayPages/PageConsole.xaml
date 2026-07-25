@@ -82,7 +82,7 @@
                                             <IEL:IELButtonText x:Name="IELButtonCloneTextCommand" Grid.Column="1" Text="Копировать" CornerRadius="5,5,5,5" Margin="3,3,3,3"  FontSize="14" BorderThickness="2,2,2,2" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource LightBlue}"/>
                                         </StackPanel>
                                         <Line Stroke="{Binding BorderBrush, ElementName=BorderControlElementInfo}" X2="1" Stretch="Uniform" VerticalAlignment="Bottom" StrokeThickness="2" StrokeStartLineCap="Square" StrokeEndLineCap="Square"/>
-                                        <IEL:IELPageController x:Name="IELControllerDescription" LeftAnimateSwitch="-15,0,15,0" RightAnimateSwitch="15,0,-15,0" Grid.RowSpan="1" Grid.Row="1"/>
+                                        <IEL:IELContentController x:Name="IELControllerDescription" LeftAnimateSwitch="-15,0,15,0" RightAnimateSwitch="15,0,-15,0" Grid.RowSpan="1" Grid.Row="1"/>
                                     </Grid>
                                 </Border>
                             </Grid>

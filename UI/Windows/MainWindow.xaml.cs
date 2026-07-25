@@ -1,8 +1,8 @@
 ﻿#region Link
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
-using Newtonsoft.Json;
 using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Language;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Settings.Struct;
@@ -14,6 +14,7 @@ using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Language;
 using OPLAPI.OIEL.CORE.Browser;
 using OPLAPI.OIEL.UserElementsControl;
 using OPLAPI.OIEL.UserElementsControl.Base;
@@ -22,6 +23,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -58,6 +60,7 @@ namespace OperPageLes.UI.Windows
         /// </summary>
         private PageAudioControl PageAudioControlApplication;
 
+        #region Loading
         /// <summary>
         /// Текущее состояние отображения загрузки процесса
         /// </summary>
@@ -69,29 +72,9 @@ namespace OperPageLes.UI.Windows
         internal bool IsLoadingProcess { get; private set; }
 
         /// <summary>
-        /// Событие закрытия главного окна перед его удалением
+        /// Количество загружаемых процессов
         /// </summary>
-        public new event FormClosingEventHandler? Closing;
-
-        /// <summary>
-        /// Событие закрытия главного окна после его удаления
-        /// </summary>
-        public new event FormClosedEventHandler? Closed;
-
-        /// <summary>
-        /// Состояние перезагрузки
-        /// </summary>
-        internal bool IsReboot = false;
-
-        /// <summary>
-        /// Состояние закрытия окна
-        /// </summary>
-        private bool IsClosing = false;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly OPLBrowserPage MainBrowser;
+        private uint CountLoadingProcesses;
 
         #region BorderMainWindowLoading
         /// <summary>
@@ -109,6 +92,7 @@ namespace OperPageLes.UI.Windows
             CenterY = 0.5d,
         };
         #endregion
+        #endregion
 
         #region WindowPages
         private PageSettingApp? _SettingApp = null;
@@ -116,6 +100,19 @@ namespace OperPageLes.UI.Windows
         /// Страница управления настройками программы
         /// </summary>
         internal PageSettingApp SettingApp => _SettingApp ??= new();
+
+        private PageLanguageGeneratorApp? _LanguageGeneratorApp = null;
+        /// <summary>
+        /// Страница управления файлами языковых переводов
+        /// </summary>
+        internal PageLanguageGeneratorApp LanguageGeneratorApp => _LanguageGeneratorApp ??= new();
+        #endregion
+
+        #region PanelActionPages
+        /// <summary>
+        /// Страница управления языковыпи переводами
+        /// </summary>
+        private PageLanguageController? SourcePageLanguageController = null;
         #endregion
 
         /// <summary>
@@ -128,56 +125,68 @@ namespace OperPageLes.UI.Windows
             {
                 base.ManagerAnimation = value;
                 SettingApp.ManagerAnimation = value;
+                PageNotificationApplication.ManagerAnimation = value;
+                VisualLoadingElement.ManagerAnimation = value;
                 App.CurrentApp.SourcePlayControl.UpdateVisualElementsFromStackPanel(PageAudioControlApplication.StackPanelAudioDevices,
                     ManagerAnimation, PageAudioControlApplication.SetActiveDeviceOutput);
             }
         }
 
+        /// <summary>
+        /// Асинхронный процесс обновления визуальных данных каждую секунду
+        /// </summary>
+        private DispatcherTimer DispatcherTimerVisualData;
+
         public MainWindow()
         {
-            App.CurrentApp.LogWriteLine("Инициализация компонентов...");
+            App.LogWriteLine($"Инициализация \"{nameof(MainWindow)}\"...");
+            #region Inicialize
             InitializeComponent();
-            App.CurrentApp.LogWriteLine("...Готово");
+            App.LogWriteLine("...Готово");
+
+            App.LogWriteLine($"Настройка \"{nameof(DispatcherTimerVisualData)}\"...");
+            #region DispatcherTimerVisualData
+            DispatcherTimerVisualData = new()
+            {
+                Interval = TimeSpan.FromMilliseconds(1000d),
+            };
+            DispatcherTimerVisualData.Tick += HandlerUpdateVisualData;
+            #endregion
+            App.LogWriteLine("...Готово");
 
             #region SetParameteres
+            Lang_LanguageUpdated(null, EventArgs.Empty);
             Icon = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
-            IELOpenDataFolder.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Folder));
-            IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
-            IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
-            IELButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
-            IELButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            BorderColorMain.BorderBrush = new SolidColorBrush(Colors.Black);
 
-            App.CurrentApp.LogWriteLine("Настройка логики главного браузера страниц в главном окне...");
-            #region BrowserPage
-            MainBrowser = App.CurrentApp.MainBrowser;
-            MainBrowser.NewInicializedAppPage += MainBrowser_NewInicializedAppPage;
-            MainBrowser.EventCloseInlay += (sender, e) =>
+            App.LogWriteLine($"Настройка \"{nameof(App.GUIE_Browser)}\"...");
+            #region GUIE_Browser
+            App.GUIE_Browser.NewInicializedAppPage += MainBrowser_NewInicializedAppPage;
+            App.GUIE_Browser.EventCloseInlay += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate) IELActionPanelMain.ClosePanelAction();
+                if (App.GUIE_PanelAction.PanelActionActivate) App.GUIE_PanelAction.ClosePanelAction();
             };
-            GridContentFromBrowser.Children.Add(MainBrowser);
+            GridContentFromBrowser.Children.Add(App.GUIE_Browser);
             #endregion
-            App.CurrentApp.LogWriteLine("...Готово");
+            App.LogWriteLine("...Готово");
+
+            App.LogWriteLine($"Настройка \"{nameof(App.GUIE_PanelAction)}\"...");
+            #region GUIE_PanelAction
+            GridMain.Children.Add(App.GUIE_PanelAction);
+            #endregion
+            App.LogWriteLine("...Готово");
 
             TokenUpdateBackgroundData = new(false);
 
             TextBlockVersion.Text = App.CurrentApp.Version;
 
-            App.CurrentApp.LogWriteLine("...1");
-            NotificationIndicator.Opacity = 0d;
+            App.LogWriteLine("...1");
             VisualLoadingElement.ManagerAnimation = ManagerAnimation;
             VisualLoadingElement.Opacity = 0d;
             TextBlockCountLoadingProcess.Opacity = 0d;
 
-            IELMessageMain.Opacity = 0d;
-            IELActionPanelMain.Opacity = 0d;
             ImageMenu.Opacity = 0d;
-            IELActionPanelMain.EventMovePanelAction += (sender, e) =>
-            {
-                App.CurrentApp.SourcePlayControl.Play(nameof(OPRES.AudioMove));
-            };
-            App.CurrentApp.LogWriteLine("...2");
+            App.LogWriteLine("...2");
 
             LinearGradientMainWindowBackground = new()
             {
@@ -194,16 +203,43 @@ namespace OperPageLes.UI.Windows
                 RelativeTransform = RotateMainWindowBackground,
             };
             Background = LinearGradientMainWindowBackground;
-
-            Canvas.SetZIndex(IELMessageMain, -2);
-            Canvas.SetZIndex(IELActionPanelMain, -2);
             #endregion
 
-            App.CurrentApp.LogWriteLine("...2-1");
-            #region IELPanelAction
-            IELActionPanelMain.EventClosingPanelAction += (Name) =>
+            App.LogWriteLine($"Настройка \"{nameof(App.GUIE_Message)}\"...");
+            #region GUIE_Message
+            GridMain.Children.Add(App.GUIE_Message);
+            App.GUIE_Message.Opacity = 0d;
+            App.GUIE_Message.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            App.GUIE_Message.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
+            App.GUIE_Message.VerticalAlignment = VerticalAlignment.Top;
+            App.GUIE_Message.VerticalContentAlignment = VerticalAlignment.Top;
+            App.GUIE_Message.OffsetUpDown = 6u;
+            App.GUIE_Message.OffsetLeftRight = 6u;
+            App.GUIE_Message.DefaultBackground = WnColor.FromRgb(197, 251, 228);
+            App.GUIE_Message.FontSize = 14d;
+            App.GUIE_Message.RadiusDefault = 15u;
+            App.GUIE_Message.RadiusMagnite = 2u;
+            System.Windows.Data.Binding SourceBinding = new()
             {
-                PageBrowser? Page = App.CurrentApp.MainBrowser.ActualInlay?.Content;
+                Mode = BindingMode.OneWay,
+                Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Deledda Open Regular"]
+            };
+            BindingOperations.SetBinding(App.GUIE_Message, IELBlockMessage.FontFamilyProperty, SourceBinding);
+            Canvas.SetZIndex(App.GUIE_Message, -2);
+            #endregion
+            App.LogWriteLine("...Готово");
+
+            App.LogWriteLine($"Настройка \"{nameof(App.GUIE_PanelAction)}\"...");
+            #region IELPanelAction
+            App.GUIE_PanelAction.Opacity = 0d;
+            Canvas.SetZIndex(App.GUIE_PanelAction, -2);
+            App.GUIE_PanelAction.EventMovePanelAction += (sender, e) =>
+            {
+                App.CurrentApp.SourcePlayControl.Play(nameof(OPRES.AudioMove));
+            };
+            App.GUIE_PanelAction.EventClosingPanelAction += (Name) =>
+            {
+                PageBrowser? Page = App.GUIE_Browser.ActualInlay?.Content;
                 if (Page == null) return;
                 switch (Page.GetType().Name)
                 {
@@ -213,56 +249,93 @@ namespace OperPageLes.UI.Windows
                     default: return;
                 }
             };
-            App.CurrentApp.LogWriteLine("...3");
-
-            //#region PageInlay
-            //PageInlay.IELButtonPageOpenInlay.OnActivateMouseLeft += (sender, e, Key) =>
-            //{
-            //    if (PageInlay.ActivateManipulateInlay?.Content != null)
-            //        App.CurrentApp.MainBrowser.ActivateInlayInBrowserPage(PageInlay.ActivateManipulateInlay.Content);
-            //};
-            //PageInlay.IELButtonPageDeleteInlay.OnActivateMouseLeft += (sender, e, Key) =>
-            //{
-            //    IELActionPanelMain.ClosePanelAction();
-            //    if (PageInlay.ActivateManipulateInlay != null)
-            //        App.CurrentApp.MainBrowser.DeleteInlayPage(PageInlay.ActivateManipulateInlay);
-            //};
-            //#endregion
-
-            PageNotificationApplication = new();
-            //App.CurrentApp.AddNotification += (sender, e) =>
-            //{
-            //    App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(NotificationIndicator, OpacityProperty, 1d, TimeSpan.FromMilliseconds(100d));
-            //};
-            //App.CurrentApp.ClearNotification += (sender, e) =>
-            //{
-            //    App.CurrentApp.ManagerAnimation.DoubleAnimationType.AnimateEffect(NotificationIndicator, OpacityProperty, 0d, TimeSpan.FromMilliseconds(100d));
-            //};
-
             #endregion
-            App.CurrentApp.LogWriteLine("...4");
+            App.LogWriteLine("...Готово");
+
+            App.LogWriteLine($"Настройка \"{nameof(PageNotificationApplication)}\"...");
+            #region PageNotificationApplication
+            PageNotificationApplication = new()
+            {
+                ManagerAnimation = ManagerAnimation,
+            };
+            NotificationIndicator.Opacity = App.CurrentApp.ApplicationNotifications.Count > 0 ? 1d : 0d;
+            App.CurrentApp.AddNotification += (sender, e) =>
+            {
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, NotificationIndicator, OpacityProperty,
+                    1d, TimeSpan.FromMilliseconds(400d));
+            };
+            App.CurrentApp.ClearNotification += (sender, e) =>
+            {
+                OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, NotificationIndicator, OpacityProperty,
+                    0d, TimeSpan.FromMilliseconds(400d));
+            };
+            #endregion
+            App.LogWriteLine("...Готово");
 
             #region UpToolButtons
-
+            App.LogWriteLine($"Настройка \"{nameof(ImageLogoApplication)}\"...");
             #region ImageLogoApplication
+            ImageLogoApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             ImageLogoApplication.OnActivateMouseLeft += (sender, e) =>
             {
                 DialogLicenseWindow License = new();
                 License.Show();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-1");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELLangApplication)}\"...");
+            #region IELLangApplication
+            IELLangApplication.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.World));
+            IELLangApplication.OnActivateMouseLeft += async (sender, e) =>
+            {
+                if (App.GUIE_PanelAction.PanelActionActivate && App.GUIE_PanelAction.ActualVisualPage?.GetType() == typeof(PageLanguageController))
+                {
+                    App.GUIE_PanelAction.AnimationMovePanelAction(PositionAnimActionPanel.Cursor, OrientationPositionCursor.RightDown, false);
+                    return;
+                }
+                PageLanguageController Source = SourcePageLanguageController ?? new() { ManagerAnimation = ManagerAnimation };
+                App.GUIE_Message.CloseBorderInformation();
+                if (!App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.OpenPanelAction(IELLangApplication, Source,
+                    Orientation: OrientationPositionCursor.RightDown, DependencePointOnSize: false);
+                else App.GUIE_PanelAction.MoveNextObjectPage(IELLangApplication, Source,
+                    Orientation: OrientationPositionCursor.RightDown, DependencePointOnSize: false);
+                if (SourcePageLanguageController == null)
+                {
+                    SourcePageLanguageController = Source;
+                    StartVisualizateLoadingProcess();
+                    await SourcePageLanguageController.UpdateListLanguages();
+                    CompleteVisualizateLoadingProcess();
+                }
+            };
+            IELLangApplication.MouseHover += (sender, e) =>
+            {
+                if (App.GUIE_PanelAction.ActualVisualPage?.GetType() != typeof(PageLanguageController))
+                {
+                    App.GUIE_Message.UsingBorderInformation(IELLangApplication, Lang.GetValue(LangUITranslate.LangTranslate),
+                        OrientationPositionCursor.RightUp);
+                }
+            };
+            IELLangApplication.MouseLeave += (sender, e) =>
+            {
+                App.GUIE_Message.CloseBorderInformation();
+            };
+            #endregion
+            App.LogWriteLine("...Готово");
+
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonTheme)}\"...");
             #region IELButtonTheme
+            IELButtonTheme.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Brush));
             IELButtonTheme.MouseHover += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELButtonTheme,
-                    "Управление персонализацией программы",
+                App.GUIE_Message.UsingBorderInformation(IELButtonTheme,
+                    Lang.GetValue(LangUITranslate.PersonalizationSetting),
                     OrientationPositionCursor.LeftDown);
             };
             IELButtonTheme.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             IELButtonTheme.OnActivateMouseLeft += (sender, e) =>
             {
@@ -271,73 +344,82 @@ namespace OperPageLes.UI.Windows
                     App.CurrentApp.ThemeApp = new()
                     {
                         ManagerAnimation = ManagerAnimation,
-                        SourcePanelAction = IELActionPanelMain
+                        SourcePanelAction = App.GUIE_PanelAction
                     };
                     App.CurrentApp.ThemeApp.LoadingThemes();
                 }
                 ActivateCustomPageBrowser(App.CurrentApp.ThemeApp);
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-2");
+            App.LogWriteLine("...Готово");
 
-            #region IELImageButtonCollapse
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonCollapse)}\"...");
+            #region IELButtonCollapse
+            IELButtonCollapse.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Collapse));
             IELButtonCollapse.OnActivateMouseLeft += (sender, e) =>
             {
                 WindowState = WindowState.Minimized;
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-3");
+            App.LogWriteLine("...Готово");
 
-            #region IELImageButtonClose
-            IELButtonClose.OnActivateMouseLeft += (sender, e) =>
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonClose)}\"...");
+            #region IELButtonClose
+            IELButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            IELButtonClose.OnActivateMouseLeft += async (sender, e) =>
             {
-                Close();
+                await App.CurrentApp.CloseApplication();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-4");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonSettings)}\"...");
             #region IELButtonSettings
+            IELButtonSettings.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainSettings));
             IELButtonSettings.MouseHover += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELButtonSettings,
-                    "Настройки программы",
+                App.GUIE_Message.UsingBorderInformation(IELButtonSettings,
+                    Lang.GetValue(LangUITranslate.ProgramSetting),
                     OrientationPositionCursor.LeftDown);
             };
             IELButtonSettings.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             IELButtonSettings.OnActivateMouseLeft += (sender, e) =>
             {
-                ActivateCustomPageBrowser(SettingApp);
+                ActivateCustomPageBrowser(App.CurrentApp.PageSettingApplication);
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-5");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonBack)}\"...");
             #region IELButtonBack
             IELButtonBack.IsEnabled = false;
             IELButtonBack.Margin = new(0, 5, 6, 0);
             IELButtonBack.Width = 0d;
             IELButtonBack.OnActivateMouseLeft += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate)
-                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                if (App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
                 Disable_IELButtonBack();
-                App.CurrentApp.MainBrowser.GoBack();
+                App.GUIE_Browser.GoBack();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-6");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELOpenDataFolder)}\"...");
             #region IELOpenDataFolder
+            IELOpenDataFolder.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Folder));
             IELOpenDataFolder.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELOpenDataFolder,
-                    "Главная директория данных программы",
+                App.GUIE_Message.UsingBorderInformation(IELOpenDataFolder,
+                    Lang.GetValue(LangUITranslate.MainDirectoryData),
                     OrientationPositionCursor.LeftDown);
             };
             IELOpenDataFolder.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             IELOpenDataFolder.OnActivateMouseLeft += (sender, e) =>
             {
@@ -347,17 +429,15 @@ namespace OperPageLes.UI.Windows
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                if (IELActionPanelMain.PanelActionActivate)
-                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                if (App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...4-7");
-
+            App.LogWriteLine("...Готово");
             #endregion
-            App.CurrentApp.LogWriteLine("...5");
 
             #region DownToolButtons
-
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonInstallAppPage)}\"...");
             #region IELButtonInstallAppPage
             IELButtonInstallAppPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.File));
             IELButtonInstallAppPage.OnActivateMouseLeft += (sender, e) =>
@@ -367,28 +447,29 @@ namespace OperPageLes.UI.Windows
 
                 };
                 dialog.ShowDialog();
-                MainBrowser.AddNewAppPage(dialog.FileName);
+                App.GUIE_Browser.AddNewAppPage(dialog.FileName);
             };
             IELButtonInstallAppPage.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELButtonInstallAppPage,
-                    "Установить новое страничное приложение",
+                App.GUIE_Message.UsingBorderInformation(IELButtonInstallAppPage,
+                    Lang.GetValue(LangUITranslate.InstallNewPageApp),
                     OrientationPositionCursor.RightUp);
             };
             IELButtonInstallAppPage.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-0");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonAddLabel)}\"...");
             #region IELButtonAddLabel
             IELButtonAddLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
             IELButtonAddLabel.OnActivateMouseLeft += (sender, e) =>
             {
-                if (MainBrowser.SourceManagerAppPage == null) return;
-                PageManagerAppPage AppPage = (PageManagerAppPage)MainBrowser.SourceManagerAppPage;
-                IELMessageMain.CloseBorderInformation();
+                if (App.GUIE_Browser.SourceManagerAppPage == null) return;
+                PageManagerAppPage AppPage = (PageManagerAppPage)App.GUIE_Browser.SourceManagerAppPage;
+                App.GUIE_Message.CloseBorderInformation();
                 DialogGenLabel dialog = new();
                 SourceLabelAction? Result = dialog.CreateLabel();
                 if (Result == null) return;
@@ -396,30 +477,32 @@ namespace OperPageLes.UI.Windows
             };
             IELButtonAddLabel.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELButtonAddLabel,
-                    "Добавить ярлык на главную страницу",
+                App.GUIE_Message.UsingBorderInformation(IELButtonAddLabel,
+                    Lang.GetValue(LangShortcutUITranslate.ShortcutCreateDescription),
                     OrientationPositionCursor.RightUp);
             };
             IELButtonAddLabel.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-1");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELButtonHomeBrowser)}\"...");
             #region IELButtonHomeBrowser
             IELButtonHomeBrowser.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Home));
             IELButtonHomeBrowser.OnActivateMouseLeft += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate)
-                    IELActionPanelMain.ClosePanelAction();
+                if (App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction();
                 if (IELButtonBack.IsEnabled)
                     Disable_IELButtonBack();
-                App.CurrentApp.MainBrowser.OpenManagerAppPage();
+                App.GUIE_Browser.OpenManagerAppPage();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-2");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELBlockInfoInternetConnection)}\"...");
             #region IELBlockInfoInternetConnection
             IELBlockInfoInternetConnection.IsEnabled = false;
             IELBlockInfoInternetConnection.Padding = new(0);
@@ -427,15 +510,15 @@ namespace OperPageLes.UI.Windows
             TextBlockInternetConnectionMillisecond.Opacity = 0d;
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELBlockInfoInternetConnection,
-                    "Текущее подключение к интернету",
+                App.GUIE_Message.UsingBorderInformation(IELBlockInfoInternetConnection,
+                    Lang.GetValue(LangUITranslate.CurrentInternetConnection),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoInternetConnection.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
-            App.CurrentApp.LogWriteLine("...\\/");
+            App.LogWriteLine("...\\/");
             App.CurrentApp.ConnectionPingChanged += (sender, e) =>
             {
                 TextBlockInternetConnectionMillisecond.Text = e.Connect ? $"{e.Ping}ms" : string.Empty;
@@ -448,13 +531,6 @@ namespace OperPageLes.UI.Windows
                         OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
                             new Thickness(0d), TimeSpan.FromMilliseconds(400d));
                     }
-                    else if (App.CurrentApp.SettingMainApplication.MillisecondInternetConnection)
-                    {
-                        OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockInternetConnectionMillisecond, OpacityProperty,
-                            1d, TimeSpan.FromMilliseconds(400d));
-                        OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
-                            new Thickness(0d, 0d, 0d, 7d), TimeSpan.FromMilliseconds(400d));
-                    }
                     IELBlockInfoInternetConnection.IsEnabled = e.Connect;
                     IELBlockInfoInternetConnection.SourceBackground.SetActiveSpecrum(
                         e.Connect ? StateSpectrum.Default : StateSpectrum.NotEnabled, true);
@@ -463,8 +539,9 @@ namespace OperPageLes.UI.Windows
                 }
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-3");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELBlockInfoStateRegister)}\"...");
             #region IELBlockInfoStateRegister
             IELBlockInfoStateRegister.Text = Console.CapsLock ? "а".ToUpper() : "a".ToLower();
             IELBlockInfoStateRegister.MouseUp += (sender, e) =>
@@ -475,17 +552,18 @@ namespace OperPageLes.UI.Windows
             };
             IELBlockInfoStateRegister.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELBlockInfoStateRegister,
-                    "Регистр символов клавиатуры",
+                App.GUIE_Message.UsingBorderInformation(IELBlockInfoStateRegister,
+                    Lang.GetValue(LangUITranslate.KeyboardCharacterCase),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoStateRegister.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-4");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELBlockInfoCurrentLanguage)}\"...");
             #region IELBlockInfoCurrentLanguage
             IELBlockInfoCurrentLanguage.Text = InputLanguage.CurrentInputLanguage.Culture.NativeName[..3].ToUpper();
             InputLanguageManager.Current.InputLanguageChanged += (sender, e) =>
@@ -494,35 +572,36 @@ namespace OperPageLes.UI.Windows
             };
             IELBlockInfoCurrentLanguage.MouseEnter += (sender, e) =>
             {
-                IELMessageMain.UsingBorderInformation(IELBlockInfoCurrentLanguage,
-                    "Текущая раскладка клавиатуры",
+                App.GUIE_Message.UsingBorderInformation(IELBlockInfoCurrentLanguage,
+                    Lang.GetValue(LangUITranslate.CurrentKeyboardLayout),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoCurrentLanguage.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-5");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(IELBlockInfoVolume)}\"...");
             #region IELBlockInfoVolume
             PageAudioControlApplication = new();
             IELBlockInfoVolume.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Volume));
             IELBlockInfoVolume.MouseHover += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageAudioControl) return;
-                IELMessageMain.UsingBorderInformation(IELBlockInfoVolume,
-                    "Громкость звуков программы",
+                if (App.GUIE_PanelAction.PanelActionActivate && App.GUIE_PanelAction.ActualVisualPage is PageAudioControl) return;
+                App.GUIE_Message.UsingBorderInformation(IELBlockInfoVolume,
+                    Lang.GetValue(LangUITranslate.AudioСontrol),
                     OrientationPositionCursor.RightUp);
             };
             IELBlockInfoVolume.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             IELBlockInfoVolume.MouseRightButtonUp += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(IELBlockInfoVolume, PageAudioControlApplication,
+                App.GUIE_Message.CloseBorderInformation();
+                App.GUIE_PanelAction.UsingPanelAction(IELBlockInfoVolume, PageAudioControlApplication,
                     Orientation: OrientationPositionCursor.RightUp,
                     DependencePointOnSize: false);
             };
@@ -530,74 +609,91 @@ namespace OperPageLes.UI.Windows
             {
                 App.CurrentApp.SourcePlayControl.Play(nameof(OPRES.AudioPopUp));
             };
-            App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
-            {
-                EllipseLittle.Opacity = Math.Min(New / 33d, 1d);
-                EllipseMiddle.Opacity = Math.Min((New - 33) / 33d, 1d);
-                EllipseBig.Opacity = Math.Min((New - 66) / 33d, 1d);
-            };
-            EllipseLittle.Opacity = Math.Min(App.CurrentApp.SettingMainApplication.Volume / 33d, 1d);
-            EllipseMiddle.Opacity = Math.Min((App.CurrentApp.SettingMainApplication.Volume - 33) / 33d, 1d);
-            EllipseBig.Opacity = Math.Min((App.CurrentApp.SettingMainApplication.Volume - 66) / 33d, 1d);
+            //App.CurrentApp.SettingMainApplication.Volume.Changed += (Old, New) =>
+            //{
+            //    EllipseLittle.Opacity = Math.Min(New / 33d, 1d);
+            //    EllipseMiddle.Opacity = Math.Min((New - 33) / 33d, 1d);
+            //    EllipseBig.Opacity = Math.Min((New - 66) / 33d, 1d);
+            //};
+            //EllipseLittle.Opacity = Math.Min(App.CurrentApp.SettingMainApplication.Volume / 33d, 1d);
+            //EllipseMiddle.Opacity = Math.Min((App.CurrentApp.SettingMainApplication.Volume - 33) / 33d, 1d);
+            //EllipseBig.Opacity = Math.Min((App.CurrentApp.SettingMainApplication.Volume - 66) / 33d, 1d);
             #endregion
-            App.CurrentApp.LogWriteLine("...5-6");
+            App.LogWriteLine("...Готово");
 
+            App.LogWriteLine($"Настройка \"{nameof(BorderIndicator)}\"...");
             #region BorderIndicator
             BorderIndicator.MouseEnter += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate && IELActionPanelMain.ActualVisualPage is PageNotificationManager) return;
-                IELMessageMain.UsingBorderInformation(BorderIndicator,
-                    "Менеджер оповещений",
+                if (App.GUIE_PanelAction.PanelActionActivate && App.GUIE_PanelAction.ActualVisualPage is PageNotificationManager) return;
+                App.GUIE_Message.UsingBorderInformation(BorderIndicator,
+                    Lang.GetValue(LangUITranslate.NotificationManager),
                     OrientationPositionCursor.LeftUp);
             };
             BorderIndicator.MouseLeave += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
+                App.GUIE_Message.CloseBorderInformation();
             };
             BorderIndicator.MouseRightButtonUp += (sender, e) =>
             {
-                IELMessageMain.CloseBorderInformation();
-                App.MainWindow.IELActionPanelMain.UsingPanelAction(BorderIndicator, PageNotificationApplication,
+                App.GUIE_Message.CloseBorderInformation();
+                App.GUIE_PanelAction.UsingPanelAction(BorderIndicator, PageNotificationApplication,
                     Orientation: OrientationPositionCursor.LeftUp,
                     DependencePointOnSize: false);
             };
             #endregion
-            App.CurrentApp.LogWriteLine("...5-7");
-
+            App.LogWriteLine("...Готово");
             #endregion
-            App.CurrentApp.LogWriteLine("...6");
 
+            App.LogWriteLine($"Настройка \"EventsWindow\"...");
             #region EventsWindow
             SizeChanged += (sender, e) =>
             {
-                if (IELActionPanelMain.PanelActionActivate)
-                    IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+                if (App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
             };
-            base.Closing += (sender, e) =>
+            Closing += (sender, e) =>
             {
-                if (!IsReboot && !IsClosing) Close();
+                //App.CurrentApp.SettingMainApplication.MainWindowWidth.Value = Width;
+                //App.CurrentApp.SettingMainApplication.MainWindowHeight.Value = Height;
+                TokenUpdateBackgroundData.ThrowIfCancellationRequested();
+                App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
             };
+            Lang.LanguageUpdated += Lang_LanguageUpdated;
             #endregion
-            App.CurrentApp.LogWriteLine("! Инициализация успешна");
+            App.LogWriteLine("...Готово");
+
+            #endregion
+            App.LogWriteLine("! Инициализация успешна");
         }
 
+        /// <summary>
+        /// Обработчик собфтия изменения языкового перевода
+        /// </summary>
+        private void Lang_LanguageUpdated(object? sender, EventArgs e)
+        {
+            Title = Lang.GetValue(LangUITranslate.MainWindowTitle);
+            IELButtonBack.Text = Lang.GetValue(LangUITranslate.Back);
+        }
+
+        #region BrowserPageControl
         private void MainBrowser_NewInicializedAppPage(object? sender, OPLInlay e)
         {
-            if (IELActionPanelMain.PanelActionActivate)
-                IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            if (App.GUIE_PanelAction.PanelActionActivate)
+                App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
 
             e.MouseHover += (sender, e) =>
             {
                 if (sender == null) return;
                 OPLInlay Source = (OPLInlay)sender;
                 if (Source.Content.Description.Length > 0)
-                    IELMessageMain.UsingBorderInformation(Source, Source.Content.Description,
+                    App.GUIE_Message.UsingBorderInformation(Source, Source.Content.Description,
                         OrientationPositionCursor.Auto);
             };
             e.MouseLeave += (sender, e) =>
             {
-                if (IELMessageMain.FlagMessage)
-                    IELMessageMain.CloseBorderInformation();
+                if (App.GUIE_Message.FlagMessage)
+                    App.GUIE_Message.CloseBorderInformation();
             };
 
             IELButtonImage ButtonClose = e.GetButtonCloseInlay();
@@ -605,6 +701,7 @@ namespace OperPageLes.UI.Windows
             ButtonClose.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red];
             ButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }
+        #endregion
 
         /// <summary>
         /// Присвоить кнопкам цвет в завимисости от темы
@@ -623,7 +720,7 @@ namespace OperPageLes.UI.Windows
             SourceTheme[PaletteSpectrumEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
             SourceTheme[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
             SourceTheme[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
-            SourceTheme[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELActionPanelMain);
+            SourceTheme[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(App.GUIE_PanelAction);
             SourceTheme[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
             SourceTheme[PaletteSpectrumEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
             SourceTheme[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonInstallAppPage);
@@ -635,15 +732,15 @@ namespace OperPageLes.UI.Windows
         /// <param name="Setting">Объект настроек</param>
         internal void ChangeFromSetting(in SettingApplication Setting)
         {
-            IELActionPanelMain.IsKeyboardModeExit = Setting.ExitKeyboardModeInClosePanelAction;
-            IELActionPanelMain.KeyActivateKeyboardMode = Setting.KEY_KeyboardModePanelAction;
-            IELActionPanelMain.KeyKeyboardModeActivateRightClick = Setting.KEY_PanelActionRightClick;
-            IELActionPanelMain.KeyCloseElement = Setting.KEY_PanelActionClose;
+            App.GUIE_PanelAction.IsKeyboardModeExit = Setting.ExitKeyboardModeInClosePanelAction;
+            App.GUIE_PanelAction.KeyActivateKeyboardMode = Setting.KEY_KeyboardModePanelAction;
+            App.GUIE_PanelAction.KeyKeyboardModeActivateRightClick = Setting.KEY_PanelActionRightClick;
+            App.GUIE_PanelAction.KeyCloseElement = Setting.KEY_PanelActionClose;
             Width = Setting.MainWindowWidth;
             Height = Setting.MainWindowHeight;
             UpdateImageMenu(Setting.PathMenuImage);
 
-            Setting.LoadingBorderVisualizate.Changed += (Old, New) =>
+            Setting.LoadingBorderVisualizate.ValueChanged += (Old, New) =>
             {
                 if (!IsVisualLoagingProcessInBorder) EndRotateBorder(New ? 1 : -1);
             };
@@ -682,147 +779,69 @@ namespace OperPageLes.UI.Windows
         /// <param name="RightAlign">Парвая ориентация появления</param>
         internal void ActivateCustomPageBrowser(PageBrowser SourcePage, bool RightAlign = true)
         {
-            if (IELActionPanelMain.PanelActionActivate)
-                IELActionPanelMain.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-            if (MainBrowser.ActualPage != null)
+            if (App.GUIE_PanelAction.PanelActionActivate)
+                App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
+            if (App.GUIE_Browser.ActualPage != null)
                 Enable_IELButtonBack();
-            MainBrowser.ActivateCustomPageBrowser(SourcePage, RightAlign);
+            App.GUIE_Browser.ActivateCustomPageBrowser(SourcePage, RightAlign);
         }
 
         #region ManipulateWindow
-        /// <summary>
-        /// Закрыть главное окно приложения без перезагрузки
-        /// </summary>
-        public new void Close()
-        {
-            IsClosing = true;
-            Hide();
-            App.CurrentApp.SettingMainApplication.MainWindowWidth.Value = Width;
-            App.CurrentApp.SettingMainApplication.MainWindowHeight.Value = Height;
-            TokenUpdateBackgroundData.ThrowIfCancellationRequested();
-            App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
-            Closing?.Invoke(this, new(CloseReason.UserClosing, false));
-            bool WindowSaveClose = false;
-            DialogSaveWait windowSave = new()
-            {
-                ManagerAnimation = ManagerAnimation,
-            };
-            windowSave.Closed += (sender, e) =>
-            {
-                WindowSaveClose = true;
-                Closed?.Invoke(windowSave, new(CloseReason.WindowsShutDown));
-                base.Close();
-            };
-            windowSave.OpenOnToComplete();
-            windowSave.Focus();
-
-            Thread thread = new(async () =>
-            {
-                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Закрываются все окна приложения", 0d));
-                Dispatcher.Invoke(() =>
-                {
-                    int count = App.CurrentApp.OpenedWindowsInApplication.Count;
-                    for (int i = 0; i < count; i++)
-                    {
-                        App.CurrentApp.OpenedWindowsInApplication[0].Close();
-                        Thread.Sleep(10);
-                    }
-                });
-                Thread.Sleep(500);
-
-                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Обновляются ваши настройки", 30d));
-                App.CurrentApp.UpdateSettingApplication();
-                Thread.Sleep(300);
-
-                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Сохраняются все ярлыки", 60d));
-                PageManagerAppPage AppPage = (PageManagerAppPage?)MainBrowser.SourceManagerAppPage ??
-                    throw new Exception("Главная страница браузера не инициализирована!");
-                string SettingApplicationJSON = JsonConvert.SerializeObject(AppPage.Labels.Select((i) => i.Label));
-                File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
-                Thread.Sleep(700);
-
-                Dispatcher.Invoke(() => windowSave.SetVisualTextSaving("Ожидайте завершения...", 100d));
-                await windowSave.Complete();
-            });
-            thread.Start();
-
-            Task.Run(() =>
-            {
-                while (!WindowSaveClose) ;
-                thread.Join();
-            });
-        }
 
         /// <summary>
         /// Собственная функция отображения главного окна
         /// </summary>
-        public new void Show()
+        public new async Task Show()
         {
-            //App.CurrentApp.LogWriteLine($"...-1 {App.ApplicationPageDeveloper != null}");
-            //TextBlock StackUpdateData = Dispatcher.Invoke(() => App.ApplicationPageDeveloper.AddNewStackTextBlock("Task: Обновление данных"));
-            App.CurrentApp.LogWriteLine("...-1-0");
-            _ = Task.Run(async () =>
-            {
-                while (true)
-                {
-                    //Dispatcher.Invoke(() => OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, (SolidColorBrush)StackUpdateData.Foreground,
-                    //    SolidColorBrush.ColorProperty, Colors.LightGreen, Colors.Black, TimeSpan.FromMilliseconds(300d)));
-                    await BackgroundUpdateVisualData();
-                    Thread.Sleep(1000);
-                }
-            }, TokenUpdateBackgroundData);
-            App.CurrentApp.LogWriteLine("...-1-1");
+            DispatcherTimerVisualData.Start();
             Opacity = 0d;
-            App.CurrentApp.LogWriteLine("...0");
             base.Show();
-            App.CurrentApp.LogWriteLine("...1");
-            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockInternetConnectionMillisecond, OpacityProperty,
-                App.CurrentApp.SettingMainApplication.MillisecondInternetConnection ? 1d : 0d, TimeSpan.FromMilliseconds(800d));
-            App.CurrentApp.LogWriteLine("...2");
-            #region MainBrowser
-            MainBrowser.GenerateNewMainManagerAppPage(typeof(PageManagerAppPage));
-            MainBrowser.OpenManagerAppPage();
-            _ = ((PageManagerAppPage?)MainBrowser.SourceManagerAppPage)?.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
+            App.GUIE_Browser.OpenManagerAppPage();
+            await ((PageManagerAppPage?)App.GUIE_Browser.SourceManagerAppPage)?.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
+        }
 
-            #region AppPage
-            MainBrowser.AddNewAppPage(typeof(PageConsole));
-            MainBrowser.AddNewAppPage(typeof(PageNetwork));
-            MainBrowser.AddNewAppPage(typeof(PageWebBrowser));
-            MainBrowser.AddNewAppPage(typeof(PageDeveloper));
-            #endregion
-
-            #endregion
+        /// <summary>
+        /// Собственная функция закрытия главного окна
+        /// </summary>
+        public new void Close()
+        {
+            DispatcherTimerVisualData.Stop();
+            base.Close();
         }
         #endregion
 
+        #region LoadingManipulate
         /// <summary>
         /// Начало визуализации загрузки
         /// </summary>
-        /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
         internal void StartVisualizateLoadingProcess()
         {
             if (!IsLoadingProcess)
             {
                 IsLoadingProcess = true;
-                if (App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate)
-                {
-                    BeginRotateBorder();
-                    IsVisualLoagingProcessInBorder = true;
-                }
+                //if (App.CurrentApp.SettingMainApplication.LoadingBorderVisualizate)
+                //{
+                //    BeginRotateBorder();
+                //    IsVisualLoagingProcessInBorder = true;
+                //}
                 VisualLoadingElement.OpenLoading();
                 OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockCountLoadingProcess,
                     OpacityProperty, 1d, TimeSpan.FromMilliseconds(400d));
             }
+            CountLoadingProcesses++;
+            TextBlockCountLoadingProcess.Text = CountLoadingProcesses.ToString();
         } 
 
         /// <summary>
         /// Завершение визуализации загрузки
         /// </summary>
-        /// <param name="ViewLoading">Элемент визуализации загрузочного процесса</param>
         internal void CompleteVisualizateLoadingProcess()
         {
             if (IsLoadingProcess)
             {
+                CountLoadingProcesses--;
+                TextBlockCountLoadingProcess.Text = CountLoadingProcesses.ToString();
+                if (CountLoadingProcesses > 0u) return;
                 IsLoadingProcess = false;
                 if (IsVisualLoagingProcessInBorder)
                 {
@@ -870,16 +889,15 @@ namespace OperPageLes.UI.Windows
         }
         #endregion
 
+        #endregion
+
         /// <summary>
-        /// Функция обновления визуальной информации в данном окне
+        /// Обработчик обновления визуальной информации в данном окне
         /// </summary>
-        private async Task BackgroundUpdateVisualData()
+        private void HandlerUpdateVisualData(object? sender, EventArgs e)
         {
-            await Dispatcher.BeginInvoke(() =>
-            {
-                TextBlockTime.Text = App.RealTime.ToShortTimeString();
-                TextBlockData.Text = App.RealTime.ToShortDateString();
-            });
+            TextBlockTime.Text = App.RealTime.ToShortTimeString();
+            TextBlockData.Text = App.RealTime.ToShortDateString();
         }
 
         #region ImageMenu
@@ -912,8 +930,7 @@ namespace OperPageLes.UI.Windows
                 {
                     App.CurrentApp.AddNewNotification($"Файл картинки фонового изображения не был найден...",
                         EnumNotificationStyle.System,
-                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)),
-                        "Ошибка установки фона");
+                        StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Warning)));
                 }
             }
             else
@@ -960,8 +977,10 @@ namespace OperPageLes.UI.Windows
         /// <param name="Color">Цвет который будет отображён как сигнальный</param>
         internal void BlurMainAnimateColor(WnColor Color)
         {
-            //App.ColorAnimationType.AnimateEffect(BorderWindowMain.Background,
-            //    SolidColorBrush.ColorProperty, Color, Colors.Black, TimeSpan.FromMilliseconds(1300d));
+            ((SolidColorBrush)BorderColorMain.BorderBrush).Color = Color;
+            BorderColorMain.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, null);
+            OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, BorderColorMain.BorderBrush, SolidColorBrush.ColorProperty,
+                Colors.Black, TimeSpan.FromMilliseconds(1300d));
         }
         #endregion
     }

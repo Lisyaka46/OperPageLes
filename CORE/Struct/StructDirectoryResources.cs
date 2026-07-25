@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using OPLAPI.CORE.Language;
+using System.IO;
+using System.Net.Http.Json;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -91,7 +93,7 @@ namespace OperPageLes.CORE.Struct
         /// </summary>
         internal static void CheckCreateAllResources()
         {
-            App.CurrentApp.LogWriteLine("Проверка ресурсных файлов");
+            App.LogWriteLine("Проверка ресурсных файлов");
             string Prefics;
             PathesFromNameResource.Clear();
             CheckCreateDirectoryInFile(DirectoryImagesApplication);
@@ -105,6 +107,14 @@ namespace OperPageLes.CORE.Struct
                     if (prop.Name.Contains("Audio")) Prefics = DirectoryAudioApplication + $"{prop.Name}.mp3";
                     else if (prop.Name.Contains("Media")) Prefics = DirectoryMediaApplication + $"{prop.Name}.mp4";
                     else if (prop.Name.Contains("Dictionary")) Prefics = DirectoryDictionaryApplication + $"{prop.Name}.xaml";
+                    else if (prop.Name.Contains("Lang"))
+                    {
+                        byte[] BytesJSONData = (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым.");
+                        string JSONContent = System.Text.Encoding.UTF8.GetString(BytesJSONData);
+                        Lang.AppendNewLanguage(JSONContent);
+                        continue;
+                    }
+                    else if (prop.Name.Contains("Flag")) Prefics = Lang.DirectoryImageFlagsApplication + $"{prop.Name}.png";
                     else Prefics = DirectoryImagesApplication + $"{prop.Name}.png";
                     if (!File.Exists(Prefics) || prop.Name.Contains("Dictionary"))
                         CreateResourceMedia(Prefics, (byte[]?)prop.GetValue(null) ?? throw new Exception("Ресурс является нулевым."));

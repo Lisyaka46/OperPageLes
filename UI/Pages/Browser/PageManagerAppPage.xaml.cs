@@ -1,4 +1,5 @@
-﻿using OperPageLes.CORE.Objects;
+﻿using IEL.UserElementsControl;
+using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
@@ -12,8 +13,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Point = System.Windows.Point;
 using OPRES = OperPageLes.Properties.Resources;
+using Point = System.Windows.Point;
 
 namespace OperPageLes.UI.Pages.Browser
 {
@@ -22,6 +23,25 @@ namespace OperPageLes.UI.Pages.Browser
     /// </summary>
     public partial class PageManagerAppPage : MainPageBrowser
     {
+        /// <summary>
+        /// Объект панели действий подключаемый к контенту страницы браузера OPL
+        /// </summary>
+        public new IELPanelAction? SourcePanelAction
+        {
+            get => base.SourcePanelAction;
+            set
+            {
+                value?.EventClosingPanelAction += HandlerClosePanelAction;
+                base.SourcePanelAction?.EventClosingPanelAction -= HandlerClosePanelAction;
+                base.SourcePanelAction = value;
+            }
+        }
+
+        /// <summary>
+        /// Обработчик события закрытия панели действий
+        /// </summary>
+        private IELPanelAction.ClosingPanelAction HandlerClosePanelAction;
+
         /// <summary>
         /// Массив всех страничных приложений подключённых к начальной странице
         /// </summary>
@@ -136,6 +156,11 @@ namespace OperPageLes.UI.Pages.Browser
                 ClipToBounds = false,
                 Margin = new(3d),
             };
+            HandlerClosePanelAction = (NameFramework) =>
+            {
+                if (App.GUIE_Browser.ActivateManagerPage)
+                    Focus();
+            };
             InitializeComponent();
             DefaultIconAppPage = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.IconMainApplication));
             MainGridContainer.Children.Add(MainPanelAllApplicationPages);
@@ -146,9 +171,9 @@ namespace OperPageLes.UI.Pages.Browser
             SctollViewerLabels.Content = StackPanelAllLabels;
             MainGridContainer.MouseLeftButtonUp += (sender, e) =>
             {
-                if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                if (SourcePanelAction?.PanelActionActivate ?? false)
                 {
-                    App.MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
+                    SourcePanelAction.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
                 }
             };
 
@@ -160,6 +185,7 @@ namespace OperPageLes.UI.Pages.Browser
                         IsSelectMoveLabel = true;
                         break;
                 }
+                e.Handled = true;
             };
 
             KeyUp += (sender, e) =>
@@ -172,13 +198,14 @@ namespace OperPageLes.UI.Pages.Browser
                             ClearVisualElementMove(SourceMoveLabel, new(Mouse.PrimaryDevice, 0));
                         break;
                 }
+                e.Handled = true;
             };
 
             #region PageLabelActionPanel
             PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
                 await SelectLabelActionPanel.Activate();
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.GUIE_PanelAction.ClosePanelAction();
             };
             PageLabelActionPanel.IELButtonExecuteLabel.OnActivateMouseRight += async (sender, e, Key) =>
             {
@@ -186,7 +213,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             PageLabelActionPanel.IELButtonChangeLabel.OnActivateMouseLeft += async (sender, e, Key) =>
             {
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.GUIE_PanelAction.ClosePanelAction();
                 new DialogGenLabel().ChangeLabel(SelectLabelActionPanel.Label);
                 SelectLabelActionPanel.UpdateVisualLabel();
             };
@@ -194,19 +221,10 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 StackPanelAllLabels.Children.Remove(SelectLabelActionPanel.VisualELement);
                 SourceLabels.Remove(SelectLabelActionPanel);
-                App.MainWindow.IELActionPanelMain.ClosePanelAction();
+                App.GUIE_PanelAction.ClosePanelAction();
                 _SelectLabelActionPanel = null;
             };
             #endregion
-
-            Loaded += (sender, e) =>
-            {
-                App.MainWindow.IELActionPanelMain.EventClosingPanelAction += (NameFramework) =>
-                {
-                    if (App.CurrentApp.MainBrowser.ActivateManagerPage)
-                        Focus();
-                };
-            };
         }
 
         /// <summary>
@@ -231,9 +249,9 @@ namespace OperPageLes.UI.Pages.Browser
                     SelectLabelElement(Label);
                 else
                 {
-                    if (App.MainWindow.IELActionPanelMain.PanelActionActivate)
+                    if (App.GUIE_PanelAction.PanelActionActivate)
                     {
-                        App.MainWindow.IELActionPanelMain.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
+                        App.GUIE_PanelAction.ClosePanelAction(IEL.CORE.Enums.PositionAnimActionPanel.CenterObject);
                     }
                     LabelSelectPosition(sender, e);
                 }
@@ -265,8 +283,9 @@ namespace OperPageLes.UI.Pages.Browser
 
         private void SelectLabelElement(LabelAction SelectLabel)
         {
+            if (SourcePanelAction == null) return;
             _SelectLabelActionPanel = SelectLabel;
-            App.MainWindow.IELActionPanelMain.UsingPanelAction(MainGridContainer, PageLabelActionPanel,
+            SourcePanelAction.UsingPanelAction(MainGridContainer, PageLabelActionPanel,
                 Orientation: IEL.CORE.Enums.OrientationPositionCursor.RightUp, DependencePointOnSize: false);
             PageLabelActionPanel.ChangeTextDescription(SelectLabel.Label.Description ?? "- Нет описания", true);
         }

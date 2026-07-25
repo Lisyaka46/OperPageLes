@@ -26,7 +26,7 @@ namespace OperPageLes.CORE.Audio
         {
             if (Bass.BASS_Start())
                 Bass.BASS_Free();
-            Bass.BASS_Init(App.CurrentApp.SettingMainApplication.DeviceIndexActive, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
+            Bass.BASS_Init(0, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero); // App.CurrentApp.SettingMainApplication.DeviceIndexActive
 
             string Prefics;
             List<string> AllDirectories = [];
@@ -84,7 +84,7 @@ namespace OperPageLes.CORE.Audio
             ClearSamples();
             Bass.BASS_Free();
             Bass.BASS_Init(Handle, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
-            App.CurrentApp.SettingMainApplication.DeviceIndexActive.Value = Handle;
+            //App.CurrentApp.SettingMainApplication.DeviceIndexActive.Value = Handle;
             AddDataSamples();
         }
 
@@ -103,8 +103,8 @@ namespace OperPageLes.CORE.Audio
                 BASSFlag.BASS_SAMCHAN_STREAM | BASSFlag.BASS_STREAM_AUTOFREE);
 
             // Установить громкость (опционально)
-            Bass.BASS_ChannelSetAttribute(channel, BASSAttribute.BASS_ATTRIB_VOL,
-                (float)App.CurrentApp.SettingMainApplication.Volume / 100f);
+            //Bass.BASS_ChannelSetAttribute(channel, BASSAttribute.BASS_ATTRIB_VOL,
+            //    (float)App.CurrentApp.SettingMainApplication.Volume / 100f);
 
             if (channel == 0)
             {
@@ -175,7 +175,7 @@ namespace OperPageLes.CORE.Audio
                     IsEnabled = info.flags.HasFlag(BASSDeviceInfo.BASS_DEVICE_ENABLED),
                     IndexCurrentDevice = i,
                     Text = info.name,
-                    Activate = i == App.CurrentApp.SettingMainApplication.DeviceIndexActive,
+                    //Activate = i == App.CurrentApp.SettingMainApplication.DeviceIndexActive,
                 };
                 VisualDevice.OnActivateMouseLeft += ChangeDeviceHandler;
                 ContainerVisualElements.Children.Add(VisualDevice);

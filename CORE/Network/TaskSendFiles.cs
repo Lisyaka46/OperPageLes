@@ -1,13 +1,6 @@
-﻿using OperPageLes.UI.UserElementsControl.Network;
-using OPLAPI.OIEL.UserElementsControl.Network;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using OPLAPI.OIEL.UserElementsControl.Network;
 using System.IO;
 using System.Net.Sockets;
-using System.Text;
-using System.Windows.Controls;
 
 namespace OperPageLes.CORE.Network
 {
@@ -61,7 +54,7 @@ namespace OperPageLes.CORE.Network
         internal void AddQueue(OPLNetworkMessage UIMessageElement, string[] PathFiles)
         {
             for (uint i = 0; i < UIMessageElement.StackPanelClip.Children.Count; i++)
-                ((OPLNetworkClipElement)UIMessageElement.StackPanelClip.Children[(int)i]).SetIndex(CountQueueFiles + i);
+                ((OPLVisualNetworkClipFile)UIMessageElement.StackPanelClip.Children[(int)i]).NumberIndex = CountQueueFiles + i;
 
             UIMessages.Enqueue(UIMessageElement);
             InfoPathFiles.Enqueue(PathFiles);
@@ -95,13 +88,13 @@ namespace OperPageLes.CORE.Network
         /// </summary>
         private async Task ExecuteSendFiles(Socket SocketSendFile, OPLNetworkMessage UIMessageElement, string[] PathFiles)
         {
-            OPLNetworkClipElement ClipElement;
+            OPLVisualNetworkClipFile ClipElement;
             byte[] Buffer;
             FileStream Reader;
             for (int i = 0; i < PathFiles.Length; i++)
             {
-                ClipElement = UIMessageElement.Dispatcher.Invoke(() => (OPLNetworkClipElement)UIMessageElement.StackPanelClip.Children[i]);
-                ClipElement.Dispatcher.Invoke(ClipElement.ClearIndex);
+                ClipElement = UIMessageElement.Dispatcher.Invoke(() => (OPLVisualNetworkClipFile)UIMessageElement.StackPanelClip.Children[i]);
+                ClipElement.Dispatcher.Invoke(() => ClipElement.IsVisibleIndex = false);
 
                 if (!File.Exists(PathFiles[i]))
                 {
