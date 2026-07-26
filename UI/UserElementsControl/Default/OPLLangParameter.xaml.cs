@@ -26,7 +26,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
         /// </summary>
         public static readonly new DependencyProperty PaletteElementProperty =
             DependencyProperty.Register("PaletteElement", typeof(PaletteSpectrum), typeof(OPLLangParameter),
-                new(new PaletteSpectrum(),
+                new(PaletteSpectrum.UnknownPaletteSpectrum,
                     (sender, e) =>
                     {
                         PaletteSpectrum palette = (PaletteSpectrum)e.NewValue;

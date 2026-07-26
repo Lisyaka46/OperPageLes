@@ -24,7 +24,7 @@ namespace OperPageLes.UI.Windows.DEV
              <IEL:BrushSettingQ x:Key="FG_PastelBlue" DurationBrushSettingQ="00:00:00.2000000" Default="Black" Select="Black" Used="Black" NotEnabled="Black"/>
              */
             Dialog = new();
-            PaletteSpectrumSource = new();
+            PaletteSpectrumSource = PaletteSpectrum.UnknownPaletteSpectrum;
             InitializeComponent();
             TextBlockCodeView.Text = String.Empty;
             CheckBoxIsEnabledController.IsChecked = IELSourceButton.IsEnabled;
