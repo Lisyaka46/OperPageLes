@@ -116,7 +116,7 @@ namespace OperPageLes.UI.Windows.Dialogs
         internal void ShowDialogChangeQData(PaletteSpectrum SourceSpectrum, QData.EnumDataSpectrum spectrum)
         {
             PaletteSpectrumSource = SourceSpectrum;
-            PaletteSpectrumManipulate = (PaletteSpectrum)SourceSpectrum.Clone();
+            PaletteSpectrumManipulate = (PaletteSpectrum)SourceSpectrum;
 
             ChangeSpectrum = spectrum;
             Title = $"Изменение спектра \"{spectrum}\"";

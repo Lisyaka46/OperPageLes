@@ -33,7 +33,7 @@ namespace OperPageLes.CORE.Settings.PaletteElements
             for (int i = 0; i < Keys.Length; i++)
             {
                 _SourcePalette.Add((PaletteSpectrumEnum)Enum.Parse(typeof(PaletteSpectrumEnum), Keys[i]),
-                    (PaletteSpectrum)((PaletteSpectrum)Resource[Keys[i]]).Clone());
+                    (PaletteSpectrum)((PaletteSpectrum)Resource[Keys[i]]));
             }
         }
 
@@ -49,7 +49,7 @@ namespace OperPageLes.CORE.Settings.PaletteElements
                     $"{SourceData.Length}%{QData.CountSpectrumColor * QData.CountBytesFromColor} байт");
 
             _SourcePalette = Source._SourcePalette.ToDictionary(
-                entry => entry.Key, entry => (PaletteSpectrum)entry.Value.Clone());
+                entry => entry.Key, entry => (PaletteSpectrum)entry.Value);
             ChangePaletteFromBytes(ref SourceData);
         }
 
