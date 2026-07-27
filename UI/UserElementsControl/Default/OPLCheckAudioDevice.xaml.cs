@@ -1,4 +1,5 @@
 ﻿using IEL.UserElementsControl.Base;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
 using System.Windows;
@@ -116,7 +117,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
         public OPLCheckAudioDevice()
         {
             InitializeComponent();
-            DeviceButton.PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine];
+            DeviceButton.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine];
             DeviceButton.Text = "Неизвестный";
             DeviceButton.OnActivateMouseLeft += (sender, e) => OnActivateMouseLeft?.Invoke(this, e);
             DeviceButton.OnActivateMouseRight += (sender, e) => OnActivateMouseRight?.Invoke(this, e);

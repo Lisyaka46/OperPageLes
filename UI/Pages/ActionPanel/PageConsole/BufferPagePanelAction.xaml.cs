@@ -2,13 +2,13 @@
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
 using OPLAPI.OIEL.UserElementsControl;
-using OperPageLes.CORE.Enums;
 using OperPageLes.UI.Pages.Browser;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using OperPageLes.CORE.Enums.Theme;
 
 namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
 {
@@ -41,8 +41,8 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
             GridBuffer.Opacity = 0d;
             TextBlockCounterBuffer.Text = "NULL";
 
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBackMainMenu);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearBuffer);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonBackMainMenu);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonClearBuffer);
 
             IELButtonClearBuffer.OnActivateMouseLeft += async (sender, e, Key) =>
             {
@@ -109,7 +109,7 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
                 CornerRadius = new(8),
 
             };
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(Button);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Chocolate].ConnectPalleteFromIELElement(Button);
             return Button;
         }
 

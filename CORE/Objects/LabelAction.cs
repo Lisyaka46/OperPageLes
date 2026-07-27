@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Windows.Storage;
 using OPRES = OperPageLes.Properties.Resources;
+using OperPageLes.CORE.Enums.Theme;
 
 namespace OperPageLes.CORE.Objects
 {
@@ -102,11 +103,11 @@ namespace OperPageLes.CORE.Objects
             VisualELement.Text = Label.Name;
             try
             {
-                VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[(Enums.PaletteSpectrumEnum)(uint)Label.IndexSpectrumTheme];
+                VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)(uint)Label.IndexSpectrumTheme];
             }
             catch
             {
-                VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[Enums.PaletteSpectrumEnum.Aquamarine];
+                VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Aquamarine];
                 App.CurrentApp.AddNewNotification($"Не удалось присвоить спектр темы \"{Label.IndexSpectrumTheme}\" ярлыку \"{Label.Name}\"",
                     Enums.EnumNotificationStyle.System);
             }

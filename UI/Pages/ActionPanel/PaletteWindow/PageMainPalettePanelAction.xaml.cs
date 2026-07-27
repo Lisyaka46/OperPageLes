@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Theme;
 
 namespace OperPageLes.UI.Pages.ActionPanel.PaletteWindow
 {
@@ -25,9 +25,9 @@ namespace OperPageLes.UI.Pages.ActionPanel.PaletteWindow
         public PageMainPalettePanelAction()
         {
             InitializeComponent();
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonSelectTheme);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELButtonExecuteTheme);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteTheme);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade].ConnectPalleteFromIELElement(IELButtonSelectTheme);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Olive].ConnectPalleteFromIELElement(IELButtonExecuteTheme);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteTheme);
         }
     }
 }

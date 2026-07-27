@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OperPageLes.CORE.Enums
+namespace OperPageLes.CORE.Enums.Theme
 {
-    internal enum PaletteSpectrumEnum : uint
+    internal enum PaletteEnum : uint
     {
         /// <summary>
         /// Красный

@@ -3,6 +3,7 @@ using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Settings.Struct;
@@ -698,7 +699,7 @@ namespace OperPageLes.UI.Windows
 
             IELButtonImage ButtonClose = e.GetButtonCloseInlay();
             ButtonClose.MarginViewBox = new(0d);
-            ButtonClose.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red];
+            ButtonClose.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Red];
             ButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }
         #endregion
@@ -709,21 +710,21 @@ namespace OperPageLes.UI.Windows
         /// <param name="SourceTheme">Тема</param>
         internal void SetPallete(in Theme SourceTheme)
         {
-            SourceTheme[PaletteSpectrumEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
-            SourceTheme[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonBack);
-            SourceTheme[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELOpenDataFolder);
-            SourceTheme[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
-            SourceTheme[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
-            SourceTheme[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCollapse);
-            SourceTheme[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClose);
-            SourceTheme[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
-            SourceTheme[PaletteSpectrumEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
-            SourceTheme[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
-            SourceTheme[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
-            SourceTheme[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(App.GUIE_PanelAction);
-            SourceTheme[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
-            SourceTheme[PaletteSpectrumEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
-            SourceTheme[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonInstallAppPage);
+            SourceTheme[PaletteEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
+            SourceTheme[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonBack);
+            SourceTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELOpenDataFolder);
+            SourceTheme[PaletteEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
+            SourceTheme[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
+            SourceTheme[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCollapse);
+            SourceTheme[PaletteEnum.Red].ConnectPalleteFromIELElement(IELButtonClose);
+            SourceTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
+            SourceTheme[PaletteEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
+            SourceTheme[PaletteEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
+            SourceTheme[PaletteEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
+            SourceTheme[PaletteEnum.Cocoa].ConnectPalleteFromIELElement(App.GUIE_PanelAction);
+            SourceTheme[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
+            SourceTheme[PaletteEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
+            SourceTheme[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonInstallAppPage);
         }
 
         /// <summary>

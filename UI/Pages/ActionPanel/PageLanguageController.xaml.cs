@@ -1,4 +1,5 @@
-﻿using OperPageLes.UI.UserElementsControl.Default;
+﻿using OperPageLes.CORE.Enums.Theme;
+using OperPageLes.UI.UserElementsControl.Default;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
 using OPLAPI.CORE.Language;
@@ -109,7 +110,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             {
                 ManagerAnimation = ManagerAnimation,
                 DataContext = SourceInfo,
-                PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PlumCrayola],
+                PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola],
                 CornerRadius = new(6d),
                 Margin = new(5d),
             };

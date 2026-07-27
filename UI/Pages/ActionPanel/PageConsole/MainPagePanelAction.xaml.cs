@@ -1,6 +1,6 @@
 ﻿using OPLAPI.OIEL.UserElementsControl;
-using OperPageLes.CORE.Enums;
 using System.Windows.Controls;
+using OperPageLes.CORE.Enums.Theme;
 
 namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
 {
@@ -26,9 +26,9 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
         {
             InitializeComponent();
 
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.VioletRed].ConnectPalleteFromIELElement(IELButtonDeleteCommandViewer);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteAllCommandViewers);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonCommandBuffer);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.VioletRed].ConnectPalleteFromIELElement(IELButtonDeleteCommandViewer);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteAllCommandViewers);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonCommandBuffer);
 
             IELButtonDeleteCommandViewer.IsEnabled = false;
         }

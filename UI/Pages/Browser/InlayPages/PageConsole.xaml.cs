@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using OPRES = OperPageLes.Properties.Resources;
+using OperPageLes.CORE.Enums.Theme;
 
 namespace OperPageLes.UI.Pages.Browser.InlayPages
 {
@@ -113,7 +114,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #endregion
 
             #region ButtonReturnCommand
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Green].ConnectPalleteFromIELElement(ButtonReturnCommand);
             ButtonReturnCommand.OnActivateMouseLeft += async (sender, e) =>
             {
                 if (TextBoxCommandInput.Text.Length == 0) return;
@@ -195,7 +196,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
             #endregion
 
             #region TextBoxCommandInput
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Violet].ConnectPalleteFromIELElement(TextBoxCommandInput);
             TextBoxCommandInput.PreviewKeyDown += (sender, e) =>
             {
                 switch (e.Key)
@@ -398,14 +399,14 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 IsAnimatedSettingQ = false,
                 IsEnabledSettingQ = false,
             };
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(Viewer);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine].ConnectPalleteFromIELElement(Viewer);
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,
                 Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["RussianRail G Pro"]
             };
             BindingOperations.SetBinding(Viewer, FontFamilyProperty, binding);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(Viewer);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue].ConnectPalleteFromIELElement(Viewer);
 
             Viewer.MouseUp += (sender, e) =>
             {

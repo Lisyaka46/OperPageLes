@@ -2,7 +2,7 @@
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
-using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PaletteWindow;
@@ -30,11 +30,6 @@ namespace OperPageLes.UI.Pages.Browser
         /// Цвет индикатора активной темы
         /// </summary>
         private WnColor ActiveThemeColor = WnColor.FromArgb(255, 0, 255, 255);
-
-        /// <summary>
-        /// Активная палитра взаимодействия
-        /// </summary>
-        private Theme ActiveManipulateTheme = new();
 
         /// <summary>
         /// Активный объект спектра палитры над которым производится манипуляция
@@ -164,7 +159,8 @@ namespace OperPageLes.UI.Pages.Browser
 
             DefaultPaletteElement.ManagerAnimation = ManagerAnimation;
             //DefaultPaletteElement.IsActivate = App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0;
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Chocolate].ConnectPalleteFromIELElement(DefaultPaletteElement);
+            DefaultPaletteElement.GetValue
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Chocolate].ConnectPalleteFromIELElement(DefaultPaletteElement);
             DefaultPaletteElement.SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette));
             DefaultPaletteElement.MouseRightButtonUp += (sender, e) =>
             {
@@ -364,7 +360,7 @@ namespace OperPageLes.UI.Pages.Browser
                 Cursor = System.Windows.Input.Cursors.Hand,
                 FontFamily = (System.Windows.Media.FontFamily)App.CurrentApp.Resources["Alphasano"],
             };
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PlumCrayola].ConnectPalleteFromIELElement(Button);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(Button);
             Button.MouseLeftButtonUp += (sender, e) =>
             {
                 if (SourcePanelAction != null && SourcePanelAction.PanelActionActivate)
@@ -389,7 +385,7 @@ namespace OperPageLes.UI.Pages.Browser
         {
             UIResult.Children.Clear();
             IELButtonText button = new();
-            foreach (PaletteSpectrumEnum ElementPalette in Enum.GetValues<PaletteSpectrumEnum>())
+            foreach (PaletteEnum ElementPalette in Enum.GetValues<PaletteEnum>())
             {
 				button = await Dispatcher.InvokeAsync(CreateButtonPaletteSpectrum);
                 button.Text = Enum.GetName(ElementPalette) ?? "Имя не инициализировано";

@@ -1,6 +1,6 @@
 ﻿using IEL.UserElementsControl;
 using OperPageLes.CORE;
-using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Struct;
 using OPLAPI.CORE;
@@ -76,22 +76,22 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
             }
         }
 
-        /// <summary>
-        /// Установить отображение темы в объектах страницы
-        /// </summary>
-        /// <param name="ActiveTheme">Опорная тема</param>
-        internal void SetVisualTheme(in Theme ActiveTheme)
-        {
-            ActiveTheme[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonExecuteLabel);
-            ActiveTheme[PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonChangeLabel);
-            ActiveTheme[PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonRemoveLabel);
-            System.Windows.Data.Binding binding = new()
-            {
-                Mode = BindingMode.OneWay,
-                Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Deledda Open Regular"]
-            };
-            BindingOperations.SetBinding(TextBlockDescriptionHead, IELButtonText.FontFamilyProperty, binding);
-            BindingOperations.SetBinding(TextBlockDescriptionContent, IELButtonText.FontFamilyProperty, binding);
-        }
+        ///// <summary>
+        ///// Установить отображение темы в объектах страницы
+        ///// </summary>
+        ///// <param name="ActiveTheme">Опорная тема</param>
+        //internal void SetVisualTheme(in Theme ActiveTheme)
+        //{
+        //    ActiveTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELButtonExecuteLabel);
+        //    ActiveTheme[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonChangeLabel);
+        //    ActiveTheme[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonRemoveLabel);
+        //    System.Windows.Data.Binding binding = new()
+        //    {
+        //        Mode = BindingMode.OneWay,
+        //        Source = (System.Windows.Media.FontFamily)System.Windows.Application.Current.Resources["Deledda Open Regular"]
+        //    };
+        //    BindingOperations.SetBinding(TextBlockDescriptionHead, IELButtonText.FontFamilyProperty, binding);
+        //    BindingOperations.SetBinding(TextBlockDescriptionContent, IELButtonText.FontFamilyProperty, binding);
+        //}
     }
 }

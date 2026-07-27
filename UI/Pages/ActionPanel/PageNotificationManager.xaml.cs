@@ -1,4 +1,5 @@
 ﻿using OperPageLes.CORE.Enums.Language;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Objects;
 using OperPageLes.UI.UserElementsControl.Default;
 using OPLAPI.CORE.Animation;
@@ -69,7 +70,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
                 Margin = new(6d),
                 CornerRadius = new(5d),
             };
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(ViewNotification);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue].ConnectPalleteFromIELElement(ViewNotification);
             ViewNotification.MouseRightButtonUp += (sender, e) =>
             {
                 if (App.CurrentApp.ApplicationNotifications.Count > 0)

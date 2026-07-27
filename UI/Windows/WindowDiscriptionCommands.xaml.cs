@@ -2,7 +2,7 @@
 using IEL.UserElementsControl;
 using Interpreter.Interfaces;
 using OperPageLes.CORE;
-using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.Description;
 using OPLAPI.OIEL.UserElementsControl.Base;
@@ -87,15 +87,15 @@ namespace OperPageLes.Windows
             ImageSelectIndicator.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.ArrowRight));
 
             #region Palette
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonSearchCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Cocoa].ConnectPalleteFromIELElement(IELInputSearchCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine].ConnectPalleteFromIELElement(IELButtonSearchCommand);
 
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonConsole);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(IELButtonAlias);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade].ConnectPalleteFromIELElement(IELButtonConsole);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade].ConnectPalleteFromIELElement(IELButtonAlias);
 
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonBack);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCloneTextCommand);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonInfoParameter);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Green].ConnectPalleteFromIELElement(IELButtonBack);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCloneTextCommand);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue].ConnectPalleteFromIELElement(IELButtonInfoParameter);
             #endregion
 
             IELButtonAlias.IsEnabled = App.CurrentApp.Interpreter.AliasesCount > 0;
@@ -125,7 +125,7 @@ namespace OperPageLes.Windows
             };
 
             #region IELImageButtonClose
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Red].ConnectPalleteFromIELElement(IELImageButtonClose);
             IELImageButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
             IELImageButtonClose.OnActivateMouseLeft += (sender, e) =>
             {
@@ -349,7 +349,7 @@ namespace OperPageLes.Windows
                 Padding = new(0, 5, 0, 5),
                 MarginViewBox = new(5, 10, 5, 10),
             };
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Jade].ConnectPalleteFromIELElement(Element);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade].ConnectPalleteFromIELElement(Element);
             System.Windows.Data.Binding binding = new()
             {
                 Mode = BindingMode.OneWay,

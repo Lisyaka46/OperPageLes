@@ -1,6 +1,7 @@
 ﻿using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
 using OperPageLes.CORE.Enums.Language;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
@@ -163,7 +164,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
             OPLVisualElementIM Result = new()
             {
                 ManagerAnimation = ManagerAnimation,
-                PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Terracotta],
+                PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Terracotta],
                 Margin = new(-8d, -5d, -8d, -5d),
                 CornerRadius = new(15d),
                 BorderThickness = new(2d),

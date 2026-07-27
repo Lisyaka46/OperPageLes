@@ -1,6 +1,7 @@
 ﻿using IEL.CORE.Classes;
-using OperPageLes.CORE.Enums;
+using OperPageLes.CORE.Enums.Theme;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Themes;
 using System.Windows;
 using System.Windows.Media;
 using static IEL.CORE.Classes.QData;
@@ -75,10 +76,9 @@ namespace OperPageLes.UI.Windows.DEV
             InicializeQData.Click += (sender, e) =>
             {
                 if (ComboBoxSelectInitQData.SelectedIndex < 0) return;
-                IELSourceButton.PaletteElement =
-                    App.CurrentApp.ActiveThemeApplication[(PaletteSpectrumEnum)ComboBoxSelectInitQData.SelectedIndex];
+                IELSourceButton.PaletteElement = Theme.GetValue((PaletteEnum)ComboBoxSelectInitQData.SelectedIndex);
                 SaveNamePalette = TextGeneratePalette.Text;
-                TextGeneratePalette.Text = ((PaletteSpectrumEnum)ComboBoxSelectInitQData.SelectedIndex).ToString();
+                TextGeneratePalette.Text = ((PaletteEnum)ComboBoxSelectInitQData.SelectedIndex).ToString();
                 TextGeneratePalette.IsEnabled = false;
                 ControlUpdateModeSetBrushQ(IELSourceButton.PaletteElement);
                 UpdateCode();
@@ -148,7 +148,7 @@ namespace OperPageLes.UI.Windows.DEV
         private System.Windows.Controls.ComboBox CreateAllPaletteButtons(System.Windows.Controls.ComboBox ResultComboBox)
         {
             ResultComboBox.Items.Clear();
-            foreach (PaletteSpectrumEnum ElementPalette in Enum.GetValues<PaletteSpectrumEnum>())
+            foreach (PaletteEnum ElementPalette in Enum.GetValues<PaletteEnum>())
             {
                 ResultComboBox.Items.Add(ElementPalette.ToString());
             }

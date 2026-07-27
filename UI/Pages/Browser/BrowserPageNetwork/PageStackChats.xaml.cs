@@ -1,4 +1,5 @@
-﻿using OperPageLes.CORE.Network;
+﻿using OperPageLes.CORE.Enums.Theme;
+using OperPageLes.CORE.Network;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
@@ -136,7 +137,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             {
                 Margin = new(3),
                 FontSize = 16d,
-                PaletteElement = App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Jade],
+                PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade],
                 IsEnabled = false,
             };
 

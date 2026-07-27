@@ -1,4 +1,4 @@
-﻿using OperPageLes.CORE.Enums;
+﻿using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Settings.PaletteElements;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace OperPageLes.UI.Windows.DEV
     /// </summary>
     public partial class WindowTestIcons : Window
     {
-        private Array EnumThemeValues = Enum.GetValues<PaletteSpectrumEnum>();
+        private Array EnumThemeValues = Enum.GetValues<PaletteEnum>();
 
         public WindowTestIcons()
         {
@@ -49,13 +49,13 @@ namespace OperPageLes.UI.Windows.DEV
             ComboBoxTheme.SelectionChanged += (sender, e) =>
             {
                 if (ComboBoxTheme.SelectedIndex == -1) return;
-                PaletteSpectrumEnum Spectrum = (PaletteSpectrumEnum)(EnumThemeValues.GetValue(ComboBoxTheme.SelectedIndex) ?? throw new Exception());
+                PaletteEnum Spectrum = (PaletteEnum)(EnumThemeValues.GetValue(ComboBoxTheme.SelectedIndex) ?? throw new Exception());
                 App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon64);
                 App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon45);
                 App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon90);
             };
 
-            foreach (string item in Enum.GetNames<PaletteSpectrumEnum>())
+            foreach (string item in Enum.GetNames<PaletteEnum>())
             {
                 ComboBoxTheme.Items.Add(item);
             }

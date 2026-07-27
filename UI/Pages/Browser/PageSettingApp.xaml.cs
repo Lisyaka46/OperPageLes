@@ -1,9 +1,9 @@
 ﻿using OPLAPI.OIEL.CORE.Browser;
-using OperPageLes.CORE.Enums;
 using OperPageLes.UI.Pages.Settings;
 using OPLAPI.CORE.Animation;
 using System.Windows;
 using System.Windows.Controls;
+using OperPageLes.CORE.Enums.Theme;
 
 namespace OperPageLes.UI.Pages.Browser
 {
@@ -52,9 +52,9 @@ namespace OperPageLes.UI.Pages.Browser
             ConsoleSetting = new();
             PanelActionSetting = new();
 
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Tangerine].ConnectPalleteFromIELElement(IELGeneralButton);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELConsoleButton);
-            App.CurrentApp.ActiveThemeApplication[PaletteSpectrumEnum.LightBlue].ConnectPalleteFromIELElement(IELPanelActionButton);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine].ConnectPalleteFromIELElement(IELGeneralButton);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Green].ConnectPalleteFromIELElement(IELConsoleButton);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELPanelActionButton);
 
             #region IELButtonsSetting
             #region IELGeneralButton

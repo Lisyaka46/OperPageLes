@@ -1,4 +1,5 @@
-﻿using OperPageLes.CORE.Struct;
+﻿using OperPageLes.CORE.Enums.Theme;
+using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
 using OPLAPI.OIEL.UserElementsControl;
@@ -42,14 +43,14 @@ namespace OperPageLes.UI.Pages.Settings
         {
             InitializeComponent();
 
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Olive].ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground);
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Red].ConnectPalleteFromIELElement(IELButtonClearImage);
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Green].ConnectPalleteFromIELElement(IELButtonSetTextClipboard);
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Purple].ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Olive].ConnectPalleteFromIELElement(IELTextBoxDirectoryBackground);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Red].ConnectPalleteFromIELElement(IELButtonClearImage);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Green].ConnectPalleteFromIELElement(IELButtonSetTextClipboard);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonDialogDirectoryFile);
 
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonTextClearValue);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonTextClearValue);
 
-            App.CurrentApp.ActiveThemeApplication[CORE.Enums.PaletteSpectrumEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
+            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Violet].ConnectPalleteFromIELElement(IELTextBoxDefaultUrl);
 
             #region PathMenuImage
             string PathBackgroundImage = string.Empty; // App.CurrentApp.SettingMainApplication.PathMenuImage;

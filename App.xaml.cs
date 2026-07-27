@@ -8,16 +8,14 @@ using InterpreterCommand.Classes;
 using InterpreterCommand.Commands;
 using LibraryPackKey.CORE;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OperPageLes.CORE;
 using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
+using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Objects;
-using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
-using OperPageLes.Properties;
 using OperPageLes.UI.Pages.ActionPanel.PageConsole;
 using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
@@ -28,15 +26,14 @@ using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Language;
 using OPLAPI.CORE.Settings;
 using OPLAPI.CORE.Settings.Base;
-using OPLAPI.CORE.Settings.Interfaces;
 using OPLAPI.CORE.Settings.Parameters;
+using OPLAPI.CORE.Themes;
 using OPLAPI.OIEL.UserElementsControl;
 using OPLAPI.OIEL.UserElementsControl.Base;
 using OPLAPI.OIEL.UserElementsControl.Interfaces;
 using Renci.SshNet;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.IO;
 using System.Management;
 using System.Net;
@@ -48,7 +45,6 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using System.Xml.Linq;
 using Windows.Foundation;
 
 namespace OperPageLes
@@ -58,19 +54,6 @@ namespace OperPageLes
     /// </summary>
     public partial class App : System.Windows.Application
     {
-        #region ThemeSetting
-        /// <summary>
-        /// Палитра приложения по умолчанию
-        /// </summary>
-        internal Palette? DefaultPalette { get; private set; }
-
-        /// <summary>
-        /// Активная тема приложения
-        /// </summary>
-        internal Theme ActiveThemeApplication => _ActiveThemeApplication ?? throw new Exception("Невозможно получить тему по умолчанию!");
-        private Theme? _ActiveThemeApplication;
-        #endregion
-
         #region Data
         /// <summary>
         /// Реальное время
@@ -862,10 +845,11 @@ namespace OperPageLes
             try
             {
                 #region OnStartup
-                LogWriteLine("Инициализация палитры");
-                DefaultPalette = new(Resources.MergedDictionaries[1]);
-                _ActiveThemeApplication = new();
-                PageManagerAppPage.PageLabelActionPanel.SetVisualTheme(in _ActiveThemeApplication);
+                LogWriteLine($"Настройка \"{nameof(Theme)}\"");
+                #region
+                Theme.SetSelectEnumSpectrumType(Assembly.GetExecutingAssembly(), nameof(PaletteEnum));
+                //PageManagerAppPage.PageLabelActionPanel.SetVisualTheme(in _ActiveThemeApplication);
+                #endregion
                 LogWriteLine("...Готово");
 
                 LogWriteLine("Подключение связей страниц");
