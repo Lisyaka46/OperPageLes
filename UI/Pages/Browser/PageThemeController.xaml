@@ -36,13 +36,13 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Theme:OPLThemeFile x:Name="DefaultPaletteElement" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Margin="2,2,2,2" CornerRadius="12,12,12,12" TextNameFile="Default" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" FontFamily="{DynamicResource Alphasano}" FontSize="18" IsActivate="True" Padding="0,2,0,2" Cursor="Hand"/>
+                <Theme:OPLThemeFile x:Name="DefaultPaletteElement" Grid.Row="0" Margin="2,2,2,2" CornerRadius="12,12,12,12" TextNameFile="Default" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" FontFamily="{DynamicResource Alphasano}" FontSize="18" IsActivate="True" Padding="0,2,0,2" Cursor="Hand"/>
                 <Border x:Name="BorderCollectPalettes" Grid.Row="1" BorderThickness="0,2,0,2" BorderBrush="Black">
                     <IEL:IELScrollViewer x:Name="ScrollViewerTheme">
 
                     </IEL:IELScrollViewer>
                 </Border>
-                <IEL:IELButtonText x:Name="IELCreateNewTheme" Grid.Row="2" Margin="5,5,5,5" PaletteElement="{DynamicResource SpruceColor}" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5" Height="45" MarginViewBox="5,7,5,7"/>
+                <IEL:IELButtonText x:Name="IELCreateNewTheme" Grid.Row="2" Margin="5,5,5,5" FontFamily="{DynamicResource Bree CYR var}" Text="Создать тему" Padding="0,2,0,2" CornerRadius="5,5,5,5" Height="45" MarginViewBox="5,7,5,7"/>
             </Grid>
         </Border>
         <Grid x:Name="GridPaletteSpectrumViewer" Grid.Column="1">
@@ -70,7 +70,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="TextBlockNameSelectTheme" Text="Name Palette" VerticalAlignment="Center" Padding="5,10,5,0" FontSize="20" Grid.ColumnSpan="1" TextTrimming="CharacterEllipsis" FontFamily="{DynamicResource Deledda Open Regular}"/>
-                    <IEL:IELButtonText x:Name="IELButtonBackViewTheme" Grid.Column="1" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Jade}" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Text="Назад" Padding="0,2,0,2" Height="40" Margin="5,5,5,5"/>
+                    <IEL:IELButtonText x:Name="IELButtonBackViewTheme" Grid.Column="1" CornerRadius="5,5,5,5" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Text="Назад" Padding="0,2,0,2" Height="40" Margin="5,5,5,5"/>
                 </Grid>
                 <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="#FF1D92D0">
                     <IEL:IELScrollViewer x:Name="ScrollViewerSpectrum"/>
@@ -93,8 +93,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <IEL:IELButtonText x:Name="IELExampleButtonPalette" FontSize="20" FontWeight="Bold" FontFamily="{DynamicResource Bree CYR var}" Padding="0,2,0,2" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Text="Пример" VerticalAlignment="Center" Margin="20,5,20,5" Grid.Row="0" PaletteElement="{DynamicResource Chocolate}" Height="45"/>
-                        <OPL:OPLCheckBox x:Name="CheckBoxEnabledExampleButtonPalette" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" PaletteElement="{DynamicResource Terracotta}" Text="Включить кнопку" CheckBoxCornerRadius="15" CornerRadius="15,15,15,15" Margin="5,0,5,2" FontFamily="{DynamicResource Alphasano}" FontSize="16" CheckBoxBorderThickness="0,0,0,0" Padding="10,0,10,0" IsChecked="True"/>
+                        <IEL:IELButtonText x:Name="IELExampleButtonPalette" FontSize="20" FontWeight="Bold" FontFamily="{DynamicResource Bree CYR var}" Padding="0,2,0,2" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Text="Пример" VerticalAlignment="Center" Margin="20,5,20,5" Grid.Row="0" Height="45"/>
+                        <OPL:OPLCheckBox x:Name="CheckBoxEnabledExampleButtonPalette" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Включить кнопку" CheckBoxCornerRadius="15" CornerRadius="15,15,15,15" Margin="5,0,5,2" FontFamily="{DynamicResource Alphasano}" FontSize="16" CheckBoxBorderThickness="0,0,0,0" Padding="10,0,10,0" IsChecked="True"/>
                     </Grid>
                     <Border Grid.Row="1" BorderThickness="0,2,0,0" BorderBrush="Black" CornerRadius="0,0,5,0">
                         <Border.Background>

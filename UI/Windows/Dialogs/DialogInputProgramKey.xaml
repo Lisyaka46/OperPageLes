@@ -5,7 +5,6 @@
     xmlns:local="clr-namespace:OperPageLes.UI.Windows.Dialogs"
     xmlns:Base="clr-namespace:OPLAPI.OIEL.UserElementsControl.Base;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     x:Class="OperPageLes.UI.Windows.Dialogs.DialogInputProgramKey"
     Title="Ввод ключа доступа" Height="320" Width="565" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" AllowsTransparency="True" RenderTransformOrigin="0.5,0.5">
@@ -38,8 +37,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <IEL:IELButtonText x:Name="IELButtonInput" Grid.Column="1" BorderThickness="2,2,2,2" Text="Ввод" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="10,10,10,10" PaletteElement="{DynamicResource Green}" Margin="5,0,0,0" Padding="10,3,10,3"/>
-            <IEL:IELButtonText x:Name="IELButtonCancel" Grid.Column="0" BorderThickness="2,2,2,2" Text="Отмена" FontFamily="{DynamicResource Bree CYR var}" Margin="0,0,5,0" CornerRadius="10,10,10,10" PaletteElement="{DynamicResource Red}" Padding="10,3,10,3"/>
+            <IEL:IELButtonText x:Name="IELButtonInput" Grid.Column="1" BorderThickness="2,2,2,2" Text="Ввод" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="10,10,10,10" Margin="5,0,0,0" Padding="10,3,10,3"/>
+            <IEL:IELButtonText x:Name="IELButtonCancel" Grid.Column="0" BorderThickness="2,2,2,2" Text="Отмена" FontFamily="{DynamicResource Bree CYR var}" Margin="0,0,5,0" CornerRadius="10,10,10,10" Padding="10,3,10,3"/>
         </Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -59,11 +58,11 @@
                         <TextBlock x:Name="TextBlockPack" Text="SUNHSkhBR0lJQklGSEVIQ0lDQkFISEFHSElER0ZHQkdC" FontFamily="{DynamicResource Vollda}" Foreground="#FF0D3254" MaxHeight="36" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Grid.Column="0" Margin="3,0,3,0"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2">
                             <Line X1="0" Y1="50" Stroke="Black" StrokeThickness="2" VerticalAlignment="Center" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Center"/>
-                            <IEL:IELButtonText x:Name="IELButtonCopyPack" Grid.Column="0" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,3,3,3" Text="Скопировать" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Padding="10,0,10,0" PaletteElement="{DynamicResource Tangerine}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <IEL:IELButtonText x:Name="IELButtonUpdatePack" Grid.Column="1" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,3,3,3" Text="Обновить" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Padding="10,0,10,0" PaletteElement="{DynamicResource Jade}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <IEL:IELButtonText x:Name="IELButtonCopyPack" Grid.Column="0" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,3,3,3" Text="Скопировать" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Padding="10,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <IEL:IELButtonText x:Name="IELButtonUpdatePack" Grid.Column="1" BorderThickness="2,2,2,2" CornerRadius="6,6,6,6" Margin="3,3,3,3" Text="Обновить" FontSize="16" FontFamily="{DynamicResource Bree CYR var}" Padding="10,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
-                    <IEL:IELTextBox x:Name="IELTextBoxKey" Grid.Row="2" BorderThickness="2,2,2,2" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Margin="5,5,5,5" PaletteElement="{DynamicResource PastelBlue}" CornerRadius="6,6,6,6" Padding="0,4,0,2"/>
+                    <IEL:IELTextBox x:Name="IELTextBoxKey" Grid.Row="2" BorderThickness="2,2,2,2" FontSize="16" FontFamily="{DynamicResource RussianRail G Pro}" Margin="5,5,5,5" CornerRadius="6,6,6,6" Padding="0,4,0,2"/>
                 </StackPanel>
             </Border>
             <TextBlock Grid.Row="2" TextWrapping="Wrap" Text="При отсутствии ключа обратитесь к поставщику приложения" FontSize="17" TextAlignment="Center" FontStyle="Italic" FontFamily="{DynamicResource Bree CYR var}" Padding="5,5,5,5" Opacity="0.4"/>

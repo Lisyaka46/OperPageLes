@@ -33,7 +33,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             RunCommandRequiredSymbol.Text = Lang.GetValue(LangUITranslate.RequiredMarker);
             IELButtonCancel.Text = Lang.GetValue(LangUITranslate.Cancel);
 
-            ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)SelectIndexSpectrum];
+            ButtonSelectSpectrumTheme.Palette = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)SelectIndexSpectrum];
             IELTextBoxNameLabel.Text = string.Empty;
             IELTextBoxCommand.Text = string.Empty;
             IELTextBoxDescription.Text = string.Empty;
@@ -124,25 +124,25 @@ namespace OperPageLes.UI.Windows.Dialogs
             {
                 try
                 {
-                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)(++SelectIndexSpectrum)];
+                    ButtonSelectSpectrumTheme.Palette = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)(++SelectIndexSpectrum)];
                 }
                 catch
                 {
                     SelectIndexSpectrum = 0u;
-                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)0u];
+                    ButtonSelectSpectrumTheme.Palette = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)0u];
                 }
             };
             ButtonSelectSpectrumTheme.MouseRightButtonUp += (sender, e) =>
             {
                 try
                 {
-                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)(--SelectIndexSpectrum)];
+                    ButtonSelectSpectrumTheme.Palette = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)(--SelectIndexSpectrum)];
                 }
                 catch
                 {
                     PaletteEnum[] Array = Enum.GetValues<PaletteEnum>();
                     SelectIndexSpectrum = (uint)(Array.Length - 1);
-                    ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[Array[^1]];
+                    ButtonSelectSpectrumTheme.Palette = App.CurrentApp.ActiveThemeApplication[Array[^1]];
                 }
             };
             Loaded += (sender, e) =>
@@ -201,7 +201,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             IELTextBoxNameLabel.Text = Source.Name;
             IELTextBoxCommand.Text = Source.Command;
             IELTextBoxDescription.Text = Source.Description ?? string.Empty;
-            ButtonSelectSpectrumTheme.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)Source.IndexSpectrumTheme];
+            ButtonSelectSpectrumTheme.Palette = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)Source.IndexSpectrumTheme];
             SelectIndexSpectrum = (uint)Source.IndexSpectrumTheme;
 
             ShowDialog();

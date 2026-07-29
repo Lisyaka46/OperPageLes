@@ -6,7 +6,6 @@
       xmlns:local="clr-namespace:OperPageLes.UI.Pages.ActionPanel"
       xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
       xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
       x:Class="OperPageLes.UI.Pages.ActionPanel.PageConsole.BufferPagePanelAction" Width="250" Height="250">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
@@ -43,8 +42,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelBlue}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8" Height="50" MarginViewBox="5,7,5,7" Padding="10,0,10,0"/>
-            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource PastelRed}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1" Height="50" MarginViewBox="5,7,5,7"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonBackMainMenu" Text="Назад" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" KeyActivateButton="Oem3" CornerRadiusKey="8,8,8,8" Height="50" MarginViewBox="5,7,5,7" Padding="10,0,10,0"/>
+            <GUI:IELButtonTextKey x:Name="IELButtonClearBuffer" Text="Очистить" Grid.Column="1" FontSize="16" Margin="3,0,3,0" FontFamily="{DynamicResource Bree CYR var}" CornerRadiusKey="8,8,8,8" KeyActivateButton="D1" Height="50" MarginViewBox="5,7,5,7"/>
         </Grid>
     </Grid>
 </Page>

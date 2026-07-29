@@ -1,7 +1,8 @@
 ﻿using ColorPicker;
 using ColorPicker.Models;
-using IEL.CORE.Classes;
-using IEL.CORE.Enums;
+using LibraryIEL.CORE.Themes.Data;
+using LibraryIEL.CORE.Themes.Palette;
+using LibraryIEL.CORE.Themes.Palettes;
 using OperPageLes.CORE.Struct;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Interfaces;
@@ -126,17 +127,17 @@ namespace OperPageLes.UI.Windows.Dialogs
             BorderColorBorderBrush.Background = new SolidColorBrush(PaletteSpectrumManipulate.BB.GetFromSpectrumColor(spectrum));
             BorderColorForeground.Background = new SolidColorBrush(PaletteSpectrumManipulate.FG.GetFromSpectrumColor(spectrum));
 
-            IELBlockExample50.PaletteElement = PaletteSpectrumManipulate;
-            IELBlockExample50.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
+            IELBlockExample50.Palette = PaletteSpectrumManipulate;
+            IELBlockExample50.SetActiveSpecrum((SpectrumColor)spectrum + 1, false);
 
-            IELBlockExampleB50.PaletteElement = PaletteSpectrumManipulate;
-            IELBlockExampleB50.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
+            IELBlockExampleB50.Palette = PaletteSpectrumManipulate;
+            IELBlockExampleB50.SetActiveSpecrum((SpectrumColor)spectrum + 1, false);
 
-            IELBlockExample80.PaletteElement = PaletteSpectrumManipulate;
-            IELBlockExample80.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
+            IELBlockExample80.Palette = PaletteSpectrumManipulate;
+            IELBlockExample80.SetActiveSpecrum((SpectrumColor)spectrum + 1, false);
 
-            IELBlockExampleB80.PaletteElement = PaletteSpectrumManipulate;
-            IELBlockExampleB80.SetActiveSpecrum((StateSpectrum)spectrum + 1, false);
+            IELBlockExampleB80.Palette = PaletteSpectrumManipulate;
+            IELBlockExampleB80.SetActiveSpecrum((SpectrumColor)spectrum + 1, false);
 
 
             ActivateColorPicker(BorderColorBackground, PaletteSpectrumManipulate.BG);

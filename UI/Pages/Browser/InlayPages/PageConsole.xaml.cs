@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using OPRES = OperPageLes.Properties.Resources;
 using OperPageLes.CORE.Enums.Theme;
+using LibraryIEL.CORE.Themes.Palettes;
 
 namespace OperPageLes.UI.Pages.Browser.InlayPages
 {
@@ -240,7 +241,7 @@ namespace OperPageLes.UI.Pages.Browser.InlayPages
                 {
                     case Key.Enter:
                         SaveStringPrintBuffer = string.Empty;
-                        TextBoxCommandInput.SetActiveSpecrum(StateSpectrum.Used, true);
+                        TextBoxCommandInput.SetActiveSpecrum(SpectrumColor.Used, true);
                         if (SelectNavigation == SelectNavigationPageConsoleEnum.HitCommands)
                         {
                             SetSelectNavigation(SelectNavigationPageConsoleEnum.None);

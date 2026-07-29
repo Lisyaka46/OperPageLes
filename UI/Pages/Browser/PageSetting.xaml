@@ -14,8 +14,8 @@
         </Grid.ColumnDefinitions>
         <IEL:IELScrollViewer x:Name="IELScrollCategoryButtons">
             <StackPanel ClipToBounds="True">
-                <IEL:IELButtonText HorizontalAlignment="Left" VerticalAlignment="Center" PaletteElement="{DynamicResource Aquamarine}" Margin="0,2,0,2" CornerRadius="0,10,10,0" MarginViewBox="2,2,2,2" Text="Общие" Height="35" Padding="0,0,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
-                <IEL:IELButtonText HorizontalAlignment="Left" VerticalAlignment="Center" PaletteElement="{DynamicResource Aquamarine}" Margin="0,2,10,2" CornerRadius="0,10,10,0" MarginViewBox="2,2,2,2" Text="Общие" Height="35" Padding="0,0,0,2" FontFamily="{DynamicResource RussianRail G Pro}"/>
+                <IEL:IELButtonText HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,0,2" CornerRadius="0,10,10,0" MarginViewBox="2,2,2,2" Text="Общие" Height="35" Padding="0,0,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
+                <IEL:IELButtonText HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,10,2" CornerRadius="0,10,10,0" MarginViewBox="2,2,2,2" Text="Общие" Height="35" Padding="0,0,0,2" FontFamily="{DynamicResource RussianRail G Pro}"/>
             </StackPanel>
         </IEL:IELScrollViewer>
         <Grid x:Name="ControllerCategories" Grid.Column="1">

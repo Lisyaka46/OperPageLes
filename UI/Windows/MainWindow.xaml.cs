@@ -1,17 +1,15 @@
 ﻿#region Link
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
+using LibraryIEL.CORE.Themes.Palettes;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
-using OperPageLes.CORE.Enums.Theme;
 using OperPageLes.CORE.Objects;
-using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel;
 using OperPageLes.UI.Pages.ActionPanel.Other;
 using OperPageLes.UI.Pages.Browser;
-using OperPageLes.UI.Pages.Browser.BrowserPageNetwork;
 using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
@@ -534,7 +532,7 @@ namespace OperPageLes.UI.Windows
                     }
                     IELBlockInfoInternetConnection.IsEnabled = e.Connect;
                     IELBlockInfoInternetConnection.SourceBackground.SetActiveSpecrum(
-                        e.Connect ? StateSpectrum.Default : StateSpectrum.NotEnabled, true);
+                        e.Connect ? SpectrumColor.Default : SpectrumColor.NotEnabled, true);
                     IELBlockInfoInternetConnection.Source =
                         StructDirectoryResources.GetResourceBitmap(e.Connect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
                 }
@@ -699,33 +697,33 @@ namespace OperPageLes.UI.Windows
 
             IELButtonImage ButtonClose = e.GetButtonCloseInlay();
             ButtonClose.MarginViewBox = new(0d);
-            ButtonClose.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Red];
+            //ButtonClose.Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Red];
             ButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }
         #endregion
 
-        /// <summary>
-        /// Присвоить кнопкам цвет в завимисости от темы
-        /// </summary>
-        /// <param name="SourceTheme">Тема</param>
-        internal void SetPallete(in Theme SourceTheme)
-        {
-            SourceTheme[PaletteEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
-            SourceTheme[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonBack);
-            SourceTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELOpenDataFolder);
-            SourceTheme[PaletteEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
-            SourceTheme[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
-            SourceTheme[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCollapse);
-            SourceTheme[PaletteEnum.Red].ConnectPalleteFromIELElement(IELButtonClose);
-            SourceTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
-            SourceTheme[PaletteEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
-            SourceTheme[PaletteEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
-            SourceTheme[PaletteEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
-            SourceTheme[PaletteEnum.Cocoa].ConnectPalleteFromIELElement(App.GUIE_PanelAction);
-            SourceTheme[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
-            SourceTheme[PaletteEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
-            SourceTheme[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonInstallAppPage);
-        }
+        ///// <summary>
+        ///// Присвоить кнопкам цвет в завимисости от темы
+        ///// </summary>
+        ///// <param name="SourceTheme">Тема</param>
+        //internal void SetPallete(in Theme SourceTheme)
+        //{
+        //    SourceTheme[PaletteEnum.Lime].ConnectPalleteFromIELElement(ImageLogoApplication);
+        //    SourceTheme[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonBack);
+        //    SourceTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELOpenDataFolder);
+        //    SourceTheme[PaletteEnum.Chocolate].ConnectPalleteFromIELElement(IELButtonTheme);
+        //    SourceTheme[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonSettings);
+        //    SourceTheme[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonCollapse);
+        //    SourceTheme[PaletteEnum.Red].ConnectPalleteFromIELElement(IELButtonClose);
+        //    SourceTheme[PaletteEnum.Green].ConnectPalleteFromIELElement(IELBlockInfoInternetConnection);
+        //    SourceTheme[PaletteEnum.Saffron].ConnectPalleteFromIELElement(IELBlockInfoStateRegister);
+        //    SourceTheme[PaletteEnum.Violet].ConnectPalleteFromIELElement(IELBlockInfoCurrentLanguage);
+        //    SourceTheme[PaletteEnum.Jade].ConnectPalleteFromIELElement(IELBlockInfoVolume);
+        //    SourceTheme[PaletteEnum.Cocoa].ConnectPalleteFromIELElement(App.GUIE_PanelAction);
+        //    SourceTheme[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(IELButtonHomeBrowser);
+        //    SourceTheme[PaletteEnum.BlueGreenCrayola].ConnectPalleteFromIELElement(IELButtonAddLabel);
+        //    SourceTheme[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELButtonInstallAppPage);
+        //}
 
         /// <summary>
         /// Установить настройки для данной формы

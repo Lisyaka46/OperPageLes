@@ -110,7 +110,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             {
                 ManagerAnimation = ManagerAnimation,
                 DataContext = SourceInfo,
-                PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola],
+                Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola],
                 CornerRadius = new(6d),
                 Margin = new(5d),
             };

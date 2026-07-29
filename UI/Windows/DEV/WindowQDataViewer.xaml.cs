@@ -1,10 +1,11 @@
-﻿using IEL.CORE.Classes;
+﻿using LibraryIEL.CORE.Themes.Data;
+using LibraryIEL.CORE.Themes.Palette;
 using OperPageLes.CORE.Enums.Theme;
 using OPLAPI.CORE.Animation;
 using OPLAPI.CORE.Themes;
 using System.Windows;
 using System.Windows.Media;
-using static IEL.CORE.Classes.QData;
+using static LibraryIEL.CORE.Themes.Data.QData;
 using WnColor = System.Windows.Media.Color;
 
 namespace OperPageLes.UI.Windows.DEV
@@ -30,12 +31,12 @@ namespace OperPageLes.UI.Windows.DEV
             TextBlockCodeView.Text = String.Empty;
             CheckBoxIsEnabledController.IsChecked = IELSourceButton.IsEnabled;
             ButtonBack.IsEnabled = false;
-            IELSourceButton.PaletteElement = PaletteSpectrumSource;
+            IELSourceButton.Palette = PaletteSpectrumSource;
             ButtonBack.Click += (sender, e) =>
             {
                 ButtonBack.IsEnabled = false;
                 ControlUpdateModeSetBrushQ(PaletteSpectrumSource);
-                IELSourceButton.PaletteElement = PaletteSpectrumSource;
+                IELSourceButton.Palette = PaletteSpectrumSource;
 
                 TextGeneratePalette.Text = SaveNamePalette;
                 TextGeneratePalette.IsEnabled = true;
@@ -76,11 +77,11 @@ namespace OperPageLes.UI.Windows.DEV
             InicializeQData.Click += (sender, e) =>
             {
                 if (ComboBoxSelectInitQData.SelectedIndex < 0) return;
-                IELSourceButton.PaletteElement = Theme.GetValue((PaletteEnum)ComboBoxSelectInitQData.SelectedIndex);
+                IELSourceButton.Palette = Theme.GetValue((PaletteEnum)ComboBoxSelectInitQData.SelectedIndex);
                 SaveNamePalette = TextGeneratePalette.Text;
                 TextGeneratePalette.Text = ((PaletteEnum)ComboBoxSelectInitQData.SelectedIndex).ToString();
                 TextGeneratePalette.IsEnabled = false;
-                ControlUpdateModeSetBrushQ(IELSourceButton.PaletteElement);
+                ControlUpdateModeSetBrushQ(IELSourceButton.Palette);
                 UpdateCode();
                 ButtonBack.IsEnabled = true;
             };
@@ -142,7 +143,7 @@ namespace OperPageLes.UI.Windows.DEV
             OPLAnimationManager.AnimateTakingZeroTo(null, ArrayBrushSource[ComboBoxSelectQData.SelectedIndex][(int)DataStateChange],
                         SolidColorBrush.ColorProperty, ResultColor, TimeSpan.FromMilliseconds(500d));
             qd.SetFromSpectrumColor(DataStateChange, ResultColor);
-            ControlUpdateModeSetBrushQ(IELSourceButton.PaletteElement);
+            ControlUpdateModeSetBrushQ(IELSourceButton.Palette);
         }
 
         private System.Windows.Controls.ComboBox CreateAllPaletteButtons(System.Windows.Controls.ComboBox ResultComboBox)

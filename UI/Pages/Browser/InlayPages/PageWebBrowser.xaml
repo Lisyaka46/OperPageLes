@@ -7,7 +7,6 @@
     xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     xmlns:Cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
     x:Class="OperPageLes.UI.Pages.Browser.InlayPages.PageWebBrowser"
     Title="Веб-браузер">
@@ -26,11 +25,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-                <IEL:IELButtonImage x:Name="IELButtonReloadPage" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Padding="2,2,2,2" PaletteElement="{DynamicResource Saffron}" Width="40" Height="40" Margin="0,0,5,0"/>
-                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Padding="2,2,2,2" Grid.Column="1" PaletteElement="{DynamicResource PastelBlue}" Width="40" Height="40" Margin="0,0,5,0"/>
+                <IEL:IELButtonImage x:Name="IELButtonReloadPage" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Padding="2,2,2,2" Width="40" Height="40" Margin="0,0,5,0"/>
+                <IEL:IELButtonImage x:Name="IELButtonUnopenPageSystemBrowser" CornerRadius="6,6,6,6" BorderThickness="2,2,2,2" Padding="2,2,2,2" Grid.Column="1" Width="40" Height="40" Margin="0,0,5,0"/>
             </StackPanel>
             <Grid Grid.Column="1">
-                <IEL:IELTextBox x:Name="TextBoxLink" Text="123" Grid.ColumnSpan="1" BorderThickness="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}" PaletteElement="{DynamicResource Green}" CornerRadius="5,5,5,5" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Center" Padding="0,8,0,4" FontSize="15"/>
+                <IEL:IELTextBox x:Name="TextBoxLink" Text="123" Grid.ColumnSpan="1" BorderThickness="1,1,1,1" FontFamily="{DynamicResource Deledda Open Regular}" CornerRadius="5,5,5,5" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Center" Padding="0,8,0,4" FontSize="15"/>
             </Grid>
             <Grid Grid.Column="2">
                 

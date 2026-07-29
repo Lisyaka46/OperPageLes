@@ -23,9 +23,9 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <IEL:IELButtonImage x:Name="IELButtonChats" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource PastelBlue}" FontFamily="{DynamicResource Bree CYR var}" Margin="5,5,5,5" FontSize="14" MarginViewBox="10,6,10,6" CornerRadiusGuides="7.6,7.6,7.6,7.6" Grid.ColumnSpan="1"/>
-                    <IEL:IELButtonText x:Name="IELButtonProfile" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Saffron}" FontFamily="{DynamicResource Bree CYR var}" Text="Ваш профиль" Margin="5,5,5,5" FontSize="14" MarginViewBox="5,6,5,6" IsEnabled="False" Grid.ColumnSpan="1" Grid.Column="1"/>
-                    <IEL:IELButtonImage x:Name="IELButtonFolderDownloads" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Green}" FontFamily="{DynamicResource Bree CYR var}" Margin="5,5,5,5" FontSize="14" MarginViewBox="10,6,10,6" CornerRadiusGuides="7.6,7.6,7.6,7.6" Grid.ColumnSpan="1" Grid.Column="3"/>
+                    <IEL:IELButtonImage x:Name="IELButtonChats" CornerRadius="5,5,5,5" FontFamily="{DynamicResource Bree CYR var}" Margin="5,5,5,5" FontSize="14" MarginViewBox="10,6,10,6" CornerRadiusGuides="7.6,7.6,7.6,7.6" Grid.ColumnSpan="1"/>
+                    <IEL:IELButtonText x:Name="IELButtonProfile" CornerRadius="5,5,5,5" FontFamily="{DynamicResource Bree CYR var}" Text="Ваш профиль" Margin="5,5,5,5" FontSize="14" MarginViewBox="5,6,5,6" IsEnabled="False" Grid.ColumnSpan="1" Grid.Column="1"/>
+                    <IEL:IELButtonImage x:Name="IELButtonFolderDownloads" CornerRadius="5,5,5,5" FontFamily="{DynamicResource Bree CYR var}" Margin="5,5,5,5" FontSize="14" MarginViewBox="10,6,10,6" CornerRadiusGuides="7.6,7.6,7.6,7.6" Grid.ColumnSpan="1" Grid.Column="3"/>
                 </Grid>
             </Border>
             <Grid Grid.Row="1">

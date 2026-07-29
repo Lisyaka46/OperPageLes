@@ -1,21 +1,21 @@
-﻿using IEL.CORE.Classes;
-using IEL.CORE.Enums;
+﻿using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using IEL.UserElementsControl.Base;
+using LibraryIEL.CORE.Themes.Palette;
 using OperPageLes.CORE.Enums.Theme;
-using OperPageLes.CORE.Settings.PaletteElements;
 using OperPageLes.CORE.Struct;
 using OperPageLes.UI.Pages.ActionPanel.PaletteWindow;
 using OperPageLes.UI.UserElementsControl.Theme;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Themes;
 using OPLAPI.OIEL.CORE.Browser;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
-using static IEL.CORE.Classes.QData;
+using static LibraryIEL.CORE.Themes.Data.QData;
 using OPRES = OperPageLes.Properties.Resources;
 using WnColor = System.Windows.Media.Color;
 
@@ -159,8 +159,7 @@ namespace OperPageLes.UI.Pages.Browser
 
             DefaultPaletteElement.ManagerAnimation = ManagerAnimation;
             //DefaultPaletteElement.IsActivate = App.CurrentApp.SettingMainApplication.ThemeInstallName.Value.Length == 0;
-            DefaultPaletteElement.GetValue
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Chocolate].ConnectPalleteFromIELElement(DefaultPaletteElement);
+            DefaultPaletteElement.Palette = Theme.GetValue(PaletteEnum.Cocoa);
             DefaultPaletteElement.SourceElement = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Palette));
             DefaultPaletteElement.MouseRightButtonUp += (sender, e) =>
             {
@@ -359,8 +358,8 @@ namespace OperPageLes.UI.Pages.Browser
                 ManagerAnimation = ManagerAnimation,
                 Cursor = System.Windows.Input.Cursors.Hand,
                 FontFamily = (System.Windows.Media.FontFamily)App.CurrentApp.Resources["Alphasano"],
+                Palette = Theme.GetValue(PaletteEnum.PlumCrayola),
             };
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola].ConnectPalleteFromIELElement(Button);
             Button.MouseLeftButtonUp += (sender, e) =>
             {
                 if (SourcePanelAction != null && SourcePanelAction.PanelActionActivate)
@@ -403,7 +402,7 @@ namespace OperPageLes.UI.Pages.Browser
                     }
                     BorderViewerQData.IsEnabled = true;
                     
-                    SetPaletteViewer(((IELObjectBase)sender).PaletteElement);
+                    SetPaletteViewer(((IELObjectBase)sender).Palette);
                 };
                 ActiveManipulateTheme[ElementPalette].ConnectPalleteFromIELElement(button);
 
@@ -439,7 +438,7 @@ namespace OperPageLes.UI.Pages.Browser
         private void SetPaletteViewer(PaletteSpectrum Source)
         {
             ActiveManipulateSpectrum = Source;
-            IELExampleButtonPalette.PaletteElement = Source;
+            IELExampleButtonPalette.Palette = Source;
 
             UpdateVisualPaletteSpectrumFromBorder(ref Source);
         }

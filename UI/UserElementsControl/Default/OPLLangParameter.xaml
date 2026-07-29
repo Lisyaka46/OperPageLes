@@ -24,7 +24,7 @@
                     <TextBlock x:FieldModifier="private" x:Name="TextBlockLangKey" Text="Enum.Key" HorizontalAlignment="Left" FontSize="14" FontFamily="{DynamicResource Brenzo Slab Personal Use}" MaxWidth="200"/>
                 </StackPanel>
             </Viewbox>
-            <IEL:IELTextBox x:FieldModifier="private" x:Name="IELTextBoxLangValueTranslate" Grid.Column="1" PaletteElement="{DynamicResource PlumCrayola}" FontSize="18" Padding="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}" Margin="0,0,5,5" CornerRadius="10,10,10,10" IsEnabledSettingQ="False" IsAnimatedSettingQ="True"/>
+            <IEL:IELTextBox x:FieldModifier="private" x:Name="IELTextBoxLangValueTranslate" Grid.Column="1" FontSize="18" Padding="0,10,0,10" FontFamily="{DynamicResource Bree CYR var}" Margin="0,0,5,5" CornerRadius="10,10,10,10" IsEnabledSettingQ="False" IsAnimatedSettingQ="True"/>
         </Grid>
     </Grid>
 </Base:IELContainerBase>

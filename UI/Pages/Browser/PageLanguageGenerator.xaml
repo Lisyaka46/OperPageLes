@@ -24,22 +24,22 @@
                 <Border>
                     <StackPanel>
                         <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguageLocate"/>
-                        <IEL:IELTextBox PaletteElement="{DynamicResource PlatinumGrey}"/>
+                        <IEL:IELTextBox/>
                     </StackPanel>
                 </Border>
                 <Border>
                     <StackPanel>
                         <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguageName"/>
-                        <IEL:IELTextBox PaletteElement="{DynamicResource Aquamarine}"/>
+                        <IEL:IELTextBox/>
                     </StackPanel>
                 </Border>
                 <Border>
                     <StackPanel>
                         <TextBlock x:FieldModifier="private" x:Name="TextBlockLanguageVersion"/>
-                        <IEL:IELTextBox PaletteElement="{DynamicResource LightBlue}"/>
+                        <IEL:IELTextBox/>
                     </StackPanel>
                 </Border>
-                <IEL:IELButtonText x:Name="IELButtonAutors" PaletteElement="{DynamicResource Jade}"/>
+                <IEL:IELButtonText x:Name="IELButtonAutors"/>
             </StackPanel>
             <Line Grid.Row="1" Margin="5,5,5,4" StrokeThickness="2" Stroke="Black" X2="1" HorizontalAlignment="Center" Stretch="Fill" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
             <StackPanel Grid.Row="2">
@@ -58,13 +58,13 @@
                                 <ColumnDefinition Width="37*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:FieldModifier="private" x:Name="TextBlockPath"/>
-                            <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonOverview" Grid.Column="1" PaletteElement="{DynamicResource GreenishAsphalt}"/>
+                            <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonOverview" Grid.Column="1"/>
                         </Grid>
                         <TextBlock x:FieldModifier="private" x:Name="TextBlockErrorPath"/>
                     </StackPanel>
                 </Border>
-                <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonManipulation" PaletteElement="{DynamicResource BlueGreenCrayola}"/>
-                <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonCancel" PaletteElement="{DynamicResource Red}"/>
+                <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonManipulation"/>
+                <IEL:IELButtonText x:FieldModifier="private" x:Name="IELButtonCancel"/>
             </StackPanel>
         </Grid>
     </Grid>

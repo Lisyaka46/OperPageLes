@@ -34,9 +34,9 @@
                         <GradientStop Color="Black" Offset="0.25"/>
                     </LinearGradientBrush>
                 </StackPanel.OpacityMask>
-                <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" FontFamily="{DynamicResource Vollda}" PaletteElement="{DynamicResource Tangerine}"/>
-                <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}" PaletteElement="{DynamicResource Green}"/>
-                <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1" PaletteElement="{DynamicResource LightBlue}"/>
+                <IEL:IELButtonText x:Name="IELGeneralButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Общие" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" FontFamily="{DynamicResource Vollda}"/>
+                <IEL:IELButtonText x:Name="IELConsoleButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Консоль" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="1" FontFamily="{DynamicResource Vollda}"/>
+                <IEL:IELButtonText x:Name="IELPanelActionButton" Margin="5,0,5,10" CornerRadius="0,0,8,8" Text="Панель действий" BorderThickness="3,0,3,3"  FontSize="16" Padding="10,0,10,0" Grid.Column="2" FontFamily="{DynamicResource Vollda}" Grid.ColumnSpan="1"/>
             </StackPanel>
             <Grid Grid.Row="1">
                 <Border x:Name="BorderElement" ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderThickness="0,3,0,0" BorderBrush="Black">

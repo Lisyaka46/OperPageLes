@@ -99,8 +99,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <IEL:IELButtonText x:Name="IELButtonCancel" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Red}" Height="35" Grid.ColumnSpan="1" Text="Отмена" Margin="3,3,2,3"/>
-                <IEL:IELButtonText x:Name="IELButtonComplete" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Green}" Height="35" Grid.ColumnSpan="1" Grid.Column="1" Text="Применить" Margin="2,3,3,3"/>
+                <IEL:IELButtonText x:Name="IELButtonCancel" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" Height="35" Grid.ColumnSpan="1" Text="Отмена" Margin="3,3,2,3"/>
+                <IEL:IELButtonText x:Name="IELButtonComplete" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" Height="35" Grid.ColumnSpan="1" Grid.Column="1" Text="Применить" Margin="2,3,3,3"/>
             </Grid>
         </Grid>
     </Grid>

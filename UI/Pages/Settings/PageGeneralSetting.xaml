@@ -71,13 +71,13 @@
                                 <RowDefinition Height="Auto" MinHeight="34.73"/>
                             </Grid.RowDefinitions>
                             <Image x:Name="ImageErrorBitmapBackground" Source="/UI/Images/Warning.png" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,10,5" StretchDirection="DownOnly"/>
-                            <IEL:IELTextBox x:Name="IELTextBoxDirectoryBackground" FontSize="16"  Grid.RowSpan="1" CornerRadius="3,3,3,3" IsReadOnly="True" MaxHeight="40" Margin="50,0,50,0" Padding="0,2,0,2" FontFamily="{DynamicResource Bree CYR var}" PaletteElement="{DynamicResource Olive}"/>
+                            <IEL:IELTextBox x:Name="IELTextBoxDirectoryBackground" FontSize="16"  Grid.RowSpan="1" CornerRadius="3,3,3,3" IsReadOnly="True" MaxHeight="40" Margin="50,0,50,0" Padding="0,2,0,2" FontFamily="{DynamicResource Bree CYR var}"/>
                             <TextBlock x:Name="TextBlockFailedImageSetup" TextWrapping="Wrap" Text="Не удалось установить изображение по ссылке или директории" FontSize="17" Foreground="White" FontStyle="Italic" Grid.Row="1" TextAlignment="Center" LineStackingStrategy="BlockLineHeight" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" Padding="0,2,0,2"/>
                         </Grid>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5" HorizontalAlignment="Center">
-                            <IEL:IELButtonText x:Name="IELButtonClearImage" Text="Убрать фон"  BorderThickness="2,2,2,2" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Red}" MarginViewBox="5,7,5,7"/>
-                            <IEL:IELButtonText x:Name="IELButtonSetTextClipboard" Text="Вставить ссылку из буфера" BorderThickness="2,2,2,2" Grid.Column="1" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" PaletteElement="{DynamicResource Green}" Margin="10,0,10,0" MarginViewBox="5,7,5,7"/>
-                            <IEL:IELButtonText x:Name="IELButtonDialogDirectoryFile" Text="Обзор"  BorderThickness="2,2,2,2" Grid.Column="2" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" VisualGuide="RightArrow" PaletteElement="{DynamicResource Purple}" CornerRadiusGuides="7.6,7.6,7.6,7.6" MarginViewBox="5,7,5,7"/>
+                            <IEL:IELButtonText x:Name="IELButtonClearImage" Text="Убрать фон"  BorderThickness="2,2,2,2" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" MarginViewBox="5,7,5,7"/>
+                            <IEL:IELButtonText x:Name="IELButtonSetTextClipboard" Text="Вставить ссылку из буфера" BorderThickness="2,2,2,2" Grid.Column="1" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" Margin="10,0,10,0" MarginViewBox="5,7,5,7"/>
+                            <IEL:IELButtonText x:Name="IELButtonDialogDirectoryFile" Text="Обзор"  BorderThickness="2,2,2,2" Grid.Column="2" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="14" FontFamily="{DynamicResource Bree CYR var}" CornerRadius="5,5,5,5" VisualGuide="RightArrow" CornerRadiusGuides="7.6,7.6,7.6,7.6" MarginViewBox="5,7,5,7"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -107,12 +107,12 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock TextWrapping="Wrap" Text="Настройка активируется только после перезагрузки" Foreground="White" Padding="10,0,10,0"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontFamily="{DynamicResource Bree CYR var}"/>
-                    <IEL:IELButtonText x:Name="IELButtonTextClearValue" Grid.Column="1" CornerRadius="5,5,5,5" Margin="5,3,5,3" Text="По умолчанию" Padding="8,0,8,0"  FontSize="14" FontFamily="{DynamicResource Vollda}" HeightViewBox="20" PaletteElement="{DynamicResource PastelRed}"/>
+                    <IEL:IELButtonText x:Name="IELButtonTextClearValue" Grid.Column="1" CornerRadius="5,5,5,5" Margin="5,3,5,3" Text="По умолчанию" Padding="8,0,8,0"  FontSize="14" FontFamily="{DynamicResource Vollda}" HeightViewBox="20"/>
                 </Grid>
             </Border>
         </Grid>
-        <OIEL:OPLCheckBox x:Name="CheckBoxInternetConnectionMillisecond" Text="Отображать скорость отклика интернета в миллисекундах" PaletteElement="{DynamicResource Olive}" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" VerticalAlignment="Stretch" Margin="5,5,5,0" IsAnimatedSettingQ="True" HorizontalAlignment="Stretch"/>
-        <OIEL:OPLCheckBox x:Name="CheckBoxLoadingBorderVisualizate" Text="Визуализировать загрузку в границе окна" PaletteElement="{DynamicResource PastelBlue}" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" VerticalAlignment="Stretch" Margin="5,5,5,0" IsAnimatedSettingQ="True" HorizontalAlignment="Stretch"/>
+        <OIEL:OPLCheckBox x:Name="CheckBoxInternetConnectionMillisecond" Text="Отображать скорость отклика интернета в миллисекундах" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" VerticalAlignment="Stretch" Margin="5,5,5,0" IsAnimatedSettingQ="True" HorizontalAlignment="Stretch"/>
+        <OIEL:OPLCheckBox x:Name="CheckBoxLoadingBorderVisualizate" Text="Визуализировать загрузку в границе окна" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" VerticalAlignment="Stretch" Margin="5,5,5,0" IsAnimatedSettingQ="True" HorizontalAlignment="Stretch"/>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -127,10 +127,10 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Ссылка по умолчанию для веб-браузера"  Padding="4,0,4,0" TextTrimming="CharacterEllipsis" LineStackingStrategy="BlockLineHeight" FontSize="14" FontFamily="{DynamicResource Bree CYR var}"/>
-                            <IEL:IELTextBox x:Name="IELTextBoxDefaultUrl" FontSize="15" Grid.RowSpan="1" CornerRadius="3,3,3,3" MaxHeight="40" Grid.Row="1" Margin="5,5,5,5" FontFamily="{DynamicResource RussianRail G Pro}" PaletteElement="{DynamicResource Violet}"/>
+                            <IEL:IELTextBox x:Name="IELTextBoxDefaultUrl" FontSize="15" Grid.RowSpan="1" CornerRadius="3,3,3,3" MaxHeight="40" Grid.Row="1" Margin="5,5,5,5" FontFamily="{DynamicResource RussianRail G Pro}"/>
                         </Grid>
                     </Border>
-                    <OIEL:OPLCheckBox x:Name="CheckBoxUsePageBrowser" Text="Использовать страницу браузера для открытия ссылок по умолчанию" PaletteElement="{DynamicResource PlumCrayola}" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" VerticalAlignment="Stretch" Margin="5,5,5,0" IsAnimatedSettingQ="True" HorizontalAlignment="Stretch"/>
+                    <OIEL:OPLCheckBox x:Name="CheckBoxUsePageBrowser" Text="Использовать страницу браузера для открытия ссылок по умолчанию" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" VerticalAlignment="Stretch" Margin="5,5,5,0" IsAnimatedSettingQ="True" HorizontalAlignment="Stretch"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -138,7 +138,7 @@
                         </Grid.ColumnDefinitions>
                         <Line Stroke="Black" Y2="1" Stretch="Uniform" Margin="15,2,0,2" Grid.Column="0" StrokeThickness="2" StrokeDashArray="4" StrokeDashCap="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
                         <StackPanel Grid.Column="1">
-                            <OIEL:OPLCheckBox x:Name="CheckBoxUseOnlyCreatePageBrowser" Text="Всегда создавать новую страницу браузера при открытии ссылки" PaletteElement="{DynamicResource Violet}" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" Margin="5,5,5,5" IsAnimatedSettingQ="True" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                            <OIEL:OPLCheckBox x:Name="CheckBoxUseOnlyCreatePageBrowser" Text="Всегда создавать новую страницу браузера при открытии ссылки" FontFamily="{DynamicResource Bree CYR var}" FontSize="16" CheckBoxCornerRadius="5" CornerRadius="7,7,7,7" Margin="5,5,5,5" IsAnimatedSettingQ="True" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

@@ -201,7 +201,7 @@ namespace OperPageLes.UI.Pages.Browser
                 Height = 35d,
                 MarginViewBox = new(2d),
                 Text = Category.NameCategory,
-                PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Aquamarine],
+                Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Aquamarine],
                 DataContext = Category,
                 Tag = Category.KeyCategory,
             };
@@ -242,7 +242,7 @@ namespace OperPageLes.UI.Pages.Browser
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                     ManagerAnimation = ManagerAnimation,
-                    PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue],
+                    Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue],
                     CheckBoxCornerRadius = 5d,
                     CornerRadius = new(8d),
                     Margin = new(5d),

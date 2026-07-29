@@ -298,7 +298,7 @@ namespace OperPageLes.UI.Pages.Browser
             NextIndex = StartIndex;
             StackPanelAllLabels.Children.Remove(SourceMoveLabel);
             StackPanelAllLabels.Children.Insert(StartIndex, RectangleSelectPosition);
-            RectangleSelectPosition.Stroke = SourceMoveLabel.SourceBorderBrush.SourceBrush;
+            RectangleSelectPosition.Stroke = SourceMoveLabel.SourceBrushBorderBrush;
 
             MainGridContainer.Children.Add(SourceMoveLabel);
             SourceMoveLabel.MouseMove += MoveToPosVisualElement;

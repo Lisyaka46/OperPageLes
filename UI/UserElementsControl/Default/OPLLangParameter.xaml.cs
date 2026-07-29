@@ -1,17 +1,5 @@
-﻿using IEL.CORE.Classes;
-using IEL.UserElementsControl.Base;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using IEL.UserElementsControl.Base;
+using LibraryIEL.CORE.Themes.Palettes;
 
 namespace OperPageLes.UI.UserElementsControl.Default
 {
@@ -20,29 +8,17 @@ namespace OperPageLes.UI.UserElementsControl.Default
     /// </summary>
     public partial class OPLLangParameter : IELContainerBase
     {
-        #region PaletteElement
-        /// <summary>
-        /// Данные конкретного свойства
-        /// </summary>
-        public static readonly new DependencyProperty PaletteElementProperty =
-            DependencyProperty.Register("PaletteElement", typeof(PaletteSpectrum), typeof(OPLLangParameter),
-                new(PaletteSpectrum.UnknownPaletteSpectrum,
-                    (sender, e) =>
-                    {
-                        PaletteSpectrum palette = (PaletteSpectrum)e.NewValue;
-                        ((OPLLangParameter)sender).PaletteElement = palette;
-                    }));
-
+        #region Palette
         /// <summary>
         /// Объект палитры
         /// </summary>
-        public new PaletteSpectrum PaletteElement
+        public override PaletteData Palette
         {
-            get => (PaletteSpectrum)GetValue(PaletteElementProperty);
+            get => base.Palette;
             set
             {
-                IELTextBoxLangValueTranslate.PaletteElement = value;
-                SetValue(PaletteElementProperty, value);
+                IELTextBoxLangValueTranslate.Palette = value;
+                base.Palette = value;
             }
         }
         #endregion
@@ -53,7 +29,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
             TextBlockNotTraslationInfo.Foreground = SourceForeground.SourceBrush;
             TextBlockValueLangExample.Foreground = SourceForeground.SourceBrush;
             TextBlockLangKey.Foreground = SourceForeground.SourceBrush;
-            IELTextBoxLangValueTranslate.PaletteElement = PaletteElement;
+            IELTextBoxLangValueTranslate.Palette = Palette;
         }
     }
 }
