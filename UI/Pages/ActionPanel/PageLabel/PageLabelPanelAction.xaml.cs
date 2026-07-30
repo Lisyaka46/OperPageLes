@@ -1,13 +1,6 @@
-﻿using IEL.UserElementsControl;
-using OperPageLes.CORE;
-using OperPageLes.CORE.Enums.Theme;
-using OperPageLes.CORE.Settings.PaletteElements;
-using OperPageLes.CORE.Struct;
-using OPLAPI.CORE;
+﻿using OPLAPI.CORE;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using OPRES = OperPageLes.Properties.Resources;
 
 namespace OperPageLes.UI.Pages.ActionPanel.PageLabel
 {

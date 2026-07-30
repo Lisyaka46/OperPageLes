@@ -134,7 +134,7 @@ namespace OperPageLes.UI.Windows.Dialogs
             catch
             {
                 Keyboard.ClearFocus();
-                IELTextBoxKey.SourceBackground.SetActiveSpecrum(Colors.Red);
+                IELTextBoxKey.SourceBackground.SetActiveSpecrum(Colors.Red, true);
             }
         }
     }

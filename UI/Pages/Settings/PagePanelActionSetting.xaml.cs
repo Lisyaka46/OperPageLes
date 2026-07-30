@@ -161,7 +161,7 @@ namespace OperPageLes.UI.Pages.Settings
         {
             if (SelectSetKey != null)
             {
-                SelectSetKey.SourceBackground.SetUsedState(false);
+                SelectSetKey.SourceBackground.UsedState = false;
                 SelectSetKey.FontStyle = FontStyles.Normal;
                 bool EqualsSelectElement = SelectSetKey.Equals(sender);
                 SelectSetKey = null;
@@ -169,7 +169,7 @@ namespace OperPageLes.UI.Pages.Settings
             }
             if (sender is IELButtonText button)
             {
-                button.SourceBackground.SetUsedState(true);
+                button.SourceBackground.UsedState = true;
                 ActivateSelectButtonKey(button);
             }
             e.Handled = true;
@@ -182,7 +182,7 @@ namespace OperPageLes.UI.Pages.Settings
         private void ActivateSelectButtonKey(IELButtonText? button)
         {
             if (button == null) return;
-            SelectSetKey?.SourceBackground.SetUsedState(false);
+            SelectSetKey?.SourceBackground.UsedState = false;
             SelectSetKey = button;
             SelectSetKey.Focus();
             SelectSetKey.FontStyle = FontStyles.Italic;
@@ -197,7 +197,7 @@ namespace OperPageLes.UI.Pages.Settings
             if (SelectSetKey == null) return;
             SelectSetKey.Text = IELKeyConverter.ConvertKeyToString(key);
             SelectSetKey.FontStyle = FontStyles.Normal;
-            SelectSetKey.SourceBackground.SetUsedState(false);
+            SelectSetKey.SourceBackground.UsedState = false;
             SelectSetKey = null;
         }
     }

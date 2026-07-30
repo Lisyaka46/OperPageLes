@@ -10,9 +10,6 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Page.Resources>
     <Grid x:Name="GridMain" VerticalAlignment="Center">
-        <Grid.Resources>
-            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>

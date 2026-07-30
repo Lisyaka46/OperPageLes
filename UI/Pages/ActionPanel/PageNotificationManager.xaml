@@ -7,7 +7,6 @@
     xmlns:Base="clr-namespace:OPLAPI.OIEL.CORE.Browser;assembly=OPLAPI"
     xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
     xmlns:OIEL="clr-namespace:OPLAPI.OIEL.UserElementsControl;assembly=OPLAPI"
-    xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL"
     xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL"
     x:Class="OperPageLes.UI.Pages.ActionPanel.PageNotificationManager"
     Width="250" Height="300">

@@ -28,9 +28,6 @@
         </Border.Background>
         <Border x:Name="BorderColorMain" CornerRadius="13,13,13,13" BorderBrush="Black" BorderThickness="1,1,1,1">
             <Grid x:Name="GridMain" RenderTransformOrigin="0.5,0.5">
-                <Grid.Resources>
-                    <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-                </Grid.Resources>
                 <Grid Panel.ZIndex="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="53"/>

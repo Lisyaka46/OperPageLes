@@ -10,9 +10,6 @@
     x:Class="OperPageLes.UI.Windows.Dialogs.DialogGenerateTheme"
     mc:Ignorable="d"
     Title="Создание новой темы" Height="345" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

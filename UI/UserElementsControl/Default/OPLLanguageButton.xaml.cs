@@ -164,7 +164,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
             OPLVisualElementIM Result = new()
             {
                 ManagerAnimation = ManagerAnimation,
-                PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Terracotta],
+                //PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Terracotta],
                 Margin = new(-8d, -5d, -8d, -5d),
                 CornerRadius = new(15d),
                 BorderThickness = new(2d),

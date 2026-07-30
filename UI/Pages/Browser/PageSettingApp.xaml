@@ -20,9 +20,6 @@
             </LinearGradientBrush>
         </Border.Background>
         <Grid>
-            <Grid.Resources>
-                <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition/>

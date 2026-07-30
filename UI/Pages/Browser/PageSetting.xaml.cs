@@ -135,7 +135,7 @@ namespace OperPageLes.UI.Pages.Browser
             {
                 OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, ActiveButtonCategory, IELButtonText.MarginProperty,
                 new Thickness(0d, 2d, 15d, 2d), TimeSpan.FromMilliseconds(500d));
-                ActiveButtonCategory.SourceBackground.SetUsedState(false);
+                ActiveButtonCategory.SourceBackground.UsedState = false;
                 if (ActiveButtonCategory.Equals(Element))
                 {
                     ActiveButtonCategory = null;
@@ -146,7 +146,7 @@ namespace OperPageLes.UI.Pages.Browser
             ActiveButtonCategory = Element;
             OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, Element, IELButtonText.MarginProperty,
                 new Thickness(0d, 2d, 2d, 2d), TimeSpan.FromMilliseconds(500d));
-            Element.SourceBackground.SetUsedState(true);
+            Element.SourceBackground.UsedState = true;
             ActivateCategory(SourceVisualCategories[(string)Element.Tag]);
         }
         #endregion
@@ -201,7 +201,7 @@ namespace OperPageLes.UI.Pages.Browser
                 Height = 35d,
                 MarginViewBox = new(2d),
                 Text = Category.NameCategory,
-                Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Aquamarine],
+                //Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Aquamarine],
                 DataContext = Category,
                 Tag = Category.KeyCategory,
             };
@@ -242,7 +242,7 @@ namespace OperPageLes.UI.Pages.Browser
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                     ManagerAnimation = ManagerAnimation,
-                    Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue],
+                    //Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue],
                     CheckBoxCornerRadius = 5d,
                     CornerRadius = new(8d),
                     Margin = new(5d),

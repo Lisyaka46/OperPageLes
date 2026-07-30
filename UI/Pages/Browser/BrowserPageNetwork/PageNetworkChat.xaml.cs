@@ -140,7 +140,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
                     TextFileName = System.IO.Path.GetFileName(Path),
                     CornerRadius = new(5),
                     Margin = new(5),
-                    PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine],
+                    //PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine],
                     ManagerAnimation = ManagerAnimation,
                 };
                 ClipElement.MathSizeFile(Path);

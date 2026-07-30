@@ -101,9 +101,6 @@
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-            <Grid.Resources>
-                <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>

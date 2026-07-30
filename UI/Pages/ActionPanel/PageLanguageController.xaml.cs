@@ -110,7 +110,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
             {
                 ManagerAnimation = ManagerAnimation,
                 DataContext = SourceInfo,
-                Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola],
+                //Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.PlumCrayola],
                 CornerRadius = new(6d),
                 Margin = new(5d),
             };
@@ -129,8 +129,8 @@ namespace OperPageLes.UI.Pages.ActionPanel
         /// <param name="NewActiveLangButton">Новая активная кнопка</param>
         private void ChangeVisualActiveLanguage(in OPLLanguageButton NewActiveLangButton)
         {
-            ActiveLanguageButton?.SourceBackground.SetUsedState(false);
-            NewActiveLangButton.SourceBackground.SetUsedState(true);
+            ActiveLanguageButton?.SourceBackground.UsedState = false;
+            NewActiveLangButton.SourceBackground.UsedState = true;
             ActiveLanguageButton = NewActiveLangButton;
         }
     }

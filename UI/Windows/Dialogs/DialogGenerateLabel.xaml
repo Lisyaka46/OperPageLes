@@ -14,9 +14,6 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Window.Resources>
     <Grid Background="#FF1FB5B9">
-        <Grid.Resources>
-            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="80"/>

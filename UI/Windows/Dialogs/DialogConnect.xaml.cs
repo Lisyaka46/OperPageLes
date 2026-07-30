@@ -64,7 +64,7 @@ namespace OperPageLes.UI.Windows.Dialogs
                     IELComplete.IsEnabled = true;
                     IELTextBoxIP.IsEnabled = true;
                     IELButtonCancel.IsEnabled = true;
-                    IELTextBoxIP.SourceBackground.SetActiveSpecrum(Colors.IndianRed);
+                    IELTextBoxIP.SourceBackground.SetActiveSpecrum(Colors.IndianRed, true);
                 }
                 return;
             };

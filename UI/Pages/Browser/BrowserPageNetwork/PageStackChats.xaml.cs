@@ -137,7 +137,7 @@ namespace OperPageLes.UI.Pages.Browser.BrowserPageNetwork
             {
                 Margin = new(3),
                 FontSize = 16d,
-                Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade],
+                //Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Jade],
                 IsEnabled = false,
             };
 

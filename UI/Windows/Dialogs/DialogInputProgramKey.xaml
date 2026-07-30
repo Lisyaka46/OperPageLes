@@ -25,9 +25,6 @@
         </LinearGradientBrush>
     </Base:OPLWindowBase.Background>
     <Grid>
-        <Grid.Resources>
-            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>

@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OperPageLes.UI.Pages.Description"
       xmlns:GUI="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL"
-      xmlns:ObjectSettings="clr-namespace:IEL.CORE.Classes.ObjectSettings;assembly=LibraryIEL" xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL" x:Class="OperPageLes.UI.Pages.Description.PageDescriptionAlias"
+      xmlns:Classes="clr-namespace:IEL.CORE.Classes;assembly=LibraryIEL" x:Class="OperPageLes.UI.Pages.Description.PageDescriptionAlias"
       Title="PageDescriptionAlias">
     <Page.Resources>
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>

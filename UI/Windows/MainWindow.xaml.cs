@@ -345,7 +345,7 @@ namespace OperPageLes.UI.Windows
                         ManagerAnimation = ManagerAnimation,
                         SourcePanelAction = App.GUIE_PanelAction
                     };
-                    App.CurrentApp.ThemeApp.LoadingThemes();
+                    //App.CurrentApp.ThemeApp.LoadingThemes();
                 }
                 ActivateCustomPageBrowser(App.CurrentApp.ThemeApp);
             };

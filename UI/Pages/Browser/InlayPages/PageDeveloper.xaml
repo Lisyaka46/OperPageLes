@@ -16,9 +16,6 @@
     </Base:PageBrowser.Resources>
     <ScrollViewer>
         <Grid x:Name="GridMain" VerticalAlignment="Top">
-            <Grid.Resources>
-                <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>

@@ -70,7 +70,7 @@ namespace OperPageLes.UI.Pages.ActionPanel
                 Margin = new(6d),
                 CornerRadius = new(5d),
             };
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue].ConnectPalleteFromIELElement(ViewNotification);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelBlue].ConnectPalleteFromIELElement(ViewNotification);
             ViewNotification.MouseRightButtonUp += (sender, e) =>
             {
                 if (App.CurrentApp.ApplicationNotifications.Count > 0)

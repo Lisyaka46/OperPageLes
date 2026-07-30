@@ -117,7 +117,7 @@ namespace OperPageLes.UI.UserElementsControl.Default
         public OPLCheckAudioDevice()
         {
             InitializeComponent();
-            DeviceButton.Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine];
+            //DeviceButton.Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine];
             DeviceButton.Text = "Неизвестный";
             DeviceButton.OnActivateMouseLeft += (sender, e) => OnActivateMouseLeft?.Invoke(this, e);
             DeviceButton.OnActivateMouseRight += (sender, e) => OnActivateMouseRight?.Invoke(this, e);

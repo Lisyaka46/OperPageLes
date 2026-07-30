@@ -26,9 +26,9 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
         {
             InitializeComponent();
 
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.VioletRed].ConnectPalleteFromIELElement(IELButtonDeleteCommandViewer);
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteAllCommandViewers);
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonCommandBuffer);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.VioletRed].ConnectPalleteFromIELElement(IELButtonDeleteCommandViewer);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.PastelRed].ConnectPalleteFromIELElement(IELButtonDeleteAllCommandViewers);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.Purple].ConnectPalleteFromIELElement(IELButtonCommandBuffer);
 
             IELButtonDeleteCommandViewer.IsEnabled = false;
         }

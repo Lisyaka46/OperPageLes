@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Windows.Storage;
 using OPRES = OperPageLes.Properties.Resources;
 using OperPageLes.CORE.Enums.Theme;
+using OPLAPI.CORE.Themes;
 
 namespace OperPageLes.CORE.Objects
 {
@@ -101,16 +102,7 @@ namespace OperPageLes.CORE.Objects
             if (Label.Name.Length > 64)
                 Label.Name = Label.Name[..64];
             VisualELement.Text = Label.Name;
-            try
-            {
-                VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[(PaletteEnum)(uint)Label.IndexSpectrumTheme];
-            }
-            catch
-            {
-                VisualELement.PaletteElement = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Aquamarine];
-                App.CurrentApp.AddNewNotification($"Не удалось присвоить спектр темы \"{Label.IndexSpectrumTheme}\" ярлыку \"{Label.Name}\"",
-                    Enums.EnumNotificationStyle.System);
-            }
+            VisualELement.Palette = Theme.GetValue((PaletteEnum)(uint)Label.IndexSpectrumTheme);
             if (SaveOldCommand.Equals(Label.Command)) return;
             else if (Label.Command.Contains("open_link"))
             {

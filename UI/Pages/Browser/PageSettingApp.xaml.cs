@@ -52,9 +52,9 @@ namespace OperPageLes.UI.Pages.Browser
             ConsoleSetting = new();
             PanelActionSetting = new();
 
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine].ConnectPalleteFromIELElement(IELGeneralButton);
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.Green].ConnectPalleteFromIELElement(IELConsoleButton);
-            App.CurrentApp.ActiveThemeApplication[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELPanelActionButton);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.Tangerine].ConnectPalleteFromIELElement(IELGeneralButton);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.Green].ConnectPalleteFromIELElement(IELConsoleButton);
+            //App.CurrentApp.ActiveThemeApplication[PaletteEnum.LightBlue].ConnectPalleteFromIELElement(IELPanelActionButton);
 
             #region IELButtonsSetting
             #region IELGeneralButton

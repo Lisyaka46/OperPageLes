@@ -1,16 +1,6 @@
 ﻿using OperPageLes.CORE.Enums.Theme;
-using OperPageLes.CORE.Settings.PaletteElements;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OperPageLes.UI.Windows.DEV
 {
@@ -50,9 +40,9 @@ namespace OperPageLes.UI.Windows.DEV
             {
                 if (ComboBoxTheme.SelectedIndex == -1) return;
                 PaletteEnum Spectrum = (PaletteEnum)(EnumThemeValues.GetValue(ComboBoxTheme.SelectedIndex) ?? throw new Exception());
-                App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon64);
-                App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon45);
-                App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon90);
+                //App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon64);
+                //App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon45);
+                //App.CurrentApp.ActiveThemeApplication[Spectrum].ConnectPalleteFromIELElement(Icon90);
             };
 
             foreach (string item in Enum.GetNames<PaletteEnum>())

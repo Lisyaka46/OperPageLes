@@ -7,9 +7,6 @@
       xmlns:IEL="clr-namespace:IEL.UserElementsControl;assembly=LibraryIEL" Width="145" Height="175" Margin="5,0,5,0">
 
     <Grid VerticalAlignment="Center">
-        <Grid.Resources>
-            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>

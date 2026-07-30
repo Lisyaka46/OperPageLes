@@ -16,9 +16,6 @@
         <ResourceDictionary Source="/CORE/Resources/VisualDictionary.xaml"/>
     </Base:PageBrowser.Resources>
     <Grid x:Name="MainGrid">
-        <Grid.Resources>
-            <ResourceDictionary Source="/CORE/Resources/PaletteDictionary.xaml"/>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="101*"/>
