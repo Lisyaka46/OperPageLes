@@ -4,6 +4,7 @@ using IEL.UserElementsControl;
 using LibraryIEL.CORE.Themes.Palettes;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
+using OperPageLes.CORE.Internet;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
@@ -503,9 +504,12 @@ namespace OperPageLes.UI.Windows
 
             App.LogWriteLine($"Настройка \"{nameof(IELBlockInfoInternetConnection)}\"...");
             #region IELBlockInfoInternetConnection
-            IELBlockInfoInternetConnection.IsEnabled = false;
+            IELBlockInfoInternetConnection.IsEnabled = Connection.StateConnect;
             IELBlockInfoInternetConnection.Padding = new(0);
-            IELBlockInfoInternetConnection.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Wifi));
+            IELBlockInfoInternetConnection.Source =
+                StructDirectoryResources.GetResourceBitmap(Connection.StateConnect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+            IELBlockInfoInternetConnection.SourceBackground.SetActiveSpecrum(
+                        Connection.StateConnect ? SpectrumColor.Default : SpectrumColor.NotEnabled, false);
             TextBlockInternetConnectionMillisecond.Opacity = 0d;
             IELBlockInfoInternetConnection.MouseEnter += (sender, e) =>
             {
@@ -517,26 +521,34 @@ namespace OperPageLes.UI.Windows
             {
                 App.GUIE_Message.CloseBorderInformation();
             };
-            App.LogWriteLine("...\\/");
-            App.CurrentApp.ConnectionPingChanged += (sender, e) =>
+
+            App.LogWriteLine($"Настройка \"{nameof(IELBlockInfoInternetConnection)}.Connection\"...");
+            #region Connection
+            Connection.ConnectionChanged += (sender, e) =>
             {
-                TextBlockInternetConnectionMillisecond.Text = e.Connect ? $"{e.Ping}ms" : string.Empty;
-                if (IELBlockInfoInternetConnection.IsEnabled != e.Connect)
+                if (IELBlockInfoInternetConnection.IsEnabled != e)
                 {
-                    if (!e.Connect)
+                    if (!e)
                     {
                         OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, TextBlockInternetConnectionMillisecond, OpacityProperty,
                             0d, TimeSpan.FromMilliseconds(400d));
                         OPLAnimationManager.AnimateTakingZeroTo(ManagerAnimation, IELBlockInfoInternetConnection, IELBlockInfoImage.PaddingProperty,
                             new Thickness(0d), TimeSpan.FromMilliseconds(400d));
                     }
-                    IELBlockInfoInternetConnection.IsEnabled = e.Connect;
+                    IELBlockInfoInternetConnection.IsEnabled = e;
                     IELBlockInfoInternetConnection.SourceBackground.SetActiveSpecrum(
-                        e.Connect ? SpectrumColor.Default : SpectrumColor.NotEnabled, true);
+                        e ? SpectrumColor.Default : SpectrumColor.NotEnabled, true);
                     IELBlockInfoInternetConnection.Source =
-                        StructDirectoryResources.GetResourceBitmap(e.Connect ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
+                        StructDirectoryResources.GetResourceBitmap(e ? nameof(OPRES.WifiOn) : nameof(OPRES.WifiOff));
                 }
             };
+            Connection.PingChanged += (sender, e) =>
+            {
+                TextBlockInternetConnectionMillisecond.Text = $"{e}ms";
+            };
+            #endregion
+            App.LogWriteLine("...Готово");
+
             #endregion
             App.LogWriteLine("...Готово");
 
@@ -656,7 +668,6 @@ namespace OperPageLes.UI.Windows
                 //App.CurrentApp.SettingMainApplication.MainWindowWidth.Value = Width;
                 //App.CurrentApp.SettingMainApplication.MainWindowHeight.Value = Height;
                 TokenUpdateBackgroundData.ThrowIfCancellationRequested();
-                App.CurrentApp.TokenInternetConnection.ThrowIfCancellationRequested();
             };
             Lang.LanguageUpdated += Lang_LanguageUpdated;
             #endregion

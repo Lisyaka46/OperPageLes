@@ -11,6 +11,7 @@ using Windows.Storage;
 using OPRES = OperPageLes.Properties.Resources;
 using OperPageLes.CORE.Enums.Theme;
 using OPLAPI.CORE.Themes;
+using OperPageLes.CORE.Internet;
 
 namespace OperPageLes.CORE.Objects
 {
@@ -53,10 +54,10 @@ namespace OperPageLes.CORE.Objects
         /// <summary>
         /// Установить иконку сайта на ярлык по событию
         /// </summary>
-        private void LoadFaviconIcon(object? sender, ObjectConnectEventArgs e)
+        private void LoadFaviconIcon(object? sender, bool e)
         {
-            if (!e.Connect) return;
-            App.CurrentApp.ConnectionPingChanged -= LoadFaviconIcon;
+            if (!e) return;
+            Connection.ConnectionChanged -= LoadFaviconIcon;
             LoadFaviconIcon();
         }
 
@@ -107,7 +108,9 @@ namespace OperPageLes.CORE.Objects
             else if (Label.Command.Contains("open_link"))
             {
                 VisualELement.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Link));
-                App.CurrentApp.ConnectionPingChanged += LoadFaviconIcon;
+                if (!Connection.StateConnect)
+                    Connection.ConnectionChanged += LoadFaviconIcon;
+                else LoadFaviconIcon();
             }
             else if (Label.Command.Contains("open_directory"))
                 VisualELement.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Folder));

@@ -13,6 +13,7 @@ using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
 using OperPageLes.CORE.Enums.Theme;
+using OperPageLes.CORE.Internet;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
@@ -38,6 +39,7 @@ using System.IO;
 using System.Management;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -387,37 +389,22 @@ namespace OperPageLes
         private readonly ActionManipulateData[] ReadDataActions;
         #endregion
 
+        #region Internet
+        /// <summary>
+        /// Процесс проверки подключения к интернету
+        /// </summary>
+        private Task? TaskInetnetpinging;
+
+        /// <summary>
+        /// Токен, управляющий процессом проверки подключения к интернету
+        /// </summary>
+        private CancellationToken TokenInternetPinging;
+        #endregion
+
         /// <summary>
         /// Клиент для загрузки иконки сайта
         /// </summary>
         private readonly HttpClient ClientFavconLoading = new();
-
-        #region Threads
-        /// <summary>
-        /// Состояние подключения к интернету
-        /// </summary>
-        private ObjectConnect? InternetPinging;
-
-        /// <summary>
-        /// Состояние подключения к интернету
-        /// </summary>
-        internal bool InternetConnectState => InternetPinging?.ConnectInternet ?? false;
-
-        /// <summary>
-        /// Поток обновляемый данные интернета
-        /// </summary>
-        private Task? TaskInternetConnection;
-
-        /// <summary>
-        /// Токен управления потоком проверки интернета
-        /// </summary>
-        internal CancellationToken TokenInternetConnection;
-
-        /// <summary>
-        /// Событие количества миллисекунд которое потребовалось на проверку интернета
-        /// </summary>
-        internal event EventHandler<ObjectConnectEventArgs>? ConnectionPingChanged;
-        #endregion
 
 #if DEBUG
         #region Testing
@@ -1013,21 +1000,10 @@ namespace OperPageLes
                 LogWriteLine("...Готово");
                 #endregion
 
-                LogWriteLine("Запуск фоновых потоков");
-                #region ThreadUptadeRuntime
-                InternetPinging = new();
-                TokenInternetConnection = new();
-                TaskInternetConnection = new(() =>
-                {
-                    ObjectConnectEventArgs EventArgs;
-                    while (!TokenInternetConnection.IsCancellationRequested)
-                    {
-                        EventArgs = InternetPinging.UpdateInternetConnection();
-                        Dispatcher.Invoke(() => ConnectionPingChanged?.Invoke(null, EventArgs));
-                        Thread.Sleep(4000);
-                    }
-                }, TokenInternetConnection);
-                TaskInternetConnection.Start();
+                LogWriteLine($"Настройка \"{nameof(Connection)}\"");
+                #region Connection
+                TokenInternetPinging = new();
+                TaskInetnetpinging = Connection.StartRunTimeCheckInternetConnection(TokenInternetPinging);
                 #endregion
                 LogWriteLine("...Готово");
 
