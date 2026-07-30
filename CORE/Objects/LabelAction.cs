@@ -11,7 +11,7 @@ using Windows.Storage;
 using OPRES = OperPageLes.Properties.Resources;
 using OperPageLes.CORE.Enums.Theme;
 using OPLAPI.CORE.Themes;
-using OperPageLes.CORE.Internet;
+using OPLAPI.CORE.Internet;
 
 namespace OperPageLes.CORE.Objects
 {

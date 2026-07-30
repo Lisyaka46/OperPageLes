@@ -13,7 +13,7 @@ using OperPageLes.CORE.Audio;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
 using OperPageLes.CORE.Enums.Theme;
-using OperPageLes.CORE.Internet;
+using OPLAPI.CORE.Internet;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;

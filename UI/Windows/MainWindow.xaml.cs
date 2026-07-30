@@ -4,7 +4,7 @@ using IEL.UserElementsControl;
 using LibraryIEL.CORE.Themes.Palettes;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
-using OperPageLes.CORE.Internet;
+using OPLAPI.CORE.Internet;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
