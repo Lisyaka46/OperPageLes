@@ -5,7 +5,9 @@ using OperPageLes.UI.Pages.ActionPanel.PageLabel;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Browser;
 using OPLAPI.OIEL.CORE.Browser;
+using OPLAPI.OIEL.CORE.Browser.Base;
 using OPLAPI.OIEL.UserElementsControl;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -158,7 +160,7 @@ namespace OperPageLes.UI.Pages.Browser
             };
             HandlerClosePanelAction = (NameFramework) =>
             {
-                if (App.GUIE_Browser.ActivateManagerPage)
+                if (App.GUIE_Browser.ActivateMainPage)
                     Focus();
             };
             InitializeComponent();

@@ -104,7 +104,6 @@ namespace OperPageLes.UI.Windows.Dialogs
                 DragMove();
                 ActivateMoveWindow = false;
             };
-            UpdateLayout();
             Hide();
         }
 
@@ -126,7 +125,6 @@ namespace OperPageLes.UI.Windows.Dialogs
             TimerSecond.Start();
             Show();
             Opacity = 0d;
-            UpdateLayout();
             Focus();
             OPLAnimationManager.AnimateTakingZeroFromTo(ManagerAnimation, this, OpacityProperty,
                 0d, 1d, TimeSpan.FromMilliseconds(1270d));
@@ -149,7 +147,6 @@ namespace OperPageLes.UI.Windows.Dialogs
             await Task.Delay(700);
             Opacity = 0d;
             BeginAnimation(OpacityProperty, null);
-            UpdateLayout();
             Hide();
             TimerSecond.Stop();
         }

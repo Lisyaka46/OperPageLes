@@ -155,6 +155,7 @@ namespace OperPageLes
             {
                 Margin = new(4d),
                 ManagerAnimation = ManagerAnimation,
+                SourcePanelAction = GUIE_PanelAction,
             };
             return Result;
         }
@@ -506,10 +507,10 @@ namespace OperPageLes
                 "Очищает текстовый вывод главного меню программы",
                 (Command, param, CV) =>
                 {
-                    if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
-                    {
-                        page.StackPanelConsole.Children.Clear();
-                    }
+                    //if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
+                    //{
+                    //    page.StackPanelConsole.Children.Clear();
+                    //}
                     return Task.FromResult(CommandStateResult.Completed(Command.Name));
                 }),
                 #endregion
@@ -758,10 +759,10 @@ namespace OperPageLes
                         #region Action
                         OriginAction = () =>
                         {
-                            PageManagerAppPage AppPage = (PageManagerAppPage?)GUIE_Browser.SourceManagerAppPage ??
-                                throw new Exception("Главная страница браузера не инициализирована!");
-                            string SettingApplicationJSON = JsonConvert.SerializeObject(AppPage.Labels.Select((i) => i.Label));
-                            File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
+                            //PageManagerAppPage AppPage = (PageManagerAppPage?)GUIE_Browser.MainPage ??
+                            //    throw new Exception("Главная страница браузера не инициализирована!");
+                            //string SettingApplicationJSON = JsonConvert.SerializeObject(AppPage.Labels.Select((i) => i.Label));
+                            //File.WriteAllText(StructDirectoryResources.DirectoryDataLabels, SettingApplicationJSON);
                         },
                         #endregion
                     }
@@ -772,12 +773,12 @@ namespace OperPageLes
                     new("Инициализация системных страничных приложений", 1600d)
                     {
                         #region Action
-                        OriginAction = async () =>
+                        OriginAction = () =>
                         {
-                            await GUIE_Browser.AddNewAppPage(typeof(PageConsole));
-                            await GUIE_Browser.AddNewAppPage(typeof(PageNetwork));
-                            await GUIE_Browser.AddNewAppPage(typeof(PageWebBrowser));
-                            await GUIE_Browser.AddNewAppPage(typeof(PageDeveloper));
+                            GUIE_Browser.AddAppPage(typeof(PageConsole));
+                            GUIE_Browser.AddAppPage(typeof(PageNetwork));
+                            GUIE_Browser.AddAppPage(typeof(PageWebBrowser));
+                            GUIE_Browser.AddAppPage(typeof(PageDeveloper));
                         },
                         #endregion
                     }
@@ -1014,19 +1015,19 @@ namespace OperPageLes
                 };
                 PageConsole.PageConsoleActionPanelMain.IELButtonDeleteCommandViewer.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
-                    {
-                        if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
-                            page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
-                    }
+                    //if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
+                    //{
+                    //    if (PageConsole.PageConsoleActionPanelMain.CommandViewerSelect != null)
+                    //        page.DeleteCommandViewer(PageConsole.PageConsoleActionPanelMain.CommandViewerSelect);
+                    //}
                     GUIE_PanelAction.ClosePanelAction();
                 };
                 PageConsole.PageConsoleActionPanelMain.IELButtonDeleteAllCommandViewers.OnActivateMouseLeft += (sender, e, Key) =>
                 {
-                    if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
-                    {
-                        page.StackPanelConsole.Children.Clear();
-                    }
+                    //if (GUIE_Browser.ActualInlay?.Content is PageConsole page)
+                    //{
+                    //    page.StackPanelConsole.Children.Clear();
+                    //}
                     GUIE_PanelAction.ClosePanelAction();
                 };
                 #endregion
@@ -1090,7 +1091,7 @@ namespace OperPageLes
 
                 LogWriteLine($"Настройка \"{nameof(GUIE_Browser)}\"");
                 GUIE_Browser.GenerateNewMainManagerAppPage(typeof(PageManagerAppPage));
-                GUIE_Browser.SourceManagerAppPage?.SourcePanelAction = GUIE_PanelAction;
+                GUIE_Browser.SourcePanelAction = GUIE_PanelAction;
                 LogWriteLine("...Готово");
 
                 LogWriteLine($"Настройка \"{nameof(Lang)}\"");
@@ -1124,6 +1125,7 @@ namespace OperPageLes
                 {
                     DialogManipulateData.TitleHead = Lang.GetValue(LangManipulateDataTranslate.ReadImportantData);
                     await DialogManipulateData.ActivateVisualManipulate(ReadDataActions);
+                    GUIE_Browser.OpenMainPage();
                     GUIE_MainWindow.Topmost = true;
                     await GUIE_MainWindow.Show();
                     GUIE_MainWindow.Topmost = false;

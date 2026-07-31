@@ -1,10 +1,10 @@
 ﻿#region Link
+using CefSharp.DevTools.CSS;
 using IEL.CORE.Enums;
 using IEL.UserElementsControl;
 using LibraryIEL.CORE.Themes.Palettes;
 using OperPageLes.CORE.Enums;
 using OperPageLes.CORE.Enums.Language;
-using OPLAPI.CORE.Internet;
 using OperPageLes.CORE.Objects;
 using OperPageLes.CORE.Settings.Struct;
 using OperPageLes.CORE.Struct;
@@ -14,6 +14,8 @@ using OperPageLes.UI.Pages.Browser;
 using OperPageLes.UI.Pages.Browser.InlayPages;
 using OperPageLes.UI.Windows.Dialogs;
 using OPLAPI.CORE.Animation;
+using OPLAPI.CORE.Browser;
+using OPLAPI.CORE.Internet;
 using OPLAPI.CORE.Language;
 using OPLAPI.OIEL.CORE.Browser;
 using OPLAPI.OIEL.UserElementsControl;
@@ -161,17 +163,32 @@ namespace OperPageLes.UI.Windows
 
             App.LogWriteLine($"Настройка \"{nameof(App.GUIE_Browser)}\"...");
             #region GUIE_Browser
-            App.GUIE_Browser.NewInicializedAppPage += MainBrowser_NewInicializedAppPage;
-            App.GUIE_Browser.EventCloseInlay += (sender, e) =>
-            {
-                if (App.GUIE_PanelAction.PanelActionActivate) App.GUIE_PanelAction.ClosePanelAction();
-            };
+            App.GUIE_Browser.InlayActivated += InlayActivatedHandler;
+            App.GUIE_Browser.CustomPageActivated += CustomPageActivatedHandler;
             GridContentFromBrowser.Children.Add(App.GUIE_Browser);
             #endregion
             App.LogWriteLine("...Готово");
 
             App.LogWriteLine($"Настройка \"{nameof(App.GUIE_PanelAction)}\"...");
             #region GUIE_PanelAction
+            App.GUIE_PanelAction.Opacity = 0d;
+            Canvas.SetZIndex(App.GUIE_PanelAction, -2);
+            App.GUIE_PanelAction.EventMovePanelAction += (sender, e) =>
+            {
+                App.CurrentApp.SourcePlayControl.Play(nameof(OPRES.AudioMove));
+            };
+            //App.GUIE_PanelAction.EventClosingPanelAction += (Name) =>
+            //{
+            //    PageBrowser? Page = App.GUIE_Browser.ActualInlay?.;
+            //    if (Page == null) return;
+            //    switch (Page.GetType().Name)
+            //    {
+            //        case "PageConsole":
+            //            ((PageConsole)Page).TextBoxCommandInput.Focus();
+            //            break;
+            //        default: return;
+            //    }
+            //};
             GridMain.Children.Add(App.GUIE_PanelAction);
             #endregion
             App.LogWriteLine("...Готово");
@@ -226,29 +243,6 @@ namespace OperPageLes.UI.Windows
             };
             BindingOperations.SetBinding(App.GUIE_Message, IELBlockMessage.FontFamilyProperty, SourceBinding);
             Canvas.SetZIndex(App.GUIE_Message, -2);
-            #endregion
-            App.LogWriteLine("...Готово");
-
-            App.LogWriteLine($"Настройка \"{nameof(App.GUIE_PanelAction)}\"...");
-            #region IELPanelAction
-            App.GUIE_PanelAction.Opacity = 0d;
-            Canvas.SetZIndex(App.GUIE_PanelAction, -2);
-            App.GUIE_PanelAction.EventMovePanelAction += (sender, e) =>
-            {
-                App.CurrentApp.SourcePlayControl.Play(nameof(OPRES.AudioMove));
-            };
-            App.GUIE_PanelAction.EventClosingPanelAction += (Name) =>
-            {
-                PageBrowser? Page = App.GUIE_Browser.ActualInlay?.Content;
-                if (Page == null) return;
-                switch (Page.GetType().Name)
-                {
-                    case "PageConsole":
-                        ((PageConsole)Page).TextBoxCommandInput.Focus();
-                        break;
-                    default: return;
-                }
-            };
             #endregion
             App.LogWriteLine("...Готово");
 
@@ -348,7 +342,7 @@ namespace OperPageLes.UI.Windows
                     };
                     //App.CurrentApp.ThemeApp.LoadingThemes();
                 }
-                ActivateCustomPageBrowser(App.CurrentApp.ThemeApp);
+                App.GUIE_Browser.ActivateCustomPageBrowser(App.CurrentApp.ThemeApp);
             };
             #endregion
             App.LogWriteLine("...Готово");
@@ -388,7 +382,7 @@ namespace OperPageLes.UI.Windows
             };
             IELButtonSettings.OnActivateMouseLeft += (sender, e) =>
             {
-                ActivateCustomPageBrowser(App.CurrentApp.PageSettingApplication);
+                App.GUIE_Browser.ActivateCustomPageBrowser(App.CurrentApp.PageSettingApplication);
             };
             #endregion
             App.LogWriteLine("...Готово");
@@ -440,14 +434,14 @@ namespace OperPageLes.UI.Windows
             App.LogWriteLine($"Настройка \"{nameof(IELButtonInstallAppPage)}\"...");
             #region IELButtonInstallAppPage
             IELButtonInstallAppPage.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.File));
-            IELButtonInstallAppPage.OnActivateMouseLeft += (sender, e) =>
+            IELButtonInstallAppPage.OnActivateMouseLeft += async (sender, e) =>
             {
                 OpenFileDialog dialog = new()
                 {
 
                 };
                 dialog.ShowDialog();
-                App.GUIE_Browser.AddNewAppPage(dialog.FileName);
+                await App.GUIE_Browser.AddAppPage(dialog.FileName);
             };
             IELButtonInstallAppPage.MouseEnter += (sender, e) =>
             {
@@ -465,16 +459,17 @@ namespace OperPageLes.UI.Windows
             App.LogWriteLine($"Настройка \"{nameof(IELButtonAddLabel)}\"...");
             #region IELButtonAddLabel
             IELButtonAddLabel.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Plus));
-            IELButtonAddLabel.OnActivateMouseLeft += (sender, e) =>
-            {
-                if (App.GUIE_Browser.SourceManagerAppPage == null) return;
-                PageManagerAppPage AppPage = (PageManagerAppPage)App.GUIE_Browser.SourceManagerAppPage;
-                App.GUIE_Message.CloseBorderInformation();
-                DialogGenLabel dialog = new();
-                SourceLabelAction? Result = dialog.CreateLabel();
-                if (Result == null) return;
-                AppPage.AddLabel(Result);
-            };
+            IELButtonAddLabel.IsEnabled = false;
+            //IELButtonAddLabel.OnActivateMouseLeft += (sender, e) =>
+            //{
+            //    if (App.GUIE_Browser.MainPage == null) return;
+            //    PageManagerAppPage AppPage = (PageManagerAppPage)App.GUIE_Browser.MainPage;
+            //    App.GUIE_Message.CloseBorderInformation();
+            //    DialogGenLabel dialog = new();
+            //    SourceLabelAction? Result = dialog.CreateLabel();
+            //    if (Result == null) return;
+            //    AppPage.AddLabel(Result);
+            //};
             IELButtonAddLabel.MouseEnter += (sender, e) =>
             {
                 App.GUIE_Message.UsingBorderInformation(IELButtonAddLabel,
@@ -497,7 +492,7 @@ namespace OperPageLes.UI.Windows
                     App.GUIE_PanelAction.ClosePanelAction();
                 if (IELButtonBack.IsEnabled)
                     Disable_IELButtonBack();
-                App.GUIE_Browser.OpenManagerAppPage();
+                App.GUIE_Browser.OpenMainPage();
             };
             #endregion
             App.LogWriteLine("...Готово");
@@ -677,17 +672,22 @@ namespace OperPageLes.UI.Windows
             App.LogWriteLine("! Инициализация успешна");
         }
 
+        #region BrowserPageHandlers
         /// <summary>
-        /// Обработчик собфтия изменения языкового перевода
+        /// Обработчик события открытия кастомной страницы в браузере
         /// </summary>
-        private void Lang_LanguageUpdated(object? sender, EventArgs e)
+        private void CustomPageActivatedHandler(object? sender, EventArgs e)
         {
-            Title = Lang.GetValue(LangUITranslate.MainWindowTitle);
-            IELButtonBack.Text = Lang.GetValue(LangUITranslate.Back);
+            if (!IELButtonBack.IsEnabled)
+                Enable_IELButtonBack();
+            if (App.GUIE_PanelAction.PanelActionActivate)
+                App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
         }
 
-        #region BrowserPageControl
-        private void MainBrowser_NewInicializedAppPage(object? sender, OPLInlay e)
+        /// <summary>
+        /// Обработчик события открытия вкладки браузера
+        /// </summary>
+        private void InlayActivatedHandler(object? sender, Inlay e)
         {
             if (App.GUIE_PanelAction.PanelActionActivate)
                 App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
@@ -696,8 +696,8 @@ namespace OperPageLes.UI.Windows
             {
                 if (sender == null) return;
                 OPLInlay Source = (OPLInlay)sender;
-                if (Source.Content.Description.Length > 0)
-                    App.GUIE_Message.UsingBorderInformation(Source, Source.Content.Description,
+                if (e.Description.Length > 0)
+                    App.GUIE_Message.UsingBorderInformation(Source, e.Description,
                         OrientationPositionCursor.Auto);
             };
             e.MouseLeave += (sender, e) =>
@@ -705,13 +705,26 @@ namespace OperPageLes.UI.Windows
                 if (App.GUIE_Message.FlagMessage)
                     App.GUIE_Message.CloseBorderInformation();
             };
-
-            IELButtonImage ButtonClose = e.GetButtonCloseInlay();
-            ButtonClose.MarginViewBox = new(0d);
+            e.Closed += (sender, e) =>
+            {
+                if (App.GUIE_PanelAction.PanelActionActivate)
+                    App.GUIE_PanelAction.ClosePanelAction();
+            };
+            //e.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
+            //IELButtonImage ButtonClose = e.GetButtonCloseInlay();
+            //ButtonClose.MarginViewBox = new(0d);
             //ButtonClose.Palette = App.CurrentApp.ActiveThemeApplication[PaletteEnum.Red];
-            ButtonClose.Source = StructDirectoryResources.GetResourceBitmap(nameof(OPRES.Cross));
         }
         #endregion
+
+        /// <summary>
+        /// Обработчик собфтия изменения языкового перевода
+        /// </summary>
+        private void Lang_LanguageUpdated(object? sender, EventArgs e)
+        {
+            Title = Lang.GetValue(LangUITranslate.MainWindowTitle);
+            IELButtonBack.Text = Lang.GetValue(LangUITranslate.Back);
+        }
 
         ///// <summary>
         ///// Присвоить кнопкам цвет в завимисости от темы
@@ -782,20 +795,6 @@ namespace OperPageLes.UI.Windows
         }
         #endregion
 
-        /// <summary>
-        /// Воспроизвести активацию собственной страницы в браузере страниц с логикой отображения
-        /// </summary>
-        /// <param name="SourcePage">Открываемая страница</param>
-        /// <param name="RightAlign">Парвая ориентация появления</param>
-        internal void ActivateCustomPageBrowser(PageBrowser SourcePage, bool RightAlign = true)
-        {
-            if (App.GUIE_PanelAction.PanelActionActivate)
-                App.GUIE_PanelAction.ClosePanelAction(PositionAnimActionPanel.CenterObject);
-            if (App.GUIE_Browser.ActualPage != null)
-                Enable_IELButtonBack();
-            App.GUIE_Browser.ActivateCustomPageBrowser(SourcePage, RightAlign);
-        }
-
         #region ManipulateWindow
 
         /// <summary>
@@ -806,8 +805,8 @@ namespace OperPageLes.UI.Windows
             DispatcherTimerVisualData.Start();
             Opacity = 0d;
             base.Show();
-            App.GUIE_Browser.OpenManagerAppPage();
-            await ((PageManagerAppPage?)App.GUIE_Browser.SourceManagerAppPage)?.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
+            App.GUIE_Browser.OpenMainPage();
+            //await ((PageManagerAppPage?)App.GUIE_Browser.MainPage)?.AddLabelsFromJSON(StructDirectoryResources.DirectoryDataLabels);
         }
 
         /// <summary>

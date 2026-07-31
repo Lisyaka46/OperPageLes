@@ -132,26 +132,26 @@ namespace OperPageLes.UI.Pages.ActionPanel.PageConsole
                 IELButtonText Button = CreateBufferButton(Command);
                 Button.OnActivateMouseLeft += async (sender, e) =>
                 {
-                    if (false) // App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand
-                    {
-                        await Dispatcher.InvokeAsync(() =>
-                        {
-                            if (App.GUIE_Browser.ActualInlay?.Content?.GetType() != SourcePage.GetType())
-                            {
-                                OPLInlay? InlaySource = App.GUIE_Browser.Inlays.FirstOrDefault(
-                                    (i) => i.Content?.Equals(SourcePage) ?? false);
-                                if (InlaySource != null)
-                                {
-                                    App.GUIE_Browser.ActivateInlayIndex(App.GUIE_Browser.Inlays.IndexOf(InlaySource));
-                                }
-                                else if (App.GUIE_Browser.ActualInlay?.Content is Browser.InlayPages.PageConsole page)
-                                {
-                                    SourcePage = page;
-                                }
-                            }
-                            Task.Delay(300);
-                        });
-                    }
+                    //if (false) // App.CurrentApp.SettingMainApplication.MovePageExecuteBufferCommand
+                    //{
+                    //    await Dispatcher.InvokeAsync(() =>
+                    //    {
+                    //        if (App.GUIE_Browser.ActualInlay?.Content?.GetType() != SourcePage.GetType())
+                    //        {
+                    //            OPLInlay? InlaySource = App.GUIE_Browser.Inlays.FirstOrDefault(
+                    //                (i) => i.Content?.Equals(SourcePage) ?? false);
+                    //            if (InlaySource != null)
+                    //            {
+                    //                App.GUIE_Browser.ActivateInlayIndex(App.GUIE_Browser.Inlays.IndexOf(InlaySource));
+                    //            }
+                    //            else if (App.GUIE_Browser.ActualInlay?.Content is Browser.InlayPages.PageConsole page)
+                    //            {
+                    //                SourcePage = page;
+                    //            }
+                    //        }
+                    //        Task.Delay(300);
+                    //    });
+                    //}
                     OPLCommandViewer Viewer = SourcePage.CreateNewCommandViewer(Command);
                     await App.CurrentApp.ActivateActionCommand(Viewer, Command);
                 };
